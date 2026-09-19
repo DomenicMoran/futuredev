@@ -1,87 +1,85 @@
-// Vorläufige, aber sinnvolle Werte. Die endgültigen Werte übernehmen wir aus der
-// Vault-Notiz 10_Projekte/FutureDev/Wissen/design-system.md, sobald sie vorliegt
-// (Entscheidung 9 des Zusatzauftrags Phase 2: eigenes Design-System, kein geteilter
-// Baukasten, Apple-Niveau ohne KI-Slop).
+// Werte aus der Vault-Notiz 10_Projekte/FutureDev/Wissen/design-system.md
+// (Abschnitt "Token als TypeScript-Objekt"), abgeglichen von Agent A in Phase 3
+// (Entscheidung 9 des Zusatzauftrags Phase 2: eigenes Design-System, kein
+// geteilter Baukasten, Apple-Niveau ohne KI-Slop).
 
 export const colors = {
   light: {
-    background: '#FFFFFF',
-    surface: '#F5F6F8',
-    border: '#D9DCE1',
-    textPrimary: '#14181F',
-    textSecondary: '#4B5563',
-    accent: '#2B5FA6',
-    success: '#2E7D5B',
-    error: '#B3402B',
+    bg: '#F7F8FA',
+    surface: '#FFFFFF',
+    text: '#14181F',
+    textWeak: '#5B6472',
+    accent: '#2A5FD9',
+    accentText: '#FFFFFF',
+    success: '#177A56',
+    warning: '#8F5B00',
+    error: '#C22F3A',
+    border: '#E2E5EA',
   },
   dark: {
-    background: '#0E1116',
-    surface: '#171B22',
+    bg: '#0F1116',
+    surface: '#171A21',
+    text: '#EDEFF3',
+    textWeak: '#A3ABB8',
+    accent: '#5B8DFF',
+    accentText: '#0B1220',
+    success: '#4ADE94',
+    warning: '#FFB955',
+    error: '#FF6B76',
     border: '#2A2F3A',
-    textPrimary: '#F2F4F7',
-    textSecondary: '#A6ADB8',
-    accent: '#6C9DE0',
-    success: '#4CAF7D',
-    error: '#E07856',
   },
 } as const;
 
 // 8-Punkt-Raster.
 export const spacing = {
-  xxs: 4,
-  xs: 8,
-  sm: 12,
-  md: 16,
+  xs: 4,
+  sm: 8,
+  md: 12,
+  base: 16,
   lg: 24,
   xl: 32,
-  xxl: 48,
+  '2xl': 48,
 } as const;
 
 export const radius = {
-  sm: 6,
+  sm: 8,
   md: 12,
-  lg: 20,
-  full: 999,
+  lg: 16,
+  full: 9999,
 } as const;
 
 export const type = {
-  // Systemschrift: keine eigene Schriftdatei, sieht auf jedem Gerät nativ aus.
-  fontFamily: 'System',
-  size: {
-    caption: 13,
-    body: 16,
-    subtitle: 18,
-    title: 22,
-    headline: 28,
+  family: {
+    android: 'Roboto',
+    ios: 'System', // System = SF auf iOS
+    web: 'Inter',
   },
-  lineHeight: {
-    caption: 18,
-    body: 24,
-    subtitle: 26,
-    title: 28,
-    headline: 34,
+  size: {
+    xs: { size: 12, lineHeight: 16 },
+    sm: { size: 14, lineHeight: 20 },
+    base: { size: 16, lineHeight: 24 },
+    lg: { size: 18, lineHeight: 26 },
+    xl: { size: 22, lineHeight: 30 },
+    '2xl': { size: 28, lineHeight: 36 },
+    '3xl': { size: 34, lineHeight: 42 },
   },
   weight: {
     regular: '400',
     medium: '500',
-    semibold: '600',
     bold: '700',
   },
 } as const;
 
 export const motion = {
-  // Kurze, funktionale Dauer statt Zierde (feedback_performance_first).
-  durationFast: 120,
-  durationBase: 200,
-  durationSlow: 320,
-  easing: 'cubic-bezier(0.2, 0, 0, 1)',
-  // Wird von jeder Animation respektiert: bei aktivem Reduced-Motion auf 0 kürzen,
-  // nie nur per CSS-Regel (feedback_reduced_motion_css_reicht_nicht).
-  respectReducedMotion: true,
+  durationMs: {
+    short: 150,
+    base: 200,
+    long: 250,
+  },
 } as const;
 
-// Zielgröße für tippbare Elemente, mindestens 44 Punkt (Apple-Richtlinie, gilt hier
-// projektübergreifend als Untergrenze).
+// Zielgroesse fuer tippbare Elemente, mindestens 44 Punkt (Apple-Richtlinie,
+// gilt hier projektuebergreifend als Untergrenze).
 export const minTapTarget = 44;
 
 export * from './contrast.js';

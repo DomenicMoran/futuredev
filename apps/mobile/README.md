@@ -1,13 +1,26 @@
 # FutureDev, Mobile
 
-Noch kein Code. Der App-Gerüst-Agent legt hier in Phase 3 ein Expo-Projekt an
-(aktuelles stabiles SDK, React Native, `expo-router`, TypeScript strict), Android-
-Paketname `de.domenicmoran.futuredev`, Slug `futuredev`.
+Expo-SDK 57, React Native 0.86, `expo-router`, TypeScript strict, Android-Paketname
+`de.domenicmoran.futuredev`, Slug `futuredev`.
 
-Geplanter Aufbau (Phase 3 ff.): fünf Reiter (Start, Lernen, Hören, Üben, Ich), Inhalt
-aus `@futuredev/content-schema` geladen und lokal in SQLite (`expo-sqlite`) sowie
-Dateisystem (`expo-file-system`) gehalten, Design aus `@futuredev/design-tokens`,
-Wiederholung und Auswertung aus `@futuredev/core`.
+Fünf Reiter unter `app/(tabs)/`: Start (`index`), Lernen (`lernen`), Hören (`hoeren`),
+Üben (`ueben`), Ich (`ich`). Onboarding unter `app/onboarding.tsx` (drei Schritte,
+Zustand im Speicher). Lektionsroute `app/lesson/[id].tsx` zeigt in dieser Phase nur
+eine ehrliche Ladeansicht, Agent B ersetzt sie durch den vollständigen
+Lektionsbildschirm.
+
+Inhalt aus `@futuredev/content-schema` (`content/modules.json` für die Modulkarte)
+geladen und lokal in SQLite (`expo-sqlite`) sowie Dateisystem (`expo-file-system`)
+gehalten, Design aus `@futuredev/design-tokens` (`src/theme/useTheme.ts`), Wiederholung
+und Auswertung aus `@futuredev/core`. Sichtbare Texte stehen in `src/i18n/de.ts`.
+
+Icon und Splash sind mit `scripts/make-icons.mjs` aus einer eigenen SVG erzeugt
+(Buchstabe „F" aus zwei Formen in Akzentfarbe auf Hintergrundfarbe der Token), kein
+Stockbild:
+
+```bash
+pnpm --filter @futuredev/mobile run make-icons
+```
 
 Bau ohne EAS: lokal mit `expo prebuild --platform android` und
 `gradlew assembleRelease`, signiert mit einem Keystore außerhalb dieses Repos unter
@@ -15,9 +28,96 @@ Bau ohne EAS: lokal mit `expo prebuild --platform android` und
 `2026-09-19-futuredev-apk-bau-lokal-ohne-eas` im Vault). Wegen der Windows-
 Pfadlänge beim C++-Codegen läuft der Bau über die Junction `C:\rnb\FutureDev`.
 
+### Bauen auf Windows
+
+Drei Dinge zusammen, sonst scheitert der native Bau an der Windows-Pfadlänge
+(`ninja: error: manifest 'build.ninja' still dirty after 100 tries` in einem
+`.cxx`-Ordner eines nativen Moduls wie `react-native-screens`):
+
+1. **`.npmrc` in der Repo-Wurzel mit `node-linker=hoisted`.** Der Standard-Linker
+   von pnpm legt jedes Paket unter `node_modules/.pnpm/<name>@<version>_<hash>/
+   node_modules/<name>/...` ab, das kostet rund 80 Zeichen zusätzlich in jedem
+   Pfad. Mit `hoisted` liegen die Pakete flach unter `node_modules/<name>/...`.
+2. **Bau über die Junction `C:\rnb\FutureDev`**, nie über den langen Pfad unter
+   `Dokumente`. `git rev-parse --show-toplevel` zeigt dabei weiterhin den langen
+   Pfad (Git löst die Junction zum Realpfad auf), das betrifft aber nur Git,
+   nicht die Dateisystemzugriffe von Gradle/Ninja.
+3. **Nur die Emulator-Architektur bauen**: Umgebungsvariable
+   `ORG_GRADLE_PROJECT_reactNativeArchitectures=x86_64` vor `gradlew` setzen,
+   das spart eine ganze Ordnerebene je Nicht-Ziel-Architektur.
+
+Ohne diese drei Punkte bricht der Bau mit einem Fehler wie
+`ninja: error: Stat([...]\RNGestureHandlerDetectorShadowNode.cpp.o): Filename
+longer than 260 characters` ab, weil CMake/Ninja Junctions zum Realpfad
+auflösen und der Pfad unter `Dokumente\Projekte\FutureDev` dafür zu lang ist.
+
+Beispiel für einen Debug-Bau aus `C:\rnb\FutureDev\apps\mobile\android`:
+
+```bash
+ANDROID_HOME="C:/Users/<user>/AppData/Local/Android/Sdk" \
+ANDROID_SDK_ROOT="C:/Users/<user>/AppData/Local/Android/Sdk" \
+ORG_GRADLE_PROJECT_reactNativeArchitectures=x86_64 \
+./gradlew.bat assembleDebug
+```
+
+`android/local.properties` (von Git ignoriert) braucht `sdk.dir` mit doppelt
+maskierten Backslashes, etwa `sdk.dir=C\:\\Users\\<user>\\AppData\\Local\\Android\\Sdk`.
+
 Befehle (ab Phase 3):
 
 ```bash
-pnpm --filter @futuredev/mobile start
-pnpm --filter @futuredev/mobile android
+pnpm --filter @futuredev/mobile run start
+pnpm --filter @futuredev/mobile run android
+pnpm --filter @futuredev/mobile run typecheck
+pnpm --filter @futuredev/mobile run lint
+pnpm --filter @futuredev/mobile run test
 ```
+
+### Relative Importe mit fester ".js"-Endung
+
+Der ganze Workspace schreibt relative Importe im NodeNext-Stil mit fester
+`.js`-Endung, auch wenn die Quelle eine `.ts`- oder `.tsx`-Datei ist (siehe
+`packages/*`). Metro löst das ohne Zusatzschritt nicht auf, weil es bei einer
+angegebenen Endung keine Alternativen mehr probiert und mit
+`UnableToResolveError` abbricht. `metro.config.js` fängt genau diesen Fall
+mit einem eigenen `resolver.resolveRequest` ab: schlägt eine relative
+`.js`-Anfrage fehl, wird dieselbe Anfrage ohne Endung erneut versucht, damit
+Metros eigene `sourceExts`-Reihenfolge greift. Kein Quellcode wird dafür
+umgeschrieben.
+
+### Emulator-Rezept
+
+Eigener AVD `futuredev_shots` (nicht den fremden AVD `salati_a` verwenden):
+
+```bash
+avdmanager create avd -n futuredev_shots -k "system-images;android-36;google_apis;x86_64" -d pixel_7
+emulator -avd futuredev_shots -port 5560 -no-snapshot-load -no-boot-anim
+adb -s emulator-5560 install -r android/app/build/outputs/apk/debug/app-debug.apk
+```
+
+Metro läuft bewusst auf Port 8082, nicht 8081 (ein zweiter, fremder Metro-Lauf
+auf 8081 liefert sonst ein fremdes Bundle in die eigene App, siehe
+`feedback_metro_port_8081_zeigt_fremde_app.md`):
+
+```bash
+npx expo start --dev-client --port 8082
+adb -s emulator-5560 reverse tcp:8082 tcp:8082
+```
+
+Wichtige Falle: dieser Build enthält kein `expo-dev-client` (bare Build), und
+React Native spricht den Bundler auf dem Emulator immer fest unter
+`10.0.2.2:8081` an, unabhängig vom `--port`-Wert. `adb reverse` wirkt nur auf
+`localhost` des Geräts, nicht auf `10.0.2.2` (das läuft über das eigene
+QEMU-Netz direkt zum Host). Ohne Weiteres bekommt die App also immer die
+RedBox „Unable to load script“. Abhilfe: ein schlanker TCP-Durchreicher auf
+dem Host, der `127.0.0.1:8081` nur an `127.0.0.1:8082` weiterreicht (kein
+zweites Metro auf 8081, nur ein Rohr):
+
+```bash
+node -e "require('net').createServer(c=>{const u=require('net').connect(8082,'127.0.0.1',()=>{c.pipe(u);u.pipe(c)});u.on('error',()=>c.destroy());c.on('error',()=>u.destroy())}).listen(8081,'127.0.0.1')"
+```
+
+Bauzeit für `assembleDebug` bei kaltem Gradle-Daemon: rund 3 Minuten
+(gemessen: 3 min 5 s). Bildschirmfotos je Reiter mit
+`adb exec-out screencap -p > datei.png` nach dem in der Aufgabe genannten
+Zielordner, niemals als Behauptung ohne Datei.

@@ -7,6 +7,7 @@ import { fileURLToPath } from 'node:url';
 import { lessonSchema } from './lesson.js';
 import { manifestSchema } from './manifest.js';
 import { checkAllRules } from './rules.js';
+import { modulesFileSchema } from './modules.js';
 import type { Lesson } from './lesson.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -14,6 +15,7 @@ const repoRoot = join(__dirname, '..', '..', '..');
 const contentDir = join(repoRoot, 'content');
 const lessonsDir = join(contentDir, 'lessons');
 const manifestPath = join(contentDir, 'manifest.json');
+const modulesPath = join(contentDir, 'modules.json');
 
 let errorCount = 0;
 
@@ -94,6 +96,26 @@ function main(): void {
   } else {
     console.error('content:validate: content/manifest.json fehlt, wird von content:manifest erzeugt.');
     errorCount += 1;
+  }
+
+  if (existsSync(modulesPath)) {
+    let modulesRaw: unknown;
+    try {
+      modulesRaw = JSON.parse(readFileSync(modulesPath, 'utf8'));
+    } catch (err) {
+      reportError('modules.json', 'json-parsen', String(err));
+      modulesRaw = undefined;
+    }
+    if (modulesRaw !== undefined) {
+      const modulesResult = modulesFileSchema.safeParse(modulesRaw);
+      if (!modulesResult.success) {
+        for (const issue of modulesResult.error.issues) {
+          reportError('modules.json', 'schema', `${issue.path.join('.')}: ${issue.message}`);
+        }
+      }
+    }
+  } else {
+    reportError('modules.json', 'fehlt', 'content/modules.json fehlt.');
   }
 
   if (errorCount > 0) {
