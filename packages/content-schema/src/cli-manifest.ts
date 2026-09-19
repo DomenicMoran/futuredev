@@ -15,10 +15,15 @@ const contentDir = join(repoRoot, 'content');
 const lessonsDir = join(contentDir, 'lessons');
 const manifestPath = join(contentDir, 'manifest.json');
 
-// Vorläufig: Supabase-Projekt existiert erst ab Phase 3. Platzhalter-Basis-URLs,
-// werden dort ersetzt.
-const CONTENT_BASE_URL = 'https://futuredev.supabase.co/storage/v1/object/public/content';
-const AUDIO_BASE_URL = 'https://futuredev.supabase.co/storage/v1/object/public/audio';
+// Basis-URLs kommen aus der Umgebung (CONTENT_BASE_URL/AUDIO_BASE_URL), damit
+// dieses Skript nicht angepasst werden muss, wenn sich die Auslieferung
+// ändert (z. B. Übergang von Supabase auf einen GitHub-Release, siehe
+// AP-3.4/Teil 2). Ohne gesetzte Variable bleibt der bisherige
+// Supabase-Platzhalter erhalten, damit ein Lauf ohne Env unverändert bleibt.
+const CONTENT_BASE_URL =
+  process.env.CONTENT_BASE_URL ?? 'https://futuredev.supabase.co/storage/v1/object/public/content';
+const AUDIO_BASE_URL =
+  process.env.AUDIO_BASE_URL ?? 'https://futuredev.supabase.co/storage/v1/object/public/audio';
 
 function sha256(content: string): string {
   return createHash('sha256').update(content).digest('hex');

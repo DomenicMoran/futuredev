@@ -1,0 +1,62 @@
+// Schmale Schnittstelle zu Agent B's Datenzugriff (src/data) und
+// Inhaltsladen (src/content), wie im Auftrag vorgegeben: die Bindung an das,
+// was im Ordner liegt, ist inzwischen möglich (siehe Bericht: beide Ordner
+// waren zu Beginn der Arbeit noch leer, während der Umsetzung sind sie
+// gefüllt worden). getLessonForPlayback bindet an `loadLesson`/`loadModules`
+// (src/content/lessonLoader.ts) plus einen Netz-Nachschlag über das Manifest,
+// falls eine Lektion lokal noch fehlt; savePlaybackPosition/markListened
+// binden an `getProgress`/`markLessonState` (src/data/progress.ts), die schon
+// die Felder aus datenmodell.md tragen (listenedUntil).
+import { lessonSchema, type Lesson } from '@futuredev/content-schema';
+import { getProgress, markLessonState } from '../data/index.js';
+import { getContentFs } from '../content/contentFs.js';
+import { loadLesson, loadLocalManifest } from '../content/lessonLoader.js';
+
+function contentBaseUrl(): string {
+  return process.env.EXPO_PUBLIC_CONTENT_BASE_URL ?? '';
+}
+
+async function fetchRemoteLesson(lessonId: string): Promise<Lesson> {
+  const base = contentBaseUrl();
+  const fs = await getContentFs();
+  const localManifest = await loadLocalManifest(fs);
+  const trimmedBase = base.replace(/\/$/, '');
+  if (!trimmedBase) {
+    throw new Error(
+      `getLessonForPlayback: ${lessonId} liegt nicht lokal vor und EXPO_PUBLIC_CONTENT_BASE_URL ist nicht gesetzt`,
+    );
+  }
+  const entry = localManifest?.lessons.find((l) => l.id === lessonId);
+  const fileName = entry?.file ?? `${lessonId}.json`;
+  const response = await fetch(`${trimmedBase}/lessons/${fileName}`, { cache: 'no-store' });
+  if (!response.ok) {
+    throw new Error(`getLessonForPlayback: Lektionsabruf fehlgeschlagen (HTTP ${response.status})`);
+  }
+  return lessonSchema.parse(await response.json());
+}
+
+/** Lädt eine Lektion für die Wiedergabe: lokal (nach Erststart-Kopie/Sync) vor Netz. */
+export async function getLessonForPlayback(lessonId: string): Promise<Lesson> {
+  const fs = await getContentFs();
+  const local = await loadLesson(fs, lessonId);
+  if (local) return local;
+  return fetchRemoteLesson(lessonId);
+}
+
+/** Sichert die Hörposition (progress.listenedUntil), alle 5 s bzw. sofort bei Pause. */
+export async function savePlaybackPosition(lessonId: string, seconds: number): Promise<void> {
+  const existing = await getProgress(lessonId);
+  const nextState = existing?.state === 'new' ? 'started' : (existing?.state ?? 'started');
+  await markLessonState(lessonId, nextState, { listenedUntil: Math.round(seconds) });
+}
+
+/**
+ * Setzt den Zustand 'listened' bei 100 Prozent. Zwei Schritte (new→started,
+ * dann →listened): ALLOWED_TRANSITIONS in @futuredev/core erlaubt von 'new'
+ * aus nur 'started', ein einzelner Sprung auf 'listened' würde also
+ * stillschweigend ignoriert.
+ */
+export async function markListened(lessonId: string, seconds: number): Promise<void> {
+  await markLessonState(lessonId, 'started', {});
+  await markLessonState(lessonId, 'listened', { listenedUntil: Math.round(seconds) });
+}

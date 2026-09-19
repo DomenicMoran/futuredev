@@ -27,8 +27,9 @@ import {
 } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { lessonSchema, type Lesson, type SpeechBlock } from '@futuredev/content-schema';
+import { cueSheetSchema, lessonSchema, type Lesson, type SpeechBlock } from '@futuredev/content-schema';
 import { buildConcatPlan, type ConcatStep } from './concat-plan.js';
+import { buildCueSheet } from './cues.js';
 import { estimateCostByTier } from './pricing.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -87,13 +88,17 @@ function requireEnv(): EnvValues {
 interface Args {
   readonly dryRun: boolean;
   readonly lessonId: string | undefined;
+  // Nur die Cue-Datei (Kapitelmarken) neu berechnen: kein Zusammenfuegen, keine
+  // ID3-Tags, kein neuer API-Aufruf, solange die Block-MP3s schon vorliegen.
+  readonly cuesOnly: boolean;
 }
 
 function parseArgs(argv: readonly string[]): Args {
   const dryRun = argv.includes('--dry-run');
+  const cuesOnly = argv.includes('--cues-only');
   const lessonIndex = argv.indexOf('--lesson');
   const lessonId = lessonIndex >= 0 ? argv[lessonIndex + 1] : undefined;
-  return { dryRun, lessonId };
+  return { dryRun, lessonId, cuesOnly };
 }
 
 /* ---------------------------------------------------------- Lektion laden */
@@ -290,6 +295,13 @@ function writeId3Tags(lesson: Lesson, mp3Path: string): void {
 }
 
 function measureDurationSeconds(mp3Path: string): number {
+  return Math.round(measureDurationSecondsPrecise(mp3Path));
+}
+
+/** Ungerundete Dauer (Sekunden, Fliesskomma), fuer Kapitelmarken: ueber 68
+ * Bloecke summiert sich ein Rundungsfehler von einer ganzen Sekunde je Block
+ * sonst zu einer spuerbar falschen Sprungmarke auf. */
+function measureDurationSecondsPrecise(mp3Path: string): number {
   const output = execFileSync('ffprobe', [
     '-v',
     'error',
@@ -301,7 +313,29 @@ function measureDurationSeconds(mp3Path: string): number {
   ])
     .toString()
     .trim();
-  return Math.round(Number(output));
+  return Number(output);
+}
+
+/* -------------------------------------------------------------- Cue-Sidecar */
+
+/** Ob jeder Block-MP3-Pfad einer Lektion vorhanden ist. */
+function allBlocksExist(lesson: Lesson, lessonOutDir: string): boolean {
+  return lesson.speechBlocks.every((_, index) => existsSync(blockFile(lessonOutDir, lesson.id, index)));
+}
+
+/**
+ * Baut die Cue-Datei (Kapitelmarken) aus den bereits vorliegenden Block-MP3s
+ * und schreibt sie nach tools/audio/out/<id>.cues.json. Braucht keinen
+ * API-Aufruf, nur ffprobe je Block.
+ */
+function writeCueSheet(lesson: Lesson, lessonOutDir: string): string {
+  const durations = lesson.speechBlocks.map((_, index) =>
+    measureDurationSecondsPrecise(blockFile(lessonOutDir, lesson.id, index)),
+  );
+  const cueSheet = cueSheetSchema.parse(buildCueSheet(lesson.id, lesson.speechBlocks, durations));
+  const cuesPath = join(outDir, `${lesson.id}.cues.json`);
+  writeFileSync(cuesPath, JSON.stringify(cueSheet, null, 2) + '\n');
+  return cuesPath;
 }
 
 /* --------------------------------------------------------------- Hauptlauf */
@@ -330,10 +364,29 @@ async function main(): Promise<void> {
 
     if (args.dryRun) continue;
 
-    const env = requireEnv();
     const lessonOutDir = join(outDir, lesson.id);
     mkdirSync(lessonOutDir, { recursive: true });
 
+    if (args.cuesOnly) {
+      if (!allBlocksExist(lesson, lessonOutDir)) {
+        console.log(`  einzelne Block-MP3s fehlen, werden mit dem vorhandenen Schlüssel einmalig nachvertont.`);
+        const env = requireEnv();
+        try {
+          await renderBlocks(env, lesson, lessonOutDir);
+        } catch (err) {
+          if (err instanceof ElevenLabsError) {
+            console.error(`${lesson.id}: Abbruch (${err.status}): ${err.message}`);
+            process.exit(1);
+          }
+          throw err;
+        }
+      }
+      const cuesPath = writeCueSheet(lesson, lessonOutDir);
+      console.log(`  Cue-Datei: ${cuesPath} (${lesson.speechBlocks.length} Blöcke, --cues-only)`);
+      continue;
+    }
+
+    const env = requireEnv();
     try {
       await renderBlocks(env, lesson, lessonOutDir);
     } catch (err) {
@@ -346,13 +399,14 @@ async function main(): Promise<void> {
 
     const outputPath = concatLesson(lesson, lessonOutDir);
     writeId3Tags(lesson, outputPath);
+    const cuesPath = writeCueSheet(lesson, lessonOutDir);
     const durationSeconds = measureDurationSeconds(outputPath);
     const sizeKb = Math.round(statSync(outputPath).size / 1024);
 
     console.log(
       `  fertig: ${outputPath}, ${sizeKb} KB, ${Math.floor(durationSeconds / 60)}:${String(
         durationSeconds % 60,
-      ).padStart(2, '0')} Min`,
+      ).padStart(2, '0')} Min, Cue-Datei: ${cuesPath}`,
     );
   }
 }
