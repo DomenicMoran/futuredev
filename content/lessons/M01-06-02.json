@@ -1,0 +1,1031 @@
+{
+  "id": "M01-06-02",
+  "title": "Bedingungen: Wenn, dann, sonst",
+  "durationMinutes": 17,
+  "prerequisites": [
+    "M01-00-01",
+    "M01-00-02",
+    "M01-06-01"
+  ],
+  "terms": [
+    {
+      "term": "Bedingung",
+      "definition": "Eine Frage im Code, deren Antwort nur wahr oder falsch sein kann. Je nach Antwort läuft ein anderer Teil des Codes."
+    },
+    {
+      "term": "Vergleichsoperator",
+      "definition": "Ein Zeichen im Code, das zwei Werte vergleicht, zum Beispiel ob sie gleich sind oder welcher größer ist."
+    },
+    {
+      "term": "if",
+      "definition": "Das Wort, mit dem eine Bedingung beginnt. Es leitet den Teil des Codes ein, der nur bei einer wahren Bedingung läuft."
+    },
+    {
+      "term": "else",
+      "definition": "Das Wort für den Teil des Codes, der genau dann läuft, wenn die if-Bedingung davor falsch war."
+    },
+    {
+      "term": "Und-Verknüpfung",
+      "definition": "Eine Verknüpfung zweier Bedingungen, geschrieben als &&. Das Ergebnis ist nur wahr, wenn beide einzelnen Bedingungen wahr sind."
+    },
+    {
+      "term": "Oder-Verknüpfung",
+      "definition": "Eine Verknüpfung zweier Bedingungen, geschrieben als ||. Das Ergebnis ist wahr, sobald mindestens eine der beiden Bedingungen wahr ist."
+    },
+    {
+      "term": "Funktion",
+      "definition": "Ein wiederverwendbares Stück Code mit eigenem Namen, das eine feste Abfolge von Schritten ausführt."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "text": "Stell dir eine Weiche an einem Bahngleis vor.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein Zug fährt heran. Die Weiche entscheidet: fährt der Zug geradeaus weiter, oder biegt er auf das andere Gleis ab.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Diese Entscheidung hängt von genau einer Sache ab: der Stellung der Weiche in genau diesem Moment. Steht sie so, geht es geradeaus. Steht sie anders, geht es auf das andere Gleis.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "B",
+      "text": "Und im Code gibt es auch so eine Weiche, die entscheidet, welcher Weg genommen wird?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau. Auch dort gibt es ständig solche Weichen. Sie prüfen jedes Mal eine Frage, die nur wahr oder falsch beantwortet werden kann, und je nach Ergebnis läuft ein anderer Teil des Codes.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "So eine Weiche im Code nennt man eine Bedingung.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Bedingung.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Eine Bedingung aus dem Alltag: ist der Warenkorb in einem Shop leer, ja oder nein. Ist das wahr, zeigt die Seite einen Hinweis, dass noch nichts ausgewählt wurde. Ist das falsch, zeigt sie stattdessen die ausgewählten Artikel.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Wie schreibt man so eine Bedingung dann als Code hin?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Wir schreiben: if alter ist größer gleich 18, geschweifte Klammer auf.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Das heißt: wenn die Variable alter mindestens 18 ist, dann führe alles aus, was zwischen den geschweiften Klammern steht.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Das Wort if steht immer ganz am Anfang so einer Zeile, direkt vor der Frage in runden Klammern.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "if ist Englisch für wenn. Es leitet immer genau den Teil des Codes ein, der nur bei einer wahren Bedingung läuft.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Schreibst du if istVolljaehrig, geschweifte Klammer auf, console Punkt log Klammer auf Anführungszeichen Zutritt erlaubt Anführungszeichen Klammer zu, geschweifte Klammer zu, dann erscheint der Text Zutritt erlaubt nur dann, wenn istVolljaehrig gerade true ist.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Und was passiert, wenn die Bedingung falsch ist, also wenn jemand noch nicht volljährig ist?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Dann passiert bei einem reinen if erst einmal gar nichts. Der Codeblock zwischen den geschweiften Klammern wird einfach übersprungen, und es geht danach im Code normal weiter.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Oft will man aber, dass für den falschen Fall etwas Bestimmtes passiert, nicht einfach nur nichts.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir wieder die Weiche vor. Fährt der Zug nicht geradeaus, muss er ja trotzdem irgendwohin fahren, nicht einfach stehen bleiben.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Für diesen zweiten Weg gibt es das Wort else.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "else.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Wir schreiben: if istVolljaehrig, geschweifte Klammer auf, console Punkt log Klammer auf Anführungszeichen Zutritt erlaubt Anführungszeichen Klammer zu, geschweifte Klammer zu. Direkt danach: else geschweifte Klammer auf, console Punkt log Klammer auf Anführungszeichen Zutritt verweigert Anführungszeichen Klammer zu, geschweifte Klammer zu.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Jetzt läuft immer genau einer der beiden Teile: entweder der if-Teil, wenn istVolljaehrig wahr ist, oder der else-Teil, wenn sie falsch ist. Nie beide, nie keiner.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Warum ist mindestens einer der beiden Teile so wichtig, statt nur beim reinen if zu bleiben?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Weil viele Entscheidungen im echten Leben genau zwei Ausgänge brauchen, keinen dritten stillen Zustand. Ein Türsteher lässt jemanden entweder rein, oder er weist ihn ab. Es gibt kein Drittes.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Jetzt zur Frage, was überhaupt in so einer runden Klammer stehen darf, damit die Bedingung geprüft werden kann.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir eine Waage in der Küche vor, mit zwei Schalen. Du legst auf jede Seite etwas, und die Waage zeigt dir, welche Seite schwerer ist, oder ob beide gleich schwer sind.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau das macht ein Vergleich im Code: er stellt zwei Werte nebeneinander und prüft, in welchem Verhältnis sie zueinander stehen.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Das Zeichen dafür heißt Vergleichsoperator.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Vergleichsoperator.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein Vergleichsoperator ist dabei immer nur ein kleines Zeichen, das zwischen zwei Werten steht. Ein Beispiel: zwei Gleichheitszeichen hintereinander, geschrieben als doppeltes Ist-Gleich, prüfen, ob zwei Werte gleich sind. alter doppeltes Ist-Gleich 18 ist genau dann wahr, wenn alter exakt den Wert 18 hat.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein spitzer Winkel nach rechts, größer als, prüft, ob der linke Wert größer ist als der rechte. alter größer als 18 ist wahr, sobald alter mindestens 19 beträgt.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein spitzer Winkel nach rechts direkt gefolgt von einem Gleichheitszeichen, größer gleich, prüft größer oder genau gleich. alter größer gleich 18 ist also schon bei genau 18 wahr, nicht erst ab 19.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Warum benutzt man ausgerechnet zwei Gleichheitszeichen zum Vergleichen, ein einzelnes würde doch auch reichen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Weil ein einzelnes Gleichheitszeichen im Code schon eine andere Aufgabe hat, wie wir in der letzten Lektion gelernt haben: es befüllt eine Variable mit einem Wert, es prüft nichts. alter ist gleich 18 mit nur einem Zeichen würde alter tatsächlich auf 18 setzen, statt nur zu vergleichen.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Deshalb braucht das Vergleichen ein eigenes Zeichen, zwei Gleichheitszeichen, damit der Computer weiß: hier wird nur gefragt, nicht verändert.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Funktioniert das doppelte Gleichheitszeichen auch bei Text, oder nur bei Zahlen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Es funktioniert bei jedem Datentyp, den wir in der letzten Lektion gelernt haben. Stell dir zwei Bestellzettel in einer Küche vor. Sie sind nur dann gleich, wenn wirklich jeder einzelne Buchstabe übereinstimmt, an derselben Stelle.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Wir schreiben: if stadt doppeltes Ist-Gleich Anführungszeichen Berlin Anführungszeichen. Diese Bedingung ist nur dann wahr, wenn die Variable stadt exakt den Text Berlin enthält, Buchstabe für Buchstabe, auch Groß- und Kleinschreibung eingeschlossen.",
+      "isKeySentence": false, "role": "example" },
+    {
+      "speaker": "B",
+      "text": "Zählt berlin klein geschrieben dann nicht als dasselbe wie Berlin groß geschrieben?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Richtig gesehen, und das ist eine häufige Anfängerfalle. Für den Computer sind berlin und Berlin zwei völlig unterschiedliche Texte, weil sich ein einzelner Buchstabe in der Groß- und Kleinschreibung unterscheidet.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Wer das vermeiden will, wandelt beide Seiten vor dem Vergleich bewusst in dieselbe Schreibweise um, meistens komplett klein. Das ist aber ein Thema für eine spätere Lektion, heute reicht es zu wissen, dass Groß- und Kleinschreibung beim Textvergleich zählt.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Manchmal reicht eine einzelne Frage nicht aus, weil eine Entscheidung von mehreren Dingen gleichzeitig abhängt.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir eine Tür vor, die nur aufgeht, wenn du sowohl den richtigen Schlüssel hast als auch den richtigen Code am Zahlenschloss eintippst. Nur eines von beiden reicht nicht.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "So eine Und-Verknüpfung zweier Bedingungen schreibt man im Code als zwei Kaufmanns-Und-Zeichen hintereinander.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Und-Verknüpfung.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "So sieht das im Code aus: if hatSchluessel UND-Zeichen UND-Zeichen hatZugangscode, geschweifte Klammer auf, Tür öffnen, geschweifte Klammer zu. Diese Und-Verknüpfung ist nur dann wahr, wenn beide einzelnen Teile wahr sind, hatSchluessel und hatZugangscode gleichzeitig.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Und wenn nur eine der beiden Bedingungen reichen soll, nicht beide gleichzeitig?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir jetzt einen Fahrstuhl vor, der sich öffnet, wenn entweder eine Person davorsteht, oder ein Paket auf der Bodenmatte liegt. Es muss nicht beides gleichzeitig sein.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Für so eine Entweder-oder-Verknüpfung gibt es ein zweites Zeichen: zwei senkrechte Striche hintereinander.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Oder-Verknüpfung.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Wir schreiben: if personSteht senkrechter Strich senkrechter Strich paketLiegt, geschweifte Klammer auf, Tür öffnen, geschweifte Klammer zu. Diese Oder-Verknüpfung ist schon wahr, sobald mindestens einer der beiden Teile wahr ist, auch wenn der andere Teil falsch bleibt.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Also UND ist strenger, weil beides gleichzeitig gelten muss, und ODER ist lockerer, weil einer von beiden reicht?",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Ganz genau. Eine gute Eselsbrücke: UND wird strenger, je mehr Bedingungen man aneinanderreiht, weil immer alle gleichzeitig wahr sein müssen. ODER wird lockerer, je mehr Bedingungen man aneinanderreiht, weil schon eine einzige davon reicht.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Manchmal will man auch mehr als zwei Wege prüfen, nicht nur ja oder nein.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Dafür kann man hinter ein if einfach ein else if hängen, so oft man will, und ganz am Ende noch ein reines else als Auffangnetz für alle übrigen Fälle.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein Beispiel mit Schulnoten: if note doppeltes Ist-Gleich 1, Ausgabe sehr gut. else if note doppeltes Ist-Gleich 2, Ausgabe gut. else, Ausgabe für alle übrigen Noten.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Prüft der Computer dann wirklich jede einzelne Zeile durch, auch wenn schon die erste zutrifft?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, genau das Gegenteil, und das ist wichtig zu wissen. Sobald eine Bedingung zutrifft, wird nur ihr eigener Teil ausgeführt, und alle folgenden else if und else werden komplett übersprungen.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Was passiert eigentlich, wenn ich das else am Ende ganz vergesse?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Dann bleibt für alle Noten, die weder 1 noch 2 sind, einfach still gar nichts übrig. Stell dir einen Briefkasten vor, der nur für zwei bestimmte Absender beschriftet ist. Ein Brief von jedem anderen Absender liegt einfach unsortiert davor.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Das ist einer der häufigsten Anfängerfehler bei Bedingungen: man denkt an die Hauptfälle, und vergisst dabei den Rest. Deshalb lohnt es sich, sich bei jeder if-Kette bewusst zu fragen: welche Fälle fängt mein else überhaupt noch auf, und bleibt am Ende wirklich keine Lücke übrig?",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Jetzt zu einem echten Beispiel aus einem kleinen Programmierpaket, in dem genau solche Bedingungen den Kern der Sache ausmachen.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Es heißt darts-checkout und stammt aus der Zählweise eines Dartspiels: 501 Punkte, mit jedem Wurf werden Punkte abgezogen, und am Ende muss man mit einem bestimmten Wurf exakt auf null kommen.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Nicht jeder Wurf, der rechnerisch auf null kommt, zählt aber auch wirklich als Abschluss. Es gibt eine feste Regel dafür, ab wann ein Wurf gültig ist.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "In der Quelldatei src slash index Punkt ts dieses Pakets gibt es eine Funktion mit dem Namen isFinisher. Sie bekommt einen einzelnen Wurf und die geltende Auszahlungsregel hinein, und beantwortet die Frage: darf dieser Wurf das Spiel beenden.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "In Zeile 82 der Quelldatei steht die erste Zeile ihrer Prüfung: if out doppeltes Ist-Gleich Anführungszeichen straight Anführungszeichen, dann gib true zurück.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Das heißt Wort für Wort: wenn die Auszahlungsregel straight ist, also die lockerste Regel, dann darf jeder beliebige Wurf das Spiel beenden, egal welcher Ring getroffen wurde.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "In Zeile 83 folgt die zweite Zeile: if out doppeltes Ist-Gleich Anführungszeichen double Anführungszeichen, dann gib zurück, ob der getroffene Ring gleich double ist, ODER-Zeichen der getroffene Ring gleich bullseye ist.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Wörtlich: bei der strengsten Regel, double, zählt ein Wurf nur, wenn er entweder ein Doppelfeld trifft, oder die Doppelmitte, die bullseye genannte innere Mitte der Scheibe. Ein einfaches Feld oder ein Dreifachfeld reicht bei dieser Regel nicht.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Und was, wenn out weder straight noch double ist, sondern die dritte, mittlere Regel?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Dann laufen beide vorherigen if-Bedingungen ins Leere, keine trifft zu, und der Code fällt bis zur letzten Zeile der Funktion durch. Dort steht ohne weiteres if einfach: gib zurück, ob der Ring gleich double ist, ODER der Ring gleich treble ist, ODER der Ring gleich bullseye ist.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Das ist die master-Regel: hier zählen zusätzlich auch Dreifachfelder als gültiger Schlussdart, nur das einfache Feld bleibt in jeder Regel ungültig.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Warum sind es drei einzelne Prüfungen und nicht eine einzige große Bedingung mit ganz vielen UND und ODER aneinandergereiht?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Weil sich die drei Regeln inhaltlich klar unterscheiden, und getrennte, kurze Bedingungen für Menschen viel leichter zu lesen sind als eine einzige riesige Zeile. Jede Regel bekommt ihren eigenen, gut lesbaren Absatz im Code.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Das ist ein Grundsatz, den du dir merken solltest: Bedingungen sollen so einfach wie möglich bleiben. Lieber mehrere kurze, klar benannte Bedingungen, als eine einzige, die niemand auf den ersten Blick versteht.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein letzter wichtiger Punkt: Bedingungen dürfen auch ineinander verschachtelt werden.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir eine Sicherheitsschleuse am Flughafen vor. Zuerst wird geprüft, ob überhaupt ein gültiges Ticket vorliegt. Erst wenn das stimmt, folgt die zweite Prüfung: passt das Foto auf dem Ausweis zur Person.", "isKeySentence": false, "role": "image" },
+    {
+      "speaker": "A",
+      "text": "Im Code sieht das ähnlich aus: innerhalb der geschweiften Klammern eines äußeren if steht ein zweites, inneres if. Wir schreiben: if hatTicket, geschweifte Klammer auf, if ausweisPasstZumFoto, geschweifte Klammer auf, Durchlass gewähren, geschweifte Klammer zu, geschweifte Klammer zu.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Und wenn hatTicket falsch ist, wird dann trotzdem noch geprüft, ob das Foto passt?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, genau das ist der Vorteil der Verschachtelung. Ist die äußere Bedingung schon falsch, wird die innere gar nicht erst angeschaut, der ganze innere Block wird komplett übersprungen.", "isKeySentence": false, "role": "why" },
+    {
+      "speaker": "A",
+      "text": "Das spart nicht nur Rechenzeit, es macht den Code auch ehrlicher lesbar. Die zweite Prüfung ergibt inhaltlich nur Sinn, wenn die erste schon erfüllt ist, genau wie an der Schleuse das Foto erst nach dem gültigen Ticket überhaupt eine Rolle spielt.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Könnte man das nicht auch mit einer einzigen Und-Verknüpfung schreiben, statt zwei if ineinander zu verschachteln?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Bei nur zwei Bedingungen stimmt das, if hatTicket UND-Zeichen UND-Zeichen ausweisPasstZumFoto würde hier dasselbe Ergebnis liefern. Verschachtelung lohnt sich vor allem dann, wenn zwischen den beiden Prüfungen noch andere Schritte passieren sollen, die nur im äußeren wahren Fall überhaupt Sinn ergeben.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Noch eine letzte Frage: gibt es einen Unterschied zwischen if hintereinander mehrfach geschrieben, und einer Kette aus if und else if?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, einen wichtigen. Schreibst du mehrere reine if hintereinander, ohne else if, prüft der Computer jede einzelne davon komplett durch, auch wenn eine frühere schon zutraf.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Bei einer else-if-Kette dagegen stoppt die Prüfung, sobald der erste Treffer feststeht, wie wir eben gesehen haben. Das ist nicht nur schneller, es verhindert auch, dass am Ende versehentlich zwei Fälle gleichzeitig zutreffen und beide ihren eigenen Code ausführen.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Bei Schulnoten macht das kaum einen Unterschied, weil eine Note nicht gleichzeitig 1 und 2 sein kann. Bei anderen Bedingungen, etwa Preisstufen ab einem bestimmten Betrag, kann eine falsche Wahl zwischen beiden Varianten aber zu doppelt angewendeten Rabatten führen.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Also nochmal ganz kurz: eine Bedingung ist eine Frage im Code, die nur wahr oder falsch beantwortet werden kann. if leitet den wahren Fall ein, else den übrigen Fall. UND verlangt, dass alle Teile gleichzeitig wahr sind, ODER reicht schon bei einem einzigen wahren Teil.",
+      "isKeySentence": true,
+      "role": "key"
+    },
+    {
+      "speaker": "A",
+      "text": "Zum Schluss noch einmal alle Begriffe von heute in einer kurzen Liste.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Bedingung: eine Frage im Code, die nur wahr oder falsch beantwortet werden kann, und die entscheidet, welcher Teil des Codes läuft.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Vergleichsoperator: ein Zeichen, das zwei Werte vergleicht, etwa ob sie gleich sind oder welcher größer ist.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "if: das Wort, mit dem eine Bedingung beginnt, gefolgt von der Frage in runden Klammern.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "else: der Teil des Codes, der läuft, wenn die if-Bedingung davor falsch war.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Und-Verknüpfung, geschrieben als zwei Kaufmanns-Und-Zeichen: eine Verknüpfung, die nur wahr ist, wenn beide einzelnen Bedingungen wahr sind.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Oder-Verknüpfung, geschrieben als zwei senkrechte Striche: eine Verknüpfung, die schon wahr ist, sobald mindestens eine der beiden Bedingungen wahr ist.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Funktion: ein wiederverwendbares Stück Code mit eigenem Namen, das eine feste Abfolge von Schritten ausführt.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss ich bei UND und ODER immer nur genau zwei Bedingungen verknüpfen, oder geht das auch mit mehr?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Du kannst beliebig viele Bedingungen aneinanderreihen, zum Beispiel gleich drei Stück auf einmal. Bei UND müssen dann alle drei gleichzeitig wahr sein, bei ODER reicht weiterhin schon eine einzige wahre Bedingung unter allen dreien.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Was passiert, wenn ich if schreibe, aber keine geschweiften Klammern dahinter setze?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Ohne geschweifte Klammern gilt nur die allernächste einzelne Zeile als zur Bedingung gehörig, nicht mehrere Zeilen danach. Weil das leicht zu Missverständnissen führt, setzen die meisten Programmierer die geschweiften Klammern trotzdem immer, auch bei nur einer Zeile.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann eine Bedingung auch einfach nur eine Variable sein, ohne einen Vergleich mit doppeltem Gleichheitszeichen?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, das geht, vor allem bei einer Variable vom Datentyp Boolean. Schreibst du if istAngemeldet, ohne weiteren Vergleich, prüft der Computer direkt, ob istAngemeldet gerade true ist. Das ist kürzer als if istAngemeldet doppeltes Ist-Gleich true, und bedeutet genau dasselbe.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Warum benutzt darts-checkout drei getrennte Bedingungen statt einer einzigen Tabelle mit allen Kombinationen?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Weil es bei nur drei Auszahlungsregeln übersichtlicher bleibt, jede Regel als eigene, kurze Bedingung zu schreiben. Eine Tabelle würde sich erst bei sehr vielen unterschiedlichen Regeln lohnen, hier wäre sie unnötiger Aufwand für denselben Zweck.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Was ist der Unterschied zwischen else und else if?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "else if prüft noch eine weitere eigene Bedingung, falls die Bedingung davor falsch war. else prüft gar nichts mehr, es fängt einfach alle übrigen Fälle auf, die vorher noch nicht zutrafen. Ein else steht deshalb immer ganz am Ende einer solchen Kette, nie in der Mitte.",
+      "isKeySentence": false,
+      "role": "faq"
+    }
+  ],
+  "practiceExample": {
+    "text": "Im Repo darts-checkout entscheidet die Funktion isFinisher in src/index.ts mit einer kleinen Kette von if-Zeilen, ob ein Wurf das Spiel beenden darf. In Zeile 82 gibt sie bei der Regel straight sofort true zurück. In Zeile 83 prüft sie bei der Regel double, ob der Ring gleich double oder gleich bullseye ist, mit einer ODER-Verknüpfung. Fällt keine der beiden if-Bedingungen zu, das heißt bei der Regel master, prüft die letzte Zeile der Funktion ohne weiteres if, ob der Ring double, treble oder bullseye ist. So bekommt jede der drei Auszahlungsregeln ihre eigene, klar lesbare Bedingung.",
+    "repoNote": "repo-darts-checkout",
+    "location": "src/index.ts, Zeile 80-84 (Funktion isFinisher)"
+  },
+  "quiz": [
+    {
+      "question": "Was tut eine Bedingung im Code?",
+      "area": "Bedingungen",
+      "options": [
+        {
+          "text": "Sie prüft eine Frage, deren Antwort nur wahr oder falsch sein kann, und steuert so, welcher Teil des Codes läuft.",
+          "isCorrect": true,
+          "explanation": "Genau das ist der Kern: eine Bedingung entscheidet zwischen genau zwei Antworten, wahr oder falsch."
+        },
+        {
+          "text": "Sie legt eine neue Variable mit einem Startwert an.",
+          "isCorrect": false,
+          "explanation": "Das beschreibt let oder const, nicht eine Bedingung."
+        },
+        {
+          "text": "Sie zeigt grundsätzlich automatisch und ohne jede weitere Prüfung sofort einen langen Text auf dem gesamten Bildschirm an.",
+          "isCorrect": false,
+          "explanation": "Eine Bedingung muss nichts anzeigen, sie kann auch nur eine Berechnung steuern."
+        },
+        {
+          "text": "Sie läuft immer genau zweimal hintereinander ab.",
+          "isCorrect": false,
+          "explanation": "Eine Bedingung wird einmal geprüft, nicht automatisch mehrfach."
+        }
+      ]
+    },
+    {
+      "question": "Was passiert bei if alter größer gleich 18, wenn alter genau 18 ist?",
+      "area": "Bedingungen",
+      "options": [
+        {
+          "text": "Die Bedingung ist wahr, weil größer gleich auch den genau gleichen Wert einschließt.",
+          "isCorrect": true,
+          "explanation": "größer gleich schließt den exakt gleichen Wert mit ein, deshalb ist 18 größer gleich 18 wahr."
+        },
+        {
+          "text": "Die Bedingung ist falsch, weil 18 nicht größer als 18 ist.",
+          "isCorrect": false,
+          "explanation": "größer gleich prüft auch die Gleichheit mit, nicht nur echtes größer sein."
+        },
+        {
+          "text": "Der Code stürzt an dieser einen Stelle sofort und ohne jede weitere Fehlermeldung im Hintergrund völlig ab.",
+          "isCorrect": false,
+          "explanation": "Ein Vergleich stürzt nicht ab, er liefert nur wahr oder falsch."
+        },
+        {
+          "text": "Es kommt darauf an, ob davor let oder const benutzt wurde.",
+          "isCorrect": false,
+          "explanation": "let oder const spielt für das Ergebnis eines Vergleichs keine Rolle."
+        }
+      ]
+    },
+    {
+      "question": "Warum benutzt man zum Vergleichen zwei Gleichheitszeichen statt einem einzigen?",
+      "area": "Vergleiche",
+      "options": [
+        {
+          "text": "Weil ein einzelnes Gleichheitszeichen bereits einer Variable einen Wert zuweist, statt zu vergleichen.",
+          "isCorrect": true,
+          "explanation": "Ein einzelnes Gleichheitszeichen ist bereits mit einer anderen Aufgabe belegt, dem Zuweisen eines Werts."
+        },
+        {
+          "text": "Weil zwei gleiche Zeichen hintereinander grundsätzlich immer etwas schneller vom Computer gelesen und verarbeitet werden als nur eines.",
+          "isCorrect": false,
+          "explanation": "Die Lesegeschwindigkeit hat mit der Anzahl der Zeichen hier nichts zu tun."
+        },
+        {
+          "text": "Weil ein einzelnes Gleichheitszeichen in der Sprache verboten ist.",
+          "isCorrect": false,
+          "explanation": "Ein einzelnes Gleichheitszeichen ist erlaubt, es bedeutet nur etwas anderes, nämlich Zuweisen."
+        },
+        {
+          "text": "Weil doppelte Zeichen für alle Vergleichsoperatoren vorgeschrieben sind.",
+          "isCorrect": false,
+          "explanation": "Größer als und größer gleich bestehen nicht aus zwei gleichen Zeichen, sondern aus eigenen Symbolen."
+        }
+      ]
+    },
+    {
+      "question": "Wie viele der beiden Teile einer if-else-Konstruktion laufen bei jedem Durchlauf?",
+      "area": "Bedingungen",
+      "options": [
+        {
+          "text": "Genau einer der beiden Teile.",
+          "isCorrect": true,
+          "explanation": "Entweder läuft der if-Teil, wenn die Bedingung wahr ist, oder der else-Teil, wenn sie falsch ist, nie beide."
+        },
+        {
+          "text": "Immer beide Teile nacheinander.",
+          "isCorrect": false,
+          "explanation": "Nur einer der beiden Teile läuft, der andere wird komplett übersprungen."
+        },
+        {
+          "text": "Keiner der beiden Teile, wenn ein else vorhanden ist.",
+          "isCorrect": false,
+          "explanation": "Mit einem else läuft immer mindestens einer der beiden Teile, nie keiner."
+        },
+        {
+          "text": "Das hängt vom verwendeten Datentyp der Bedingung ab.",
+          "isCorrect": false,
+          "explanation": "Der Datentyp spielt dabei keine Rolle, nur das Ergebnis der Bedingung selbst zählt."
+        }
+      ]
+    },
+    {
+      "question": "Wann ist hatSchluessel UND hatCode insgesamt wahr?",
+      "area": "UND und ODER",
+      "options": [
+        {
+          "text": "Nur wenn beide einzelnen Bedingungen gleichzeitig wahr sind.",
+          "isCorrect": true,
+          "explanation": "UND verlangt, dass alle verknüpften Teile gleichzeitig wahr sind, sonst ist das Gesamtergebnis falsch."
+        },
+        {
+          "text": "Sobald mindestens eine der beiden Bedingungen wahr ist.",
+          "isCorrect": false,
+          "explanation": "Das beschreibt ODER, nicht UND. Bei UND reicht ein einzelner wahrer Teil nicht."
+        },
+        {
+          "text": "Immer, unabhängig vom Inhalt der beiden Bedingungen.",
+          "isCorrect": false,
+          "explanation": "Der Inhalt der beiden Bedingungen entscheidet direkt über das Ergebnis, es ist nicht immer wahr."
+        },
+        {
+          "text": "Nie, weil die Und-Verknüpfung in dieser Programmiersprache ausschließlich innerhalb von Schleifen und niemals in einer einfachen Bedingung erlaubt ist.",
+          "isCorrect": false,
+          "explanation": "UND ist innerhalb jeder Bedingung erlaubt, nicht nur in Schleifen."
+        }
+      ]
+    },
+    {
+      "question": "Ein Fahrstuhl öffnet bei personSteht ODER paketLiegt. Wann bleibt die Tür geschlossen?",
+      "area": "UND und ODER",
+      "options": [
+        {
+          "text": "Nur wenn weder eine Person davorsteht noch ein Paket liegt.",
+          "isCorrect": true,
+          "explanation": "ODER ist bereits wahr, sobald einer der beiden Teile zutrifft, geschlossen bleibt sie nur, wenn beide falsch sind."
+        },
+        {
+          "text": "Immer, wenn mindestens eine Bedingung wahr ist.",
+          "isCorrect": false,
+          "explanation": "Genau dann öffnet sich die Tür, sie bleibt nicht geschlossen."
+        },
+        {
+          "text": "Nur wenn beide Bedingungen gleichzeitig wahr sind.",
+          "isCorrect": false,
+          "explanation": "Das wäre die Regel für UND, nicht für ODER."
+        },
+        {
+          "text": "Sie bleibt bei einer Oder-Verknüpfung grundsätzlich und in jedem denkbaren Fall dauerhaft fest geschlossen, ganz gleich was passiert.",
+          "isCorrect": false,
+          "explanation": "ODER öffnet die Tür gerade sehr leicht, schon bei einer einzigen wahren Bedingung."
+        }
+      ]
+    },
+    {
+      "question": "Warum prüft der Code bei mehreren else if nicht einfach alle Bedingungen der Reihe nach vollständig durch?",
+      "area": "Bedingungen",
+      "options": [
+        {
+          "text": "Weil er stoppt, sobald die erste zutreffende Bedingung gefunden wurde, und den Rest überspringt.",
+          "isCorrect": true,
+          "explanation": "Sobald eine Bedingung zutrifft, wird nur ihr Teil ausgeführt, alle weiteren else if und else werden übersprungen."
+        },
+        {
+          "text": "Weil else if in den meisten Sprachen technisch gar nicht funktioniert.",
+          "isCorrect": false,
+          "explanation": "else if funktioniert einwandfrei und wird in der Praxis sehr häufig benutzt."
+        },
+        {
+          "text": "Weil jede Bedingung nur einmal im ganzen Code stehen darf.",
+          "isCorrect": false,
+          "explanation": "Dieselbe Art von Bedingung darf mehrfach an verschiedenen Stellen im Code stehen."
+        },
+        {
+          "text": "Weil else if nur mit Zahlen funktioniert, nicht mit Text oder Boolean.",
+          "isCorrect": false,
+          "explanation": "else if funktioniert mit jedem Datentyp, der sich zu wahr oder falsch auswerten lässt."
+        }
+      ]
+    },
+    {
+      "question": "In darts-checkout gibt isFinisher bei der Regel straight sofort true zurück. Was bedeutet das für einen Wurf?",
+      "area": "Praxisbeispiel",
+      "options": [
+        {
+          "text": "Jeder Wurf darf das Spiel beenden, egal welchen Ring er trifft.",
+          "isCorrect": true,
+          "explanation": "Bei der straight-Regel gilt keine weitere Einschränkung, jeder getroffene Ring zählt als gültiger Schlussdart."
+        },
+        {
+          "text": "Nur ein Dreifachfeld darf das Spiel beenden.",
+          "isCorrect": false,
+          "explanation": "Das gilt erst bei der master-Regel, nicht bei straight, wo jeder Ring reicht."
+        },
+        {
+          "text": "Kein Wurf darf bei dieser Regel das Spiel beenden.",
+          "isCorrect": false,
+          "explanation": "true bedeutet genau das Gegenteil: jeder Wurf darf hier abschließen."
+        },
+        {
+          "text": "Nur die Doppelmitte darf das Spiel beenden.",
+          "isCorrect": false,
+          "explanation": "Das wäre eine viel strengere Regel als straight, wo jeder Ring erlaubt ist."
+        }
+      ]
+    },
+    {
+      "question": "Bei der Regel double prüft die Funktion ring gleich double ODER ring gleich bullseye. Welcher Wurf zählt bei dieser Regel nicht als gültiger Abschluss?",
+      "area": "Praxisbeispiel",
+      "options": [
+        {
+          "text": "Ein einfaches Feld, das kein Doppelfeld und keine bullseye ist.",
+          "isCorrect": true,
+          "explanation": "Nur double oder bullseye erfüllen die ODER-Bedingung, ein einfaches Feld erfüllt keine der beiden und zählt daher nicht."
+        },
+        {
+          "text": "Ein getroffenes Doppelfeld.",
+          "isCorrect": false,
+          "explanation": "Ein Doppelfeld erfüllt die erste Hälfte der ODER-Bedingung und zählt als gültiger Abschluss."
+        },
+        {
+          "text": "Die getroffene bullseye.",
+          "isCorrect": false,
+          "explanation": "Die bullseye erfüllt die zweite Hälfte der ODER-Bedingung und zählt ebenfalls als gültiger Abschluss."
+        },
+        {
+          "text": "Gar keiner, bei double zählt bei dieser Zeile jeder Wurf.",
+          "isCorrect": false,
+          "explanation": "Die ODER-Bedingung schließt ein einfaches Feld ausdrücklich aus, es zählt nicht jeder Wurf."
+        }
+      ]
+    },
+    {
+      "question": "Warum benutzt darts-checkout für jede der drei Auszahlungsregeln eine eigene, kurze Bedingung statt einer einzigen riesigen Zeile?",
+      "area": "Praxisbeispiel",
+      "options": [
+        {
+          "text": "Weil kurze, getrennte Bedingungen für Menschen leichter zu lesen sind.",
+          "isCorrect": true,
+          "explanation": "Lesbarkeit ist der genannte Grund: jede Regel bekommt einen eigenen, klar verständlichen Absatz im Code."
+        },
+        {
+          "text": "Weil eine einzige lange Bedingung technisch nicht ausführbar wäre.",
+          "isCorrect": false,
+          "explanation": "Eine lange Bedingung wäre technisch ausführbar, nur deutlich schwerer zu lesen."
+        },
+        {
+          "text": "Weil jede einzelne Bedingung in dieser Programmiersprache nur eine sehr begrenzte, fest vorgeschriebene Anzahl an Zeichen haben darf.",
+          "isCorrect": false,
+          "explanation": "Es gibt keine solche Zeichenbegrenzung für Bedingungen in dieser Sprache."
+        },
+        {
+          "text": "Weil getrennte Bedingungen automatisch schneller berechnet werden.",
+          "isCorrect": false,
+          "explanation": "Der Grund ist Lesbarkeit für Menschen, nicht die Rechengeschwindigkeit des Computers."
+        }
+      ]
+    },
+    {
+      "question": "Was liefert if istAngemeldet, ohne einen weiteren Vergleich dahinter, wenn istAngemeldet den Wert true hat?",
+      "area": "Bedingungen",
+      "options": [
+        {
+          "text": "Die Bedingung ist wahr, weil der Boolean-Wert direkt geprüft wird.",
+          "isCorrect": true,
+          "explanation": "Ein Boolean kann direkt als Bedingung stehen, ohne zusätzlichen Vergleich mit true."
+        },
+        {
+          "text": "Das ist ein Fehler, weil ein Vergleichsoperator zwingend nötig ist.",
+          "isCorrect": false,
+          "explanation": "Ein Vergleichsoperator ist hier nicht zwingend, ein Boolean kann direkt geprüft werden."
+        },
+        {
+          "text": "Die Bedingung ist immer falsch ohne zusätzlichen Vergleich.",
+          "isCorrect": false,
+          "explanation": "Ist der Boolean-Wert true, ist die Bedingung wahr, auch ohne zusätzlichen Vergleich."
+        },
+        {
+          "text": "Der Computer wandelt istAngemeldet automatisch in eine Zahl um.",
+          "isCorrect": false,
+          "explanation": "Es findet keine Umwandlung in eine Zahl statt, der Boolean-Wert wird direkt geprüft."
+        }
+      ]
+    },
+    {
+      "question": "Ein Kollege schreibt if note größer als 4, dann Ausgabe nicht bestanden, sonst nichts. Was fehlt in dieser Beschreibung, damit auch der bestandene Fall sichtbar wird?",
+      "area": "Bedingungen",
+      "options": [
+        {
+          "text": "Ein else-Teil, der für den bestandenen Fall eine eigene Ausgabe zeigt.",
+          "isCorrect": true,
+          "explanation": "Ohne else passiert im bestandenen Fall gar nichts sichtbares, ein eigener else-Teil würde das nachholen."
+        },
+        {
+          "text": "Ein zweites if mit derselben Bedingung.",
+          "isCorrect": false,
+          "explanation": "Ein zweites, gleiches if würde dieselbe Prüfung nur wiederholen, nicht den fehlenden Fall abdecken."
+        },
+        {
+          "text": "Ein UND anstelle des größer-als-Vergleichs.",
+          "isCorrect": false,
+          "explanation": "UND verknüpft mehrere Bedingungen, das löst hier nicht das Problem des fehlenden else-Falls."
+        },
+        {
+          "text": "Ein const statt let vor der Variable note.",
+          "isCorrect": false,
+          "explanation": "let oder const betreffen nur das Anlegen der Variable, nicht das Fehlen einer Ausgabe im else-Fall."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Öffne auf deinem eigenen Rechner die Entwicklerkonsole des Browsers, so wie in der letzten Lektion. Lege eine Variable an: let punkte ist gleich 45. Tippe dann diese vier Zeilen einzeln ein: if Klammer auf punkte größer gleich 50 Klammer zu geschweifte Klammer auf console Punkt log Klammer auf Anführungszeichen bestanden Anführungszeichen Klammer zu geschweifte Klammer zu, gefolgt von else geschweifte Klammer auf console Punkt log Klammer auf Anführungszeichen nicht bestanden Anführungszeichen Klammer zu geschweifte Klammer zu. Ändere danach den Wert von punkte auf 60 und wiederhole die Bedingung, um den anderen Zweig zu sehen.",
+    "expectation": "Bei punkte gleich 45 zeigt die Entwicklerkonsole nicht bestanden. Setzt du punkte auf 60 und führst die Bedingung erneut aus, zeigt die Entwicklerkonsole bestanden.",
+    "checklist": [
+      "Entwicklerkonsole geöffnet",
+      "Variable punkte mit let angelegt",
+      "if-else-Bedingung mit console.log eingetippt und ausgeführt",
+      "Ergebnis nicht bestanden bei punkte gleich 45 gesehen",
+      "Wert von punkte auf 60 geändert und Ergebnis bestanden gesehen"
+    ]
+  },
+  "audio": {
+    "file": "M01-06-02.mp3",
+    "durationSeconds": 1002,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Muss ich bei UND und ODER immer nur genau zwei Bedingungen verknüpfen, oder geht das auch mit mehr?",
+      "answer": "Du kannst beliebig viele Bedingungen aneinanderreihen, zum Beispiel gleich drei Stück auf einmal. Bei UND müssen dann alle drei gleichzeitig wahr sein, bei ODER reicht weiterhin schon eine einzige wahre Bedingung unter allen dreien."
+    },
+    {
+      "question": "Was passiert, wenn ich if schreibe, aber keine geschweiften Klammern dahinter setze?",
+      "answer": "Ohne geschweifte Klammern gilt nur die allernächste einzelne Zeile als zur Bedingung gehörig, nicht mehrere Zeilen danach. Weil das leicht zu Missverständnissen führt, setzen die meisten Programmierer die geschweiften Klammern trotzdem immer, auch bei nur einer Zeile."
+    },
+    {
+      "question": "Kann eine Bedingung auch einfach nur eine Variable sein, ohne einen Vergleich mit doppeltem Gleichheitszeichen?",
+      "answer": "Ja, das geht, vor allem bei einer Variable vom Datentyp Boolean. Schreibst du if istAngemeldet, ohne weiteren Vergleich, prüft der Computer direkt, ob istAngemeldet gerade true ist. Das ist kürzer als if istAngemeldet doppeltes Ist-Gleich true, und bedeutet genau dasselbe."
+    },
+    {
+      "question": "Warum benutzt darts-checkout drei getrennte Bedingungen statt einer einzigen Tabelle mit allen Kombinationen?",
+      "answer": "Weil es bei nur drei Auszahlungsregeln übersichtlicher bleibt, jede Regel als eigene, kurze Bedingung zu schreiben. Eine Tabelle würde sich erst bei sehr vielen unterschiedlichen Regeln lohnen, hier wäre sie unnötiger Aufwand für denselben Zweck."
+    },
+    {
+      "question": "Was ist der Unterschied zwischen else und else if?",
+      "answer": "else if prüft noch eine weitere eigene Bedingung, falls die Bedingung davor falsch war. else prüft gar nichts mehr, es fängt einfach alle übrigen Fälle auf, die vorher noch nicht zutrafen. Ein else steht deshalb immer ganz am Ende einer solchen Kette, nie in der Mitte."
+    }
+  ]
+}

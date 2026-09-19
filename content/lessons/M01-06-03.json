@@ -1,0 +1,961 @@
+{
+  "id": "M01-06-03",
+  "title": "Schleifen: etwas mehrfach tun",
+  "durationMinutes": 17,
+  "prerequisites": [
+    "M01-00-01",
+    "M01-00-02",
+    "M01-06-01",
+    "M01-06-02"
+  ],
+  "terms": [
+    {
+      "term": "Schleife",
+      "definition": "Ein Teil des Codes, der mehrfach hintereinander wiederholt wird, statt nur einmal zu laufen."
+    },
+    {
+      "term": "for-Schleife",
+      "definition": "Eine Schleife, bei der von Anfang an feststeht, wie oft sie läuft, meist gesteuert über einen Zähler."
+    },
+    {
+      "term": "while-Schleife",
+      "definition": "Eine Schleife, die so lange läuft, wie eine Bedingung wahr bleibt, ohne dass die Anzahl der Durchläufe vorher feststeht."
+    },
+    {
+      "term": "Zähler",
+      "definition": "Eine Variable, die bei jedem Durchlauf einer Schleife mitzählt, an welchem Durchlauf man gerade ist."
+    },
+    {
+      "term": "Endlosschleife",
+      "definition": "Eine Schleife, deren Abbruchbedingung nie wahr wird, sodass sie ohne Ende weiterläuft."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "text": "Stell dir eine Waschmaschine vor.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Sie dreht dieselbe Bewegung immer wieder: Wasser rein, drehen, Wasser raus, wieder drehen. Nicht einmal, sondern viele Male hintereinander, bis die Wäsche sauber ist.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Und an der Anzeige läuft dabei die Restzeit mit, sie zählt genau mit, wie viele Minuten oder Umdrehungen noch übrig sind, bis der Waschgang fertig ist.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "B",
+      "text": "Und im Code gibt es auch so ein sich wiederholendes Stück, das immer wieder dasselbe tut?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau. Bisher haben wir nur Zeilen gesehen, die einmal von oben nach unten ablaufen. Manchmal soll aber derselbe Teil des Codes mehrfach hintereinander laufen, ohne dass du ihn zehnmal von Hand hinschreibst.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "So ein sich wiederholendes Stück Code nennt man eine Schleife.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Schleife.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein Beispiel aus dem Alltag: du gehst eine Einkaufsliste durch, Punkt für Punkt, und tust bei jedem Punkt dasselbe: schauen, ob er im Wagen liegt, wenn nicht, ihn holen. Diese eine Handlung wiederholt sich für jeden einzelnen Punkt auf der Liste.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Wie schreibt man so eine Wiederholung im Code hin?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Es gibt zwei gängige Bauarten. Die erste passt, wenn du von Anfang an genau weißt, wie oft etwas wiederholt werden soll.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir wieder die Waschmaschine vor, mit einer Anzeige, die von 1 bis 10 hochzählt, eine Zahl für jede Umdrehung der Trommel in dieser Phase. Nach der zehnten Umdrehung ist diese Phase fertig, ganz gleich was sonst passiert.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "So eine Schleife mit einer von Anfang an feststehenden Anzahl an Durchläufen heißt for-Schleife.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "for-Schleife.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Wir schreiben: for Klammer auf let i ist gleich 0, Semikolon, i kleiner als 5, Semikolon, i plus plus, Klammer zu, geschweifte Klammer auf, console Punkt log Klammer auf i Klammer zu, geschweifte Klammer zu.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Das war jetzt viel auf einmal, kannst du das in kleinere Stücke zerlegen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Gerne, Stück für Stück. Der Kopf einer for-Schleife hat immer drei Teile, getrennt durch Semikolons.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Der erste Teil, let i ist gleich 0, legt eine neue Variable namens i an und setzt sie auf 0. Diese Variable zählt bei jedem Durchlauf mit, an welchem Durchlauf wir gerade sind.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "So eine mitzählende Variable nennt man einen Zähler.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Zähler.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Der Name i steht dabei einfach für Index, eine übliche kurze Bezeichnung für einen Zähler. Das ist so, wie man in der Küche eine Schublade auch einfach Schublade eins nennen könnte, statt ihr einen langen Namen zu geben.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Und der zweite Teil, i kleiner als 5, ist das dann die Bedingung, wie wir sie letzte Lektion gelernt haben?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ganz genau, gut erkannt. Der zweite Teil ist die Abbruchbedingung. Vor jedem einzelnen Durchlauf prüft der Computer: ist i noch kleiner als 5. Ist das wahr, läuft der Durchlauf. Ist es falsch, stoppt die ganze Schleife sofort.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Der dritte Teil, i plus plus, läuft nach jedem einzelnen Durchlauf, und erhöht i um genau 1. Zwei Plus-Zeichen hintereinander sind eine Kurzform für i ist gleich i plus 1.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein Beispiel aus der Küche: du füllst fünf Gläser Marmelade nacheinander ab, und nach jedem Glas machst du einen Strich auf einem Zettel. Der Strich ist wie i plus plus, er erhöht deinen eigenen Zähler um eins, und du hörst auf, sobald fünf Striche auf dem Zettel stehen.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Also läuft dieses Beispiel insgesamt genau fünfmal durch, mit i gleich 0, 1, 2, 3 und 4?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Exakt richtig. Fünf Durchläufe, weil i bei 0 startet und die Schleife stoppt, sobald i den Wert 5 erreicht, also nicht mehr kleiner als 5 ist. Das ist ein häufiger Stolperstein: man zählt bei 0 an, nicht bei 1, und die letzte Zahl wird nicht mehr mitgezählt.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann eine for-Schleife auch über eine Liste von Werten gehen, statt nur über Zahlen von 0 bis 5 zu zählen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, das ist sogar sehr üblich. Stell dir einen Einkaufskorb vor, in dem mehrere Zettel liegen, einer pro Artikel: Milch, Brot, Eier. Du nimmst sie nacheinander heraus, einen nach dem anderen, bis der Korb leer ist.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Im Code sieht so eine Liste aus wie eine einzige Variable mit mehreren Werten darin, getrennt durch Kommas, in eckigen Klammern. Wir schreiben: const artikel ist gleich eckige Klammer auf Anführungszeichen Milch Anführungszeichen, Komma, Anführungszeichen Brot Anführungszeichen, Komma, Anführungszeichen Eier Anführungszeichen, eckige Klammer zu.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Eine Schleife über so eine Liste sieht fast genauso aus wie beim Zeichen-für-Zeichen-Beispiel, das wir gleich noch aus einem echten Paket sehen werden. Wir schreiben: for Klammer auf const artikel von artikel eckige Klammer zu, geschweifte Klammer auf, console Punkt log Klammer auf artikel Klammer zu, geschweifte Klammer zu.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Diese Bauart läuft automatisch genau dreimal, einmal für jeden Eintrag in der Liste, egal ob die Liste drei, dreißig oder dreihundert Einträge hat. Du musst die Anzahl nicht selbst zählen.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Jetzt zur zweiten Bauart, für den Fall, dass du vorher gar nicht weißt, wie oft etwas wiederholt werden muss.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir vor, du rührst einen Teig, bis er glatt ist. Du weißt nicht im Voraus, ob das zwanzig oder vierzig Rührbewegungen dauert, du rührst einfach so lange weiter, bis eine bestimmte Bedingung erfüllt ist: der Teig ist glatt.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "So eine Schleife, die läuft, solange eine Bedingung wahr bleibt, ohne feste Anzahl an Durchläufen, heißt while-Schleife.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "while-Schleife.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "So sieht eine while-Schleife im Code aus: let punkte ist gleich 0. Danach: while Klammer auf punkte kleiner als 100 Klammer zu, geschweifte Klammer auf, punkte ist gleich punkte plus 10, geschweifte Klammer zu.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Also läuft diese while-Schleife immer weiter, solange punkte unter 100 liegt, und zählt dabei jedes Mal 10 Punkte dazu?",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau. Vor jedem Durchlauf prüft der Computer erneut: ist punkte kleiner als 100. Ist das wahr, läuft der Durchlauf, punkte steigt um 10. Ist es irgendwann falsch, weil punkte 100 erreicht hat, stoppt die Schleife.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Wann nimmt man dann eher for, und wann eher while?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Eine einfache Faustregel: kennst du die Anzahl der Durchläufe schon vorher, wie bei den fünf Marmeladengläsern, nimmst du for. Hängt das Ende von etwas ab, das sich während des Rührens erst noch zeigt, wie beim glatten Teig, nimmst du while.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Jetzt zu einer echten Gefahr bei Schleifen, vor der du dich unbedingt in Acht nehmen solltest.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir eine Waschmaschine vor, deren Restzeit-Anzeige kaputt ist und einfach nie auf 0 herunterzählt. Die Maschine dreht immer weiter, ohne jemals von selbst zu stoppen.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau das kann auch einer while-Schleife im Code passieren, wenn die Abbruchbedingung nie falsch wird. So eine Schleife nennt man eine Endlosschleife.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Endlosschleife.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein Beispiel für so eine Endlosschleife: while Klammer auf punkte kleiner als 100 Klammer zu, geschweifte Klammer auf, console Punkt log Klammer auf punkte Klammer zu, geschweifte Klammer zu. Hier fehlt die Zeile, die punkte erhöht. punkte bleibt für immer bei 0, die Bedingung bleibt für immer wahr, die Schleife hört nie auf.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Und was passiert dann wirklich, hängt sich der ganze Rechner dabei auf?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Meistens reagiert die Anwendung auf nichts mehr, weil sie ständig damit beschäftigt ist, dieselbe Schleife immer wieder durchzulaufen, ohne je zum nächsten Schritt zu kommen. In einem Browser fragt die Seite oft irgendwann, ob das Skript beendet werden soll.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Deshalb prüfst du bei jeder while-Schleife bewusst: gibt es irgendeine Zeile in der Schleife, die den geprüften Wert wirklich verändert, sodass die Bedingung irgendwann falsch werden kann.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Jetzt zu einem echten Beispiel aus einem kleinen Programmierpaket, in dem eine Schleife über einzelne Buchstaben eines Textes läuft.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Es heißt arabic-normalize und löst folgende Aufgabe: arabische Schrift so umformen, dass zwei eigentlich gleich klingende Wörter auch als gleich erkannt werden, selbst wenn sie mit leicht unterschiedlichen Zeichen geschrieben wurden.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein Teil dieser Aufgabe ist es, arabische Ziffern in gewöhnliche Ziffern umzuwandeln, Zeichen für Zeichen, denn ein Text kann beide Ziffernarten gemischt enthalten.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "In der Quelldatei src slash index Punkt ts dieses Pakets gibt es eine Funktion mit dem Namen mapDigits. Sie bekommt einen Text hinein, und gibt denselben Text zurück, nur mit umgewandelten Ziffern.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "In Zeile 72 beginnt die Funktion, in Zeile 73 steht direkt danach: let out ist gleich ein leerer Text in Anführungszeichen. Das ist unser Sammelbehälter, in dem am Ende der fertige, umgewandelte Text steht.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "In Zeile 74 beginnt die Schleife: for Klammer auf const ch von input Klammer zu, geschweifte Klammer auf.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Das ist eine besondere, sehr praktische Bauart der for-Schleife. Statt eines Zählers von 0 bis zu einer Zahl, geht sie direkt über jedes einzelne Zeichen der eingehenden Textvariable input, eines nach dem anderen, in genau der Reihenfolge, in der sie im Text stehen.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Also läuft diese Schleife automatisch so oft, wie der Text Zeichen hat, ohne dass man diese Anzahl selbst ausrechnen muss?",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau, das ist der große Vorteil dieser Bauart. Ob der Text drei Zeichen hat oder dreitausend, dieselbe Zeile funktioniert immer, ohne Anpassung.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "In Zeile 75 steht: const code ist gleich ch Punkt codePointAt Klammer auf 0 Klammer zu Ausrufezeichen. Das holt sich die Zahl, die dieses eine Zeichen im Unicode-System eindeutig kennzeichnet, so etwas wie eine Postleitzahl für jeden Buchstaben und jedes Symbol.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "In Zeile 76 wird geprüft, ob diese Zahl in einem der bekannten Bereiche für arabische Ziffern liegt, mit einer Bedingung, die auf gespeicherte Grenzwerte zugreift. In Zeile 77 hängt eine if-Bedingung mit einer Kurzform des else-Prinzips entweder die umgewandelte Ziffer oder das unveränderte Zeichen an out an.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "In Zeile 79, nach dem Ende der Schleife, gibt die Funktion mit return out den vollständigen, fertig umgewandelten Text zurück.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Warum geht man hier über jedes einzelne Zeichen, statt den ganzen Text auf einmal zu ersetzen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Weil jedes Zeichen für sich geprüft werden muss: ist es eine arabische Ziffer, die umgewandelt werden soll, oder ein gewöhnlicher Buchstabe, der einfach unverändert bleibt. Ohne eine Schleife müsste man diese Prüfung für jede mögliche Textlänge einzeln von Hand hinschreiben, was bei langen Texten unmöglich wäre.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau das ist der Kern einer Schleife: eine einzige, kurze Regel, die für eine beliebige Anzahl an Wiederholungen gilt, egal ob es drei sind oder drei Millionen.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Und wenn der Text leer ist, also gar keine Zeichen enthält, was passiert dann mit der Schleife?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Dann läuft die Schleife einfach null Mal, kein einziger Durchlauf. Das ist kein Fehler, sondern genau das erwartete Verhalten: bei nichts zu iterieren gibt es folgerichtig nichts zu tun, und die Funktion gibt sofort den ebenfalls leeren Sammelbehälter zurück.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Das zeigt auch, warum diese Bauart der for-Schleife so robust ist: du musst nicht extra prüfen, ob der Text überhaupt Zeichen enthält, bevor du die Schleife startest. Die Schleife kümmert sich bei jeder Textlänge von ganz allein richtig darum, auch bei der Länge null.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein letzter wichtiger Punkt zu Schleifen, bevor wir zusammenfassen: sie dürfen auch ineinander verschachtelt werden, genau wie wir es letzte Lektion schon bei Bedingungen gesehen haben.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir ein Regal mit mehreren Fächern vor, und in jedem Fach liegen mehrere Bücher. Um wirklich jedes einzelne Buch im ganzen Regal anzuschauen, gehst du erst Fach für Fach durch, und innerhalb jedes Fachs noch einmal Buch für Buch.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Im Code sieht das so aus: eine äußere Schleife läuft über die Fächer, und innerhalb ihrer geschweiften Klammern läuft eine zweite, innere Schleife über die Bücher in jedem einzelnen Fach.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Wie oft läuft dann insgesamt die innere Schleife, wenn es drei Fächer mit je vier Büchern gibt?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Für jedes der drei Fächer läuft die innere Schleife komplett viermal durch, einmal für jedes Buch. Macht dreimal vier, also insgesamt zwölf Durchläufe der inneren Schleife über die gesamte verschachtelte Konstruktion hinweg.",
+      "isKeySentence": false, "role": "why" },
+    {
+      "speaker": "A",
+      "text": "Das nutzt zum Beispiel mapDigits so nicht, weil dort nur eine einzige Ebene gebraucht wird, ein Text und seine Zeichen. Bei komplexeren Aufgaben, etwa einer Tabelle mit Zeilen und Spalten, sind verschachtelte Schleifen aber sehr üblich.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Macht es einen Unterschied, wie viele Durchläufe eine Schleife am Ende wirklich braucht, oder ist das dem Computer völlig egal?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Es macht durchaus einen Unterschied, besonders bei verschachtelten Schleifen. Bei drei Fächern mit je vier Büchern waren es zwölf Durchläufe. Bei hundert Fächern mit je hundert Büchern wären es schon zehntausend Durchläufe, obwohl beide Zahlen für sich genommen klein wirken.", "isKeySentence": false, "role": "why" },
+    {
+      "speaker": "A",
+      "text": "Genau solche Kosten dokumentiert übrigens auch das Paket cron-last-due aus der ersten Lektion ausdrücklich. Eine Rückwärtssuche über ein ganzes Jahr kostet dort laut eigener Beschreibung etwa eine halbe Million Durchläufe, eine Zahl, die man vor einer Schleife über sehr viele Einträge kennen sollte.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Das heißt nicht, dass Schleifen mit vielen Durchläufen automatisch schlecht sind. Es heißt nur, dass du dir bei sehr großen Zahlen bewusst die Frage stellst, ob die Schleife auch bei diesem größeren Umfang noch schnell genug fertig wird.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Wie finde ich denn im Zweifel heraus, wie viele Durchläufe eine bestimmte Schleife wirklich braucht?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Am einfachsten, indem du dir bei jeder Schleife bewusst die Anzahl der Durchläufe ausrechnest, statt sie zu erraten. Bei einer for-Schleife steht sie oft direkt in der Abbruchbedingung, bei verschachtelten Schleifen multiplizierst du die Anzahl jeder einzelnen Ebene miteinander.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Also nochmal ganz kurz: eine Schleife wiederholt ein Stück Code mehrfach. Eine for-Schleife eignet sich, wenn die Anzahl der Durchläufe vorher feststeht, eine while-Schleife, wenn sie von einer Bedingung abhängt. Ein Zähler zählt die Durchläufe mit, und fehlt die Zeile, die ihn verändert, entsteht eine Endlosschleife, die nie von selbst aufhört.",
+      "isKeySentence": true,
+      "role": "key"
+    },
+    {
+      "speaker": "A",
+      "text": "Zum Schluss noch einmal alle Begriffe von heute in einer kurzen Liste.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Schleife: ein Teil des Codes, der mehrfach hintereinander wiederholt wird, statt nur einmal zu laufen.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "for-Schleife: eine Schleife, bei der von Anfang an feststeht, wie oft sie läuft, meist gesteuert über einen Zähler.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "while-Schleife: eine Schleife, die läuft, solange eine Bedingung wahr bleibt, ohne feste Anzahl an Durchläufen.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Zähler: eine Variable, die bei jedem Durchlauf einer Schleife mitzählt, an welchem Durchlauf man gerade ist.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Endlosschleife: eine Schleife, deren Abbruchbedingung nie wahr wird, sodass sie ohne Ende weiterläuft.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss der Zähler einer for-Schleife immer i heißen?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, i ist nur eine weit verbreitete Gewohnheit, keine Pflicht. Du darfst den Zähler auch zaehler oder position nennen. Bei mehreren ineinander verschachtelten Schleifen ist ein sprechender Name sogar deutlich klarer als eine zweite Schleife mit demselben Namen i.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Was ist der Unterschied zwischen i plus plus und i ist gleich i plus 1?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Inhaltlich passiert dasselbe: der Wert von i steigt um genau 1. i plus plus ist nur eine kürzere Schreibweise für denselben Vorgang, die sich in Schleifenköpfen eingebürgert hat, weil sie weniger Tipparbeit macht und beim Lesen sofort als Zähler-Erhöhung erkennbar ist.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann eine for-Schleife auch rückwärts zählen, von einer hohen Zahl zu einer niedrigen?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, das geht ohne Weiteres. Du startest den Zähler bei der hohen Zahl, zum Beispiel let i ist gleich 5, und prüfst i größer als 0 als Abbruchbedingung. Dann verringerst du i bei jedem Durchlauf mit i minus minus statt i plus plus, damit die Schleife von 5 bis 1 rückwärts zählt.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Wie merke ich mir am besten, ob ich eher eine for-Schleife oder eine while-Schleife brauche?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir die Frage: weiß ich schon vorher, wie oft das laufen soll, oder hängt das Ende von etwas ab, das sich erst während des Ablaufs zeigt. Im ersten Fall passt eine for-Schleife besser, im zweiten Fall eine while-Schleife. Im Zweifel funktionieren aber auch beide Bauarten für dieselbe Aufgabe, nur unterschiedlich elegant.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Wie erkenne ich im Voraus, ob ich versehentlich eine Endlosschleife baue?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Lies bei jeder while-Schleife bewusst mit: welche Variable steht in der Bedingung, und gibt es innerhalb der geschweiften Klammern wirklich eine Zeile, die genau diese Variable so verändert, dass die Bedingung irgendwann falsch wird. Fehlt diese Zeile, oder verändert sie die falsche Variable, entsteht eine Endlosschleife.",
+      "isKeySentence": false,
+      "role": "faq"
+    }
+  ],
+  "practiceExample": {
+    "text": "Im Repo arabic-normalize geht die Funktion mapDigits in src/index.ts mit einer for-Schleife über jedes einzelne Zeichen eines Textes. In Zeile 74 steht for (const ch of input): sie läuft automatisch so oft, wie der Text Zeichen hat. In Zeile 75 wird der Unicode-Codepunkt jedes Zeichens ermittelt, in Zeile 76 geprüft, ob er in einem Bereich arabischer Ziffern liegt, und in Zeile 77 je nach Ergebnis entweder die umgewandelte Ziffer oder das unveränderte Zeichen an den Sammelbehälter out angehängt. Nach dem Ende der Schleife gibt Zeile 79 den fertigen Text zurück. So verarbeitet dieselbe kurze Schleife Texte jeder Länge, von einem einzelnen Zeichen bis zu einer ganzen Seite.",
+    "repoNote": "repo-arabic-normalize",
+    "location": "src/index.ts, Zeile 72-80 (Funktion mapDigits)"
+  },
+  "quiz": [
+    {
+      "question": "Was tut eine Schleife im Code?",
+      "area": "Schleifen",
+      "options": [
+        {
+          "text": "Sie wiederholt ein Stück Code mehrfach hintereinander, statt es nur einmal auszuführen.",
+          "isCorrect": true,
+          "explanation": "Das ist die Grundidee jeder Schleife: derselbe Code läuft mehrfach, ohne dass man ihn mehrfach hinschreiben muss."
+        },
+        {
+          "text": "Sie legt eine neue Variable mit einem Startwert an.",
+          "isCorrect": false,
+          "explanation": "Das beschreibt let oder const, nicht eine Schleife."
+        },
+        {
+          "text": "Sie prüft grundsätzlich immer nur eine einzelne Frage und läuft danach in jedem Fall genau ein einziges Mal weiter.",
+          "isCorrect": false,
+          "explanation": "Das beschreibt eher eine einzelne Bedingung, keine Wiederholung."
+        },
+        {
+          "text": "Sie stoppt automatisch nach genau drei Durchläufen.",
+          "isCorrect": false,
+          "explanation": "Die Anzahl der Durchläufe hängt von der jeweiligen Schleife ab, nicht fest von drei."
+        }
+      ]
+    },
+    {
+      "question": "Wie oft läuft for Klammer auf let i ist gleich 0, Semikolon, i kleiner als 5, Semikolon, i plus plus Klammer zu insgesamt durch?",
+      "area": "for-Schleifen",
+      "options": [
+        {
+          "text": "Fünfmal, mit i gleich 0, 1, 2, 3 und 4.",
+          "isCorrect": true,
+          "explanation": "i startet bei 0 und die Schleife stoppt, sobald i nicht mehr kleiner als 5 ist, also nach fünf Durchläufen."
+        },
+        {
+          "text": "Viermal, mit i gleich 1, 2, 3 und 4.",
+          "isCorrect": false,
+          "explanation": "i startet bei 0, nicht bei 1, deshalb sind es fünf Durchläufe, nicht vier."
+        },
+        {
+          "text": "Sechsmal, mit i gleich 0 bis 5.",
+          "isCorrect": false,
+          "explanation": "Bei i gleich 5 ist die Bedingung i kleiner als 5 bereits falsch, dieser Durchlauf findet nicht mehr statt."
+        },
+        {
+          "text": "Unendlich oft, weil kein Zähler begrenzt wird.",
+          "isCorrect": false,
+          "explanation": "Der Zähler i wird durch i kleiner als 5 klar begrenzt, es ist keine Endlosschleife."
+        }
+      ]
+    },
+    {
+      "question": "Welche Aufgabe hat der zweite Teil einer for-Schleife, also i kleiner als 5?",
+      "area": "for-Schleifen",
+      "options": [
+        {
+          "text": "Er ist die Abbruchbedingung, die vor jedem Durchlauf neu geprüft wird.",
+          "isCorrect": true,
+          "explanation": "Vor jedem Durchlauf prüft der Computer genau diese Bedingung, um zu entscheiden, ob die Schleife weiterläuft."
+        },
+        {
+          "text": "Er legt einmalig den Startwert des Zählers fest.",
+          "isCorrect": false,
+          "explanation": "Das ist die Aufgabe des ersten Teils, let i ist gleich 0, nicht des zweiten."
+        },
+        {
+          "text": "Er erhöht den Zähler nach jedem Durchlauf.",
+          "isCorrect": false,
+          "explanation": "Das ist die Aufgabe des dritten Teils, i plus plus, nicht des zweiten."
+        },
+        {
+          "text": "Er wird nur beim allerersten Durchlauf geprüft, danach nie wieder.",
+          "isCorrect": false,
+          "explanation": "Die Bedingung wird vor jedem einzelnen Durchlauf erneut geprüft, nicht nur beim ersten."
+        }
+      ]
+    },
+    {
+      "question": "Wann eignet sich eine while-Schleife besser als eine for-Schleife?",
+      "area": "while-Schleifen",
+      "options": [
+        {
+          "text": "Wenn die Anzahl der Durchläufe vorher nicht feststeht, sondern von einer Bedingung abhängt.",
+          "isCorrect": true,
+          "explanation": "Genau dafür ist die while-Schleife gedacht: sie läuft, solange eine Bedingung wahr bleibt, egal wie viele Durchläufe das am Ende sind."
+        },
+        {
+          "text": "Wenn von Anfang an genau feststeht, wie oft etwas laufen soll.",
+          "isCorrect": false,
+          "explanation": "Das ist gerade der Fall, für den sich eine for-Schleife besser eignet."
+        },
+        {
+          "text": "Wenn gar keine Bedingung geprüft werden soll.",
+          "isCorrect": false,
+          "explanation": "Eine while-Schleife braucht immer eine Bedingung, sonst kann sie gar nicht entscheiden, wann sie stoppt."
+        },
+        {
+          "text": "Wenn der Code nur ein einziges Mal laufen soll.",
+          "isCorrect": false,
+          "explanation": "Für einen einzigen Durchlauf braucht man gar keine Schleife, weder for noch while."
+        }
+      ]
+    },
+    {
+      "question": "Was fehlt in dieser Schleife: while Klammer auf punkte kleiner als 100 Klammer zu, geschweifte Klammer auf, console Punkt log Klammer auf punkte Klammer zu, geschweifte Klammer zu, damit sie kein Endlosschleife wird?",
+      "area": "Endlosschleifen",
+      "options": [
+        {
+          "text": "Eine Zeile, die den Wert von punkte innerhalb der Schleife verändert.",
+          "isCorrect": true,
+          "explanation": "Ohne eine solche Zeile bleibt punkte für immer unter 100, die Bedingung wird nie falsch, die Schleife läuft endlos."
+        },
+        {
+          "text": "Ein zusätzliches else nach der Schleife.",
+          "isCorrect": false,
+          "explanation": "Ein else gehört zu Bedingungen, nicht zu Schleifen, und würde das Problem nicht lösen."
+        },
+        {
+          "text": "Ein zweites, zusätzliches console.log ganz am Ende innerhalb der geschweiften Klammern dieser einen bestehenden Schleife.",
+          "isCorrect": false,
+          "explanation": "Ein weiteres console.log würde nur mehr ausgeben, aber die Bedingung nicht verändern."
+        },
+        {
+          "text": "Ein const statt let vor punkte.",
+          "isCorrect": false,
+          "explanation": "const würde spätere Änderungen an punkte sogar verbieten und das Problem eher verschlimmern."
+        }
+      ]
+    },
+    {
+      "question": "Was zählt der Zähler einer Schleife?",
+      "area": "Zähler",
+      "options": [
+        {
+          "text": "An welchem Durchlauf man sich gerade befindet.",
+          "isCorrect": true,
+          "explanation": "Genau das ist die Aufgabe eines Zählers: bei jedem Durchlauf mitzuzählen, der wievielte er gerade ist."
+        },
+        {
+          "text": "Wie viel Speicherplatz die Schleife insgesamt verbraucht.",
+          "isCorrect": false,
+          "explanation": "Speicherplatz wird davon nicht erfasst, der Zähler zählt nur die Durchläufe."
+        },
+        {
+          "text": "Wie viele Fehler während der Schleife aufgetreten sind.",
+          "isCorrect": false,
+          "explanation": "Ein gewöhnlicher Zähler zählt Durchläufe, nicht Fehler, dafür bräuchte man eine eigene, andere Variable."
+        },
+        {
+          "text": "Ob die Schleife eine for-Schleife oder eine while-Schleife ist.",
+          "isCorrect": false,
+          "explanation": "Die Art der Schleife legt der Code selbst fest, das zählt kein Zähler."
+        }
+      ]
+    },
+    {
+      "question": "In mapDigits läuft for Klammer auf const ch von input Klammer zu über den eingehenden Text. Wie oft läuft diese Schleife, wenn input ein leerer Text ist?",
+      "area": "Praxisbeispiel",
+      "options": [
+        {
+          "text": "Null Mal, es gibt keinen einzigen Durchlauf.",
+          "isCorrect": true,
+          "explanation": "Ein leerer Text hat keine Zeichen, über die iteriert werden könnte, deshalb läuft die Schleife kein einziges Mal."
+        },
+        {
+          "text": "Genau einmal, mit einem leeren Zeichen.",
+          "isCorrect": false,
+          "explanation": "Ein leerer Text enthält kein einziges Zeichen, auch kein leeres, deshalb gibt es keinen Durchlauf."
+        },
+        {
+          "text": "Das führt zu einem Absturz der Funktion.",
+          "isCorrect": false,
+          "explanation": "Ein leerer Text ist kein Fehlerfall, die Schleife läuft einfach null Mal, ohne Absturz."
+        },
+        {
+          "text": "Unendlich oft, weil kein Zähler begrenzt wurde.",
+          "isCorrect": false,
+          "explanation": "Diese Bauart der for-Schleife läuft automatisch nur so oft, wie der Text Zeichen hat, hier also gar nicht."
+        }
+      ]
+    },
+    {
+      "question": "Warum eignet sich for Klammer auf const ch von input Klammer zu besonders gut, um jedes Zeichen eines Textes zu bearbeiten?",
+      "area": "Praxisbeispiel",
+      "options": [
+        {
+          "text": "Weil sie automatisch für jede Textlänge funktioniert, ohne dass man die Anzahl der Zeichen selbst ausrechnen muss.",
+          "isCorrect": true,
+          "explanation": "Diese Bauart übernimmt die Zählung selbst, egal ob der Text drei oder dreitausend Zeichen hat."
+        },
+        {
+          "text": "Weil sie nur bei arabischer Schrift funktioniert.",
+          "isCorrect": false,
+          "explanation": "Diese Bauart funktioniert bei jedem Text, unabhängig von der Schrift, nicht nur bei arabischer."
+        },
+        {
+          "text": "Weil sie garantiert genau zehn Durchläufe hat.",
+          "isCorrect": false,
+          "explanation": "Die Anzahl der Durchläufe richtet sich nach der Länge des Textes, nicht nach einer festen Zahl zehn."
+        },
+        {
+          "text": "Weil sie den Text vor der Schleife komplett löscht.",
+          "isCorrect": false,
+          "explanation": "Der eingehende Text bleibt unverändert, die Schleife baut nur einen neuen, umgewandelten Text zusammen."
+        }
+      ]
+    },
+    {
+      "question": "Was macht die Zeile let out ist gleich ein leerer Text vor der Schleife in mapDigits?",
+      "area": "Praxisbeispiel",
+      "options": [
+        {
+          "text": "Sie legt einen leeren Sammelbehälter an, in dem der fertige Text aufgebaut wird.",
+          "isCorrect": true,
+          "explanation": "out startet leer und wird bei jedem Durchlauf um ein weiteres Zeichen ergänzt, bis am Ende der vollständige Text darin steht."
+        },
+        {
+          "text": "Sie löscht den Inhalt der Variable input.",
+          "isCorrect": false,
+          "explanation": "input bleibt unverändert, out ist eine eigene, zunächst leere Variable."
+        },
+        {
+          "text": "Sie beendet die Schleife sofort, bevor sie beginnt.",
+          "isCorrect": false,
+          "explanation": "Diese Zeile bereitet die Schleife nur vor, sie beendet nichts."
+        },
+        {
+          "text": "Sie zählt von Anfang an genau mit, wie viele einzelne arabische Ziffern im gesamten Text vorkommen.",
+          "isCorrect": false,
+          "explanation": "out sammelt den fertigen Text, keine separate Anzahl an Ziffern."
+        }
+      ]
+    },
+    {
+      "question": "Ein Kollege schreibt eine for-Schleife, um genau siebenmal eine Begrüßung auszugeben, kennt die Anzahl also von Anfang an. Welche Bauart passt laut Faustregel besser?",
+      "area": "for- oder while-Schleife",
+      "options": [
+        {
+          "text": "Eine for-Schleife, weil die Anzahl der Durchläufe von Anfang an feststeht.",
+          "isCorrect": true,
+          "explanation": "Genau für diesen Fall, eine von vornherein bekannte Anzahl an Durchläufen, ist die for-Schleife gedacht."
+        },
+        {
+          "text": "Eine while-Schleife, weil sie grundsätzlich schneller ist.",
+          "isCorrect": false,
+          "explanation": "Geschwindigkeit ist hier nicht der entscheidende Unterschied, sondern ob die Anzahl vorher bekannt ist."
+        },
+        {
+          "text": "Keine der beiden Bauarten, sieben Wiederholungen brauchen eine eigene dritte Bauart.",
+          "isCorrect": false,
+          "explanation": "for und while genügen für diesen Fall vollständig, eine dritte Bauart wird nicht gebraucht."
+        },
+        {
+          "text": "Eine while-Schleife, weil for nur bei Texten funktioniert.",
+          "isCorrect": false,
+          "explanation": "for funktioniert auch bei Zahlen und in vielen anderen Fällen, nicht nur bei Texten."
+        }
+      ]
+    },
+    {
+      "question": "Warum ist i plus plus in einer for-Schleife so wichtig?",
+      "area": "for-Schleifen",
+      "options": [
+        {
+          "text": "Weil es den Zähler bei jedem Durchlauf verändert, sodass die Abbruchbedingung irgendwann falsch wird.",
+          "isCorrect": true,
+          "explanation": "Ohne diese Veränderung würde der Zähler stehen bleiben, und die Schleife könnte nie stoppen."
+        },
+        {
+          "text": "Weil es den Startwert des Zählers auf 0 setzt.",
+          "isCorrect": false,
+          "explanation": "Der Startwert wird im ersten Teil der for-Schleife gesetzt, nicht durch i plus plus."
+        },
+        {
+          "text": "Weil es die Abbruchbedingung komplett ersetzt.",
+          "isCorrect": false,
+          "explanation": "i plus plus verändert nur den Zähler, die Abbruchbedingung bleibt ein eigener, separater Teil."
+        },
+        {
+          "text": "Weil es nur bei while-Schleifen gebraucht wird.",
+          "isCorrect": false,
+          "explanation": "i plus plus gehört zur for-Schleife, bei while-Schleifen wird der Zähler an einer anderen Stelle verändert."
+        }
+      ]
+    },
+    {
+      "question": "Wie viele Zeichen verarbeitet die Schleife for Klammer auf const ch von input Klammer zu, wenn input aus drei Buchstaben besteht?",
+      "area": "Praxisbeispiel",
+      "options": [
+        {
+          "text": "Genau drei, für jeden Buchstaben einen Durchlauf.",
+          "isCorrect": true,
+          "explanation": "Diese Bauart läuft automatisch genau so oft, wie der Text Zeichen enthält, hier also dreimal."
+        },
+        {
+          "text": "Immer genau fünf, unabhängig von der Textlänge.",
+          "isCorrect": false,
+          "explanation": "Es gibt hier keinen fest eingetragenen Wert fünf, die Anzahl richtet sich nach der tatsächlichen Textlänge."
+        },
+        {
+          "text": "Nur einen einzigen Durchlauf für den ganzen Text auf einmal.",
+          "isCorrect": false,
+          "explanation": "Diese Bauart geht Zeichen für Zeichen vor, nicht den ganzen Text in einem einzigen Durchlauf."
+        },
+        {
+          "text": "Null Mal, weil drei Buchstaben zu wenig für eine Schleife sind.",
+          "isCorrect": false,
+          "explanation": "Auch ein kurzer Text mit wenigen Zeichen wird ganz normal durchlaufen, hier dreimal."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Öffne auf deinem eigenen Rechner die Entwicklerkonsole des Browsers, so wie in den letzten beiden Lektionen. Tippe diese Zeile ein: for Klammer auf let i ist gleich 1, Semikolon, i kleiner gleich 5, Semikolon, i plus plus, Klammer zu, geschweifte Klammer auf, console Punkt log Klammer auf Anführungszeichen Durchlauf Anführungszeichen, Komma, i, Klammer zu, geschweifte Klammer zu. Zähle in der Ausgabe, wie oft die Zeile erscheint. Ändere danach die Zahl 5 in der Bedingung auf 3, führe die Schleife erneut aus, und zähle erneut nach.",
+    "expectation": "Beim ersten Durchlauf erscheinen fünf Zeilen in der Konsole, mit den Zahlen 1 bis 5. Nach der Änderung auf i kleiner gleich 3 erscheinen nur noch drei Zeilen, mit den Zahlen 1 bis 3.",
+    "checklist": [
+      "Entwicklerkonsole des Browsers geöffnet",
+      "for-Schleife mit Zähler i von 1 bis 5 eingetippt und ausgeführt",
+      "Fünf Ausgabezeilen in der Konsole gezählt",
+      "Abbruchbedingung auf i kleiner gleich 3 geändert",
+      "Drei Ausgabezeilen nach der Änderung gezählt"
+    ]
+  },
+  "audio": {
+    "file": "M01-06-03.mp3",
+    "durationSeconds": 1006,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Muss der Zähler einer for-Schleife immer i heißen?",
+      "answer": "Nein, i ist nur eine weit verbreitete Gewohnheit, keine Pflicht. Du darfst den Zähler auch zaehler oder position nennen. Bei mehreren ineinander verschachtelten Schleifen ist ein sprechender Name sogar deutlich klarer als eine zweite Schleife mit demselben Namen i."
+    },
+    {
+      "question": "Was ist der Unterschied zwischen i plus plus und i ist gleich i plus 1?",
+      "answer": "Inhaltlich passiert dasselbe: der Wert von i steigt um genau 1. i plus plus ist nur eine kürzere Schreibweise für denselben Vorgang, die sich in Schleifenköpfen eingebürgert hat, weil sie weniger Tipparbeit macht und beim Lesen sofort als Zähler-Erhöhung erkennbar ist."
+    },
+    {
+      "question": "Kann eine for-Schleife auch rückwärts zählen, von einer hohen Zahl zu einer niedrigen?",
+      "answer": "Ja, das geht ohne Weiteres. Du startest den Zähler bei der hohen Zahl, zum Beispiel let i ist gleich 5, und prüfst i größer als 0 als Abbruchbedingung. Dann verringerst du i bei jedem Durchlauf mit i minus minus statt i plus plus, damit die Schleife von 5 bis 1 rückwärts zählt."
+    },
+    {
+      "question": "Wie merke ich mir am besten, ob ich eher eine for-Schleife oder eine while-Schleife brauche?",
+      "answer": "Stell dir die Frage: weiß ich schon vorher, wie oft das laufen soll, oder hängt das Ende von etwas ab, das sich erst während des Ablaufs zeigt. Im ersten Fall passt eine for-Schleife besser, im zweiten Fall eine while-Schleife. Im Zweifel funktionieren aber auch beide Bauarten für dieselbe Aufgabe, nur unterschiedlich elegant."
+    },
+    {
+      "question": "Wie erkenne ich im Voraus, ob ich versehentlich eine Endlosschleife baue?",
+      "answer": "Lies bei jeder while-Schleife bewusst mit: welche Variable steht in der Bedingung, und gibt es innerhalb der geschweiften Klammern wirklich eine Zeile, die genau diese Variable so verändert, dass die Bedingung irgendwann falsch wird. Fehlt diese Zeile, oder verändert sie die falsche Variable, entsteht eine Endlosschleife."
+    }
+  ]
+}

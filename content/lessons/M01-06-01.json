@@ -1,0 +1,296 @@
+{
+  "id": "M01-06-01",
+  "title": "Variablen und Datentypen",
+  "durationMinutes": 17,
+  "prerequisites": ["M01-00-01", "M01-00-02", "M01-02-01"],
+  "terms": [
+    { "term": "Variable", "definition": "Ein benannter Platz im Speicher eines Geräts, dessen Inhalt sich ändern kann. Der Name bleibt gleich, der Inhalt nicht." },
+    { "term": "Datentyp", "definition": "Die Art von Inhalt, die in einer Variable steckt: eine Zahl, ein Text oder ein Wahrheitswert. Der Computer braucht diese Angabe, um richtig damit zu rechnen." },
+    { "term": "Boolean", "definition": "Ein Datentyp mit nur zwei möglichen Werten: wahr oder falsch. Benannt nach dem Mathematiker George Boole." },
+    { "term": "let", "definition": "Ein Wort am Anfang einer Codezeile, das eine neue Variable anlegt, deren Inhalt später ausgetauscht werden darf." },
+    { "term": "const", "definition": "Ein Wort am Anfang einer Codezeile, das eine neue Variable anlegt, deren Inhalt danach nie mehr geändert werden darf." },
+    { "term": "Funktion", "definition": "Ein Stück Code mit einem eigenen Namen, das eine feste Abfolge von Schritten ausführt, sooft man es aufruft." }
+  ],
+  "speechBlocks": [
+    { "speaker": "A", "text": "Stell dir eine Küchenschublade vor.", "isKeySentence": false, "role": "image" },
+    { "speaker": "A", "text": "Auf der Schublade klebt ein kleiner Zettel mit der Aufschrift Gewürze.", "isKeySentence": false, "role": "image" },
+    { "speaker": "A", "text": "Heute liegt Salz in der Schublade. Nächste Woche liegt vielleicht Pfeffer drin. Der Zettel bleibt die ganze Zeit derselbe.", "isKeySentence": false, "role": "image" },
+    { "speaker": "B", "text": "Der Name auf dem Zettel ändert sich also nicht, nur das, was drinliegt?", "isKeySentence": false, "role": "question" },
+    { "speaker": "A", "text": "Genau. Der Zettel zeigt nur, wo der Platz ist. Was gerade darin liegt, kann wechseln, so oft du willst.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Auf einem Bildschirm oder in einem Gerät gibt es etwas ganz Ähnliches: einen Platz mit einem Namen, dessen Inhalt sich ändern kann.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "So einen Platz nennt man in der Programmierung eine Variable.", "isKeySentence": false, "role": "term" },
+    { "speaker": "A", "text": "Variable.", "isKeySentence": false, "role": "term" },
+    { "speaker": "A", "text": "Stell dir eine App vor, in der du einträgst, für wie viele Personen du heute kochst. Diese Zahl landet in einer Variable mit dem Namen personen. Trägst du morgen eine andere Zahl ein, ändert sich nur der Inhalt, der Name personen bleibt gleich.", "isKeySentence": false, "role": "example" },
+    { "speaker": "B", "text": "Und wie schreibt man das dann wirklich hin, als Code?", "isKeySentence": false, "role": "question" },
+    { "speaker": "A", "text": "Wir schreiben eine einzelne Zeile: let alter ist gleich 30.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Das heißt: leg einen neuen Platz mit dem Namen alter an, und leg die Zahl 30 hinein.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Das Wort let steht immer ganz am Anfang so einer Zeile.", "isKeySentence": false, "role": "term" },
+    { "speaker": "A", "text": "let sagt dem Computer: hier entsteht gerade eine neue Variable.", "isKeySentence": false, "role": "term" },
+    { "speaker": "A", "text": "Schreibst du später in einer anderen Zeile alter ist gleich 31, weil ein Geburtstag war, tauscht das nur den Inhalt der Schublade aus. Der Name alter bleibt bestehen.", "isKeySentence": false, "role": "example" },
+    { "speaker": "B", "text": "Kann ich mit let jede Variable später wieder ändern?", "isKeySentence": false, "role": "question" },
+    { "speaker": "A", "text": "Ja, das ist genau der Sinn von let. Aber manchmal will man das absichtlich verhindern.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Stell dir eine Schublade vor, die extra festgeklebt wurde, weil ihr Inhalt sich nie mehr ändern darf. Der Steuersatz an der Kasse zum Beispiel bleibt während eines Einkaufs fest.", "isKeySentence": false, "role": "image" },
+    { "speaker": "A", "text": "Dafür gibt es ein zweites Wort: const.", "isKeySentence": false, "role": "term" },
+    { "speaker": "A", "text": "const.", "isKeySentence": false, "role": "term" },
+    { "speaker": "A", "text": "Wir schreiben: const mehrwertsteuer ist gleich 19. Diese Zahl darf danach in dieser Zeile nirgendwo mehr geändert werden. Versucht man es doch, meldet der Computer einen Fehler und stoppt.", "isKeySentence": false, "role": "example" },
+    { "speaker": "B", "text": "Warum sollte ich mir das Ändern selbst verbieten wollen?", "isKeySentence": false, "role": "question" },
+    { "speaker": "A", "text": "Weil ein Verbot Fehler verhindert. Wenn eine Zahl sich nie ändern darf, kann sich auch niemand versehentlich verschreiben und sie doch ändern. Der Computer passt für dich auf.", "isKeySentence": false, "role": "why" },
+    { "speaker": "A", "text": "Deshalb nehmen erfahrene Programmierer const als Startpunkt, und wechseln nur zu let, wenn sich der Inhalt wirklich ändern soll.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Jetzt zu der Frage, was überhaupt in so eine Schublade hineinpasst.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Stell dir eine Waage in der Küche vor. Sie zeigt eine Zahl an, 250 Gramm zum Beispiel. Daneben liegt ein Einkaufszettel, auf dem Wörter stehen, Mehl, Zucker, Eier.", "isKeySentence": false, "role": "image" },
+    { "speaker": "A", "text": "Eine Zahl und ein Wort sind für uns Menschen offensichtlich verschieden. Für den Computer muss diese Unterscheidung ausdrücklich festgelegt werden, sonst weiß er nicht, wie er damit rechnen oder umgehen soll.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Diese Festlegung, um welche Art von Inhalt es sich handelt, nennt man Datentyp.", "isKeySentence": false, "role": "term" },
+    { "speaker": "A", "text": "Datentyp.", "isKeySentence": false, "role": "term" },
+    { "speaker": "A", "text": "250 hat den Datentyp Zahl. Mehl hat den Datentyp Text, weil es aus Buchstaben besteht, keine Rechenzahl ist. Der Computer behandelt beides völlig unterschiedlich: Zahlen kann er addieren, Text kann er nur aneinanderreihen oder vergleichen.", "isKeySentence": false, "role": "example" },
+    { "speaker": "B", "text": "Was passiert, wenn ich eine Zahl und einen Text zusammenrechnen will?", "isKeySentence": false, "role": "question" },
+    { "speaker": "A", "text": "Das geht meistens schief oder liefert ein unsinniges Ergebnis. Deshalb prüft die Sprache, in der wir schreiben, genau, welcher Datentyp gerade in welcher Variable steckt.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "In der Sprache, in der wir hier lernen, schreibt man eine Zahl einfach so hin: let gramm ist gleich 250. Keine Anführungszeichen, nur die Ziffern.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Einen Text schreibt man dagegen zwischen Anführungszeichen: let zutat ist gleich Anführungszeichen Mehl Anführungszeichen. In der Fachsprache heißt ein solcher Text ein String, wörtlich übersetzt eine Zeichenkette, eine Kette aus Buchstaben.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "B", "text": "Und was ist mit Ja oder Nein, gibt es dafür auch einen eigenen Datentyp?", "isKeySentence": false, "role": "question" },
+    { "speaker": "A", "text": "Ja, das ist der dritte wichtige Datentyp. Stell dir einen Lichtschalter vor. Er kennt nur zwei Stellungen: an oder aus, es gibt kein Dazwischen.", "isKeySentence": false, "role": "image" },
+    { "speaker": "A", "text": "Genau so ein Nur-zwei-Zustände-Wert heißt in der Programmierung Boolean.", "isKeySentence": false, "role": "term" },
+    { "speaker": "A", "text": "Boolean.", "isKeySentence": false, "role": "term" },
+    { "speaker": "A", "text": "Ein Boolean hat immer nur einen von zwei Werten: true, also wahr, oder false, also falsch. Wir schreiben zum Beispiel: let istAngemeldet ist gleich true. Das sagt: die Person ist gerade angemeldet, ja, wahr.", "isKeySentence": false, "role": "example" },
+    { "speaker": "A", "text": "Der Name Boolean kommt von George Boole, einem Mathematiker aus dem neunzehnten Jahrhundert, der als Erster mit genau solchen Wahr-oder-falsch-Werten gerechnet hat.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "B", "text": "Wofür braucht man so einen Nur-wahr-oder-falsch-Wert überhaupt im Alltag eines Programms?", "isKeySentence": false, "role": "question" },
+    { "speaker": "A", "text": "Für jede Entscheidung. Ist der Warenkorb leer, ja oder nein. Hat jemand das Häkchen bei den Nutzungsbedingungen gesetzt, ja oder nein. Jede solche Frage bekommt am Ende einen Boolean als Ergebnis.", "isKeySentence": false, "role": "why" },
+    { "speaker": "A", "text": "Zahl, Text und Boolean sind die drei Datentypen, die du am häufigsten brauchen wirst, wenn du anfängst.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Warum ist diese ganze Unterscheidung überhaupt wichtig, fragst du dich vielleicht.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Weil ein Computer, anders als ein Mensch, nicht aus dem Zusammenhang errät, was gemeint ist. Er braucht die feste Regel, damit jede Zeile Code genau ein Ergebnis liefert, jedes Mal dasselbe.", "isKeySentence": false, "role": "why" },
+    { "speaker": "B", "text": "Kann man sich beim Datentyp auch vertun, und was passiert dann?", "isKeySentence": false, "role": "question" },
+    { "speaker": "A", "text": "Ja, das ist sogar eine der häufigsten Anfängerfallen. Stell dir vor, du liest zwei Zahlen aus einem Formularfeld auf einer Internetseite aus, zum Beispiel 5 und 3.", "isKeySentence": false, "role": "image" },
+    { "speaker": "A", "text": "Eingabefelder liefern ihren Inhalt fast immer als Text, egal ob jemand Zahlen oder Buchstaben eintippt. Aus deiner Sicht stehen also 5 und 3 da, aus Sicht des Computers stehen dort zwei Texte, die zufällig wie Zahlen aussehen.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Addierst du jetzt beide Werte, ohne sie vorher ausdrücklich in Zahlen umzuwandeln, passiert etwas Überraschendes: der Computer hängt die beiden Texte einfach aneinander. Aus 5 und 3 wird nicht 8, sondern der Text 53.", "isKeySentence": false, "role": "example" },
+    { "speaker": "B", "text": "Das klingt nach einem Fehler, der im Alltag richtig teuer werden könnte, etwa bei einer Preisberechnung.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Genau deshalb ist der Datentyp so wichtig. Ein solcher Fehler zeigt sich oft nicht sofort mit einer roten Fehlermeldung, sondern nur als falsches Ergebnis, das erst später jemandem auffällt, im schlimmsten Fall einem zahlenden Kunden.", "isKeySentence": false, "role": "why" },
+    { "speaker": "A", "text": "Deshalb prüfen erfahrene Programmierer bei Eingaben aus Formularen immer bewusst, welchen Datentyp sie gerade wirklich in der Hand halten, bevor sie damit rechnen.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Ein zweites Alltagsbeispiel, damit sich das richtig setzt: ein kleiner Warenkorb in einem Shop.", "isKeySentence": false, "role": "image" },
+    { "speaker": "A", "text": "Stell dir zwei Schubladen vor: eine mit dem Etikett preis, darin liegt die Zahl 12, und eine mit dem Etikett menge, darin liegt die Zahl 3.", "isKeySentence": false, "role": "image" },
+    { "speaker": "A", "text": "In Code sähe das so aus: const preis ist gleich 12. Und in einer zweiten Zeile: let menge ist gleich 3.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "preis bekommt const, weil ein einzelner Artikelpreis sich während des Zusammenrechnens nicht mehr ändert. menge bekommt let, weil eine Person im Shop die Anzahl noch erhöhen oder verringern kann, etwa mit einem Plus- oder Minus-Knopf.", "isKeySentence": false, "role": "why" },
+    { "speaker": "A", "text": "Eine dritte Zeile berechnet daraus die Summe: const summe ist gleich preis mal menge. Weil beide Ausgangswerte den Datentyp Zahl haben, rechnet der Computer hier ganz normal, 12 mal 3 ergibt 36.", "isKeySentence": false, "role": "example" },
+    { "speaker": "B", "text": "Und wenn preis aus Versehen als Text mit Anführungszeichen eingetragen wurde, weil er aus einem Formularfeld kommt?", "isKeySentence": false, "role": "question" },
+    { "speaker": "A", "text": "Dann würde aus preis mal menge nicht 36 werden, sondern ein unsinniges Ergebnis oder eine Fehlermeldung, genau wie bei den beiden aneinandergehängten Zahlen vorhin. Das ist der Grund, warum der Datentyp jeder einzelnen Variable im Warenkorb wirklich wichtig ist, nicht nur eine Formsache.", "isKeySentence": false, "role": "why" },
+    { "speaker": "A", "text": "Jetzt noch ein kurzer Abstecher, damit unser Praxisbeispiel gleich Sinn ergibt.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Stell dir ein Rezept vor, das du immer wieder benutzt. Zwiebel schneiden, Pfanne erhitzen, Zwiebel hineingeben. Jedes Mal, wenn du das Rezept aufschlägst, läuft genau dieselbe Abfolge ab.", "isKeySentence": false, "role": "image" },
+    { "speaker": "A", "text": "Ein solches wiederverwendbares Stück Code mit einem eigenen Namen heißt Funktion.", "isKeySentence": false, "role": "term" },
+    { "speaker": "A", "text": "Funktion.", "isKeySentence": false, "role": "term" },
+    { "speaker": "A", "text": "Eine Funktion bekommt oft eine oder mehrere Variablen als Zutaten hinein, arbeitet ihre Schritte ab, und gibt am Ende ein Ergebnis zurück. Zum Beispiel eine Funktion namens berechneSumme, die zwei Zahlen entgegennimmt und ihre Summe zurückgibt.", "isKeySentence": false, "role": "example" },
+    { "speaker": "B", "text": "Was heißt zurückgeben genau, bekommt jemand das Ergebnis zugeschickt?", "isKeySentence": false, "role": "question" },
+    { "speaker": "A", "text": "Nein, so wörtlich nicht. Zurückgeben heißt: die Funktion liefert am Ende ein Ergebnis, das man in einer Variable auffangen kann, so wie eine Kellnerin einen fertigen Teller an den Tisch zurückbringt, von dem die Bestellung kam.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Jetzt zu einem echten Beispiel aus einem echten kleinen Programmierpaket, das genau so geschrieben wurde.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Es heißt cron-last-due und löst folgende Aufgabe: Es prüft, ob ein wiederkehrender Auftrag auf einem entfernten Rechner pünktlich gelaufen ist, oder ob er ausgefallen ist.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Ein solcher Auftrag heißt in der Fachsprache ein Cronjob, benannt nach dem griechischen Wort Chronos für Zeit. Er läuft nach einem festen Zeitplan, jeden Tag um drei Uhr nachts zum Beispiel.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "In der Quelldatei src slash index Punkt ts dieses Pakets gibt es eine Funktion mit dem Namen parseCron. Sie bekommt eine Textzeile wie Stern Stern Stern Stern Stern hinein, den Zeitplan, und soll daraus herauslesen, wann der Auftrag laufen soll.", "isKeySentence": false, "role": "example" },
+    { "speaker": "A", "text": "In Zeile 85 dieser Quelldatei steht: const minute ist gleich parseField von fields eckige Klammer 0 eckige Klammer, Komma 0, Komma 59.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Das heißt Wort für Wort: leg eine neue, fest verklebte Schublade mit dem Namen minute an. Fülle sie mit dem Ergebnis einer anderen Funktion namens parseField, der du drei Zutaten mitgibst: das erste Feld der Textzeile, die kleinste erlaubte Minutenzahl null, und die größte erlaubte Minutenzahl neunundfünfzig.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Warum const und nicht let? Weil minute in dieser Zeile genau einmal berechnet wird und sich danach nie mehr ändern soll. Genau das haben wir eben gelernt, angewendet in echtem Code.", "isKeySentence": false, "role": "example" },
+    { "speaker": "B", "text": "Und was, wenn der Zeitplan in der Textzeile gar keinen Sinn ergibt, weil sich jemand vertippt hat?", "isKeySentence": false, "role": "question" },
+    { "speaker": "A", "text": "Genau darum geht es in Zeile 91. Dort steht: wenn minute nicht vorhanden ist, oder hour nicht vorhanden ist, oder einer der anderen Werte fehlt, dann gib null zurück.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "null ist ein besonderer Wert. Er bedeutet nicht null wie die Zahl, sondern: hier ist absichtlich nichts, kein Ergebnis vorhanden.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Die Funktion stürzt also nicht ab und wirft keinen Fehler, wenn der Zeitplan falsch getippt wurde. Sie gibt still null zurück, und wer die Funktion aufgerufen hat, kann selbst entscheiden, was jetzt zu tun ist.", "isKeySentence": false, "role": "why" },
+    { "speaker": "A", "text": "Das ist eine bewusste Entscheidung des Entwicklers, und keine zufällige. In der Beschreibung des Pakets steht dazu: ein Tippfehler im Zeitplan würde die Warnfunktion sonst für immer zum Schweigen bringen, und dieses Schweigen sähe genauso aus wie alles in Ordnung.", "isKeySentence": false, "role": "why" },
+    { "speaker": "B", "text": "Also lieber ein leises null zurückgeben, als den ganzen Ablauf mit einem Fehler abstürzen zu lassen, der niemand bemerkt?", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Ganz genau. Und diese Entscheidung konnte der Entwickler nur treffen, weil er wusste, welchen Datentyp seine Funktion zurückgibt: entweder ein fertig zerlegtes Zeitplan-Objekt, oder eben null. Nichts dazwischen, nichts Überraschendes.", "isKeySentence": false, "role": "example" },
+    { "speaker": "A", "text": "Noch eine zweite Zeile aus derselben Funktion, damit sich das Lesen von Code einprägt.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "In Zeile 81 der Quelldatei steht: let fields ist gleich expression Punkt trim Klammer auf Klammer zu Punkt split Klammer auf Schrägstrich Leerzeichen plus Schrägstrich Klammer zu.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Das klingt zunächst nach viel, wir lesen es trotzdem Wort für Wort. let legt wieder eine Variable an, mit dem Namen fields, die sich später noch ändern darf.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Der Inhalt dieser Variable entsteht aus zwei Schritten hintereinander an der eingehenden Textzeile expression. Erst wird an den Rändern jedes überflüssige Leerzeichen entfernt. Dann wird die Zeile überall dort in Stücke zerteilt, wo ein oder mehrere Leerzeichen stehen.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Aus dem Text 0 12 Stern Stern Stern wird dadurch eine Liste von fünf einzelnen Textstücken: 0, dann 12, dann drei Sterne. Diese Liste landet komplett in der Variable fields.", "isKeySentence": false, "role": "example" },
+    { "speaker": "B", "text": "Warum nimmt man hier let und nicht const, wenn fields sich doch gar nicht mehr ändern soll?", "isKeySentence": false, "role": "question" },
+    { "speaker": "A", "text": "Gute Beobachtung. Ein paar Zeilen weiter unten im echten Code wird fields unter bestimmten Umständen noch einmal neu befüllt, wenn die Textzeile ein zusätzliches sechstes Feld für Sekunden enthält. Deshalb braucht diese eine Variable ausnahmsweise let statt const.", "isKeySentence": false, "role": "why" },
+    { "speaker": "A", "text": "Das zeigt eine wichtige Faustregel: man wählt let oder const nicht nach Gewohnheit, sondern danach, ob sich der Inhalt im weiteren Verlauf der Funktion wirklich noch ändert.", "isKeySentence": false, "role": "why" },
+    { "speaker": "A", "text": "Ein letzter Punkt zu Variablen, bevor wir zusammenfassen: wie man sie sinnvoll benennt.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Stell dir ein Regal mit lauter Kisten vor, auf denen nur Kiste eins, Kiste zwei, Kiste drei steht. Du müsstest jede einzelne öffnen, um zu wissen, was drin ist.", "isKeySentence": false, "role": "image" },
+    { "speaker": "A", "text": "Steht auf den Kisten dagegen Winterjacken, Werkzeug, Weihnachtsschmuck, weißt du sofort, wo du suchen musst, ohne eine einzige Kiste zu öffnen.", "isKeySentence": false, "role": "image" },
+    { "speaker": "A", "text": "Genauso ist es mit dem Namen einer Variable. minute, fields oder istAngemeldet verraten sofort, was darin steckt. Ein Name wie x oder wert1 verrät das nicht.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "In der Sprache, die wir hier lernen, gilt außerdem eine feste Schreibregel für Variablennamen aus mehreren Wörtern: das erste Wort klein, jedes weitere Wort direkt angehängt und mit einem Großbuchstaben begonnen, ohne Leerzeichen dazwischen. Also istAngemeldet, nicht ist Angemeldet oder Ist_Angemeldet.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Diese Schreibweise heißt camelCase, wegen der Großbuchstaben mitten im Wort, die wie die Höcker eines Kamels aussehen.", "isKeySentence": false, "role": "example" },
+    { "speaker": "B", "text": "Und wenn ich mich nicht daran halte, welche einzelnen Wörter groß schreibe, stürzt dann alles ab?", "isKeySentence": false, "role": "question" },
+    { "speaker": "A", "text": "Nein, der Computer würde auch andere Schreibweisen technisch akzeptieren. Aber jeder, der deinen Code später liest, auch du selbst in einem Jahr, erwartet camelCase. Ein Name, der davon abweicht, macht das Lesen unnötig schwer.", "isKeySentence": false, "role": "why" },
+    { "speaker": "B", "text": "Also merken wir uns noch einmal ganz kurz: eine Variable ist ein benannter Platz, dessen Inhalt wechseln kann, let erlaubt das Austauschen, const verbietet es. Jede Variable trägt zusätzlich einen Datentyp, meistens Zahl, Text oder Boolean, damit der Computer weiß, wie er mit dem Inhalt umgehen soll.", "isKeySentence": true, "role": "key" },
+    { "speaker": "A", "text": "Zum Schluss noch einmal alle Begriffe von heute in einer kurzen Liste.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Variable: ein benannter Platz im Speicher eines Geräts, dessen Inhalt sich ändern kann, während der Name gleich bleibt.", "isKeySentence": false, "role": "terms_list" },
+    { "speaker": "A", "text": "Datentyp: die Art des Inhalts einer Variable, zum Beispiel Zahl, Text oder Boolean.", "isKeySentence": false, "role": "terms_list" },
+    { "speaker": "A", "text": "Boolean: ein Datentyp mit nur zwei möglichen Werten, wahr oder falsch.", "isKeySentence": false, "role": "terms_list" },
+    { "speaker": "A", "text": "let: das Wort, mit dem eine Variable angelegt wird, deren Inhalt später geändert werden darf.", "isKeySentence": false, "role": "terms_list" },
+    { "speaker": "A", "text": "const: das Wort, mit dem eine Variable angelegt wird, deren Inhalt danach nie mehr geändert werden darf.", "isKeySentence": false, "role": "terms_list" },
+    { "speaker": "A", "text": "Funktion: ein wiederverwendbares Stück Code mit eigenem Namen, das eine feste Abfolge von Schritten ausführt.", "isKeySentence": false, "role": "terms_list" },
+    { "speaker": "B", "text": "Muss ich mir merken, wann ich let und wann ich const nehme, oder kann ich am Anfang einfach immer let benutzen?", "isKeySentence": false, "role": "faq" },
+    { "speaker": "A", "text": "Am Anfang darfst du ruhig öfter zu let greifen, das funktioniert immer. Erfahrene Programmierer nehmen aber möglichst oft const, weil es Fehler verhindert. Ein Beispiel: eine Mehrwertsteuer, die während eines Einkaufs nie wechseln darf, gehört in eine const-Variable, damit sich niemand aus Versehen verschreibt.", "isKeySentence": false, "role": "faq" },
+    { "speaker": "B", "text": "Was passiert, wenn ich versuche, eine mit const angelegte Variable trotzdem zu ändern?", "isKeySentence": false, "role": "faq" },
+    { "speaker": "A", "text": "Der Computer meldet einen Fehler und stoppt an genau dieser Stelle, bevor irgendetwas Falsches passieren kann. Das ist gewollt: lieber sofort ein klarer Fehler, als ein stiller falscher Wert, der erst viel später auffällt.", "isKeySentence": false, "role": "faq" },
+    { "speaker": "B", "text": "Woher weiß der Computer, welchen Datentyp eine Zahl wie 30 hat, ich schreibe doch nirgendwo Zahl dazu?", "isKeySentence": false, "role": "faq" },
+    { "speaker": "A", "text": "Der Computer erkennt es an der Schreibweise. Ziffern ohne Anführungszeichen sind für ihn immer eine Zahl. Sobald Anführungszeichen drumherum stehen, wie bei Mehl, ist es für ihn Text, selbst wenn zufällig nur Ziffern zwischen den Anführungszeichen stehen.", "isKeySentence": false, "role": "faq" },
+    { "speaker": "B", "text": "Kann eine Variable ihren Datentyp später wechseln, also erst eine Zahl sein und dann ein Text werden?", "isKeySentence": false, "role": "faq" },
+    { "speaker": "A", "text": "In der Sprache, die wir hier lernen, technisch schon, aber es gilt als schlechter Stil und führt schnell zu Fehlern. Besser ist es, für jede Variable von Anfang an bei einem Datentyp zu bleiben, dann weißt du beim Lesen des Codes jederzeit, womit du es zu tun hast.", "isKeySentence": false, "role": "faq" },
+    { "speaker": "B", "text": "Ist null dasselbe wie die Zahl null?", "isKeySentence": false, "role": "faq" },
+    { "speaker": "A", "text": "Nein, das ist ein häufiges Missverständnis. Die Zahl null ist ein ganz normaler Zahlenwert, mit dem man rechnen kann. null als eigener Wert bedeutet dagegen: hier ist absichtlich gar kein Ergebnis vorhanden, wie eine leere Schublade ohne jeden Inhalt.", "isKeySentence": false, "role": "faq" }
+  ],
+  "practiceExample": {
+    "text": "Im Repo cron-last-due zeigt die Funktion parseCron in src/index.ts genau, wie let, const und Datentypen im echten Code zusammenspielen. In Zeile 85 legt der Code mit const minute = parseField(fields[0], 0, 59) eine feste Variable an, die eine Zahl oder nichts enthält. In Zeile 91 prüft der Code, ob einer der berechneten Werte fehlt, und gibt in diesem Fall bewusst null zurück, statt mit einem Fehler abzustürzen. Diese Entscheidung ist im Paket ausdrücklich begründet: ein Tippfehler im Zeitplan soll die Überwachung nicht für immer stumm schalten, weil dieses Schweigen sonst wie ein gesunder Zustand aussähe.",
+    "repoNote": "repo-cron-last-due",
+    "location": "src/index.ts, Zeile 80-91 (Funktion parseCron), README Abschnitt 'What it does not do'"
+  },
+  "quiz": [
+    {
+      "question": "Was ändert sich bei einer Variable, wenn man ihr einen neuen Inhalt zuweist?",
+      "area": "Variablen",
+      "options": [
+        { "text": "Nur der Inhalt, der Name bleibt gleich.", "isCorrect": true, "explanation": "Genau das ist der Kern einer Variable: der Name zeigt dauerhaft auf einen Platz, dessen Inhalt wechseln kann." },
+        { "text": "Der Name ändert sich mit, der Inhalt bleibt gleich.", "isCorrect": false, "explanation": "Das ist genau andersherum: der Name bleibt fest, nur der Inhalt wechselt." },
+        { "text": "Beides ändert sich gleichzeitig.", "isCorrect": false, "explanation": "Nur der Inhalt wechselt. Der Name der Variable bleibt in der Regel während des ganzen Programms derselbe." },
+        { "text": "Es entsteht eine völlig neue Variable an einem neuen Platz.", "isCorrect": false, "explanation": "Nein, es ist derselbe Platz mit demselben Namen, nur der Inhalt darin wird ausgetauscht." }
+      ]
+    },
+    {
+      "question": "Du schreibst let punktestand ist gleich 0. Was passiert dabei?",
+      "area": "Variablen",
+      "options": [
+        { "text": "Eine neue Variable namens punktestand wird angelegt und mit 0 gefüllt.", "isCorrect": true, "explanation": "let legt eine neue Variable an, hier mit dem Namen punktestand und dem Startwert 0." },
+        { "text": "Der Wert 0 wird gelöscht.", "isCorrect": false, "explanation": "Es wird nichts gelöscht, im Gegenteil: ein neuer Platz mit Inhalt 0 entsteht." },
+        { "text": "Es wird geprüft, ob punktestand gleich 0 ist.", "isCorrect": false, "explanation": "Das wäre eine Bedingung mit einem Vergleich, nicht das Anlegen einer Variable. Hier wird eine neue Variable erzeugt." },
+        { "text": "Die Variable punktestand darf danach nie mehr geändert werden.", "isCorrect": false, "explanation": "Das gilt für const, nicht für let. Mit let angelegte Variablen dürfen später geändert werden." }
+      ]
+    },
+    {
+      "question": "Warum nehmen erfahrene Programmierer möglichst oft const statt let?",
+      "area": "Variablen",
+      "options": [
+        { "text": "Weil const versehentliche spätere Änderungen verhindert und so Fehler vorbeugt.", "isCorrect": true, "explanation": "const sperrt den Inhalt fest, ein Versehen fällt dadurch sofort auf, statt sich unbemerkt einzuschleichen." },
+        { "text": "Weil const-Variablen grundsätzlich schneller vom Bildschirm gelesen und angezeigt werden als jede mit let angelegte Variable.", "isCorrect": false, "explanation": "Das hat mit der Lesegeschwindigkeit des Bildschirms nichts zu tun." },
+        { "text": "Weil let inzwischen aus der Sprache entfernt wurde.", "isCorrect": false, "explanation": "let gibt es weiterhin, es wird nur seltener benutzt als const, wenn eine Änderung nicht nötig ist." },
+        { "text": "Weil const weniger Speicherplatz braucht als let.", "isCorrect": false, "explanation": "Der Speicherplatzbedarf unterscheidet sich dadurch nicht. Der Grund ist Fehlervermeidung, nicht Speicherplatz." }
+      ]
+    },
+    {
+      "question": "Welcher Datentyp passt zu der Eingabe Mehl in Anführungszeichen?",
+      "area": "Datentypen",
+      "options": [
+        { "text": "Text.", "isCorrect": true, "explanation": "Alles, was in Anführungszeichen steht, behandelt der Computer als Text, selbst wenn nur ein Wort darin steht." },
+        { "text": "Zahl.", "isCorrect": false, "explanation": "Zahlen werden ohne Anführungszeichen geschrieben. Mehl in Anführungszeichen ist Text." },
+        { "text": "Boolean.", "isCorrect": false, "explanation": "Ein Boolean hat nur die zwei Werte wahr oder falsch, kein Wort wie Mehl." },
+        { "text": "Funktion.", "isCorrect": false, "explanation": "Eine Funktion ist ein Stück Code mit Namen, kein einzelner Wert wie ein Wort in Anführungszeichen." }
+      ]
+    },
+    {
+      "question": "Welche zwei Werte kann ein Boolean annehmen?",
+      "area": "Datentypen",
+      "options": [
+        { "text": "true oder false.", "isCorrect": true, "explanation": "Ein Boolean kennt genau zwei Zustände, wahr, also true, oder falsch, also false, nichts dazwischen." },
+        { "text": "0 oder eine beliebige andere Zahl.", "isCorrect": false, "explanation": "Das beschreibt den Datentyp Zahl, nicht den Boolean. Ein Boolean kennt nur wahr und falsch." },
+        { "text": "Groß oder klein geschrieben.", "isCorrect": false, "explanation": "Groß- und Kleinschreibung betrifft Text, nicht den Boolean-Datentyp." },
+        { "text": "let oder const.", "isCorrect": false, "explanation": "let und const sind Wörter zum Anlegen von Variablen, keine Werte eines Boolean." }
+      ]
+    },
+    {
+      "question": "Warum muss ein Computer überhaupt wissen, welchen Datentyp eine Variable hat?",
+      "area": "Datentypen",
+      "options": [
+        { "text": "Weil er sonst nicht weiß, wie er mit dem Inhalt rechnen oder umgehen soll.", "isCorrect": true, "explanation": "Zahlen werden addiert, Text wird aneinandergereiht, ein Boolean steuert Entscheidungen. Ohne Datentyp weiß der Computer nicht, welche Regel gilt." },
+        { "text": "Weil sonst der Bildschirm eine andere Farbe zeigt.", "isCorrect": false, "explanation": "Der Datentyp hat nichts mit Bildschirmfarben zu tun." },
+        { "text": "Nur damit der Code kürzer aussieht.", "isCorrect": false, "explanation": "Der Datentyp dient nicht der Kürze, sondern der richtigen Behandlung des Inhalts." },
+        { "text": "Weil jede angelegte Variable ohne festen Datentyp nach kurzer Zeit automatisch wieder aus dem Speicher gelöscht wird.", "isCorrect": false, "explanation": "Eine fehlende Datentyp-Angabe löscht nichts, sie würde nur zu falschem Verhalten beim Rechnen führen." }
+      ]
+    },
+    {
+      "question": "Was macht eine Funktion?",
+      "area": "Funktionen",
+      "options": [
+        { "text": "Sie führt eine feste Abfolge von Schritten aus, sooft man sie aufruft.", "isCorrect": true, "explanation": "Wie ein Rezept: dieselben Schritte laufen jedes Mal ab, wenn man die Funktion benutzt." },
+        { "text": "Sie speichert dauerhaft genau einen einzigen Wert.", "isCorrect": false, "explanation": "Das beschreibt eher eine Variable. Eine Funktion führt Schritte aus, statt nur einen Wert zu halten." },
+        { "text": "Sie zeigt immer sofort ein Bild auf dem Bildschirm an.", "isCorrect": false, "explanation": "Eine Funktion muss nichts anzeigen, sie kann auch nur rechnen und ein Ergebnis zurückgeben." },
+        { "text": "Sie ändert automatisch alle Datentypen im Code.", "isCorrect": false, "explanation": "Eine Funktion ändert nicht automatisch Datentypen, sie führt die Schritte aus, die in ihr stehen." }
+      ]
+    },
+    {
+      "question": "In cron-last-due gibt parseCron in bestimmten Fällen null zurück. Was bedeutet das?",
+      "area": "Funktionen",
+      "options": [
+        { "text": "Der Zeitplan konnte nicht verstanden werden, es gibt absichtlich kein Ergebnis.", "isCorrect": true, "explanation": "null steht hier für ein bewusst leeres Ergebnis, nicht für die Zahl null, damit die Funktion nicht abstürzt." },
+        { "text": "Der Zeitplan bedeutet, dass der Auftrag nie laufen soll.", "isCorrect": false, "explanation": "null sagt nur, dass der Text nicht verstanden wurde, nicht, dass der Auftrag nie laufen soll." },
+        { "text": "Es ist ein Rechtschreibfehler im Code selbst.", "isCorrect": false, "explanation": "null ist kein Fehler im Code, sondern ein bewusst gewählter Rückgabewert für unlesbare Eingaben." },
+        { "text": "Die Funktion stürzt in diesem Fall ab.", "isCorrect": false, "explanation": "Im Gegenteil: null zurückzugeben verhindert genau den Absturz, das ist der Sinn dieser Entscheidung." }
+      ]
+    },
+    {
+      "question": "Warum entscheidet sich cron-last-due bewusst für null statt dafür, mit einer Fehlermeldung abzustürzen?",
+      "area": "Funktionen",
+      "options": [
+        { "text": "Weil ein Absturz die Überwachung dauerhaft stumm schalten könnte, was wie ein gesunder Zustand aussieht.", "isCorrect": true, "explanation": "Ein still zurückgegebenes null lässt den Aufrufer selbst entscheiden. Ein harter Absturz könnte die Warnung dauerhaft verstummen lassen." },
+        { "text": "Weil ein Absturz in dieser Programmiersprache aus rein technischen Gründen unter keinen Umständen jemals möglich wäre, ganz gleich was im Code passiert.", "isCorrect": false, "explanation": "Ein Absturz wäre technisch möglich, wurde hier aber bewusst vermieden." },
+        { "text": "Weil null weniger Speicherplatz braucht als eine Fehlermeldung.", "isCorrect": false, "explanation": "Speicherplatz ist hier nicht der Grund, sondern die Zuverlässigkeit der Überwachung." },
+        { "text": "Weil die Programmiersprache Abstürze grundsätzlich verbietet.", "isCorrect": false, "explanation": "Abstürze sind in der Sprache erlaubt, hier wurde nur bewusst dagegen entschieden." }
+      ]
+    },
+    {
+      "question": "Welche Zeile legt laut Praxisbeispiel eine Variable an, deren Inhalt danach nicht mehr geändert wird?",
+      "area": "Funktionen",
+      "options": [
+        { "text": "const minute ist gleich parseField von fields, 0, 59.", "isCorrect": true, "explanation": "const legt eine Variable an, deren Inhalt danach fest bleibt, hier die berechnete Minute." },
+        { "text": "let minute ist gleich parseField von fields, 0, 59.", "isCorrect": false, "explanation": "Im Praxisbeispiel steht dort const, nicht let. let würde spätere Änderungen erlauben." },
+        { "text": "if minute ist gleich 0.", "isCorrect": false, "explanation": "Das wäre eine Bedingung mit einem Vergleich, kein Anlegen einer Variable." },
+        { "text": "return null.", "isCorrect": false, "explanation": "Das gibt ein Ergebnis zurück, legt aber keine neue Variable an." }
+      ]
+    },
+    {
+      "question": "Wie sieht man einem Wert direkt an, dass er Text ist und keine Zahl?",
+      "area": "Datentypen",
+      "options": [
+        { "text": "Der Wert steht in Anführungszeichen.", "isCorrect": true, "explanation": "Anführungszeichen markieren einen Text, auch wenn nur eine einzelne Ziffer oder ein einzelner Buchstabe darin steht." },
+        { "text": "Der Wert ist immer länger als drei Zeichen.", "isCorrect": false, "explanation": "Die Länge sagt nichts über den Datentyp aus, ein Text kann auch nur ein Zeichen lang sein." },
+        { "text": "Der Wert beginnt immer mit einem Großbuchstaben.", "isCorrect": false, "explanation": "Groß- oder Kleinschreibung am Anfang entscheidet nicht über den Datentyp." },
+        { "text": "Der Wert steht direkt hinter dem Wort const.", "isCorrect": false, "explanation": "const kann vor jedem Datentyp stehen, nicht nur vor Text." }
+      ]
+    },
+    {
+      "question": "Ein Kollege sagt: Ich nehme immer let, const brauche ich nie. Was fehlt in dieser Aussage?",
+      "area": "Variablen",
+      "options": [
+        { "text": "const schützt vor versehentlichen Änderungen, das ist ein Vorteil, den let nicht bietet.", "isCorrect": true, "explanation": "Beide Wörter legen Variablen an, aber nur const verhindert spätere Änderungen und macht Fehler früh sichtbar." },
+        { "text": "let funktioniert technisch überhaupt nicht.", "isCorrect": false, "explanation": "let funktioniert einwandfrei, es fehlt nur der Schutz vor versehentlichen Änderungen, den const bietet." },
+        { "text": "const ist ausschließlich für Texte und Zeichenketten gedacht, während let ausschließlich für Zahlen und Boolean-Werte gedacht ist.", "isCorrect": false, "explanation": "Beide Wörter funktionieren mit jedem Datentyp, der Unterschied liegt nicht beim Datentyp." },
+        { "text": "let ist eine ältere Sprache als const.", "isCorrect": false, "explanation": "Beide Wörter gehören zur selben Sprache und werden gleichzeitig benutzt, es ist keine Frage des Alters." }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Öffne auf deinem eigenen Rechner einen Browser, zum Beispiel Chrome, Firefox oder Edge. Öffne die Entwicklerkonsole: unter Windows mit der Taste F12, unter macOS mit cmd und alt und J gleichzeitig, und wechsle dort auf den Reiter Konsole. Tippe nacheinander diese drei Zeilen ein und drücke jeweils Enter: let name ist gleich Anführungszeichen dein Name Anführungszeichen. Dann: const geburtsjahr ist gleich die Jahreszahl deiner Geburt, ohne Anführungszeichen. Dann: let istVolljaehrig ist gleich true oder false, je nachdem was zutrifft. Tippe danach in einer neuen Zeile nur das Wort name ein und drücke Enter, um den Inhalt anzusehen.",
+    "expectation": "Nach jeder Zeile zeigt die Konsole den Wert der neu angelegten Variable an. Tippst du am Ende nur name ein, erscheint dein eingetippter Name in Anführungszeichen, weil er vom Datentyp Text ist.",
+    "checklist": [
+      "Entwicklerkonsole des Browsers geöffnet",
+      "Variable name mit let und einem Text angelegt",
+      "Variable geburtsjahr mit const und einer Zahl angelegt",
+      "Variable istVolljaehrig mit let und einem Boolean-Wert angelegt",
+      "Inhalt von name durch erneutes Eintippen des Namens angezeigt"
+    ]
+  },
+  "audio": {
+    "file": "M01-06-01.mp3",
+    "durationSeconds": 1014,
+    "voices": ["A", "B"],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Muss ich mir merken, wann ich let und wann ich const nehme, oder kann ich am Anfang einfach immer let benutzen?",
+      "answer": "Am Anfang darfst du ruhig öfter zu let greifen, das funktioniert immer. Erfahrene Programmierer nehmen aber möglichst oft const, weil es Fehler verhindert. Ein Beispiel: eine Mehrwertsteuer, die während eines Einkaufs nie wechseln darf, gehört in eine const-Variable, damit sich niemand aus Versehen verschreibt."
+    },
+    {
+      "question": "Was passiert, wenn ich versuche, eine mit const angelegte Variable trotzdem zu ändern?",
+      "answer": "Der Computer meldet einen Fehler und stoppt an genau dieser Stelle, bevor irgendetwas Falsches passieren kann. Das ist gewollt: lieber sofort ein klarer Fehler, als ein stiller falscher Wert, der erst viel später auffällt."
+    },
+    {
+      "question": "Woher weiß der Computer, welchen Datentyp eine Zahl wie 30 hat, ich schreibe doch nirgendwo Zahl dazu?",
+      "answer": "Der Computer erkennt es an der Schreibweise. Ziffern ohne Anführungszeichen sind für ihn immer eine Zahl. Sobald Anführungszeichen drumherum stehen, wie bei Mehl, ist es für ihn Text, selbst wenn zufällig nur Ziffern zwischen den Anführungszeichen stehen."
+    },
+    {
+      "question": "Kann eine Variable ihren Datentyp später wechseln, also erst eine Zahl sein und dann ein Text werden?",
+      "answer": "In der Sprache, die wir hier lernen, technisch schon, aber es gilt als schlechter Stil und führt schnell zu Fehlern. Besser ist es, für jede Variable von Anfang an bei einem Datentyp zu bleiben, dann weißt du beim Lesen des Codes jederzeit, womit du es zu tun hast."
+    },
+    {
+      "question": "Ist null dasselbe wie die Zahl null?",
+      "answer": "Nein, das ist ein häufiges Missverständnis. Die Zahl null ist ein ganz normaler Zahlenwert, mit dem man rechnen kann. null als eigener Wert bedeutet dagegen: hier ist absichtlich gar kein Ergebnis vorhanden, wie eine leere Schublade ohne jeden Inhalt."
+    }
+  ]
+}
