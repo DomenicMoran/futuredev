@@ -10,7 +10,7 @@ export interface SupabaseEnv {
   readonly SUPABASE_SERVICE_ROLE_KEY: string;
 }
 
-function readEnvLocal(repoRoot: string): Record<string, string> {
+export function readEnvLocal(repoRoot: string): Record<string, string> {
   const path = join(repoRoot, '.env.local');
   if (!existsSync(path)) return {};
   const values: Record<string, string> = {};
@@ -37,4 +37,17 @@ export function loadSupabaseEnv(repoRoot: string): SupabaseEnv | null {
   const key = get('SUPABASE_SERVICE_ROLE_KEY');
   if (!url || !key) return null;
   return { SUPABASE_URL: url, SUPABASE_SERVICE_ROLE_KEY: key };
+}
+
+/**
+ * `SUPABASE_URL` allein, unabhaengig vom Dienstschluessel: die Basis-URLs im
+ * veroeffentlichten Manifest muessen auch im Dry-Run ohne
+ * `SUPABASE_SERVICE_ROLE_KEY` auf den Supabase-Eimer zeigen, nicht auf
+ * GitHub (siehe `buildPublishManifest` in plan.ts). Nicht gefunden ist ein
+ * Abbruch, kein stiller Rueckfall, weil sonst ein Manifest mit falscher
+ * Basis-URL veroeffentlicht werden koennte.
+ */
+export function loadSupabaseUrl(repoRoot: string): string | null {
+  const fromFile = readEnvLocal(repoRoot);
+  return process.env.SUPABASE_URL ?? fromFile.SUPABASE_URL ?? null;
 }

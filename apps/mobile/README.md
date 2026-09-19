@@ -121,3 +121,41 @@ Bauzeit für `assembleDebug` bei kaltem Gradle-Daemon: rund 3 Minuten
 (gemessen: 3 min 5 s). Bildschirmfotos je Reiter mit
 `adb exec-out screencap -p > datei.png` nach dem in der Aufgabe genannten
 Zielordner, niemals als Behauptung ohne Datei.
+
+### Fallen
+
+**Schwarzer Bildschirm beim Start, ohne Absturz.** Ursache war nicht der
+JavaScript-Code (auch ein leeres Wurzel-Layout ohne jeden Provider blieb
+schwarz), sondern Metro selbst: `metro.config.js` hatte `watchFolders` auf
+die ganze Repo-Wurzel gesetzt. Dadurch krabbelte Metro auch durch
+`apps/web` (eigenes Next.js), `apps/mobile/android` (1,3 GB native
+Bauartefakte, gemessen mit `du -sh`), `supabase/` und `tools/`. Der erste
+Bündel-Abruf dauerte dadurch bis zu 20 Minuten und endete zuletzt mit
+`Metro has encountered an error: Failed to get the SHA-1 for:
+[...]\node_modules\react-native\node_modules\@react-native\js-polyfills\
+console.js` (ein leerer, verwaister `node_modules`-Rest unter
+`react-native`, den ein früherer Installationsstand hinterlassen hatte und
+den der breite Crawl in den Haste-Cache aufnahm). Der native Client wartete
+auf eine Antwort, die nie kam: kein `ReactNativeJS`-Log nach
+`Running "main"`, keine RedBox, keine Absturzmeldung, nur ein leeres
+`android.view.View` laut `uiautomator dump`. Ursache belegt mit
+`curl -s -o out.json -w "%{http_code} %{time_total}s"
+"http://localhost:8082/node_modules/expo-router/entry.bundle?platform=android&dev=true&minify=false"`
+(erst `500` nach 20 Minuten, Fehlertext wie oben). Behoben durch engere
+`watchFolders` (nur die gehobenen `node_modules` und `packages/*`) und eine
+`resolver.blockList` für `apps/web`, `apps/mobile/android`,
+`apps/mobile/.expo`, `supabase/` und `tools/` (nicht `content/`: das JSON
+dort ist mit 73 KB winzig und wird von `src/settings/profile.ts` direkt
+importiert). Nach dem Neustart mit `--clear` lieferte derselbe Bündel-Abruf
+`200` in rund 2 bis 15 Sekunden. Lehre: ein `watchFolders = [workspaceRoot]`
+in einem pnpm-Monorepo mit mehreren Apps und nativen Bauordnern ist keine
+harmlose Bequemlichkeit, sondern ein Risiko, das erst bei wachsendem Repo
+sichtbar wird.
+
+Ein Timeout bei `adb shell am start -W` (`Status: timeout`, keine
+`Drawn`-Zeile) ist bei diesem Build für sich kein Beleg für einen Fehler:
+die App ruft `reportFullyDrawn()` nicht auf, darum liefert `-W` hier nie
+`Complete`. Beleg für „läuft wirklich" ist stattdessen ein Bildschirmfoto
+nach ein paar Sekunden Wartezeit und ein leeres Ergebnis von
+`adb logcat -d | grep -iE "UnsatisfiedLinkError|SIGSEGV|FATAL"` nach
+mehreren Reloads.

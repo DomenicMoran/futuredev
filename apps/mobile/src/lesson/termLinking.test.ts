@@ -21,8 +21,8 @@ describe('linkTermsInBlocks', () => {
 
   it('markiert jeden Begriff nur beim ersten Vorkommen ueber alle Bloecke hinweg', () => {
     const blocks = [
-      { speaker: 'A' as const, text: 'Die CPU rechnet, die CPU ist schnell.', isKeySentence: false },
-      { speaker: 'A' as const, text: 'Der Arbeitsspeicher haelt Daten, die CPU nutzt ihn.', isKeySentence: false },
+      { speaker: 'A' as const, text: 'Die CPU rechnet, die CPU ist schnell.', isKeySentence: false, role: 'explain' as const },
+      { speaker: 'A' as const, text: 'Der Arbeitsspeicher haelt Daten, die CPU nutzt ihn.', isKeySentence: false, role: 'explain' as const },
     ];
     const result = linkTermsInBlocks(blocks, terms);
 
@@ -33,13 +33,13 @@ describe('linkTermsInBlocks', () => {
   });
 
   it('baut den Originaltext aus den Segmenten wieder zusammen', () => {
-    const blocks = [{ speaker: 'A' as const, text: 'Die CPU rechnet Schritt fuer Schritt.', isKeySentence: false }];
+    const blocks = [{ speaker: 'A' as const, text: 'Die CPU rechnet Schritt fuer Schritt.', isKeySentence: false, role: 'explain' as const }];
     const result = linkTermsInBlocks(blocks, terms);
     expect((result[0] ?? []).map((s) => s.text).join('')).toBe(blocks[0]?.text);
   });
 
   it('funktioniert ohne Begriffe (leere Liste)', () => {
-    const blocks = [{ speaker: 'A' as const, text: 'Ganz normaler Text.', isKeySentence: false }];
+    const blocks = [{ speaker: 'A' as const, text: 'Ganz normaler Text.', isKeySentence: false, role: 'explain' as const }];
     expect(linkTermsInBlocks(blocks, [])).toEqual([[{ text: 'Ganz normaler Text.', term: null }]]);
   });
 });

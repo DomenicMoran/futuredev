@@ -45,10 +45,19 @@ export function diffLessons(local: Manifest, remote: Manifest | null): LessonUpl
  * content/lessons/. Nur so darf die Lektionsdatei mit cacheControl 31536000s
  * (ein Jahr) ausgeliefert werden, ohne dass ein Client unter demselben Namen
  * jemals eine veraltete Fassung bekommt.
+ *
+ * `contentBaseUrl`/`audioBaseUrl` werden dabei auf die Supabase-Eimer
+ * umgeschrieben (siehe Nachtrag 2026-09-19: `content/manifest.json` traegt
+ * lokal noch die GitHub-Uebergangsadressen aus Welle 3, Agent C). Ohne diese
+ * Umschreibung wuerde das veroeffentlichte Manifest weiter auf GitHub zeigen,
+ * obwohl die Lektionsdateien selbst im Supabase-Eimer "content" liegen.
  */
-export function buildPublishManifest(local: Manifest): Manifest {
+export function buildPublishManifest(local: Manifest, supabaseUrl: string): Manifest {
+  const base = supabaseUrl.replace(/\/+$/, '');
   return {
     ...local,
+    contentBaseUrl: `${base}/storage/v1/object/public/content`,
+    audioBaseUrl: `${base}/storage/v1/object/public/audio`,
     lessons: local.lessons.map((lesson) => ({
       ...lesson,
       file: lessonStoragePath(lesson.id, lesson.sha256),
@@ -93,12 +102,12 @@ export type ContentPlanStep =
  * Abbruch mitten im Lauf nie ein Manifest veroeffentlichen, das auf eine
  * Lektionsdatei zeigt, die noch nicht im Eimer liegt.
  */
-export function planContentUploads(local: Manifest, remote: Manifest | null): ContentPlanStep[] {
+export function planContentUploads(local: Manifest, remote: Manifest | null, supabaseUrl: string): ContentPlanStep[] {
   const lessonSteps: ContentPlanStep[] = diffLessons(local, remote).map((upload) => ({
     kind: 'lesson',
     ...upload,
   }));
-  const publishManifest = buildPublishManifest(local);
+  const publishManifest = buildPublishManifest(local, supabaseUrl);
   return [...lessonSteps, { kind: 'manifest', changed: manifestChanged(publishManifest, remote) }];
 }
 

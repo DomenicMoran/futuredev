@@ -40,7 +40,7 @@ interface Section {
 // unterstuetzt eine Sprungleiste ueber scrollToLocation (Begriffe,
 // Praxisbeispiel, Praxisaufgabe, FAQ), ohne eine fremde Bibliothek.
 export default function LessonScreen() {
-  const { id } = useLocalSearchParams<{ id: string }>();
+  const { id, block: blockParam } = useLocalSearchParams<{ id: string; block?: string }>();
   const theme = useTheme();
   const { state: contentState } = useContent();
 
@@ -86,6 +86,24 @@ export default function LessonScreen() {
       cancelled = true;
     };
   }, [id]);
+
+  // "Im Text lesen" aus dem Player uebergibt den zuletzt gehoerten Block als
+  // `block`-Parameter (app/player.tsx); hierher zurueckspringen heisst genau
+  // dorthin scrollen, nicht nur die Lektion oeffnen.
+  useEffect(() => {
+    if (!lesson || blockParam === undefined) return;
+    const blockIndex = Number(blockParam);
+    if (!Number.isFinite(blockIndex) || blockIndex < 0 || blockIndex >= lesson.speechBlocks.length) return;
+    const timer = setTimeout(() => {
+      listRef.current?.scrollToLocation({
+        sectionIndex: 0,
+        itemIndex: blockIndex,
+        viewPosition: 0,
+        animated: true,
+      });
+    }, 0);
+    return () => clearTimeout(timer);
+  }, [lesson, blockParam]);
 
   const termSegments = useMemo<TextSegment[][]>(() => {
     if (!lesson) return [];
@@ -231,6 +249,12 @@ export default function LessonScreen() {
         renderItem={({ item, index, section }) => {
           if (section.key === 'body') {
             const block = item as SpeechBlock;
+            // role "faq" steht schon im eigenen Abschnitt (aus lesson.faq);
+            // im Fliesstext wird der Block uebersprungen, um ihn nicht
+            // doppelt zu zeigen. Der Index bleibt unveraendert (Positionen
+            // fuer Notizen, Lesezeichen und den Player zaehlen weiter über
+            // lesson.speechBlocks), nur die Darstellung entfaellt.
+            if (block.role === 'faq') return null;
             return (
               <SpeechBlockRow
                 block={block}

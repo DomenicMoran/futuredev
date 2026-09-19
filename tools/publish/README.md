@@ -63,6 +63,21 @@ auch der Dry-Run gegen den echten zuletzt veröffentlichten Stand, sendet aber
 weiterhin nichts. Ohne `--dry-run` und ohne Schlüssel bricht das Werkzeug mit
 einer klaren Meldung und Rückgabewert 2 ab, ohne etwas zu senden.
 
+## Basis-URLs im veröffentlichten Manifest
+
+`content/manifest.json` trägt im Repo (Übergangsstand aus Welle 3, Agent C)
+`contentBaseUrl`/`audioBaseUrl` auf einen GitHub-Release, weil die Hördatei
+und die Cue-Sidecar-Datei dort lagen, bevor Supabase Storage befüllt war.
+`buildPublishManifest` in `src/plan.ts` schreibt beide Felder beim
+Veröffentlichen immer um, unabhängig vom lokalen Wert: auf
+`${SUPABASE_URL}/storage/v1/object/public/content` und
+`.../public/audio`. Das veröffentlichte Manifest zeigt damit stets auf die
+Eimer, in die dieses Werkzeug selbst hochlädt, nie auf GitHub. `--dry-run`
+druckt beide umgeschriebenen Adressen vor dem Plan aus, auch ohne
+`SUPABASE_SERVICE_ROLE_KEY` (dafür reicht `SUPABASE_URL` allein, siehe unten);
+fehlt `SUPABASE_URL` ganz, bricht das Werkzeug mit Rückgabewert 2 ab, auch im
+Dry-Run, weil sonst eine falsche Basis-URL nicht auffiele.
+
 ## Umgebungsvariablen (`.env.local` in der Repo-Wurzel)
 
 - `SUPABASE_URL`: Projekt-URL für administrative Aufrufe vom Rechner aus.

@@ -19,7 +19,7 @@ import { createClient } from '@supabase/supabase-js';
 import { lessonSchema, manifestSchema, type Lesson, type Manifest } from '@futuredev/content-schema';
 import { formatAudioPlan, formatContentPlan, withDryRunPrefix } from './format.js';
 import { sha256Hex } from './hash.js';
-import { loadSupabaseEnv } from './env.js';
+import { loadSupabaseEnv, loadSupabaseUrl } from './env.js';
 import {
   buildPublishManifest,
   planAudioUploads,
@@ -131,8 +131,14 @@ async function main(): Promise<number> {
   const localManifest = loadLocalManifest();
   const lessonEntries = loadLocalLessons(localManifest);
   const lessonRawById = new Map([...lessonEntries].map(([id, entry]) => [id, entry.raw]));
-  const publishManifest = buildPublishManifest(localManifest);
   const lessonIds = localManifest.lessons.map((lesson) => lesson.id);
+
+  const supabaseUrl = loadSupabaseUrl(repoRoot);
+  if (!supabaseUrl) {
+    console.error('publish: SUPABASE_URL fehlt in .env.local. Ohne sie koennen die Basis-URLs im Manifest nicht umgeschrieben werden.');
+    return 2;
+  }
+  const publishManifest = buildPublishManifest(localManifest, supabaseUrl);
 
   const env = loadSupabaseEnv(repoRoot);
 
@@ -152,7 +158,7 @@ async function main(): Promise<number> {
   }
 
   const remoteManifest = client ? await fetchRemoteManifest(client, manifestSchema) : null;
-  const contentSteps = planContentUploads(localManifest, remoteManifest);
+  const contentSteps = planContentUploads(localManifest, remoteManifest, supabaseUrl);
 
   const audioLocalInfo = gatherAudioLocalInfo(args.audioDir, lessonIds);
   const remoteAudioShas = client
@@ -164,6 +170,8 @@ async function main(): Promise<number> {
     if (!env) {
       console.log('[dry-run] kein SUPABASE_SERVICE_ROLE_KEY: zeigt den vollen Umfang, als waere noch nichts veroeffentlicht.');
     }
+    console.log(`[dry-run] contentBaseUrl: ${publishManifest.contentBaseUrl}`);
+    console.log(`[dry-run] audioBaseUrl: ${publishManifest.audioBaseUrl}`);
     for (const line of withDryRunPrefix(formatContentPlan(contentSteps))) console.log(line);
     for (const line of withDryRunPrefix(formatAudioPlan(audioSteps))) console.log(line);
     console.log('[dry-run] nichts gesendet.');
