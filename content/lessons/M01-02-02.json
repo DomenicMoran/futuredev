@@ -1,0 +1,1143 @@
+{
+  "id": "M01-02-02",
+  "title": "Im Dateisystem navigieren: cd, ls, mkdir",
+  "durationMinutes": 15,
+  "prerequisites": [
+    "M01-00-01",
+    "M01-00-02",
+    "M01-00-03",
+    "M01-00-04",
+    "M01-01-03",
+    "M01-02-01"
+  ],
+  "terms": [
+    {
+      "term": "Dateisystem",
+      "definition": "Die Art, wie ein Computer alle Dateien und Ordner geordnet ablegt, ähnlich wie ein Aktenschrank mit Schubladen und Mappen."
+    },
+    {
+      "term": "Ordner",
+      "definition": "Ein Behälter im Dateisystem, der Dateien und weitere Ordner enthalten kann. Auch Verzeichnis genannt."
+    },
+    {
+      "term": "Datei",
+      "definition": "Ein einzelnes, benanntes Stück gespeicherter Information, zum Beispiel ein Text, ein Bild oder eine Tabelle."
+    },
+    {
+      "term": "Pfad",
+      "definition": "Die genaue Wegbeschreibung zu einem Ordner oder einer Datei im Dateisystem."
+    },
+    {
+      "term": "absoluter Pfad",
+      "definition": "Ein Pfad, der immer beim Wurzelort des Dateisystems beginnt und deshalb von überall aus zum gleichen Ziel führt."
+    },
+    {
+      "term": "relativer Pfad",
+      "definition": "Ein Pfad, der vom Ort ausgeht, an dem man gerade steht, und deshalb je nach Startort zu unterschiedlichen Zielen führen kann."
+    },
+    {
+      "term": "Tab-Vervollständigung",
+      "definition": "Eine Eigenschaft des Terminals, die einen angefangenen Namen automatisch ergänzt, wenn man die Tabulatortaste drückt."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "text": "Stell dir einen großen Aktenschrank in einem Büro vor.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Der Schrank hat mehrere Schubladen. In jeder Schublade liegen Mappen, und in jeder Mappe liegen einzelne Blätter.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau so geordnet legt auch ein Computer alles ab, was auf ihm gespeichert ist. Nichts liegt einfach lose herum, alles hat seinen festen Platz in dieser Ordnung.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Diese gesamte Ordnung aus Schubladen, Mappen und Blättern nennt man Dateisystem.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "B",
+      "text": "Ist das Dateisystem also der ganze Aktenschrank zusammen, nicht nur eine einzelne Schublade?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau, das Dateisystem ist die gesamte Struktur. Egal ob Windows, macOS oder ein anderes Betriebssystem, jeder Computer organisiert seine gespeicherten Inhalte über so ein Dateisystem, auch wenn die Beschriftung leicht unterschiedlich aussieht.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Ohne diese Ordnung müsstest du bei jeder Suche den ganzen Computer nach einem einzelnen Blatt durchwühlen. Mit ihr weißt du immer, wo etwas liegt oder liegen sollte.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Gibt es noch ein anderes Bild dafür, das Entwickler oft benutzen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, ein sehr verbreitetes Bild ist ein Baum, auf dem Kopf stehend. Ganz unten die Wurzel, von ihr gehen dicke Äste ab, von den dicken Ästen wieder dünnere, bis hin zu den einzelnen Blättern ganz außen.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Die Wurzel ist der oberste Ausgangspunkt des ganzen Dateisystems. Jeder Ast ist ein Ordner, der weitere Äste oder Blätter tragen kann. Jedes Blatt ganz am Ende eines Astes ist eine Datei.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Also ist der Aktenschrank von eben und der Baum jetzt eigentlich dasselbe Bild, nur anders gezeichnet?",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau, beide beschreiben dieselbe Idee: eine Ordnung, die oben oder in der Mitte beginnt und sich nach außen immer weiter verzweigt. Welches Bild dir besser hängen bleibt, darfst du dir selbst aussuchen.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Sieht dieses Dateisystem auf jedem Gerät, das ich besitze, genau gleich aus?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Die grobe Grundordnung mit Ordnern und Dateien ist überall gleich, aber die obersten, mitgelieferten Ordner heißen je nach Betriebssystem unterschiedlich. Windows zeigt oft ein Laufwerk namens C, macOS und verwandte Systeme beginnen bei einem einzigen, gemeinsamen Wurzelort.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Für dich als Anfänger reicht es, das Prinzip zu verstehen. Die genauen Namen der obersten Orte lernst du automatisch, sobald du länger mit deinem eigenen Gerät arbeitest.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Bleiben wir bei den Schubladen und Mappen aus dem Aktenschrank.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Eine Mappe kann mehrere Blätter enthalten, und sie kann sogar wieder kleinere Mappen enthalten, verschachtelt ineinander.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Im Dateisystem heißt so eine Mappe Ordner.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "B",
+      "text": "Ich habe auch schon das Wort Verzeichnis gehört. Ist das etwas anderes?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, Verzeichnis ist nur das etwas technischere Wort für genau dasselbe. Ein Ordner namens Fotos und ein Verzeichnis namens Fotos meinen exakt dasselbe Ding.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein Ordner kann leer sein, oder er kann randvoll mit weiteren Ordnern und Dateien sein, genau wie eine Mappe im Aktenschrank.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Ordner sind der Grund, warum ein Dateisystem übersichtlich bleibt, selbst wenn Tausende Dinge darauf gespeichert sind.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Und jetzt das einzelne Blatt Papier in der Mappe.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Auf diesem Blatt steht etwas Konkretes: ein Brief, eine Liste, eine Zeichnung.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Dieses einzelne, benannte Stück Inhalt heißt im Dateisystem eine Datei.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "B",
+      "text": "Was für Arten von Dateien gibt es denn üblicherweise?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein Urlaubsfoto ist eine Datei, ein Lied ist eine Datei, ein geschriebener Brief ist eine Datei. Jede hat einen Namen und meist eine kurze Endung danach, die verrät, um welche Art von Inhalt es geht, etwa Foto punkt jpg.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Also liegt jede Datei immer in irgendeinem Ordner, nie einfach frei im Nichts?",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau richtig erkannt. Jede Datei hat einen Ordner, in dem sie liegt, so wie jedes Blatt Papier in einer bestimmten Mappe steckt und nicht lose im Raum schwebt.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Wenn ich bisher immer mit der Maus auf Ordner geklickt habe, mache ich dann im Terminal etwas komplett anderes?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, du siehst dasselbe Dateisystem, nur mit einer anderen Ansicht. Ein Doppelklick auf einen Ordner im gewohnten Datei-Fenster öffnet genau denselben Ordner, den du im Terminal mit cd ansteuerst.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Der Unterschied ist nur die Form der Bedienung: dort Doppelklick nach Doppelklick, hier ein einziger, präziser Befehl, so wie das Sprechen statt Klicken aus der vorigen Lektion.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir vor, du stehst mitten in einem riesigen Möbelhaus mit vielen Abteilungen und fragst dich: In welcher Abteilung stehe ich hier gerade eigentlich?",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau diese Frage kannst du im Terminal auch stellen, denn du stehst dort immer an einem bestimmten Ort im Dateisystem, auch wenn du das nicht siehst.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Der Befehl dafür heißt pwd, kurz für print working directory, zeige den Ordner, in dem ich gerade arbeite.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Und was zeigt mir pwd dann genau an?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Eine einzige Zeile Text mit dem genauen Ort deines aktuellen Ordners, zum Beispiel etwas wie C Doppelpunkt Backslash Benutzer Backslash Maria. Dieser Text beantwortet dir genau die Frage, wo du gerade stehst.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Diesen Befehl solltest du dir merken, denn er ist deine Orientierung, bevor du irgendetwas anderes im Terminal tust.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Woher weiß das Terminal überhaupt, wo ich zu stehen beginne, wenn ich es zum ersten Mal öffne?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Jedes Terminal startet an einem festgelegten Standardort, meist in deinem persönlichen Benutzerordner. Von dort aus bewegst du dich mit den Befehlen aus dieser Lektion weiter, wohin du willst.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Damit du deinem Freund den Weg zu deiner Wohnung erklären kannst, sagst du ihm nicht einfach nur die Stadt. Du gibst ihm Straße, Hausnummer und Stockwerk.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Diese vollständige Wegbeschreibung zu einem Ordner oder einer Datei im Dateisystem heißt Pfad.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "B",
+      "text": "Sieht so ein Pfad dann aus wie eine ganz normale Adresse?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ähnlich, nur mit Schrägstrichen statt Kommas. Etwas wie Dokumente Schrägstrich Fotos Schrägstrich Urlaub zeigt dir: erst der Ordner Dokumente, darin der Ordner Fotos, darin der Ordner Urlaub.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Jeder Ordner und jede Datei im gesamten Dateisystem hat so einen eigenen, eindeutigen Pfad, egal wie tief er verschachtelt liegt.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir zwei Arten vor, jemandem den Weg zu einem Geschäft zu erklären.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Die erste Art: Musterstraße 12, ganz Berlin, dritter Stock. Das findet jeder, egal von wo er losläuft.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Die zweite Art: geh einfach zwei Häuser weiter und dann links. Das funktioniert nur, wenn du schon genau dort stehst, wo diese Wegbeschreibung beginnt.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Die erste Art nennt man im Dateisystem einen absoluten Pfad.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein absoluter Pfad beginnt immer ganz oben im Dateisystem und funktioniert deshalb von überall aus, egal wo du gerade stehst.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Die zweite Art nennt man einen relativen Pfad.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "B",
+      "text": "Relativ heißt also, dass er von meinem aktuellen Standort abhängt?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau. Fotos Schrägstrich Urlaub als relativer Pfad findet nur dann den richtigen Ordner, wenn du schon im richtigen Ausgangsordner stehst. Stehst du woanders, landest du woanders oder bekommst eine Fehlermeldung.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Für kurze Wege im Alltag ist der relative Pfad meist bequemer, für eindeutige Anleitungen, die überall funktionieren sollen, ist der absolute Pfad sicherer.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Jetzt willst du im Möbelhaus tatsächlich von der Küchenabteilung in die Gartenabteilung laufen, nicht nur wissen, wo du gerade stehst.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau dieses Wechseln des Ortes macht der Befehl cd, kurz für change directory, wechsle den Ordner.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Wie benutze ich cd denn genau?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Du schreibst cd, ein Leerzeichen, und danach den Namen des Ordners, in den du willst, zum Beispiel cd Dokumente. Danach zeigt dir pwd, dass du wirklich dort angekommen bist.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Willst du wieder einen Schritt zurück, also eine Ebene nach oben aus dem Ordner heraus, schreibst du cd mit zwei Punkten dahinter, cd Punkt Punkt. Das bedeutet: geh einen Schritt in Richtung Ausgang.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann ich mit diesen zwei Punkten auch mehrere Ebenen auf einmal zurückgehen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, du reihst die Zweipunkt-Schritte einfach mit einem Schrägstrich aneinander, etwa cd Punkt Punkt Schrägstrich Punkt Punkt für zwei Ebenen auf einmal. Jeder Doppelpunkt-Schritt bedeutet dabei genau eine Ebene nach oben.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Gibt es auch eine schnelle Abkürzung, um sofort zu meinem eigenen Benutzerordner zurückzuspringen, egal wo ich gerade stehe?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, tippst du nur cd ohne irgendeinen Namen dahinter, springt dich das Terminal direkt zu deinem persönlichen Benutzerordner zurück, egal wie tief du dich vorher verlaufen hattest.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "cd ist der Befehl, mit dem du dich im Dateisystem tatsächlich bewegst, so wie Laufen im Möbelhaus, nur eben per Text.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Was passiert, wenn ich cd in einen Ordner eingebe, den es gar nicht gibt?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Dann meldet der Computer eine Fehlermeldung, meist so etwas wie kein solcher Ordner gefunden. Du bleibst einfach an deinem bisherigen Standort stehen, es geht nichts kaputt.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Und wenn der Ordnername ein Leerzeichen enthält, wie Meine Dokumente mit Leerzeichen dazwischen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Dann setzt du den ganzen Namen in Anführungszeichen, also cd, dann in Anführungszeichen Meine Dokumente. Ohne die Anführungszeichen würde das Terminal das Leerzeichen als Trennung zwischen zwei getrennten Wörtern missverstehen.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Du stehst jetzt in einer Abteilung des Möbelhauses und willst sehen, was hier überhaupt steht, bevor du weitergehst.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Auf macOS und ähnlichen Systemen fragst du dafür mit dem Befehl ls, kurz für list, zeige die Liste. Unter Windows in PowerShell heißt der vergleichbare Befehl dir.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Was sehe ich dann als Ergebnis dieses Befehls?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Eine Liste aller Ordner und Dateien, die im aktuellen Ordner liegen. Manche Anzeigen unterscheiden dabei Ordner und Dateien sogar farblich oder mit einem kleinen Schrägstrich hinter dem Ordnernamen.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Diese kurze Liste vor jedem Schritt ist wie ein Blick auf die Beschilderung, bevor man weitergeht. Sie verhindert, dass du blind irgendwohin wechselst.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Zeigt ls mir auch, wie groß eine Datei ist oder wann sie zuletzt verändert wurde?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "In der einfachsten Form zeigt ls nur die Namen. Mit einem kleinen Zusatz dahinter, etwa ls, ein Leerzeichen, dann ein Bindestrich und der Buchstabe l, zeigt ls zusätzlich Größe, Datum und weitere Details zu jedem Eintrag.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Für den heutigen Einstieg reicht die einfache Form völlig aus, die ausführlichere Form lernst du, sobald du sie tatsächlich brauchst.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Jetzt willst du im Möbelhaus nicht nur schauen, sondern selbst eine neue, noch leere Abteilung eröffnen.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Der Befehl, der einen ganz neuen Ordner erschafft, heißt mkdir, kurz für make directory, erstelle einen Ordner.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "B",
+      "text": "Wie genau lege ich damit einen Ordner an?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Du schreibst mkdir, ein Leerzeichen, und den gewünschten Namen, zum Beispiel mkdir lernen. Danach existiert im aktuellen Ordner ein neuer, leerer Ordner namens lernen.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Mit ls kannst du direkt danach prüfen, ob der neue Ordner wirklich da ist, und mit cd lernen wechselst du gleich hinein.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Was, wenn schon ein Ordner mit demselben Namen existiert und ich versehentlich mkdir lernen ein zweites Mal eingebe?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Dann meldet der Computer eine Fehlermeldung und legt nichts an, der bereits bestehende Ordner bleibt unverändert erhalten. mkdir überschreibt niemals etwas Vorhandenes.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann ich mit mkdir auch mehrere Ordner auf einmal anlegen, statt jedes Mal neu zu tippen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, du schreibst einfach mehrere Namen hintereinander, jeweils durch ein Leerzeichen getrennt, etwa mkdir lernen uebung notizen. Dann entstehen im selben Augenblick drei neue, leere Ordner.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Das zeigt schon im Kleinen, warum Entwickler das Terminal schätzen: eine einzige Zeile ersetzt drei einzelne Klickvorgänge im gewohnten Datei-Fenster.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir vor, du diktierst jemandem eine Bestellung, und sobald du die ersten Buchstaben eines bekannten Wortes sagst, ergänzt die Person den Rest schon für dich.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau das kann dein Terminal auch, wenn du einen Ordner- oder Dateinamen eintippst.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Tippst du die ersten Buchstaben und drückst dann die Tabulatortaste, ergänzt das Terminal automatisch den Rest des Namens. Das heißt Tab-Vervollständigung.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "B",
+      "text": "Und wenn es mehrere Namen gibt, die mit denselben Buchstaben anfangen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Dann ergänzt das Terminal nur so weit, wie die Namen eindeutig übereinstimmen, und zeigt dir bei einem zweiten Druck auf die Tabulatortaste alle passenden Möglichkeiten zur Auswahl an.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Die Tab-Vervollständigung ergänzt so auch den langen Ordnernamen Dokumente von ganz allein, sobald du nur Doku eintippst und die Tabulatortaste drückst.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Sie spart nicht nur Tipparbeit, sie verhindert auch Tippfehler in langen Namen, die sonst leicht zu einer Fehlermeldung führen.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Fassen wir kurz zusammen: pwd zeigt, wo ich gerade stehe. cd wechselt den Ordner. ls zeigt, was dort liegt. mkdir legt einen neuen Ordner an.",
+      "isKeySentence": true,
+      "role": "key"
+    },
+    {
+      "speaker": "A",
+      "text": "Mit genau diesen vier Befehlen kannst du dich durch das ganze Dateisystem bewegen, dir jederzeit einen Überblick verschaffen und eigene Ordner anlegen.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann ich beim Üben mit diesen vier Befehlen irgendetwas kaputt machen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein. pwd zeigt nur an, ls zeigt nur an, cd wechselt nur den Standort, und mkdir legt ausschließlich Neues an. Keiner dieser vier Befehle löscht oder verändert eine bestehende Datei.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau deshalb sind diese vier der ideale Einstieg: du kannst so oft üben, wie du willst, ohne Angst, etwas Wichtiges zu verlieren.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Und wenn ich später doch mal einen Ordner wieder loswerden will, den ich zum Üben angelegt habe?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Dafür gibt es eigene Löschbefehle, die in dieser Lektion bewusst noch nicht behandelt werden, gerade weil Löschen anders als die heutigen vier Befehle tatsächlich etwas dauerhaft entfernen kann. Für den heutigen Übungsordner reicht es, ihn stehen zu lassen.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Wie hängt das heutige Wissen eigentlich mit der vorigen Lektion über das Terminal selbst zusammen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "In der vorigen Lektion hast du gelernt, dass ein Befehl eine präzise Textzeile ist, auf die der Computer antwortet. Heute hast du vier ganz konkrete solche Zeilen kennengelernt: pwd, cd, ls und mkdir.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Damit bewegst du dich nicht nur theoretisch, sondern ganz praktisch durch dein eigenes Gerät, mit denselben vier Handgriffen, die auch erfahrene Entwickler täglich viele Male benutzen.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Was kommt als Nächstes, wenn ich diese vier Befehle sicher beherrsche?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Als Nächstes lernst du, warum manche wichtigen Werte niemals direkt in einem Text stehen sollten, sondern an einem eigenen, geschützten Ort aufbewahrt werden. Auch dafür arbeitest du wieder im Terminal, an genau dem Ort, an dem du dich heute schon bewegen gelernt hast.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Fassen wir die Begriffe von heute noch einmal als Liste zusammen.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Dateisystem: Die Art, wie ein Computer alle Dateien und Ordner geordnet ablegt, ähnlich wie ein Aktenschrank mit Schubladen und Mappen.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Ordner: Ein Behälter im Dateisystem, der Dateien und weitere Ordner enthalten kann. Auch Verzeichnis genannt.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Datei: Ein einzelnes, benanntes Stück gespeicherter Information, zum Beispiel ein Text, ein Bild oder eine Tabelle.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Pfad: Die genaue Wegbeschreibung zu einem Ordner oder einer Datei im Dateisystem.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "absoluter Pfad: Ein Pfad, der immer beim Wurzelort des Dateisystems beginnt und deshalb von überall aus zum gleichen Ziel führt.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "relativer Pfad: Ein Pfad, der vom Ort ausgeht, an dem man gerade steht, und deshalb je nach Startort zu unterschiedlichen Zielen führen kann.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Tab-Vervollständigung: Eine Eigenschaft des Terminals, die einen angefangenen Namen automatisch ergänzt, wenn man die Tabulatortaste drückt.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann ich mit mkdir versehentlich eine schon bestehende Datei überschreiben?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, mkdir legt ausschließlich neue, leere Ordner an, es verändert und überschreibt keine bestehenden Dateien. Gibt es bereits einen Ordner mit demselben Namen, meldet der Computer nur eine Fehlermeldung, statt etwas zu löschen.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Was mache ich, wenn ich mich mit cd im falschen Ordner verlaufen habe?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Mit pwd siehst du sofort, wo du gerade stehst, und mit cd gefolgt von dem gewünschten Pfad wechselst du gezielt an den richtigen Ort. Nichts geht dabei verloren, das Herumwechseln zwischen Ordnern verändert keine Dateien.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss ich mir jeden Pfad komplett merken, um cd benutzen zu können?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, für kurze Wege reicht meist ein relativer Pfad mit ein, zwei Ordnernamen, und die Tab-Vervollständigung ergänzt lange Namen ohnehin automatisch. Vollständige, lange absolute Pfade brauchst du nur selten, meist beim Verweisen auf Orte weit außerhalb deines aktuellen Standorts.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Was ist, wenn zwei Dateien im selben Ordner genau denselben Namen haben sollen?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Das Dateisystem erlaubt das nicht, jeder Name innerhalb eines Ordners muss eindeutig sein, ähnlich wie in einer Mappe keine zwei Blätter mit exakt derselben Beschriftung nebeneinanderliegen. Willst du zwei ähnliche Dateien behalten, brauchen sie unterschiedliche Namen oder liegen in unterschiedlichen Ordnern.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Sind Groß- und Kleinschreibung bei cd und ls wichtig?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Unter Windows spielt Groß- und Kleinschreibung bei Ordnernamen meist keine Rolle, unter macOS und ähnlichen Systemen dagegen schon, dort ist Ordner etwas anderes als ordner. Am sichersten ist es, Namen immer genau so zu schreiben, wie sie tatsächlich angelegt wurden, dann funktioniert es auf jedem System gleich.",
+      "isKeySentence": false,
+      "role": "faq"
+    }
+  ],
+  "practiceExample": {
+    "text": "Im Repo cron-last-due prüft man das eigene Paket im Terminal mit einem einzigen Befehl: npm test. Dieser Befehl startet den hinterlegten Testlauf, der alle 23 vorbereiteten Testfälle einmal durchgehen lässt und danach meldet, ob alles bestanden hat. Um dorthin zu gelangen, wechselt man zuerst mit cd in den heruntergeladenen Projektordner und prüft mit ls, ob dort tatsächlich eine Datei namens package.json liegt, bevor man den Test-Befehl abschickt.",
+    "repoNote": "repo-cron-last-due",
+    "location": "package.json, Abschnitt \"scripts\", Eintrag \"test\": \"vitest run\", Testfälle in src/index.test.ts"
+  },
+  "quiz": [
+    {
+      "question": "Was ist ein Dateisystem?",
+      "area": "Dateisystem-Grundlagen",
+      "options": [
+        {
+          "text": "Die geordnete Struktur, in der ein Computer alle Ordner und Dateien ablegt.",
+          "isCorrect": true,
+          "explanation": "Genau das ist die Definition, ähnlich einem Aktenschrank mit Schubladen und Mappen."
+        },
+        {
+          "text": "Ein einzelner Ordner auf der obersten Ebene.",
+          "isCorrect": false,
+          "explanation": "Das Dateisystem ist die gesamte Struktur, nicht nur ein einzelner Ordner."
+        },
+        {
+          "text": "Ein anderes Wort für das Terminal.",
+          "isCorrect": false,
+          "explanation": "Das Terminal ist ein Fenster für Befehle, kein Speicherort."
+        },
+        {
+          "text": "Eine einzelne Datei mit einer Liste aller anderen Dateien.",
+          "isCorrect": false,
+          "explanation": "Ein Dateisystem ist die gesamte Ordnung, keine einzelne Liste-Datei."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der Unterschied zwischen einem Ordner und einer Datei?",
+      "area": "Dateisystem-Grundlagen",
+      "options": [
+        {
+          "text": "Ein Ordner kann Dateien und weitere Ordner enthalten, eine Datei enthält einen konkreten Inhalt.",
+          "isCorrect": true,
+          "explanation": "Der Ordner ist der Behälter, die Datei das einzelne Stück Inhalt darin."
+        },
+        {
+          "text": "Eine Datei kann Ordner enthalten, ein Ordner nie.",
+          "isCorrect": false,
+          "explanation": "Es ist umgekehrt: Ordner enthalten Dateien, nicht andersherum."
+        },
+        {
+          "text": "Beide Wörter meinen exakt dasselbe.",
+          "isCorrect": false,
+          "explanation": "Ordner und Datei sind zwei verschiedene Dinge im Dateisystem."
+        },
+        {
+          "text": "Ein Ordner existiert nur im Terminal, eine Datei nur außerhalb.",
+          "isCorrect": false,
+          "explanation": "Beide existieren im gesamten Dateisystem, unabhängig vom Terminal."
+        }
+      ]
+    },
+    {
+      "question": "Wofür steht der Befehl pwd?",
+      "area": "Terminal-Befehle",
+      "options": [
+        {
+          "text": "Er zeigt den Pfad des Ordners, in dem du gerade stehst.",
+          "isCorrect": true,
+          "explanation": "print working directory, zeige den aktuellen Arbeitsordner."
+        },
+        {
+          "text": "Er wechselt sofort in den Wurzelordner.",
+          "isCorrect": false,
+          "explanation": "pwd wechselt nichts, er zeigt nur den aktuellen Ort an."
+        },
+        {
+          "text": "Er löscht den aktuellen Ordner.",
+          "isCorrect": false,
+          "explanation": "pwd verändert nichts, er ist eine reine Anzeige."
+        },
+        {
+          "text": "Er listet alle Dateien im Ordner auf.",
+          "isCorrect": false,
+          "explanation": "Das Auflisten übernimmt ls, nicht pwd."
+        }
+      ]
+    },
+    {
+      "question": "Was ist ein Pfad?",
+      "area": "Dateisystem-Grundlagen",
+      "options": [
+        {
+          "text": "Die genaue Wegbeschreibung zu einem Ordner oder einer Datei.",
+          "isCorrect": true,
+          "explanation": "Genau wie eine Adresse mit Straße und Hausnummer beschreibt der Pfad den genauen Ort."
+        },
+        {
+          "text": "Ein anderes Wort für Tab-Vervollständigung.",
+          "isCorrect": false,
+          "explanation": "Das sind zwei unterschiedliche Dinge, kein Synonym."
+        },
+        {
+          "text": "Der Name des Terminals selbst.",
+          "isCorrect": false,
+          "explanation": "Der Pfad beschreibt einen Ort im Dateisystem, nicht das Terminal-Fenster."
+        },
+        {
+          "text": "Eine Liste aller jemals besuchten Ordner seit dem allerersten Start des Terminals.",
+          "isCorrect": false,
+          "explanation": "Ein Pfad beschreibt einen einzelnen Ort, keine Liste vergangener Orte."
+        }
+      ]
+    },
+    {
+      "question": "Worin unterscheidet sich ein absoluter Pfad von einem relativen Pfad?",
+      "area": "Dateisystem-Grundlagen",
+      "options": [
+        {
+          "text": "Der absolute Pfad startet oben, der relative unten.",
+          "isCorrect": true,
+          "explanation": "Genau dieser Unterschied wurde am Bild der vollständigen Adresse gegenüber zwei Häuser weiter gezeigt."
+        },
+        {
+          "text": "Ein relativer Pfad funktioniert immer, egal wo man steht, weil er sich automatisch an jeden möglichen Standort anpasst.",
+          "isCorrect": false,
+          "explanation": "Das trifft auf den absoluten Pfad zu, nicht auf den relativen."
+        },
+        {
+          "text": "Ein absoluter Pfad zeigt nur auf Dateien, ein relativer nur auf Ordner.",
+          "isCorrect": false,
+          "explanation": "Beide Pfadarten können sowohl auf Ordner als auch auf Dateien zeigen."
+        },
+        {
+          "text": "Es gibt keinen wirklichen Unterschied, nur zwei Namen für dasselbe.",
+          "isCorrect": false,
+          "explanation": "Die beiden Pfadarten verhalten sich unterschiedlich, je nach Startpunkt."
+        }
+      ]
+    },
+    {
+      "question": "Was macht der Befehl cd?",
+      "area": "Terminal-Befehle",
+      "options": [
+        {
+          "text": "Er wechselt den Ordner, in dem du gerade stehst.",
+          "isCorrect": true,
+          "explanation": "change directory, genau das ist seine Aufgabe."
+        },
+        {
+          "text": "Er zeigt eine ausführliche Liste aller Dateien im aktuellen Ordner mitsamt Größe und Datum an.",
+          "isCorrect": false,
+          "explanation": "Das übernimmt ls, nicht cd."
+        },
+        {
+          "text": "Er legt einen neuen Ordner an.",
+          "isCorrect": false,
+          "explanation": "Das übernimmt mkdir, nicht cd."
+        },
+        {
+          "text": "Er löscht den aktuellen Ordner vollständig.",
+          "isCorrect": false,
+          "explanation": "cd wechselt nur den Standort, es löscht nichts."
+        }
+      ]
+    },
+    {
+      "question": "Was bewirkt cd mit zwei Punkten dahinter, also cd Punkt Punkt?",
+      "area": "Terminal-Befehle",
+      "options": [
+        {
+          "text": "Es geht eine Ebene hoch.",
+          "isCorrect": true,
+          "explanation": "Die zwei Punkte stehen für den übergeordneten Ordner, einen Schritt Richtung Ausgang."
+        },
+        {
+          "text": "Es öffnet direkt den Wurzelordner des gesamten Dateisystems, unabhängig vom aktuellen Standort.",
+          "isCorrect": false,
+          "explanation": "Das würde ein anderer, hier nicht behandelter Kurzbefehl tun, nicht die zwei Punkte."
+        },
+        {
+          "text": "Es zeigt alle Unterordner der aktuellen Ebene an.",
+          "isCorrect": false,
+          "explanation": "Das Anzeigen übernimmt ls, nicht cd mit zwei Punkten."
+        },
+        {
+          "text": "Es benennt den aktuellen Ordner um.",
+          "isCorrect": false,
+          "explanation": "cd wechselt nur den Standort, es benennt nichts um."
+        }
+      ]
+    },
+    {
+      "question": "Welcher Befehl zeigt unter macOS und ähnlichen Systemen den Inhalt des aktuellen Ordners an?",
+      "area": "Terminal-Befehle",
+      "options": [
+        {
+          "text": "ls",
+          "isCorrect": true,
+          "explanation": "ls, kurz für list, zeigt die Liste aller Ordner und Dateien im aktuellen Ordner."
+        },
+        {
+          "text": "cd",
+          "isCorrect": false,
+          "explanation": "cd wechselt den Ordner, es zeigt keinen Inhalt an."
+        },
+        {
+          "text": "mkdir",
+          "isCorrect": false,
+          "explanation": "mkdir erstellt einen neuen Ordner, es zeigt keinen Inhalt an."
+        },
+        {
+          "text": "pwd",
+          "isCorrect": false,
+          "explanation": "pwd zeigt den aktuellen Standort, nicht den Inhalt des Ordners."
+        }
+      ]
+    },
+    {
+      "question": "Was macht der Befehl mkdir lernen?",
+      "area": "Terminal-Befehle",
+      "options": [
+        {
+          "text": "Er legt einen neuen Ordner namens lernen an.",
+          "isCorrect": true,
+          "explanation": "make directory, genau das ist seine Aufgabe, mit dem Namen als Zusatz."
+        },
+        {
+          "text": "Er wechselt in einen bereits an anderer Stelle bestehenden Ordner namens lernen hinein.",
+          "isCorrect": false,
+          "explanation": "Das Wechseln übernimmt cd, mkdir erstellt nur neu."
+        },
+        {
+          "text": "Er zeigt alle Ordner an, die lernen im Namen tragen.",
+          "isCorrect": false,
+          "explanation": "mkdir erstellt einen Ordner, es durchsucht nichts."
+        },
+        {
+          "text": "Er löscht den Ordner lernen, falls er existiert.",
+          "isCorrect": false,
+          "explanation": "mkdir erstellt neu, es löscht nichts."
+        }
+      ]
+    },
+    {
+      "question": "Wozu dient die Tab-Vervollständigung im Terminal?",
+      "area": "Terminal-Befehle",
+      "options": [
+        {
+          "text": "Sie ergänzt einen Namen automatisch.",
+          "isCorrect": true,
+          "explanation": "Genau das ist ihre Aufgabe, wie beim Diktieren einer Bestellung, die vervollständigt wird."
+        },
+        {
+          "text": "Sie legt automatisch einen neuen Ordner mit einem vorgeschlagenen Namen an.",
+          "isCorrect": false,
+          "explanation": "Das übernimmt mkdir, nicht die Tab-Vervollständigung."
+        },
+        {
+          "text": "Sie löscht überflüssige Leerzeichen aus einem bereits eingetippten Befehl.",
+          "isCorrect": false,
+          "explanation": "Sie ergänzt Namen, sie räumt keine Leerzeichen auf."
+        },
+        {
+          "text": "Sie zeigt die Uhrzeit des letzten Befehls an.",
+          "isCorrect": false,
+          "explanation": "Das hat nichts mit der Tab-Vervollständigung zu tun."
+        }
+      ]
+    },
+    {
+      "question": "Was zeigt das Praxisbeispiel aus dem Repo cron-last-due?",
+      "area": "Praxis",
+      "options": [
+        {
+          "text": "Ein einziger Befehl startet den kompletten Testlauf.",
+          "isCorrect": true,
+          "explanation": "Genau das steht im Abschnitt scripts der package.json des Repos."
+        },
+        {
+          "text": "npm test legt für jeden einzelnen Testfall automatisch einen eigenen, neu benannten Ordner für die Testergebnisse an.",
+          "isCorrect": false,
+          "explanation": "npm test führt Tests aus, es legt keinen Ordner an."
+        },
+        {
+          "text": "npm test funktioniert nur, wenn man vorher mkdir lernen ausführt.",
+          "isCorrect": false,
+          "explanation": "npm test hängt nicht vom Ordner lernen aus der heutigen Übung ab."
+        },
+        {
+          "text": "npm test zeigt nur an, in welchem Ordner man gerade steht.",
+          "isCorrect": false,
+          "explanation": "Das wäre die Aufgabe von pwd, nicht von npm test."
+        }
+      ]
+    },
+    {
+      "question": "Was passiert, wenn du einen relativen Pfad benutzt, aber gerade im falschen Ordner stehst?",
+      "area": "Dateisystem-Grundlagen",
+      "options": [
+        {
+          "text": "Der Pfad kann ins Leere führen oder zu einem anderen Ziel.",
+          "isCorrect": true,
+          "explanation": "Genau das ist das Risiko eines relativen Pfads: er hängt vom aktuellen Standort ab."
+        },
+        {
+          "text": "Der Computer wechselt automatisch zum richtigen Ordner.",
+          "isCorrect": false,
+          "explanation": "Ein Terminal rät nicht automatisch den gemeinten Ordner."
+        },
+        {
+          "text": "Der relative Pfad verwandelt sich automatisch in einen absoluten.",
+          "isCorrect": false,
+          "explanation": "Ein relativer Pfad bleibt relativ, er wandelt sich nicht von selbst um."
+        },
+        {
+          "text": "Es passiert grundsätzlich gar nichts, relative Pfade funktionieren immer exakt gleich, unabhängig vom Ausgangsort.",
+          "isCorrect": false,
+          "explanation": "Genau das Gegenteil stimmt: der Ausgangsort verändert das Ergebnis."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Öffne dein Terminal. Prüfe zuerst mit pwd, wo du gerade stehst. Lege dann mit mkdir lernen einen neuen Ordner an. Wechsle danach mit cd lernen in diesen neuen Ordner hinein. Prüfe zum Schluss noch einmal mit pwd, dass du wirklich im neuen Ordner lernen angekommen bist.",
+    "expectation": "Nach dem letzten pwd endet der angezeigte Pfad mit dem Ordnernamen lernen, genau der Ort, den du selbst angelegt hast.",
+    "checklist": [
+      "Mit pwd den Ausgangsort geprüft",
+      "Mit mkdir lernen einen neuen Ordner angelegt",
+      "Mit cd lernen in den neuen Ordner gewechselt",
+      "Mit einem zweiten pwd bestätigt, im Ordner lernen zu stehen"
+    ]
+  },
+  "audio": {
+    "file": "M01-02-02.mp3",
+    "durationSeconds": 1016,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Kann ich mit mkdir versehentlich eine schon bestehende Datei überschreiben?",
+      "answer": "Nein, mkdir legt ausschließlich neue, leere Ordner an, es verändert und überschreibt keine bestehenden Dateien. Gibt es bereits einen Ordner mit demselben Namen, meldet der Computer nur eine Fehlermeldung, statt etwas zu löschen."
+    },
+    {
+      "question": "Was mache ich, wenn ich mich mit cd im falschen Ordner verlaufen habe?",
+      "answer": "Mit pwd siehst du sofort, wo du gerade stehst, und mit cd gefolgt von dem gewünschten Pfad wechselst du gezielt an den richtigen Ort. Nichts geht dabei verloren, das Herumwechseln zwischen Ordnern verändert keine Dateien."
+    },
+    {
+      "question": "Muss ich mir jeden Pfad komplett merken, um cd benutzen zu können?",
+      "answer": "Nein, für kurze Wege reicht meist ein relativer Pfad mit ein, zwei Ordnernamen, und die Tab-Vervollständigung ergänzt lange Namen ohnehin automatisch. Vollständige, lange absolute Pfade brauchst du nur selten, meist beim Verweisen auf Orte weit außerhalb deines aktuellen Standorts."
+    },
+    {
+      "question": "Was ist, wenn zwei Dateien im selben Ordner genau denselben Namen haben sollen?",
+      "answer": "Das Dateisystem erlaubt das nicht, jeder Name innerhalb eines Ordners muss eindeutig sein, ähnlich wie in einer Mappe keine zwei Blätter mit exakt derselben Beschriftung nebeneinanderliegen. Willst du zwei ähnliche Dateien behalten, brauchen sie unterschiedliche Namen oder liegen in unterschiedlichen Ordnern."
+    },
+    {
+      "question": "Sind Groß- und Kleinschreibung bei cd und ls wichtig?",
+      "answer": "Unter Windows spielt Groß- und Kleinschreibung bei Ordnernamen meist keine Rolle, unter macOS und ähnlichen Systemen dagegen schon, dort ist Ordner etwas anderes als ordner. Am sichersten ist es, Namen immer genau so zu schreiben, wie sie tatsächlich angelegt wurden, dann funktioniert es auf jedem System gleich."
+    }
+  ]
+}

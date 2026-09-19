@@ -1,0 +1,1018 @@
+{
+  "id": "M01-02-03",
+  "title": "Umgebungsvariablen und warum Geheimnisse dort stehen und nicht im Code",
+  "durationMinutes": 15,
+  "prerequisites": [
+    "M01-00-01",
+    "M01-00-02",
+    "M01-00-03",
+    "M01-00-04",
+    "M01-01-03",
+    "M01-02-01",
+    "M01-02-02"
+  ],
+  "terms": [
+    {
+      "term": "Umgebungsvariable",
+      "definition": "Ein benannter Wert, der nicht im Quelltext steht, sondern außerhalb, in der Umgebung, in der eine Anwendung gerade läuft."
+    },
+    {
+      "term": "Geheimnis",
+      "definition": "Ein Wert, der geheim bleiben muss, weil er Zugang zu etwas Wichtigem gewährt, zum Beispiel ein Passwort oder ein Schlüssel für einen Dienst."
+    },
+    {
+      "term": "Env-Datei",
+      "definition": "Eine Datei, in der Umgebungsvariablen für ein Projekt gesammelt an einem Ort stehen, üblicherweise nicht mitgeteilt oder veröffentlicht."
+    },
+    {
+      "term": "Repository",
+      "definition": "Ein Ort, an dem der Quelltext eines Projekts gespeichert und mit anderen geteilt wird, oft öffentlich einsehbar."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "text": "Stell dir deinen eigenen Schlüsselbund vor: der Haustürschlüssel, der Autoschlüssel, vielleicht ein Schlüssel für das Fahrradschloss.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Diese Schlüssel trägst du bei dir, aber du nähst sie nicht in deine Jacke ein. Du hängst sie an einen austauschbaren Ring, den du bei Bedarf wechseln, ergänzen oder abgeben kannst.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Eine Anwendung braucht oft ganz ähnliche Schlüssel: einen Zugang zu einem Dienst im Internet, ein Passwort für eine Datenbank, einen Code für einen bezahlten Service.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Und wo bewahrt eine Anwendung solche Schlüssel dann auf, wenn nicht fest eingenäht im eigenen Quelltext?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau wie deine echten Schlüssel liegen sie an einem austauschbaren, separaten Ort, außerhalb des eigentlichen Quelltextes. Dieser Ort heißt Umgebungsvariable.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Eine Umgebungsvariable ist ein benannter Wert, der neben der Anwendung bereitsteht, so wie der Schlüsselring neben deiner Jacke hängt, statt ein fester Teil von ihr zu sein.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Diese Trennung ist der ganze Witz an der Sache: die Anwendung bleibt gleich, aber die Schlüssel daneben können ausgetauscht werden, ohne die Anwendung selbst anzufassen.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Warum reicht es nicht, den Schlüssel einfach fest in die Anwendung selbst hineinzuschreiben? Dann müsste man ihn doch gar nicht extra verwalten.",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir vor, du müsstest bei jedem neuen Wohnungsschlüssel dein ganzes Jackenfutter auftrennen und neu einnähen. Genauso mühsam wäre es, bei jedem neuen Zugangscode die ganze Anwendung umzuschreiben.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Mit einer Umgebungsvariable tauschst du nur den einen Wert daneben aus, ohne auch nur eine einzige Zeile der eigentlichen Anwendung anzufassen. Genau diese Bequemlichkeit ist einer der Hauptgründe für die Trennung.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Umgebungsvariablen sind übrigens keine Erfindung nur für Entwickler-Projekte. Dein eigener Computer benutzt sie ständig, meist ohne dass du es merkst.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann ich mir so eine Umgebungsvariable auf meinem eigenen Gerät mal ansehen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, ganz einfach. Auf macOS oder ähnlichen Systemen tippst du im Terminal echo Dollarzeichen HOME und drückst die Eingabetaste. Der Computer zeigt dir dann den Pfad zu deinem persönlichen Benutzerordner.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Unter Windows in PowerShell heißt die entsprechende Zeile echo Dollarzeichen env Doppelpunkt USERPROFILE, sie zeigt dort dasselbe: den Pfad zu deinem eigenen Benutzerordner.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "HOME und USERPROFILE sind selbst Umgebungsvariablen, die dein Betriebssystem schon beim Start für dich bereitgestellt hat, lange bevor du überhaupt ein Terminal geöffnet hast.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Gibt es noch weitere solche vom Betriebssystem vorbereiteten Umgebungsvariablen, oder ist HOME die einzige?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Es gibt einige weitere, etwa eine, die den bevorzugten Sprach- und Ländercode deines Systems trägt, oder eine, die den Namen deines Rechners im Netzwerk nennt. Für heute reicht HOME als einfachstes Beispiel völlig aus.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Wichtig ist nur das Prinzip: irgendwo, außerhalb jeder Anwendung, liegen benannte Werte bereit, und jede Anwendung darf sie bei Bedarf abfragen.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Nicht jede Umgebungsvariable ist heikel. HOME zu kennen bringt niemandem etwas.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Anders sieht es bei manchen Werten aus, die einen Dienst im Internet ansprechen: ein Zugangscode, mit dem jeder, der ihn kennt, in deinem Namen handeln kann.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "So einen besonders schützenswerten Wert nennt man ein Geheimnis.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "B",
+      "text": "Was passiert denn wirklich, wenn so ein Geheimnis in fremde Hände gerät?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Wer ein Geheimnis wie einen bezahlten Zugangscode kennt, kann ihn oft im Namen des eigentlichen Besitzers benutzen, manchmal sogar auf dessen Kosten. Das ist so, als würde jemand deinen Haustürschlüssel entdecken und einfach hineinspazieren.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Deshalb behandeln Entwickler Geheimnisse mit besonderer Vorsicht, viel vorsichtiger als gewöhnliche Umgebungsvariablen wie HOME.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Woran erkenne ich denn überhaupt, ob ein bestimmter Wert ein Geheimnis ist oder nicht?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Eine gute, einfache Faustregel: würde es dir schaden, wenn eine fremde Person diesen Wert liest, ist es ein Geheimnis. Schadet es niemandem, ist es eine gewöhnliche Umgebungsvariable wie HOME.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir eine einzelne Karteikarte vor, auf der alle deine Schlüsselbund-Einträge fein säuberlich aufgelistet stehen, einer pro Zeile.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau so eine Sammelkarte gibt es für Umgebungsvariablen eines Projekts auch, meist als eine einzelne Datei mit einem ungewöhnlichen Namen: Punkt env.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Diese Datei heißt .env-Datei.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "B",
+      "text": "Warum beginnt der Name mit einem Punkt? Das sehe ich sonst nie bei Dateinamen.",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein Punkt am Anfang eines Namens versteckt eine Datei auf macOS und ähnlichen Systemen vor der gewöhnlichen Ansicht. Sie ist trotzdem da, nur nicht sofort sichtbar, ein kleiner zusätzlicher Schutz vor versehentlichem Anfassen.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "In dieser Datei steht Zeile für Zeile ein Name, ein Gleichheitszeichen, und der eigentliche Wert, zum Beispiel API Unterstrich SCHLUESSEL Gleichheitszeichen und dahinter der geheime Zugangscode.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Ist so eine .env-Datei dann für immer fest an einem Ort gespeichert, oder muss ich sie bei jedem Start neu anlegen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Einmal angelegt, bleibt sie liegen, genau wie jede andere Datei auf deinem Gerät auch. Eine Anwendung liest sie bei jedem eigenen Start neu ein, du musst dafür nichts wiederholen.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau darin unterscheidet sich die .env-Datei von einer Umgebungsvariable, die du nur kurz mit export im Terminal setzt: die Datei bleibt dauerhaft, das kurze export gilt nur für diese eine Terminal-Sitzung.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Warum benutzt man dann überhaupt noch das kurze export im Terminal, wenn die .env-Datei ohnehin dauerhaft ist?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Für schnelles Ausprobieren an einem einzelnen Nachmittag ist export bequemer, weil nichts dauerhaft irgendwo liegen bleibt. Für ein richtiges Projekt, das über Tage oder Monate wächst, ist die dauerhafte .env-Datei die verlässlichere Wahl.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir eine Postkarte vor, die du jemandem schickst. Jeder, der die Karte in der Hand hält, egal ob Postbote oder Nachbar, kann lesen, was draufsteht.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Der Quelltext eines Projekts landet oft an einem Ort, an dem ihn viele Menschen lesen können, manchmal sogar die ganze Welt. Dieser geteilte Ort heißt Repository.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann wirklich jeder in so ein Repository hineinschauen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Bei einem öffentlichen Repository ja, genau wie bei einer Postkarte. Selbst bei einem privaten Repository lesen meist mehrere Kolleginnen und Kollegen mit, und jede Änderung bleibt für immer in der Geschichte des Projekts gespeichert.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Würdest du ein Geheimnis direkt in den Quelltext schreiben, landet es genau wie ein Satz auf einer Postkarte für jeden lesbar in diesem geteilten Repository. Das gilt oft sogar dauerhaft, auch wenn du die Zeile später wieder entfernst.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Deshalb liegen Geheimnisse also lieber in dieser separaten .env-Datei statt im Quelltext selbst?",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau, und zusätzlich wird diese .env-Datei bewusst so eingerichtet, dass sie gar nicht erst mit ins Repository wandert, wenn der übrige Quelltext dorthin geschickt wird.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Wie sorgt man denn technisch dafür, dass eine einzelne Datei nicht mit ins Repository wandert?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Dafür gibt es eine eigene Liste, in der Dateinamen und Muster stehen, die beim Verschicken übersprungen werden sollen, ähnlich einer Liste von Dingen, die grundsätzlich nicht mitgeschickt werden dürfen. Der genaue Umgang mit dieser Liste ist Stoff für eine spätere Lektion.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Für heute reicht das Prinzip: die .env-Datei existiert auf deinem eigenen Gerät, aber sie hat im Repository nichts verloren, so wie ein Originalschlüssel nicht in die für jeden einsehbare Hausordnung gehört.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Was, wenn ich mehrere Geräte benutze, zum Beispiel einen Laptop und einen Rechner bei der Arbeit? Muss ich dieselbe .env-Datei dann irgendwie übertragen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, aber eben nicht über das Repository, sondern auf einem anderen, sicheren Weg, etwa direkt zwischen den eigenen Geräten oder über einen speziell dafür gedachten, geschützten Dienst. Jedes Gerät bekommt seine eigene, lokale Kopie der .env-Datei.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Was, wenn ich gar keine Kollegin oder keinen Kollegen habe, sondern ganz allein an einem eigenen Projekt arbeite? Lohnt sich der ganze Aufwand dann überhaupt?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, gerade dann. Auch ein einzelnes Repository ohne Team kann öffentlich sein, und selbst ein privates Repository kann eines Tages doch geteilt werden, wenn du es später jemandem zeigen willst. Die Gewohnheit lohnt sich von Anfang an.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Wenn die echte .env-Datei mit den echten Geheimnissen nie ins Repository darf, wie erfahren dann neue Mitarbeitende überhaupt, welche Umgebungsvariablen ein Projekt eigentlich braucht?",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Dafür legt man eine zweite, ungefährliche Datei an, mit fast demselben Namen, aber angehängtem example, also Punkt env Punkt example.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Diese zweite Datei listet dieselben Namen wie die echte .env-Datei auf, aber ohne die echten Werte dahinter, nur leer oder mit einem Beispielwert.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Diese Vorlage darf ganz normal mit ins Repository, weil sie kein einziges echtes Geheimnis enthält, nur die Namen, die ausgefüllt werden müssen.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Wie geht eine neue Mitarbeiterin dann praktisch vor, wenn sie das Projekt zum ersten Mal auf ihrem eigenen Gerät einrichtet?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Sie kopiert die Vorlage und entfernt den Zusatz example aus dem Dateinamen. Dann trägt sie Zeile für Zeile ihre eigenen, echten Werte ein, die sie sich vorher besorgt hat, etwa von einer Kollegin oder aus einem geschützten Dienst.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Danach besitzt sie eine eigene, echte .env-Datei, die niemals ins Repository wandert, während die Vorlage unverändert für die nächste neue Person bereitliegt.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Was passiert, wenn sie einen Namen in der Vorlage übersieht und ihre eigene .env-Datei deshalb unvollständig bleibt?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Meist meldet die Anwendung beim Start dann einen Fehler, weil ein erwarteter Wert fehlt. Diese Fehlermeldung ist unangenehm, aber ehrlich: sie zeigt sofort, welcher Name noch fehlt, statt später an einer unerwarteten Stelle rätselhaft zu scheitern.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann ich mir so eine fehlende Umgebungsvariable praktisch vorstellen wie ein vergessenes Zutat in einem Rezept?",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau dieses Bild passt gut. Fehlt eine Zutat, merkst du das spätestens beim Kochen, nicht erst beim Essen. Genauso meldet die Anwendung den fehlenden Wert früh, direkt beim Start, statt irgendwann mittendrin unerklärlich stehen zu bleiben.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Sich zu merken, welche Datei ins Repository darf und welche nicht, ist fehleranfällig, besonders an einem hektischen Tag.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Deshalb bauen manche Projekte ein zusätzliches Werkzeug ein, das jede Datei kurz vor dem Verschicken ins Repository noch einmal automatisch durchsucht.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Wonach durchsucht so ein Werkzeug die Dateien denn genau?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Es sucht nach typischen Mustern, an denen sich ein Geheimnis erkennen lässt, etwa nach besonders langen, zufällig aussehenden Zeichenketten, oder nach Dateinamen, die grundsätzlich nichts im Repository zu suchen haben.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Findet das Werkzeug so ein Muster, stoppt es den Versand sofort, noch bevor irgendetwas tatsächlich verschickt wird. Ein Fund vorher ist immer besser als ein Fund, nachdem das Geheimnis schon in der Welt ist.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Ist so ein Prüfwerkzeug hundertprozentig sicher, oder kann trotzdem mal ein Geheimnis durchrutschen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ehrlich gesagt: hundertprozentig sicher ist kein Prüfwerkzeug, weil es nur nach bekannten Mustern sucht. Ein sehr ungewöhnlich geformtes Geheimnis könnte theoretisch unentdeckt bleiben, deshalb bleibt die .env-Datei die erste und wichtigste Verteidigungslinie.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Das Prüfwerkzeug ist also kein Ersatz für die saubere Trennung von Anwendung und Umgebungsvariable, sondern ein zusätzliches Sicherheitsnetz für den Fall, dass sich doch jemand vertut.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss ich so ein Prüfwerkzeug selbst schreiben, wenn ich später ein eigenes Projekt beginne?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Nicht unbedingt von null an, viele fertige Werkzeuge dafür stehen bereits kostenlos zur Verfügung. Wichtiger als das eigene Schreiben ist zu wissen, dass so ein Schutz existiert und wofür er gebraucht wird, genau das nimmst du aus der heutigen Lektion mit.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Warum reicht es nicht, dass eine einzelne Person im Team einfach vorsichtig genug ist?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Weil an einem hektischen Tag jeder Mensch einmal unaufmerksam ist, egal wie erfahren. Ein automatisches Werkzeug wird nie müde und vergisst nie zu prüfen, ein Mensch schon.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Fassen wir kurz zusammen: eine Umgebungsvariable liegt neben der Anwendung, nicht darin. Ein Geheimnis ist eine besonders schützenswerte Umgebungsvariable. Die .env-Datei sammelt diese Werte, und sie wandert nie mit ins Repository.",
+      "isKeySentence": true,
+      "role": "key"
+    },
+    {
+      "speaker": "A",
+      "text": "Mit diesem Grundsatz vermeidest du von Anfang an einen der häufigsten Anfängerfehler beim Programmieren: ein Passwort, das versehentlich für immer im geteilten Repository landet.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Wie hängt das heutige Thema mit dem Dateisystem aus der vorigen Lektion zusammen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Die .env-Datei ist eine ganz gewöhnliche Datei, genau wie jede andere aus der vorigen Lektion. Sie liegt in einem Ordner, du findest sie mit ls, wenn du weißt, wonach du suchst, und du erreichst sie über einen Pfad.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Das Besondere ist nicht die Datei selbst, sondern die Vereinbarung dahinter: alle im Team wissen, dass genau diese eine Datei niemals mit ins Repository geschickt wird.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss ich mir jetzt schon Sorgen um Geheimnisse machen, obwohl ich noch gar kein eigenes Projekt mit Zugangscodes habe?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, überhaupt nicht. Wichtig ist nur, dass dir das Prinzip jetzt schon bekannt ist, damit du es sofort erkennst und richtig anwendest, sobald dein erstes eigenes Projekt tatsächlich einen Zugangscode braucht.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann ich mit dem heutigen Wissen auch schon einschätzen, ob ein fremdes Projekt sauber mit Geheimnissen umgeht?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein guter erster Blick: gibt es eine .env.example ohne echte Werte, und fehlt die echte .env-Datei in der sichtbaren Liste des Repositorys, stehen die Chancen gut, dass dort sorgfältig gearbeitet wurde.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Und wenn ich stattdessen eine echte .env-Datei mit ausgefüllten Werten mitten im Repository entdecke?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Dann ist genau der Fehler passiert, vor dem die heutige Lektion warnt: ein Geheimnis liegt offen und lesbar an einem geteilten Ort. Das wäre ein guter Anlass, freundlich darauf hinzuweisen, damit der Wert schnell ausgetauscht wird.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Reicht dieses Grundwissen schon aus, oder gibt es zu Umgebungsvariablen noch viel mehr zu lernen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Für den Anfang reicht genau dieses Grundwissen völlig: die Trennung von Anwendung und Umgebungsvariable, der besondere Schutz für Geheimnisse, und die Vorlage ohne echte Werte. Alles Weitere baut später einfach auf diesem Fundament auf.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Dann fasse ich für mich selbst noch einmal zusammen: Schlüssel gehören an den Ring, nicht ins Jackenfutter, und Geheimnisse gehören in die .env-Datei, nicht in den geteilten Quelltext.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau so hast du es heute richtig verstanden. Mit diesem einfachen, leicht zu merkenden Grundsatz beginnt jeder sorgfältige, umsichtige Umgang mit einem ganz eigenen, neuen Projekt, gleich ab der allerersten Zeile.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Fassen wir die Begriffe von heute noch einmal als Liste zusammen.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Umgebungsvariable: Ein benannter Wert, der nicht im Quelltext steht, sondern außerhalb, in der Umgebung, in der eine Anwendung gerade läuft.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Geheimnis: Ein Wert, der geheim bleiben muss, weil er Zugang zu etwas Wichtigem gewährt, zum Beispiel ein Passwort oder ein Schlüssel für einen Dienst.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Env-Datei: Eine Datei, in der Umgebungsvariablen für ein Projekt gesammelt an einem Ort stehen, üblicherweise nicht mitgeteilt oder veröffentlicht.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Repository: Ein Ort, an dem der Quelltext eines Projekts gespeichert und mit anderen geteilt wird, oft öffentlich einsehbar.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "B",
+      "text": "Verschwindet eine Umgebungsvariable, die ich mit export gesetzt habe, wirklich komplett, wenn ich das Terminal schließe?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, eine mit export im Terminal gesetzte Umgebungsvariable existiert nur für diese eine, gerade laufende Terminal-Sitzung. Eine .env-Datei ist dagegen dauerhaft, weil sie als Datei erhalten bleibt und beim nächsten Start eines Projekts erneut eingelesen wird.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Was mache ich, wenn ich versehentlich doch ein Geheimnis in den Quelltext geschrieben und schon ins Repository geschickt habe?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Das Geheimnis gilt ab diesem Moment als bekannt und sollte umgehend ausgetauscht werden, denn es bleibt oft auch nach dem nachträglichen Löschen in der gespeicherten Geschichte des Repositorys sichtbar. Danach lohnt sich ein Prüfwerkzeug wie in der heutigen Lektion, damit derselbe Fehler kein zweites Mal passiert.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss jedes Projekt zwingend eine .env-Datei haben?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, ein sehr kleines Projekt ohne Zugangscodes oder Passwörter kommt oft ganz ohne .env-Datei aus. Sobald aber irgendein Geheimnis im Spiel ist, etwa ein Zugang zu einem bezahlten Dienst, wird eine .env-Datei zur üblichen und sinnvollen Lösung.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann ich eine Umgebungsvariable auch wieder ändern, nachdem ich sie einmal gesetzt habe?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, du setzt sie einfach ein zweites Mal mit demselben Namen und einem neuen Wert, der alte Wert wird dabei überschrieben. Das funktioniert sowohl beim kurzfristigen Setzen im Terminal als auch beim dauerhaften Eintrag in einer .env-Datei.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Warum reicht es nicht, ein Geheimnis einfach nur nicht zu erwähnen, wenn ich über mein Projekt spreche?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein im Quelltext stehendes Geheimnis bleibt lesbar für jeden, der Zugriff auf das Repository hat, ganz unabhängig davon, ob jemand mündlich darüber spricht. Der Schutz muss deshalb technisch in der Struktur des Projekts liegen, in der Trennung von Quelltext und Umgebungsvariable, nicht nur im vorsichtigen Reden darüber.",
+      "isKeySentence": false,
+      "role": "faq"
+    }
+  ],
+  "practiceExample": {
+    "text": "Im Repo futuredev liegt neben den echten Umgebungsvariablen der Werkzeuge eine zweite Datei mit dem Zusatz example, die dieselben Namen zeigt, aber ohne echte Werte dahinter, etwa den Eintrag ELEVENLABS_API_KEY ganz ohne Wert. Zusätzlich beschreibt die README ein eigenes Werkzeug, das jede Datei vor dem Verschicken ins Repository nach typischen Geheimnis-Mustern durchsucht und den Vorgang stoppt, sobald es fündig wird.",
+    "repoNote": "repo-futuredev",
+    "location": "README.md, Abschnitt \"Aufbau des Repos\", Zeile zu tools/check-secrets.mjs; die Vorlage .env.example im Wurzelverzeichnis"
+  },
+  "quiz": [
+    {
+      "question": "Was ist eine Umgebungsvariable?",
+      "area": "Umgebungsvariablen",
+      "options": [
+        {
+          "text": "Ein Wert außerhalb des Quelltextes.",
+          "isCorrect": true,
+          "explanation": "Genau das ist die Definition, ähnlich dem Schlüssel am eigenen, austauschbaren Ring."
+        },
+        {
+          "text": "Ein fest eingebauter Teil des Quelltextes.",
+          "isCorrect": false,
+          "explanation": "Genau das Gegenteil trifft zu: sie steht bewusst außerhalb."
+        },
+        {
+          "text": "Ein anderes Wort für Repository.",
+          "isCorrect": false,
+          "explanation": "Ein Repository ist der geteilte Speicherort, kein einzelner Wert."
+        },
+        {
+          "text": "Ein Name für jede Datei mit der Endung .env.",
+          "isCorrect": false,
+          "explanation": "Die .env-Datei sammelt mehrere Umgebungsvariablen, sie ist selbst kein einzelner Wert."
+        }
+      ]
+    },
+    {
+      "question": "Was zeigt dir der Befehl echo $HOME im Terminal?",
+      "area": "Umgebungsvariablen",
+      "options": [
+        {
+          "text": "Den Pfad zu deinem eigenen Benutzerordner.",
+          "isCorrect": true,
+          "explanation": "HOME ist eine vom Betriebssystem bereitgestellte Umgebungsvariable mit genau diesem Wert."
+        },
+        {
+          "text": "Alle Geheimnisse, die in der .env-Datei stehen.",
+          "isCorrect": false,
+          "explanation": "echo $HOME zeigt nur eine einzelne, unkritische Umgebungsvariable, keine Geheimnisse."
+        },
+        {
+          "text": "Den Inhalt des Repositorys.",
+          "isCorrect": false,
+          "explanation": "Das Repository ist ein Speicherort für Quelltext, echo $HOME zeigt nur einen Pfad."
+        },
+        {
+          "text": "Die Liste aller Ordner im aktuellen Verzeichnis.",
+          "isCorrect": false,
+          "explanation": "Das würde eher ls oder dir zeigen, nicht echo $HOME."
+        }
+      ]
+    },
+    {
+      "question": "Warum ist ein Passwort ein Geheimnis, HOME aber nicht?",
+      "area": "Umgebungsvariablen",
+      "options": [
+        {
+          "text": "Weil ein Passwort Zugang zu etwas Wichtigem gewährt, das Wissen um HOME dagegen niemandem nützt.",
+          "isCorrect": true,
+          "explanation": "Genau dieser Unterschied wurde am Bild von Haustürschlüssel gegenüber unkritischer Information gezeigt."
+        },
+        {
+          "text": "Weil HOME technisch keine Umgebungsvariable ist.",
+          "isCorrect": false,
+          "explanation": "HOME ist selbst eine ganz gewöhnliche Umgebungsvariable, nur eben unkritisch."
+        },
+        {
+          "text": "Weil Passwörter nie in Umgebungsvariablen stehen dürfen.",
+          "isCorrect": false,
+          "explanation": "Genau umgekehrt: Passwörter gehören typischerweise in eine Umgebungsvariable, nicht in den Quelltext."
+        },
+        {
+          "text": "Es gibt keinen wirklichen Unterschied zwischen beiden.",
+          "isCorrect": false,
+          "explanation": "Der Unterschied liegt im Schaden, der bei Bekanntwerden entstehen kann."
+        }
+      ]
+    },
+    {
+      "question": "Wofür wird eine .env-Datei benutzt?",
+      "area": "Umgebungsvariablen",
+      "options": [
+        {
+          "text": "Sie sammelt Umgebungsvariablen an einem Ort.",
+          "isCorrect": true,
+          "explanation": "Genau wie die Sammelkarte mit allen Schlüsselbund-Einträgen aus dem Bild."
+        },
+        {
+          "text": "Sie speichert den kompletten Quelltext eines Projekts.",
+          "isCorrect": false,
+          "explanation": "Der Quelltext liegt in eigenen Dateien, nicht in der .env-Datei."
+        },
+        {
+          "text": "Sie ist ein anderes Wort für das Repository.",
+          "isCorrect": false,
+          "explanation": "Das Repository ist der geteilte Speicherort für das ganze Projekt, die .env-Datei nur eine einzelne Datei darin."
+        },
+        {
+          "text": "Sie zeigt die Version des benutzten Betriebssystems an.",
+          "isCorrect": false,
+          "explanation": "Das hat nichts mit dem Zweck einer .env-Datei zu tun."
+        }
+      ]
+    },
+    {
+      "question": "Was ist ein Repository?",
+      "area": "Umgebungsvariablen",
+      "options": [
+        {
+          "text": "Ein geteilter Speicherort für Quelltext.",
+          "isCorrect": true,
+          "explanation": "Genau das ist die Definition, oft sogar öffentlich für viele Menschen einsehbar."
+        },
+        {
+          "text": "Eine Anwendung, die ausschließlich Umgebungsvariablen erzeugt.",
+          "isCorrect": false,
+          "explanation": "Ein Repository speichert Quelltext, es erzeugt keine Umgebungsvariablen."
+        },
+        {
+          "text": "Eine Art Passwort für ein einzelnes Projekt.",
+          "isCorrect": false,
+          "explanation": "Ein Repository ist ein Speicherort, kein Passwort."
+        },
+        {
+          "text": "Ein anderes Wort für Terminal.",
+          "isCorrect": false,
+          "explanation": "Das Terminal ist ein Fenster für Befehle, kein Speicherort für Quelltext."
+        }
+      ]
+    },
+    {
+      "question": "Warum sollte ein Geheimnis nicht direkt im Quelltext stehen?",
+      "area": "Umgebungsvariablen",
+      "options": [
+        {
+          "text": "Weil viele Menschen den geteilten Quelltext lesen können.",
+          "isCorrect": true,
+          "explanation": "Genau wie die Postkarte, die jeder Postbote lesen kann, der sie in der Hand hält."
+        },
+        {
+          "text": "Weil Quelltext technisch keine Buchstaben speichern kann.",
+          "isCorrect": false,
+          "explanation": "Quelltext kann durchaus Buchstaben und Zeichen jeder Art enthalten."
+        },
+        {
+          "text": "Weil ein Geheimnis im Quelltext automatisch gelöscht wird.",
+          "isCorrect": false,
+          "explanation": "Nichts wird automatisch gelöscht, das Geheimnis bliebe einfach für jeden lesbar stehen."
+        },
+        {
+          "text": "Weil Umgebungsvariablen technisch gar nicht existieren, wenn Quelltext vorhanden ist.",
+          "isCorrect": false,
+          "explanation": "Beide können nebeneinander existieren, sie schließen sich nicht aus."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der Zweck einer Datei namens .env.example?",
+      "area": "Umgebungsvariablen",
+      "options": [
+        {
+          "text": "Sie zeigt benötigte Namen ohne echte Werte.",
+          "isCorrect": true,
+          "explanation": "Genau das macht sie ungefährlich für das Repository, im Unterschied zur echten .env-Datei."
+        },
+        {
+          "text": "Sie enthält dieselben echten Geheimnisse wie die echte .env-Datei.",
+          "isCorrect": false,
+          "explanation": "Genau das darf sie nicht, sonst wäre sie ebenso gefährlich wie die echte Datei."
+        },
+        {
+          "text": "Sie ersetzt das Repository vollständig.",
+          "isCorrect": false,
+          "explanation": ".env.example ist nur eine einzelne Datei innerhalb des Repositorys, kein Ersatz dafür."
+        },
+        {
+          "text": "Sie wird nach dem ersten Programmstart automatisch gelöscht.",
+          "isCorrect": false,
+          "explanation": "Sie bleibt dauerhaft als Vorlage im Repository erhalten."
+        }
+      ]
+    },
+    {
+      "question": "Wonach sucht ein Werkzeug, das vor dem Verschicken ins Repository nach Geheimnissen prüft?",
+      "area": "Umgebungsvariablen",
+      "options": [
+        {
+          "text": "Nach typischen Geheimnis-Mustern.",
+          "isCorrect": true,
+          "explanation": "Genau solche Muster verraten häufig ein vergessenes Geheimnis."
+        },
+        {
+          "text": "Nach der Anzahl der Ordner im gesamten Projekt.",
+          "isCorrect": false,
+          "explanation": "Die Anzahl der Ordner sagt nichts über ein mögliches Geheimnis aus."
+        },
+        {
+          "text": "Nach der Geschwindigkeit, mit der Befehle im Terminal eingetippt wurden.",
+          "isCorrect": false,
+          "explanation": "Das hat mit der Suche nach Geheimnissen nichts zu tun."
+        },
+        {
+          "text": "Nach dem Namen des Betriebssystems, auf dem gerade gearbeitet wird.",
+          "isCorrect": false,
+          "explanation": "Das Betriebssystem spielt für die Geheimnis-Suche keine Rolle."
+        }
+      ]
+    },
+    {
+      "question": "Was passiert, wenn so ein Prüfwerkzeug beim Versand ein mögliches Geheimnis findet?",
+      "area": "Umgebungsvariablen",
+      "options": [
+        {
+          "text": "Es stoppt den Versand, noch bevor etwas tatsächlich verschickt wird.",
+          "isCorrect": true,
+          "explanation": "Ein Fund vorher verhindert, dass das Geheimnis überhaupt erst in der Welt landet."
+        },
+        {
+          "text": "Es verschickt trotzdem alles, meldet den Fund aber erst danach.",
+          "isCorrect": false,
+          "explanation": "Genau das würde den Schutz zu spät kommen lassen."
+        },
+        {
+          "text": "Es löscht automatisch das gesamte Repository.",
+          "isCorrect": false,
+          "explanation": "Ein Fund führt zu einem Stopp, nicht zu einer Löschung des Repositorys."
+        },
+        {
+          "text": "Es ändert automatisch das gefundene Geheimnis in einen neuen Wert.",
+          "isCorrect": false,
+          "explanation": "Das Werkzeug meldet nur den Fund, es erfindet keine neuen Werte."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der Unterschied zwischen der echten .env-Datei und der Datei .env.example?",
+      "area": "Umgebungsvariablen",
+      "options": [
+        {
+          "text": "Nur die echte .env-Datei enthält tatsächliche Werte, .env.example nur die Namen.",
+          "isCorrect": true,
+          "explanation": "Genau das macht .env.example ungefährlich fürs Repository, im Unterschied zur echten Datei."
+        },
+        {
+          "text": "Beide Dateien enthalten exakt dieselben echten Geheimnisse.",
+          "isCorrect": false,
+          "explanation": "Genau das dürfte niemals der Fall sein, sonst wäre .env.example ebenso gefährlich."
+        },
+        {
+          "text": "Nur .env.example wird beim Start einer Anwendung tatsächlich eingelesen.",
+          "isCorrect": false,
+          "explanation": "Eingelesen wird üblicherweise die echte .env-Datei, nicht die Beispiel-Vorlage."
+        },
+        {
+          "text": "Der Unterschied liegt nur in der Groß- und Kleinschreibung des Namens.",
+          "isCorrect": false,
+          "explanation": "Der Unterschied liegt im Inhalt, nicht in der Schreibweise des Namens."
+        }
+      ]
+    },
+    {
+      "question": "Warum beginnt der Name .env oft mit einem Punkt?",
+      "area": "Umgebungsvariablen",
+      "options": [
+        {
+          "text": "Er versteckt die Datei vor der gewöhnlichen Ansicht.",
+          "isCorrect": true,
+          "explanation": "Genau das wurde als kleiner zusätzlicher Schutz vor versehentlichem Anfassen erklärt."
+        },
+        {
+          "text": "Der Punkt zeigt an, dass die Datei ein Geheimnis automatisch verschlüsselt.",
+          "isCorrect": false,
+          "explanation": "Der Punkt versteckt die Datei nur in der Ansicht, er verschlüsselt nichts."
+        },
+        {
+          "text": "Ohne den Punkt würde die Datei gar nicht funktionieren.",
+          "isCorrect": false,
+          "explanation": "Der Punkt beeinflusst nur die Sichtbarkeit, nicht die Arbeitsweise."
+        },
+        {
+          "text": "Der Punkt ist reiner Zufall ohne jede Bedeutung.",
+          "isCorrect": false,
+          "explanation": "Der Punkt hat eine konkrete, erklärte Bedeutung: er versteckt die Datei."
+        }
+      ]
+    },
+    {
+      "question": "Was zeigt das Praxisbeispiel aus dem Repo futuredev über den Umgang mit Geheimnissen?",
+      "area": "Umgebungsvariablen",
+      "options": [
+        {
+          "text": "Eine Vorlage ohne Werte und ein Prüfwerkzeug schützen gemeinsam.",
+          "isCorrect": true,
+          "explanation": "Genau diese beiden Bausteine, .env.example und das Prüfwerkzeug, nennt die README des Repos."
+        },
+        {
+          "text": "Das Repo futuredev verzichtet vollständig auf Umgebungsvariablen.",
+          "isCorrect": false,
+          "explanation": "Die README nennt ausdrücklich mehrere Umgebungsvariablen für seine Werkzeuge."
+        },
+        {
+          "text": "Alle echten Zugangscodes stehen offen in der README.",
+          "isCorrect": false,
+          "explanation": "Genau das Gegenteil ist der Fall, die README zeigt nur Namen, keine echten Werte."
+        },
+        {
+          "text": "Das Prüfwerkzeug läuft nur einmal im Jahr automatisch.",
+          "isCorrect": false,
+          "explanation": "Das Werkzeug prüft laut Beschreibung vor jedem Versand, nicht nur einmal jährlich."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Öffne dein Terminal. Setze auf macOS oder ähnlichen Systemen mit export MEIN_NAME=\"dein Name\" eine eigene Umgebungsvariable, unter Windows in PowerShell mit $env:MEIN_NAME=\"dein Name\". Lies den Wert danach mit echo $MEIN_NAME (macOS und ähnliche Systeme) oder echo $env:MEIN_NAME (Windows) wieder aus.",
+    "expectation": "Nach dem echo-Befehl erscheint genau der Name, den du zuvor als Wert gesetzt hast, als eigene Zeile im Terminal.",
+    "checklist": [
+      "Eigene Umgebungsvariable MEIN_NAME mit dem eigenen Namen gesetzt",
+      "Wert mit echo erfolgreich ausgelesen",
+      "Eigener Name in der Terminal-Ausgabe wiedererkannt",
+      "Verstanden, dass dieser Wert beim Schließen des Terminal-Fensters wieder verschwindet"
+    ]
+  },
+  "audio": {
+    "file": "M01-02-03.mp3",
+    "durationSeconds": 1001,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Verschwindet eine Umgebungsvariable, die ich mit export gesetzt habe, wirklich komplett, wenn ich das Terminal schließe?",
+      "answer": "Ja, eine mit export im Terminal gesetzte Umgebungsvariable existiert nur für diese eine, gerade laufende Terminal-Sitzung. Eine .env-Datei ist dagegen dauerhaft, weil sie als Datei erhalten bleibt und beim nächsten Start eines Projekts erneut eingelesen wird."
+    },
+    {
+      "question": "Was mache ich, wenn ich versehentlich doch ein Geheimnis in den Quelltext geschrieben und schon ins Repository geschickt habe?",
+      "answer": "Das Geheimnis gilt ab diesem Moment als bekannt und sollte umgehend ausgetauscht werden, denn es bleibt oft auch nach dem nachträglichen Löschen in der gespeicherten Geschichte des Repositorys sichtbar. Danach lohnt sich ein Prüfwerkzeug wie in der heutigen Lektion, damit derselbe Fehler kein zweites Mal passiert."
+    },
+    {
+      "question": "Muss jedes Projekt zwingend eine .env-Datei haben?",
+      "answer": "Nein, ein sehr kleines Projekt ohne Zugangscodes oder Passwörter kommt oft ganz ohne .env-Datei aus. Sobald aber irgendein Geheimnis im Spiel ist, etwa ein Zugang zu einem bezahlten Dienst, wird eine .env-Datei zur üblichen und sinnvollen Lösung."
+    },
+    {
+      "question": "Kann ich eine Umgebungsvariable auch wieder ändern, nachdem ich sie einmal gesetzt habe?",
+      "answer": "Ja, du setzt sie einfach ein zweites Mal mit demselben Namen und einem neuen Wert, der alte Wert wird dabei überschrieben. Das funktioniert sowohl beim kurzfristigen Setzen im Terminal als auch beim dauerhaften Eintrag in einer .env-Datei."
+    },
+    {
+      "question": "Warum reicht es nicht, ein Geheimnis einfach nur nicht zu erwähnen, wenn ich über mein Projekt spreche?",
+      "answer": "Ein im Quelltext stehendes Geheimnis bleibt lesbar für jeden, der Zugriff auf das Repository hat, ganz unabhängig davon, ob jemand mündlich darüber spricht. Der Schutz muss deshalb technisch in der Struktur des Projekts liegen, in der Trennung von Quelltext und Umgebungsvariable, nicht nur im vorsichtigen Reden darüber."
+    }
+  ]
+}
