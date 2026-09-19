@@ -4,11 +4,13 @@ import { buildCueSheet, type CueSourceBlock } from '../src/cues.js';
 const A = (overrides: Partial<CueSourceBlock> = {}): CueSourceBlock => ({
   speaker: 'A',
   isKeySentence: false,
+  role: 'explain',
   ...overrides,
 });
 const B = (overrides: Partial<CueSourceBlock> = {}): CueSourceBlock => ({
   speaker: 'B',
   isKeySentence: false,
+  role: 'question',
   ...overrides,
 });
 
@@ -29,19 +31,23 @@ describe('buildCueSheet', () => {
     expect(sheet.blocks[1]?.startSeconds).toBe(1.6);
   });
 
-  it('übernimmt isKeySentence und section je Block', () => {
+  it('übernimmt isKeySentence und leitet section aus role ab', () => {
     const sheet = buildCueSheet(
       'M01-01-01',
-      [A({ isKeySentence: true, section: 'body' }), B({ section: 'terms' })],
+      [A({ isKeySentence: true, role: 'explain' }), B({ role: 'terms_list' })],
       [1, 1],
     );
     expect(sheet.blocks[0]).toMatchObject({ isKeySentence: true, section: 'body' });
     expect(sheet.blocks[1]).toMatchObject({ isKeySentence: false, section: 'terms' });
   });
 
-  it('lässt section weg, wenn sie im Quellblock fehlt', () => {
-    const sheet = buildCueSheet('M01-01-01', [A()], [1]);
-    expect(sheet.blocks[0]).not.toHaveProperty('section');
+  it('leitet section faq/terms/example korrekt aus role ab, sonst body', () => {
+    const sheet = buildCueSheet(
+      'M01-01-01',
+      [A({ role: 'faq' }), A({ role: 'terms_list' }), A({ role: 'example' }), A({ role: 'key' })],
+      [1, 1, 1, 1],
+    );
+    expect(sheet.blocks.map((b) => b.section)).toEqual(['faq', 'terms', 'example', 'body']);
   });
 
   it('wirft bei unterschiedlicher Länge der Eingaben', () => {

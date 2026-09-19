@@ -6,7 +6,7 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { lessonSchema } from './lesson.js';
 import { manifestSchema } from './manifest.js';
-import { checkAllRules } from './rules.js';
+import { checkAllRules, checkMinimumWordCount, type RuleViolation } from './rules.js';
 import { modulesFileSchema } from './modules.js';
 import { portfolioFileSchema } from './portfolio.js';
 import { careerFileSchema } from './career.js';
@@ -22,10 +22,23 @@ const portfolioPath = join(contentDir, 'portfolio.json');
 const careerPath = join(contentDir, 'career.json');
 
 let errorCount = 0;
+let warningCount = 0;
 
 function reportError(file: string, rule: string, message: string): void {
   errorCount += 1;
   console.error(`FEHLER ${file} [${rule}]: ${message}`);
+}
+
+// Verletzung mit severity ausgeben: 'warning' zaehlt nicht in errorCount und
+// bricht den Lauf nicht ab (Task 2d, AP-4.1: Mindestumfang ist zunaechst eine
+// Warnung, solange die Manifest-Version unter 0.2.0 liegt).
+function reportViolation(file: string, v: RuleViolation): void {
+  if (v.severity === 'warning') {
+    warningCount += 1;
+    console.warn(`WARNUNG ${file} [${v.rule}]: ${v.message}`);
+    return;
+  }
+  reportError(file, v.rule, v.message);
 }
 
 function main(): void {
@@ -65,7 +78,7 @@ function main(): void {
   for (const lesson of lessons) {
     const violations = checkAllRules(lesson, lessons);
     for (const v of violations) {
-      reportError(`${lesson.id}.json`, v.rule, v.message);
+      reportViolation(`${lesson.id}.json`, v);
     }
   }
 
@@ -73,6 +86,10 @@ function main(): void {
   for (const lesson of lessons) {
     totalQuestions += lesson.quiz.length;
   }
+
+  // Fallback, falls das Manifest fehlt oder ungueltig ist: dann gilt die
+  // Mindestumfang-Regel noch als Warnung (0.1.0 < 0.2.0), siehe checkMinimumWordCount.
+  let manifestVersion = '0.1.0';
 
   if (existsSync(manifestPath)) {
     let manifestRaw: unknown;
@@ -89,6 +106,7 @@ function main(): void {
           reportError('manifest.json', 'schema', `${issue.path.join('.')}: ${issue.message}`);
         }
       } else {
+        manifestVersion = manifestResult.data.version;
         const lessonIds = new Set(lessons.map((l) => l.id));
         for (const entry of manifestResult.data.lessons) {
           if (!lessonIds.has(entry.id)) {
@@ -100,6 +118,12 @@ function main(): void {
   } else {
     console.error('content:validate: content/manifest.json fehlt, wird von content:manifest erzeugt.');
     errorCount += 1;
+  }
+
+  for (const lesson of lessons) {
+    for (const v of checkMinimumWordCount(lesson, manifestVersion)) {
+      reportViolation(`${lesson.id}.json`, v);
+    }
   }
 
   if (existsSync(modulesPath)) {
@@ -150,7 +174,9 @@ function main(): void {
     process.exit(1);
   }
 
-  console.log(`content:validate: ${lessons.length} Lektion(en), ${totalQuestions} Frage(n), keine Verletzung.`);
+  console.log(
+    `content:validate: ${lessons.length} Lektion(en), ${totalQuestions} Frage(n), keine Verletzung, ${warningCount} Warnung(en).`,
+  );
 }
 
 main();

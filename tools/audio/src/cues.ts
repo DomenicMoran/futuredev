@@ -3,12 +3,28 @@
 // Zusammenfuegeplan (buildConcatPlan). Reine Funktion, kein Dateizugriff, damit
 // sie ohne ffmpeg/ffprobe getestet werden kann.
 
-import type { CueSheet } from '@futuredev/content-schema';
+import type { BlockRole, CueSection, CueSheet } from '@futuredev/content-schema';
 import { buildConcatPlan, type SpeechBlockLike } from './concat-plan.js';
 
 export interface CueSourceBlock extends SpeechBlockLike {
   readonly isKeySentence: boolean;
-  readonly section?: 'body' | 'terms' | 'example' | 'task' | 'faq' | undefined;
+  readonly role: BlockRole;
+}
+
+/**
+ * Leitet den Kapitelmarken-Abschnitt (section) aus der inhaltlichen Rolle
+ * (role) eines Sprechblocks ab (AP-4.1). role ist seit AP-4.1 die
+ * Wahrheitsquelle im Lektionsschema; section bleibt nur noch als abgeleitetes
+ * Feld im Cue-Sidecar bestehen, weil apps/mobile darauf liest. Zuordnung:
+ * faq -> faq, terms_list -> terms, example -> example, jede andere Rolle ->
+ * body (kein role-Wert bildet "task" ab, das war schon vorher nur theoretisch
+ * erreichbar, weil practiceTask kein Sprechblock ist).
+ */
+export function sectionFromRole(role: BlockRole): CueSection {
+  if (role === 'faq') return 'faq';
+  if (role === 'terms_list') return 'terms';
+  if (role === 'example') return 'example';
+  return 'body';
 }
 
 // Drei Nachkommastellen reichen fuer eine Kapitelmarke (Millisekunden) und
@@ -57,7 +73,7 @@ export function buildCueSheet(
       startSeconds: roundMs(cursorSeconds),
       durationSeconds: roundMs(duration),
       isKeySentence: block.isKeySentence,
-      ...(block.section !== undefined ? { section: block.section } : {}),
+      section: sectionFromRole(block.role),
     });
     cursorSeconds += duration;
   }

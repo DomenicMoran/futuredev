@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { REPO_NOTE_NAMES } from './repo-notes.js';
+import { countSentences } from './text-metrics.js';
 
 // Lektionskennung: Modul, Untermodul, Lektion, je zwei Ziffern.
 // Beispiel: M03-02-04.
@@ -23,11 +24,35 @@ const termSchema = z.object({
 export const cueSectionSchema = z.enum(['body', 'terms', 'example', 'task', 'faq']);
 export type CueSection = z.infer<typeof cueSectionSchema>;
 
+// Rolle eines Sprechblocks (AP-4.1, inhaltsformat.md): sagt, welche Funktion
+// der Block im Fuenf-Schritt-Muster (AW-046) oder im Rahmen der Lektion
+// erfuellt. "image" = Alltagsbild, "explain" = Erklaerung in einfachen Worten,
+// "term" = Fachausdruck wird benannt/definiert, "example" = zweites Beispiel
+// aus Praxis oder Repo, "why" = Satz, warum es wichtig ist, "question" = Frage
+// von Sprecher B, "key" = der eine Kernsatz der Lektion (isKeySentence),
+// "terms_list" = Begriffsliste am Lektionsende, "faq" = vertonte
+// Frage/Antwort-Bloecke aus dem Feld faq. Ersetzt das frueher optionale
+// section-Feld als Wahrheitsquelle beim Schreiben; section bleibt nur noch als
+// abgeleitetes Feld im Cue-Sidecar (tools/audio/src/cues.ts leitet section aus
+// role ab, siehe dort).
+export const blockRoleSchema = z.enum([
+  'image',
+  'explain',
+  'term',
+  'example',
+  'why',
+  'question',
+  'key',
+  'terms_list',
+  'faq',
+]);
+export type BlockRole = z.infer<typeof blockRoleSchema>;
+
 const speechBlockSchema = z.object({
   speaker: z.enum(['A', 'B']),
   text: z.string().min(1),
   isKeySentence: z.boolean(),
-  section: cueSectionSchema.optional(),
+  role: blockRoleSchema,
 });
 
 const practiceExampleSchema = z.object({
@@ -56,12 +81,17 @@ const practiceTaskSchema = z.object({
   portfolioItem: portfolioItemSchema.optional(),
 });
 
-// Pflichtfeld ab Phase 4 (AW-045): "Fragen, die jetzt offen sein koennten".
-// Bis das Schema es verlangt (erste Inhaltswelle), bleibt das Feld optional,
-// damit bestehende Lektionen ohne faq weiter gueltig sind.
+// Pflichtfeld seit AP-4.1 (AW-045): "Fragen, die jetzt offen sein koennten".
+// answer braucht laut inhaltsformat.md Regel 12 mindestens zwei vollstaendige
+// Saetze; countSentences() nutzt dieselbe Satzende-Heuristik wie Regel 14
+// (siehe text-metrics.ts), damit buchstabierte Abkuerzungen keine falschen
+// Satzenden erzeugen.
 const faqEntrySchema = z.object({
   question: z.string().min(1).regex(/\?$/, 'Frage muss mit einem Fragezeichen enden'),
-  answer: z.string().min(1),
+  answer: z
+    .string()
+    .min(1)
+    .refine((value) => countSentences(value) >= 2, 'Antwort muss mindestens zwei vollständige Sätze haben'),
 });
 
 const audioSchema = z.object({
@@ -84,10 +114,9 @@ export const lessonSchema = z.object({
   quiz: z.array(quizQuestionSchema).min(10, 'mindestens zehn Fragen je Lektion'),
   practiceTask: practiceTaskSchema,
   audio: audioSchema,
-  // Optional bis Phase 4 (AW-045); danach mindestens 5 Eintraege, siehe
-  // packages/content-schema/src/rules.ts (checkFaqMinimumWhenPresent gilt nur,
-  // wenn eine spaetere Pflicht-Version das Feld einfuehrt).
-  faq: z.array(faqEntrySchema).min(5).optional(),
+  // Pflichtfeld seit AP-4.1 (AW-045): mindestens fuenf Eintraege. Konsistenz
+  // zu den vertonten faq-Sprechbloecken prueft rules.ts (checkFaqBlocksMatchEntries).
+  faq: z.array(faqEntrySchema).min(5, 'mindestens fünf FAQ-Einträge'),
 });
 
 export type Lesson = z.infer<typeof lessonSchema>;
