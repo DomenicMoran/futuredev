@@ -1,0 +1,1044 @@
+{
+  "id": "M01-04-02",
+  "title": "Wie ein Name zu einer Adresse wird: DNS-Auflösung",
+  "durationMinutes": 24,
+  "prerequisites": [
+    "M01-04-01",
+    "M01-03-01",
+    "M01-02-01",
+    "M01-00-01",
+    "M01-00-03",
+    "M01-03-02",
+    "M01-01-03"
+  ],
+  "terms": [
+    {
+      "term": "DNS",
+      "definition": "Das System aus verteilten Nachschlagewerken, das Domainnamen in IP-Adressen übersetzt, Domain Name System."
+    },
+    {
+      "term": "Nameserver",
+      "definition": "Ein Computer, der im DNS für einen bestimmten Teil des Telefonbuchs zuständig ist und Namensanfragen mit der passenden IP-Adresse beantwortet."
+    },
+    {
+      "term": "DNS-Auflösung",
+      "definition": "Der mehrstufige Vorgang, bei dem aus einem Domainnamen am Ende eine IP-Adresse wird."
+    },
+    {
+      "term": "Cache",
+      "definition": "Ein kurzfristiger Zwischenspeicher für bereits abgefragte DNS-Antworten."
+    },
+    {
+      "term": "TTL",
+      "definition": "Die Zahl, die angibt, wie lange ein DNS-Eintrag im Cache gültig bleibt, Time to Live."
+    },
+    {
+      "term": "DNS-Rebinding",
+      "definition": "Der Trick, bei dem sich die IP-Adresse hinter einer Domain zwischen zwei Abfragen unbemerkt ändert."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "text": "In der letzten Lektion hast du gelernt, dass eine Domain wie domenicmoran.de nur ein lesbarer Name für eine Zahlenadresse ist, eine IP-Adresse.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Aber wie findet mein Gerät diese Zahlenadresse, wenn ich nur den Namen eintippe?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau das ist das Thema dieser Lektion. Es gibt im Internet ein riesiges, verteiltes Telefonbuch, das genau diese Übersetzung übernimmt, jedes Mal, wenn du eine Domain aufrufst.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Am Ende dieser Lektion weißt du, wie diese Übersetzung Schritt für Schritt abläuft, warum sie meistens blitzschnell geht, und warum manche Änderungen trotzdem eine Weile brauchen.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein Wort brauchen wir dafür noch kurz. Stell dir ein Schaufenster vor, durch das du ins Innere eines Ladens schaust, ohne die Tür zu öffnen.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Die Anwendung auf deinem Gerät, mit der du dir Webseiten anschaust, funktioniert ähnlich wie so ein Schaufenster. Sie zeigt dir den Inhalt einer Webseite, ohne dass du selbst wissen musst, wie sie im Hintergrund geladen wird.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Du meinst sowas wie Chrome, Firefox oder Safari?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau. Eine solche Anwendung nennt man Browser.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Wenn du im Browser domenicmoran.de eintippst, startet genau in diesem Moment die DNS-Auflösung, die wir gleich Schritt für Schritt durchgehen.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Der Browser ist wichtig, weil er der übliche Ort ist, an dem für dich sichtbar wird, was DNS im Hintergrund unsichtbar erledigt.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Passiert dieselbe DNS-Auflösung eigentlich auch, wenn ich gar keinen Browser benutze, sondern zum Beispiel eine App auf dem Handy?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, genau dasselbe passiert dort im Hintergrund. Jede Anwendung, die sich mit einer Domain statt mit einer reinen Zahlenadresse verbindet, egal ob Browser, App oder ein Befehl im Terminal, löst zuerst über DNS die passende IP-Adresse auf.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir ein altes, dickes Telefonbuch vor. Du kennst den Namen einer Person, aber nicht ihre Telefonnummer, also schlägst du den Namen im Buch nach und findest die Nummer daneben.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Im Internet gibt es ein System, das genau das mit Domainnamen macht: Du kennst den Namen, zum Beispiel domenicmoran.de, das System schlägt ihn nach und findet die passende IP-Adresse.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Gibt es dafür ein einziges großes Telefonbuch für das ganze Internet?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, eher viele kleinere, verteilte Nachschlagewerke, die zusammenarbeiten. Aber das Prinzip bleibt gleich: Name rein, Zahlenadresse raus.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Dieses gesamte System aus verteilten Nachschlagewerken nennt man DNS. D, N, S, das steht für Domain Name System, auf Deutsch etwa Domainnamen-System.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Jedes Mal, wenn du im Terminal, das du aus einer früheren Lektion kennst, oder in einer Anwendung eine Domain benutzt, fragt im Hintergrund das DNS nach, welche IP-Adresse dazugehört, meist innerhalb von Sekundenbruchteilen.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Das DNS ist wichtig, weil ohne es kein Name funktionieren würde. Ohne DNS müsstest du dir für jede Webseite die reine Zahlenadresse merken.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Wer betreibt so ein riesiges, weltweites System eigentlich, gehört das einer einzigen großen Firma?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, niemandem allein. Das DNS ist über viele unabhängige, zusammenarbeitende Stellen weltweit verteilt, ähnlich wie viele einzelne Poststellen, die zusammen ein funktionierendes Postnetz ergeben, statt einer einzigen zentralen Zentrale.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "In einem Telefonbuch stehen die Nummern nicht einfach im leeren Raum. Ein Verlag druckt das Buch, jemand pflegt die Einträge, jemand ist dafür zuständig, dass die Nummern stimmen.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genauso gibt es im DNS bestimmte Computer, die für einen Teil dieses großen Nachschlagewerks zuständig sind und auf Nachfrage die passende IP-Adresse zurückgeben.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Ist das derselbe Server, auf dem am Ende die Webseite liegt?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, das ist ein wichtiger Unterschied. Der eine Server beantwortet nur die Frage nach der Adresse, ein anderer, oft ganz anderer Server liefert danach die eigentliche Webseite.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Einen Computer, der im DNS für einen bestimmten Teil des Telefonbuchs zuständig ist und Namensanfragen mit der passenden IP-Adresse beantwortet, nennt man Nameserver.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Für die Domain domenicmoran.de gibt es beim zuständigen Anbieter eigene Nameserver, die auf die Frage \"Welche IP-Adresse gehört zu domenicmoran.de?\" mit der richtigen Zahlenadresse antworten.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Nameserver sind wichtig, weil sie die eigentliche Arbeit der Übersetzung übernehmen. Ohne sie gäbe es niemanden, der die Frage nach der Adresse überhaupt beantwortet.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir vor, du suchst in einer riesigen Bibliothek ohne Suchcomputer ein bestimmtes Buch. Du gehst zuerst zur Information am Eingang, die dir sagt, in welchem Stockwerk dein Themengebiet liegt.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Im passenden Stockwerk fragst du erneut, diesmal jemanden, der genau dieses Themengebiet kennt, und der schickt dich zum richtigen Regal. Am Regal findest du endlich dein Buch.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Die Auflösung eines Domainnamens läuft ganz ähnlich in mehreren Schritten ab, nie in einem einzigen Sprung.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Kannst du mir diese Schritte genau an domenicmoran.de zeigen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Gerne. Dein Gerät fragt zuerst einen sogenannten Resolver, eine Art Vermittlungsstelle deines Internetanbieters. Der Resolver kennt die passende Adresse meist noch nicht selbst und fragt deshalb weiter.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Er fragt zuerst einen der obersten Nameserver des gesamten DNS, den Wurzel-Nameserver. Der Wurzel-Nameserver kennt nicht die genaue Adresse, aber er weiß, wer für die Endung .de zuständig ist, und schickt den Resolver dorthin weiter.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Dort, beim für .de zuständigen Nameserver, bekommt der Resolver die Auskunft, welcher Nameserver konkret für domenicmoran.de zuständig ist. Diesen fragt der Resolver als Nächstes.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Dieser letzte, zuständige Nameserver kennt schließlich die tatsächliche IP-Adresse von domenicmoran.de und gibt sie dem Resolver, der sie an dein Gerät weiterreicht.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Diesen gesamten Vorgang, vom eingetippten Namen bis zur fertigen IP-Adresse, nennt man DNS-Auflösung.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau diesen Ablauf kannst du in der Praxisaufgabe dieser Lektion selbst beobachten, mit einem kleinen Befehl namens nslookup im Terminal, der dir am Ende die IP-Adresse einer echten Domain wie domenicmoran.de zeigt.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Diese Schritte sind wichtig zu kennen, weil sie erklären, warum das Laden einer Webseite winzige Verzögerungen haben kann, bevor überhaupt die erste Verbindung zum eigentlichen Server steht.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Das klingt nach ziemlich vielen Zwischenschritten für eine einzige eingetippte Adresse.",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Das stimmt, und trotzdem passiert das Ganze in aller Regel in einem winzigen Bruchteil einer Sekunde, weil viele dieser Schritte durch den Cache aus dem nächsten Gedanken meistens übersprungen werden.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Was wäre denn, wenn ein Nameserver auf dieser Kette einmal gar nicht antwortet?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Gute Frage. Für genau diesen Fall gibt es zu jeder Domain meist nicht nur einen, sondern mehrere Nameserver gleichzeitig, damit der Resolver es einfach beim nächsten in der Liste versucht, statt einfach aufzugeben.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "So ein Ausfall eines einzelnen Nameservers bleibt für dich als Nutzer damit in aller Regel unsichtbar, weil einer der übrigen Nameserver die gleiche, korrekte Auskunft geben kann.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir vor, du fragst jemanden nach dem Weg zu einem Laden. Einmal erklärt, merkst du dir den Weg und fragst beim nächsten Mal nicht noch einmal.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Geräte und Resolver merken sich ein einmal erhaltenes Ergebnis ebenfalls für eine gewisse Zeit, statt bei jedem Klick die ganze Kette aus Nameservern erneut zu fragen.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Wo genau wird sich das denn gemerkt?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "In einem kleinen, kurzfristigen Zwischenspeicher, ähnlich einem Notizzettel, den dein Gerät oder der Resolver deines Anbieters führt.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Diesen kurzfristigen Zwischenspeicher für bereits abgefragte Antworten nennt man Cache. C, A, C, H, E, englisch ausgesprochen wie \"Käsch\".",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Rufst du domenicmoran.de zweimal kurz hintereinander auf, wird die IP-Adresse beim zweiten Mal meist direkt aus dem Cache gelesen, ohne dass die komplette Nameserver-Kette erneut gefragt werden muss.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Der Cache ist wichtig, weil er das gesamte Internet spürbar schneller macht. Ohne ihn müsste jede einzelne Namensabfrage die gesamte, mehrstufige Kette aus Nameservern erneut durchlaufen.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Gibt es diesen Cache nur auf meinem eigenen Gerät, oder auch woanders?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Es gibt ihn an mehreren Stellen gleichzeitig: auf deinem eigenen Gerät, beim Resolver deines Internetanbieters, und oft sogar in deinem Browser selbst, der sich kürzlich besuchte Domains ebenfalls kurz merkt.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Das bedeutet: Selbst wenn der Cache auf deinem Gerät gerade leer ist, kann der Resolver deines Anbieters die passende IP-Adresse für viele andere Nutzer schon gespeichert haben, und du bekommst sie trotzdem schnell.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Schau dir ein Milchpäckchen im Kühlschrank an. Darauf steht ein Haltbarkeitsdatum, danach solltest du die Milch nicht mehr vertrauen und lieber neue kaufen.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein gespeicherter DNS-Eintrag im Cache bekommt genauso ein Haltbarkeitsdatum mit, eine Zeitspanne, nach der er nicht mehr benutzt werden soll und neu abgefragt werden muss.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Wer legt fest, wie lange so ein gespeicherter Eintrag gültig bleibt?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Das legt derjenige fest, der die Domain und ihre Nameserver-Einträge verwaltet, als eine Zahl direkt am jeweiligen Eintrag.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Diese Zahl, die angibt, wie lange ein DNS-Eintrag im Cache gültig bleibt, nennt man TTL. T, T, L, kurz für Time to Live, auf Deutsch etwa Lebensdauer.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Ändert jemand die IP-Adresse hinter domenicmoran.de, zum Beispiel weil der Server wechselt, sehen manche Geräte die neue Adresse sofort, andere erst, wenn die TTL des vorher gespeicherten, alten Eintrags abgelaufen ist.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Das ist wichtig zu wissen, damit du nach einer Domain-Änderung nicht sofort in Panik gerätst, wenn nicht jeder Besucher sofort die neue Adresse sieht. Das ist normal und braucht je nach TTL Minuten bis Tage.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann man diese Wartezeit umgehen, wenn man es eilig hat?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Man kann vor einer geplanten Änderung die TTL vorab absichtlich verkürzen, damit alte Einträge schneller ablaufen. Ganz auf null setzen kann man die Wartezeit aber praktisch nie, ein Rest an Verzögerung bleibt immer übrig.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Wie lang ist so eine TTL normalerweise, in Minuten oder eher in Tagen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Das ist unterschiedlich und hängt von der jeweiligen Domain ab. Für eine ruhige, selten geänderte Domain sind mehrere Stunden oder sogar ein Tag üblich, für eine Domain, bei der häufiger etwas wechselt, wählt man dagegen oft nur wenige Minuten.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Wichtig ist der Kompromiss dahinter: eine kurze TTL macht Änderungen schneller sichtbar, erzeugt aber auch mehr wiederkehrende Abfragen bei den Nameservern, eine lange TTL entlastet die Nameserver, macht Änderungen aber langsamer sichtbar.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir einen Besucher vor, der sich am Empfang eines Bürogebäudes zunächst ganz normal als harmloser Gast anmeldet und einen Besucherausweis bekommt.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Später, mit demselben Ausweis, öffnet dieser Besucher heimlich eine Tür, die eigentlich nur für Mitarbeitende gedacht ist, weil niemand nach der ersten Anmeldung noch einmal genau hinschaut.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "B",
+      "text": "Was hat das jetzt mit DNS zu tun?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Eine ganz ähnliche Falle gibt es tatsächlich beim DNS. Eine Domain kann so eingerichtet werden, dass eine erste DNS-Abfrage eine ganz normale, öffentliche IP-Adresse liefert. Eine zweite Abfrage kurz danach liefert aber plötzlich eine andere, private Adresse, zum Beispiel eine Adresse innerhalb eines geschützten Firmennetzes.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Eine Anwendung, die die Adresse nur einmal prüft und sich danach blind auf diese erste Prüfung verlässt, verbindet sich am Ende womöglich mit dem geschützten, internen Netz. Sie denkt dabei weiterhin, sie spricht mit derselben, harmlosen öffentlichen Adresse.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Diesen Trick, bei dem sich die IP-Adresse hinter einer Domain zwischen zwei Abfragen unbemerkt ändert, nennt man DNS-Rebinding.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Im Repo ssrf-guarded-fetch wird genau dieses DNS-Rebinding beschrieben und verhindert: Jeder einzelne Sprung einer Weiterleitung wird noch einmal komplett neu gegen genau diese Falle geprüft, statt sich nur auf die allererste Prüfung zu verlassen.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Das zeigt, warum die DNS-Auflösung nicht nur eine technische Randnotiz ist. Wer versteht, dass sich eine Adresse hinter einem Namen jederzeit ändern kann, versteht auch, warum eine einzelne, frühe Prüfung allein nicht sicher genug ist.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss ich als Anfänger jetzt selbst Schutz gegen so einen Trick bauen können?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, nicht in dieser frühen Phase deines Lernwegs. Wichtig ist hier nur das Grundverständnis: eine Domain zeigt nicht für immer auf dieselbe Adresse, und genau darauf muss sich eine sicherheitsbewusste Anwendung einstellen, wie du am Repo ssrf-guarded-fetch siehst.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Werde ich das als Entwickler später wirklich oft brauchen, oder ist das nur Hintergrundwissen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Du wirst es öfter brauchen, als du jetzt vielleicht denkst. Wenn eine Webseite plötzlich nicht erreichbar ist, ist eine der ersten Fragen fast immer: Liegt es an der DNS-Auflösung, oder ist tatsächlich der Server selbst das Problem?",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau dafür benutzt du dann wieder den Befehl nslookup aus der Praxisaufgabe dieser Lektion. Zeigt er eine falsche oder gar keine IP-Adresse, liegt der Fehler beim DNS. Zeigt er die richtige Adresse, liegt der Fehler eher beim Server selbst.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Also ist nslookup so etwas wie ein erster Prüfschritt, bevor man tiefer sucht.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau. Erfahrene Entwickler prüfen fast automatisch zuerst die einfachste, schnellste Erklärung, bevor sie sich mit komplizierteren Ursachen beschäftigen, und eine falsche DNS-Auflösung ist eine sehr häufige, einfache Ursache.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Und wenn ich später selbst eine Domain für mein eigenes Portfolio einrichte, hilft mir das dann auch direkt weiter?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja. Richtest du zum Beispiel eine Subdomain wie futuredev.domenicmoran.de bei einem Anbieter wie Vercel ein, trägst du dafür meist selbst einen passenden Eintrag im DNS deiner Domain ein.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Läuft danach etwas nicht wie erwartet, prüfst du mit genau demselben nslookup-Befehl, ob dein Eintrag überhaupt schon sichtbar ist, oder ob du wegen der TTL einfach nur noch etwas warten musst.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Lass uns die ganze Kette noch einmal am Beispiel domenicmoran.de durchgehen.",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Du tippst domenicmoran.de ein. Dein Gerät fragt zuerst im eigenen Zwischenspeicher, dem Cache, nach, ob die Adresse schon bekannt ist.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Ist sie nicht bekannt oder ist die TTL abgelaufen, fragt dein Gerät den Resolver deines Anbieters.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Der Resolver fragt sich über den Wurzel-Nameserver und den für .de zuständigen Nameserver zum eigentlich zuständigen Nameserver von domenicmoran.de durch, das ist die eigentliche DNS-Auflösung.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Am Ende bekommst du die IP-Adresse zurück, und erst jetzt kann sich dein Gerät mit dem passenden Server verbinden und die eigentliche Webseite laden.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Halten wir also fest. DNS ist das verteilte Telefonbuch des Internets, Nameserver sind die zuständigen Auskunftsstellen darin, und DNS-Auflösung nennt man den mehrstufigen Vorgang, der aus einem Domainnamen die passende IP-Adresse macht. Ein Cache merkt sich Antworten für eine Weile, die TTL bestimmt wie lange, und genau diese zeitliche Lücke macht auch Tricks wie DNS-Rebinding möglich, wenn niemand sie mitbedenkt.",
+      "isKeySentence": true,
+      "role": "key"
+    },
+    {
+      "speaker": "A",
+      "text": "Fassen wir die Begriffe dieser Lektion noch einmal als Liste zusammen.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "DNS: das System aus verteilten Nachschlagewerken, das Domainnamen in IP-Adressen übersetzt, Domain Name System.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Nameserver: ein Computer, der im DNS für einen bestimmten Teil des Telefonbuchs zuständig ist und Namensanfragen mit der passenden IP-Adresse beantwortet.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "DNS-Auflösung: der mehrstufige Vorgang, bei dem aus einem Domainnamen am Ende eine IP-Adresse wird.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Cache: ein kurzfristiger Zwischenspeicher für bereits abgefragte DNS-Antworten.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "TTL: die Zahl, die angibt, wie lange ein DNS-Eintrag im Cache gültig bleibt, Time to Live.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "DNS-Rebinding: der Trick, bei dem sich die IP-Adresse hinter einer Domain zwischen zwei Abfragen unbemerkt ändert.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss ich bei jeder Domain-Änderung selbst irgendwo auf \"aktualisieren\" klicken?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, das läuft automatisch im Hintergrund ab. Sobald die TTL eines alten, gespeicherten Eintrags abgelaufen ist, fragt dein Gerät von selbst erneut nach und bekommt die neue Adresse, ohne dass du etwas tun musst.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Warum sehe ich manchmal noch tagelang eine alte Version einer Webseite nach einem Umzug auf einen neuen Server?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Das liegt fast immer an der TTL und am Cache. Solange die alte, gespeicherte Adresse bei dir, deinem Anbieter oder einem zwischengeschalteten Dienst noch als gültig gilt, wirst du weiterhin zum alten Server geschickt, bis die Gültigkeit abläuft.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Ist ein Nameserver dasselbe wie der Server, auf dem meine Webseite liegt?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, das sind meistens zwei völlig verschiedene Computer, oft sogar bei zwei verschiedenen Anbietern. Der Nameserver beantwortet nur die Frage nach der IP-Adresse, der eigentliche Webserver liefert danach erst die Webseite selbst aus.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann ich nachvollziehen, welche IP-Adresse hinter einer Domain steckt, ohne Programmierkenntnisse?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, dafür reicht ein einfacher Befehl wie nslookup, den du im Terminal deines Geräts eingibst, ohne dass du dafür programmieren musst. Genau das übst du in der Praxisaufgabe dieser Lektion an einer echten Domain.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Warum ist DNS-Rebinding überhaupt gefährlich, wenn ich als Privatperson nur Webseiten anschaue?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Für dich als reinen Webseiten-Besucher ist es selten direkt gefährlich. Gefährlich wird es vor allem für Programme, die im Hintergrund selbstständig fremde Adressen abrufen, etwa ein automatischer Link-Vorschau-Dienst, der sich dabei versehentlich mit einem eigentlich geschützten, internen Netzwerk verbindet.",
+      "isKeySentence": false,
+      "role": "faq"
+    }
+  ],
+  "practiceExample": {
+    "text": "Das Repo ssrf-guarded-fetch beschreibt in seiner README einen Fetch-Wrapper, der eine fremde URL nur nach mehreren Sicherheitsprüfungen abruft. Ein zentraler Punkt darin ist DNS-Rebinding: Ein öffentlicher Host kann per Weiterleitung auf eine private Adresse umleiten, deshalb wird jeder einzelne Sprung einer Weiterleitung erneut durch dieselbe Adressprüfung geschickt, statt sich nur auf das allererste Prüfergebnis zu verlassen.",
+    "repoNote": "repo-ssrf-guarded-fetch",
+    "location": "README.md Abschnitt 'What it checks, in order', Punkt 3, sowie src/index.ts:439-463 (Funktion safeFetch)"
+  },
+  "quiz": [
+    {
+      "question": "Was macht das DNS im Kern?",
+      "area": "DNS",
+      "options": [
+        {
+          "text": "Es übersetzt Domainnamen in IP-Adressen.",
+          "isCorrect": true,
+          "explanation": "Genau das ist die Kernaufgabe des DNS, wie bei einem Telefonbuch."
+        },
+        {
+          "text": "Es speichert die Inhalte von Webseiten dauerhaft.",
+          "isCorrect": false,
+          "explanation": "Das übernimmt der jeweilige Webserver, nicht das DNS."
+        },
+        {
+          "text": "Es registriert neue Domainnamen bei einem Registrar.",
+          "isCorrect": false,
+          "explanation": "Das ist Aufgabe des Registrars aus der vorherigen Lektion, nicht des DNS selbst."
+        },
+        {
+          "text": "Es verschlüsselt die Verbindung zu einer Webseite.",
+          "isCorrect": false,
+          "explanation": "Verschlüsselung ist ein anderes Thema und keine Aufgabe des DNS."
+        }
+      ]
+    },
+    {
+      "question": "Was ist ein Nameserver?",
+      "area": "DNS",
+      "options": [
+        {
+          "text": "Der Server, auf dem am Ende die eigentliche Webseite mit allen Bildern und Texten gespeichert liegt.",
+          "isCorrect": false,
+          "explanation": "Das ist der Webserver, ein Nameserver beantwortet nur die Adressfrage."
+        },
+        {
+          "text": "Ein Computer, der Namensanfragen mit der passenden IP-Adresse beantwortet.",
+          "isCorrect": true,
+          "explanation": "Genau das ist die Aufgabe eines Nameservers innerhalb des DNS."
+        },
+        {
+          "text": "Ein Gerät, das nur E-Mails zustellt.",
+          "isCorrect": false,
+          "explanation": "E-Mail-Zustellung ist eine eigene, andere Aufgabe, unabhängig vom Nameserver-Begriff."
+        },
+        {
+          "text": "Der Anbieter, bei dem man eine Domain kauft.",
+          "isCorrect": false,
+          "explanation": "Das ist der Registrar, ein anderer Begriff aus der vorherigen Lektion."
+        }
+      ]
+    },
+    {
+      "question": "Warum läuft eine DNS-Auflösung meist in mehreren Schritten ab, statt in einem einzigen Sprung?",
+      "area": "DNS",
+      "options": [
+        {
+          "text": "Weil kein einzelner Nameserver das gesamte, riesige Telefonbuch des Internets allein kennt.",
+          "isCorrect": true,
+          "explanation": "Genau deshalb ist das DNS über viele zuständige Nameserver verteilt, jeder kennt nur seinen eigenen Bereich."
+        },
+        {
+          "text": "Weil jede Domain zufällig eine andere Sprache verwendet.",
+          "isCorrect": false,
+          "explanation": "Sprache spielt bei der technischen DNS-Auflösung keine Rolle."
+        },
+        {
+          "text": "Weil IP-Adressen sich mehrmals am Tag ändern müssen.",
+          "isCorrect": false,
+          "explanation": "IP-Adressen ändern sich nicht grundsätzlich mehrmals täglich, das ist kein Grund für die mehrstufige Auflösung."
+        },
+        {
+          "text": "Weil jeder Nutzer eine eigene, persönliche Version des gesamten DNS-Systems auf seinem eigenen Gerät gespeichert bekommt.",
+          "isCorrect": false,
+          "explanation": "Das DNS ist ein gemeinsames, geteiltes System, keine persönliche Version je Nutzer."
+        }
+      ]
+    },
+    {
+      "question": "Welche Rolle spielt der Wurzel-Nameserver bei der Auflösung von domenicmoran.de?",
+      "area": "DNS",
+      "options": [
+        {
+          "text": "Er kennt sofort die genaue IP-Adresse von domenicmoran.de.",
+          "isCorrect": false,
+          "explanation": "Der Wurzel-Nameserver kennt nur, wer für .de zuständig ist, nicht die genaue Adresse einer einzelnen Domain."
+        },
+        {
+          "text": "Er verweist den Resolver an den für die Endung .de zuständigen Nameserver.",
+          "isCorrect": true,
+          "explanation": "Genau das ist seine Rolle: er zeigt nur den nächsten Schritt in der Kette, nicht das Endergebnis."
+        },
+        {
+          "text": "Er verkauft die Domain domenicmoran.de.",
+          "isCorrect": false,
+          "explanation": "Domains werden über einen Registrar verkauft, nicht über einen Wurzel-Nameserver."
+        },
+        {
+          "text": "Er speichert dauerhaft den vollständigen Quelltext und alle Bilder der Webseite domenicmoran.de.",
+          "isCorrect": false,
+          "explanation": "Der Quelltext liegt beim Webserver, nicht bei einem Nameserver."
+        }
+      ]
+    },
+    {
+      "question": "Was ist ein Cache im Zusammenhang mit DNS?",
+      "area": "DNS",
+      "options": [
+        {
+          "text": "Ein kurzfristiger Zwischenspeicher für bereits abgefragte DNS-Antworten.",
+          "isCorrect": true,
+          "explanation": "Genau das ist ein Cache: ein Merkzettel für bereits bekannte Antworten."
+        },
+        {
+          "text": "Ein anderer Name für einen Registrar.",
+          "isCorrect": false,
+          "explanation": "Ein Registrar ist ein Domain-Anbieter, das ist ein völlig anderer Begriff."
+        },
+        {
+          "text": "Die dauerhafte, offizielle und zentrale Datenbank aller jemals weltweit registrierten Domains.",
+          "isCorrect": false,
+          "explanation": "Das beschreibt eher das DNS insgesamt, ein Cache ist dagegen nur ein kurzfristiger, lokaler Speicher."
+        },
+        {
+          "text": "Eine Fehlermeldung, die bei falscher Adresse erscheint.",
+          "isCorrect": false,
+          "explanation": "Ein Cache ist kein Fehler, sondern ein nützlicher Zwischenspeicher."
+        }
+      ]
+    },
+    {
+      "question": "Wofür steht TTL im DNS-Zusammenhang?",
+      "area": "DNS",
+      "options": [
+        {
+          "text": "Für die Zeitspanne, wie lange ein DNS-Eintrag im Cache gültig bleibt.",
+          "isCorrect": true,
+          "explanation": "Genau das bedeutet TTL, Time to Live: die Lebensdauer eines gespeicherten Eintrags."
+        },
+        {
+          "text": "Für die Geschwindigkeit, mit der eine Webseite lädt.",
+          "isCorrect": false,
+          "explanation": "Ladegeschwindigkeit einer Webseite hängt von vielen Dingen ab, nicht direkt von der TTL eines DNS-Eintrags."
+        },
+        {
+          "text": "Für die genaue Anzahl der verschiedenen Nameserver, die eine einzelne Domain insgesamt besitzt.",
+          "isCorrect": false,
+          "explanation": "Die Anzahl der Nameserver hat nichts mit der TTL zu tun, das sind zwei verschiedene Angaben."
+        },
+        {
+          "text": "Für den Registrar, bei dem eine Domain registriert wurde.",
+          "isCorrect": false,
+          "explanation": "Das ist der Registrar-Begriff aus der vorherigen Lektion, nicht die TTL."
+        }
+      ]
+    },
+    {
+      "question": "Warum sieht nicht jeder Besucher sofort die neue Adresse, wenn ein Server gewechselt wird?",
+      "area": "DNS",
+      "options": [
+        {
+          "text": "Weil manche Geräte oder Resolver noch einen alten Eintrag im Cache haben, bis dessen TTL abläuft.",
+          "isCorrect": true,
+          "explanation": "Genau das ist der Grund: gespeicherte alte Antworten gelten weiter, bis ihre Gültigkeit endet."
+        },
+        {
+          "text": "Weil das DNS nur einmal pro Jahr aktualisiert wird.",
+          "isCorrect": false,
+          "explanation": "Das DNS wird laufend aktualisiert, nicht nur einmal jährlich, das ist kein zutreffender Grund."
+        },
+        {
+          "text": "Weil jeder einzelne Nutzer die Änderung erst manuell in den Geräteeinstellungen seines eigenen Geräts bestätigen und freigeben muss.",
+          "isCorrect": false,
+          "explanation": "Eine manuelle Bestätigung durch den Nutzer ist nicht nötig, die Aktualisierung läuft automatisch nach Ablauf der TTL."
+        },
+        {
+          "text": "Weil sich Domainnamen bei jedem Serverwechsel automatisch ändern.",
+          "isCorrect": false,
+          "explanation": "Der Domainname bleibt beim Serverwechsel gleich, nur die dahinterliegende IP-Adresse ändert sich."
+        }
+      ]
+    },
+    {
+      "question": "Was passiert grob bei einem DNS-Rebinding-Trick?",
+      "area": "DNS",
+      "options": [
+        {
+          "text": "Eine Domain liefert zuerst eine harmlose Adresse, später bei erneuter Abfrage eine andere, unerwartete Adresse.",
+          "isCorrect": true,
+          "explanation": "Genau das beschreibt DNS-Rebinding: die Adresse hinter derselben Domain ändert sich unbemerkt zwischen zwei Abfragen."
+        },
+        {
+          "text": "Ein Registrar löscht versehentlich eine registrierte Domain.",
+          "isCorrect": false,
+          "explanation": "Das hat mit DNS-Rebinding nichts zu tun, das ist ein anderer, unabhängiger Vorgang."
+        },
+        {
+          "text": "Ein Nutzer vertippt sich beim Eintippen einer Domain.",
+          "isCorrect": false,
+          "explanation": "Ein Tippfehler ist kein DNS-Rebinding, sondern ein einfacher Bedienfehler."
+        },
+        {
+          "text": "Ein Cache läuft nach genau einer Sekunde grundsätzlich ab.",
+          "isCorrect": false,
+          "explanation": "Die Gültigkeitsdauer eines Cache-Eintrags hängt von der TTL ab, nicht fest von genau einer Sekunde."
+        }
+      ]
+    },
+    {
+      "question": "Warum reicht laut dem Repo ssrf-guarded-fetch eine einzige, frühe Adressprüfung nicht aus?",
+      "area": "DNS",
+      "options": [
+        {
+          "text": "Weil sich die Adresse hinter einer Domain zwischen der Prüfung und der eigentlichen Verbindung ändern kann.",
+          "isCorrect": true,
+          "explanation": "Genau das ist der Kern von DNS-Rebinding und der Grund, jeden Verbindungssprung erneut zu prüfen."
+        },
+        {
+          "text": "Weil eine einzige Prüfung technisch nicht möglich ist.",
+          "isCorrect": false,
+          "explanation": "Eine einzige Prüfung ist technisch möglich, sie ist nur nicht ausreichend sicher, das ist der eigentliche Punkt."
+        },
+        {
+          "text": "Weil Domains grundsätzlich nie eine gültige IP-Adresse besitzen.",
+          "isCorrect": false,
+          "explanation": "Domains besitzen sehr wohl gültige IP-Adressen, das ist keine zutreffende Aussage."
+        },
+        {
+          "text": "Weil ein Cache jede Prüfung automatisch überschreibt.",
+          "isCorrect": false,
+          "explanation": "Ein Cache überschreibt keine Prüfungen, er speichert nur bereits abgefragte DNS-Antworten für eine Weile."
+        }
+      ]
+    },
+    {
+      "question": "Womit kannst du selbst, ohne Programmierkenntnisse, die IP-Adresse hinter einer Domain herausfinden?",
+      "area": "DNS",
+      "options": [
+        {
+          "text": "Mit dem Befehl nslookup im Terminal.",
+          "isCorrect": true,
+          "explanation": "Genau dieses Werkzeug übst du in der Praxisaufgabe dieser Lektion."
+        },
+        {
+          "text": "Nur mit einer eigenen, selbst programmierten Anwendung.",
+          "isCorrect": false,
+          "explanation": "Dafür braucht es keine eigene Programmierung, nslookup ist ein fertiges, einfaches Werkzeug."
+        },
+        {
+          "text": "Nur, indem man den Registrar telefonisch kontaktiert.",
+          "isCorrect": false,
+          "explanation": "Ein Telefonanruf beim Registrar ist dafür nicht nötig, die Abfrage geht direkt selbst am eigenen Gerät."
+        },
+        {
+          "text": "Gar nicht, das ist ausschließlich Internetanbietern vorbehalten.",
+          "isCorrect": false,
+          "explanation": "Das ist falsch, jede Person kann diese Abfrage selbst an ihrem eigenen Gerät durchführen."
+        }
+      ]
+    },
+    {
+      "question": "Angenommen, du rufst domenicmoran.de zweimal innerhalb weniger Sekunden im Browser auf. Was passiert dabei wahrscheinlich beim zweiten Mal?",
+      "area": "DNS",
+      "options": [
+        {
+          "text": "Die IP-Adresse kommt vermutlich direkt aus dem Cache, ohne die komplette Nameserver-Kette erneut abzufragen.",
+          "isCorrect": true,
+          "explanation": "Genau das ist der Sinn des Caches: kurz hintereinander wiederholte Abfragen werden schneller beantwortet."
+        },
+        {
+          "text": "Das DNS wird beim zweiten Mal grundsätzlich komplett neu aufgebaut.",
+          "isCorrect": false,
+          "explanation": "Das DNS als Ganzes wird nicht neu aufgebaut, nur die einzelne Abfrage nutzt gegebenenfalls den Cache."
+        },
+        {
+          "text": "Die Domain domenicmoran.de wird beim zweiten Aufruf automatisch gesperrt.",
+          "isCorrect": false,
+          "explanation": "Ein zweiter, normaler Aufruf sperrt eine Domain nicht, das hat mit DNS-Caching nichts zu tun."
+        },
+        {
+          "text": "Der Registrar wird bei jedem zweiten Aufruf automatisch benachrichtigt.",
+          "isCorrect": false,
+          "explanation": "Ein Registrar wird bei gewöhnlichen Webseitenaufrufen nicht benachrichtigt, das ist kein Teil der DNS-Auflösung."
+        }
+      ]
+    },
+    {
+      "question": "Welche Aussage über das Verhältnis von Nameserver und Webserver stimmt?",
+      "area": "DNS",
+      "options": [
+        {
+          "text": "Nameserver und Webserver sind meist zwei verschiedene Computer mit unterschiedlichen Aufgaben.",
+          "isCorrect": true,
+          "explanation": "Genau das ist der zutreffende Unterschied: der eine beantwortet Adressfragen, der andere liefert die Webseite selbst."
+        },
+        {
+          "text": "Ein Nameserver ist immer auch gleichzeitig der Webserver derselben Domain.",
+          "isCorrect": false,
+          "explanation": "Das ist in der Praxis meist nicht der Fall, beide Aufgaben liegen üblicherweise bei getrennten Servern."
+        },
+        {
+          "text": "Ein Webserver übernimmt die DNS-Auflösung selbst, ganz ohne Nameserver.",
+          "isCorrect": false,
+          "explanation": "Die DNS-Auflösung läuft über Nameserver, bevor ein Webserver überhaupt erreicht wird, nicht durch den Webserver selbst."
+        },
+        {
+          "text": "Beide Begriffe meinen exakt dasselbe, nur mit unterschiedlichem Namen.",
+          "isCorrect": false,
+          "explanation": "Die Begriffe beschreiben zwei unterschiedliche Aufgaben, sie sind keine bloßen Synonyme."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Öffne auf deinem eigenen Gerät das Terminal (unter Windows zum Beispiel PowerShell, unter macOS oder Linux das Terminal) und gib den Befehl \"nslookup domenicmoran.de\" ein. Lies dir die Ausgabe genau durch und notiere die dort angezeigte IP-Adresse.",
+    "expectation": "Eine im Terminal angezeigte IP-Adresse für die Domain domenicmoran.de, notiert zusammen mit dem verwendeten Befehl.",
+    "checklist": [
+      "Terminal auf dem eigenen Gerät geöffnet",
+      "Befehl nslookup domenicmoran.de eingegeben",
+      "Angezeigte IP-Adresse notiert",
+      "Denselben Befehl ein zweites Mal ausgeführt und geprüft, ob dieselbe Adresse erscheint"
+    ]
+  },
+  "audio": {
+    "file": "M01-04-02.mp3",
+    "durationSeconds": 1006,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Muss ich bei jeder Domain-Änderung selbst irgendwo auf \"aktualisieren\" klicken?",
+      "answer": "Nein, das läuft automatisch im Hintergrund ab. Sobald die TTL eines alten, gespeicherten Eintrags abgelaufen ist, fragt dein Gerät von selbst erneut nach und bekommt die neue Adresse, ohne dass du etwas tun musst."
+    },
+    {
+      "question": "Warum sehe ich manchmal noch tagelang eine alte Version einer Webseite nach einem Umzug auf einen neuen Server?",
+      "answer": "Das liegt fast immer an der TTL und am Cache. Solange die alte, gespeicherte Adresse bei dir, deinem Anbieter oder einem zwischengeschalteten Dienst noch als gültig gilt, wirst du weiterhin zum alten Server geschickt, bis die Gültigkeit abläuft."
+    },
+    {
+      "question": "Ist ein Nameserver dasselbe wie der Server, auf dem meine Webseite liegt?",
+      "answer": "Nein, das sind meistens zwei völlig verschiedene Computer, oft sogar bei zwei verschiedenen Anbietern. Der Nameserver beantwortet nur die Frage nach der IP-Adresse, der eigentliche Webserver liefert danach erst die Webseite selbst aus."
+    },
+    {
+      "question": "Kann ich nachvollziehen, welche IP-Adresse hinter einer Domain steckt, ohne Programmierkenntnisse?",
+      "answer": "Ja, dafür reicht ein einfacher Befehl wie nslookup, den du im Terminal deines Geräts eingibst, ohne dass du dafür programmieren musst. Genau das übst du in der Praxisaufgabe dieser Lektion an einer echten Domain."
+    },
+    {
+      "question": "Warum ist DNS-Rebinding überhaupt gefährlich, wenn ich als Privatperson nur Webseiten anschaue?",
+      "answer": "Für dich als reinen Webseiten-Besucher ist es selten direkt gefährlich. Gefährlich wird es vor allem für Programme, die im Hintergrund selbstständig fremde Adressen abrufen, etwa ein automatischer Link-Vorschau-Dienst, der sich dabei versehentlich mit einem eigentlich geschützten, internen Netzwerk verbindet."
+    }
+  ]
+}
