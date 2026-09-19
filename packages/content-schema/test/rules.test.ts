@@ -7,6 +7,9 @@ import {
   checkKeySentenceHasKeyRole,
   checkLongestOptionNotAlwaysCorrect,
   checkMinimumWordCount,
+  checkNoPrerequisiteCycles,
+  checkPrerequisitesAreEarlier,
+  checkPrerequisitesExist,
   checkSentenceLength,
   checkTermBlockFollowedByExample,
   checkTermOrder,
@@ -140,6 +143,125 @@ describe('checkTermOrder', () => {
       ],
     });
     expect(checkTermOrder(later, [earlier, later])).toHaveLength(0);
+  });
+
+  it('lässt einen Begriff aus einer transitiv vorausgesetzten Lektion durch, ohne dass sie direkt gelistet ist', () => {
+    const first = makeValidLesson({
+      id: 'M01-00-01',
+      terms: [{ term: 'Terminal', definition: 'Textfenster für Befehle' }],
+    });
+    const middle = makeValidLesson({ id: 'M01-01-01', prerequisites: ['M01-00-01'] });
+    const last = makeValidLesson({
+      id: 'M02-01-01',
+      prerequisites: ['M01-01-01'],
+      speechBlocks: [
+        { speaker: 'A', text: 'Im Terminal geben wir jetzt Befehle ein.', isKeySentence: true, role: 'key' },
+        { speaker: 'B', text: 'Genau, das Terminal kennen wir schon.', isKeySentence: false, role: 'question' },
+      ],
+    });
+    expect(checkTermOrder(last, [first, middle, last])).toHaveLength(0);
+  });
+
+  it('erkennt einen Begriff mit Umlaut über eine Wortgrenze hinweg', () => {
+    const earlier = makeValidLesson({
+      id: 'M01-00-01',
+      terms: [{ term: 'öffentliche Adresse', definition: 'Eine im Internet sichtbare Adresse' }],
+    });
+    const later = makeValidLesson({
+      id: 'M02-01-01',
+      speechBlocks: [
+        {
+          speaker: 'A',
+          text: 'Dieser Server hat eine öffentliche Adresse.',
+          isKeySentence: true,
+          role: 'key',
+        },
+        { speaker: 'B', text: 'Woher kommt diese Adresse?', isKeySentence: false, role: 'question' },
+      ],
+    });
+    const violations = checkTermOrder(later, [earlier, later]);
+    expect(violations.some((v) => v.message.includes('öffentliche Adresse'))).toBe(true);
+  });
+});
+
+describe('checkTermOrder (Kürzel Groß-/Kleinschreibung)', () => {
+  it('verwechselt ein grossgeschriebenes Kürzel nicht mit einem gleichnamigen deutschen Wort', () => {
+    const earlier = makeValidLesson({
+      id: 'M01-00-01',
+      terms: [{ term: 'POST', definition: 'Eine HTTP-Methode zum Senden von Daten' }],
+    });
+    const later = makeValidLesson({
+      id: 'M02-01-01',
+      speechBlocks: [
+        {
+          speaker: 'A',
+          text: 'Die Post bringt den Brief zum richtigen Haus.',
+          isKeySentence: true,
+          role: 'key',
+        },
+        { speaker: 'B', text: 'Wie findet die Post das richtige Haus?', isKeySentence: false, role: 'question' },
+      ],
+    });
+    expect(checkTermOrder(later, [earlier, later])).toHaveLength(0);
+  });
+
+  it('erkennt das Kürzel weiterhin in exakter Schreibweise', () => {
+    const earlier = makeValidLesson({
+      id: 'M01-00-01',
+      terms: [{ term: 'POST', definition: 'Eine HTTP-Methode zum Senden von Daten' }],
+    });
+    const later = makeValidLesson({
+      id: 'M02-01-01',
+      speechBlocks: [
+        { speaker: 'A', text: 'Mit POST schickt der Browser neue Daten an den Server.', isKeySentence: true, role: 'key' },
+        { speaker: 'B', text: 'Und wann benutzt man POST?', isKeySentence: false, role: 'question' },
+      ],
+    });
+    expect(checkTermOrder(later, [earlier, later]).length).toBeGreaterThan(0);
+  });
+});
+
+describe('checkPrerequisitesExist', () => {
+  it('lässt vorhandene Voraussetzungen durch', () => {
+    const a = makeValidLesson({ id: 'M01-00-01' });
+    const b = makeValidLesson({ id: 'M01-00-02', prerequisites: ['M01-00-01'] });
+    expect(checkPrerequisitesExist(b, [a, b])).toHaveLength(0);
+  });
+
+  it('lehnt eine Voraussetzung auf eine nicht vorhandene Lektion ab', () => {
+    const b = makeValidLesson({ id: 'M01-00-02', prerequisites: ['M01-00-99'] });
+    expect(checkPrerequisitesExist(b, [b])).toHaveLength(1);
+  });
+});
+
+describe('checkPrerequisitesAreEarlier', () => {
+  it('lässt eine frühere Kennung als Voraussetzung durch', () => {
+    const lesson = makeValidLesson({ id: 'M01-00-02', prerequisites: ['M01-00-01'] });
+    expect(checkPrerequisitesAreEarlier(lesson)).toHaveLength(0);
+  });
+
+  it('lehnt eine spätere Kennung als Voraussetzung ab', () => {
+    const lesson = makeValidLesson({ id: 'M01-00-01', prerequisites: ['M01-00-02'] });
+    expect(checkPrerequisitesAreEarlier(lesson)).toHaveLength(1);
+  });
+
+  it('lehnt die eigene Kennung als Voraussetzung ab', () => {
+    const lesson = makeValidLesson({ id: 'M01-00-01', prerequisites: ['M01-00-01'] });
+    expect(checkPrerequisitesAreEarlier(lesson)).toHaveLength(1);
+  });
+});
+
+describe('checkNoPrerequisiteCycles', () => {
+  it('lässt eine azyklische Kette durch', () => {
+    const a = makeValidLesson({ id: 'M01-00-01' });
+    const b = makeValidLesson({ id: 'M01-00-02', prerequisites: ['M01-00-01'] });
+    expect(checkNoPrerequisiteCycles(b, [a, b])).toHaveLength(0);
+  });
+
+  it('erkennt einen Zyklus über zwei Lektionen', () => {
+    const a = makeValidLesson({ id: 'M01-00-01', prerequisites: ['M01-00-02'] });
+    const b = makeValidLesson({ id: 'M01-00-02', prerequisites: ['M01-00-01'] });
+    expect(checkNoPrerequisiteCycles(a, [a, b]).length).toBeGreaterThan(0);
   });
 });
 
@@ -315,8 +437,18 @@ describe('checkMinimumWordCount', () => {
   });
 
   it('meldet einen Fehler ab Manifest-Version 0.2.0', () => {
-    const violations = checkMinimumWordCount(makeValidLesson(), '0.2.0');
+    // Nicht die Fixture-Kennung M01-01-01 nehmen: die steht auf der benannten
+    // Ausnahmeliste (AP-4.2) und bliebe deshalb bei einer Warnung.
+    const lesson = makeValidLesson({ id: 'M02-01-01' });
+    const violations = checkMinimumWordCount(lesson, '0.2.0');
     expect(violations).toHaveLength(1);
     expect(violations[0]?.severity).toBe('error');
+  });
+
+  it('lässt M01-01-01 auch ab Manifest-Version 0.2.0 nur eine Warnung sein (benannte Ausnahme)', () => {
+    const violations = checkMinimumWordCount(makeValidLesson(), '0.2.0');
+    expect(violations).toHaveLength(1);
+    expect(violations[0]?.severity).toBe('warning');
+    expect(violations[0]?.message).toContain('Ausnahme');
   });
 });

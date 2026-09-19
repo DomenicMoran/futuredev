@@ -1,0 +1,1204 @@
+{
+  "id": "M01-03-03",
+  "title": "Wie ein Datenpaket von A nach B kommt",
+  "durationMinutes": 26,
+  "prerequisites": [
+    "M01-03-02",
+    "M01-03-01",
+    "M01-00-01",
+    "M01-00-03",
+    "M01-01-03",
+    "M01-02-01",
+    "M01-00-04",
+    "M01-02-02",
+    "M01-02-04"
+  ],
+  "terms": [
+    {
+      "term": "Datenpaket",
+      "definition": "Ein kleines Stück einer größeren Nachricht, das für sich allein über das Netzwerk verschickt werden kann."
+    },
+    {
+      "term": "Poststation",
+      "definition": "Ein Gerät im Netzwerk, das ein Datenpaket entgegennimmt und auf dem besten bekannten Weg weiterschickt."
+    },
+    {
+      "term": "TCP",
+      "definition": "Ein Verfahren, das jedes Datenpaket bestätigen lässt und fehlende oder falsch sortierte Pakete automatisch nachfordert."
+    },
+    {
+      "term": "UDP",
+      "definition": "Ein Verfahren, das Datenpakete einfach verschickt, ohne auf eine Bestätigung zu warten oder verlorene Pakete nachzufordern."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "text": "Du weißt jetzt, wie eine Anfrage ihr Ziel findet: über eine IP-Adresse und einen Port.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Aber wie legt so eine Anfrage den ganzen Weg dorthin eigentlich zurück, quer über die Welt?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau darum geht es heute. Stell dir vor, du willst einer Freundin ein sehr dickes Buch mit der Post schicken.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein einziges großes Paket mit dem ganzen Buch wäre schwer, teuer im Versand, und wenn es unterwegs verloren geht, ist alles auf einmal weg.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Klüger wäre es, das Buch in einzelne Kapitel zu zerlegen und jedes Kapitel als eigenen kleinen Umschlag separat zu verschicken.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "B",
+      "text": "Aber kommt dann nicht Durcheinander bei ihr an, wenn zehn einzelne Umschläge nacheinander eintrudeln?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Nicht, wenn jeder Umschlag eine Nummer trägt: Kapitel eins von zehn, Kapitel zwei von zehn, und so weiter.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "So kann sie am Ende alle Umschläge in der richtigen Reihenfolge zusammenlegen, egal in welcher Reihenfolge sie tatsächlich ankamen.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau so funktioniert das auch im Internet. Eine größere Nachricht wird nicht als ein einziges riesiges Stück verschickt.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Sie wird in viele kleine, nummerierte Stücke zerlegt, bevor sie überhaupt losgeschickt wird.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "So ein kleines Stück einer größeren Nachricht heißt Datenpaket.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Öffnest du eine Webseite mit vielen Bildern, wird diese Seite in Wahrheit als viele einzelne Datenpakete zu dir geschickt, nicht als ein einziges großes Stück.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Warum lohnt sich dieses Zerlegen überhaupt, statt einfach alles auf einmal zu schicken?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Weil kleine Pakete leichter durch ein überfülltes Netzwerk passen, so wie ein kleiner Briefumschlag leichter durch einen engen Briefschlitz passt als ein sperriges Buch.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Geht dazu ein einzelnes kleines Paket unterwegs verloren, muss auch nur dieses eine kleine Stück erneut geschickt werden, nicht die ganze Nachricht.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Und wie findet so ein einzelnes kleines Paket seinen Weg durch das ganze Internet?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir eine lange Reise mit dem Auto durch mehrere Länder vor.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Unterwegs hältst du an verschiedenen Raststätten, um dich zu orientieren: Wie geht es von hier am besten weiter?",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "An jeder Raststätte bekommst du einen neuen Hinweis, welche Straße als Nächstes die schnellste Verbindung ist.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein Datenpaket reist ganz ähnlich: es durchläuft viele Zwischenstationen, bevor es sein Ziel erreicht.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "So eine Zwischenstation heißt Poststation.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Jede Poststation schaut sich das Paket kurz an, und schickt es auf dem aus ihrer Sicht besten bekannten Weg weiter zur nächsten Poststation.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Kennt denn jede einzelne Poststation den kompletten Weg von Anfang bis Ende im Voraus?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, überraschenderweise nicht. Jede Poststation kennt nur ihre eigene kleine Umgebung, ähnlich wie ein Autofahrer an einer Kreuzung, der nur die nächste Abzweigung sieht.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Trotzdem findet das Paket am Ende sein Ziel, weil jede Poststation für sich genommen eine gute, lokale Entscheidung trifft.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Nimmt jedes Paket derselben Nachricht dann eigentlich denselben Weg über dieselben Poststationen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Nicht unbedingt. Stell dir vor, auf deiner Autoreise ist plötzlich eine Straße gesperrt, eine Baustelle oder ein Stau.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Du fährst dann einfach eine andere Strecke, die im Moment freier ist, auch wenn sie länger aussieht.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genauso können verschiedene Datenpakete derselben Nachricht unterschiedliche Wege durch das Netzwerk nehmen, je nachdem, welcher Weg gerade frei ist.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann es dann passieren, dass Paket zwei vor Paket eins ankommt, obwohl Paket eins zuerst losgeschickt wurde?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau das kann passieren. Nimmt Paket zwei zufällig einen kürzeren freien Weg, kommt es unter Umständen früher an als Paket eins auf einem längeren Weg.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau deshalb trägt jedes Paket seine eigene Nummer, so wie im Bild mit den nummerierten Buch-Umschlägen.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Kannst du mir ein Beispiel aus dem Alltag geben, bei dem ich dieses Zerlegen in Pakete selbst merken könnte?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Denk an das Herunterladen eines großen Films auf deinem Fernseher oder Computer.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Der Film wird nicht als ein einziges riesiges Stück übertragen, sondern als tausende kleiner Datenpakete, die nacheinander bei dir ankommen.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Der Ladebalken, den du dabei siehst, zeigt dir eigentlich nur, wie viele dieser kleinen Pakete schon angekommen sind.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Und bei einem Online-Spiel, wo alles sehr schnell gehen muss, läuft das genauso ab?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, auch dort werden ständig kleine Datenpakete hin und her geschickt, jede Bewegung deiner Spielfigur wird als eigenes kleines Paket übertragen.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Kommt so ein Bewegungspaket zu spät an, wirkt das Spiel für einen kurzen Moment ruckelig, weil die Spielwelt gerade auf neue Information wartet.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann so ein Paket auch einfach ganz verloren gehen, ohne dass irgendjemand das mitbekommt?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, das kann passieren, etwa wenn eine Poststation gerade überlastet ist und ein Paket verwerfen muss, weil kein Platz mehr für die Weiterleitung bleibt.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Ohne Gegenmaßnahme würde die empfangende Seite dann einfach ein Loch in der Nachricht haben, ohne es zu merken.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Wie stellt man dann sicher, dass am Ende wirklich alle Pakete richtig und vollständig ankommen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Dafür gibt es ein eigenes Verfahren, ähnlich einer Postsendung mit Empfangsbestätigung.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Bei so einer Sendung unterschreibst du, dass das Paket wirklich bei dir angekommen ist, und der Absender bekommt diese Bestätigung zurück.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Kommt keine Bestätigung zurück, weiß der Absender, dass etwas schiefgegangen sein muss, und schickt das Paket einfach noch einmal.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau dieses Prinzip nutzt ein Verfahren, das im Internet Datenpakete zuverlässig überträgt.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Dieses Verfahren heißt TCP.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "B",
+      "text": "TCP. T, C, P.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau. Schickt der Empfänger für ein Paket keine Bestätigung, sendet der Absender dieses eine Paket automatisch erneut.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Zusätzlich sortiert TCP alle ankommenden Pakete automatisch wieder in die richtige Reihenfolge, bevor die vollständige Nachricht weitergegeben wird.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Also kümmert sich TCP um beides gleichzeitig, um die richtige Reihenfolge und um verlorene Pakete?",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau, und das macht TCP insgesamt sehr zuverlässig, weil am Ende garantiert wirklich alles vollständig und in der richtigen Reihenfolge ankommt.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Gibt es denn auch Fälle, in denen diese ganze Bestätigungs-Prozedur eher hinderlich ist als hilfreich?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, tatsächlich gibt es die. Stell dir statt eines Empfangsbestätigungs-Briefs jetzt eine einfache Postkarte im Urlaub vor.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Du schreibst die Postkarte, wirfst sie in den nächsten Briefkasten, und machst mit deinem Urlaub weiter, ohne auf irgendeine Bestätigung zu warten.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Kommt die Postkarte nicht an, ist das schade, aber du schickst nicht extra eine zweite hinterher, nur um sicherzugehen.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau so ein Verfahren gibt es auch im Internet, für Fälle, in denen Geschwindigkeit wichtiger ist als hundertprozentige Vollständigkeit.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Dieses schnellere, aber ungesicherte Verfahren heißt UDP.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "B",
+      "text": "UDP. U, D, P.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Bei einem Videoanruf zum Beispiel wird oft UDP genutzt: kommt ein einzelnes Bildpaket nicht an, würde ein erneutes Anfordern das Bild ohnehin nur unnötig verzögern.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Lieber ein winziges Ruckeln im Bild als eine spürbare Verzögerung im ganzen Gespräch, verstehe ich das richtig?",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau richtig so verstanden, gut erkannt. TCP wählst du, wenn Vollständigkeit zählt, etwa beim Laden einer Webseite oder einer Datei.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "UDP wählst du dann, wenn Geschwindigkeit wichtiger ist als jedes einzelne verlorene Stückchen, etwa bei Livestreams oder Online-Spielen.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Entscheidet das eigentlich jedes Mal der Nutzer selbst, TCP oder UDP?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, das entscheidet meist die App oder der Dienst im Voraus, passend zu ihrem jeweiligen Zweck, du bekommst davon normalerweise nichts mit.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Könntest du mir noch mehr Beispiele nennen, welche Anwendung eher TCP und welche eher UDP benutzt?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Gern, das hilft, ein Gefühl für die Entscheidung zu bekommen.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein E-Mail-Dienst setzt fast immer auf TCP, weil eine E-Mail mit einem fehlenden Absatz mitten im Text keinen Sinn ergeben würde.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Auch das Herunterladen einer Datei setzt auf TCP, weil eine unvollständige Datei am Ende oft überhaupt nicht mehr funktioniert.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein Livestream einer Sportübertragung dagegen setzt oft auf UDP, weil ein winziger Bildfehler weit weniger stört als eine spürbare Verzögerung zum echten Geschehen.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Also entscheidet letztlich die Art der Nachricht selbst, ob Vollständigkeit oder Geschwindigkeit wichtiger ist?", "isKeySentence": false, "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau das ist der eigentliche Kerngedanke hinter der ganzen Wahl zwischen TCP und UDP.", "isKeySentence": false, "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann eine einzelne App eigentlich für verschiedene Aufgaben gleichzeitig beide Verfahren benutzen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, das ist sogar üblich. Ein Videospiel könnte TCP nutzen, um den Highscore sicher zu übertragen, und gleichzeitig UDP für die schnellen Bewegungen im Spiel selbst.", "isKeySentence": false, "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Für jede einzelne Art von Nachricht wählt der jeweilige Dienst also ganz getrennt aus, welches der beiden Verfahren dafür am besten passt.", "isKeySentence": false, "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau diese Art von Zuverlässigkeit steckt übrigens auch in einem echten, öffentlich veröffentlichten Projekt, das du schon aus einer früheren Lektion kennst.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Im Repo resilient-ws-client geht es zwar nicht um einzelne Datenpakete selbst, aber um genau dasselbe Grundproblem eine Ebene höher.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Was hat dieser Client denn mit verlorenen Datenpaketen zu tun?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Auch auf dieser höheren Ebene kann eine Nachricht verloren gehen, wenn die Verbindung mittendrin abbricht, ganz ähnlich wie ein einzelnes Datenpaket auf dem Weg.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Der Client merkt sich deshalb, welche Nachrichten der Server noch nicht bestätigt hat, in einer eigenen Warteliste.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Kommt keine Bestätigung, schickt der Client die Nachricht nach dem Wiederverbinden erneut, ganz nach demselben Grundprinzip wie TCP bei einzelnen Paketen.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Also wird das TCP-Prinzip von Bestätigen und erneut Senden auch auf höheren Ebenen wieder eingesetzt, nicht nur bei einzelnen Paketen?",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau. Bestätigen und bei Bedarf erneut senden ist ein sehr grundsätzliches Muster, das im Netzwerk auf mehreren Ebenen gleichzeitig vorkommt.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Was passiert eigentlich, wenn eine Poststation unterwegs komplett ausfällt, zum Beispiel wegen einer Störung?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir wieder deine Autoreise vor, aber diesmal ist eine ganze Raststätte plötzlich geschlossen.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Du fährst dann einfach zur nächsten erreichbaren Raststätte weiter und orientierst dich von dort aus neu.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau so passen sich auch Datenpakete an: fällt eine Poststation aus, nehmen die nachfolgenden Poststationen automatisch einen anderen Weg drumherum.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Merkt man als Nutzerin oder Nutzer denn überhaupt etwas von so einem Ausfall einer einzelnen Poststation?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Meistens gar nicht, weil das gesamte Netzwerk aus sehr vielen Poststationen besteht und fast immer ein brauchbarer Ersatzweg vorhanden ist.", "isKeySentence": false, "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Nur wenn gleich mehrere wichtige Wege gleichzeitig gestört sind, merkst du das deutlich an einer spürbar langsameren oder sogar ganz unterbrochenen Verbindung.", "isKeySentence": false, "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann ich als Nutzerin oder Nutzer eigentlich selbst sehen, welche Poststationen meine eigenen Datenpakete durchlaufen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, dafür gibt es zwei kleine, sehr verbreitete Werkzeuge, die auf fast jedem Computer schon vorhanden sind.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Das erste heißt ping.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Ping schickt ein winziges Test-Datenpaket an eine Adresse und misst, wie lange die Antwort zurückbraucht, ganz ähnlich wie ein Echo, das du in einen Bergwald rufst.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Also sagt mir ping nur, ob ein Ziel überhaupt erreichbar ist, und wie schnell?",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau das, nicht mehr und nicht weniger, aber das ist schon sehr nützlich, um einen ersten Verdacht zu prüfen, ob überhaupt eine Verbindung besteht.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Das zweite Werkzeug heißt traceroute, unter Windows tracert.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Traceroute zeigt dir nicht nur, ob das Ziel erreichbar ist, sondern auch jede einzelne Poststation auf dem Weg dorthin, mit der jeweiligen Zeit bis dorthin.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Also wie eine Liste aller Raststätten auf meiner Autoreise, mit der jeweiligen Uhrzeit, wann ich dort war?",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein sehr passendes Bild dafür. Genau diese Liste hilft später zu erkennen, an welcher Stelle im Netzwerk eine Verbindung besonders langsam wird.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Zeigt traceroute mir dann auch, ob eine langsame Stelle eher in meinem eigenen Heimnetzwerk liegt oder ganz woanders?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau das kannst du daran gut ablesen: liegt die Verzögerung schon bei den ersten paar Poststationen, liegt das Problem eher bei dir zu Hause oder bei deinem Anbieter.", "isKeySentence": false, "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Zeigt sich die Verzögerung erst viel später in der Liste, liegt das Problem eher weiter draußen im Netzwerk, außerhalb deines eigenen Einflussbereichs.", "isKeySentence": false, "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss ich als Nutzerin oder Nutzer irgendetwas extra installieren, um ping oder traceroute benutzen zu können?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, beide Werkzeuge sind auf so gut wie jedem Computer schon von Anfang an vorhanden, egal ob Windows, macOS oder Linux.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Du musst sie nur in der Kommandozeile aufrufen, mit dem passenden Befehlsnamen und der Adresse, die dich interessiert.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Sind ping und traceroute nur für Entwickler nützlich, oder auch für ganz normale Nutzerinnen und Nutzer?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Auch für normale Nutzerinnen und Nutzer, wenn zum Beispiel eine bestimmte Webseite nicht erreichbar ist, hilft ping dabei, einen ersten Verdacht zu prüfen.", "isKeySentence": false, "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Antwortet ping überhaupt gar nicht, liegt das eigentliche Problem eher an der eigenen Verbindung oder am fernen Ziel selbst, nicht an der jeweiligen einzelnen App.", "isKeySentence": false, "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Also noch einmal ganz kurz zusammengefasst: eine größere Nachricht wird in kleine Datenpakete zerlegt, die jeweils einzeln über mehrere Poststationen zum Ziel reisen, manchmal auf unterschiedlichen Wegen und in unterschiedlicher Reihenfolge. TCP bestätigt jedes Paket und fordert verlorene Pakete erneut an, für vollständige, geordnete Übertragung. UDP verschickt Pakete einfach, ohne Bestätigung, dafür schneller, für Fälle wie Videoanrufe, bei denen Tempo wichtiger ist als jedes einzelne Paket.",
+      "isKeySentence": true,
+      "role": "key"
+    },
+    {
+      "speaker": "A",
+      "text": "Sehr gut und wirklich vollständig zusammengefasst, genau richtig und klar auf den Punkt gebracht.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Dieses Zusammenspiel aus Zerlegen, Weiterleiten über Poststationen und je nach Bedarf Bestätigen passiert bei jeder einzelnen Anfrage, die du täglich stellst.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Wer versteht, dass eine Nachricht in viele kleine Pakete zerlegt wird, versteht auch, warum eine Verbindung manchmal kurz ruckelt, ohne ganz abzubrechen.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Merkt man als Nutzerin oder Nutzer im Alltag eigentlich, ob gerade TCP oder UDP benutzt wird?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Meistens nicht direkt, aber indirekt schon: ruckelt ein Videoanruf kurz statt komplett abzubrechen, ist das oft ein Zeichen für UDP im Hintergrund.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Lädt dagegen eine Webseite einfach etwas länger, statt Teile davon wegzulassen, spricht das eher für die Vollständigkeitsgarantie von TCP.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Fassen wir die Begriffe von heute noch einmal als Liste zusammen.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Gibt es einen guten Merksatz, um sich Poststation, TCP und UDP nicht zu verwechseln?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein guter Merksatz: die Poststation bringt das Paket weiter, TCP zählt und bestätigt jedes einzelne Paket, UDP schickt es einfach los und schaut nicht zurück.", "isKeySentence": false, "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Datenpaket: ein kleines Stück einer größeren Nachricht, das für sich allein über das Netzwerk verschickt werden kann.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Poststation: ein Gerät im Netzwerk, das ein Datenpaket entgegennimmt und auf dem besten bekannten Weg weiterschickt.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "TCP: ein Verfahren, das jedes Datenpaket bestätigen lässt und fehlende oder falsch sortierte Pakete automatisch nachfordert.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "UDP: ein Verfahren, das Datenpakete einfach verschickt, ohne auf eine Bestätigung zu warten oder verlorene Pakete nachzufordern.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann ein Datenpaket auf seinem Weg eigentlich auch beschädigt statt nur verloren gehen?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, das kann vorkommen, etwa durch eine kurze Störung auf der Leitung. Deshalb trägt jedes Datenpaket zusätzlich eine kleine Prüfsumme mit. Damit kann die empfangende Seite erkennen, ob das Paket unterwegs verändert wurde. Ein beschädigtes Paket wird dann wie ein verlorenes Paket behandelt und bei Bedarf erneut angefordert.",
+      "role": "faq",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "text": "Warum nimmt nicht einfach jedes Paket immer automatisch den allerkürzesten Weg zum Ziel?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Der kürzeste Weg ist nicht immer der schnellste, wenn er gerade überlastet ist, ähnlich wie eine kurze Straße, die im Stau steht. Jede Poststation wählt deshalb den aus ihrer aktuellen Sicht besten, nicht zwingend geografisch kürzesten Weg, und diese Einschätzung kann sich von Minute zu Minute ändern.",
+      "role": "faq",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "text": "Braucht jede Art von Anwendung TCP, oder gibt es auch Anwendungen ganz ohne TCP oder UDP?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Fast jede alltägliche Anwendung nutzt eines der beiden Verfahren, weil beide auf demselben grundlegenden Konzept von Datenpaketen aufbauen. Für sehr spezielle Zwecke gibt es zwar noch weitere, seltenere Verfahren, die spielen im Alltag eines Nutzers aber praktisch keine Rolle.",
+      "role": "faq",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "text": "Zeigt traceroute wirklich jede einzelne Poststation an, ganz ohne eine einzige Lücke?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Meistens ja, aber nicht immer lückenlos: manche Poststationen antworten aus Sicherheitsgründen absichtlich nicht auf die Testanfrage von traceroute. In so einem Fall zeigt die Liste an dieser Stelle einfach drei Sternchen statt eines Namens, der Rest des Weges bleibt aber trotzdem sichtbar.",
+      "role": "faq",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "text": "Ist es normal, dass ping manchmal eine Antwort komplett verpasst, obwohl die Internetverbindung sonst gut funktioniert?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, ein einzelner verpasster Ping ist meist kein Grund zur Sorge, weil auch ping-Pakete gelegentlich ganz normal unterwegs verloren gehen können. Erst wenn viele Anfragen hintereinander ohne Antwort bleiben, deutet das auf ein echtes Problem mit der Verbindung hin.",
+      "role": "faq",
+      "isKeySentence": false
+    }
+  ],
+  "practiceExample": {
+    "text": "Der Client aus resilient-ws-client zeigt dasselbe Grundprinzip wie TCP, nur auf einer höheren Ebene: statt einzelner Datenpakete bestätigt er ganze Nachrichten. Nicht bestätigte Nachrichten bleiben in einer Warteliste (einer Map) und werden nach einem Wiederverbinden automatisch erneut gesendet, genau wie TCP ein unbestätigtes Datenpaket erneut schickt. Der Zustandsautomat mit vier Zuständen macht dabei jederzeit sichtbar, ob gerade überhaupt ein verlässlicher Weg zum Server besteht, so wie ping und traceroute sichtbar machen, ob und wie ein Ziel im Netzwerk erreichbar ist.",
+    "repoNote": "repo-resilient-ws-client",
+    "location": "src/index.ts:144,164-174,229-232 (Sendewarteschlange mit Bestätigung, dasselbe Grundprinzip wie TCP)"
+  },
+  "quiz": [
+    {
+      "question": "Warum wird eine größere Nachricht im Internet in mehrere Datenpakete zerlegt?",
+      "area": "Datenpakete",
+      "options": [
+        {
+          "text": "Kleine Pakete passen leichter durch ein überfülltes Netzwerk, und geht eines verloren, muss nur dieses eine erneut geschickt werden.",
+          "isCorrect": true,
+          "explanation": "Genau das sind die beiden in der Lektion genannten Gründe."
+        },
+        {
+          "text": "Weil ein einzelnes großes Paket ganz grundsätzlich rein technisch niemals über das gesamte weltweite Internet verschickt werden dürfte, egal wie klein der Inhalt eigentlich ist.",
+          "isCorrect": false,
+          "explanation": "Das ist keine technische Unmöglichkeit, sondern eine bewusste, sinnvolle Entscheidung für kleinere Pakete."
+        },
+        {
+          "text": "Weil jedes Datenpaket sonst automatisch doppelt so lange zum Ziel bräuchte.",
+          "isCorrect": false,
+          "explanation": "Das war nicht der in der Lektion genannte Grund für das Zerlegen."
+        },
+        {
+          "text": "Weil nur kleine Pakete überhaupt eine IP-Adresse tragen dürfen.",
+          "isCorrect": false,
+          "explanation": "Die IP-Adresse hat mit der Paketgröße nichts zu tun."
+        }
+      ]
+    },
+    {
+      "question": "Was ist ein Datenpaket?",
+      "area": "Datenpakete",
+      "options": [
+        {
+          "text": "Ein kleines Stück einer größeren Nachricht, das für sich allein über das Netzwerk verschickt werden kann.",
+          "isCorrect": true,
+          "explanation": "Genau das ist die Definition des Datenpakets."
+        },
+        {
+          "text": "Ein anderes Wort für eine komplette IP-Adresse.",
+          "isCorrect": false,
+          "explanation": "Ein Datenpaket ist ein Nachrichtenstück, keine Adresse."
+        },
+        {
+          "text": "Ein Gerät, das im gesamten Netzwerk ausschließlich fremde Pakete weiterleitet, ohne dabei jemals selbst welche zu enthalten.",
+          "isCorrect": false,
+          "explanation": "Das beschreibt eher eine Poststation, nicht das Datenpaket selbst."
+        },
+        {
+          "text": "Der Name eines bestimmten Ports für Postdienste.",
+          "isCorrect": false,
+          "explanation": "Ein Datenpaket ist keine Portnummer."
+        }
+      ]
+    },
+    {
+      "question": "Welches Alltagsbild passt am besten zu einer Poststation im Netzwerk?",
+      "area": "Datenpakete",
+      "options": [
+        {
+          "text": "Eine Raststätte auf einer langen Autoreise, die den nächsten Hinweis für die Weiterfahrt gibt.",
+          "isCorrect": true,
+          "explanation": "Genau dieses Bild wurde für die Poststation verwendet."
+        },
+        {
+          "text": "Ein einzelner Briefumschlag mit einem Kapitel eines Buches darin.",
+          "isCorrect": false,
+          "explanation": "Der Umschlag entspricht eher dem Datenpaket, nicht der Poststation."
+        },
+        {
+          "text": "Eine Postkarte, die ohne Empfangsbestätigung verschickt wird.",
+          "isCorrect": false,
+          "explanation": "Das Bild der Postkarte wurde für UDP verwendet, nicht für eine Poststation."
+        },
+        {
+          "text": "Das gesamte Zielland der langen Reise am Ende, ganz ohne jeden einzelnen Zwischenstopp unterwegs.",
+          "isCorrect": false,
+          "explanation": "Eine Poststation ist gerade ein einzelner Zwischenstopp, nicht das gesamte Ziel."
+        }
+      ]
+    },
+    {
+      "question": "Kennt eine einzelne Poststation laut der Lektion den kompletten Weg eines Pakets von Anfang bis Ende?",
+      "area": "Datenpakete",
+      "options": [
+        {
+          "text": "Nein, sie kennt nur ihre eigene kleine Umgebung und trifft dort jeweils eine lokale Entscheidung.",
+          "isCorrect": true,
+          "explanation": "Genau das wurde in der Lektion so beschrieben."
+        },
+        {
+          "text": "Ja, jede Poststation kennt zwingend den kompletten Weg schon im Voraus.",
+          "isCorrect": false,
+          "explanation": "Das Gegenteil wurde in der Lektion erklärt."
+        },
+        {
+          "text": "Nur die allererste Poststation ganz am Anfang kennt angeblich den kompletten Weg, während alle anderen danach nur zufällig raten.",
+          "isCorrect": false,
+          "explanation": "Auch die erste Poststation kennt nur ihre eigene Umgebung, kein Raten."
+        },
+        {
+          "text": "Das hängt ausschließlich davon ab, ob TCP oder UDP verwendet wird.",
+          "isCorrect": false,
+          "explanation": "Das Wissen einer Poststation über den Weg hängt nicht von TCP oder UDP ab."
+        }
+      ]
+    },
+    {
+      "question": "Warum kann es passieren, dass ein später losgeschicktes Paket vor einem früher losgeschickten Paket ankommt?",
+      "area": "Datenpakete",
+      "options": [
+        {
+          "text": "Weil unterschiedliche Pakete derselben Nachricht unterschiedliche, unterschiedlich schnelle Wege nehmen können.",
+          "isCorrect": true,
+          "explanation": "Genau das erklärt, warum die Reihenfolge durcheinandergeraten kann."
+        },
+        {
+          "text": "Weil das Verfahren UDP ganz grundsätzlich in jedem einzigen denkbaren Fall immer viel schneller arbeitet als das Verfahren TCP.",
+          "isCorrect": false,
+          "explanation": "Das war nicht der in der Lektion genannte Grund für diesen konkreten Effekt."
+        },
+        {
+          "text": "Weil das später verschickte Paket automatisch kleiner gemacht wird.",
+          "isCorrect": false,
+          "explanation": "Die Paketgröße hat mit der Ankunftsreihenfolge in diesem Beispiel nichts zu tun."
+        },
+        {
+          "text": "Weil eine Poststation Pakete grundsätzlich nach dem Zufallsprinzip vertauscht.",
+          "isCorrect": false,
+          "explanation": "Es ist kein absichtliches Vertauschen, sondern eine Folge unterschiedlicher Wege."
+        }
+      ]
+    },
+    {
+      "question": "Wofür sorgt TCP?",
+      "area": "Datenpakete",
+      "options": [
+        {
+          "text": "Es bestätigt jedes Paket und fordert fehlende oder falsch sortierte Pakete automatisch erneut an.",
+          "isCorrect": true,
+          "explanation": "Genau das ist die Aufgabe von TCP."
+        },
+        {
+          "text": "Es verschickt sämtliche Pakete grundsätzlich vollständig ohne jede einzelne Bestätigung, einzig und allein für maximale Geschwindigkeit.",
+          "isCorrect": false,
+          "explanation": "Das beschreibt UDP, nicht TCP."
+        },
+        {
+          "text": "Es sorgt dafür, dass jedes Paket automatisch eine eigene IP-Adresse bekommt.",
+          "isCorrect": false,
+          "explanation": "Die IP-Adresse gehört zum Computer, nicht zu einzelnen Paketen."
+        },
+        {
+          "text": "Es wählt für jedes Paket automatisch den geografisch kürzesten Weg.",
+          "isCorrect": false,
+          "explanation": "Die Wegwahl übernehmen die Poststationen, nicht TCP selbst."
+        }
+      ]
+    },
+    {
+      "question": "Wofür sorgt UDP?",
+      "area": "Datenpakete",
+      "options": [
+        {
+          "text": "Es verschickt Pakete einfach, ohne auf eine Bestätigung zu warten oder verlorene Pakete nachzufordern.",
+          "isCorrect": true,
+          "explanation": "Genau das ist die Definition von UDP."
+        },
+        {
+          "text": "Es garantiert vollständig und unter allen erdenklichen Umständen, dass niemals auch nur ein einziges Paket verloren gehen kann.",
+          "isCorrect": false,
+          "explanation": "Genau diese Garantie fehlt bei UDP bewusst, im Gegensatz zu TCP."
+        },
+        {
+          "text": "Es sortiert ankommende Pakete grundsätzlich in die richtige Reihenfolge.",
+          "isCorrect": false,
+          "explanation": "Diese automatische Sortierung ist eine Aufgabe von TCP, nicht von UDP."
+        },
+        {
+          "text": "Es funktioniert ausschließlich innerhalb eines einzigen Heimnetzwerks.",
+          "isCorrect": false,
+          "explanation": "UDP ist nicht auf ein einzelnes Heimnetzwerk beschränkt."
+        }
+      ]
+    },
+    {
+      "question": "Warum wird bei einem Videoanruf laut der Lektion oft UDP statt TCP eingesetzt?",
+      "area": "Datenpakete",
+      "options": [
+        {
+          "text": "Weil ein erneutes Anfordern eines verlorenen Bildpakets das Bild ohnehin nur unnötig verzögern würde.",
+          "isCorrect": true,
+          "explanation": "Genau das war der in der Lektion genannte Grund."
+        },
+        {
+          "text": "Weil UDP grundsätzlich die einzige Möglichkeit für Videoübertragungen ist.",
+          "isCorrect": false,
+          "explanation": "Es gibt auch andere technische Möglichkeiten, UDP ist nur oft die passendere Wahl."
+        },
+        {
+          "text": "Weil TCP für Videoanrufe technisch überhaupt nicht funktionieren würde.",
+          "isCorrect": false,
+          "explanation": "TCP würde technisch funktionieren, wäre aber für diesen Zweck unpassender."
+        },
+        {
+          "text": "Weil bei einem Videoanruf niemals Datenpakete verloren gehen können.",
+          "isCorrect": false,
+          "explanation": "Auch bei UDP können Pakete verloren gehen, das wird hier bewusst in Kauf genommen."
+        }
+      ]
+    },
+    {
+      "question": "Was zeigt das Praxisbeispiel aus resilient-ws-client über das Verhältnis zwischen dieser Lektion und der Verbindung aus einer früheren Lektion?",
+      "area": "Datenpakete",
+      "options": [
+        {
+          "text": "Bestätigen und bei Bedarf erneut Senden ist ein Grundprinzip, das auf mehreren Ebenen wiederkehrt, nicht nur bei einzelnen Datenpaketen.",
+          "isCorrect": true,
+          "explanation": "Genau das war die zentrale Erkenntnis aus diesem Praxisbeispiel."
+        },
+        {
+          "text": "Der Client aus dem veröffentlichten Repo ersetzt TCP dabei vollständig durch ein eigenes, komplett neu erfundenes Verfahren.",
+          "isCorrect": false,
+          "explanation": "Der Client baut auf demselben Grundprinzip auf, ersetzt TCP aber nicht."
+        },
+        {
+          "text": "Der Client aus dem veröffentlichten Repo funktioniert dabei ausschließlich mit dem Verfahren UDP und niemals mit dem Verfahren TCP.",
+          "isCorrect": false,
+          "explanation": "Das war nicht die Aussage des Praxisbeispiels."
+        },
+        {
+          "text": "Der Client verzichtet komplett darauf, jemals eine Nachricht erneut zu senden.",
+          "isCorrect": false,
+          "explanation": "Genau das Gegenteil beschreibt das Praxisbeispiel."
+        }
+      ]
+    },
+    {
+      "question": "Was macht das Werkzeug ping?",
+      "area": "Datenpakete",
+      "options": [
+        {
+          "text": "Es schickt ein Test-Datenpaket an eine Adresse und misst, wie lange die Antwort zurückbraucht.",
+          "isCorrect": true,
+          "explanation": "Genau das ist die Aufgabe von ping."
+        },
+        {
+          "text": "Es zeigt dauerhaft und ganz automatisch jede einzelne Poststation auf dem gesamten langen Weg zu einem entfernten Ziel an.",
+          "isCorrect": false,
+          "explanation": "Das leistet traceroute, nicht ping."
+        },
+        {
+          "text": "Es zerlegt eine große Nachricht automatisch in viele kleine Datenpakete.",
+          "isCorrect": false,
+          "explanation": "Das Zerlegen passiert unabhängig davon, ob ping benutzt wird oder nicht."
+        },
+        {
+          "text": "Es schaltet automatisch von UDP auf TCP um, sobald ein Paket verloren geht.",
+          "isCorrect": false,
+          "explanation": "Ping wählt oder wechselt kein Übertragungsverfahren."
+        }
+      ]
+    },
+    {
+      "question": "Was macht traceroute im Unterschied zu ping?",
+      "area": "Datenpakete",
+      "options": [
+        {
+          "text": "Es zeigt zusätzlich jede einzelne Poststation auf dem Weg zum Ziel, mit der jeweiligen Zeit dorthin.",
+          "isCorrect": true,
+          "explanation": "Genau das ist der Unterschied zu ping, der nur das Ziel selbst testet."
+        },
+        {
+          "text": "Es kann ausschließlich innerhalb des eigenen Heimnetzwerks benutzt werden.",
+          "isCorrect": false,
+          "explanation": "Traceroute funktioniert auch über das eigene Heimnetzwerk hinaus."
+        },
+        {
+          "text": "Es verschickt grundsätzlich größere Datenpakete als ping.",
+          "isCorrect": false,
+          "explanation": "Die Paketgröße ist nicht der beschriebene Unterschied zwischen beiden Werkzeugen."
+        },
+        {
+          "text": "Es ersetzt vollständig TCP und UDP durch ein eigenes drittes Verfahren.",
+          "isCorrect": false,
+          "explanation": "Traceroute ist ein Diagnosewerkzeug, kein Ersatz für TCP oder UDP."
+        }
+      ]
+    },
+    {
+      "question": "Was bedeuten drei Sternchen in einer traceroute-Ausgabe laut der Lektion?",
+      "area": "Datenpakete",
+      "options": [
+        {
+          "text": "Eine Poststation an dieser Stelle antwortet aus Sicherheitsgründen absichtlich nicht auf die Testanfrage.",
+          "isCorrect": true,
+          "explanation": "Genau das wurde in der Lektion als Grund für die Sternchen erklärt."
+        },
+        {
+          "text": "Der gesamte Weg ist an dieser Stelle für immer komplett unterbrochen.",
+          "isCorrect": false,
+          "explanation": "Der Weg kann trotz der Sternchen dahinter weiterhin sichtbar sein."
+        },
+        {
+          "text": "Das Zielgerät wurde bereits erfolgreich erreicht und die Messung ist beendet.",
+          "isCorrect": false,
+          "explanation": "Sternchen bedeuten fehlende Antwort, nicht erfolgreiches Erreichen des Ziels."
+        },
+        {
+          "text": "Die eigene Internetverbindung ist komplett ausgefallen.",
+          "isCorrect": false,
+          "explanation": "Das ist keine zwingende Ursache für Sternchen an einer einzelnen Stelle."
+        }
+      ]
+    },
+    {
+      "question": "Welche Aussage über Ping-Antworten stimmt laut der Lektion?",
+      "area": "Datenpakete",
+      "options": [
+        {
+          "text": "Ein einzelner verpasster Ping ist meist kein Grund zur Sorge, erst viele hintereinander deuten auf ein echtes Problem hin.",
+          "isCorrect": true,
+          "explanation": "Genau das wurde in der Lektion so erklärt."
+        },
+        {
+          "text": "Jeder verpasste Ping bedeutet automatisch einen kompletten Ausfall der Internetverbindung.",
+          "isCorrect": false,
+          "explanation": "Ein einzelner verpasster Ping ist normal und kein Beweis für einen Totalausfall."
+        },
+        {
+          "text": "Ping-Pakete können laut der Lektion niemals verloren gehen, im Unterschied zu gewöhnlichen Datenpaketen.",
+          "isCorrect": false,
+          "explanation": "Auch Ping-Pakete können ganz normal verloren gehen."
+        },
+        {
+          "text": "Verpasste Ping-Antworten treten ausschließlich bei der Nutzung von TCP auf.",
+          "isCorrect": false,
+          "explanation": "Das hat mit der Wahl zwischen TCP und UDP nichts zu tun."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Öffne auf deinem Computer die Kommandozeile (unter Windows die Eingabeaufforderung, unter macOS oder Linux das Terminal). Gib den Befehl ping gefolgt von einer bekannten Adresse ein, zum Beispiel ping wikipedia.org, und beobachte die Antwortzeiten. Führe danach denselben Test mit traceroute (unter Windows tracert) aus, also zum Beispiel tracert wikipedia.org, und beobachte die Liste der Zwischenstationen.",
+    "expectation": "Eine Ausgabe von ping mit mehreren Antwortzeiten in Millisekunden, und eine Ausgabe von traceroute oder tracert mit einer Liste mehrerer Zwischenstationen auf dem Weg zum Ziel.",
+    "checklist": [
+      "ping mit einer bekannten Adresse erfolgreich ausgeführt",
+      "Mindestens drei Antwortzeiten aus der ping-Ausgabe notiert",
+      "traceroute oder tracert mit derselben Adresse erfolgreich ausgeführt",
+      "Anzahl der sichtbaren Zwischenstationen aus der Ausgabe notiert"
+    ]
+  },
+  "audio": {
+    "file": "M01-03-03.mp3",
+    "durationSeconds": 1560,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Kann ein Datenpaket auf seinem Weg eigentlich auch beschädigt statt nur verloren gehen?",
+      "answer": "Ja, das kann vorkommen, etwa durch eine kurze Störung auf der Leitung. Deshalb trägt jedes Datenpaket zusätzlich eine kleine Prüfsumme mit. Damit kann die empfangende Seite erkennen, ob das Paket unterwegs verändert wurde. Ein beschädigtes Paket wird dann wie ein verlorenes Paket behandelt und bei Bedarf erneut angefordert."
+    },
+    {
+      "question": "Warum nimmt nicht einfach jedes Paket immer automatisch den allerkürzesten Weg zum Ziel?",
+      "answer": "Der kürzeste Weg ist nicht immer der schnellste, wenn er gerade überlastet ist, ähnlich wie eine kurze Straße, die im Stau steht. Jede Poststation wählt deshalb den aus ihrer aktuellen Sicht besten, nicht zwingend geografisch kürzesten Weg, und diese Einschätzung kann sich von Minute zu Minute ändern."
+    },
+    {
+      "question": "Braucht jede Art von Anwendung TCP, oder gibt es auch Anwendungen ganz ohne TCP oder UDP?",
+      "answer": "Fast jede alltägliche Anwendung nutzt eines der beiden Verfahren, weil beide auf demselben grundlegenden Konzept von Datenpaketen aufbauen. Für sehr spezielle Zwecke gibt es zwar noch weitere, seltenere Verfahren, die spielen im Alltag eines Nutzers aber praktisch keine Rolle."
+    },
+    {
+      "question": "Zeigt traceroute wirklich jede einzelne Poststation an, ganz ohne eine einzige Lücke?",
+      "answer": "Meistens ja, aber nicht immer lückenlos: manche Poststationen antworten aus Sicherheitsgründen absichtlich nicht auf die Testanfrage von traceroute. In so einem Fall zeigt die Liste an dieser Stelle einfach drei Sternchen statt eines Namens, der Rest des Weges bleibt aber trotzdem sichtbar."
+    },
+    {
+      "question": "Ist es normal, dass ping manchmal eine Antwort komplett verpasst, obwohl die Internetverbindung sonst gut funktioniert?",
+      "answer": "Ja, ein einzelner verpasster Ping ist meist kein Grund zur Sorge, weil auch ping-Pakete gelegentlich ganz normal unterwegs verloren gehen können. Erst wenn viele Anfragen hintereinander ohne Antwort bleiben, deutet das auf ein echtes Problem mit der Verbindung hin."
+    }
+  ]
+}

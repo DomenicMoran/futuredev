@@ -24,6 +24,16 @@ describe('splitSentences', () => {
     expect(result).toHaveLength(1);
   });
 
+  it('behandelt "u. a." nicht als Satzende (zwei buchstabierte Einzelbuchstaben)', () => {
+    const result = splitSentences('Es gibt Eingabegeräte, u. a. Tastatur und Maus.');
+    expect(result).toHaveLength(1);
+  });
+
+  it('behandelt "bzw." nicht als Satzende', () => {
+    const result = splitSentences('Das Programm bzw. der Code läuft auf dem Computer.');
+    expect(result).toHaveLength(1);
+  });
+
   it('gibt eine leere Liste für einen leeren Text zurück', () => {
     expect(splitSentences('')).toEqual([]);
   });

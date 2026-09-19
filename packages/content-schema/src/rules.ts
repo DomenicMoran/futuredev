@@ -267,20 +267,41 @@ const MINIMUM_WORD_COUNT = 2500;
 // liegt (siehe content/README.md).
 const MINIMUM_WORD_COUNT_ENFORCED_FROM = '0.2.0';
 
+// Benannte Ausnahmeliste (AP-4.2, Auftrag Punkt 5): Lektionen, die trotz
+// Manifest-Version 0.2.0 (und damit scharf gestellter Mindestumfang-Regel)
+// unter 2500 Wörtern bleiben duerfen, mit Begruendung. Nur M01-01-01 ist
+// hier eingetragen: sie wurde vor AW-045 geschrieben und wird in der
+// Audio-Welle erweitert, statt jetzt kuenstlich mit Fuellsaetzen gestreckt zu
+// werden. Jede neue Lektion muss den Mindestumfang von Anfang an einhalten.
+const MINIMUM_WORD_COUNT_EXCEPTIONS: Record<string, string> = {
+  'M01-01-01': 'vor AW-045 geschrieben, wird in der Audio-Welle erweitert',
+};
+
 /**
  * Task 2d (AP-4.1): Mindestumfang 2500 Wörter je Lektion, gezählt über
  * speechBlocks[].text (der tatsächlich gesprochene Text). Warnung statt
- * Fehler, solange die Manifest-Version unter 0.2.0 liegt.
+ * Fehler, solange die Manifest-Version unter 0.2.0 liegt, danach Fehler,
+ * außer für eine Lektion aus der benannten Ausnahmeliste.
  */
 export function checkMinimumWordCount(lesson: Lesson, manifestVersion: string): RuleViolation[] {
   const words = lesson.speechBlocks.reduce((sum, b) => sum + countWords(b.text), 0);
   if (words >= MINIMUM_WORD_COUNT) return [];
-  const isError = semverGte(manifestVersion, MINIMUM_WORD_COUNT_ENFORCED_FROM);
+  const exceptionReason = MINIMUM_WORD_COUNT_EXCEPTIONS[lesson.id];
+  const enforced = semverGte(manifestVersion, MINIMUM_WORD_COUNT_ENFORCED_FROM);
+  if (exceptionReason !== undefined) {
+    return [
+      {
+        rule: 'mindestumfang-2500-woerter',
+        message: `${lesson.id}: ${words} Wörter unter dem Mindestumfang von ${MINIMUM_WORD_COUNT}, Ausnahme: ${exceptionReason}`,
+        severity: 'warning',
+      },
+    ];
+  }
   return [
     {
       rule: 'mindestumfang-2500-woerter',
       message: `${lesson.id}: ${words} Wörter unter dem Mindestumfang von ${MINIMUM_WORD_COUNT} (Manifest-Version ${manifestVersion})`,
-      severity: isError ? 'error' : 'warning',
+      severity: enforced ? 'error' : 'warning',
     },
   ];
 }
@@ -289,18 +310,41 @@ function escapeRegExp(value: string): string {
   return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
+// `\b` kennt nur ASCII-Wortzeichen: bei einem Begriff mit Umlaut ("öffentliche
+// Adresse", "Änderung") liegt die Grenze zwischen Nicht-Wort und Umlaut nicht
+// dort, wo \b sie erwartet, und der Treffer geht verloren (feedback der
+// Autoren, AP-4.2). Ersetzt durch Lookaround auf \p{L}/\p{N} (Unicode-fähig
+// mit Flag 'u'), das Buchstaben und Ziffern jeder Sprache als Wortzeichen
+// behandelt.
+const WORD_CHAR = '\\p{L}\\p{N}';
+
+// Ein Kürzel wie "POST" oder "GET" ist ein eigenes, grossgeschriebenes Wort
+// (die HTTP-Methode), das mit einem gewoehnlichen deutschen Wort gleichen
+// Namens kollidieren kann ("Post" als Anrede fuer den Postboten). Groß/Klein
+// egal ist fuer normale Begriffe richtig, wuerde hier aber einen falschen
+// Treffer erzeugen. Kuerzel (rein grossgeschriebene Buchstaben/Ziffern/Bindestrich,
+// mindestens zwei Zeichen) werden deshalb Gross-/Kleinschreibung-sensitiv
+// gesucht, alle anderen Begriffe weiterhin ohne Ruecksicht auf Gross-/
+// Kleinschreibung.
+function isAcronym(word: string): boolean {
+  return /^[A-Z][A-Z0-9-]+$/.test(word);
+}
+
 function textContainsWord(text: string, word: string): boolean {
-  const pattern = new RegExp(`\\b${escapeRegExp(word)}\\b`, 'iu');
+  const flags = isAcronym(word) ? 'u' : 'iu';
+  const pattern = new RegExp(`(?<![${WORD_CHAR}])${escapeRegExp(word)}(?![${WORD_CHAR}])`, flags);
   return pattern.test(text);
 }
 
 /**
  * Wortstamm-Suche (Regel 13): der Begriff muss am Wortanfang stehen
  * (Wortgrenze davor), darf aber mit weiteren Buchstaben enden (z. B.
- * "Festplatten" erfuellt den Begriff "Festplatte"). Groß/Klein egal.
+ * "Festplatten" erfuellt den Begriff "Festplatte"). Groß/Klein egal, außer
+ * bei einem Kürzel (siehe `isAcronym`).
  */
 function textStartsWithWordStem(text: string, word: string): boolean {
-  const pattern = new RegExp(`\\b${escapeRegExp(word)}`, 'iu');
+  const flags = isAcronym(word) ? 'u' : 'iu';
+  const pattern = new RegExp(`(?<![${WORD_CHAR}])${escapeRegExp(word)}`, flags);
   return pattern.test(text);
 }
 
@@ -323,9 +367,104 @@ function lessonFullText(lesson: Lesson): string {
  * Braucht die vollständige Lektionsliste, um zu wissen, wann welcher Begriff
  * eingeführt wurde.
  */
+/**
+ * Transitive Voraussetzungshülle: die Menge aller Lektionen, die über
+ * `prerequisites` erreichbar sind (direkt oder über Ketten), plus die
+ * Lektion selbst. Vorher prüfte checkTermOrder nur die direkt gelisteten
+ * `prerequisites`, weshalb Autoren jede indirekte Voraussetzung zusätzlich
+ * einzeln eintragen mussten (feedback der Autoren, AP-4.2). Setzt
+ * `checkPrerequisitesAreEarlier` voraus, um Endlosschleifen bei einem Zyklus
+ * auszuschließen; robust dagegen zusätzlich über `visited`.
+ */
+function transitivePrerequisites(lessonId: string, allLessons: Lesson[]): Set<string> {
+  const byId = new Map(allLessons.map((l) => [l.id, l]));
+  const visited = new Set<string>([lessonId]);
+  const stack = [lessonId];
+  while (stack.length > 0) {
+    const current = stack.pop();
+    if (current === undefined) continue;
+    const lesson = byId.get(current);
+    if (!lesson) continue;
+    for (const prereq of lesson.prerequisites) {
+      if (!visited.has(prereq)) {
+        visited.add(prereq);
+        stack.push(prereq);
+      }
+    }
+  }
+  return visited;
+}
+
+/** Voraussetzungen dürfen nur auf tatsächlich vorhandene Lektionen verweisen. */
+export function checkPrerequisitesExist(lesson: Lesson, allLessons: Lesson[]): RuleViolation[] {
+  const ids = new Set(allLessons.map((l) => l.id));
+  const violations: RuleViolation[] = [];
+  for (const p of lesson.prerequisites) {
+    if (!ids.has(p)) {
+      violations.push({
+        rule: 'voraussetzung-existiert',
+        message: `${lesson.id}: Voraussetzung "${p}" verweist auf keine vorhandene Lektion`,
+      });
+    }
+  }
+  return violations;
+}
+
+/**
+ * Lernpfad-Reihenfolge bleibt die Kennungsreihenfolge: eine Lektion setzt nie
+ * eine spätere oder gleiche Kennung voraus. Kennungen haben feste Breite
+ * (`M00-00-00`), daher entspricht String-Vergleich der Reihenfolge.
+ */
+export function checkPrerequisitesAreEarlier(lesson: Lesson): RuleViolation[] {
+  const violations: RuleViolation[] = [];
+  for (const p of lesson.prerequisites) {
+    if (p >= lesson.id) {
+      violations.push({
+        rule: 'voraussetzung-liegt-frueher',
+        message: `${lesson.id}: Voraussetzung "${p}" ist keine frühere Kennung als die Lektion selbst`,
+      });
+    }
+  }
+  return violations;
+}
+
+/**
+ * Keine Zyklen in den Voraussetzungsketten. Wird durch
+ * `checkPrerequisitesAreEarlier` bereits ausgeschlossen (eine streng
+ * aufsteigende Kette kann nicht zu sich selbst zurückführen), bleibt aber als
+ * eigene, von dieser Annahme unabhängige Prüfung bestehen (Task 3,
+ * inhaltsformat.md).
+ */
+export function checkNoPrerequisiteCycles(lesson: Lesson, allLessons: Lesson[]): RuleViolation[] {
+  const byId = new Map(allLessons.map((l) => [l.id, l]));
+  const visiting = new Set<string>();
+
+  function hasCycle(id: string): boolean {
+    if (visiting.has(id)) return true;
+    const current = byId.get(id);
+    if (!current) return false;
+    visiting.add(id);
+    for (const prereq of current.prerequisites) {
+      if (hasCycle(prereq)) return true;
+    }
+    visiting.delete(id);
+    return false;
+  }
+
+  if (hasCycle(lesson.id)) {
+    return [
+      {
+        rule: 'keine-zyklen',
+        message: `${lesson.id}: Voraussetzungskette enthält einen Zyklus`,
+      },
+    ];
+  }
+  return [];
+}
+
 export function checkTermOrder(lesson: Lesson, allLessons: Lesson[]): RuleViolation[] {
   const violations: RuleViolation[] = [];
-  const allowedLessonIds = new Set([lesson.id, ...lesson.prerequisites]);
+  const allowedLessonIds = transitivePrerequisites(lesson.id, allLessons);
   const ownTerms = new Set(lesson.terms.map((t) => t.term.toLowerCase()));
   const text = lessonFullText(lesson);
 
@@ -388,6 +527,9 @@ export function checkAllRules(lesson: Lesson, allLessons: Lesson[]): RuleViolati
     ...checkTermsHaveImageOrExample(lesson),
     ...checkTermBlockFollowedByExample(lesson),
     ...checkSentenceLength(lesson),
+    ...checkPrerequisitesExist(lesson, allLessons),
+    ...checkPrerequisitesAreEarlier(lesson),
+    ...checkNoPrerequisiteCycles(lesson, allLessons),
     ...checkTermOrder(lesson, allLessons),
     ...checkDistractorsSameArea(lesson, allLessons),
   ];

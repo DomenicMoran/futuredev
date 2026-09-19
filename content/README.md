@@ -62,14 +62,34 @@ Begriff aus einem fremden Modul ist, die `role: "faq"`-Blöcke spiegeln die
 `terms`, je Begriff aus `terms` nennt ihn mindestens ein `image`- oder
 `example`-Block wörtlich, jeder `term`-Block hat innerhalb der nächsten drei
 Blöcke ein `example` oder `image`, die mittlere Satzlänge über alle
-Sprechblöcke liegt unter 20 Wörtern und kein Satz über 35 Wörtern (Regeln aus
-der Vault-Notiz `10_Projekte/FutureDev/Wissen/inhaltsformat.md`, Prüfregeln 1
-bis 14). Zusätzlich meldet der Lauf eine Warnung, wenn eine Lektion unter 2.500
-Wörtern gesprochenem Text bleibt; das wird erst ab Manifest-Version 0.2.0 zum
-Fehler, weil `M01-01-01` selbst noch darunter liegt (siehe
-`checkMinimumWordCount` in `packages/content-schema/src/rules.ts`). Der Lauf
-endet mit Rückgabewert 1 bei jeder Fehler-Verletzung, sonst mit 0 und einer
-Zusammenfassung aus Lektionen-, Fragen- und Warnungszahl.
+Sprechblöcke liegt unter 20 Wörtern und kein Satz über 35 Wörtern, keine
+Voraussetzung verweist auf eine spätere oder nicht vorhandene Lektion, keine
+Voraussetzungskette enthält einen Zyklus (Regeln aus der Vault-Notiz
+`10_Projekte/FutureDev/Wissen/inhaltsformat.md`, Prüfregeln 1 bis 14).
+Zusätzlich meldet der Lauf einen Fehler, wenn eine Lektion unter 2.500 Wörtern
+gesprochenem Text bleibt, sobald das Manifest die Version 0.2.0 oder höher
+trägt (ab dieser Version gilt der Mindestumfang als Pflicht); einzige
+benannte Ausnahme ist `M01-01-01` (siehe `MINIMUM_WORD_COUNT_EXCEPTIONS` in
+`packages/content-schema/src/rules.ts`), weil sie vor AW-045 geschrieben wurde
+und in der Audio-Welle erweitert wird. Der Lauf endet mit Rückgabewert 1 bei
+jeder Fehler-Verletzung, sonst mit 0 und einer Zusammenfassung aus Lektionen-,
+Fragen- und Warnungszahl.
+
+## Begriffs-Eigentümer
+
+Ein Begriff (`terms`) gehört genau einer Lektion: der frühesten Lektion in der
+Lernreihenfolge, die ihn wirklich erklärt (Fünf-Schritt-Muster, nicht nur ein
+beiläufiger Gebrauch). Jede spätere Lektion, die den Begriff weiter benutzt,
+lässt ihn im Text stehen (Wiederholung schadet nicht, AW-045), führt ihn aber
+nicht erneut unter `terms` und nennt ihn nicht im `terms_list`-Block; sie trägt
+stattdessen den Eigentümer, direkt oder über eine Kette, in `prerequisites`
+ein (die Begriffsreihenfolge-Prüfung aus `content:validate` folgt dieser Kette
+transitiv, siehe `checkTermOrder` in `packages/content-schema/src/rules.ts`).
+
+`pnpm content:terms` listet je Begriff alle Lektionen, die ihn unter `terms`
+einführen, markiert Kollisionen (mehr als eine Lektion) und nennt den
+Eigentümer. Vor dem Schreiben einer neuen Lektion damit prüfen, ob ein
+gebrauchter Begriff schon einen Eigentümer hat.
 
 ## Manifest
 
