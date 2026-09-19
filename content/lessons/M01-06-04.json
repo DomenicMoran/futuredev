@@ -1,0 +1,1059 @@
+{
+  "id": "M01-06-04",
+  "title": "Funktionen: ein Rezept, das man immer wieder benutzt",
+  "durationMinutes": 27,
+  "prerequisites": [
+    "M01-06-01",
+    "M01-06-02",
+    "M01-06-03"
+  ],
+  "terms": [
+    {
+      "term": "Code",
+      "definition": "geschriebene Anweisungen, die ein Rechner der Reihe nach ausführt."
+    },
+    {
+      "term": "JavaScript",
+      "definition": "die Programmiersprache, die in diesem Kurs benutzt wird."
+    },
+    {
+      "term": "Funktion",
+      "definition": "ein Stück Code mit einem Namen, das man immer wieder benutzen kann."
+    },
+    {
+      "term": "function",
+      "definition": "das Wort, mit dem man in JavaScript eine Funktion beginnt."
+    },
+    {
+      "term": "Parameter",
+      "definition": "eine Angabe, die eine Funktion beim Aufruf entgegennimmt."
+    },
+    {
+      "term": "return",
+      "definition": "das Wort, mit dem eine Funktion ein Ergebnis zurückgibt."
+    },
+    {
+      "term": "Aufruf",
+      "definition": "das Benutzen einer Funktion, mit ihrem Namen und runden Klammern."
+    },
+    {
+      "term": "Konsole",
+      "definition": "eine im Browser eingebaute Werkstatt, in der man einzelne Zeilen JavaScript sofort ausführen kann."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "text": "Stell dir eine Kaffeemaschine vor, die auf deiner Arbeitsplatte steht.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Du füllst Wasser und Kaffeepulver ein, drückst einen Knopf, und ein paar Sekunden später steht eine fertige Tasse Kaffee vor dir.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Du musst nicht jedes Mal neu erklären, wie die Maschine innen funktioniert. Du drückst nur den Knopf, und der Rest läuft von selbst ab.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Und was hat eine Kaffeemaschine mit Programmieren zu tun?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Fast alles. In dieser Lektion lernst du das wichtigste Werkzeug kennen, mit dem man im Code genau so einen Knopf baut: ein Stück Code, das man immer wieder benutzen kann, ohne es jedes Mal neu zu schreiben.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Bevor wir zum Knopf kommen, brauchen wir ein Wort für die Anweisungen selbst.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Geschriebene Anweisungen, die ein Rechner der Reihe nach ausführt, nennt man Code.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein Kochrezept ist auch eine Reihe von Anweisungen, Schritt für Schritt: zuerst Wasser aufsetzen, dann Nudeln hineingeben, dann zehn Minuten warten. Code ist genau das, nur für einen Rechner statt für eine Köchin, und in einer Sprache, die der Rechner versteht.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Code ist das Werkzeug, mit dem in dieser gesamten Lektion gearbeitet wird. Jede Funktion, über die wir gleich sprechen, ist Code.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Versteht der Rechner denn Deutsch, wenn ich ihm Anweisungen gebe?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Menschen sprechen viele verschiedene Sprachen, Deutsch, Englisch, Spanisch. Ein Rechner versteht keine davon direkt.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Damit ein Mensch dem Rechner trotzdem klare Anweisungen geben kann, gibt es eigene Sprachen, nur für Rechner gemacht, mit ganz festen Regeln, wo kein Wort zweideutig sein darf. So eine Sprache heißt Programmiersprache.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Die Programmiersprache, die wir in diesem Kurs benutzen, heißt JavaScript.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "JavaScript läuft zum Beispiel in jedem Browser, den du kennst, in Chrome genauso wie in Firefox oder Safari. Dort steuert JavaScript zum Beispiel, was passiert, wenn du irgendwo im Browser auf einen Knopf klickst.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Wir bleiben in diesem Kurs bei JavaScript, damit jedes Beispiel in derselben Sprache bleibt und du nicht zwei Sprachen gleichzeitig lernen musst.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Okay, und wo genau kommt jetzt die Kaffeemaschine ins Spiel?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Zurück zur Kaffeemaschine. Sie hat einen Knopf. Du drückst ihn, und die Maschine tut immer dieselben Schritte: Wasser erhitzen, durch das Pulver drücken, in die Tasse laufen lassen.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Im Code gibt es ein sehr ähnliches Werkzeug: ein Stück Code, das man einmal aufschreibt und danach beliebig oft wieder benutzt, ohne es erneut hinzuschreiben. Man gibt ihm nur einen Namen, so wie der Knopf an der Maschine einen Namen wie Start trägt.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "So ein wiederverwendbares Stück Code nennt man eine Funktion.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Eine Funktion, die aus einer Zahl in Kilometern eine Zahl in Meilen macht, schreibst du einmal. Danach benutzt du diese Funktion für jede beliebige Zahl, ohne die Rechenformel jedes Mal neu hinzuschreiben.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss ich mir jede Funktion selbst ausdenken, oder gibt es die schon fertig?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Beides. Manche Funktionen bringt JavaScript schon fertig mit, andere schreibst du selbst, genau für dein eigenes Problem. Eine eigene Funktion zu schreiben ist wie ein eigenes Rezept zu erfinden, statt nur ein vorhandenes nachzukochen.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Ohne Funktionen müsstest du denselben Code immer wieder abschreiben. Das macht den Code länger und unübersichtlicher, und einen Fehler musst du dann an vielen Stellen statt an einer einzigen Stelle beheben.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Wie sieht so eine Funktion in echtem Code überhaupt aus?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir ein Rezeptheft vor. Über jedem Rezept steht in großen Buchstaben ein Titel, zum Beispiel Nudelwasser kochen. Darunter stehen die Schritte.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "In JavaScript beginnt man eine Funktion mit einem bestimmten Wort, damit der Rechner sofort erkennt: jetzt kommt ein Rezept, keine einmalige Anweisung.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Dieses Wort ist function, buchstabiert f, u, n, c, t, i, o, n. Direkt danach kommt der Name, den du dir für die Funktion ausdenkst.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Eine Funktion, die eine Begrüßung baut, könnte function begruessen heißen. Wer den Code später liest, weiß schon am Namen, was die Funktion tut, ganz ohne sie auszuführen.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "function ist wie die Überschrift des Rezepts. Ohne dieses Wort weiß der Rechner nicht, dass hier ein wiederverwendbares Stück Code beginnt, statt einer einmaligen Anweisung.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Und wie sagt man der Funktion, mit welchen Werten sie arbeiten soll?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "An der Kaffeemaschine stellst du vorher ein, wie stark der Kaffee werden soll und wie viel Wasser hinein soll. Das sind Angaben, die du der Maschine vor dem Knopfdruck mitgibst.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Eine Funktion kann genau so Angaben entgegennehmen. Diese Angaben stehen in runden Klammern direkt hinter dem Namen der Funktion.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Eine Angabe, die eine Funktion beim Aufruf entgegennimmt, heißt Parameter.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Die Funktion begruessen könnte einen Parameter namens name bekommen, geschrieben als function begruessen(name). Beim Benutzen gibst du dann einen echten Namen wie Anna mit, und die Funktion baut daraus Hallo, Anna.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann eine Funktion auch mehrere Parameter gleichzeitig haben?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, mit Komma getrennt, so viele wie sie braucht. Eine Kaffeemaschine mit mehr Einstellmöglichkeiten nimmt eben auch mehr Angaben entgegen, Wasserstärke und Menge zum Beispiel gleichzeitig.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Parameter machen eine Funktion vielseitig. Ohne sie müsstest du für jede Zahl, jeden Namen, jede Situation eine eigene neue Funktion schreiben, statt eine einzige für alle Fälle.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Und wie bekomme ich das Ergebnis wieder aus der Funktion heraus?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Wenn die Kaffeemaschine fertig ist, stellt sie die Tasse Kaffee vor dich hin. Das ist das, was am Ende bei dir ankommt, nachdem du den Knopf gedrückt hast.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Eine Funktion kann genau so ein Ergebnis nach draußen geben, an die Stelle im Code, von der aus sie aufgerufen wurde.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Das Wort dafür ist return, das englische Wort für zurückgeben. Steht return in einer Funktion, endet die Funktion an dieser Stelle und gibt den Wert dahinter zurück.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "In der Funktion begruessen könnte am Ende return Hallo, plus name stehen. Das Ergebnis, der fertige Begrüßungstext, kommt dann genau dort an, wo die Funktion benutzt wurde.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss eine Funktion immer etwas zurückgeben?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein. Manche Funktionen tun einfach etwas, zum Beispiel etwas auf dem Bildschirm anzeigen, ohne ein Ergebnis zurückzugeben. Aber sehr viele Funktionen berechnen etwas, und genau dieses Etwas geben sie mit return zurück.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "return ist die Tasse Kaffee am Ende. Ohne return liefe die Kaffeemaschine zwar, aber du stündest am Ende ohne Tasse da, obwohl innen alles richtig abgelaufen ist.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Ich habe jetzt eine Funktion geschrieben. Wie bringe ich sie dazu, wirklich zu laufen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Das Rezept im Heft kocht von selbst gar nichts. Erst wenn du wirklich in die Küche gehst und die Schritte ausführst, entsteht das Essen.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau so wartet eine fertig geschriebene Funktion einfach nur da, bis sie benutzt wird. Sie führt sich nicht von selbst aus.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Eine Funktion zu benutzen heißt, sie aufzurufen, auf Englisch to call. Diesen Vorgang nennt man einen Aufruf: den Namen der Funktion schreiben, gefolgt von runden Klammern mit den passenden Werten darin.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "begruessen('Anna') ist ein Aufruf: der Name begruessen, dahinter die Klammer mit dem Wert Anna für den Parameter. Genau dieser Aufruf ist wie das Drücken des Knopfs an der Kaffeemaschine.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Ohne den Aufruf bleibt eine Funktion nur ein Rezept im Heft, nie fertiger Kaffee. Erst der Aufruf bringt den Code wirklich zum Laufen.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Was bringt mir das jetzt praktisch, wenn ich eine Funktion an vielen Stellen benutze?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir eine Bäckerei vor, in der jede Verkäuferin ihre eigene Kaffeemaschine unter der Theke stehen hätte, statt eine gemeinsame Maschine für alle zu benutzen.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Müsste die Bäckerei die Kaffeezubereitung ändern, zum Beispiel eine neue Kaffeesorte einführen, müsste sie das an jeder einzelnen Maschine einzeln nachstellen. Bei einer gemeinsamen Maschine reicht eine einzige Änderung.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Bei Funktionen ist es genauso: benutzt du an zehn Stellen im Code dieselbe Funktion statt zehnmal denselben abgeschriebenen Code, reicht später eine Änderung an einer einzigen Stelle, der Funktion selbst.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Deshalb schreiben Menschen, die viel Code schreiben, lieber eine Funktion einmal richtig, als sie zehnmal leicht unterschiedlich abzuschreiben. Jede Kopie ist eine zusätzliche Stelle, an der später ein Fehler versteckt sein kann.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Heißt das, ich sollte für jede winzige Kleinigkeit gleich eine eigene Funktion schreiben?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Nicht zwingend jede Kleinigkeit, aber sobald du merkst, dass du dieselben Schritte ein zweites Mal brauchst, lohnt sich eine Funktion fast immer. Am Anfang reicht als Faustregel: schreibst du etwas ein zweites Mal fast gleich hin, mach lieber eine Funktion daraus.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Mit der Zeit bekommst du ein Gefühl dafür, wann sich eine eigene Funktion lohnt und wann eine einzelne Zeile reicht. Am Anfang dieses Kurses ist es kein Fehler, lieber etwas zu früh eine Funktion zu schreiben, als zu spät. Übung entsteht dabei nur durchs wirkliche Ausprobieren, nicht durchs bloße Zuhören.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Warum reden wir eigentlich extra über gute Namen für Funktionen? Ist das nicht egal, Hauptsache es läuft?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir zwei Türen in einem Bürogebäude vor. Auf der einen steht Tür 4B, auf der anderen Kaffeeküche. Beide führen vielleicht zum selben Raum, aber nur eine sagt dir sofort, was dich erwartet.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau so ist es mit Funktionsnamen. Dem Rechner ist es egal, wie eine Funktion heißt, sie läuft trotzdem. Aber ein Mensch, der den Code später liest, vielleicht du selbst in einem halben Jahr, braucht einen Namen, der sofort sagt, was die Funktion tut.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "berechneGesamtpreis ist ein guter Name, weil er sagt, was passiert. mache oder funktion1 sagen gar nichts, du müsstest jedes Mal den ganzen Code lesen, nur um herauszufinden, wofür die Funktion überhaupt da ist.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein guter Name spart Zeit bei jedem einzelnen Lesen des Codes, nicht nur beim Schreiben. Code wird über die Zeit hinweg viel öfter gelesen als geschrieben, oft von dir selbst, wenn du dich schon nicht mehr an jedes Detail erinnerst.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Kannst du mir das an einem echten Beispiel aus einem echten Projekt zeigen, keinem erfundenen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Gern. Im Projekt cron-last-due gibt es eine Funktion, die für einen automatischen Zeitplan, einen sogenannten Cron-Ausdruck, herausfindet, wann eine Aufgabe zuletzt hätte laufen müssen. Wir gehen sie jetzt zusammen Zeile für Zeile durch.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir einen Wachdienst vor, der jede Nacht um sieben Uhr nach dem Rechten sehen soll. Wenn er einmal nicht kommt, will jemand herausfinden: wann genau war der letzte Termin, den er verpasst hat?",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Diese Funktion heißt lastDueBefore, auf Deutsch etwa zuletzt fällig vor. Fundstelle im Projekt: src/index.ts, Zeilen 200 bis 222.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Die Funktion beginnt mit function lastDueBefore, gefolgt von vier Parametern in Klammern: expression, before, timeZone und options.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "expression ist der Zeitplan selbst als Text, zum Beispiel null sieben Stern Stern eins bis fünf, für jeden Wochentag um sieben Uhr. before ist der Zeitpunkt, ab dem rückwärts gesucht wird, meistens jetzt.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "timeZone ist die Zeitzone, zum Beispiel Europe Berlin, und options sind zusätzliche, freiwillige Einstellungen, etwa wie weit die Suche höchstens zurückgehen darf.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Direkt in der ersten Zeile im Inneren der Funktion steht sinngemäß: cron ist gleich das Ergebnis von parseCron, aufgerufen mit expression. Das ruft eine andere Funktion namens parseCron auf und übergibt ihr den Zeitplan-Text.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Diese andere Funktion übersetzt den Text in eine Form, mit der der Rechner weiterrechnen kann. Genau das ist eine Funktion, die eine andere Funktion aufruft, ganz normal im Alltag von Code.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Direkt danach steht sinngemäß: wenn cron nicht vorhanden ist, gib null zurück. Das heißt: wenn parseCron den Text nicht lesen konnte, gibt lastDueBefore sofort null zurück, ein Wort für kein Ergebnis, und hört an dieser Stelle auf.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Diese eine Zeile ist eine bewusste Entscheidung. Lieber sauber sagen: ich weiß es nicht, als mit einem falschen Ergebnis weiterzumachen. Man nennt das einen bewussten Rückgabewert.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Dann folgt eine Zeile, die festlegt, wie weit rückwärts gesucht wird, standardmäßig sieben Tage. Danach bestimmt die Funktion einen Startzeitpunkt, eine volle Minute vor dem übergebenen before, weil ein Termin, der genau jetzt läuft, noch nicht als verpasst zählen soll.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Der Kern der Funktion ist eine Schleife, die minutenweise rückwärts geht, von diesem Startzeitpunkt bis zur Grenze von sieben Tagen zurück. Bei jeder Minute prüft die Funktion, ob der Zeitplan genau auf diese Minute passt.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Passt der Zeitplan, gibt die Funktion sofort diesen Zeitpunkt zurück, mit return d. Das ist der letzte Fälligkeitszeitpunkt, genau der, nach dem gesucht wurde.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Findet die Schleife in den ganzen sieben Tagen keinen passenden Zeitpunkt, endet die Funktion mit return null, ganz am Schluss. Auch das ist wieder eine bewusste Entscheidung: kein Ergebnis statt eines falschen Ergebnisses.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Diese eine Funktion zeigt in wenigen Zeilen fast alles aus dieser Lektion: einen klaren Namen, Parameter für das, was hereinkommt, und return für das, was herauskommt.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Wo probiere ich das jetzt selbst aus, ohne extra etwas zu installieren?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Jeder Browser hat eine versteckte Werkstatt eingebaut, eine Ecke, in der du direkt mit dem Browser sprechen kannst, ganz ohne eigenes Projekt.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Diese Werkstatt öffnest du mit einem Tastendruck, und darin kannst du einzelne Zeilen JavaScript eintippen und sofort ausführen, eine nach der anderen.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Diese Werkstatt heißt Konsole, auf Englisch console.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Tippst du in der Konsole eins plus eins ein und drückst Enter, zeigt sie dir sofort zwei an, noch bevor du irgendeine eigene Funktion geschrieben hast.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Die Konsole ist der schnellste Ort, um eine einzelne Funktion auszuprobieren, ohne erst ein ganzes eigenes Projekt zu bauen. Genau dort machst du gleich die Praxisaufgabe.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Also nochmal ganz kurz: eine Funktion ist ein Stück Code mit einem Namen, das über Parameter etwas entgegennehmen kann, mit function beginnt, mit return ein Ergebnis zurückgibt, und erst durch einen Aufruf wirklich läuft.",
+      "isKeySentence": true,
+      "role": "key"
+    },
+    {
+      "speaker": "A",
+      "text": "Fassen wir die Begriffe von heute noch einmal als Liste zusammen.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Code: geschriebene Anweisungen, die ein Rechner der Reihe nach ausführt.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "JavaScript: die Programmiersprache, die in diesem Kurs benutzt wird.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Funktion: ein Stück Code mit einem Namen, das man immer wieder benutzen kann.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "function: das Wort, mit dem man in JavaScript eine Funktion beginnt.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Parameter: eine Angabe, die eine Funktion beim Aufruf entgegennimmt.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "return: das Wort, mit dem eine Funktion ein Ergebnis zurückgibt.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Aufruf: das Benutzen einer Funktion, mit ihrem Namen und runden Klammern.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Konsole: eine im Browser eingebaute Werkstatt, in der man einzelne Zeilen JavaScript sofort ausführen kann.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss ich JavaScript auf meinem Rechner extra installieren, um damit anzufangen?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, dein Browser bringt JavaScript schon mit, du brauchst also nichts zu installieren. Die Konsole aus dieser Lektion reicht völlig aus, um die ersten eigenen Zeilen auszuprobieren.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Was passiert, wenn ich eine Funktion aufrufe, aber die falsche Anzahl an Werten mitgebe?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "JavaScript beschwert sich meistens nicht laut, sondern setzt einen fehlenden Wert einfach auf undefined, ein Wort für nicht vorhanden. Das Ergebnis der Funktion wird dann oft falsch oder ebenfalls undefined, deshalb lohnt sich ein Blick darauf, wie viele Parameter eine Funktion wirklich erwartet.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann eine Funktion eine andere Funktion aufrufen?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, das passiert sogar ständig, genau wie im Beispiel lastDueBefore, das die Funktion parseCron aufruft. Größere Aufgaben werden so in kleinere Funktionen zerlegt, die sich gegenseitig benutzen.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Was ist der Unterschied zwischen dem Schreiben einer Funktion und dem Aufrufen einer Funktion?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Das Schreiben legt nur das Rezept fest, mit function, Namen, Parametern und return, ohne dass dabei etwas passiert. Erst der Aufruf mit Klammern und echten Werten bringt die Funktion wirklich zum Laufen, so wie das Drücken des Knopfs an der Kaffeemaschine.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Warum benutzt die Beispiel-Funktion return null statt einfach nichts zu sagen?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein klares null bedeutet für alle, die die Funktion später benutzen, ausdrücklich kein Ergebnis gefunden, statt dass die Funktion einfach schweigt oder abstürzt. So kann der aufrufende Code gezielt prüfen, ob ein Ergebnis da ist, bevor er damit weiterarbeitet.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Ich habe in der Konsole etwas eingetippt, und es kam eine rote Fehlermeldung. Habe ich etwas kaputt gemacht?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, eine rote Fehlermeldung in der Konsole betrifft nur diese eine eingetippte Zeile, nicht deinen Browser oder deinen Rechner. Du kannst die Meldung lesen, die Zeile verbessern und es einfach noch einmal versuchen.",
+      "isKeySentence": false,
+      "role": "faq"
+    }
+  ],
+  "practiceExample": {
+    "text": "Im Repo cron-last-due berechnet die Funktion lastDueBefore, wann ein automatischer Zeitplan zuletzt fällig war. Sie nimmt vier Parameter entgegen, ruft die Funktion parseCron auf, prüft minutenweise rückwärts, ob der Zeitplan passt, und gibt entweder den gefundenen Zeitpunkt oder null zurück, wenn nichts gefunden wurde. Ein klares Beispiel für Parameter, Aufruf und return in einer einzigen kurzen Funktion.",
+    "repoNote": "repo-cron-last-due",
+    "location": "src/index.ts:200-222, Funktion lastDueBefore"
+  },
+  "quiz": [
+    {
+      "question": "Womit wird eine Funktion in dieser Lektion am ehesten verglichen?",
+      "area": "Funktionen",
+      "options": [
+        {
+          "text": "Mit einem Rezept, das man immer wieder benutzen kann.",
+          "isCorrect": true,
+          "explanation": "Genau das ist das Bild der Lektion: einmal aufschreiben, danach beliebig oft benutzen."
+        },
+        {
+          "text": "Mit einem Foto, das man sich nur einmal ansieht.",
+          "isCorrect": false,
+          "explanation": "Ein Foto verändert sich nicht und wird nicht wiederverwendet wie eine Funktion."
+        },
+        {
+          "text": "Mit einer Zahl, die man einmal notiert.",
+          "isCorrect": false,
+          "explanation": "Eine Zahl ist kein wiederverwendbarer Ablauf, sondern nur ein einzelner Wert."
+        },
+        {
+          "text": "Mit einem einmaligen Handgriff, der danach vergessen wird.",
+          "isCorrect": false,
+          "explanation": "Eine Funktion wird gerade nicht vergessen, sondern bleibt zur Wiederverwendung erhalten."
+        }
+      ]
+    },
+    {
+      "question": "Was passiert, wenn du eine fertig geschriebene Funktion niemals aufrufst?",
+      "area": "Funktionen",
+      "options": [
+        {
+          "text": "Nichts von ihrem Code wird ausgeführt.",
+          "isCorrect": true,
+          "explanation": "Ohne Aufruf bleibt eine Funktion wie ein Rezept im Heft, das niemand nachkocht."
+        },
+        {
+          "text": "Sie führt sich beim Programmstart automatisch trotzdem aus.",
+          "isCorrect": false,
+          "explanation": "Eine gewöhnliche Funktion startet nicht von selbst, sie braucht einen Aufruf."
+        },
+        {
+          "text": "JavaScript löscht die Funktion sofort wieder.",
+          "isCorrect": false,
+          "explanation": "Eine ungenutzte Funktion bleibt im Code stehen, sie wird nicht automatisch gelöscht."
+        },
+        {
+          "text": "Der Browser zeigt sofort eine Fehlermeldung an.",
+          "isCorrect": false,
+          "explanation": "Eine nicht aufgerufene Funktion erzeugt für sich allein keinen Fehler."
+        }
+      ]
+    },
+    {
+      "question": "Wofür stehen die Werte in den runden Klammern hinter einem Funktionsnamen?",
+      "area": "Funktionen",
+      "options": [
+        {
+          "text": "Für Parameter, also Angaben, die die Funktion entgegennimmt.",
+          "isCorrect": true,
+          "explanation": "Genau das ist ihre Aufgabe: Eingaben für die Funktion, so wie Wasserstärke bei der Kaffeemaschine."
+        },
+        {
+          "text": "Für den Namen der Funktion selbst.",
+          "isCorrect": false,
+          "explanation": "Der Name steht vor der Klammer, nicht in der Klammer."
+        },
+        {
+          "text": "Für Kommentare, die der Rechner ignoriert.",
+          "isCorrect": false,
+          "explanation": "Kommentare stehen anders im Code, nicht in den Aufrufklammern."
+        },
+        {
+          "text": "Für das fertige Ergebnis, das die Funktion am Ende über return zurückgibt.",
+          "isCorrect": false,
+          "explanation": "Das Ergebnis kommt erst durch return zurück, nicht in der Aufrufklammer."
+        }
+      ]
+    },
+    {
+      "question": "Welches Wort beendet eine Funktion und gibt einen Wert an die aufrufende Stelle zurück?",
+      "area": "Funktionen",
+      "options": [
+        {
+          "text": "return",
+          "isCorrect": true,
+          "explanation": "return ist genau dafür da: die Funktion beenden und einen Wert nach draußen geben."
+        },
+        {
+          "text": "function",
+          "isCorrect": false,
+          "explanation": "function beginnt eine Funktion, es beendet sie nicht."
+        },
+        {
+          "text": "Parameter",
+          "isCorrect": false,
+          "explanation": "Ein Parameter ist eine Eingabe, kein Wort zum Beenden einer Funktion."
+        },
+        {
+          "text": "Konsole",
+          "isCorrect": false,
+          "explanation": "Die Konsole ist ein Werkzeug im Browser, kein Wort aus dem Funktionskörper."
+        }
+      ]
+    },
+    {
+      "question": "Eine Funktion hat keine return-Zeile. Was folgt daraus am ehesten?",
+      "area": "Funktionen",
+      "options": [
+        {
+          "text": "Sie kann trotzdem etwas tun, gibt aber kein Ergebnis nach draußen zurück.",
+          "isCorrect": true,
+          "explanation": "Manche Funktionen zeigen nur etwas an oder verändern etwas, ohne ein Ergebnis zurückzugeben."
+        },
+        {
+          "text": "Die Funktion lässt sich dadurch gar nicht mehr aufrufen.",
+          "isCorrect": false,
+          "explanation": "Ein fehlendes return verhindert den Aufruf nicht, die Funktion läuft trotzdem."
+        },
+        {
+          "text": "JavaScript ergänzt automatisch eine passende return-Zeile.",
+          "isCorrect": false,
+          "explanation": "JavaScript erfindet keinen Rückgabewert von sich aus, der einfach fehlt."
+        },
+        {
+          "text": "Der Browser zeigt in jedem Fall eine Fehlermeldung.",
+          "isCorrect": false,
+          "explanation": "Ein fehlendes return ist normal und für sich kein Fehler."
+        }
+      ]
+    },
+    {
+      "question": "Warum ist berechneGesamtpreis ein besserer Funktionsname als funktion1?",
+      "area": "Funktionen",
+      "options": [
+        {
+          "text": "Weil er beim Lesen sofort sagt, was die Funktion tut.",
+          "isCorrect": true,
+          "explanation": "Genau darum geht es bei guten Namen: dem lesenden Menschen sofort erklären, wofür die Funktion da ist."
+        },
+        {
+          "text": "Weil kürzere Namen wie funktion1 vom Rechner nicht ausgeführt werden können.",
+          "isCorrect": false,
+          "explanation": "Der Rechner führt auch kurze, unklare Namen ganz normal aus, das ist keine technische Grenze."
+        },
+        {
+          "text": "Weil er weniger Buchstaben zum Eintippen braucht.",
+          "isCorrect": false,
+          "explanation": "berechneGesamtpreis hat mehr Buchstaben, nicht weniger, das ist also nicht der Grund."
+        },
+        {
+          "text": "Weil JavaScript lange Namen schneller ausführt als kurze.",
+          "isCorrect": false,
+          "explanation": "Die Länge eines Namens hat keinen Einfluss auf die Ausführungsgeschwindigkeit."
+        }
+      ]
+    },
+    {
+      "question": "In der Funktion lastDueBefore steht am Anfang: wenn cron nicht vorhanden ist, gib null zurück. Wofür ist das ein Beispiel?",
+      "area": "Programmierlogik",
+      "options": [
+        {
+          "text": "Für eine bewusste Entscheidung, lieber kein Ergebnis als ein falsches zu liefern.",
+          "isCorrect": true,
+          "explanation": "Laut der Lektion ist das genau die Idee: klar sagen, dass nichts gefunden wurde, statt zu raten oder abzustürzen."
+        },
+        {
+          "text": "Für einen Fehler im Code, der noch behoben werden muss.",
+          "isCorrect": false,
+          "explanation": "Diese Zeile ist eine absichtliche Entscheidung, kein unbeabsichtigter Fehler."
+        },
+        {
+          "text": "Für einen Parameter, den die Funktion entgegennimmt.",
+          "isCorrect": false,
+          "explanation": "Ein Parameter steht in der Klammer hinter dem Funktionsnamen, nicht in dieser Zeile."
+        },
+        {
+          "text": "Für den Aufruf der Funktion durch ein anderes Programmstück.",
+          "isCorrect": false,
+          "explanation": "Diese Zeile liegt im Inneren der Funktion, sie ist kein Aufruf von außen."
+        }
+      ]
+    },
+    {
+      "question": "Was tut die Funktion parseCron innerhalb von lastDueBefore?",
+      "area": "Programmierlogik",
+      "options": [
+        {
+          "text": "Sie übersetzt den Zeitplan-Text in eine Form, mit der weitergerechnet werden kann.",
+          "isCorrect": true,
+          "explanation": "Genau das ist ihre Rolle im Beispiel: aus dem Text expression etwas Nutzbares für die restliche Funktion machen."
+        },
+        {
+          "text": "Sie öffnet die Konsole im Browser.",
+          "isCorrect": false,
+          "explanation": "Die Konsole hat mit dem Parsen eines Zeitplan-Texts nichts zu tun."
+        },
+        {
+          "text": "Sie gibt sofort die fertige Tasse Kaffee aus dem Beispiel zurück.",
+          "isCorrect": false,
+          "explanation": "Die Kaffeemaschine war nur ein Bild für Funktionen allgemein, keine echte Funktion im Beispiel."
+        },
+        {
+          "text": "Sie benennt die Funktion lastDueBefore um.",
+          "isCorrect": false,
+          "explanation": "Ein Funktionsname wird durch einen Funktionsaufruf nicht verändert."
+        }
+      ]
+    },
+    {
+      "question": "Wo kannst du laut dieser Lektion eine einzelne Zeile JavaScript ausprobieren, ohne vorher etwas anzulegen?",
+      "area": "Werkzeuge",
+      "options": [
+        {
+          "text": "In der Konsole des Browsers.",
+          "isCorrect": true,
+          "explanation": "Die Konsole ist genau für schnelle, einzelne Zeilen JavaScript gedacht, direkt im Browser."
+        },
+        {
+          "text": "Nur in einer speziell installierten Zusatz-App.",
+          "isCorrect": false,
+          "explanation": "Die Lektion nennt ausdrücklich die im Browser eingebaute Konsole, keine zusätzliche App."
+        },
+        {
+          "text": "Nur, indem man eine ganze Webseite veröffentlicht.",
+          "isCorrect": false,
+          "explanation": "Für einen ersten Versuch reicht die Konsole, eine ganze Webseite ist dafür nicht nötig."
+        },
+        {
+          "text": "Gar nicht ohne einen eigenen Server.",
+          "isCorrect": false,
+          "explanation": "Die Konsole läuft direkt im eigenen Browser, ganz ohne eigenen Server."
+        }
+      ]
+    },
+    {
+      "question": "Welche Aussage über Parameter und Funktionsnamen stimmt?",
+      "area": "Funktionen",
+      "options": [
+        {
+          "text": "Der Funktionsname steht vor der Klammer, die Parameter stehen in der Klammer.",
+          "isCorrect": true,
+          "explanation": "Das ist die feste Reihenfolge im Code, etwa bei function begruessen(name)."
+        },
+        {
+          "text": "Parameter und Funktionsname stehen immer in zwei völlig getrennten Zeilen im Code.",
+          "isCorrect": false,
+          "explanation": "Beide stehen üblicherweise in derselben Zeile, direkt nebeneinander."
+        },
+        {
+          "text": "Ein Parameter ersetzt den Funktionsnamen vollständig.",
+          "isCorrect": false,
+          "explanation": "Ein Parameter ist eine zusätzliche Angabe, er ersetzt den Namen nicht."
+        },
+        {
+          "text": "Der Funktionsname steht in der Klammer, die Parameter davor im Text.",
+          "isCorrect": false,
+          "explanation": "Das ist genau umgekehrt zur tatsächlichen Reihenfolge im Code."
+        }
+      ]
+    },
+    {
+      "question": "Eine Funktion soll sowohl eine Wasserstärke als auch eine Wassermenge entgegennehmen. Wie ist das am ehesten möglich?",
+      "area": "Funktionen",
+      "options": [
+        {
+          "text": "Mit zwei durch Komma getrennten Parametern in derselben Klammer.",
+          "isCorrect": true,
+          "explanation": "Die Lektion nennt genau das: mehrere Parameter, durch Komma getrennt, in einer Funktion."
+        },
+        {
+          "text": "Gar nicht, eine Funktion darf immer nur einen Parameter haben.",
+          "isCorrect": false,
+          "explanation": "Die Lektion sagt ausdrücklich, dass eine Funktion mehrere Parameter haben kann."
+        },
+        {
+          "text": "Nur, indem man zwei völlig getrennte Funktionen ohne jeden Bezug schreibt.",
+          "isCorrect": false,
+          "explanation": "Eine einzige Funktion kann selbst mehrere Parameter entgegennehmen, ohne zwei getrennte Funktionen zu brauchen."
+        },
+        {
+          "text": "Nur über die Konsole, nicht über eine echte Funktion.",
+          "isCorrect": false,
+          "explanation": "Mehrere Parameter sind eine normale Eigenschaft von Funktionen selbst, unabhängig von der Konsole."
+        }
+      ]
+    },
+    {
+      "question": "Was beschreibt der Ausdruck begruessen('Anna') am besten?",
+      "area": "Funktionen",
+      "options": [
+        {
+          "text": "Einen Aufruf der Funktion begruessen mit dem Wert Anna als Parameter.",
+          "isCorrect": true,
+          "explanation": "Name plus Klammer mit Wert ist genau der Aufbau eines Funktionsaufrufs aus der Lektion."
+        },
+        {
+          "text": "Die Definition einer neuen Funktion namens Anna.",
+          "isCorrect": false,
+          "explanation": "Hier wird keine neue Funktion definiert, sondern eine bestehende Funktion benutzt."
+        },
+        {
+          "text": "Einen Kommentar, den der Rechner beim Ausführen überspringt.",
+          "isCorrect": false,
+          "explanation": "Ein Aufruf wird ausgeführt, ein Kommentar dagegen wird von JavaScript übersprungen."
+        },
+        {
+          "text": "Eine Fehlermeldung der Konsole.",
+          "isCorrect": false,
+          "explanation": "Das ist Code, den man selbst schreibt, keine automatische Meldung der Konsole."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Öffne die Konsole deines Browsers (meistens mit der Taste F12 oder mit Rechtsklick, dann Untersuchen, dann Konsole). Schreibe dort eine eigene kleine Funktion mit einem Parameter und einem return, zum Beispiel eine Funktion namens verdoppeln, die eine Zahl entgegennimmt und diese Zahl mal zwei zurückgibt. Rufe die Funktion danach mit einer eigenen Zahl auf.",
+    "expectation": "Nach Enter zeigt die Konsole das Ergebnis deines Funktionsaufrufs an, zum Beispiel die verdoppelte Zahl. Ein Screenshot der Konsole mit deiner Funktion und dem Ergebnis darunter.",
+    "checklist": [
+      "Konsole des Browsers geöffnet",
+      "Eigene Funktion mit function und einem Parameter geschrieben",
+      "Funktion enthält eine return-Zeile",
+      "Funktion mit einem eigenen Wert aufgerufen",
+      "Ergebnis in der Konsole sichtbar und per Screenshot festgehalten"
+    ]
+  },
+  "audio": {
+    "file": "M01-06-04.mp3",
+    "durationSeconds": 1007,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Muss ich JavaScript auf meinem Rechner extra installieren, um damit anzufangen?",
+      "answer": "Nein, dein Browser bringt JavaScript schon mit, du brauchst also nichts zu installieren. Die Konsole aus dieser Lektion reicht völlig aus, um die ersten eigenen Zeilen auszuprobieren."
+    },
+    {
+      "question": "Was passiert, wenn ich eine Funktion aufrufe, aber die falsche Anzahl an Werten mitgebe?",
+      "answer": "JavaScript beschwert sich meistens nicht laut, sondern setzt einen fehlenden Wert einfach auf undefined, ein Wort für nicht vorhanden. Das Ergebnis der Funktion wird dann oft falsch oder ebenfalls undefined, deshalb lohnt sich ein Blick darauf, wie viele Parameter eine Funktion wirklich erwartet."
+    },
+    {
+      "question": "Kann eine Funktion eine andere Funktion aufrufen?",
+      "answer": "Ja, das passiert sogar ständig, genau wie im Beispiel lastDueBefore, das die Funktion parseCron aufruft. Größere Aufgaben werden so in kleinere Funktionen zerlegt, die sich gegenseitig benutzen."
+    },
+    {
+      "question": "Was ist der Unterschied zwischen dem Schreiben einer Funktion und dem Aufrufen einer Funktion?",
+      "answer": "Das Schreiben legt nur das Rezept fest, mit function, Namen, Parametern und return, ohne dass dabei etwas passiert. Erst der Aufruf mit Klammern und echten Werten bringt die Funktion wirklich zum Laufen, so wie das Drücken des Knopfs an der Kaffeemaschine."
+    },
+    {
+      "question": "Warum benutzt die Beispiel-Funktion return null statt einfach nichts zu sagen?",
+      "answer": "Ein klares null bedeutet für alle, die die Funktion später benutzen, ausdrücklich kein Ergebnis gefunden, statt dass die Funktion einfach schweigt oder abstürzt. So kann der aufrufende Code gezielt prüfen, ob ein Ergebnis da ist, bevor er damit weiterarbeitet."
+    },
+    {
+      "question": "Ich habe in der Konsole etwas eingetippt, und es kam eine rote Fehlermeldung. Habe ich etwas kaputt gemacht?",
+      "answer": "Nein, eine rote Fehlermeldung in der Konsole betrifft nur diese eine eingetippte Zeile, nicht deinen Browser oder deinen Rechner. Du kannst die Meldung lesen, die Zeile verbessern und es einfach noch einmal versuchen."
+    }
+  ]
+}
