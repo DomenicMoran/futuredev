@@ -159,3 +159,50 @@ die App ruft `reportFullyDrawn()` nicht auf, darum liefert `-W` hier nie
 nach ein paar Sekunden Wartezeit und ein leeres Ergebnis von
 `adb logcat -d | grep -iE "UnsatisfiedLinkError|SIGSEGV|FATAL"` nach
 mehreren Reloads.
+
+### Klickdurchgang (Prüfrezept)
+
+Vollständiger manueller Durchgang vor jedem Release-Kandidaten, mit Beleg
+(Bildschirmfoto) je Schritt nach `Projektordner/90_Werkstatt/futuredev/shots/`,
+Logcat-Kontrolle auf `UnsatisfiedLinkError|FATAL|Uncaught` nach jedem Block.
+Vor dem Durchgang: `pm clear` für einen echten Erststart, Metro mit `--clear`
+frisch starten (siehe oben), nur ein Bauprozess gleichzeitig.
+
+1. **Onboarding** (drei Schritte: Ziel, Lesen/Hören, Tagesziel) bis zum
+   Start-Reiter.
+2. **Start**: Karten „Weiter" (nach dem ersten Durchgang), „Heute fällig",
+   „Nächste Empfehlung" sichtbar und antippbar.
+3. **Lernen**: Modulliste → Untermodul → Lektionsliste → Lektion öffnen.
+4. **Lektionsbildschirm**: bis ans Ende scrollen, Begriffe-Chip öffnet die
+   Glossar-Karte (Begriff antippen, „Schließen"), Lesezeichen an einem Block
+   setzen (Symbol wird gefüllt/blau), Notiz-Eingabe öffnen und speichern,
+   Praxisaufgabe-Kästchen abhaken, „Im Repo ansehen" öffnet den Browser.
+5. **Hören-Umschalter**: aus der Lektion in den Player wechseln, Position und
+   Kapitel prüfen; danach „Im Text lesen" zurück in die Lektion.
+6. **Vollbild-Player**: Tempo, Sprung 15 s/30 s, Kapitelmarken, Schlaf-Timer,
+   Warteschlange; Home-Taste drücken, `dumpsys media_session` zeigt die
+   Sitzung weiter aktiv, Benachrichtigung vorhanden.
+7. **Quiz**: aus der Lektion starten, alle Fragen beantworten (mindestens
+   eine absichtlich falsch), Ergebnisbildschirm, „Zur Lektion".
+8. **Üben**: Tagesration, Wiederholungsrunde, Modulprüfung starten und über
+   die Zurück-Geste abbrechen (Bestätigungsdialog muss erscheinen).
+9. **Ich**: Fortschritt, Jobreife, Notizen, Lesezeichen, Portfolio,
+   Checkliste; Einstellungen (Dunkelmodus, Tagesziel, Export — Datei muss im
+   Freigabe-Dialog erscheinen), alle vier Rechtstexte öffnen.
+10. **Persistenz**: `am force-stop`, App neu starten: Start zeigt
+    „Weitermachen" mit der zuletzt gelesenen Blocknummer, Einstellungen und
+    Notizen bleiben erhalten.
+11. **Offline**: `svc wifi disable && svc data disable`, App neu starten,
+    heruntergeladene Lektion lesen/hören, Offline-Banner sichtbar; danach
+    Netz wieder aktivieren.
+
+Werkzeuge je Schritt: `adb shell uiautomator dump` plus `bounds` aus dem
+XML für exakte Tippkoordinaten (Bildschirmkoordinaten sind 1,2× die im
+Screenshot sichtbaren, falls der Screenshot verkleinert angezeigt wird),
+`adb exec-out screencap -p > datei.png` für den Beleg, ein bis zwei Sekunden
+Wartezeit zwischen Tipp und Bildschirmfoto (sonst zeigt das Foto den Stand
+vor der Navigation). Ein Deep-Link (`adb shell am start -a
+android.intent.action.VIEW -d "futuredev://<route>" de.domenicmoran.futuredev`)
+umgeht eine blockierende Dev-Overlay-Meldung („Open debugger to view
+warnings", LogBox, nur im Dev-Build) zuverlässiger als ein Tipp auf die
+Reiterleiste.

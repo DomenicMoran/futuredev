@@ -51,6 +51,7 @@ export default function LessonScreen() {
   const [noteBodies, setNoteBodies] = useState<Record<number, string>>({});
   const [glossaryTerm, setGlossaryTerm] = useState<string | null>(null);
   const [checkedTasks, setCheckedTasks] = useState<Set<number>>(new Set());
+  const [audioError, setAudioError] = useState(false);
   const listRef = useRef<SectionList<unknown, Section>>(null);
   const hasMarkedRead = useRef(false);
 
@@ -196,6 +197,18 @@ export default function LessonScreen() {
     void Linking.openURL(`https://github.com/DomenicMoran/${repoName}`);
   };
 
+  // Deckt den Zustand "Fehler" aus ux-bildschirmfluss.md Abschnitt 2 (Hören)
+  // ab: ein fehlender oder beschaedigter Kapitelmarken-Datensatz (offline,
+  // kaputtes Manifest) darf nicht als unbehandelte Promise-Ablehnung im
+  // RedBox/Toast enden, sondern zeigt de.player.loadError mit Wiederholen-
+  // Knopf, ohne den Lesebildschirm zu blockieren.
+  const handleListen = () => {
+    setAudioError(false);
+    playLesson(id, readUntil).catch(() => {
+      setAudioError(true);
+    });
+  };
+
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.bg }]}>
       <SectionList
@@ -211,7 +224,8 @@ export default function LessonScreen() {
             lesson={lesson}
             sections={sections}
             onJump={jumpTo}
-            onListen={() => void playLesson(id, readUntil)}
+            onListen={handleListen}
+            audioError={audioError}
           />
         }
         ListFooterComponent={
@@ -378,11 +392,13 @@ function LessonHeader({
   sections,
   onJump,
   onListen,
+  audioError,
 }: {
   lesson: Lesson;
   sections: Section[];
   onJump: (key: SectionKey) => void;
   onListen: () => void;
+  audioError: boolean;
 }) {
   const theme = useTheme();
   const allJumpTargets: { key: SectionKey; label: string }[] = [
@@ -416,6 +432,15 @@ function LessonHeader({
           <Text style={{ color: theme.colors.text }}>{de.lesson.listenTab}</Text>
         </Pressable>
       </View>
+
+      {audioError ? (
+        <Text
+          accessibilityRole="alert"
+          style={[styles.metaText, { color: theme.colors.error, marginTop: theme.spacing.xs }]}
+        >
+          {de.player.loadError}
+        </Text>
+      ) : null}
 
       {jumpTargets.length > 0 ? (
         <View style={[styles.jumpRow, { marginTop: theme.spacing.sm }]}>
