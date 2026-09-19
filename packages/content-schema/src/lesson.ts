@@ -16,10 +16,18 @@ const termSchema = z.object({
   definition: z.string().min(1),
 });
 
+// Abschnitt eines Sprechblocks innerhalb der Lektion, fuer Kapitelmarken bei
+// laengeren Lektionen (20 bis 40 Minuten, AW-045). Optional, weil die
+// bestehenden Lektionen (etwa M01-01-01) noch keine Abschnittsgrenzen
+// vertonen: fehlt das Feld, gilt ein Block als "body".
+export const cueSectionSchema = z.enum(['body', 'terms', 'example', 'task', 'faq']);
+export type CueSection = z.infer<typeof cueSectionSchema>;
+
 const speechBlockSchema = z.object({
   speaker: z.enum(['A', 'B']),
   text: z.string().min(1),
   isKeySentence: z.boolean(),
+  section: cueSectionSchema.optional(),
 });
 
 const practiceExampleSchema = z.object({
@@ -48,6 +56,14 @@ const practiceTaskSchema = z.object({
   portfolioItem: portfolioItemSchema.optional(),
 });
 
+// Pflichtfeld ab Phase 4 (AW-045): "Fragen, die jetzt offen sein koennten".
+// Bis das Schema es verlangt (erste Inhaltswelle), bleibt das Feld optional,
+// damit bestehende Lektionen ohne faq weiter gueltig sind.
+const faqEntrySchema = z.object({
+  question: z.string().min(1).regex(/\?$/, 'Frage muss mit einem Fragezeichen enden'),
+  answer: z.string().min(1),
+});
+
 const audioSchema = z.object({
   file: z.string().regex(/^M\d{2}-\d{2}-\d{2}\.mp3$/, 'Audiodatei muss <Lektionskennung>.mp3 heißen'),
   durationSeconds: z.number().int().positive(),
@@ -68,8 +84,13 @@ export const lessonSchema = z.object({
   quiz: z.array(quizQuestionSchema).min(10, 'mindestens zehn Fragen je Lektion'),
   practiceTask: practiceTaskSchema,
   audio: audioSchema,
+  // Optional bis Phase 4 (AW-045); danach mindestens 5 Eintraege, siehe
+  // packages/content-schema/src/rules.ts (checkFaqMinimumWhenPresent gilt nur,
+  // wenn eine spaetere Pflicht-Version das Feld einfuehrt).
+  faq: z.array(faqEntrySchema).min(5).optional(),
 });
 
 export type Lesson = z.infer<typeof lessonSchema>;
 export type QuizQuestion = z.infer<typeof quizQuestionSchema>;
 export type SpeechBlock = z.infer<typeof speechBlockSchema>;
+export type FaqEntry = z.infer<typeof faqEntrySchema>;
