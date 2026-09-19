@@ -1,14 +1,16 @@
 // Zustandsübergänge einer Lektion und Fortschritt je Modul.
+// Zustandswerte auf Englisch (Code-Vokabular): 'new' = neu, 'started' = begonnen,
+// 'read' = gelesen, 'listened' = gehoert, 'quiz_passed' = quiz bestanden, 'completed' = abgeschlossen.
 
-export type LessonState = 'neu' | 'begonnen' | 'gelesen' | 'gehoert' | 'quiz_bestanden' | 'abgeschlossen';
+export type LessonState = 'new' | 'started' | 'read' | 'listened' | 'quiz_passed' | 'completed';
 
 const ALLOWED_TRANSITIONS: Record<LessonState, LessonState[]> = {
-  neu: ['begonnen'],
-  begonnen: ['gelesen', 'gehoert'],
-  gelesen: ['gehoert', 'quiz_bestanden'],
-  gehoert: ['gelesen', 'quiz_bestanden'],
-  quiz_bestanden: ['abgeschlossen'],
-  abgeschlossen: [],
+  new: ['started'],
+  started: ['read', 'listened'],
+  read: ['listened', 'quiz_passed'],
+  listened: ['read', 'quiz_passed'],
+  quiz_passed: ['completed'],
+  completed: [],
 };
 
 export interface LessonProgress {
@@ -31,11 +33,11 @@ export function transitionLesson(progress: LessonProgress, nextState: LessonStat
 }
 
 export function createLessonProgress(lessonId: string): LessonProgress {
-  return { lessonId, state: 'neu' };
+  return { lessonId, state: 'new' };
 }
 
 export function isLessonComplete(progress: LessonProgress): boolean {
-  return progress.state === 'abgeschlossen';
+  return progress.state === 'completed';
 }
 
 export interface ModuleProgress {

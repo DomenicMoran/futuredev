@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { computeJobreife } from '../src/jobreife.js';
+import { computeReadiness } from '../src/readiness.js';
 
-describe('computeJobreife', () => {
+describe('computeReadiness', () => {
   it('gibt 0 zurück, wenn nichts erreicht ist', () => {
-    const result = computeJobreife({
+    const result = computeReadiness({
       passedCoreModulesCount: 0,
       totalCoreModulesCount: 10,
       publishedPortfolioItemsCount: 0,
@@ -16,7 +16,7 @@ describe('computeJobreife', () => {
   });
 
   it('gibt 100 zurück, wenn alle drei Anteile vollständig sind', () => {
-    const result = computeJobreife({
+    const result = computeReadiness({
       passedCoreModulesCount: 10,
       totalCoreModulesCount: 10,
       publishedPortfolioItemsCount: 7,
@@ -29,7 +29,7 @@ describe('computeJobreife', () => {
   });
 
   it('gewichtet die drei Anteile zu je einem Drittel', () => {
-    const result = computeJobreife({
+    const result = computeReadiness({
       passedCoreModulesCount: 10,
       totalCoreModulesCount: 10,
       publishedPortfolioItemsCount: 0,
@@ -43,7 +43,7 @@ describe('computeJobreife', () => {
 
   it('lehnt Gewichte ab, die sich nicht zu 1 summieren', () => {
     expect(() =>
-      computeJobreife({
+      computeReadiness({
         passedCoreModulesCount: 1,
         totalCoreModulesCount: 1,
         publishedPortfolioItemsCount: 1,

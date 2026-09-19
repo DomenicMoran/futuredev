@@ -2,46 +2,46 @@ import { describe, expect, it } from 'vitest';
 import { computeModuleProgress, createLessonProgress, transitionLesson } from '../src/progress.js';
 
 describe('transitionLesson', () => {
-  it('erlaubt den Weg von neu bis abgeschlossen', () => {
+  it('erlaubt den Weg von new bis completed', () => {
     let p = createLessonProgress('M01-01-01');
-    expect(p.state).toBe('neu');
-    p = transitionLesson(p, 'begonnen');
-    expect(p.state).toBe('begonnen');
-    p = transitionLesson(p, 'gelesen');
-    expect(p.state).toBe('gelesen');
-    p = transitionLesson(p, 'gehoert');
-    expect(p.state).toBe('gehoert');
-    p = transitionLesson(p, 'quiz_bestanden');
-    expect(p.state).toBe('quiz_bestanden');
-    p = transitionLesson(p, 'abgeschlossen');
-    expect(p.state).toBe('abgeschlossen');
+    expect(p.state).toBe('new');
+    p = transitionLesson(p, 'started');
+    expect(p.state).toBe('started');
+    p = transitionLesson(p, 'read');
+    expect(p.state).toBe('read');
+    p = transitionLesson(p, 'listened');
+    expect(p.state).toBe('listened');
+    p = transitionLesson(p, 'quiz_passed');
+    expect(p.state).toBe('quiz_passed');
+    p = transitionLesson(p, 'completed');
+    expect(p.state).toBe('completed');
   });
 
-  it('ignoriert einen nicht erlaubten Sprung von neu direkt zu abgeschlossen', () => {
+  it('ignoriert einen nicht erlaubten Sprung von new direkt zu completed', () => {
     const p = createLessonProgress('M01-01-01');
-    const next = transitionLesson(p, 'abgeschlossen');
-    expect(next.state).toBe('neu');
+    const next = transitionLesson(p, 'completed');
+    expect(next.state).toBe('new');
   });
 
   it('wirft eine abgeschlossene Lektion nicht durch ein verspätetes Ereignis zurück', () => {
     let p = createLessonProgress('M01-01-01');
-    p = transitionLesson(p, 'begonnen');
-    p = transitionLesson(p, 'gelesen');
-    p = transitionLesson(p, 'gehoert');
-    p = transitionLesson(p, 'quiz_bestanden');
-    p = transitionLesson(p, 'abgeschlossen');
-    const next = transitionLesson(p, 'gehoert');
-    expect(next.state).toBe('abgeschlossen');
+    p = transitionLesson(p, 'started');
+    p = transitionLesson(p, 'read');
+    p = transitionLesson(p, 'listened');
+    p = transitionLesson(p, 'quiz_passed');
+    p = transitionLesson(p, 'completed');
+    const next = transitionLesson(p, 'listened');
+    expect(next.state).toBe('completed');
   });
 });
 
 describe('computeModuleProgress', () => {
   it('berechnet den Prozentsatz abgeschlossener Lektionen', () => {
     const progresses = [
-      { lessonId: 'a', state: 'abgeschlossen' as const },
-      { lessonId: 'b', state: 'abgeschlossen' as const },
-      { lessonId: 'c', state: 'begonnen' as const },
-      { lessonId: 'd', state: 'neu' as const },
+      { lessonId: 'a', state: 'completed' as const },
+      { lessonId: 'b', state: 'completed' as const },
+      { lessonId: 'c', state: 'started' as const },
+      { lessonId: 'd', state: 'new' as const },
     ];
     const result = computeModuleProgress('M01', progresses);
     expect(result.completedLessons).toBe(2);

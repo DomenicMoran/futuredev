@@ -1,8 +1,9 @@
 // Jobreife-Formel aus 10_Projekte/FutureDev/Wissen/lehrplan-konzept.md, Abschnitt 9:
 // gewichtetes Mittel aus drei zu je einem Drittel gewichteten Anteilen, sofern der
-// Nutzer nichts anders einstellt.
+// Nutzer nichts anders einstellt. Codename englisch (readiness), Produktbegriff im
+// Vault und in der UI bleibt "Jobreife".
 
-export interface JobreifeInput {
+export interface ReadinessInput {
   passedCoreModulesCount: number;
   totalCoreModulesCount: number;
   publishedPortfolioItemsCount: number;
@@ -13,7 +14,7 @@ export interface JobreifeInput {
   weights?: { modules: number; portfolio: number; career: number };
 }
 
-export interface JobreifeResult {
+export interface ReadinessResult {
   /** 0 bis 100. */
   percent: number;
   missing: string[];
@@ -26,7 +27,7 @@ function shareOf(done: number, total: number): number {
   return Math.min(1, Math.max(0, done / total));
 }
 
-export function computeJobreife(input: JobreifeInput): JobreifeResult {
+export function computeReadiness(input: ReadinessInput): ReadinessResult {
   const weights = input.weights ?? DEFAULT_WEIGHTS;
   const weightSum = weights.modules + weights.portfolio + weights.career;
   if (Math.abs(weightSum - 1) > 1e-9) {
@@ -54,5 +55,5 @@ export function computeJobreife(input: JobreifeInput): JobreifeResult {
 // Regel, die immer neben der Anzeige steht (lehrplan-konzept.md, Abschnitt 9):
 // keine Job-Garantie, die Anzeige zeigt Vorbereitung, nicht die Zusage eines
 // Arbeitgebers.
-export const JOBREIFE_DISCLAIMER =
+export const READINESS_DISCLAIMER =
   'Die Jobreife-Anzeige zeigt den Stand der Vorbereitung, keine Zusage eines Arbeitgebers.';
