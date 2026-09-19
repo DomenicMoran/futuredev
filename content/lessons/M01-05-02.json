@@ -1,0 +1,1086 @@
+{
+  "id": "M01-05-02",
+  "title": "HTTPS und warum Verschlüsselung wichtig ist",
+  "durationMinutes": 17,
+  "prerequisites": [
+    "M01-05-01",
+    "M01-03-01",
+    "M01-04-01",
+    "M01-04-02",
+    "M01-00-01",
+    "M01-00-02",
+    "M01-00-03"
+  ],
+  "terms": [
+    {
+      "term": "Klartext",
+      "definition": "Eine Nachricht, die für jeden lesbar ist, der sie unterwegs abfängt, ohne jede Verschlüsselung."
+    },
+    {
+      "term": "Verschlüsselung",
+      "definition": "Ein Verfahren, das eine Nachricht so umwandelt, dass nur Sender und Empfänger sie lesen können, niemand dazwischen."
+    },
+    {
+      "term": "HTTPS",
+      "definition": "HTTP mit eingebauter Verschlüsselung: dieselbe Sprache zwischen Browser und Server, aber in einem verschlossenen Umschlag statt auf offener Postkarte."
+    },
+    {
+      "term": "TLS",
+      "definition": "Das technische Verfahren, das im Hintergrund die Verschlüsselung von HTTPS herstellt und den Schlüssel dafür aushandelt."
+    },
+    {
+      "term": "Zertifikat",
+      "definition": "Ein digitaler Ausweis für eine Webseite, ausgestellt von einer vertrauenswürdigen Stelle, der bestätigt, dass ein Server wirklich der ist, für den er sich ausgibt."
+    },
+    {
+      "term": "Sicherheitskopfzeile",
+      "definition": "Eine besondere Kopfzeile in der Antwort eines Servers, die dem Browser zusätzliche Sicherheitsregeln mitgibt, zum Beispiel welche Inhalte überhaupt geladen werden dürfen."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "text": "Stell dir vor, du schreibst deiner Freundin eine Postkarte.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Du schreibst deinen Text drauf, klebst eine Marke drauf und wirfst sie in den Briefkasten. Auf dem Weg zu ihr geht die Postkarte durch viele Hände: den Briefkasten, das Sortierzentrum, den Postboten.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "B",
+      "text": "Und jeder von denen könnte theoretisch mitlesen, was auf der Postkarte steht?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau, jeder, der die Postkarte kurz in der Hand hält, kann lesen, was draufsteht. Es gibt keinen Umschlag, der den Text verbirgt.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Eine Nachricht, die so offen lesbar unterwegs ist, nennt man Klartext.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Klartext.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Die Anfrage aus der letzten Lektion, so wie sie dort erklärt wurde, reist bei einfachem HTTP genau wie diese Postkarte: als Klartext durchs Netz, für jeden lesbar, der auf dem Weg mithört.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Wer genau könnte denn überhaupt auf dem Weg mithören?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Zum Beispiel jemand im selben öffentlichen WLAN in einem Café, ein Betreiber eines Netzwerks, durch das deine Anfrage zufällig läuft, oder jemand, der sich technisch in die Leitung einklinkt.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Bei einer normalen Webseite, die du nur liest, ist das oft nicht dramatisch. Bei einem Passwort oder einer Kontonummer schon.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Wie schützt man dann so eine Nachricht davor, dass unterwegs jemand mitliest?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau dafür gibt es den zweiten Teil des Bildes: statt der Postkarte schickst du deiner Freundin denselben Text in einem fest versiegelten Brief.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Der Postbote sieht von außen nur den Umschlag, den Absender und den Empfänger. Den Inhalt kann er nicht lesen, ohne den Umschlag gewaltsam aufzureißen, und das würde auffallen.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein Verfahren, das eine Nachricht so verpackt, dass nur Sender und Empfänger sie lesen können, heißt Verschlüsselung.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Verschlüsselung.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Wenn du dich bei deiner Bank anmeldest und dein Passwort eintippst, wird genau dieses Passwort verschlüsselt, bevor es deinen Rechner überhaupt verlässt. Selbst wer die Leitung mithört, sieht dann nur wirren, unlesbaren Datensalat statt deines echten Passworts.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Und wie hängt das jetzt mit HTTP zusammen, das wir letztes Mal gelernt haben?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Verschlüsselung bedeutet also, dass genau dieser Umschlag um jede einzelne Nachricht gelegt wird, um Anfrage und Antwort.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Sehr direkt. Es gibt eine Version von HTTP, die genau diese Verschlüsselung fest eingebaut hat.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Diese Version heißt HTTPS.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "HTTPS. H, T, T, P, S.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Das S am Ende steht für secure, also sicher. HTTPS ist dieselbe Sprache wie HTTP, dieselben Anfragen, dieselben Antworten, nur eben nicht mehr als offene Postkarte, sondern als versiegelter Brief.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Rufst du heute eine Webseite auf, benutzt dein Browser bei fast jeder seriösen Seite automatisch HTTPS, du merkst davon im Alltag fast nichts, außer einem kleinen Zeichen in der Adressleiste.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Welches kleine Zeichen denn genau?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Meistens ein kleines Schloss-Symbol direkt vor der Adresse der Webseite. Ist das Schloss geschlossen, läuft die Verbindung über HTTPS, deine Daten sind also verschlüsselt unterwegs.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Fehlt dieses Schloss oder zeigt der Browser sogar eine Warnung, ist die Verbindung nicht abgesichert, dann solltest du dort besonders vorsichtig sein, vor allem bei Formularen mit Passwort oder Zahlungsdaten.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Und wie schafft es der Browser technisch, diesen Umschlag um jede Nachricht zu bauen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Dafür gibt es ein festes technisches Verfahren, das im Hintergrund abläuft, bevor überhaupt die erste Anfrage verschickt wird.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Dieses Verfahren heißt TLS.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "TLS. T, L, S.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "TLS handelt zwischen Browser und Server eine Art gemeinsames Geheimwort aus, einen Schlüssel, mit dem beide Seiten anschließend alle Nachrichten verschlüsseln und wieder entschlüsseln können.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir zwei Freunde vor, die sich vor dem eigentlichen Gespräch heimlich auf eine gemeinsame Geheimsprache einigen, die niemand sonst versteht. Genau das passiert bei TLS, bevor die erste echte Anfrage überhaupt losgeschickt wird.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "B",
+      "text": "Woher weiß mein Browser eigentlich, dass er wirklich mit der echten Bank redet und nicht mit jemandem, der sich nur als Bank ausgibt?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Sehr gute Frage, denn ein versiegelter Brief allein reicht nicht. Ein Betrüger könnte theoretisch auch einen Umschlag verschließen und sich als jemand anderes ausgeben.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau dagegen gibt es einen digitalen Ausweis für jede Webseite.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Dieser Ausweis heißt Zertifikat.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Zertifikat.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir einen Personalausweis vor, den nicht die Person selbst ausstellt, sondern eine unabhängige Behörde, die vorher genau geprüft hat, wer diese Person wirklich ist. Ein Zertifikat funktioniert für eine Webseite genauso: eine unabhängige, vertrauenswürdige Stelle bestätigt, dass dieser Server wirklich zu dieser Adresse gehört.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Wenn du eine Webseite mit HTTPS aufrufst, prüft dein Browser dieses Zertifikat automatisch im Hintergrund, bevor er dir überhaupt etwas anzeigt.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Und was passiert, wenn dieses Zertifikat gefälscht oder abgelaufen ist?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Dann zeigt dir der Browser eine deutliche Warnseite, bevor er die eigentliche Webseite überhaupt lädt. Diese Warnung solltest du sehr ernst nehmen und dort keinesfalls ein Passwort eingeben.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Also noch mal ganz konkret gefragt: warum darf ein Passwort nie über einfaches HTTP verschickt werden?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Weil ein Passwort dann als Klartext unterwegs ist, wie auf einer offenen Postkarte. Jeder, der mithört, könnte es einfach mitlesen und später selbst benutzen, um sich als du auszugeben.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau deshalb verlangen heute fast alle seriösen Anmeldeseiten HTTPS, und moderne Browser warnen dich sogar aktiv, wenn ein Formular mit einem Passwort über eine unverschlüsselte Seite läuft.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Betrifft das nur Passwörter, oder auch andere persönliche Angaben wie eine Adresse oder eine Kreditkartennummer?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Es betrifft jede Art von persönlicher Angabe, nicht nur Passwörter. Eine Adresse, ein Geburtsdatum oder eine Kreditkartennummer sollten genauso wenig als Klartext unterwegs sein, weil sich all das gegen dich verwenden lässt, wenn es in die falschen Hände gerät.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Reicht HTTPS allein schon aus, damit eine Webseite rundum sicher ist?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "HTTPS ist die Grundlage, aber es gibt noch weitere Bausteine, die eine Webseite zusätzlich absichern.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Einer davon nutzt genau das Werkzeug, das du schon kennst: die Kopfzeile aus der letzten Lektion.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Eine besondere Kopfzeile in der Antwort eines Servers, die dem Browser zusätzliche Sicherheitsregeln mitgibt, heißt Sicherheitskopfzeile.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Sicherheitskopfzeile.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir wieder das Paket von letzter Lektion vor, mit dem Zettel außen dran. Eine Sicherheitskopfzeile ist wie ein zusätzlicher Aufkleber auf diesem Paket, der sagt: nur von diesem einen Absender annehmen, nichts anderes reinmischen.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Eine solche Kopfzeile kann dem Browser zum Beispiel sagen, dass diese Webseite immer nur über HTTPS geladen werden darf, nie über einfaches, unverschlüsseltes HTTP, selbst wenn jemand aus Versehen die falsche Adresse eintippt.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann so ein Zertifikat auch ablaufen, so wie ein Ausweis irgendwann erneuert werden muss?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, genau wie ein Personalausweis gilt ein Zertifikat nur eine begrenzte Zeit, oft nur wenige Monate. Danach muss der Betreiber der Webseite es rechtzeitig erneuern, sonst zeigt der Browser wieder eine Warnung.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Bei den meisten großen Webseiten läuft diese Erneuerung heute vollautomatisch im Hintergrund, ohne dass jemand manuell eingreifen muss, weil ein vergessenes Zertifikat sofort auffällt und Besucherinnen und Besucher verunsichert.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Wenn ich als Besucher gar nichts einstellen muss, wer entscheidet dann eigentlich, welcher Behörde der Browser überhaupt vertraut, wenn er ein Zertifikat prüft?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Jeder Browser bringt bereits eine feste Liste vertrauenswürdiger Stellen mit, die Zertifikate ausstellen dürfen. Diese Liste wird von den Herstellern der Browser gepflegt und nur nach strengen Regeln erweitert.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir eine Liste anerkannter Ausweisbehörden vor, die ein Grenzbeamter kennt: nur einen Ausweis von einer dieser anerkannten Stellen akzeptiert er ohne Nachfrage. Ein Ausweis von irgendeiner unbekannten, selbst gegründeten Stelle würde er dagegen ablehnen.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau nach diesem Prinzip vertraut dein Browser nur Zertifikaten, die von einer dieser anerkannten Stellen stammen. Stellt jemand ein Zertifikat selbst aus, ohne eine solche Stelle dazwischen, erkennt der Browser das und warnt dich.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann ich mir diese Liste vertrauenswürdiger Stellen auch selbst ansehen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, in den Einstellungen deines Browsers findest du oft einen Bereich für Zertifikate, in dem genau diese Liste steht. Für den Alltag musst du sie nicht auswendig kennen, es reicht zu wissen, dass sie im Hintergrund existiert und geprüft wird.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Gibt es das auch in einem echten Projekt zu sehen, nicht nur als Bild?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, dafür schauen wir uns ein Stück aus dem Portfolio-Projekt an, der eigenen Bewerbungswebseite.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Diese Webseite besteht komplett aus fertigen Seiten ohne eigene Datenbank, aber sie trägt trotzdem eine ganze Reihe an Sicherheitskopfzeilen, die bei jeder einzigen Antwort automatisch mitgeschickt werden.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "In der zentralen Einstellungsdatei dieser Webseite steht eine ganze Liste solcher Kopfzeilen: eine sagt, dass die Seite niemals in einem fremden Rahmen auf einer anderen Webseite eingebettet werden darf.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Eine andere Kopfzeile in derselben Liste sagt dem Browser ausdrücklich, dass diese Webseite immer nur über HTTPS geladen werden soll, für sehr lange Zeit im Voraus, auch beim nächsten Besuch.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Warum reicht es nicht, so eine Regel einfach nur in einem Text auf der Webseite zu erklären, statt sie als Kopfzeile zu verschicken?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Weil ein Browser Text auf der Webseite als reinen Inhalt liest, nicht als Anweisung, an die er sich halten muss. Eine Kopfzeile dagegen ist Teil der HTTP-Antwort selbst und wird vom Browser automatisch ausgewertet, bevor überhaupt etwas dargestellt wird.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Und die Kopfzeile mit CSP, die im Auftrag erwähnt wurde, was macht die genau?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "CSP steht für Content Security Policy, also eine Sicherheitsrichtlinie für Inhalte. Diese eine Kopfzeile legt fest, aus welchen Quellen überhaupt Bilder, Schriften oder kleine Programme geladen werden dürfen.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir eine Gästeliste an einer Tür vor: nur wer draufsteht, kommt rein. Die CSP-Kopfzeile ist genau so eine Gästeliste, nur für alles, was auf der Webseite überhaupt geladen werden darf.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Steht eine Quelle nicht auf dieser Liste, blockiert der Browser sie von selbst, selbst wenn sich jemand Fremdes Zugriff auf die Seite verschafft hätte und versuchen würde, dort eigenen schädlichen Inhalt einzuschleusen.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Das heißt, diese Kopfzeilen schützen nicht nur die Verbindung, sondern auch, was auf der Seite selbst passieren darf?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau richtig erkannt. HTTPS verschlüsselt den Transportweg, Sicherheitskopfzeilen legen zusätzlich Regeln für die fertig angekommene Seite selbst fest. Beides zusammen ergibt erst ein solides Sicherheitsfundament.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Was würde denn fehlen, wenn eine Webseite nur HTTPS hätte, aber keine einzige Sicherheitskopfzeile?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Der Transportweg wäre zwar verschlüsselt, aber ohne Sicherheitskopfzeilen könnte ein späterer Fehler in der Webseite selbst leichter ausgenutzt werden, um fremden Inhalt von einer beliebigen anderen Adresse nachzuladen.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Der versiegelte Brief käme also sicher an, aber niemand hätte vorher festgelegt, welche Absender überhaupt vertrauenswürdig sind, sobald der Umschlag geöffnet ist.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Fassen wir noch einmal ganz kurz zusammen, was heute wichtig war?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "B",
+      "text": "Also noch einmal ganz kurz zusammengefasst: einfaches HTTP schickt Daten als Klartext, lesbar für jeden auf dem Weg, wie eine offene Postkarte. HTTPS verschlüsselt dieselben Daten mit dem Verfahren TLS, wie ein versiegelter Brief. Ein Zertifikat bestätigt dabei, dass der Server wirklich echt ist, und Sicherheitskopfzeilen setzen zusätzliche Regeln für das, was auf der Seite geladen werden darf.",
+      "isKeySentence": true,
+      "role": "key"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau, und das kleine Schloss-Symbol in der Adressleiste ist im Alltag dein schnellster Hinweis darauf, dass gerade genau dieser Schutz aktiv ist.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Sollte ich dieses Schloss also wirklich jedes Mal bewusst ansehen, bevor ich irgendwo etwas eintippe?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, vor allem bei Anmeldeseiten und Formularen mit persönlichen Daten lohnt sich dieser kurze Blick jedes Mal. Es dauert nur eine Sekunde und schützt dich davor, ein Passwort ungeschützt auf die Reise zu schicken.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Wird sich diese Gewohnheit mit der Zeit von selbst einschleifen, oder muss ich mich jedes Mal bewusst daran erinnern?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Mit ein wenig Übung wird der kurze Blick auf die Adressleiste fast automatisch, so wie du auch beim Überqueren einer Straße irgendwann ohne langes Nachdenken nach links und rechts schaust. Genau diese kleine, wiederholte Gewohnheit schützt dich im Alltag am meisten.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss ich als Nutzerin selbst irgendetwas einstellen, damit HTTPS bei mir aktiv ist?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, als Nutzerin musst du gar nichts einstellen. Dein Browser entscheidet automatisch, ob eine Seite HTTPS anbietet, und benutzt es dann von selbst.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Deine Aufgabe ist nur, das Schloss-Symbol im Blick zu behalten und eine Warnung ernst zu nehmen, wenn der Browser dir eine anzeigt.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Gilt das eigentlich nur für Webseiten im Browser, oder auch für Apps auf dem Handy?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Auch Apps auf dem Handy reden im Hintergrund oft über genau dieselbe verschlüsselte Verbindung mit einem Server, nur ohne sichtbares Schloss-Symbol, weil eine App keine Adressleiste hat.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Das Prinzip dahinter ist aber identisch: eine App, die dein Passwort ernst nimmt, verschlüsselt die Verbindung zum Server genauso wie ein Browser das bei einer Webseite tut.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Verändert Verschlüsselung eigentlich, wie lange eine Seite zum Laden braucht?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Früher kostete Verschlüsselung tatsächlich spürbar Zeit, weil das Aushandeln des Schlüssels bei TLS einen zusätzlichen Umweg brauchte, bevor die erste Anfrage überhaupt losgehen konnte.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Heute ist dieser Umweg durch bessere Technik so kurz geworden, dass du im normalen Alltag praktisch keinen Unterschied mehr merkst. Die Sicherheit kommt also fast ohne spürbaren Preis bei der Geschwindigkeit.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann eine Webseite theoretisch teilweise über HTTPS und teilweise über einfaches HTTP laufen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Technisch war das früher tatsächlich möglich und kam öfter vor, zum Beispiel wenn ein Bild von einer alten, unverschlüsselten Adresse eingebunden wurde, während die restliche Seite schon über HTTPS lief.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Moderne Browser warnen bei so einer gemischten Seite oder blockieren die unverschlüsselten Teile sogar ganz automatisch, weil ein einziges unverschlüsseltes Teilstück die ganze Sicherheit der Seite schwächen kann.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Fassen wir die Begriffe von heute noch einmal als Liste zusammen.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Klartext: Eine Nachricht, die für jeden lesbar ist, der sie unterwegs abfängt, ohne jede Verschlüsselung.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Verschlüsselung: Ein Verfahren, das eine Nachricht so umwandelt, dass nur Sender und Empfänger sie lesen können, niemand dazwischen.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "HTTPS: HTTP mit eingebauter Verschlüsselung: dieselbe Sprache zwischen Browser und Server, aber in einem verschlossenen Umschlag statt auf offener Postkarte.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "TLS: Das technische Verfahren, das im Hintergrund die Verschlüsselung von HTTPS herstellt und den Schlüssel dafür aushandelt.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Zertifikat: Ein digitaler Ausweis für eine Webseite, ausgestellt von einer vertrauenswürdigen Stelle, der bestätigt, dass ein Server wirklich der ist, für den er sich ausgibt.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Sicherheitskopfzeile: Eine besondere Kopfzeile in der Antwort eines Servers, die dem Browser zusätzliche Sicherheitsregeln mitgibt, zum Beispiel welche Inhalte überhaupt geladen werden dürfen.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "B",
+      "text": "Kostet HTTPS mich als Nutzerin oder Nutzer irgendetwas extra?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, als Besucherin oder Besucher einer Webseite zahlst du für HTTPS nichts, die Verschlüsselung läuft automatisch im Hintergrund. Für die Betreiberin oder den Betreiber der Webseite kann ein Zertifikat Geld kosten, es gibt heute aber auch kostenlose, vertrauenswürdige Anbieter dafür, die viele kleine Webseiten und Portfolios im Alltag benutzen.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Bedeutet ein geschlossenes Schloss-Symbol automatisch, dass eine Webseite vollkommen vertrauenswürdig ist?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, das Schloss bestätigt nur, dass die Verbindung verschlüsselt ist und ein gültiges Zertifikat vorliegt, nicht, dass der Betreiber der Seite ehrlich ist. Auch eine betrügerische Webseite kann heute problemlos ein gültiges Zertifikat besitzen, das Schloss ersetzt also keine gesunde Vorsicht bei unbekannten Seiten.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Verschlüsselt HTTPS auch, wer eine Webseite besucht, oder nur, was dort eingetippt wird?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "HTTPS verschlüsselt den gesamten Datenverkehr zwischen Browser und Server, also sowohl die angefragte Adresse als auch alle eingegebenen Daten und die zurückgeschickte Antwort. Nur ganz grobe Informationen, etwa mit welchem Server überhaupt Kontakt aufgenommen wird, bleiben für Außenstehende teilweise sichtbar.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Warum sollte eine Webseite ohne Formulare, wie ein reines Portfolio, überhaupt HTTPS und Sicherheitskopfzeilen brauchen?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Auch ohne Formulare schützt HTTPS davor, dass jemand unterwegs den Inhalt der Seite heimlich verändert, bevor er bei dir ankommt, etwa um eigene schädliche Inhalte einzuschleusen. Sicherheitskopfzeilen wie CSP verhindern zusätzlich, dass ein späterer Fehler in der Seite überhaupt genutzt werden kann, um fremde Inhalte von einer beliebigen Adresse nachzuladen.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Was ist, wenn ich selbst später eine eigene kleine Webseite baue, muss ich mich dann selbst um TLS und Zertifikate kümmern?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "In den meisten modernen Hosting-Diensten wird HTTPS heute automatisch eingerichtet, sobald du eine Webseite dort veröffentlichst, ohne dass du selbst ein Zertifikat manuell besorgen musst. Erst wenn du später einen eigenen Server komplett selbst verwaltest, richtest du TLS und das Zertifikat bewusst selbst ein, meist mit denselben kostenlosen, automatisierten Werkzeugen, die auch große Hosting-Dienste im Hintergrund benutzen.",
+      "isKeySentence": false,
+      "role": "faq"
+    }
+  ],
+  "practiceExample": {
+    "text": "Im Repo portfolio trägt jede einzelne Antwort der Webseite eine ganze Reihe an Sicherheitskopfzeilen. Die Kopfzeile Strict-Transport-Security sagt dem Browser, dass diese Webseite für sehr lange Zeit immer nur über HTTPS geladen werden darf, nie über einfaches, unverschlüsseltes HTTP. Die Kopfzeile Content-Security-Policy legt fest, aus welchen Quellen Bilder, Schriften und kleine Programme überhaupt geladen werden dürfen, wie eine Gästeliste an einer Tür. Beide Kopfzeilen stehen fest in einer einzigen Einstellungsdatei, nicht verstreut über viele Seiten.",
+    "repoNote": "repo-portfolio",
+    "location": "vercel.json, Zeilen 7 bis 45 (Abschnitt headers, darin Strict-Transport-Security in Zeile 28 bis 31 und Content-Security-Policy in Zeile 40 bis 42)"
+  },
+  "quiz": [
+    {
+      "question": "Was beschreibt das Bild der Postkarte am besten?",
+      "area": "Verschlüsselung",
+      "options": [
+        {
+          "text": "Eine Nachricht, die niemand außer dem Empfänger jemals zu sehen bekommt.",
+          "isCorrect": false,
+          "explanation": "Genau das Gegenteil stimmt: eine Postkarte kann jeder auf dem Weg lesen."
+        },
+        {
+          "text": "Eine Nachricht, die auf dem Weg für jeden lesbar ist, der sie kurz in der Hand hält.",
+          "isCorrect": true,
+          "explanation": "Genau das ist Klartext, wie unverschlüsseltes HTTP."
+        },
+        {
+          "text": "Eine Nachricht, die automatisch verschlüsselt wird, sobald sie den Briefkasten verlässt.",
+          "isCorrect": false,
+          "explanation": "Eine Postkarte wird gerade nicht verschlüsselt, das ist der Kern des Bildes."
+        },
+        {
+          "text": "Eine Nachricht, die nur mit einem Zertifikat verschickt werden darf.",
+          "isCorrect": false,
+          "explanation": "Ein Zertifikat gehört zu HTTPS, nicht zum Bild der einfachen Postkarte."
+        }
+      ]
+    },
+    {
+      "question": "Was ist Klartext bei HTTP?",
+      "area": "Verschlüsselung",
+      "options": [
+        {
+          "text": "Eine Nachricht, die für jeden lesbar ist, der sie unterwegs abfängt.",
+          "isCorrect": true,
+          "explanation": "Genau das ist die Definition von Klartext."
+        },
+        {
+          "text": "Eine Nachricht, die erst nach Eingabe eines gültigen Passworts überhaupt lesbar wird.",
+          "isCorrect": false,
+          "explanation": "Das würde eher zu einer verschlüsselten Nachricht passen, nicht zu Klartext."
+        },
+        {
+          "text": "Eine Nachricht, die ausschließlich in Bildern verschickt wird.",
+          "isCorrect": false,
+          "explanation": "Klartext beschreibt die Lesbarkeit, nicht das Format der Nachricht."
+        },
+        {
+          "text": "Ein anderes Wort für ein gültiges Zertifikat.",
+          "isCorrect": false,
+          "explanation": "Zertifikat und Klartext sind zwei völlig unterschiedliche Begriffe aus dieser Lektion."
+        }
+      ]
+    },
+    {
+      "question": "Was macht Verschlüsselung mit einer Nachricht?",
+      "area": "Verschlüsselung",
+      "options": [
+        {
+          "text": "Sie löscht die Nachricht spätestens eine Minute nach dem erfolgreichen Versenden automatisch.",
+          "isCorrect": false,
+          "explanation": "Verschlüsselung löscht nichts, sie verändert nur die Lesbarkeit unterwegs."
+        },
+        {
+          "text": "Sie wandelt die Nachricht so um, dass nur Sender und Empfänger sie lesen können.",
+          "isCorrect": true,
+          "explanation": "Genau das ist Verschlüsselung, wie der versiegelte Brief."
+        },
+        {
+          "text": "Sie macht die Nachricht kürzer, damit sie schneller ankommt.",
+          "isCorrect": false,
+          "explanation": "Verschlüsselung verändert nicht in erster Linie die Länge, sondern die Lesbarkeit."
+        },
+        {
+          "text": "Sie schickt die Nachricht automatisch an mehrere Empfänger gleichzeitig.",
+          "isCorrect": false,
+          "explanation": "Verschlüsselung betrifft, wer lesen kann, nicht wie viele Empfänger es gibt."
+        }
+      ]
+    },
+    {
+      "question": "Was bedeutet das S am Ende von HTTPS?",
+      "area": "HTTPS",
+      "options": [
+        {
+          "text": "Server, weil nur Server HTTPS benutzen dürfen.",
+          "isCorrect": false,
+          "explanation": "Auch Browser sind an HTTPS beteiligt, das S steht nicht für Server."
+        },
+        {
+          "text": "Secure, also sicher, weil die Verbindung verschlüsselt ist.",
+          "isCorrect": true,
+          "explanation": "Genau das ist die Bedeutung des S in HTTPS."
+        },
+        {
+          "text": "Speed, weil HTTPS grundsätzlich schneller als HTTP ist.",
+          "isCorrect": false,
+          "explanation": "Das S steht nicht für Geschwindigkeit, sondern für Sicherheit."
+        },
+        {
+          "text": "Site, weil HTTPS nur für ganze Webseiten gilt, nicht für einzelne Anfragen.",
+          "isCorrect": false,
+          "explanation": "HTTPS gilt für einzelne Anfragen und Antworten genauso wie HTTP."
+        }
+      ]
+    },
+    {
+      "question": "Woran erkennst du im Browser meist auf den ersten Blick, ob HTTPS aktiv ist?",
+      "area": "HTTPS",
+      "options": [
+        {
+          "text": "An einem kleinen Schloss-Symbol vor der Adresse der Webseite.",
+          "isCorrect": true,
+          "explanation": "Genau dieses Zeichen zeigt eine aktive HTTPS-Verbindung an."
+        },
+        {
+          "text": "An der Farbe des Hintergrunds, die jede Webseite mit HTTPS zwingend benutzen muss.",
+          "isCorrect": false,
+          "explanation": "Die Hintergrundfarbe hat nichts mit HTTPS zu tun, das entscheidet allein die Webseite selbst."
+        },
+        {
+          "text": "An der Anzahl der Bilder auf der Seite.",
+          "isCorrect": false,
+          "explanation": "Die Bilderanzahl sagt nichts über eine verschlüsselte Verbindung aus."
+        },
+        {
+          "text": "Am Namen des Browsers, den du gerade benutzt.",
+          "isCorrect": false,
+          "explanation": "HTTPS hängt von der Webseite und der Verbindung ab, nicht vom Namen des Browsers."
+        }
+      ]
+    },
+    {
+      "question": "Was passiert grob bei TLS, bevor die erste Anfrage verschickt wird?",
+      "area": "HTTPS",
+      "options": [
+        {
+          "text": "Browser und Server handeln einen gemeinsamen Schlüssel für die Verschlüsselung aus.",
+          "isCorrect": true,
+          "explanation": "Genau das ist die Aufgabe von TLS, so wie zwei Freunde, die sich vorher auf eine Geheimsprache einigen."
+        },
+        {
+          "text": "Der Browser löscht alle vorherigen Kopfzeilen aus dem Speicher.",
+          "isCorrect": false,
+          "explanation": "Das hat nichts mit der Aufgabe von TLS zu tun."
+        },
+        {
+          "text": "Der Server wählt zufällig eine neue Webadresse für die Seite aus.",
+          "isCorrect": false,
+          "explanation": "Die Adresse einer Webseite ändert sich durch TLS nicht."
+        },
+        {
+          "text": "Der Browser sendet dabei automatisch das gespeicherte Passwort des Nutzers an jeden beteiligten Server im Netz.",
+          "isCorrect": false,
+          "explanation": "Ein Passwort wird nur gezielt an den einen Server geschickt, den du ansprichst, nicht an alle."
+        }
+      ]
+    },
+    {
+      "question": "Wofür sorgt ein Zertifikat bei HTTPS?",
+      "area": "HTTPS",
+      "options": [
+        {
+          "text": "Es bestätigt, dass der Server wirklich zu der Adresse gehört, die er vorgibt.",
+          "isCorrect": true,
+          "explanation": "Genau das ist die Aufgabe eines Zertifikats, wie ein geprüfter Ausweis."
+        },
+        {
+          "text": "Es macht die Webseite optisch ansprechender.",
+          "isCorrect": false,
+          "explanation": "Ein Zertifikat betrifft die Sicherheit, nicht das Aussehen der Webseite."
+        },
+        {
+          "text": "Es verhindert dauerhaft und vollständig, dass der zugehörige Server jemals offline gehen kann.",
+          "isCorrect": false,
+          "explanation": "Ein Zertifikat hat keinen Einfluss darauf, ob ein Server erreichbar bleibt."
+        },
+        {
+          "text": "Es übersetzt die Webseite automatisch in andere Sprachen.",
+          "isCorrect": false,
+          "explanation": "Übersetzung ist keine Aufgabe eines Zertifikats."
+        }
+      ]
+    },
+    {
+      "question": "Was solltest du tun, wenn dein Browser eine deutliche Warnung wegen eines ungültigen Zertifikats zeigt?",
+      "area": "HTTPS",
+      "options": [
+        {
+          "text": "Die Warnung ignorieren und trotzdem sofort mein Passwort eingeben.",
+          "isCorrect": false,
+          "explanation": "Genau das sollte man nicht tun, denn die Warnung weist auf ein echtes Risiko hin."
+        },
+        {
+          "text": "Die Warnung ernst nehmen und dort kein Passwort oder keine Zahlungsdaten eingeben.",
+          "isCorrect": true,
+          "explanation": "Genau das war die Empfehlung aus der Lektion."
+        },
+        {
+          "text": "Den Rechner sofort komplett neu aufsetzen.",
+          "isCorrect": false,
+          "explanation": "Das wäre eine völlig überzogene Reaktion auf eine einzelne Zertifikatswarnung."
+        },
+        {
+          "text": "Die Webseite bei jedem Öffnen erneut installieren.",
+          "isCorrect": false,
+          "explanation": "Webseiten werden nicht installiert, das ist kein sinnvoller Schritt."
+        }
+      ]
+    },
+    {
+      "question": "Warum darf ein Passwort laut dieser Lektion nie über einfaches, unverschlüsseltes HTTP verschickt werden?",
+      "area": "Verschlüsselung",
+      "options": [
+        {
+          "text": "Weil HTTP technisch gar keine Formulare unterstützt.",
+          "isCorrect": false,
+          "explanation": "HTTP unterstützt Formulare problemlos, das Risiko liegt in der fehlenden Verschlüsselung."
+        },
+        {
+          "text": "Weil das Passwort als Klartext unterwegs mitgelesen werden könnte.",
+          "isCorrect": true,
+          "explanation": "Genau das war der Grund: ohne Verschlüsselung ist das Passwort wie eine offene Postkarte."
+        },
+        {
+          "text": "Weil unverschlüsseltes HTTP grundsätzlich langsamer ist als HTTPS.",
+          "isCorrect": false,
+          "explanation": "Die Geschwindigkeit war nicht der genannte Grund, sondern die fehlende Sicherheit."
+        },
+        {
+          "text": "Weil Server mit HTTP keine Antworten zurückschicken können.",
+          "isCorrect": false,
+          "explanation": "Server können bei HTTP problemlos antworten, das Problem ist allein die fehlende Verschlüsselung."
+        }
+      ]
+    },
+    {
+      "question": "Was macht die Sicherheitskopfzeile Strict-Transport-Security im Praxisbeispiel aus dem Portfolio-Projekt?",
+      "area": "Praxisbeispiel Portfolio",
+      "options": [
+        {
+          "text": "Sie sagt dem Browser, dass die Seite immer nur über HTTPS geladen werden soll.",
+          "isCorrect": true,
+          "explanation": "Genau das steht in dieser Kopfzeile laut dem Praxisbeispiel."
+        },
+        {
+          "text": "Sie übersetzt alle Kopfzeilen automatisch ins Englische.",
+          "isCorrect": false,
+          "explanation": "Übersetzung ist keine Aufgabe dieser Kopfzeile."
+        },
+        {
+          "text": "Sie erlaubt es jeder anderen Webseite, diese Seite in einem Rahmen einzubetten.",
+          "isCorrect": false,
+          "explanation": "Das würde eher das Gegenteil einer Sicherheitskopfzeile beschreiben."
+        },
+        {
+          "text": "Sie speichert das Passwort der Besucherin oder des Besuchers dauerhaft.",
+          "isCorrect": false,
+          "explanation": "Eine Sicherheitskopfzeile speichert keine Passwörter, das wäre ein Sicherheitsproblem."
+        }
+      ]
+    },
+    {
+      "question": "Wofür steht die Abkürzung CSP im Praxisbeispiel?",
+      "area": "Praxisbeispiel Portfolio",
+      "options": [
+        {
+          "text": "Content Security Policy, eine Sicherheitsrichtlinie für erlaubte Inhalte.",
+          "isCorrect": true,
+          "explanation": "Genau dafür steht CSP, wie eine Gästeliste für Inhalte."
+        },
+        {
+          "text": "Client Server Protocol, ein anderes Wort für HTTP.",
+          "isCorrect": false,
+          "explanation": "Das ist nicht die Bedeutung von CSP in dieser Lektion."
+        },
+        {
+          "text": "Certified Secure Page, eine Auszeichnung für schnelle Webseiten.",
+          "isCorrect": false,
+          "explanation": "CSP hat mit Geschwindigkeit nichts zu tun, sondern mit erlaubten Inhaltsquellen."
+        },
+        {
+          "text": "Central Storage Point, ein Ort, an dem Passwörter gesammelt werden.",
+          "isCorrect": false,
+          "explanation": "CSP sammelt keine Passwörter, das wäre komplett falsch verstanden."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der Unterschied zwischen HTTPS und einer Sicherheitskopfzeile wie CSP?",
+      "area": "HTTPS",
+      "options": [
+        {
+          "text": "HTTPS verschlüsselt den Transportweg, CSP regelt, was auf der Seite geladen werden darf.",
+          "isCorrect": true,
+          "explanation": "Genau diese Arbeitsteilung wurde in der Lektion erklärt."
+        },
+        {
+          "text": "Beide sind exakt dasselbe, nur mit zwei verschiedenen Namen.",
+          "isCorrect": false,
+          "explanation": "HTTPS und CSP lösen zwei unterschiedliche Aufgaben, sie sind nicht dasselbe."
+        },
+        {
+          "text": "HTTPS regelt Inhalte, CSP verschlüsselt die Verbindung.",
+          "isCorrect": false,
+          "explanation": "Das ist genau vertauscht: HTTPS verschlüsselt, CSP regelt Inhalte."
+        },
+        {
+          "text": "CSP ersetzt HTTPS vollständig, sodass HTTPS nicht mehr nötig ist.",
+          "isCorrect": false,
+          "explanation": "CSP ersetzt HTTPS nicht, beide ergänzen sich, wie in der Lektion beschrieben."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Öffne in deinem Browser drei bis vier Webseiten, die du regelmäßig benutzt, zum Beispiel deine Bank, ein Online-Shop und ein soziales Netzwerk. Sieh dir bei jeder Seite das Zeichen ganz links in der Adressleiste an, meist ein kleines Schloss. Klicke auf dieses Zeichen und lies dir kurz durch, was der Browser dir über die Verbindung und das Zertifikat der Seite anzeigt.",
+    "expectation": "Für jede besuchte Seite kannst du sagen, ob das Schloss geschlossen war und was der Browser beim Anklicken über die Sicherheit der Verbindung angezeigt hat.",
+    "checklist": [
+      "Mindestens drei verschiedene, regelmäßig genutzte Webseiten geöffnet",
+      "Bei jeder Seite das Schloss-Symbol in der Adressleiste gefunden",
+      "Mindestens einmal auf das Schloss geklickt und die Zertifikatsinformationen angesehen",
+      "Für jede Seite notiert, ob die Verbindung über HTTPS lief"
+    ]
+  },
+  "audio": {
+    "file": "M01-05-02.mp3",
+    "durationSeconds": 1010,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Kostet HTTPS mich als Nutzerin oder Nutzer irgendetwas extra?",
+      "answer": "Nein, als Besucherin oder Besucher einer Webseite zahlst du für HTTPS nichts, die Verschlüsselung läuft automatisch im Hintergrund. Für die Betreiberin oder den Betreiber der Webseite kann ein Zertifikat Geld kosten, es gibt heute aber auch kostenlose, vertrauenswürdige Anbieter dafür, die viele kleine Webseiten und Portfolios im Alltag benutzen."
+    },
+    {
+      "question": "Bedeutet ein geschlossenes Schloss-Symbol automatisch, dass eine Webseite vollkommen vertrauenswürdig ist?",
+      "answer": "Nein, das Schloss bestätigt nur, dass die Verbindung verschlüsselt ist und ein gültiges Zertifikat vorliegt, nicht, dass der Betreiber der Seite ehrlich ist. Auch eine betrügerische Webseite kann heute problemlos ein gültiges Zertifikat besitzen, das Schloss ersetzt also keine gesunde Vorsicht bei unbekannten Seiten."
+    },
+    {
+      "question": "Verschlüsselt HTTPS auch, wer eine Webseite besucht, oder nur, was dort eingetippt wird?",
+      "answer": "HTTPS verschlüsselt den gesamten Datenverkehr zwischen Browser und Server, also sowohl die angefragte Adresse als auch alle eingegebenen Daten und die zurückgeschickte Antwort. Nur ganz grobe Informationen, etwa mit welchem Server überhaupt Kontakt aufgenommen wird, bleiben für Außenstehende teilweise sichtbar."
+    },
+    {
+      "question": "Warum sollte eine Webseite ohne Formulare, wie ein reines Portfolio, überhaupt HTTPS und Sicherheitskopfzeilen brauchen?",
+      "answer": "Auch ohne Formulare schützt HTTPS davor, dass jemand unterwegs den Inhalt der Seite heimlich verändert, bevor er bei dir ankommt, etwa um eigene schädliche Inhalte einzuschleusen. Sicherheitskopfzeilen wie CSP verhindern zusätzlich, dass ein späterer Fehler in der Seite überhaupt genutzt werden kann, um fremde Inhalte von einer beliebigen Adresse nachzuladen."
+    },
+    {
+      "question": "Was ist, wenn ich selbst später eine eigene kleine Webseite baue, muss ich mich dann selbst um TLS und Zertifikate kümmern?",
+      "answer": "In den meisten modernen Hosting-Diensten wird HTTPS heute automatisch eingerichtet, sobald du eine Webseite dort veröffentlichst, ohne dass du selbst ein Zertifikat manuell besorgen musst. Erst wenn du später einen eigenen Server komplett selbst verwaltest, richtest du TLS und das Zertifikat bewusst selbst ein, meist mit denselben kostenlosen, automatisierten Werkzeugen, die auch große Hosting-Dienste im Hintergrund benutzen."
+    }
+  ]
+}

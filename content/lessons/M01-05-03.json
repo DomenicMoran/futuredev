@@ -1,0 +1,1129 @@
+{
+  "id": "M01-05-03",
+  "title": "Statuscodes verstehen: 200, 301, 400, 401, 403, 404, 500",
+  "durationMinutes": 17,
+  "prerequisites": [
+    "M01-05-01",
+    "M01-00-01",
+    "M01-00-02",
+    "M01-00-03",
+    "M01-03-01",
+    "M01-03-02",
+    "M01-04-01",
+    "M01-04-02"
+  ],
+  "terms": [
+    {
+      "term": "Statuscode",
+      "definition": "Eine dreistellige Zahl, die jede Antwort eines Servers begleitet und sofort sagt, ob alles geklappt hat oder was schiefgegangen ist."
+    },
+    {
+      "term": "Erfolgsfamilie",
+      "definition": "Alle Statuscodes, die mit einer 2 beginnen. Sie bedeuten: die Anfrage wurde erfolgreich bearbeitet."
+    },
+    {
+      "term": "200",
+      "definition": "Der häufigste Statuscode überhaupt. Bedeutet: alles ist gut gegangen, hier ist die Antwort."
+    },
+    {
+      "term": "Weiterleitungsfamilie",
+      "definition": "Alle Statuscodes, die mit einer 3 beginnen. Sie bedeuten: geh stattdessen zu einer anderen Adresse."
+    },
+    {
+      "term": "301",
+      "definition": "Der Statuscode für eine dauerhafte Weiterleitung: die alte Adresse gibt es so nicht mehr, die neue steht gleich mit dabei."
+    },
+    {
+      "term": "Client-Fehler-Familie",
+      "definition": "Alle Statuscodes, die mit einer 4 beginnen. Sie bedeuten: mit der Anfrage selbst stimmte etwas nicht."
+    },
+    {
+      "term": "400",
+      "definition": "Der Statuscode für eine falsch aufgebaute Anfrage, die der Server gar nicht erst verstehen konnte."
+    },
+    {
+      "term": "401",
+      "definition": "Der Statuscode dafür, dass du dich erst anmelden musst, bevor du das bekommst, was du angefragt hast."
+    },
+    {
+      "term": "403",
+      "definition": "Der Statuscode dafür, dass der Server dich zwar kennt, dir dieser Zugriff aber trotzdem nicht erlaubt ist."
+    },
+    {
+      "term": "404",
+      "definition": "Der Statuscode dafür, dass es das Angefragte an dieser Adresse schlicht nicht gibt."
+    },
+    {
+      "term": "Server-Fehler-Familie",
+      "definition": "Alle Statuscodes, die mit einer 5 beginnen. Sie bedeuten: der Fehler liegt beim Server selbst, nicht bei der Anfrage."
+    },
+    {
+      "term": "500",
+      "definition": "Der Statuscode dafür, dass im Server selbst beim Bearbeiten etwas kaputtgegangen ist, mit deiner Anfrage hatte das meist nichts zu tun."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "text": "Stell dir vor, du bestellst ein Paket und wartest auf die Lieferung.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Wenn der Paketbote da war, hinterlässt er meist einen kleinen Beleg: zugestellt, niemand angetroffen, oder Adresse unbekannt. Ein einziger kurzer Vermerk, der dir sofort sagt, was passiert ist, ohne dass du nachfragen musst.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "B",
+      "text": "Und bei einer Anfrage im Web gibt es auch so einen kurzen Vermerk?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ganz genau. Aus der letzten Lektion weißt du schon: jede Anfrage bekommt eine Antwort vom Server zurück. Diese Antwort trägt immer eine kleine Zahl mit sich, die sofort verrät, wie es gelaufen ist.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Diese Zahl nennt man Statuscode.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Statuscode.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Wenn du eine Webseite aufrufst und sie ganz normal erscheint, hat der Browser im Hintergrund bereits einen Statuscode gesehen und geprüft, ohne dass du je etwas davon mitbekommst.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Ist diese Zahl irgendwie geordnet, oder ist jede Zahl etwas völlig anderes?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Sie ist sehr klar geordnet. Ein Statuscode hat immer genau drei Ziffern, und schon die allererste Ziffer verrät dir grob, in welche Richtung es geht, noch bevor du die genaue Zahl kennst.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Man kann sich das wie Familien vorstellen: alle Statuscodes mit derselben ersten Ziffer gehören zur selben Familie und bedeuten grob dasselbe.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Die erste Familie beginnt mit einer 2 an erster Stelle.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Diese Familie heißt Erfolgsfamilie.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Erfolgsfamilie.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir wieder den Paketboten vor, der auf seinem Beleg ankreuzt: erfolgreich zugestellt. Genau das bedeutet jeder Statuscode aus der Erfolgsfamilie: die Anfrage wurde erfolgreich bearbeitet.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Der mit Abstand häufigste einzelne Statuscode aus dieser Familie ist die 200.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Statuscode 200.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Wenn du eine Nachrichtenseite öffnest und der Artikel ganz normal erscheint, mit Text und Bildern, dann stand im Hintergrund bei der Antwort eine 200. Alles gut gegangen, hier ist die Antwort, mehr bedeutet dieser Statuscode nicht.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Läuft also bei den allermeisten Klicks im Alltag einfach eine 200 im Hintergrund mit?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau, bei ganz normalem Surfen ist 200 mit Abstand der häufigste Statuscode überhaupt, so häufig, dass du ihn nie zu Gesicht bekommst, weil eben alles reibungslos funktioniert.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Was ist die nächste Familie?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Die nächste Familie beginnt mit einer 3 an erster Stelle.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Diese Familie heißt Weiterleitungsfamilie.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Weiterleitungsfamilie.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir vor, du gehst zu deinem alten Frisör, aber das Geschäft ist umgezogen. An der Tür hängt ein Zettel mit der neuen Adresse. Du bist zwar am alten Ort angekommen, bekommst aber sofort gesagt, wo es jetzt weitergeht.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau das macht ein Statuscode aus der Weiterleitungsfamilie: er sagt dem Browser, dass das, was du suchst, jetzt woanders liegt, und schickt gleich die neue Adresse mit.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Der bekannteste einzelne Statuscode aus dieser Familie ist die 301.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Statuscode 301.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Wenn eine Webseite umbenannt oder auf eine neue Adresse umgezogen wird, kann der Betreiber unter der alten Adresse eine 301 hinterlegen. Dein Browser bekommt sie, merkt sich die neue Adresse und ruft sie automatisch auf, meist ohne dass du überhaupt etwas davon bemerkst.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Merkt sich mein Browser diese neue Adresse dann auch dauerhaft?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau deshalb heißt die 301 auch dauerhafte Weiterleitung: sie sagt dem Browser ausdrücklich, dass die alte Adresse für immer verschwunden ist, nicht nur vorübergehend. Der Browser darf sich das also merken und muss die alte Adresse nicht jedes Mal neu anfragen.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Was passiert denn, wenn beim Server selbst etwas mit meiner Anfrage nicht stimmt?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau dafür gibt es die nächste Familie, und die begegnet dir im Alltag deutlich häufiger als die Weiterleitungsfamilie.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Diese Familie beginnt mit einer 4 an erster Stelle und heißt Client-Fehler-Familie.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Client-Fehler-Familie.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Der Client ist, wie du aus einer früheren Lektion weißt, die Seite, die anfragt, also meist dein Browser. Jeder Statuscode aus der Client-Fehler-Familie bedeutet deshalb: mit der Anfrage selbst stimmte etwas nicht, nicht mit dem Server.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir vor, du bestellst am Bestellzettel etwas, das die Küche gar nicht lesen kann, weil deine Schrift völlig unleserlich ist, oder du bestellst ein Gericht, das gar nicht auf der Karte steht. Der Fehler liegt dann bei deiner Bestellung, nicht bei der Küche.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Der erste wichtige Statuscode aus dieser Familie ist die 400.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Statuscode 400.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Eine 400 bedeutet, dass die Anfrage selbst so falsch aufgebaut war, dass der Server sie gar nicht erst richtig verstehen konnte, etwa wenn in einem Formular eine Angabe fehlt, die zwingend nötig gewesen wäre.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Und wenn ich mich erst anmelden muss, bevor ich etwas sehen darf?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau dafür gibt es einen eigenen Statuscode, die 401.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Statuscode 401.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Rufst du zum Beispiel den geschützten Bereich deines E-Mail-Postfachs auf, ohne angemeldet zu sein, kann der Server mit einer 401 antworten. Übersetzt bedeutet das: ich kenne dich noch nicht, melde dich erst an.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Woran erkenne ich als Nutzerin im Alltag typischerweise eine 400, ohne die Entwicklerwerkzeuge zu öffnen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Oft zeigt dir die Webseite dann direkt neben dem Formular einen roten Hinweistext, etwa dass ein Pflichtfeld noch leer ist oder eine E-Mail-Adresse falsch geschrieben wurde. Der Statuscode 400 läuft im Hintergrund mit, die Webseite übersetzt ihn aber meist in einen verständlichen Satz für dich.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Und wenn ich zwar angemeldet bin, aber trotzdem nicht an etwas herankommen soll?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Dann kommt ein anderer Statuscode ins Spiel, die 403.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Statuscode 403.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir ein Bürogebäude vor, in dem dein Mitarbeiterausweis dich problemlos durch die Eingangstür lässt, aber vor dem Serverraum trotzdem stehen bleibt, weil dieser Bereich nur für wenige Personen freigegeben ist. Genau das ist eine 403: der Server kennt dich, erlaubt dir diesen einen Zugriff aber trotzdem nicht.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "B",
+      "text": "Und was ist der Unterschied zwischen 401 und 403 noch mal ganz kurz gesagt?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Bei 401 fehlt die Anmeldung überhaupt noch, bei 403 bist du angemeldet, hast aber für genau diese eine Sache keine Erlaubnis. Erst fehlende Ausweispflicht, dann verweigerter Zutritt trotz gültigem Ausweis.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Welcher Statuscode ist wohl der bekannteste überhaupt, mit dem sogar Leute ohne technisches Vorwissen etwas anfangen können?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Das ist mit großem Abstand die 404.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Statuscode 404.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Tippst du eine Adresse falsch ein oder klickst auf einen alten Link, der zu einer inzwischen gelöschten Seite führt, antwortet der Server oft mit einer 404. Übersetzt bedeutet das: an dieser Adresse gibt es schlicht nichts, das du anfragen könntest.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Viele Webseiten gestalten diese Fehlerseite sogar extra freundlich, mit einem kleinen Bild oder einem Scherz, weil so viele Besucherinnen und Besucher im Alltag irgendwann einmal auf eine 404 stoßen.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Bisher lag der Fehler immer bei der Anfrage selbst. Kann es denn auch mal am Server liegen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, und dafür gibt es die letzte große Familie, die dir begegnen wird.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Diese Familie beginnt mit einer 5 an erster Stelle und heißt Server-Fehler-Familie.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Server-Fehler-Familie.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir vor, deine Bestellung im Restaurant war völlig korrekt und klar geschrieben, aber in der Küche fällt genau in diesem Moment der Herd aus. Der Fehler liegt eindeutig nicht an deiner Bestellung, sondern an der Küche selbst. Genau das beschreibt die Server-Fehler-Familie: nicht deine Anfrage war schuld, sondern der Server selbst.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Der bekannteste einzelne Statuscode aus dieser Familie ist die 500.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Statuscode 500.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Eine 500 bedeutet, dass beim Server selbst während der Bearbeitung etwas kaputtgegangen ist, zum Beispiel ein Fehler tief im Quelltext des Servers. Mit deiner Anfrage hatte das meist überhaupt nichts zu tun, du hast alles richtig gemacht.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Was tut eine Entwicklerin oder ein Entwickler denn, wenn plötzlich eine 500 auftaucht?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Zuerst schaut sie oder er in die eigenen Aufzeichnungen des Servers, die sogenannten Protokolle, um genau die Stelle aufzuspüren, an der der Fehler entstanden ist. Diese Protokolle halten meist genau fest, wann welche Anfrage mit welchem Statuscode beantwortet wurde.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Danach wird genau diese Stelle im Quelltext geprüft und behoben, und erst danach liefert dieselbe Anfrage wieder eine ganz normale 200 statt der 500.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Das heißt, eine 500 ist im Grunde ein Hinweis, sofort nachzusehen, was intern kaputt ist?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau, eine 500 ist für eine Entwicklerin oder einen Entwickler fast immer ein Alarmsignal, dem sofort nachgegangen wird, während eine 404 oft einfach nur eine falsch getippte Adresse bedeutet und kein größeres Problem ist. Genau diese unterschiedliche Dringlichkeit macht den praktischen Unterschied zwischen den beiden Familien aus.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Können wir uns anschauen, wie so eine Prüfung von Statuscodes in echtem Quelltext aussieht, nicht nur als Bild?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, dazu schauen wir uns ein Stück aus dem Projekt ssrf-guarded-fetch an, einem kleinen Werkzeug, das fremde Webadressen sicher abruft.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Dieses Werkzeug ruft im Auftrag einer Anwendung eine fremde Adresse auf, prüft aber vorher sehr genau, ob diese Adresse überhaupt sicher ist, bevor überhaupt eine Anfrage rausgeht.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Nachdem die Anfrage verschickt wurde, kommt irgendwann die Antwort mit ihrem Statuscode zurück. An genau dieser Stelle prüft der Quelltext, ob dieser Statuscode aus der Erfolgsfamilie stammt.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Gehört der Statuscode nicht zur Erfolgsfamilie, bricht das Werkzeug bewusst mit einer eigenen Fehlermeldung ab, statt einfach mit einer kaputten oder unvollständigen Antwort weiterzuarbeiten.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Warum ist es so wichtig, das genau an dieser Stelle zu prüfen und nicht erst später?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Weil eine Anwendung, die eine Antwort mit einer 404 oder einer 500 einfach so weiterverarbeitet, als wäre sie eine 200, leicht mit leeren oder falschen Daten weiterrechnet, ohne dass irgendjemand den eigentlichen Fehler bemerkt. Ein solcher stiller Fehler fällt oft erst viel später auf, wenn schon niemand mehr weiß, wo er entstanden ist.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau deshalb prüft gut geschriebener Quelltext den Statuscode praktisch immer als Erstes, bevor er der Antwort überhaupt vertraut.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Was ist eigentlich mit Weiterleitungen in so einem Werkzeug, folgt es denen einfach blind?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, gerade bei einem Werkzeug, das mit fremden, nicht vertrauenswürdigen Adressen arbeitet, wird jede Weiterleitung einzeln geprüft, bevor ihr gefolgt wird, damit niemand über eine Weiterleitung heimlich auf eine gefährliche Adresse umleiten kann.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Fassen wir noch einmal kurz zusammen, was heute wichtig war?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "B",
+      "text": "Also noch einmal ganz kurz zusammengefasst: jede Antwort trägt einen Statuscode, eine dreistellige Zahl. 2xx bedeutet Erfolg, 3xx bedeutet Weiterleitung zu einer neuen Adresse. 4xx bedeutet ein Fehler in der Anfrage selbst, wie bei 400, 401, 403 und 404, und 5xx bedeutet ein Fehler im Server selbst, wie bei 500.",
+      "isKeySentence": true,
+      "role": "key"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau, und diese vier Familien, 2xx, 3xx, 4xx und 5xx, bilden zusammen mit den einzelnen Zahlen 200, 301, 400, 401, 403, 404 und 500 so etwas wie ein kleines Grundvokabular. Das begegnet dir ab jetzt überall im Web.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss ich mir wirklich jede einzelne Zahl auswendig merken?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Die sieben aus dem heutigen Titel lohnen sich wirklich auswendig zu kennen, weil sie dir mit Abstand am häufigsten begegnen. Alles Weitere schlägst du bei Bedarf einfach nach, das machen erfahrene Entwicklerinnen und Entwickler auch ganz selbstverständlich.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Gibt es eigentlich noch weitere Statuscodes in der Erfolgsfamilie außer der 200, oder ist das die einzige?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Es gibt noch ein paar weitere, zum Beispiel einen eigenen Statuscode dafür, dass etwas neu angelegt wurde, statt nur gelesen. Für den Alltag reicht dir aber die 200 als mit Abstand wichtigster Vertreter dieser Familie völlig aus.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Und bei den Weiterleitungen, gibt es dort auch noch mehr als nur die 301?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, es gibt zum Beispiel noch eine Variante für eine nur vorübergehende Weiterleitung, bei der die alte Adresse ausdrücklich weiterhin gültig bleibt. Der Unterschied zur 301 liegt allein darin, ob die alte Adresse für immer oder nur für den Moment verschwindet.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Verändert sich eigentlich, was ich als Nutzerin oder Nutzer sehe, je nachdem welcher Statuscode zurückkommt?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, meistens schon. Bei einer 404 zeigt der Browser typischerweise eine eigene Fehlerseite der besuchten Webseite. Bei einer 500 kommt manchmal nur eine sehr knappe, technisch wirkende Meldung, weil der Server in diesem Moment selbst kaum noch etwas anzeigen kann. Manche Webseiten fangen auch diesen Fall ab und zeigen stattdessen eine eigene, freundlicher gestaltete Entschuldigungsseite.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Sollte ich als Anfängerin diese Zahlen jetzt schon selbst in einem eigenen Projekt einbauen können?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Du musst heute noch nichts selbst programmieren, das kommt in späteren Lektionen. Wichtig ist erst einmal, dass du die Zahl in einer Fehlermeldung oder in den Entwicklerwerkzeugen wiedererkennst und grob einordnen kannst, aus welcher Familie sie stammt.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Reicht es dafür, sich nur die erste Ziffer zu merken, oder brauche ich wirklich alle sieben genauen Zahlen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Schon die erste Ziffer allein bringt dich im Alltag sehr weit, weil sie dir sofort die grobe Richtung zeigt. Die sieben genauen Zahlen aus dem heutigen Titel geben dir zusätzlich noch die feineren Unterschiede innerhalb jeder Familie an die Hand, gerade zwischen 401 und 403 oder zwischen einer 400 und einer 404.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Fassen wir die Begriffe von heute noch einmal als Liste zusammen.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Statuscode: Eine dreistellige Zahl, die jede Antwort eines Servers begleitet und sofort sagt, ob alles geklappt hat oder was schiefgegangen ist.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Erfolgsfamilie: Alle Statuscodes, die mit einer 2 beginnen. Sie bedeuten: die Anfrage wurde erfolgreich bearbeitet.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "200: Der häufigste Statuscode überhaupt. Bedeutet: alles ist gut gegangen, hier ist die Antwort.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Weiterleitungsfamilie: Alle Statuscodes, die mit einer 3 beginnen. Sie bedeuten: geh stattdessen zu einer anderen Adresse.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "301: Der Statuscode für eine dauerhafte Weiterleitung: die alte Adresse gibt es so nicht mehr, die neue steht gleich mit dabei.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Client-Fehler-Familie: Alle Statuscodes, die mit einer 4 beginnen. Sie bedeuten: mit der Anfrage selbst stimmte etwas nicht.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "400: Der Statuscode für eine falsch aufgebaute Anfrage, die der Server gar nicht erst verstehen konnte.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "401: Der Statuscode dafür, dass du dich erst anmelden musst, bevor du das bekommst, was du angefragt hast.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "403: Der Statuscode dafür, dass der Server dich zwar kennt, dir dieser Zugriff aber trotzdem nicht erlaubt ist.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "404: Der Statuscode dafür, dass es das Angefragte an dieser Adresse schlicht nicht gibt.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Server-Fehler-Familie: Alle Statuscodes, die mit einer 5 beginnen. Sie bedeuten: der Fehler liegt beim Server selbst, nicht bei der Anfrage.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "500: Der Statuscode dafür, dass im Server selbst beim Bearbeiten etwas kaputtgegangen ist, mit deiner Anfrage hatte das meist nichts zu tun.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss ich mir alle möglichen Statuscodes auswendig merken?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, es gibt deutlich mehr Statuscodes, als in dieser Lektion vorkommen, die meisten davon brauchst du im Alltag nie. Die sieben aus dem heutigen Titel lohnen sich wirklich, den Rest schlägst du bei Bedarf einfach nach, wie erfahrene Entwicklerinnen und Entwickler es auch tun.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Sieht ein normaler Nutzer den Statuscode einer Anfrage überhaupt jemals direkt als Zahl?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Im ganz normalen Alltag meistens nicht, der Browser übersetzt den Statuscode stattdessen in eine passende Anzeige, etwa eine Fehlerseite bei 404. Mit den Entwicklerwerkzeugen aus der Praxisaufgabe kannst du die genaue Zahl aber jederzeit selbst sichtbar machen.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann eine einzelne Webseite beim Laden mehrere unterschiedliche Statuscodes gleichzeitig haben?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, das ist sogar völlig normal, weil eine Webseite aus vielen einzelnen Anfragen besteht, wie du aus der letzten Lektion weißt. Der Haupttext kann zum Beispiel eine 200 liefern, während ein einzelnes, inzwischen gelöschtes Bild auf derselben Seite eine 404 liefert, ohne dass die restliche Seite deshalb gleich unbrauchbar wird.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Bedeutet ein Statuscode aus der Server-Fehler-Familie, dass meine eigenen Daten verloren gegangen sind?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Nicht zwangsläufig, eine 500 sagt nur, dass die aktuelle Anfrage gerade nicht bearbeitet werden konnte, nicht automatisch, dass zuvor gespeicherte Daten verloren sind. Trotzdem ist es sinnvoll, bei wiederholten 500ern abzuwarten und es später erneut zu versuchen, statt dieselbe Aktion sofort mehrfach zu wiederholen.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Warum unterscheidet man überhaupt zwischen Client-Fehlern und Server-Fehlern, wenn am Ende beides ein Fehler ist?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Weil die Unterscheidung sofort zeigt, wer als Nächstes etwas ändern muss: bei einem Client-Fehler prüft man zuerst die eigene Anfrage, bei einem Server-Fehler ist meist die Betreiberin oder der Betreiber des Servers gefragt. Diese schnelle Einordnung spart bei der Fehlersuche sehr viel Zeit, gerade wenn ein Team gemeinsam an einem Projekt arbeitet und schnell klären muss, wer zuständig ist.",
+      "isKeySentence": false,
+      "role": "faq"
+    }
+  ],
+  "practiceExample": {
+    "text": "Im Repo ssrf-guarded-fetch prüft der Quelltext nach jeder abgeschlossenen Anfrage sofort den Statuscode der Antwort. Gehört er nicht zur Erfolgsfamilie, also nicht zu 2xx, wirft das Werkzeug bewusst eine eigene Fehlermeldung mit der genauen Zahl darin, statt mit einer kaputten Antwort weiterzuarbeiten. Weiterleitungen mit den Statuscodes 301, 302, 303, 307 und 308 werden dabei nicht blind befolgt, sondern jeder einzelne Sprung wird erneut auf seine Sicherheit geprüft, bevor ihm gefolgt wird.",
+    "repoNote": "repo-ssrf-guarded-fetch",
+    "location": "src/index.ts, Zeilen 476 bis 501 (Funktion safeFetch: Prüfung der Weiterleitungs-Codes und Prüfung response.ok)"
+  },
+  "quiz": [
+    {
+      "question": "Was ist ein Statuscode?",
+      "area": "Statuscodes Grundlagen",
+      "options": [
+        {
+          "text": "Eine dreistellige Zahl in jeder Antwort, die sofort sagt, wie die Anfrage gelaufen ist.",
+          "isCorrect": true,
+          "explanation": "Genau das ist die Definition eines Statuscodes."
+        },
+        {
+          "text": "Ein anderes Wort für die Adresse einer Webseite.",
+          "isCorrect": false,
+          "explanation": "Das wäre die Adresse selbst, nicht der Statuscode der Antwort."
+        },
+        {
+          "text": "Ein Passwort, das jede Anfrage automatisch mitschickt.",
+          "isCorrect": false,
+          "explanation": "Ein Statuscode ist keine Zugangsdaten, sondern eine Erfolgs- oder Fehlermeldung."
+        },
+        {
+          "text": "Ein anderer Name für die Methode einer Anfrage, also für GET oder für POST.",
+          "isCorrect": false,
+          "explanation": "Die Methode gehört zur Anfrage, der Statuscode gehört zur Antwort."
+        }
+      ]
+    },
+    {
+      "question": "Woran erkennst du grob, zu welcher Familie ein Statuscode gehört?",
+      "area": "Statuscodes Grundlagen",
+      "options": [
+        {
+          "text": "An der ersten der drei Ziffern.",
+          "isCorrect": true,
+          "explanation": "Genau die erste Ziffer entscheidet, zu welcher der vier Familien ein Statuscode gehört."
+        },
+        {
+          "text": "An der Farbe, in der der Browser die Seite anzeigt.",
+          "isCorrect": false,
+          "explanation": "Browser zeigen Statuscodes nicht durch feste Farben an, das war kein Teil der Lektion."
+        },
+        {
+          "text": "An der letzten der drei Ziffern.",
+          "isCorrect": false,
+          "explanation": "Die Familie erkennst du an der ersten Ziffer, nicht an der letzten."
+        },
+        {
+          "text": "Ausschließlich am Namen der aufgerufenen Webseite.",
+          "isCorrect": false,
+          "explanation": "Der Name der Webseite sagt nichts über die Familie des Statuscodes aus."
+        }
+      ]
+    },
+    {
+      "question": "Was bedeutet ein Statuscode aus der Erfolgsfamilie, also 2xx?",
+      "area": "Erfolgsfamilie",
+      "options": [
+        {
+          "text": "Die Anfrage wurde erfolgreich bearbeitet.",
+          "isCorrect": true,
+          "explanation": "Genau das bedeutet jeder Statuscode, der mit einer 2 beginnt."
+        },
+        {
+          "text": "Der Server ist gerade komplett nicht erreichbar.",
+          "isCorrect": false,
+          "explanation": "Ein nicht erreichbarer Server liefert gar keinen Statuscode, weil keine Antwort ankommt."
+        },
+        {
+          "text": "Die angefragte Adresse wurde dauerhaft gelöscht.",
+          "isCorrect": false,
+          "explanation": "Das würde eher zur Client-Fehler-Familie passen, etwa zu einer 404."
+        },
+        {
+          "text": "Es gab einen internen Fehler beim Server selbst.",
+          "isCorrect": false,
+          "explanation": "Ein interner Serverfehler gehört zur Server-Fehler-Familie, nicht zur Erfolgsfamilie."
+        }
+      ]
+    },
+    {
+      "question": "Was bedeutet der Statuscode 200 konkret?",
+      "area": "Erfolgsfamilie",
+      "options": [
+        {
+          "text": "Alles ist gut gegangen, hier ist die Antwort.",
+          "isCorrect": true,
+          "explanation": "Genau das bedeutet der Statuscode 200, der häufigste überhaupt."
+        },
+        {
+          "text": "Die Seite wurde dauerhaft auf eine neue Adresse verschoben.",
+          "isCorrect": false,
+          "explanation": "Das würde zur Weiterleitungsfamilie passen, etwa zur 301."
+        },
+        {
+          "text": "Der Nutzer muss sich zuerst anmelden.",
+          "isCorrect": false,
+          "explanation": "Das beschreibt eher den Statuscode 401, nicht die 200."
+        },
+        {
+          "text": "Der Server konnte die Anfrage gar nicht verstehen.",
+          "isCorrect": false,
+          "explanation": "Das beschreibt eher den Statuscode 400, nicht die 200."
+        }
+      ]
+    },
+    {
+      "question": "Was macht ein Statuscode aus der Weiterleitungsfamilie, also 3xx?",
+      "area": "Weiterleitungsfamilie",
+      "options": [
+        {
+          "text": "Er sagt dem Browser, dass das Gesuchte jetzt an einer anderen Adresse liegt.",
+          "isCorrect": true,
+          "explanation": "Genau das ist die Aufgabe der Weiterleitungsfamilie."
+        },
+        {
+          "text": "Er löscht die alte Adresse sofort aus dem Internet.",
+          "isCorrect": false,
+          "explanation": "Ein Statuscode löscht keine Adressen, er beschreibt nur den Ausgang der Anfrage."
+        },
+        {
+          "text": "Er zeigt an, dass ein Passwort falsch eingegeben wurde.",
+          "isCorrect": false,
+          "explanation": "Ein falsches Passwort würde eher zur Client-Fehler-Familie gehören, nicht zur Weiterleitungsfamilie."
+        },
+        {
+          "text": "Er verlangsamt ab sofort jede einzelne zukünftige Anfrage an genau diesen einen Server.",
+          "isCorrect": false,
+          "explanation": "Eine Weiterleitung verlangsamt zukünftige Anfragen nicht grundsätzlich."
+        }
+      ]
+    },
+    {
+      "question": "Wofür steht der Statuscode 301 genau?",
+      "area": "Weiterleitungsfamilie",
+      "options": [
+        {
+          "text": "Für eine dauerhafte Weiterleitung zu einer neuen Adresse.",
+          "isCorrect": true,
+          "explanation": "Genau das bedeutet die 301, im Unterschied zu einer nur vorübergehenden Weiterleitung."
+        },
+        {
+          "text": "Für eine Anfrage, die noch nicht abgeschlossen ist.",
+          "isCorrect": false,
+          "explanation": "Eine noch nicht abgeschlossene Anfrage hätte gar keinen fertigen Statuscode."
+        },
+        {
+          "text": "Für einen internen Fehler des Servers.",
+          "isCorrect": false,
+          "explanation": "Ein interner Fehler des Servers wäre ein Statuscode aus der Server-Fehler-Familie, wie die 500."
+        },
+        {
+          "text": "Für eine Anfrage, die erfolgreich, aber ohne Inhalt beantwortet wurde.",
+          "isCorrect": false,
+          "explanation": "Das beschreibt nicht die 301, die 301 kündigt eine neue Adresse an."
+        }
+      ]
+    },
+    {
+      "question": "Was bedeutet ein Statuscode aus der Client-Fehler-Familie, also 4xx?",
+      "area": "Client-Fehler-Familie",
+      "options": [
+        {
+          "text": "Mit der Anfrage selbst stimmte etwas nicht.",
+          "isCorrect": true,
+          "explanation": "Genau das ist die gemeinsame Bedeutung aller Statuscodes der Client-Fehler-Familie."
+        },
+        {
+          "text": "Der Server hat aus unbekanntem Grund einen internen Absturz.",
+          "isCorrect": false,
+          "explanation": "Ein interner Absturz des Servers würde zur Server-Fehler-Familie gehören, nicht zur Client-Fehler-Familie."
+        },
+        {
+          "text": "Die Anfrage wurde erfolgreich und ohne jedes Problem bearbeitet.",
+          "isCorrect": false,
+          "explanation": "Das würde zur Erfolgsfamilie gehören, nicht zur Client-Fehler-Familie."
+        },
+        {
+          "text": "Die Adresse wurde dauerhaft an eine neue Stelle verschoben.",
+          "isCorrect": false,
+          "explanation": "Das beschreibt die Weiterleitungsfamilie, nicht die Client-Fehler-Familie."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der Unterschied zwischen den Statuscodes 401 und 403?",
+      "area": "Client-Fehler-Familie",
+      "options": [
+        {
+          "text": "Bei 401 fehlt die Anmeldung, bei 403 fehlt trotz Anmeldung die Erlaubnis.",
+          "isCorrect": true,
+          "explanation": "Genau das war der Unterschied aus dem Bild mit Eingangstür und Serverraum."
+        },
+        {
+          "text": "Beide bedeuten exakt dasselbe und werden nur zufällig unterschiedlich benannt.",
+          "isCorrect": false,
+          "explanation": "Die beiden Statuscodes haben eine klar unterschiedliche Bedeutung."
+        },
+        {
+          "text": "Bei 401 ist der Server abgestürzt, bei 403 ist die Adresse falsch geschrieben.",
+          "isCorrect": false,
+          "explanation": "Ein Absturz gehört zur Server-Fehler-Familie, eine falsch geschriebene Adresse eher zur 404."
+        },
+        {
+          "text": "Bei 401 ist die Seite dauerhaft gelöscht, bei 403 nur vorübergehend nicht erreichbar.",
+          "isCorrect": false,
+          "explanation": "Weder 401 noch 403 sagen etwas über das Löschen einer Seite aus."
+        }
+      ]
+    },
+    {
+      "question": "Wann begegnet dir typischerweise ein Statuscode 404?",
+      "area": "Client-Fehler-Familie",
+      "options": [
+        {
+          "text": "Wenn du eine Adresse falsch eintippst oder einem toten Link folgst.",
+          "isCorrect": true,
+          "explanation": "Genau das ist der klassische Fall für eine 404, den vermutlich jeder schon einmal gesehen hat."
+        },
+        {
+          "text": "Wenn der Server intern komplett abgestürzt ist.",
+          "isCorrect": false,
+          "explanation": "Ein kompletter Absturz des Servers würde eher zu einer 500 führen."
+        },
+        {
+          "text": "Wenn du dich erfolgreich bei einer Webseite anmeldest.",
+          "isCorrect": false,
+          "explanation": "Eine erfolgreiche Anmeldung würde eher zu einem Statuscode aus der Erfolgsfamilie führen."
+        },
+        {
+          "text": "Wenn eine Webseite dich automatisch auf eine neue Adresse umleitet.",
+          "isCorrect": false,
+          "explanation": "Eine automatische Umleitung gehört zur Weiterleitungsfamilie, nicht zur 404."
+        }
+      ]
+    },
+    {
+      "question": "Was bedeutet ein Statuscode 500?",
+      "area": "Server-Fehler-Familie",
+      "options": [
+        {
+          "text": "Beim Server selbst ist während der Bearbeitung etwas kaputtgegangen.",
+          "isCorrect": true,
+          "explanation": "Genau das bedeutet die 500, der Fehler liegt beim Server, nicht bei deiner Anfrage."
+        },
+        {
+          "text": "Du hast dich mit einem falschen Passwort angemeldet.",
+          "isCorrect": false,
+          "explanation": "Ein falsches Passwort würde eher zu einer 401 führen, nicht zu einer 500."
+        },
+        {
+          "text": "Die angefragte Seite wurde vom Betreiber absichtlich und dauerhaft entfernt.",
+          "isCorrect": false,
+          "explanation": "Eine absichtlich entfernte Seite würde eher eine 404 liefern."
+        },
+        {
+          "text": "Die Anfrage war erfolgreich, aber ungewöhnlich langsam.",
+          "isCorrect": false,
+          "explanation": "Langsamkeit allein ändert nichts am Statuscode, solange die Anfrage sonst gelingt."
+        }
+      ]
+    },
+    {
+      "question": "Was tut eine Entwicklerin typischerweise als Erstes, wenn eine 500 auftaucht?",
+      "area": "Server-Fehler-Familie",
+      "options": [
+        {
+          "text": "Sie sieht in den Protokollen des Servers nach, wo genau der Fehler entstanden ist.",
+          "isCorrect": true,
+          "explanation": "Genau das war die beschriebene erste Reaktion auf eine 500."
+        },
+        {
+          "text": "Sie ändert nur die Farbe der Webseite.",
+          "isCorrect": false,
+          "explanation": "Das Aussehen der Seite hat mit der Ursache einer 500 nichts zu tun."
+        },
+        {
+          "text": "Sie löscht die betroffene Webseite dauerhaft.",
+          "isCorrect": false,
+          "explanation": "Eine 500 wird behoben, nicht durch Löschen der Seite gelöst."
+        },
+        {
+          "text": "Sie wartet einfach ab, ohne etwas zu unternehmen.",
+          "isCorrect": false,
+          "explanation": "Eine 500 gilt als Alarmsignal, dem aktiv nachgegangen wird, laut der Lektion."
+        }
+      ]
+    },
+    {
+      "question": "Was macht der Quelltext aus dem Praxisbeispiel ssrf-guarded-fetch, wenn eine Antwort nicht aus der Erfolgsfamilie stammt?",
+      "area": "Praxisbeispiel ssrf-guarded-fetch",
+      "options": [
+        {
+          "text": "Er wirft bewusst eine eigene Fehlermeldung, statt mit der Antwort weiterzuarbeiten.",
+          "isCorrect": true,
+          "explanation": "Genau das steht laut Praxisbeispiel im Quelltext dieses Werkzeugs."
+        },
+        {
+          "text": "Er verwandelt jeden Statuscode automatisch in eine 200.",
+          "isCorrect": false,
+          "explanation": "Das würde den eigentlichen Fehler verschleiern, das Werkzeug macht ausdrücklich das Gegenteil."
+        },
+        {
+          "text": "Er ignoriert den Statuscode komplett und zeigt trotzdem alles an.",
+          "isCorrect": false,
+          "explanation": "Genau das würde das Praxisbeispiel verhindern wollen, deshalb die eigene Fehlermeldung."
+        },
+        {
+          "text": "Er sendet die fehlerhafte Anfrage automatisch beliebig oft erneut.",
+          "isCorrect": false,
+          "explanation": "Laut Praxisbeispiel wird eine Fehlermeldung geworfen, kein automatisches endloses Wiederholen beschrieben."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Rufe in deinem Browser eine Adresse auf, die es garantiert nicht gibt, zum Beispiel eine bekannte Webseite mit einem zusätzlichen, frei erfundenen Textstück am Ende der Adresse, etwa deine-lieblingsseite.de/dastgibtsganzsicherwirklichnicht. Sieh dir die angezeigte Fehlerseite an. Öffne danach die Entwicklerwerkzeuge, wechsle zum Netzwerk-Reiter, lade die Seite erneut und finde den Statuscode dieser einen Anfrage in der Liste.",
+    "expectation": "Eine angezeigte Fehlerseite im Browser sowie ein gefundener Statuscode 404 im Netzwerk-Reiter der Entwicklerwerkzeuge für genau diese eine Anfrage.",
+    "checklist": [
+      "Eine garantiert nicht existierende Adresse aufgerufen",
+      "Die angezeigte Fehlerseite im Browser angesehen",
+      "Entwicklerwerkzeuge geöffnet und die Seite mit offenem Netzwerk-Reiter neu geladen",
+      "Den Statuscode 404 bei dieser Anfrage in der Liste gefunden"
+    ]
+  },
+  "audio": {
+    "file": "M01-05-03.mp3",
+    "durationSeconds": 1002,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Muss ich mir alle möglichen Statuscodes auswendig merken?",
+      "answer": "Nein, es gibt deutlich mehr Statuscodes, als in dieser Lektion vorkommen, die meisten davon brauchst du im Alltag nie. Die sieben aus dem heutigen Titel lohnen sich wirklich, den Rest schlägst du bei Bedarf einfach nach, wie erfahrene Entwicklerinnen und Entwickler es auch tun."
+    },
+    {
+      "question": "Sieht ein normaler Nutzer den Statuscode einer Anfrage überhaupt jemals direkt als Zahl?",
+      "answer": "Im ganz normalen Alltag meistens nicht, der Browser übersetzt den Statuscode stattdessen in eine passende Anzeige, etwa eine Fehlerseite bei 404. Mit den Entwicklerwerkzeugen aus der Praxisaufgabe kannst du die genaue Zahl aber jederzeit selbst sichtbar machen."
+    },
+    {
+      "question": "Kann eine einzelne Webseite beim Laden mehrere unterschiedliche Statuscodes gleichzeitig haben?",
+      "answer": "Ja, das ist sogar völlig normal, weil eine Webseite aus vielen einzelnen Anfragen besteht, wie du aus der letzten Lektion weißt. Der Haupttext kann zum Beispiel eine 200 liefern, während ein einzelnes, inzwischen gelöschtes Bild auf derselben Seite eine 404 liefert, ohne dass die restliche Seite deshalb gleich unbrauchbar wird."
+    },
+    {
+      "question": "Bedeutet ein Statuscode aus der Server-Fehler-Familie, dass meine eigenen Daten verloren gegangen sind?",
+      "answer": "Nicht zwangsläufig, eine 500 sagt nur, dass die aktuelle Anfrage gerade nicht bearbeitet werden konnte, nicht automatisch, dass zuvor gespeicherte Daten verloren sind. Trotzdem ist es sinnvoll, bei wiederholten 500ern abzuwarten und es später erneut zu versuchen, statt dieselbe Aktion sofort mehrfach zu wiederholen."
+    },
+    {
+      "question": "Warum unterscheidet man überhaupt zwischen Client-Fehlern und Server-Fehlern, wenn am Ende beides ein Fehler ist?",
+      "answer": "Weil die Unterscheidung sofort zeigt, wer als Nächstes etwas ändern muss: bei einem Client-Fehler prüft man zuerst die eigene Anfrage, bei einem Server-Fehler ist meist die Betreiberin oder der Betreiber des Servers gefragt. Diese schnelle Einordnung spart bei der Fehlersuche sehr viel Zeit, gerade wenn ein Team gemeinsam an einem Projekt arbeitet und schnell klären muss, wer zuständig ist."
+    }
+  ]
+}
