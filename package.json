@@ -1,0 +1,37 @@
+{
+  "name": "futuredev",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Lern-App und Landingpage fuer FutureDev, Monorepo",
+  "license": "MIT",
+  "packageManager": "pnpm@10.33.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "typecheck": "turbo run typecheck",
+    "lint": "turbo run lint && eslint .",
+    "test": "turbo run test",
+    "build": "turbo run build",
+    "content:validate": "pnpm --filter @futuredev/content-schema run validate",
+    "content:manifest": "pnpm --filter @futuredev/content-schema run manifest",
+    "check:secrets": "node tools/check-secrets.mjs",
+    "prepare": "simple-git-hooks"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "node tools/check-secrets.mjs"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@types/node": "22.20.1",
+    "eslint": "10.11.0",
+    "eslint-config-prettier": "10.1.8",
+    "globals": "17.12.0",
+    "prettier": "3.4.2",
+    "simple-git-hooks": "2.14.0",
+    "turbo": "2.11.2",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.70.0",
+    "vitest": "5.0.1"
+  }
+}
