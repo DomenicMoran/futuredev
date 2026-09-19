@@ -1,0 +1,337 @@
+{
+  "id": "M01-03-02",
+  "title": "IP-Adressen und Ports",
+  "durationMinutes": 25,
+  "prerequisites": ["M01-03-01", "M01-00-01", "M01-00-03", "M01-01-03"],
+  "terms": [
+    {
+      "term": "IP-Adresse",
+      "definition": "Eine eindeutige Nummer, die einen Computer im Netzwerk auffindbar macht, ähnlich wie eine Hausadresse."
+    },
+    {
+      "term": "Port",
+      "definition": "Eine Zahl, die innerhalb eines Computers angibt, für welchen Dienst eine Anfrage bestimmt ist, ähnlich wie eine Wohnungstür in einem Haus."
+    },
+    {
+      "term": "private Adresse",
+      "definition": "Eine IP-Adresse, die nur innerhalb eines einzelnen Heim- oder Firmennetzwerks gilt und von außen nicht direkt erreichbar ist."
+    },
+    {
+      "term": "localhost",
+      "definition": "Ein besonderer Name, mit dem sich ein Computer selbst anspricht, ohne den Umweg über das restliche Netzwerk."
+    }
+  ],
+  "speechBlocks": [
+    { "speaker": "A", "text": "In der letzten Lektion hast du gelernt: ein Client fragt, ein Server antwortet.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "B", "text": "Ja, aber woher weiß denn die Anfrage überhaupt, bei welchem Server sie ankommen soll?", "isKeySentence": false, "role": "question" },
+    { "speaker": "A", "text": "Genau darum geht es heute. Stell dir ein großes Haus vor, mit vielen Wohnungen darin.", "isKeySentence": false, "role": "image" },
+    { "speaker": "A", "text": "Damit die Post dich erreicht, braucht sie zwei Dinge: die Adresse des Hauses, und die Nummer deiner Wohnung darin.", "isKeySentence": false, "role": "image" },
+    { "speaker": "A", "text": "Ohne Hausadresse findet der Postbote das Haus gar nicht erst. Ohne Wohnungsnummer weiß er nicht, an welcher Tür er klingeln soll.", "isKeySentence": false, "role": "image" },
+    { "speaker": "A", "text": "Im Internet ist es fast genauso. Jeder Computer braucht eine eigene Adresse, damit er überhaupt gefunden werden kann.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Diese Adresse eines Computers heißt IP-Adresse.", "isKeySentence": false, "role": "term" },
+    { "speaker": "B", "text": "IP. I, P.", "isKeySentence": false, "role": "term" },
+    { "speaker": "A", "text": "Genau, das steht für Internet Protocol, aber das musst du dir nicht merken. Wichtig ist nur: es ist die Hausadresse eines Computers im Netz.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Eine IP-Adresse besteht meist aus vier Zahlen, getrennt durch Punkte, zum Beispiel 192.168.1.10.", "isKeySentence": false, "role": "example" },
+    { "speaker": "B", "text": "Hat denn wirklich jedes einzelne Gerät eine eigene solche Adresse, mein Handy genauso wie mein Laptop?", "isKeySentence": false, "role": "question" },
+    { "speaker": "A", "text": "Ja, sobald ein Gerät mit einem Netzwerk verbunden ist, bekommt es eine eigene IP-Adresse zugewiesen.", "isKeySentence": false, "role": "example" },
+    { "speaker": "A", "text": "Ohne diese Adresse könnte kein Server wissen, wohin er seine Antwort schicken soll.", "isKeySentence": false, "role": "why" },
+    { "speaker": "B", "text": "Und was ist dann mit der Wohnungsnummer aus deinem Bild? Was ist das im Computer?", "isKeySentence": false, "role": "question" },
+    { "speaker": "A", "text": "Stell dir das Haus noch einmal vor, aber jetzt schauen wir hinein.", "isKeySentence": false, "role": "image" },
+    { "speaker": "A", "text": "In jeder Wohnung wohnt jemand anderes: in einer Wohnung der Briefträger-Dienst, in einer anderen die Nachbarschaftshilfe, in einer dritten die Hausverwaltung.", "isKeySentence": false, "role": "image" },
+    { "speaker": "A", "text": "Genau so hat auch ein Computer viele verschiedene Dienste gleichzeitig laufen, die alle über dieselbe IP-Adresse erreichbar sein wollen.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Damit eine Anfrage beim richtigen Dienst ankommt und nicht bei einem falschen, braucht sie zusätzlich eine Wohnungsnummer.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Diese Wohnungsnummer eines Computers heißt Port.", "isKeySentence": false, "role": "term" },
+    { "speaker": "A", "text": "Ein Port ist einfach eine Zahl. Webseiten laufen zum Beispiel meist über Port 80 oder, verschlüsselt, über Port 443.", "isKeySentence": false, "role": "example" },
+    { "speaker": "B", "text": "Muss ich mir diese Portnummern denn selbst merken, wenn ich eine Webseite öffne?", "isKeySentence": false, "role": "question" },
+    { "speaker": "A", "text": "Nein, dein Browser trägt diese Standard-Ports automatisch für dich ein, du siehst sie meistens gar nicht.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Eine vollständige Adresse im Netz braucht also immer beides: die IP-Adresse als Haus, und den Port als Wohnungstür darin.", "isKeySentence": false, "role": "why" },
+    { "speaker": "B", "text": "Was passiert, wenn zwei verschiedene Dienste denselben Port auf demselben Computer benutzen wollen?", "isKeySentence": false, "role": "question" },
+    { "speaker": "A", "text": "Das geht nicht gleichzeitig. Genau wie zwei Mietparteien nicht dieselbe Wohnungsnummer haben können, kann ein Port jeweils nur von einem Dienst gleichzeitig belegt werden.", "isKeySentence": false, "role": "why" },
+    { "speaker": "B", "text": "Kannst du mir noch mehr Beispiele für übliche Ports nennen, damit ich ein Gefühl dafür bekomme?", "isKeySentence": false, "role": "question" },
+    { "speaker": "A", "text": "Gern. E-Mail-Programme nutzen oft eigene Ports, um Nachrichten abzuholen oder zu verschicken, unabhängig vom Port für Webseiten.", "isKeySentence": false, "role": "example" },
+    { "speaker": "A", "text": "Auch ein Fernzugriff auf einen Server läuft meist über einen eigenen, festen Port, getrennt von dem Port, über den die Webseite dieses Servers läuft.", "isKeySentence": false, "role": "example" },
+    { "speaker": "B", "text": "Sind das dann für jeden Dienst weltweit immer exakt dieselben festen Portnummern?", "isKeySentence": false, "role": "question" },
+    { "speaker": "A", "text": "Für die bekanntesten Dienste gibt es feste, weltweit übliche Vorschläge, an die sich fast alle halten, so wie sich fast jeder an Rot für Stopp bei einer Ampel hält.", "isKeySentence": false, "role": "image" },
+    { "speaker": "A", "text": "Grundsätzlich könnte man aber theoretisch jeden Dienst auch auf einem völlig anderen Port betreiben, das würde nur die meisten Nutzer verwirren.", "isKeySentence": false, "role": "why" },
+    { "speaker": "B", "text": "Warum verwirrt das die Nutzer, wenn der Browser den Port doch sowieso automatisch einträgt?", "isKeySentence": false, "role": "question" },
+    { "speaker": "A", "text": "Weil der Browser nur die üblichen Standard-Ports automatisch kennt. Bei einem unüblichen Port müsstest du ihn selbst zusätzlich zur Adresse angeben.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Genau deshalb halten sich die meisten öffentlichen Webseiten an die bekannten Standard-Ports 80 und 443, damit niemand sie extra eintippen muss.", "isKeySentence": false, "role": "why" },
+    { "speaker": "B", "text": "Sieht denn jede IP-Adresse im Internet für jeden anderen Computer gleich aus, oder gibt es da Unterschiede?", "isKeySentence": false, "role": "question" },
+    { "speaker": "A", "text": "Gute Frage, es gibt tatsächlich einen wichtigen Unterschied. Stell dir wieder unser Haus vor.", "isKeySentence": false, "role": "image" },
+    { "speaker": "A", "text": "Die Straßenadresse des Hauses kennt jeder Postbote im ganzen Land, jeder kann Post dorthin schicken.", "isKeySentence": false, "role": "image" },
+    { "speaker": "A", "text": "Innerhalb des Hauses benutzt ihr aber vielleicht eigene, private Namen für Räume, die nur die Bewohner verstehen, zum Beispiel das Arbeitszimmer oder das Gästezimmer.", "isKeySentence": false, "role": "image" },
+    { "speaker": "A", "text": "Diese Zimmernamen kennt niemand außerhalb des Hauses, sie sind nur innerhalb wichtig.", "isKeySentence": false, "role": "image" },
+    { "speaker": "A", "text": "Genau so gibt es auch bei IP-Adressen zwei Arten: solche, die im ganzen Internet sichtbar sind, und solche, die nur innerhalb eines einzelnen Netzwerks gelten.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Eine IP-Adresse, die im ganzen Internet erreichbar ist, heißt öffentliche Adresse.", "isKeySentence": false, "role": "term" },
+    { "speaker": "A", "text": "Wenn du eine Webseite besuchst, spricht dein Router mit dem Server über genau so eine öffentliche Adresse, die im ganzen Netz eindeutig ist.", "isKeySentence": false, "role": "example" },
+    { "speaker": "B", "text": "Und die private Version davon gilt dann nur zu Hause?", "isKeySentence": false, "role": "question" },
+    { "speaker": "A", "text": "Genau. Eine IP-Adresse, die nur innerhalb eines einzelnen Heim- oder Firmennetzwerks gilt, heißt private Adresse.", "isKeySentence": false, "role": "term" },
+    { "speaker": "A", "text": "Dein Router vergibt jedem Gerät zu Hause, deinem Laptop, deinem Handy, deinem Fernseher, jeweils eine eigene private Adresse, meist beginnend mit 192.168.", "isKeySentence": false, "role": "example" },
+    { "speaker": "B", "text": "Wie kommt dann eine Anfrage von meinem Laptop mit privater Adresse überhaupt bis zu einem Server draußen im Internet?", "isKeySentence": false, "role": "question" },
+    { "speaker": "A", "text": "Dein Router übernimmt dabei eine Vermittlerrolle: nach außen tritt er mit seiner eigenen, öffentlichen Adresse auf, stellvertretend für alle Geräte dahinter.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Er merkt sich, welche Anfrage von welchem Gerät im Haus kam, und leitet die passende Antwort später wieder an genau dieses Gerät weiter.", "isKeySentence": false, "role": "why" },
+    { "speaker": "B", "text": "Merkt sich der Router das für jede einzelne Anfrage neu, oder reicht ihm eine einzige Notiz für das ganze Gerät?", "isKeySentence": false, "role": "question" },
+    { "speaker": "A", "text": "Er merkt sich das tatsächlich für jede einzelne offene Verbindung einzeln, damit er später auch wirklich die passende Antwort an das richtige Gerät weiterreicht.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Läuft auf deinem Laptop gerade eine Webseite und gleichzeitig ein Download auf deinem Handy, unterscheidet der Router beide Vorgänge sauber voneinander.", "isKeySentence": false, "role": "example" },
+    { "speaker": "B", "text": "Das klingt nach ziemlich viel Arbeit für den kleinen Router zu Hause.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Für moderne Router ist das tatsächlich eine reine Routineaufgabe, sie erledigen das ganz nebenbei, während du gar nichts davon bemerkst.", "isKeySentence": false, "role": "why" },
+    { "speaker": "B", "text": "Warum benutzt man überhaupt private Adressen, wenn eine öffentliche doch angeblich sowieso ausreichen würde?", "isKeySentence": false, "role": "question" },
+    { "speaker": "A", "text": "Zwei Gründe. Erstens gibt es viel mehr Geräte auf der Welt, als es einfache öffentliche Adressen für alle gäbe.", "isKeySentence": false, "role": "why" },
+    { "speaker": "A", "text": "Zweitens ist ein Gerät hinter einer privaten Adresse von außen nicht direkt erreichbar, das schützt es vor vielen unerwünschten Zugriffen.", "isKeySentence": false, "role": "why" },
+    { "speaker": "B", "text": "Was ist eigentlich mit Geräten wie einer Spielkonsole oder einem smarten Fernseher, haben die auch beides, IP-Adresse und Port?", "isKeySentence": false, "role": "question" },
+    { "speaker": "A", "text": "Ja, jedes Gerät, das im Netzwerk mit anderen redet, braucht eine eigene IP-Adresse.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Eine Spielkonsole nutzt zum Beispiel oft mehrere Ports gleichzeitig, einen für den Online-Spielverkehr, einen anderen für den Download neuer Spiele.", "isKeySentence": false, "role": "example" },
+    { "speaker": "B", "text": "Also kann ein einziges Gerät gleichzeitig mehrere Ports gleichzeitig benutzen, nicht nur einen einzigen?", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Genau. Ein Gerät hat nur eine IP-Adresse, kann aber über sehr viele verschiedene Ports gleichzeitig mit unterschiedlichen Diensten reden.", "isKeySentence": false, "role": "why" },
+    { "speaker": "B", "text": "Gibt es eigentlich auch eine Adresse, mit der sich ein Computer nur selbst anspricht, ganz ohne irgendein Netzwerk?", "isKeySentence": false, "role": "question" },
+    { "speaker": "A", "text": "Ja, genau die gibt es, und sie ist besonders praktisch beim Entwickeln.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Stell dir vor, du rufst dich selbst auf deinem eigenen Festnetz-Telefon an, nur um zu testen, ob es überhaupt klingelt.", "isKeySentence": false, "role": "image" },
+    { "speaker": "A", "text": "Genau so ein Selbstgespräch führt auch ein Computer manchmal: er spricht mit sich selbst, ohne den Umweg über das restliche Netzwerk.", "isKeySentence": false, "role": "image" },
+    { "speaker": "A", "text": "Der besondere Name dafür heißt localhost.", "isKeySentence": false, "role": "term" },
+    { "speaker": "B", "text": "Hat localhost dann auch eine eigene IP-Adresse, oder ist es etwas ganz anderes als eine Adresse?", "isKeySentence": false, "role": "question" },
+    { "speaker": "A", "text": "Localhost hat sogar eine ganz feste, immer gleiche IP-Adresse, nämlich meist 127.0.0.1, egal auf welchem Computer du gerade sitzt.", "isKeySentence": false, "role": "example" },
+    { "speaker": "A", "text": "Diese Adresse zeigt auf jedem Gerät zuverlässig auf das Gerät selbst zurück, nie auf ein anderes Gerät im Netzwerk.", "isKeySentence": false, "role": "why" },
+    { "speaker": "A", "text": "Entwickler nutzen localhost sehr oft, wenn sie eine eigene Anwendung auf dem eigenen Computer ausprobieren, bevor sie sie im Internet veröffentlichen.", "isKeySentence": false, "role": "example" },
+    { "speaker": "B", "text": "Also ist localhost so etwas wie das eigene Wohnzimmer, in dem man erst einmal probehalber übt, bevor man rausgeht?", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Ein gutes Bild dafür. Niemand von außen kann über localhost auf deinen Computer zugreifen, es bleibt komplett bei dir selbst.", "isKeySentence": false, "role": "why" },
+    { "speaker": "B", "text": "Reichen diese vier durch Punkte getrennten Zahlen für alle Computer der Welt eigentlich für alle Zeit aus?", "isKeySentence": false, "role": "question" },
+    { "speaker": "A", "text": "Kurz gesagt: nicht mehr ganz. Diese Art von Adresse, mit vier Zahlen, heißt IPv4, die vierte Version dieses Adress-Systems.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Weil so viele Geräte gleichzeitig mit dem Internet verbunden sind, werden die möglichen IPv4-Adressen langsam knapp.", "isKeySentence": false, "role": "why" },
+    { "speaker": "A", "text": "Deshalb gibt es bereits eine neuere Art von Adresse, IPv6, mit einer viel größeren Menge möglicher Adressen.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "B", "text": "Muss ich mir IPv6 jetzt schon genau merken?", "isKeySentence": false, "role": "question" },
+    { "speaker": "A", "text": "Nein, das reicht dir fürs Erste nur als Ausblick. Wichtig ist nur: es gibt zwei Systeme nebeneinander, und beide erfüllen denselben Zweck, einen Computer eindeutig auffindbar zu machen.", "isKeySentence": false, "role": "why" },
+    { "speaker": "B", "text": "Sieht eine IPv6-Adresse denn völlig anders aus als eine IPv4-Adresse mit den vier Zahlen?", "isKeySentence": false, "role": "question" },
+    { "speaker": "A", "text": "Ja, deutlich anders. Statt vier Zahlen mit Punkten benutzt IPv6 mehrere Zahlen- und Buchstabengruppen, getrennt durch Doppelpunkte.", "isKeySentence": false, "role": "example" },
+    { "speaker": "A", "text": "Für dich als Nutzer musst du dir das gar nicht merken, das übernimmt dein Gerät und dein Router ganz automatisch im Hintergrund für dich.", "isKeySentence": false, "role": "why" },
+    { "speaker": "B", "text": "Wird denn jede Anfrage im Internet automatisch geprüft, ob die Zieladresse wirklich eine erlaubte öffentliche Adresse ist?", "isKeySentence": false, "role": "question" },
+    { "speaker": "A", "text": "Nicht automatisch überall, und genau das kann zu einem echten Sicherheitsproblem werden. Dazu gibt es ein gutes Beispiel aus einem veröffentlichten Projekt.", "isKeySentence": false, "role": "why" },
+    { "speaker": "A", "text": "Im Repo ssrf-guarded-fetch geht es genau um dieses Problem.", "isKeySentence": false, "role": "example" },
+    { "speaker": "B", "text": "Was für ein Problem kann denn entstehen, wenn niemand die Zieladresse prüft?", "isKeySentence": false, "role": "question" },
+    { "speaker": "A", "text": "Stell dir einen Dienst vor, der auf Zuruf eine beliebige Webseite abruft, damit er dir eine kleine Vorschau davon zeigen kann.", "isKeySentence": false, "role": "image" },
+    { "speaker": "A", "text": "Normalerweise gibst du ihm eine ganz normale öffentliche Adresse, etwa die einer Nachrichtenseite.", "isKeySentence": false, "role": "image" },
+    { "speaker": "A", "text": "Aber was, wenn jemand stattdessen eine private Adresse angibt, die eigentlich nur innerhalb des eigenen Netzwerks des Dienstes gilt?", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Dann ruft der Dienst plötzlich etwas ab, das eigentlich nur intern erreichbar sein sollte, zum Beispiel einen internen Verwaltungsserver.", "isKeySentence": false, "role": "why" },
+    { "speaker": "B", "text": "Also wird der eigene Dienst quasi gegen sich selbst benutzt?", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Genau das ist der Kerngedanke. Der Wrapper aus dem Repo prüft deshalb bei jeder Anfrage, ob die aufgelöste Adresse wirklich öffentlich ist, oder ob sie in Wahrheit privat oder besonders reserviert ist.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "B", "text": "Reicht es nicht aus, einfach nur den Namen der Webseite anzuschauen, bevor man die Anfrage schickt?", "isKeySentence": false, "role": "question" },
+    { "speaker": "A", "text": "Nein, das reicht nicht. Ein Name allein verrät noch nicht, welche IP-Adresse am Ende wirklich dahintersteckt.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Erst wenn der Name in eine echte Adresse übersetzt ist, kann man wirklich prüfen, ob diese Adresse öffentlich oder privat ist.", "isKeySentence": false, "role": "why" },
+    { "speaker": "A", "text": "Deshalb prüft das Werkzeug aus dem Repo genau diese fertig aufgelöste Adresse, nicht nur den ursprünglich eingegebenen Namen.", "isKeySentence": false, "role": "why" },
+    { "speaker": "B", "text": "Kommt so ein Trick mit einer versteckten privaten Adresse in der Praxis wirklich vor, oder ist das nur graue Theorie?", "isKeySentence": false, "role": "question" },
+    { "speaker": "A", "text": "Es kommt tatsächlich vor, gerade bei Diensten, die im Auftrag eines Nutzers automatisch fremde Adressen abrufen.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Genau deshalb ist die Prüfung im Repo keine übertriebene Vorsicht, sondern eine gezielte Antwort auf ein real beobachtetes Problem, wie die Repo-Notiz erklärt.", "isKeySentence": false, "role": "why" },
+    { "speaker": "B", "text": "Kann so ein Werkzeug einen Angriff denn wirklich immer verhindern, auch bei ganz neuen Tricks?", "isKeySentence": false, "role": "question" },
+    { "speaker": "A", "text": "Nicht jeden erdenklichen Trick, aber die üblichen Fälle sehr zuverlässig, weil es nicht nur einmal, sondern bei jedem einzelnen Umleitungsschritt erneut prüft.", "isKeySentence": false, "role": "why" },
+    { "speaker": "A", "text": "Verweist eine Webseite auf eine andere Adresse weiter, prüft das Werkzeug auch diese neue Adresse noch einmal, bevor es ihr folgt.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "B", "text": "Woher kennt mein Browser eigentlich die IP-Adresse einer Webseite, wenn ich nur einen Namen eintippe?", "isKeySentence": false, "role": "question" },
+    { "speaker": "A", "text": "Das ist eine sehr gute Frage, die genau in die nächste Lektion dieses Untermoduls führt.", "isKeySentence": false, "role": "why" },
+    { "speaker": "A", "text": "Kurz vorweg: es gibt einen eigenen Dienst im Internet, der Namen in IP-Adressen übersetzt, ähnlich einem riesigen Telefonbuch.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Dieser Übersetzungsvorgang läuft automatisch im Hintergrund ab, bevor dein Client überhaupt seine erste Anfrage an die richtige Adresse schicken kann.", "isKeySentence": false, "role": "why" },
+    { "speaker": "B", "text": "Also noch einmal ganz kurz zusammengefasst: eine IP-Adresse ist die Hausadresse eines Computers, ein Port ist die Wohnungstür für einen bestimmten Dienst darin. Eine öffentliche Adresse ist im ganzen Internet sichtbar, eine private Adresse gilt nur im eigenen Netzwerk. Und localhost ist der besondere Name, mit dem ein Computer nur mit sich selbst spricht.", "isKeySentence": true, "role": "key" },
+    { "speaker": "A", "text": "Sehr gut und wirklich klar zusammengefasst.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Diese vier Begriffe, IP-Adresse, Port, öffentlich und privat, wirst du ab jetzt in fast jeder technischen Erklärung wiederfinden.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Wer weiß, dass eine Anfrage immer eine vollständige Zieladresse mit Port braucht, versteht später auch leichter, warum manche Verbindungen blockiert werden.", "isKeySentence": false, "role": "why" },
+    { "speaker": "B", "text": "Woran erkenne ich als Nutzer eigentlich meine eigene öffentliche IP-Adresse?", "isKeySentence": false, "role": "question" },
+    { "speaker": "A", "text": "Dazu kommt gleich deine Praxisaufgabe. Es gibt zwei einfache Wege, das selbst herauszufinden.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Entweder du schaust in den Einstellungen deines Routers nach, dort steht die öffentliche Adresse meist unter einem Punkt wie Internetstatus oder Verbindung.", "isKeySentence": false, "role": "example" },
+    { "speaker": "A", "text": "Oder du öffnest im Browser eine Webseite, die dir deine öffentliche Adresse direkt anzeigt, weil sie sie ja ohnehin von deiner Anfrage sieht.", "isKeySentence": false, "role": "example" },
+    { "speaker": "B", "text": "Zeigt mir so eine Webseite dann auch meine private Adresse aus dem Heimnetzwerk an?", "isKeySentence": false, "role": "question" },
+    { "speaker": "A", "text": "Nein, das kann sie nicht, weil deine private Adresse ja niemals nach draußen ins Internet gelangt. Dein Router tauscht sie unterwegs gegen seine eigene öffentliche Adresse aus.", "isKeySentence": false, "role": "why" },
+    { "speaker": "B", "text": "Bekomme ich als normale Nutzerin oder normaler Nutzer eigentlich immer dieselbe öffentliche Adresse, egal an welchem Tag ich online gehe?", "isKeySentence": false, "role": "question" },
+    { "speaker": "A", "text": "Nicht unbedingt. Viele Internetanbieter vergeben die öffentliche Adresse nicht dauerhaft fest, sondern wechseln sie von Zeit zu Zeit, etwa nach einem Neustart deines Routers.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Für dich als Nutzer merkst du davon meist nichts, weil im Hintergrund alles automatisch neu geregelt wird.", "isKeySentence": false, "role": "why" },
+    { "speaker": "B", "text": "Gibt es einen einfachen Merksatz für den heutigen Unterschied zwischen IP-Adresse, Port und den beiden Adressarten?", "isKeySentence": false, "role": "question" },
+    { "speaker": "A", "text": "Ein guter Merksatz: die IP-Adresse findet das Haus, der Port findet die richtige Tür darin, und öffentlich oder privat sagt, wer überhaupt von draußen klingeln darf.", "isKeySentence": false, "role": "why" },
+    { "speaker": "A", "text": "Fassen wir die Begriffe von heute noch einmal als Liste zusammen.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "IP-Adresse: eine eindeutige Nummer, die einen Computer im Netzwerk auffindbar macht, ähnlich wie eine Hausadresse.", "isKeySentence": false, "role": "terms_list" },
+    { "speaker": "A", "text": "Port: eine Zahl, die angibt, für welchen Dienst eine Anfrage auf einem Computer bestimmt ist, ähnlich wie eine Wohnungstür.", "isKeySentence": false, "role": "terms_list" },
+    { "speaker": "A", "text": "Öffentliche Adresse: eine IP-Adresse, die im ganzen Internet sichtbar und erreichbar ist.", "isKeySentence": false, "role": "terms_list" },
+    { "speaker": "A", "text": "Private Adresse: eine IP-Adresse, die nur innerhalb eines einzelnen Heim- oder Firmennetzwerks gilt.", "isKeySentence": false, "role": "terms_list" },
+    { "speaker": "A", "text": "Localhost: ein besonderer Name, mit dem sich ein Computer selbst anspricht, ohne den Umweg über das restliche Netzwerk.", "isKeySentence": false, "role": "terms_list" },
+    { "speaker": "B", "text": "Kann sich meine öffentliche IP-Adresse einfach so ändern, ohne dass ich selbst etwas umstelle?", "isKeySentence": false, "role": "faq" },
+    { "speaker": "A", "text": "Ja, das ist völlig normal. Viele Internetanbieter vergeben deine öffentliche Adresse nicht dauerhaft, sondern wechseln sie gelegentlich, zum Beispiel nach einem Neustart deines Routers. Für deine tägliche Nutzung merkst du davon in der Regel nichts, weil im Hintergrund alles automatisch neu geregelt wird.", "isKeySentence": false, "role": "faq" },
+    { "speaker": "B", "text": "Ist eine private Adresse wie 192.168.1.10 auf meinem Laptop und auf dem Laptop meiner Nachbarin dieselbe?", "isKeySentence": false, "role": "faq" },
+    { "speaker": "A", "text": "Ja, das kann durchaus vorkommen, weil private Adressen nur innerhalb des jeweiligen eigenen Netzwerks gelten müssen. Dein Router und der Router deiner Nachbarin vergeben ihre privaten Adressen unabhängig voneinander, deshalb ist eine Doppelung im jeweils eigenen, getrennten Zuhause kein Problem.", "isKeySentence": false, "role": "faq" },
+    { "speaker": "B", "text": "Warum benutzen Entwickler localhost, statt einfach die eigene öffentliche Adresse zum Testen zu verwenden?", "isKeySentence": false, "role": "faq" },
+    { "speaker": "A", "text": "Localhost ist schneller und sicherer, weil die Anfrage den eigenen Computer nie verlässt und deshalb auch kein fremdes Netzwerk oder gar das offene Internet durchqueren muss. Außerdem funktioniert localhost sogar dann, wenn gerade gar keine Internetverbindung besteht.", "isKeySentence": false, "role": "faq" },
+    { "speaker": "B", "text": "Was passiert, wenn ich versehentlich versuche, einen Port zu benutzen, der auf meinem Computer schon von einem anderen Dienst belegt ist?", "isKeySentence": false, "role": "faq" },
+    { "speaker": "A", "text": "Der Computer meldet dann einen Fehler, meist mit einem Hinweis wie Adresse bereits verwendet. Du musst entweder den anderen Dienst beenden, der den Port belegt, oder deinen eigenen Dienst so einstellen, dass er stattdessen einen anderen, freien Port benutzt.", "isKeySentence": false, "role": "faq" },
+    { "speaker": "B", "text": "Ist Port 443 grundsätzlich besser oder sicherer als Port 80?", "isKeySentence": false, "role": "faq" },
+    { "speaker": "A", "text": "Die Portnummer selbst macht keine Verbindung automatisch sicher, sie ist nur eine Vereinbarung, welcher Port für welchen Zweck üblich ist. Port 443 wird aber üblicherweise für verschlüsselte Verbindungen genutzt, deshalb läuft dort in der Praxis meist die sicherere Variante einer Webseite.", "isKeySentence": false, "role": "faq" }
+  ],
+  "practiceExample": {
+    "text": "Der Wrapper aus ssrf-guarded-fetch prüft vor jedem Abruf einer fremden Adresse, ob die tatsächlich aufgelöste IP-Adresse öffentlich ist oder in Wahrheit zu einem privaten oder besonders reservierten Bereich gehört, etwa 127.0.0.1 (also localhost) oder 169.254.169.254 (eine interne Verwaltungsadresse). Ein reiner Blick auf den eingegebenen Namen reicht dafür nicht, weil erst die Auflösung des Namens die echte Zieladresse zeigt. Folgt die Antwort einer Weiterleitung, prüft das Werkzeug auch jede neue Zieladresse erneut, bevor es ihr folgt.",
+    "repoNote": "repo-ssrf-guarded-fetch",
+    "location": "src/index.ts:152-169 (isPrivateOrSpecialAddress), src/index.ts:439-463 (safeFetch, erneute Prüfung bei jedem Redirect-Sprung)"
+  },
+  "quiz": [
+    {
+      "question": "Wofür sorgt eine IP-Adresse im Vergleich zum Restaurant-Bild der letzten Lektion?",
+      "area": "IP-Adressen und Ports",
+      "options": [
+        { "text": "Sie macht einen Computer im Netzwerk auffindbar, ähnlich einer Hausadresse.", "isCorrect": true, "explanation": "Genau das ist die Aufgabe der IP-Adresse." },
+        { "text": "Sie sorgt ausschließlich dafür, dass eine Anfrage schneller beim richtigen Dienst innerhalb eines Computers landet.", "isCorrect": false, "explanation": "Das ist die Aufgabe des Ports, nicht der IP-Adresse selbst." },
+        { "text": "Sie verschlüsselt jede Anfrage automatisch, bevor sie den Computer verlässt.", "isCorrect": false, "explanation": "Verschlüsselung ist keine Aufgabe der IP-Adresse." },
+        { "text": "Sie speichert dauerhaft, welche Webseiten ein Gerät schon einmal besucht hat.", "isCorrect": false, "explanation": "Eine IP-Adresse speichert keinen Besuchsverlauf." }
+      ]
+    },
+    {
+      "question": "Was ist ein Port?",
+      "area": "IP-Adressen und Ports",
+      "options": [
+        { "text": "Eine zweite, alternative IP-Adresse für denselben Computer, falls die erste einmal ausfällt.", "isCorrect": false, "explanation": "Ein Port ist keine zweite IP-Adresse." },
+        { "text": "Eine Zahl, die angibt, für welchen Dienst eine Anfrage auf einem Computer bestimmt ist.", "isCorrect": true, "explanation": "Genau das ist die Definition des Ports." },
+        { "text": "Der Name eines Internetanbieters, über den eine Anfrage geleitet wird.", "isCorrect": false, "explanation": "Ein Port ist keine Firma, sondern eine Zahl innerhalb eines Computers." },
+        { "text": "Ein anderes Wort für die private Adresse eines Geräts im Heimnetzwerk.", "isCorrect": false, "explanation": "Port und private Adresse sind zwei unterschiedliche Dinge." }
+      ]
+    },
+    {
+      "question": "Welches Alltagsbild passt am besten zu IP-Adresse und Port zusammen?",
+      "area": "IP-Adressen und Ports",
+      "options": [
+        { "text": "Die Hausadresse und die Wohnungsnummer darin.", "isCorrect": true, "explanation": "Genau dieses Bild wurde für IP-Adresse und Port verwendet." },
+        { "text": "Der Name einer Stadt ohne jede weitere Angabe.", "isCorrect": false, "explanation": "Eine Stadt allein wäre viel zu ungenau, um ein einzelnes Haus zu finden." },
+        { "text": "Ein einzelner Schlüssel ohne ein dazugehöriges Schloss.", "isCorrect": false, "explanation": "Dieses Bild wurde in der Lektion nicht für IP-Adresse und Port verwendet." },
+        { "text": "Eine Telefonnummer ganz ohne jede Vorwahl.", "isCorrect": false, "explanation": "Dieses Bild passt nicht zu dem in der Lektion benutzten Vergleich." }
+      ]
+    },
+    {
+      "question": "Was unterscheidet eine öffentliche Adresse von einer privaten Adresse?",
+      "area": "IP-Adressen und Ports",
+      "options": [
+        { "text": "Eine öffentliche Adresse ist im ganzen Internet sichtbar, eine private Adresse gilt nur im eigenen Netzwerk.", "isCorrect": true, "explanation": "Genau das ist der zentrale Unterschied aus der Lektion." },
+        { "text": "Eine private Adresse ist ausschließlich für große Firmen mit eigenem Rechenzentrum reserviert, niemals für gewöhnliche private Haushalte.", "isCorrect": false, "explanation": "Auch normale Heimnetzwerke benutzen private Adressen." },
+        { "text": "Eine öffentliche Adresse gilt nur für einen einzigen Tag und ändert sich danach zwangsläufig.", "isCorrect": false, "explanation": "Das ist keine allgemeingültige Regel für öffentliche Adressen." },
+        { "text": "Eine private Adresse funktioniert nur, wenn kein Router im Spiel ist.", "isCorrect": false, "explanation": "Private Adressen werden gerade typischerweise vom Router vergeben." }
+      ]
+    },
+    {
+      "question": "Was macht der Router laut der Lektion, wenn ein Gerät mit privater Adresse eine Anfrage ins Internet schickt?",
+      "area": "IP-Adressen und Ports",
+      "options": [
+        { "text": "Er blockiert diese Anfrage grundsätzlich, weil private Adressen niemals ins Internet dürfen.", "isCorrect": false, "explanation": "Der Router blockiert das nicht, er vermittelt stattdessen." },
+        { "text": "Er tritt nach außen mit seiner eigenen öffentlichen Adresse auf und leitet die Antwort zurück an das richtige Gerät.", "isCorrect": true, "explanation": "Genau diese Vermittlerrolle wurde in der Lektion beschrieben." },
+        { "text": "Er verwandelt die private Adresse des Geräts dauerhaft in eine neue, feste öffentliche Adresse.", "isCorrect": false, "explanation": "Die private Adresse des Geräts selbst ändert sich dabei nicht dauerhaft." },
+        { "text": "Er schickt die Anfrage ausschließlich über localhost weiter.", "isCorrect": false, "explanation": "Localhost betrifft nur Anfragen an den eigenen Computer, nicht das ganze Internet." }
+      ]
+    },
+    {
+      "question": "Was bedeutet localhost?",
+      "area": "IP-Adressen und Ports",
+      "options": [
+        { "text": "Ein besonderer Name, mit dem sich ein Computer selbst anspricht, ohne den Umweg über das restliche Netzwerk.", "isCorrect": true, "explanation": "Genau das ist die Definition von localhost." },
+        { "text": "Der offizielle Name des nächstgelegenen Servers deines eigenen Internetanbieters in der Region.", "isCorrect": false, "explanation": "Localhost betrifft nur den eigenen Computer, keinen fremden Server." },
+        { "text": "Eine besonders schnelle öffentliche Adresse für große Firmen.", "isCorrect": false, "explanation": "Localhost hat nichts mit besonders schnellen öffentlichen Adressen zu tun." },
+        { "text": "Ein anderer Name für den eigenen Router im Heimnetzwerk.", "isCorrect": false, "explanation": "Localhost bezeichnet den eigenen Computer, nicht den Router." }
+      ]
+    },
+    {
+      "question": "Warum benutzen Entwickler laut der Lektion oft localhost zum Testen?",
+      "area": "IP-Adressen und Ports",
+      "options": [
+        { "text": "Weil dadurch niemand von außen zugreifen kann und die Anfrage den eigenen Computer nicht verlässt.", "isCorrect": true, "explanation": "Genau das macht localhost beim Entwickeln praktisch." },
+        { "text": "Weil localhost automatisch jede Anfrage an einen zufälligen fremden Server im Internet weiterleitet.", "isCorrect": false, "explanation": "Das Gegenteil ist richtig, localhost verlässt den eigenen Computer gerade nicht." },
+        { "text": "Weil localhost der einzige Weg ist, überhaupt eine IP-Adresse zu bekommen.", "isCorrect": false, "explanation": "Ein Gerät bekommt seine IP-Adresse unabhängig von localhost." },
+        { "text": "Weil localhost verpflichtend für jede öffentliche Webseite vorgeschrieben ist.", "isCorrect": false, "explanation": "Localhost ist kein Pflichtbestandteil einer veröffentlichten Webseite." }
+      ]
+    },
+    {
+      "question": "Was ist laut der Lektion der Grund dafür, dass es neben IPv4 auch IPv6 gibt?",
+      "area": "IP-Adressen und Ports",
+      "options": [
+        { "text": "IPv4 wurde komplett abgeschafft und existiert inzwischen überhaupt nicht mehr.", "isCorrect": false, "explanation": "IPv4 wird weiterhin genutzt, es wurde nicht abgeschafft." },
+        { "text": "Weil so viele Geräte verbunden sind, dass die möglichen IPv4-Adressen langsam knapp werden.", "isCorrect": true, "explanation": "Genau das ist der in der Lektion genannte Grund." },
+        { "text": "Weil IPv4 grundsätzlich keine Ports unterstützt.", "isCorrect": false, "explanation": "Ports gehören nicht speziell zu IPv4 oder IPv6, sondern sind ein eigenes Konzept." },
+        { "text": "Weil IPv6 ausschließlich für private Adressen gedacht ist.", "isCorrect": false, "explanation": "IPv6 ist nicht auf private Adressen beschränkt." }
+      ]
+    },
+    {
+      "question": "Was prüft der Wrapper aus dem Repo ssrf-guarded-fetch laut der Lektion, bevor er eine fremde Adresse tatsächlich abruft?",
+      "area": "IP-Adressen und Ports",
+      "options": [
+        { "text": "Nur, ob der eingegebene Name der Webseite bekannt vorkommt.", "isCorrect": false, "explanation": "Ein bloßer Namensvergleich reicht laut Lektion gerade nicht aus." },
+        { "text": "Ob die tatsächlich aufgelöste IP-Adresse öffentlich ist oder in Wahrheit privat beziehungsweise reserviert.", "isCorrect": true, "explanation": "Genau das prüft der Wrapper laut Praxisbeispiel." },
+        { "text": "Ausschließlich, wie lange die vollständige Antwort insgesamt zum Herunterladen auf den eigenen Computer braucht.", "isCorrect": false, "explanation": "Die Ladezeit ist nicht die zentrale Prüfung dieses Beispiels." },
+        { "text": "Nur, ob die Webseite über Port 80 statt über Port 443 erreichbar ist.", "isCorrect": false, "explanation": "Die konkrete Portnummer ist nicht der Kern dieser Prüfung." }
+      ]
+    },
+    {
+      "question": "Warum reicht laut der Lektion ein bloßer Blick auf den Namen einer Webseite nicht aus, um zu wissen, ob eine Adresse privat ist?",
+      "area": "IP-Adressen und Ports",
+      "options": [
+        { "text": "Weil erst die Auflösung des Namens die tatsächliche IP-Adresse zeigt, auf die er zeigt.", "isCorrect": true, "explanation": "Genau das war der Punkt: die echte Adresse steckt erst hinter dem Namen." },
+        { "text": "Weil Namen von Webseiten grundsätzlich niemals eine zugehörige IP-Adresse besitzen können.", "isCorrect": false, "explanation": "Jeder Name wird letztlich auf eine IP-Adresse aufgelöst." },
+        { "text": "Weil private Adressen keine eigenen Namen haben dürfen.", "isCorrect": false, "explanation": "Das war nicht der in der Lektion genannte Grund." },
+        { "text": "Weil ein Name sich niemals ändern kann, eine Adresse aber schon.", "isCorrect": false, "explanation": "Das ist nicht der Grund, warum ein Namensvergleich allein nicht ausreicht." }
+      ]
+    },
+    {
+      "question": "Was macht der Wrapper aus dem Praxisbeispiel, wenn eine Webseite ihn per Weiterleitung auf eine andere Adresse schickt?",
+      "area": "IP-Adressen und Ports",
+      "options": [
+        { "text": "Er folgt der Weiterleitung blind, ohne die neue Adresse noch einmal zu prüfen.", "isCorrect": false, "explanation": "Genau das würde die Prüfung umgehbar machen, deshalb macht er es nicht." },
+        { "text": "Er prüft auch die neue Zieladresse jeder Weiterleitung erneut, bevor er ihr folgt.", "isCorrect": true, "explanation": "Genau das leistet die wiederholte Prüfung bei jedem Redirect-Sprung." },
+        { "text": "Er bricht bei jeder einzelnen Weiterleitung grundsätzlich sofort ab, ganz ohne jede weitere Prüfung.", "isCorrect": false, "explanation": "Eine Weiterleitung ist nicht automatisch verboten, sie wird nur erneut geprüft." },
+        { "text": "Er verwandelt die Weiterleitung automatisch in eine Anfrage über localhost.", "isCorrect": false, "explanation": "Das hat mit dem Umgang mit Weiterleitungen nichts zu tun." }
+      ]
+    },
+    {
+      "question": "Warum können zwei verschiedene Heimnetzwerke dieselbe private Adresse benutzen, ohne dass es zu einem Konflikt kommt?",
+      "area": "IP-Adressen und Ports",
+      "options": [
+        { "text": "Weil private Adressen nur innerhalb des jeweils eigenen Netzwerks gelten müssen, nicht im ganzen Internet.", "isCorrect": true, "explanation": "Genau deshalb ist eine Doppelung in getrennten Netzwerken unproblematisch." },
+        { "text": "Weil private Adressen sich automatisch alle fünf Minuten selbst ändern.", "isCorrect": false, "explanation": "Das war nicht der in der Lektion genannte Grund." },
+        { "text": "Weil es weltweit nur eine einzige gültige private Adresse überhaupt gibt.", "isCorrect": false, "explanation": "Es gibt viele mögliche private Adressen, nicht nur eine einzige." },
+        { "text": "Weil jedes Heimnetzwerk zusätzlich eine eigene, geheime zweite IP-Adresse bekommt.", "isCorrect": false, "explanation": "Das ist keine in der Lektion beschriebene Regel." }
+      ]
+    },
+    {
+      "question": "Wie kannst du laut der Praxisaufgabe deine eigene öffentliche IP-Adresse herausfinden?",
+      "area": "IP-Adressen und Ports",
+      "options": [
+        { "text": "Nur, indem man den Hersteller des eigenen Laptops direkt anruft.", "isCorrect": false, "explanation": "Das ist kein in der Lektion genannter Weg." },
+        { "text": "Über die Einstellungen des eigenen Routers oder über eine Webseite, die die Adresse direkt anzeigt.", "isCorrect": true, "explanation": "Genau diese zwei Wege wurden in der Lektion genannt." },
+        { "text": "Ausschließlich durch das Öffnen des Gehäuses des eigenen Computers.", "isCorrect": false, "explanation": "Das Öffnen der Hardware hat mit dem Ablesen einer IP-Adresse nichts zu tun." },
+        { "text": "Nur, indem man selbst ein eigenes Repository auf GitHub veröffentlicht.", "isCorrect": false, "explanation": "Das Veröffentlichen eines Repos ist kein Weg, die eigene IP-Adresse abzulesen." }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Finde deine eigene öffentliche IP-Adresse heraus, auf zwei Wegen: Erstens über die Einstellungen deines Routers (meist erreichbar über eine Adresse wie 192.168.1.1 im Browser, oder über die App deines Internetanbieters), dort unter einem Punkt wie Internetstatus oder Verbindung. Zweitens über eine Webseite, die dir deine öffentliche Adresse direkt anzeigt. Vergleiche beide Werte miteinander.",
+    "expectation": "Deine öffentliche IP-Adresse, einmal aus den Router-Einstellungen und einmal von einer Webseite abgelesen, mit dem Ergebnis, dass beide Werte übereinstimmen.",
+    "checklist": [
+      "Öffentliche IP-Adresse in den Router-Einstellungen gefunden",
+      "Öffentliche IP-Adresse über eine Webseite abgelesen",
+      "Beide Werte verglichen und Übereinstimmung festgestellt",
+      "Kurz notiert, ob die Adresse aus vier durch Punkte getrennten Zahlen besteht (IPv4) oder anders aussieht"
+    ]
+  },
+  "audio": {
+    "file": "M01-03-02.mp3",
+    "durationSeconds": 1500,
+    "voices": ["A", "B"],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Kann sich meine öffentliche IP-Adresse einfach so ändern, ohne dass ich selbst etwas umstelle?",
+      "answer": "Ja, das ist völlig normal. Viele Internetanbieter vergeben deine öffentliche Adresse nicht dauerhaft, sondern wechseln sie gelegentlich, zum Beispiel nach einem Neustart deines Routers. Für deine tägliche Nutzung merkst du davon in der Regel nichts, weil im Hintergrund alles automatisch neu geregelt wird."
+    },
+    {
+      "question": "Ist eine private Adresse wie 192.168.1.10 auf meinem Laptop und auf dem Laptop meiner Nachbarin dieselbe?",
+      "answer": "Ja, das kann durchaus vorkommen, weil private Adressen nur innerhalb des jeweiligen eigenen Netzwerks gelten müssen. Dein Router und der Router deiner Nachbarin vergeben ihre privaten Adressen unabhängig voneinander, deshalb ist eine Doppelung im jeweils eigenen, getrennten Zuhause kein Problem."
+    },
+    {
+      "question": "Warum benutzen Entwickler localhost, statt einfach die eigene öffentliche Adresse zum Testen zu verwenden?",
+      "answer": "Localhost ist schneller und sicherer, weil die Anfrage den eigenen Computer nie verlässt und deshalb auch kein fremdes Netzwerk oder gar das offene Internet durchqueren muss. Außerdem funktioniert localhost sogar dann, wenn gerade gar keine Internetverbindung besteht."
+    },
+    {
+      "question": "Was passiert, wenn ich versehentlich versuche, einen Port zu benutzen, der auf meinem Computer schon von einem anderen Dienst belegt ist?",
+      "answer": "Der Computer meldet dann einen Fehler, meist mit einem Hinweis wie Adresse bereits verwendet. Du musst entweder den anderen Dienst beenden, der den Port belegt, oder deinen eigenen Dienst so einstellen, dass er stattdessen einen anderen, freien Port benutzt."
+    },
+    {
+      "question": "Ist Port 443 grundsätzlich besser oder sicherer als Port 80?",
+      "answer": "Die Portnummer selbst macht keine Verbindung automatisch sicher, sie ist nur eine Vereinbarung, welcher Port für welchen Zweck üblich ist. Port 443 wird aber üblicherweise für verschlüsselte Verbindungen genutzt, deshalb läuft dort in der Praxis meist die sicherere Variante einer Webseite."
+    }
+  ]
+}
