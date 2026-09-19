@@ -1,25 +1,86 @@
 import { create } from 'zustand';
 import type { ColorSchemeSetting } from '../theme/colorScheme.js';
+import { hydrateSettings, persistSetting } from '../settings/persist.js';
+import { DEFAULT_QUIZ_LENGTH, type AppSettings, type ReviewIntensity } from '../settings/types.js';
 
 // Einstellungen, die das Gerüst schon braucht (Dunkelmodus, Tagesziel, Reihenfolge
-// Lesen/Hören). Liegt in Phase 3 nur im Speicher; Agent D hängt das an SQLite
-// (Settings-Tabelle aus datenmodell.md).
+// Lesen/Hören) plus die Werte aus AP-3.5 (Quizlänge, Wiederholungsintensität,
+// Benachrichtigungen, anonyme Statistik). Persistiert additiv über
+// src/settings/persist.ts an die Tabelle `settings` (SQLite).
 export type FirstFormPreference = 'read' | 'listen';
 
 interface SettingsState {
+  hydrated: boolean;
   colorScheme: ColorSchemeSetting;
   dailyGoalMinutes: number;
   firstFormPreference: FirstFormPreference;
+  quizLength: number;
+  reviewIntensity: ReviewIntensity;
+  notificationsEnabled: boolean;
+  telemetryEnabled: boolean;
+  installId: string;
+  /** Liefert den vollständigen geladenen Stand zurück, damit app/_layout.tsx auch onboardingDone/goal auslesen kann. */
+  hydrate: () => Promise<AppSettings>;
   setColorScheme: (value: ColorSchemeSetting) => void;
   setDailyGoalMinutes: (value: number) => void;
   setFirstFormPreference: (value: FirstFormPreference) => void;
+  setQuizLength: (value: number) => void;
+  setReviewIntensity: (value: ReviewIntensity) => void;
+  setNotificationsEnabled: (value: boolean) => void;
+  setTelemetryEnabled: (value: boolean) => void;
 }
 
 export const useSettingsStore = create<SettingsState>((set) => ({
+  hydrated: false,
   colorScheme: 'system',
   dailyGoalMinutes: 20,
   firstFormPreference: 'read',
-  setColorScheme: (value) => set({ colorScheme: value }),
-  setDailyGoalMinutes: (value) => set({ dailyGoalMinutes: value }),
-  setFirstFormPreference: (value) => set({ firstFormPreference: value }),
+  quizLength: DEFAULT_QUIZ_LENGTH,
+  reviewIntensity: 'normal',
+  notificationsEnabled: false,
+  telemetryEnabled: false,
+  installId: '',
+  hydrate: async () => {
+    const loaded = await hydrateSettings();
+    set({
+      hydrated: true,
+      colorScheme: loaded.colorScheme,
+      dailyGoalMinutes: loaded.dailyGoalMinutes,
+      firstFormPreference: loaded.firstFormPreference,
+      quizLength: loaded.quizLength,
+      reviewIntensity: loaded.reviewIntensity,
+      notificationsEnabled: loaded.notificationsEnabled,
+      telemetryEnabled: loaded.telemetryEnabled,
+      installId: loaded.installId,
+    });
+    return loaded;
+  },
+  setColorScheme: (value) => {
+    set({ colorScheme: value });
+    void persistSetting('colorScheme', value);
+  },
+  setDailyGoalMinutes: (value) => {
+    set({ dailyGoalMinutes: value });
+    void persistSetting('dailyGoalMinutes', value);
+  },
+  setFirstFormPreference: (value) => {
+    set({ firstFormPreference: value });
+    void persistSetting('firstFormPreference', value);
+  },
+  setQuizLength: (value) => {
+    set({ quizLength: value });
+    void persistSetting('quizLength', value);
+  },
+  setReviewIntensity: (value) => {
+    set({ reviewIntensity: value });
+    void persistSetting('reviewIntensity', value);
+  },
+  setNotificationsEnabled: (value) => {
+    set({ notificationsEnabled: value });
+    void persistSetting('notificationsEnabled', value);
+  },
+  setTelemetryEnabled: (value) => {
+    set({ telemetryEnabled: value });
+    void persistSetting('telemetryEnabled', value);
+  },
 }));

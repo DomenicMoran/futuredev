@@ -8,6 +8,8 @@ import { lessonSchema } from './lesson.js';
 import { manifestSchema } from './manifest.js';
 import { checkAllRules } from './rules.js';
 import { modulesFileSchema } from './modules.js';
+import { portfolioFileSchema } from './portfolio.js';
+import { careerFileSchema } from './career.js';
 import type { Lesson } from './lesson.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -16,6 +18,8 @@ const contentDir = join(repoRoot, 'content');
 const lessonsDir = join(contentDir, 'lessons');
 const manifestPath = join(contentDir, 'manifest.json');
 const modulesPath = join(contentDir, 'modules.json');
+const portfolioPath = join(contentDir, 'portfolio.json');
+const careerPath = join(contentDir, 'career.json');
 
 let errorCount = 0;
 
@@ -116,6 +120,29 @@ function main(): void {
     }
   } else {
     reportError('modules.json', 'fehlt', 'content/modules.json fehlt.');
+  }
+
+  for (const [path, label, schema] of [
+    [portfolioPath, 'portfolio.json', portfolioFileSchema] as const,
+    [careerPath, 'career.json', careerFileSchema] as const,
+  ]) {
+    if (!existsSync(path)) {
+      reportError(label, 'fehlt', `content/${label} fehlt.`);
+      continue;
+    }
+    let raw: unknown;
+    try {
+      raw = JSON.parse(readFileSync(path, 'utf8'));
+    } catch (err) {
+      reportError(label, 'json-parsen', String(err));
+      continue;
+    }
+    const result = schema.safeParse(raw);
+    if (!result.success) {
+      for (const issue of result.error.issues) {
+        reportError(label, 'schema', `${issue.path.join('.')}: ${issue.message}`);
+      }
+    }
   }
 
   if (errorCount > 0) {
