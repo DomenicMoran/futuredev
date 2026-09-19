@@ -1,0 +1,1034 @@
+{
+  "id": "M01-01-02",
+  "title": "Wie ein Programm überhaupt läuft",
+  "durationMinutes": 17,
+  "prerequisites": [
+    "M01-00-01",
+    "M01-00-02",
+    "M01-00-03",
+    "M01-00-04",
+    "M01-01-01"
+  ],
+  "terms": [
+    {
+      "term": "Prozess",
+      "definition": "Ein Programm, das der Computer gerade tatsächlich ausführt, mit einem eigenen, abgetrennten Platz im Arbeitsspeicher."
+    },
+    {
+      "term": "Absturz",
+      "definition": "Wenn ein Programm plötzlich aufhört zu arbeiten, weil es einen Fehler nicht mehr bewältigen kann."
+    },
+    {
+      "term": "Plattform",
+      "definition": "Die Art von Gerät oder Umgebung, auf der ein Programm laufen soll, zum Beispiel ein Handy oder ein Browser im Web."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "text": "Letztes Mal ging es um drei Teile in jedem Computer: die CPU, den Arbeitsspeicher und die Festplatte.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Die CPU rechnet, der Arbeitsspeicher haelt das Aktuelle bereit, und die Festplatte speichert dauerhaft. Das weiss ich noch.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Heute schauen wir uns an, wie diese drei Teile zusammenspielen, wenn du wirklich ein Programm startest. Schritt fuer Schritt, von dem Moment an, in dem du auf ein Symbol tippst.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Ist das eigentlich egal, ob ich auf ein Symbol auf dem Bildschirm tippe oder den Namen des Programms in eine Suche eintippe?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Fuer das, was jetzt kommt, ist das egal. Beides ist nur ein anderer Weg, dem Computer zu sagen: starte genau dieses eine Programm. Was danach im Inneren passiert, ist immer derselbe Ablauf.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir vor, du stehst vor deinem Werkzeugschrank und suchst einen bestimmten Schraubenzieher.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Der Schrank hat viele Faecher, und du musst erst wissen, in welchem Fach dieser eine Schraubenzieher liegt.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Auf deiner Festplatte ist das genauso. Ein Programm liegt dort als Datei, an einer bestimmten Stelle, zusammen mit tausenden anderen Dateien.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Und wenn ich auf das Symbol tippe, muss der Computer diese eine Datei erst ausfindig machen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau. Ein bestimmter Teil des Computers, der immer laeuft, kennt eine Art Inhaltsverzeichnis der Festplatte und weiss deshalb sofort, wo die passende Datei liegt.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Dieser bestimmte Teil ist selbst ein besonderes Programm, das immer laeuft, sobald der Computer an ist, und das allen anderen Programmen hilft, gestartet zu werden. Wie dieses besondere Programm genau heisst und arbeitet, schauen wir uns in der naechsten Lektion an.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir wieder die Werkbank vor, auf der du gerade arbeitest.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Bevor du den Schraubenzieher benutzen kannst, nimmst du ihn aus dem Schrank und legst ihn auf die Werkbank. Erst dort, in Reichweite, kannst du wirklich damit arbeiten.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genauso holt dieser immer laufende Teil das Programm von der Festplatte und legt eine Kopie davon in den Arbeitsspeicher, also auf die Werkbank.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Diese laufende Kopie eines Programms im Arbeitsspeicher nennt man einen Prozess.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Prozess.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Wenn du zum Beispiel einen Taschenrechner startest, wird eine Kopie davon in den Arbeitsspeicher gelegt, und ab diesem Moment gibt es einen Prozess mit dem Namen des Taschenrechners.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Ist ein Prozess also nur ein anderes Wort fuer ein Programm?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Fast, aber nicht ganz. Das Programm ist die Datei auf der Festplatte, die still daliegt. Der Prozess ist das Programm, waehrend es tatsaechlich laeuft und einen eigenen Platz im Arbeitsspeicher belegt.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Also die Datei im Schrank ist das Programm, und sobald sie auf der Werkbank liegt und benutzt wird, heisst sie Prozess.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau richtig. Und weil jede Kopie auf einer eigenen Werkbank liegt, kann ein und dasselbe Programm auch mehrmals gleichzeitig als mehrere Prozesse laufen, dazu kommen wir gleich noch genauer.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Sobald die Kopie im Arbeitsspeicher liegt, kommt die CPU ins Spiel.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein Programm besteht aus vielen einzelnen Anweisungen, ganz genauen Arbeitsschritten, die jemand vorher aufgeschrieben hat.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir ein Kochrezept vor, in dem jeder Schritt einzeln nummeriert ist. Schritt eins, Wasser aufsetzen. Schritt zwei, Nudeln hineingeben. Schritt drei, zehn Minuten warten.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Eine Anweisung eines Programms ist genauso ein einzelner, nummerierter Schritt, nur viel kleiner. Zum Beispiel: nimm die Zahl fünf, addiere die Zahl drei dazu, und zeig das Ergebnis auf dem Bildschirm.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Die CPU liest die erste Anweisung des Prozesses aus dem Arbeitsspeicher, fuehrt sie aus, und geht dann zur naechsten Anweisung weiter. Immer der Reihe nach, genau wie die Koechin aus dem letzten Mal.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Also erst jetzt, bei diesem Schritt, passiert wirklich etwas, und vorher lag alles nur bereit?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Richtig erkannt. Suchen auf der Festplatte und Kopieren in den Arbeitsspeicher ist reine Vorbereitung. Die eigentliche Arbeit beginnt erst, wenn die CPU anfaengt, die Anweisungen abzuarbeiten.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Und wenn ich in einem Taschenrechner-Programm auf die Taste fuenf und dann auf plus drei tippe, wird daraus sofort so eine Anweisung fuer die CPU?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ganz genau. Dein Tippen loest im Prozess neue Anweisungen aus, die CPU liest sie und rechnet das Ergebnis, und das Ergebnis wird wieder ueber den Bildschirm angezeigt. Das alles passiert so schnell, dass es fuer dich wie ein einziger Moment wirkt.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Laufen mehrere Prozesse gleichzeitig, zum Beispiel Musik und Browser, wechselt die CPU sehr schnell zwischen ihnen hin und her, ein paar Anweisungen von hier, ein paar Anweisungen von da. Das kennst du schon aus der letzten Lektion.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Eine grosse Werkstatt hat oft mehrere Werkbaenke nebeneinander, fuer verschiedene Projekte gleichzeitig.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Jede Werkbank hat ihren eigenen Platz, und was auf der einen Werkbank liegt, stoert die andere nicht.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genauso bekommt jeder Prozess seinen eigenen, abgetrennten Bereich im Arbeitsspeicher. Ein Browser-Prozess und ein Musik-Prozess koennen gleichzeitig laufen, ohne sich gegenseitig in die Quere zu kommen.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Deshalb stuerzt also nicht gleich alles ab, wenn nur ein einziges Programm Probleme macht?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau deshalb. Die Trennung der Werkbaenke schuetzt die anderen Prozesse. Was auf der einen Werkbank schiefgeht, bleibt normalerweise dort.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Schliesst du ein Programm, endet der Prozess dazu, und seine Werkbank wird wieder leer geraeumt.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Der Platz im Arbeitsspeicher wird frei fuer das naechste Programm, das gestartet wird. Auf der Festplatte, im Schrank, bleibt das Programm dabei unveraendert liegen, fuer das naechste Mal.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Also jedes Mal, wenn ich ein Programm oeffne, entsteht ein neuer Prozess, und jedes Mal, wenn ich es schliesse, verschwindet er wieder?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau richtig zusammengefasst.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Manchmal laeuft dabei etwas schief.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir vor, ein Werkzeug auf der Werkbank bricht mitten in der Benutzung, so kaputt, dass du damit nicht weiterarbeiten kannst.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Die Arbeit an dieser Werkbank steht dann still, bis jemand eingreift.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Trifft ein Prozess auf einen Zustand, mit dem er nicht umgehen kann, zum Beispiel eine Anweisung, die keinen Sinn mehr ergibt, hoert er auf zu arbeiten. Das nennt man einen Absturz.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Absturz.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein Taschenrechner, der beim Teilen durch eine bestimmte Eingabe plötzlich einfriert und auf nichts mehr reagiert, ist genau das: ein abgestuerzter Prozess, der seine Werkbank nicht mehr aufraeumen kann.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Und was ist mit den anderen Programmen, die gleichzeitig offen sind, wenn eins abstuerzt?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Weil jeder Prozess seine eigene, abgetrennte Werkbank hat, bleiben die anderen Prozesse meistens unberuehrt. Nur der Browser stuerzt ab, die Musik laeuft weiter.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Und was ist, wenn zwei Prozesse gleichzeitig dieselbe Datei auf der Festplatte speichern wollen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Das ist ein eigenes, spannendes Thema fuer sich, dem wir in einem spaeteren Modul noch einmal ganz genau nachgehen, wenn es um das Zusammenspiel mehrerer gleichzeitiger Vorgaenge geht. Fuer heute reicht: jeder Prozess selbst bleibt fuer sich abgeschottet.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Deshalb hilft ein Neustart des Programms oft, weil eine frische, kaputte Werkbank einfach komplett neu aufgebaut wird?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau. Die kaputte Werkbank wird weggeraeumt, und eine neue, unveraenderte Kopie des Programms wird von der Festplatte geholt. Die Datei im Schrank war ja die ganze Zeit ueber unbeschaedigt.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Das ist auch der Grund, warum die Anleitung bei fast jedem technischen Problem als erster Schritt lautet: einmal aus- und wieder einschalten, oder das Programm einmal neu starten. Es klingt banal, loest aber erstaunlich viele Probleme, weil dabei ein durcheinandergeratener Prozess durch eine frische Kopie ersetzt wird.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Deshalb bringt ein Neustart eines abgestuerzten Programms fast immer etwas, waehrend ein kaputter Werkzeugschrank selbst, also eine beschaedigte Datei auf der Festplatte, ein ganz anderes, selteneres Problem ist.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Ist ein Programm, das einfach nur sehr lange nichts tut, dasselbe wie ein Absturz?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Nicht unbedingt, und das ist ein wichtiger Unterschied. Manchmal wartet ein Prozess nur auf etwas von aussen, zum Beispiel darauf, dass ueber das Internet endlich etwas zurueckkommt, und steht deshalb kurz still, ohne wirklich abgestuerzt zu sein.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir vor, du bestellst am Telefon Werkzeug bei einem Haendler und legst waehrenddessen den Hoerer nicht auf, sondern wartest, bis sich am anderen Ende jemand meldet. Solange dort irgendwann jemand drangeht, ist das normales Warten, kein Absturz.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Legt aber niemand mehr auf und du haengst endlos in der Warteschleife fest, ohne Moeglichkeit aufzulegen, fuehlt sich das fuer dich genauso an wie ein Absturz, auch wenn im Inneren technisch nichts kaputt ist.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau dieses Problem gab es beim Repo lexipulse wirklich. Die Handy-App wollte einen Artikel aus dem Internet laden, ohne eine feste Wartezeit einzuplanen. Kam von der Gegenseite im Internet nichts zurueck, blieb die App in einem Ladebildschirm haengen, unbegrenzt lange, ohne Moeglichkeit zum Abbrechen.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "War das dann fuer die Nutzerin oder den Nutzer nicht genau dasselbe wie ein Absturz?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Gefuehlt schon, technisch aber nicht. Der Prozess lief weiter, wartete nur endlos. Genau deshalb hat der App-Pruefer von Apple diese Version zweimal abgelehnt. Ein Bildschirm, der auf nichts mehr reagiert, zaehlt fuer Nutzerinnen und Nutzer wie ein Haenger, ganz gleich, ob im Inneren ein echter Absturz steckt oder nur ein endloses Warten.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Jetzt kommt noch eine Frage dazu: laeuft ein Programm eigentlich ueberall gleich ab?",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir zwei verschiedene Werkstaetten vor, eine mit Steckdosen fuer runde Stecker, eine andere nur mit Steckdosen fuer flache Stecker.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein Werkzeug, das nur mit dem runden Stecker passt, laeuft in der zweiten Werkstatt gar nicht, ohne einen Adapter.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genauso ist nicht jeder Computer und jedes Handy technisch gleich aufgebaut. Die Art von Geraet oder Umgebung, auf der ein Programm laufen soll, nennt man eine Plattform.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Plattform.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein Handy mit Android ist eine Plattform, ein Browser im Web ist eine andere Plattform, ein Windows-Computer wieder eine andere.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss also fuer jede Plattform ein komplett eigenes Programm geschrieben werden?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Frueher meistens ja. Heute schreiben viele Entwickler einen gemeinsamen Kern, der nichts Plattformspezifisches enthaelt, und bauen nur eine duenne Huelle je Plattform darum.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau das siehst du gleich im Praxisbeispiel: dieselbe App laeuft auf dem Handy und im Browser, aus demselben gemeinsamen Kern heraus.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Im Repo lexipulse gibt es genau so einen gemeinsamen Kern. Er liegt unter packages/core und kennt weder einen Browser noch die Eigenheiten eines Handys.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Und wie laeuft dann derselbe Kern auf zwei so unterschiedlichen Plattformen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Zwei duenne Huellen holen ihn ab: apps/web ist eine Webseite, die im Browser laeuft, apps/mobile ist eine Handy-App. Beide starten denselben Kern, nur die Huelle drumherum ist fuer die jeweilige Plattform gebaut.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Startest du die Webseite, laedt dein Browser den Kern von der Festplatte deines Computers in den Arbeitsspeicher, genau wie bei jedem anderen Programm. Startest du die Handy-App, macht dein Handy dasselbe mit seinem eigenen Arbeitsspeicher.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Zwei verschiedene Plattformen, zwei getrennte Prozesse, ein gemeinsamer Kern als Grundlage fuer beide.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Und die Webseite selbst, laeuft die eigentlich auch erst nach einem eigenen Startvorgang, so wie die Handy-App?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, auch das. Wenn jemand die Webseite von lexipulse veroeffentlichen will, wird der Webseiten-Teil zuerst auf einem eigenen, fremden Rechner im Internet bereitgestellt, damit er ueberhaupt im Browser aufgerufen werden kann. Das ist ein eigener Vorgang, den wir uns in einem spaeteren Modul genauer ansehen.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Fuer dich reicht heute: egal ob Handy-App, Webseite oder ein ganz normales Programm auf dem Laptop, immer gilt derselbe Ablauf. Erst die Datei ausfindig machen, dann in den Arbeitsspeicher kopieren, dann die CPU rechnen lassen.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Heisst das im Umkehrschluss, dass eine Webseite, die im Browser haengt, genauso mit einem einfachen Neuladen behoben werden kann wie ein abgestuerztes Programm mit einem Neustart?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "In sehr vielen Faellen ja. Ein Neuladen der Webseite beendet den alten Prozess im Browser und startet einen neuen, mit einer frischen Kopie des Inhalts, genau wie beim Neustart eines gewoehnlichen Programms.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Bringt so ein gemeinsamer Kern der Entwicklerin oder dem Entwickler wirklich viel, oder ist das nur eine nette Idee?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Es bringt sehr viel, gerade fuer eine einzelne Person oder ein kleines Team. Ein Fehler im Kern, einmal gefunden und behoben, ist automatisch auf allen Plattformen behoben, ohne dass irgendjemand denselben Fehler zweimal reparieren muss.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Ohne gemeinsamen Kern muesste jede Plattform ihre eigene, komplett getrennte Version des Programms bekommen, mit eigenen Fehlern, eigenen Tests und eigenem Nachziehen jeder Aenderung.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Also noch einmal ganz kurz zusammengefasst: ein Programm liegt zuerst als Datei auf der Festplatte, wird beim Start als Prozess in den Arbeitsspeicher kopiert, und die CPU arbeitet seine Anweisungen Schritt fuer Schritt ab. Stuerzt der Prozess ab, hilft meist ein Neustart, weil die Datei auf der Festplatte unveraendert bleibt.",
+      "isKeySentence": true,
+      "role": "key"
+    },
+    {
+      "speaker": "A",
+      "text": "Dieses Bild von Festplatte, Arbeitsspeicher und CPU begegnet dir ab jetzt in fast jeder Lektion wieder, egal ob es um ein Handy, einen fremden Rechner im Internet oder einen ganz gewoehnlichen Laptop geht.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Wenn du das naechste Mal ein Programm neu startest, weil es sich aufgehaengt hat, weisst du jetzt genau, was in diesem Moment technisch passiert.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann ich mir all diese Prozesse eigentlich auch selbst anschauen, oder bleibt das immer unsichtbar im Hintergrund?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Du kannst sie dir jederzeit anschauen. Der Task-Manager unter Windows und die Aktivitaetsanzeige unter macOS zeigen genau diese Liste: jeder laufende Prozess mit einem Namen. Dazu zeigen sie, wie viel Arbeitsspeicher er belegt und wie viel CPU er gerade beansprucht.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Schliesst du dort einen Prozess von Hand, passiert technisch dasselbe wie beim normalen Schliessen eines Programms: die Werkbank wird leer geraeumt, der Platz im Arbeitsspeicher wird wieder frei.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Das klingt fast so, als koennte ich damit ein haengendes Programm selbst beenden, ohne den ganzen Computer neu zu starten.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau das ist einer der haeufigsten Gruende, warum erfahrene Nutzerinnen und Nutzer den Task-Manager oeffnen: einen einzelnen, festgefahrenen Prozess beenden, statt gleich alles neu zu starten.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Fassen wir die neuen Begriffe von heute noch einmal als Liste zusammen.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Prozess: ein Programm, das der Computer gerade tatsaechlich ausfuehrt, mit einem eigenen Platz im Arbeitsspeicher.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Absturz: wenn ein Programm ploetzlich aufhoert zu arbeiten, weil es einen Fehler nicht mehr bewaeltigen kann.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Plattform: die Art von Geraet oder Umgebung, auf der ein Programm laeuft, zum Beispiel ein Handy oder ein Browser.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "B",
+      "text": "Verliere ich meine Dateien, wenn ein Programm abstuerzt?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, in der Regel nicht. Ein Absturz betrifft nur den Prozess im Arbeitsspeicher, also die Werkbank, nicht die Datei auf der Festplatte. Was du zuletzt gespeichert hast, bleibt erhalten, nur ungespeicherte Aenderungen seit dem letzten Speichern koennen verloren gehen.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Warum dauert das Starten mancher Programme laenger als bei anderen?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein grosses Programm besteht aus mehr Anweisungen und mehr Daten, die von der Festplatte in den Arbeitsspeicher kopiert werden muessen, bevor die CPU loslegen kann. Je mehr kopiert werden muss und je langsamer die Festplatte dabei ist, desto laenger dauert dieser Vorbereitungsschritt.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann ich zwei Prozesse desselben Programms gleichzeitig haben?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, das geht bei vielen Programmen problemlos. Oeffnest du zum Beispiel einen Texteditor zweimal, entstehen zwei getrennte Kopien im Arbeitsspeicher, mit zwei eigenen Werkbaenken, auch wenn beide vom selben Programm auf der Festplatte stammen.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Wieso hilft es oft, den Computer komplett neu zu starten und nicht nur das eine Programm?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Manchmal haengt nicht nur ein einzelner Prozess fest, sondern der ganze Computer ist durcheinandergeraten, etwa weil zu viele Prozesse gleichzeitig um denselben Arbeitsspeicher streiten. Ein kompletter Neustart raeumt dann die ganze Werkstatt leer und baut alles von vorne auf, nicht nur eine einzelne Werkbank.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Ist eine Webseite im Browser auch ein Prozess?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, sobald du eine Webseite oeffnest, laedt dein Browser ihren Quelltext in den Arbeitsspeicher und die CPU beginnt, ihn abzuarbeiten, genau wie bei jedem anderen Programm. Moderne Browser starten sogar oft fuer jeden geoeffneten Reiter einen eigenen, kleinen Prozess, damit eine abstuerzende Webseite nicht gleich die anderen Reiter mitreisst.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Warum sagt man manchmal Doppelklick, obwohl ich auf dem Handy nur einmal antippe?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Das kommt aus der Zeit, als Computer nur mit der Maus bedient wurden und ein einzelner Klick oft schon etwas anderes bedeutete, zum Beispiel nur Markieren statt Starten. Auf dem Handy reicht ein einziges Antippen, weil dort von Anfang an so geplant wurde, dass Antippen gleich Starten bedeutet, aber der eigentliche Ablauf danach, Festplatte, Arbeitsspeicher, CPU, ist auf beiden Geraeten derselbe.",
+      "isKeySentence": false,
+      "role": "faq"
+    }
+  ],
+  "practiceExample": {
+    "text": "Im Repo lexipulse gibt es einen gemeinsamen, plattformfreien Kern unter packages/core, der weder einen Browser noch die Eigenheiten eines Handys kennt. Zwei duenne Huellen holen ihn ab: apps/web ist eine Webseite fuer den Browser, apps/mobile ist eine Handy-App. Startest du die Webseite, laedt dein Browser den Kern von der Festplatte in seinen Arbeitsspeicher und erzeugt einen Prozess. Startest du die Handy-App, macht dein Handy genau dasselbe mit seinem eigenen Arbeitsspeicher. Zwei getrennte Prozesse auf zwei Plattformen, ein gemeinsamer Kern als gemeinsame Grundlage.",
+    "repoNote": "repo-lexipulse",
+    "location": "Tabelle 'Was man daran lernen kann', Zeile M03/M05: packages/core/src/ (engine.ts, parsers/, tokenizer.ts, pacing.ts), packages/core/package.json (kein DOM-, kein React-Native-Bezug); apps/web/ (Next.js 15) und apps/mobile/ (Expo SDK 57)"
+  },
+  "quiz": [
+    {
+      "question": "Was passiert zuerst, wenn du auf das Symbol eines Programms tippst?",
+      "area": "Programmablauf",
+      "options": [
+        {
+          "text": "Die CPU beginnt sofort, Anweisungen auszuführen.",
+          "isCorrect": false,
+          "explanation": "Das passiert erst, nachdem das Programm im Arbeitsspeicher liegt, nicht als allererster Schritt."
+        },
+        {
+          "text": "Das Betriebssystem findet die Datei auf der Festplatte.",
+          "isCorrect": true,
+          "explanation": "Zuerst muss die passende Datei überhaupt gefunden werden, bevor irgendetwas kopiert werden kann."
+        },
+        {
+          "text": "Der Arbeitsspeicher wird komplett geleert.",
+          "isCorrect": false,
+          "explanation": "Nur der neue Prozess bekommt Platz, der restliche Arbeitsspeicher wird nicht geleert."
+        },
+        {
+          "text": "Die Festplatte wird neu formatiert.",
+          "isCorrect": false,
+          "explanation": "Formatieren löscht die ganze Festplatte, das passiert beim normalen Programmstart nie."
+        }
+      ]
+    },
+    {
+      "question": "Was ist ein Prozess?",
+      "area": "Programmablauf",
+      "options": [
+        {
+          "text": "Ein anderes Wort für die Festplatte selbst.",
+          "isCorrect": false,
+          "explanation": "Die Festplatte ist Hardware, ein Prozess ist eine laufende Programmkopie."
+        },
+        {
+          "text": "Eine Datei, die nie geöffnet wurde.",
+          "isCorrect": false,
+          "explanation": "Eine ungeöffnete Datei ist noch kein Prozess, sie liegt nur still auf der Festplatte."
+        },
+        {
+          "text": "Ein laufendes Programm mit eigenem Platz im Arbeitsspeicher.",
+          "isCorrect": true,
+          "explanation": "Genau das ist die Definition eines Prozesses."
+        },
+        {
+          "text": "Der Teil des Computers, der rechnet.",
+          "isCorrect": false,
+          "explanation": "Das beschreibt die CPU, nicht einen Prozess."
+        }
+      ]
+    },
+    {
+      "question": "Welches Alltagsbild passt am besten zu einem Prozess?",
+      "area": "Programmablauf",
+      "options": [
+        {
+          "text": "Ein Werkzeug, das aus dem Schrank auf die Werkbank gelegt wurde.",
+          "isCorrect": true,
+          "explanation": "Genau wie das Werkzeug auf der Werkbank ist der Prozess die aktive Kopie im Arbeitsspeicher."
+        },
+        {
+          "text": "Ein Werkzeugschrank, der über Nacht fest abgeschlossen bleibt und morgens wieder geöffnet wird.",
+          "isCorrect": false,
+          "explanation": "Das passt eher zur Festplatte, die dauerhaft speichert."
+        },
+        {
+          "text": "Ein leeres Regal ohne jeden Inhalt.",
+          "isCorrect": false,
+          "explanation": "Ein leeres Regal zeigt keine laufende Aktivität, das passt nicht zum Prozess."
+        },
+        {
+          "text": "Eine Bauanleitung, die noch nie gelesen wurde.",
+          "isCorrect": false,
+          "explanation": "Eine ungelesene Anleitung entspricht eher dem ruhenden Programm auf der Festplatte."
+        }
+      ]
+    },
+    {
+      "question": "Was bedeutet es, wenn zwei Prozesse voneinander isoliert laufen?",
+      "area": "Programmablauf",
+      "options": [
+        {
+          "text": "Sie teilen sich normalerweise genau denselben Platz und dieselbe Adresse im Arbeitsspeicher.",
+          "isCorrect": false,
+          "explanation": "Genau das Gegenteil stimmt: jeder Prozess bekommt einen eigenen Bereich."
+        },
+        {
+          "text": "Sie können niemals gleichzeitig laufen.",
+          "isCorrect": false,
+          "explanation": "Mehrere Prozesse können sehr wohl gleichzeitig laufen, das ist der Alltag."
+        },
+        {
+          "text": "Probleme im einen Prozess bleiben normalerweise vom anderen getrennt.",
+          "isCorrect": true,
+          "explanation": "Weil jeder Prozess seine eigene Werkbank hat, bleibt ein Problem meist dort."
+        },
+        {
+          "text": "Beide Prozesse gehören automatisch zum selben Programm.",
+          "isCorrect": false,
+          "explanation": "Isolierte Prozesse können völlig unterschiedliche Programme sein."
+        }
+      ]
+    },
+    {
+      "question": "Was passiert mit dem Programm auf der Festplatte, wenn der zugehörige Prozess abstürzt?",
+      "area": "Programmablauf",
+      "options": [
+        {
+          "text": "Die Datei auf der Festplatte bleibt meist unverändert.",
+          "isCorrect": true,
+          "explanation": "Der Absturz betrifft die Werkbank im Arbeitsspeicher, nicht die Datei im Schrank."
+        },
+        {
+          "text": "Die Datei auf der Festplatte wird automatisch gelöscht.",
+          "isCorrect": false,
+          "explanation": "Ein Absturz löscht die Programmdatei nicht automatisch."
+        },
+        {
+          "text": "Die Datei wird sofort größer, weil Fehlerdaten angehängt werden.",
+          "isCorrect": false,
+          "explanation": "Ein Absturz vergrößert die Programmdatei selbst nicht."
+        },
+        {
+          "text": "Die Festplatte wird komplett neu formatiert.",
+          "isCorrect": false,
+          "explanation": "Ein einzelner Absturz führt niemals zur Formatierung der ganzen Festplatte."
+        }
+      ]
+    },
+    {
+      "question": "Warum hilft ein Neustart eines abgestürzten Programms meistens?",
+      "area": "Programmablauf",
+      "options": [
+        {
+          "text": "Weil dabei eine frische Kopie von der unveränderten Festplattendatei geladen wird.",
+          "isCorrect": true,
+          "explanation": "Die kaputte Werkbank wird weggeräumt, die Quelle im Schrank war die ganze Zeit in Ordnung."
+        },
+        {
+          "text": "Weil dabei die Festplatte automatisch repariert wird.",
+          "isCorrect": false,
+          "explanation": "Ein Neustart des Programms repariert nicht die Festplatte selbst."
+        },
+        {
+          "text": "Weil dabei die CPU ausgetauscht wird.",
+          "isCorrect": false,
+          "explanation": "Ein Neustart tauscht keine Hardware aus."
+        },
+        {
+          "text": "Weil dabei zusätzlich alle anderen bereits laufenden Prozesse ebenfalls automatisch komplett neu gestartet werden.",
+          "isCorrect": false,
+          "explanation": "Andere, isolierte Prozesse sind von diesem Neustart nicht betroffen."
+        }
+      ]
+    },
+    {
+      "question": "Was ist eine Plattform, so wie in dieser Lektion beschrieben?",
+      "area": "Programmablauf",
+      "options": [
+        {
+          "text": "Ein anderes Wort für Festplatte.",
+          "isCorrect": false,
+          "explanation": "Festplatte ist ein Speicherbauteil, keine Plattform."
+        },
+        {
+          "text": "Die Art von Gerät oder Umgebung, auf der ein Programm läuft.",
+          "isCorrect": true,
+          "explanation": "Genau das ist die Definition, zum Beispiel Handy oder Browser."
+        },
+        {
+          "text": "Ein anderer, weniger gebräuchlicher Fachbegriff für einen laufenden Prozess im Arbeitsspeicher.",
+          "isCorrect": false,
+          "explanation": "Ein Prozess ist eine laufende Programmkopie, keine Plattform."
+        },
+        {
+          "text": "Die Menge aller Dateien auf einer Festplatte.",
+          "isCorrect": false,
+          "explanation": "Das beschreibt keine Plattform, sondern nur gespeicherte Dateien."
+        }
+      ]
+    },
+    {
+      "question": "Was zeigt das Repo lexipulse zum Thema Plattformen?",
+      "area": "Programmablauf",
+      "options": [
+        {
+          "text": "Dass jede Plattform komplett eigenen, unabhängigen Code ohne gemeinsamen Kern braucht.",
+          "isCorrect": false,
+          "explanation": "Genau das Gegenteil zeigt das Repo: einen gemeinsamen Kern für mehrere Plattformen."
+        },
+        {
+          "text": "Dass ein gemeinsamer Kern von einer Web- und einer Handy-Hülle genutzt wird.",
+          "isCorrect": true,
+          "explanation": "packages/core ist der gemeinsame Kern, apps/web und apps/mobile sind die zwei Hüllen."
+        },
+        {
+          "text": "Dass Webseiten grundsätzlich keine Prozesse im Arbeitsspeicher erzeugen.",
+          "isCorrect": false,
+          "explanation": "Auch eine Webseite erzeugt beim Laden einen Prozess im Browser."
+        },
+        {
+          "text": "Dass eine Handy-App niemals von einer Festplatte geladen wird.",
+          "isCorrect": false,
+          "explanation": "Auch eine Handy-App liegt gespeichert vor und wird beim Start geladen."
+        }
+      ]
+    },
+    {
+      "question": "Welche Aussage über mehrere gleichzeitig geöffnete Programme stimmt?",
+      "area": "Programmablauf",
+      "options": [
+        {
+          "text": "Jedes offene Programm erzeugt einen eigenen Prozess im Arbeitsspeicher.",
+          "isCorrect": true,
+          "explanation": "Jedes gestartete Programm bekommt seine eigene Werkbank, also einen eigenen Prozess."
+        },
+        {
+          "text": "Alle gleichzeitig geöffneten Programme teilen sich zwingend immer nur einen einzigen, gemeinsamen Prozess.",
+          "isCorrect": false,
+          "explanation": "Normalerweise bekommt jedes Programm einen eigenen, getrennten Prozess."
+        },
+        {
+          "text": "Nur das zuletzt gestartete Programm bekommt einen Prozess.",
+          "isCorrect": false,
+          "explanation": "Jedes laufende Programm hat seinen eigenen Prozess, nicht nur das letzte."
+        },
+        {
+          "text": "Offene Programme benötigen grundsätzlich keinen Arbeitsspeicher.",
+          "isCorrect": false,
+          "explanation": "Jeder laufende Prozess braucht zwingend Platz im Arbeitsspeicher."
+        }
+      ]
+    },
+    {
+      "question": "Was passiert normalerweise mit ungespeicherten Änderungen, wenn ein Programm abstürzt?",
+      "area": "Programmablauf",
+      "options": [
+        {
+          "text": "Sie werden automatisch auf der Festplatte gesichert.",
+          "isCorrect": false,
+          "explanation": "Ohne ausdrückliches Speichern werden Änderungen nicht automatisch gesichert."
+        },
+        {
+          "text": "Sie gehen möglicherweise verloren, weil sie nur im Arbeitsspeicher lagen.",
+          "isCorrect": true,
+          "explanation": "Ungespeichertes lag nur auf der Werkbank, die beim Absturz verloren geht."
+        },
+        {
+          "text": "Sie werden automatisch gesichert und an ein völlig anderes, unabhängiges Programm weitergegeben.",
+          "isCorrect": false,
+          "explanation": "Andere Programme bekommen die Änderungen eines abgestürzten Prozesses nicht automatisch."
+        },
+        {
+          "text": "Sie werden dauerhaft unlesbar auf der Festplatte gespeichert.",
+          "isCorrect": false,
+          "explanation": "Ein Absturz im Arbeitsspeicher schreibt normalerweise nichts Unlesbares auf die Festplatte."
+        }
+      ]
+    },
+    {
+      "question": "Warum können zwei Fenster desselben Texteditors trotzdem als zwei getrennte Prozesse laufen?",
+      "area": "Programmablauf",
+      "options": [
+        {
+          "text": "Weil jedes gestartete Fenster eine eigene Kopie im Arbeitsspeicher bekommen kann.",
+          "isCorrect": true,
+          "explanation": "Jeder Start erzeugt eine eigene Werkbank, auch wenn dieselbe Programmdatei benutzt wird."
+        },
+        {
+          "text": "Weil die Festplatte für jedes Fenster eine eigene Kopie der Datei anlegt.",
+          "isCorrect": false,
+          "explanation": "Auf der Festplatte bleibt meist eine einzige Programmdatei, unabhängig von der Fensteranzahl."
+        },
+        {
+          "text": "Weil die CPU für jedes Fenster eine eigene, zweite CPU erzeugt.",
+          "isCorrect": false,
+          "explanation": "Ein Computer erzeugt keine zusätzliche CPU-Hardware, nur weil ein Fenster mehr offen ist."
+        },
+        {
+          "text": "Weil ein zweites Fenster niemals einen eigenen Arbeitsspeicherplatz braucht.",
+          "isCorrect": false,
+          "explanation": "Auch ein zweites Fenster braucht eigenen Platz im Arbeitsspeicher."
+        }
+      ]
+    },
+    {
+      "question": "Welche Aussage beschreibt den Unterschied zwischen einem Programm und einem Prozess am besten?",
+      "area": "Programmablauf",
+      "options": [
+        {
+          "text": "Programm und Prozess sind in jeder Hinsicht genau dasselbe.",
+          "isCorrect": false,
+          "explanation": "Das Programm ist die ruhende Datei, der Prozess die laufende Kopie, ein Unterschied besteht also."
+        },
+        {
+          "text": "Das Programm ist die ruhende Datei auf der Festplatte, der Prozess die laufende Kopie im Arbeitsspeicher.",
+          "isCorrect": true,
+          "explanation": "Genau diese Unterscheidung wurde in der Lektion aufgebaut."
+        },
+        {
+          "text": "Ein Prozess existiert bereits, bevor das Programm zum ersten Mal gestartet wird.",
+          "isCorrect": false,
+          "explanation": "Ein Prozess entsteht erst durch den Start, vorher gibt es nur das ruhende Programm."
+        },
+        {
+          "text": "Ein Programm entsteht erst, nachdem der zugehörige Prozess beendet wurde.",
+          "isCorrect": false,
+          "explanation": "Das Programm existiert bereits vor dem Start als Datei auf der Festplatte."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Oeffne auf deinem eigenen Computer denselben Texteditor oder Taschenrechner zweimal hintereinander, sodass zwei Fenster gleichzeitig offen sind. Oeffne danach den Task-Manager (Windows, Rechtsklick auf die Taskleiste) oder die Aktivitaetsanzeige (macOS, ueber die Spotlight-Suche) und suche das Programm in der Liste.",
+    "expectation": "In der Liste der laufenden Programme erscheint das Programm zweimal, oder einmal mit der Angabe, dass zwei Fenster dazugehoeren. Das zeigt zwei getrennte Prozesse desselben Programms.",
+    "checklist": [
+      "Dasselbe Programm zweimal geoeffnet",
+      "Task-Manager oder Aktivitaetsanzeige geoeffnet",
+      "Programm in der Prozess-Liste gefunden",
+      "Notiert, ob zwei Eintraege oder ein Eintrag mit zwei Fenstern angezeigt wird"
+    ]
+  },
+  "audio": {
+    "file": "M01-01-02.mp3",
+    "durationSeconds": 1014,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Verliere ich meine Dateien, wenn ein Programm abstuerzt?",
+      "answer": "Nein, in der Regel nicht. Ein Absturz betrifft nur den Prozess im Arbeitsspeicher, also die Werkbank, nicht die Datei auf der Festplatte. Was du zuletzt gespeichert hast, bleibt erhalten, nur ungespeicherte Aenderungen seit dem letzten Speichern koennen verloren gehen."
+    },
+    {
+      "question": "Warum dauert das Starten mancher Programme laenger als bei anderen?",
+      "answer": "Ein grosses Programm besteht aus mehr Anweisungen und mehr Daten, die von der Festplatte in den Arbeitsspeicher kopiert werden muessen, bevor die CPU loslegen kann. Je mehr kopiert werden muss und je langsamer die Festplatte dabei ist, desto laenger dauert dieser Vorbereitungsschritt."
+    },
+    {
+      "question": "Kann ich zwei Prozesse desselben Programms gleichzeitig haben?",
+      "answer": "Ja, das geht bei vielen Programmen problemlos. Oeffnest du zum Beispiel einen Texteditor zweimal, entstehen zwei getrennte Kopien im Arbeitsspeicher, mit zwei eigenen Werkbaenken, auch wenn beide vom selben Programm auf der Festplatte stammen."
+    },
+    {
+      "question": "Wieso hilft es oft, den Computer komplett neu zu starten und nicht nur das eine Programm?",
+      "answer": "Manchmal haengt nicht nur ein einzelner Prozess fest, sondern der ganze Computer ist durcheinandergeraten, etwa weil zu viele Prozesse gleichzeitig um denselben Arbeitsspeicher streiten. Ein kompletter Neustart raeumt dann die ganze Werkstatt leer und baut alles von vorne auf, nicht nur eine einzelne Werkbank."
+    },
+    {
+      "question": "Ist eine Webseite im Browser auch ein Prozess?",
+      "answer": "Ja, sobald du eine Webseite oeffnest, laedt dein Browser ihren Quelltext in den Arbeitsspeicher und die CPU beginnt, ihn abzuarbeiten, genau wie bei jedem anderen Programm. Moderne Browser starten sogar oft fuer jeden geoeffneten Reiter einen eigenen, kleinen Prozess, damit eine abstuerzende Webseite nicht gleich die anderen Reiter mitreisst."
+    },
+    {
+      "question": "Warum sagt man manchmal Doppelklick, obwohl ich auf dem Handy nur einmal antippe?",
+      "answer": "Das kommt aus der Zeit, als Computer nur mit der Maus bedient wurden und ein einzelner Klick oft schon etwas anderes bedeutete, zum Beispiel nur Markieren statt Starten. Auf dem Handy reicht ein einziges Antippen, weil dort von Anfang an so geplant wurde, dass Antippen gleich Starten bedeutet, aber der eigentliche Ablauf danach, Festplatte, Arbeitsspeicher, CPU, ist auf beiden Geraeten derselbe."
+    }
+  ]
+}
