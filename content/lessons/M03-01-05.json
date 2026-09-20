@@ -1,0 +1,731 @@
+{
+  "id": "M03-01-05",
+  "title": "Angular: eine andere Art, Web-Apps zu bauen",
+  "durationMinutes": 27,
+  "prerequisites": [
+    "M03-01-01",
+    "M03-01-02"
+  ],
+  "terms": [
+    {
+      "term": "Angular",
+      "definition": "Ein Framework von Google, das mit TypeScript eine vollständige Werkstatt zum Bau von Webanwendungen bereitstellt, inklusive Komponenten, Routing, Formularen und HTTP-Anfragen aus einer Hand."
+    },
+    {
+      "term": "Angular-Service",
+      "definition": "Eine wiederverwendbare Klasse in Angular, die Geschäftslogik oder Datenzugriff bündelt und von mehreren Komponenten gemeinsam genutzt werden kann."
+    },
+    {
+      "term": "Dependency Injection",
+      "definition": "Ein Entwurfsmuster, bei dem eine Klasse ihre Abhängigkeiten nicht selbst erzeugt, sondern von außen gereicht bekommt, in Angular automatisch durch den Injector."
+    },
+    {
+      "term": "Two-Way-Binding",
+      "definition": "Eine Datenbindung, die Änderungen am Bildschirm sofort ins Datenmodell zurückschreibt und umgekehrt, sodass Eingabefeld und Variable immer denselben Wert haben."
+    },
+    {
+      "term": "TypeScript-first",
+      "definition": "Die Entscheidung, ein Framework von Grund auf in TypeScript zu schreiben und TypeScript als Standardsprache für alle Anwender vorauszusetzen, statt es nur optional anzubieten."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir zwei verschiedene Arten vor, ein Haus zu bauen. Bei der ersten Art gehst du in den Baumarkt, kaufst einzelne Werkzeuge und Materialien, die du alle selbst aussuchst: einen Hammer hier, Nägel dort, Holz von einem anderen Händler. Bei der zweiten Art kommt ein Komplettanbieter mit einem Baukasten, in dem schon alles enthalten ist: Werkzeuge, Materialien, Bauplan und sogar eine Anleitung, wie alles zusammengehört.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Und was hat das mit React und Angular zu tun?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "React ist wie der Baumarkt: Es gibt dir eine großartige Komponenten-Bibliothek, aber für alles andere musst du selbst entscheiden, welche zusätzlichen Werkzeuge du brauchst. Einen Router für mehrere Seiten, eine Bibliothek für Formulare, ein Werkzeug für HTTP-Anfragen. Angular ist der Komplettanbieter: Es bringt all diese Dinge von Haus aus mit, in einem einzigen, aufeinander abgestimmten Paket, ohne dass du zusätzliche Pakete installieren musst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Dieses Komplettpaket von Google heißt Angular.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Angular enthält bereits eingebaute Lösungen für alles, wofür man in React oft externe Bibliotheken braucht. Ein Router für mehrere Seiten ist direkt in Angular enthalten, ohne dass man eine zusätzliche Bibliothek wie React Router installieren muss. Ein mächtiges Formularsystem mit Validierung ist ebenfalls eingebaut. Sogar ein Werkzeug für HTTP-Anfragen an einen Server bringt Angular von Haus aus mit. Während ein React-Projekt oft ein Dutzend oder mehr zusätzliche Pakete in der package.json auflistet, kommt ein Angular-Projekt mit deutlich weniger externen Abhängigkeiten aus, weil das Framework selbst schon so viel mitbringt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Das ist wichtig, weil diese Philosophie der vollständigen Werkstatt eine grundlegend andere Herangehensweise ist als der React-Ansatz der freien Werkzeugwahl. Teams, die Angular wählen, entscheiden sich bewusst für ein Framework, das ihnen viele Entscheidungen abnimmt und einen klaren, vorgegebenen Weg vorgibt, statt sie selbst jede Bibliothek einzeln auswählen zu lassen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Heißt das, Angular und React sind Konkurrenten, zwischen denen man sich entscheiden muss?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Sie sind Alternativen mit unterschiedlichen Philosophien, keine direkten Konkurrenten im engeren Sinn. React ist eine Bibliothek, die sich auf eine Sache konzentriert: Komponenten bauen und rendern. Angular ist ein Framework, das eine komplette Architektur für große, komplexe Anwendungen vorgibt. Beide haben ihre Stärken, und welche besser passt, hängt vom Projekt und vom Team ab. Große Unternehmensanwendungen mit vielen Entwicklern setzen oft auf Angular, weil die festen Strukturen dafür sorgen, dass alle im Team auf dieselbe Art arbeiten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Das ist wichtig, weil die Wahl zwischen React und Angular keine Frage von besser oder schlechter ist, sondern eine Frage der Projektanforderungen. Ein kleines, schnelles Projekt profitiert von Reacts Flexibilität. Eine große Anwendung mit zwanzig Entwicklern profitiert von Angulars festen Konventionen, weil nicht jedes Team seinen eigenen Weg erfinden muss.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine Komponente in Angular wie einen Aktenordner vor, der immer aus drei Teilen besteht: einem Deckblatt mit dem Aussehen, einem Inhaltsverzeichnis mit der Logik und einem Register mit den Tests.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Eine Komponente in Angular ist anders aufgebaut als in React. Während eine React-Komponente eine einzelne Funktion ist, die Logik und Aussehen in einer Datei mischt, besteht eine Angular-Komponente immer aus mehreren Dateien, die klar getrennte Aufgaben haben. Eine Datei für das HTML-Gerüst, eine Datei für die Programm-Logik in TypeScript, eine Datei für das CSS-Aussehen und eine Datei für automatisierte Tests.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Warum trennt Angular diese drei Dinge in verschiedene Dateien, statt sie wie React in einer Datei zusammenzufassen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Diese Trennung folgt dem Prinzip der Aufgabentrennung, auf Englisch Separation of Concerns. Die Person, die das Aussehen gestaltet, kann an der CSS-Datei arbeiten, ohne die Programmlogik zu sehen. Die Person, die die Logik schreibt, kann sich auf die TypeScript-Datei konzentrieren, ohne von HTML abgelenkt zu werden. In großen Teams mit Spezialisten für verschiedene Aufgaben ist diese Trennung ein großer Vorteil, weil niemand versehentlich fremden Code ändert.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Das ist wichtig, weil diese Dateitrennung einer der sichtbarsten Unterschiede zwischen Angular und React ist. Wer von React kommt und zum ersten Mal Angular-Code sieht, wundert sich über die vielen Dateien. Wer versteht, dass jede Datei eine klar abgegrenzte Aufgabe hat, erkennt darin eine bewusste Designentscheidung, keinen unnötigen Ballast.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir ein Restaurant vor, in dem der Koch nicht selbst zum Kühlhaus geht, um Zutaten zu holen. Stattdessen gibt es einen Kellner, der dem Koch die benötigten Zutaten an den Arbeitsplatz bringt, ohne dass der Koch wissen muss, wo genau das Kühlhaus ist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "In einer Angular-Anwendung gibt es oft Programmteile, die von vielen verschiedenen Komponenten gebraucht werden. Ein typisches Beispiel ist der Zugriff auf einen Server, um Daten zu laden. Statt dass jede Komponente diesen Serverzugriff selbst einrichtet, gibt es eine zentrale Klasse, die das für alle erledigt. Diese Klasse wird einmal geschrieben und dann von allen Komponenten gemeinsam genutzt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Eine solche zentrale, wiederverwendbare Klasse für gemeinsame Aufgaben heißt in Angular Angular-Service oder kurz Service.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Ein typischer Angular-Service ist ein Daten-Service, der alle HTTP-Anfragen an einen Server bündelt. Statt dass fünf verschiedene Komponenten jeweils eigenen Code für Serveranfragen enthalten, rufen alle fünf denselben Daten-Service auf. Ändert sich später die Adresse des Servers, muss nur der Angular-Service angepasst werden, nicht alle fünf Komponenten einzeln. Ein Angular-Service ist eine ganz normale TypeScript-Klasse, die mit dem Dekorierer Injectable markiert wird, einem speziellen Vermerk, der Angular sagt, dass diese Klasse als Angular-Service benutzt werden kann.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Woher weiß eine Komponente, welchen Angular-Service sie benutzen soll, und wer erzeugt diesen Angular-Service?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Genau dafür hat Angular ein eingebautes System, das automatisch die richtigen Angular-Services an die richtigen Komponenten liefert. Eine Komponente muss nur in ihrem Konstruktor sagen, welchen Angular-Service sie braucht, und Angular kümmert sich um den Rest. Die Komponente muss den Angular-Service weder selbst erzeugen noch wissen, wo er herkommt, genau wie der Koch nicht wissen muss, wo das Kühlhaus ist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Dieses automatische Bereitstellen von Abhängigkeiten heißt Dependency Injection, auf Deutsch etwa Abhängigkeits-Injektion, oft mit DI abgekürzt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In der Praxis sieht Dependency Injection so aus: Eine Komponente für eine Benutzerliste schreibt in ihren Konstruktor einfach private userService: UserService. Das ist alles. Angulars Injector erkennt automatisch, dass diese Komponente einen UserService braucht, erzeugt eine einzige Instanz davon, falls noch keine existiert, und reicht sie an die Komponente weiter. Keine weitere Zeile Code nötig. Dieser Mechanismus ist einer der mächtigsten Teile von Angular und ein zentraler Unterschied zu React, wo man sich selbst um die Weitergabe von Abhängigkeiten kümmern muss.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Das ist wichtig, weil Dependency Injection den Code testbar macht. In einem Test kann man statt des echten UserService einen gefälschten Test-Angular-Service injizieren, der immer dieselben vorhersehbaren Daten zurückgibt. So lässt sich die Komponente isoliert testen, ohne dass ein echter Server laufen muss. Diese eingebaute Testbarkeit ist einer der Hauptgründe, warum große Firmen Angular für geschäftskritische Anwendungen einsetzen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir ein zweiseitiges Walkie-Talkie vor, bei dem beide Seiten gleichzeitig sprechen und hören können. Sagst du etwas in das eine Gerät, kommt es sofort aus dem anderen heraus, und umgekehrt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "In React fließen Daten normalerweise nur in eine Richtung: von oben nach unten, von der Elternkomponente zu den Kindern, über Props. Wenn der Nutzer etwas in ein Eingabefeld tippt, muss der Entwickler selbst dafür sorgen, dass dieser neue Wert wieder nach oben zur Elternkomponente gemeldet wird. Angular bietet zusätzlich einen bequemeren Weg für genau diesen Fall.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Diese bequeme Art, bei der Eingabefeld und Variable automatisch denselben Wert haben, heißt Two-Way-Binding, auf Deutsch etwa zweiseitige Datenbindung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In Angular schreibt man für Two-Way-Binding einfach ngModel in eckigen Klammern und runden Klammern um den Namen der Variable. Tippt der Nutzer etwas in das Eingabefeld, ändert sich die Variable automatisch. Ändert sich die Variable im Code, ändert sich das Eingabefeld automatisch. Beide sind immer synchron, ohne dass der Entwickler eine eigene Funktion schreiben muss, die den Wert hin- und herreicht. In React müsste man dafür useState und eine onChange-Funktion schreiben, in Angular reicht eine einzige Zeile.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Ist Two-Way-Binding nicht gefährlich, weil man nicht mehr genau nachvollziehen kann, wer gerade die Variable geändert hat?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Genau das ist der Grund, warum React bewusst auf Two-Way-Binding verzichtet und auf den strengen Einweg-Datenfluss setzt. In sehr großen Anwendungen mit vielen verschachtelten Komponenten kann Two-Way-Binding tatsächlich unübersichtlich werden, weil eine Variable von vielen Stellen gleichzeitig geändert werden kann. Angular löst dieses Problem, indem es Two-Way-Binding nur für Formulare und Eingabefelder empfiehlt, nicht für die Kommunikation zwischen weit entfernten Komponenten. Für komplexe Datenflüsse zwischen Komponenten setzt auch Angular auf Einweg-Datenfluss mit Angular-Services.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine Sprache vor, die nicht nur gesprochen, sondern auch aufgeschrieben wird, und bei der jedes Wort eine kleine Farbmarkierung trägt, die sofort verrät, ob es ein Gegenstand, eine Tätigkeit oder eine Eigenschaft ist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "React kann mit normalem JavaScript geschrieben werden, TypeScript ist dort optional, auch wenn es heute fast jeder benutzt. Angular wurde von Anfang an mit TypeScript gebaut und setzt TypeScript zwingend voraus. Es gibt keinen Weg, Angular ohne TypeScript zu benutzen. Diese Entscheidung hat weitreichende Folgen für die gesamte Architektur des Frameworks.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Diese Entscheidung, TypeScript nicht nur zu unterstützen, sondern zur Grundlage des gesamten Frameworks zu machen, nennt man TypeScript-first.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Weil Angular TypeScript-first ist, sind Typangaben überall tief in das Framework eingewoben. Der Router weiß durch Typen genau, welche Daten eine Seite erwartet. Der Injector von Dependency Injection weiß durch Typen, welcher Service gemeint ist, ohne dass man Namen oder Textstücke angeben muss. Sogar die HTML-Vorlagen einer Komponente werden von TypeScript auf Tippfehler in Variablennamen geprüft, noch bevor die Anwendung im Browser läuft. In React mit JavaScript würde ein Tippfehler in einem Variablennamen erst zur Laufzeit auffallen, in Angular meldet TypeScript den Fehler schon beim Schreiben des Codes.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Muss ich dann zwingend TypeScript lernen, bevor ich Angular lernen kann?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "TypeScript wurde bereits in einem früheren Modul eingeführt, und die Grundlagen reichen für den Einstieg in Angular völlig aus. Die wichtigsten TypeScript-Konzepte wie Typangaben und Klassen werden in Angular ständig benutzt und dadurch ganz nebenbei weiter gefestigt. Wer Angular lernt, vertieft automatisch auch sein TypeScript-Wissen, weil das Framework an jeder Stelle zeigt, wie nützlich Typen in der Praxis sind.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir zwei verschiedene Küchen vor. In der einen Küche stehen alle Geräte einzeln: ein Toaster hier, ein Mixer dort, ein Wasserkocher daneben, jeder mit eigenem Kabel und eigenem Schalter. In der anderen Küche ist alles in eine große Küchenmaschine integriert, die toasten, mixen und kochen kann, gesteuert über eine einzige zentrale Schalttafel.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Dieses Bild fasst den Unterschied zwischen React und Angular noch einmal zusammen. React ist die Küche mit den Einzelgeräten: flexibel, du kannst jeden Toaster durch ein besseres Modell ersetzen, ohne den Mixer anzufassen. Angular ist die integrierte Küchenmaschine: alles aus einer Hand, perfekt aufeinander abgestimmt, aber du kannst nicht einfach den Toaster gegen ein Fremdfabrikat tauschen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Welches der beiden sollte ich denn nun für mein nächstes Projekt nehmen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Für den Einstieg und für kleinere Projekte ist React oft der leichtere Weg, weil man mit weniger Konzepten anfangen kann und sich die zusätzlichen Werkzeuge nach Bedarf dazuholt. Für große, langlebige Anwendungen mit vielen Entwicklern bietet Angular feste Strukturen, die dafür sorgen, dass auch nach Jahren noch jeder im Team den Code versteht. Beide Wege führen zum Ziel, sie unterscheiden sich nur darin, wie viel das Framework vorgibt und wie viel Freiheit es lässt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Das ist wichtig, weil die Entscheidung für ein Framework keine einmalige, endgültige Wahl ist. Viele Entwickler lernen beide und setzen je nach Projekt das passende ein. Die Konzepte, die man in Angular lernt, wie Dependency Injection und Angular-Services, sind universelle Software-Entwurfsmuster, die auch in anderen Sprachen und Frameworks wieder auftauchen. Angular zu kennen macht einen nicht nur zu einem Angular-Entwickler, sondern zu einem besseren Software-Entwickler insgesamt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "text": "Also noch einmal ganz kurz: Angular ist ein Komplettpaket von Google, das im Gegensatz zu React nicht nur eine Komponenten-Bibliothek ist, sondern Router, Formulare und HTTP-Anfragen bereits eingebaut mitbringt. Eine Komponente in Angular besteht aus mehreren getrennten Dateien für HTML, TypeScript und CSS, statt alles in einer Funktion zu mischen. Ein Angular-Service ist eine zentrale Klasse für gemeinsame Aufgaben wie Serverzugriffe, die von vielen Komponenten genutzt wird. Dependency Injection ist das automatische System, das diese Angular-Services an die Komponenten liefert, ohne dass die Komponente sie selbst erzeugen muss. Two-Way-Binding hält Eingabefeld und Variable automatisch synchron, mit einer einzigen Zeile Code. Und TypeScript-first bedeutet, dass Angular von Grund auf mit TypeScript gebaut wurde und Typen überall tief im Framework verankert sind.",
+      "isKeySentence": true
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Angular ist ein Framework von Google, das mit TypeScript eine vollständige Werkstatt zum Bau von Webanwendungen bereitstellt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Ein Angular-Service ist eine wiederverwendbare Klasse in Angular, die Geschäftslogik oder Datenzugriff bündelt und von mehreren Komponenten gemeinsam genutzt werden kann.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Dependency Injection ist ein Entwurfsmuster, bei dem eine Klasse ihre Abhängigkeiten nicht selbst erzeugt, sondern von außen gereicht bekommt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Two-Way-Binding ist eine Datenbindung, die Änderungen am Bildschirm sofort ins Datenmodell zurückschreibt und umgekehrt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "TypeScript-first bedeutet, ein Framework von Grund auf in TypeScript zu schreiben und TypeScript als Standardsprache für alle Anwender vorauszusetzen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Kann ich Angular auch ohne TypeScript benutzen, wenn ich nur JavaScript kann?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Nein, Angular setzt TypeScript zwingend voraus, es gibt keinen Weg daran vorbei. Das klingt nach einer Hürde, ist aber in der Praxis weniger schlimm, als es sich anhört. Die TypeScript-Grundlagen aus dem früheren Modul reichen für den Einstieg völlig aus, und Angulars Werkzeuge wie der Angular CLI erstellen automatisch das Grundgerüst mit den richtigen Typen. Wer JavaScript kann, lernt die zusätzliche TypeScript-Schreibweise in den ersten Tagen mit Angular ganz nebenbei.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Warum sollte ich Angular lernen, wenn ich React schon kann?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Weil Angular Konzepte vermittelt, die über ein einzelnes Framework hinausgehen. Dependency Injection ist ein universelles Entwurfsmuster, das in Java, C-Sharp und vielen serverseitigen Frameworks genauso benutzt wird. Die strikte Trennung von Logik und Aussehen in Angular schult den Blick für saubere Software-Architektur. Und nicht zuletzt suchen viele große Unternehmen gezielt Angular-Entwickler, weil ihre bestehenden Anwendungen damit gebaut sind. Ein zweites Framework zu kennen, macht den eigenen Werkzeugkasten breiter und den Lebenslauf interessanter.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Ist Angular nicht viel komplizierter als React, weil es so viele Konzepte auf einmal einführt?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Der Einstieg in Angular fühlt sich tatsächlich steiler an, weil man am Anfang mit mehr Konzepten gleichzeitig konfrontiert wird: Module, Komponenten, Angular-Services, Dependency Injection, Decorators. React lässt einen dagegen mit einer einzigen Funktion anfangen und Konzepte nach und nach dazulernen. Der Vorteil von Angulars Ansatz ist, dass nach der anfänglichen Lernkurve alles da ist und zusammenpasst, ohne dass man später feststellt, dass einem noch eine wichtige Bibliothek fehlt. Welcher Weg angenehmer ist, hängt vom eigenen Lernstil ab.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Kann ich Two-Way-Binding auch in React benutzen, wenn es so praktisch ist?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "React bietet von Haus aus kein Two-Way-Binding, aber man kann es mit etwas zusätzlichem Code selbst nachbauen, indem man useState mit einer onChange-Funktion kombiniert. Viele React-Entwickler empfinden das aber nicht als Nachteil, sondern als bewusste Entscheidung für einen klareren Datenfluss. Der Einweg-Datenfluss von React macht es einfacher, Fehler zu finden, weil man immer genau weiß, aus welcher Richtung eine Änderung kam. Two-Way-Binding spart Tipparbeit bei Formularen, kann aber bei komplexen Anwendungen die Fehlersuche erschweren.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Gibt es auch in Angular so etwas wie Hooks, die ich aus React kenne?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Angular hat keine direkten Hooks wie useState oder useEffect, aber es gibt Lebenszyklus-Methoden wie ngOnInit, die ähnliche Aufgaben erfüllen. Statt useState benutzt Angular Klassen-Eigenschaften mit Two-Way-Binding. Statt useEffect gibt es ngOnInit für einmalige Initialisierung und ngOnChanges für Reaktionen auf geänderte Eingabedaten. Die Konzepte sind ähnlich, nur die Schreibweise ist anders: React setzt auf Funktionen und Hooks, Angular auf Klassen und Lebenszyklus-Methoden. Wer das eine kennt, findet sich im anderen schneller zurecht, als man denkt.",
+      "isKeySentence": false
+    }
+  ],
+  "practiceExample": {
+    "text": "Das Repo repo-portfolio ist eine React-Anwendung und damit das Gegenstück zu dem, was diese Lektion beschreibt. Ein Lernender kann daran den Unterschied zwischen den Philosophien erkennen: repo-portfolio nutzt externe Bibliotheken für Dinge, die in Angular eingebaut wären, und mischt Logik und Aussehen in derselben Komponentendatei, während Angular beides in getrennte Dateien aufteilt. Die Datei src/components/Nav.tsx in repo-portfolio enthält sowohl die Programmlogik als auch das JSX-Aussehen in einer Datei, was in Angular auf eine HTML-Datei und eine TypeScript-Datei aufgeteilt wäre.",
+    "repoNote": "repo-portfolio",
+    "location": "src/components/Nav.tsx (React: Logik und Aussehen in einer Datei, in Angular wären es getrennte Dateien)"
+  },
+  "quiz": [
+    {
+      "question": "Welches Alltagsbild passt am besten zu Angular im Vergleich zu React?",
+      "area": "Angular-Grundlagen",
+      "options": [
+        {
+          "text": "Ein Komplettanbieter, der Werkzeuge, Materialien und Bauplan aus einer Hand liefert.",
+          "isCorrect": true,
+          "explanation": "Richtig: Angular bringt alles mit, während React wie ein Baumarkt nur die Grundausstattung liefert."
+        },
+        {
+          "text": "Ein Baumarkt, in dem man sich jedes einzelne Werkzeug selbst aussuchen und kaufen muss.",
+          "isCorrect": false,
+          "explanation": "Falsch: Das Bild des Baumarkts passt zu React, nicht zu Angular."
+        },
+        {
+          "text": "Ein einzelner Hammer, der nur für eine ganz bestimmte Aufgabe gedacht ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: Angular ist kein Einzelwerkzeug, sondern ein komplettes Framework."
+        },
+        {
+          "text": "Eine leere Werkstatt ohne jedes Werkzeug, die erst komplett eingerichtet werden muss.",
+          "isCorrect": false,
+          "explanation": "Falsch: Angular bringt im Gegenteil schon sehr viel mit, die Werkstatt ist bereits voll eingerichtet."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der Hauptunterschied zwischen React und Angular in ihrer Grundphilosophie?",
+      "area": "Angular-Grundlagen",
+      "options": [
+        {
+          "text": "React ist eine Bibliothek, Angular ein komplettes Framework.",
+          "isCorrect": true,
+          "explanation": "Richtig: React konzentriert sich auf Komponenten, Angular bringt Router, Formulare und HTTP von Haus aus mit."
+        },
+        {
+          "text": "React funktioniert nur im Browser, Angular dagegen ausschließlich auf dem Server.",
+          "isCorrect": false,
+          "explanation": "Falsch: Beide laufen im Browser, und beide haben inzwischen auch serverseitige Funktionen."
+        },
+        {
+          "text": "React wurde von Google entwickelt, Angular dagegen von Facebook.",
+          "isCorrect": false,
+          "explanation": "Falsch: Es ist genau umgekehrt: React kommt von Facebook, Angular von Google."
+        },
+        {
+          "text": "React benutzt TypeScript, Angular benutzt dagegen reines JavaScript.",
+          "isCorrect": false,
+          "explanation": "Falsch: Angular setzt TypeScript voraus, React kann beides."
+        }
+      ]
+    },
+    {
+      "question": "Aus wie vielen Dateien besteht eine typische Angular-Komponente mindestens?",
+      "area": "Angular-Komponenten",
+      "options": [
+        {
+          "text": "Drei: HTML, TypeScript und CSS.",
+          "isCorrect": true,
+          "explanation": "Richtig: Eine Angular-Komponente hat mindestens eine HTML-, eine TypeScript- und eine CSS-Datei."
+        },
+        {
+          "text": "Eine einzige Datei, genau wie in React.",
+          "isCorrect": false,
+          "explanation": "Falsch: Angular trennt bewusst in mehrere Dateien, anders als React."
+        },
+        {
+          "text": "Zwei: eine für den Code und eine für die Tests.",
+          "isCorrect": false,
+          "explanation": "Falsch: Tests sind eine vierte optionale Datei, die drei Pflichtdateien sind HTML, TypeScript und CSS."
+        },
+        {
+          "text": "Fünf: HTML, TypeScript, CSS, Tests und eine Konfigurationsdatei.",
+          "isCorrect": false,
+          "explanation": "Falsch: Eine Konfigurationsdatei ist keine eigene Komponentendatei, die drei Pflichtdateien sind HTML, TypeScript und CSS."
+        }
+      ]
+    },
+    {
+      "question": "Welche Aufgabe hat ein Angular-Service?",
+      "area": "Angular-Services",
+      "options": [
+        {
+          "text": "Gemeinsame Logik wie Datenzugriffe bündeln, die von mehreren Komponenten genutzt wird.",
+          "isCorrect": true,
+          "explanation": "Richtig: Ein Angular-Service ist eine zentrale Klasse für wiederverwendbare Aufgaben wie Serverzugriffe."
+        },
+        {
+          "text": "Das Aussehen einer Komponente mit CSS gestalten.",
+          "isCorrect": false,
+          "explanation": "Falsch: Für das Aussehen ist die CSS-Datei der Komponente zuständig, nicht der Angular-Service."
+        },
+        {
+          "text": "Die HTML-Struktur einer Seite festlegen.",
+          "isCorrect": false,
+          "explanation": "Falsch: Die HTML-Struktur steht in der HTML-Datei der Komponente, nicht im Angular-Service."
+        },
+        {
+          "text": "Automatisch Tests für die gesamte Anwendung schreiben.",
+          "isCorrect": false,
+          "explanation": "Falsch: Ein Angular-Service schreibt keine Tests, er bündelt Geschäftslogik."
+        }
+      ]
+    },
+    {
+      "question": "Was macht der Injector in Angulars Dependency Injection?",
+      "area": "Dependency Injection",
+      "options": [
+        {
+          "text": "Er erzeugt Angular-Services und reicht sie an die Komponenten weiter.",
+          "isCorrect": true,
+          "explanation": "Richtig: Der Injector ist das automatische System, das Angular-Services bereitstellt."
+        },
+        {
+          "text": "Er löscht nicht mehr benutzte Komponenten aus dem Speicher.",
+          "isCorrect": false,
+          "explanation": "Falsch: Das Löschen unbenutzter Komponenten ist nicht die Aufgabe des Injectors."
+        },
+        {
+          "text": "Er übersetzt den TypeScript-Code in JavaScript.",
+          "isCorrect": false,
+          "explanation": "Falsch: Die Übersetzung von TypeScript macht der TypeScript-Compiler, nicht der Injector."
+        },
+        {
+          "text": "Er prüft, ob alle HTML-Tags korrekt geschlossen sind.",
+          "isCorrect": false,
+          "explanation": "Falsch: HTML-Prüfung ist nicht die Aufgabe des Injectors."
+        }
+      ]
+    },
+    {
+      "question": "Warum ist Dependency Injection besonders nützlich für automatisierte Tests?",
+      "area": "Dependency Injection",
+      "options": [
+        {
+          "text": "Man kann echte Services durch gefälschte Test-Services ersetzen.",
+          "isCorrect": true,
+          "explanation": "Richtig: DI erlaubt es, im Test einen Mock-Service zu injizieren, der immer gleiche Ergebnisse liefert."
+        },
+        {
+          "text": "Weil Tests dann automatisch schneller geschrieben werden können als der eigentliche Code.",
+          "isCorrect": false,
+          "explanation": "Falsch: DI macht Tests nicht automatisch schneller schreibbar, sondern isoliert die Komponente von echten Abhängigkeiten."
+        },
+        {
+          "text": "Weil der Injector automatisch Testberichte im PDF-Format erstellt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Der Injector erstellt keine Testberichte, das ist nicht seine Aufgabe."
+        },
+        {
+          "text": "Weil Dependency Injection den gesamten Testcode überflüssig macht.",
+          "isCorrect": false,
+          "explanation": "Falsch: DI macht Tests nicht überflüssig, sondern erleichtert sie nur."
+        }
+      ]
+    },
+    {
+      "question": "Was bewirkt Two-Way-Binding in Angular?",
+      "area": "Two-Way-Binding",
+      "options": [
+        {
+          "text": "Eingabefeld und Variable bleiben automatisch synchron.",
+          "isCorrect": true,
+          "explanation": "Richtig: Two-Way-Binding hält beide Seiten automatisch auf demselben Stand."
+        },
+        {
+          "text": "Zwei Komponenten tauschen ihre kompletten HTML-Vorlagen miteinander aus.",
+          "isCorrect": false,
+          "explanation": "Falsch: Two-Way-Binding tauscht keine HTML-Vorlagen, es synchronisiert Werte."
+        },
+        {
+          "text": "Der Browser kommuniziert gleichzeitig mit zwei verschiedenen Servern.",
+          "isCorrect": false,
+          "explanation": "Falsch: Two-Way-Binding hat nichts mit Server-Kommunikation zu tun."
+        },
+        {
+          "text": "Eine Komponente kann gleichzeitig in zwei verschiedenen Sprachen angezeigt werden.",
+          "isCorrect": false,
+          "explanation": "Falsch: Two-Way-Binding hat nichts mit Mehrsprachigkeit zu tun."
+        }
+      ]
+    },
+    {
+      "question": "Warum verzichtet React bewusst auf Two-Way-Binding?",
+      "area": "Two-Way-Binding",
+      "options": [
+        {
+          "text": "Weil der Einweg-Datenfluss klarer macht, aus welcher Richtung eine Änderung kam.",
+          "isCorrect": true,
+          "explanation": "Richtig: Reacts Einweg-Datenfluss macht die Fehlersuche einfacher, weil Änderungen immer nur von oben nach unten fließen."
+        },
+        {
+          "text": "Weil Two-Way-Binding technisch in JavaScript gar nicht möglich ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: Two-Way-Binding ist technisch möglich, Angular beweist es."
+        },
+        {
+          "text": "Weil Facebook, der Erfinder von React, ein Patent auf Two-Way-Binding hält.",
+          "isCorrect": false,
+          "explanation": "Falsch: Es gibt kein solches Patent, die Entscheidung ist eine Design-Entscheidung."
+        },
+        {
+          "text": "Weil Two-Way-Binding nur auf Apple-Geräten funktioniert.",
+          "isCorrect": false,
+          "explanation": "Falsch: Two-Way-Binding funktioniert in allen modernen Browsern."
+        }
+      ]
+    },
+    {
+      "question": "Was bedeutet TypeScript-first bei Angular?",
+      "area": "TypeScript-first",
+      "options": [
+        {
+          "text": "Angular wurde von Grund auf mit TypeScript gebaut und setzt es zwingend voraus.",
+          "isCorrect": true,
+          "explanation": "Richtig: Anders als React, wo TypeScript optional ist, ist es in Angular Pflicht."
+        },
+        {
+          "text": "Angular kann TypeScript benutzen, aber nur, wenn man eine spezielle Erweiterung installiert.",
+          "isCorrect": false,
+          "explanation": "Falsch: TypeScript ist in Angular keine optionale Erweiterung, sondern die Grundlage."
+        },
+        {
+          "text": "Angular übersetzt TypeScript automatisch in die Sprache Python.",
+          "isCorrect": false,
+          "explanation": "Falsch: TypeScript wird in JavaScript übersetzt, nicht in Python."
+        },
+        {
+          "text": "Angular war das erste Framework, das jemals TypeScript benutzt hat.",
+          "isCorrect": false,
+          "explanation": "Falsch: Angular war nicht das erste, aber es hat TypeScript von Anfang an zur Pflicht gemacht."
+        }
+      ]
+    },
+    {
+      "question": "Welchen praktischen Vorteil hat TypeScript-first für die Fehlersuche in Angular?",
+      "area": "TypeScript-first",
+      "options": [
+        {
+          "text": "Tippfehler werden schon beim Schreiben gemeldet, nicht erst zur Laufzeit.",
+          "isCorrect": true,
+          "explanation": "Richtig: TypeScript prüft den Code bereits im Editor und findet Fehler, bevor die Anwendung läuft."
+        },
+        {
+          "text": "TypeScript repariert automatisch alle Fehler im Code, ohne dass der Entwickler eingreifen muss.",
+          "isCorrect": false,
+          "explanation": "Falsch: TypeScript findet Fehler, repariert sie aber nicht automatisch."
+        },
+        {
+          "text": "TypeScript macht die Anwendung immun gegen alle Arten von Hackerangriffen.",
+          "isCorrect": false,
+          "explanation": "Falsch: TypeScript bietet keinen Schutz vor Hackerangriffen, das ist nicht seine Aufgabe."
+        },
+        {
+          "text": "TypeScript sorgt dafür, dass die Anwendung auf jedem Gerät genau gleich aussieht.",
+          "isCorrect": false,
+          "explanation": "Falsch: Für das Aussehen ist CSS zuständig, nicht TypeScript."
+        }
+      ]
+    },
+    {
+      "question": "Wie gibt eine Angular-Komponente an, welchen Angular-Service sie benötigt?",
+      "area": "Dependency Injection",
+      "options": [
+        {
+          "text": "Sie schreibt den Angular-Service mit Typangabe in ihren Konstruktor.",
+          "isCorrect": true,
+          "explanation": "Richtig: Der Konstruktor mit Typangabe reicht, Angulars Injector erkennt den Bedarf automatisch."
+        },
+        {
+          "text": "Sie ruft eine spezielle Funktion namens getService auf.",
+          "isCorrect": false,
+          "explanation": "Falsch: Es gibt keine getService-Funktion, der Konstruktor ist der Weg."
+        },
+        {
+          "text": "Sie importiert den Angular-Service und erzeugt ihn mit new selbst.",
+          "isCorrect": false,
+          "explanation": "Falsch: Genau das soll Dependency Injection vermeiden, die Komponente erzeugt den Angular-Service nicht selbst."
+        },
+        {
+          "text": "Sie schreibt den Namen des Angular-Service als Text in die HTML-Vorlage.",
+          "isCorrect": false,
+          "explanation": "Falsch: Die HTML-Vorlage ist nicht der Ort für Angular-Service-Angaben."
+        }
+      ]
+    },
+    {
+      "question": "Warum setzen große Unternehmen oft auf Angular statt auf React?",
+      "area": "Angular-Grundlagen",
+      "options": [
+        {
+          "text": "Weil Angulars feste Strukturen dafür sorgen, dass viele Entwickler auf dieselbe Art arbeiten.",
+          "isCorrect": true,
+          "explanation": "Richtig: Angular gibt einen klaren Weg vor, was in großen Teams die Zusammenarbeit erleichtert."
+        },
+        {
+          "text": "Weil Angular grundsätzlich schneller ist als React, in jedem erdenklichen Fall.",
+          "isCorrect": false,
+          "explanation": "Falsch: Die Geschwindigkeit hängt von der konkreten Anwendung ab, nicht pauschal vom Framework."
+        },
+        {
+          "text": "Weil React nur für private Projekte erlaubt ist, nicht für geschäftliche.",
+          "isCorrect": false,
+          "explanation": "Falsch: React darf auch geschäftlich genutzt werden, viele große Firmen tun das."
+        },
+        {
+          "text": "Weil Angular keine Internetverbindung braucht, React aber schon.",
+          "isCorrect": false,
+          "explanation": "Falsch: Beide Frameworks funktionieren auch ohne Internetverbindung, sobald sie geladen sind."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Öffne die Angular-Dokumentation unter angular.dev und folge dem dortigen Schnelleinstieg, der eine kleine Beispielanwendung im Browser erstellt, ohne etwas installieren zu müssen. Beobachte, wie der Angular CLI eine Komponente mit mehreren Dateien anlegt. Notiere die Unterschiede zu dem, was du aus React kennst: Wie viele Dateien entstehen für eine Komponente? Wo steht das HTML, wo die Logik?",
+    "expectation": "Der Lernende hat eine Angular-Komponente im Browser erstellt und erkennt die strukturellen Unterschiede zu React: mehrere Dateien statt einer, getrenntes HTML und TypeScript, und die Verwendung von Klassen statt Funktionen.",
+    "checklist": [
+      "Die Angular-Dokumentation unter angular.dev geöffnet.",
+      "Dem Schnelleinstieg gefolgt und eine Beispielanwendung im Browser erstellt.",
+      "Die automatisch erzeugten Dateien für eine Komponente betrachtet.",
+      "Die Trennung von HTML, TypeScript und CSS in verschiedenen Dateien erkannt.",
+      "Mindestens zwei konkrete Unterschiede zur React-Komponentenstruktur notiert."
+    ],
+    "portfolioItem": "P01"
+  },
+  "audio": {
+    "file": "M03-01-05.mp3",
+    "durationSeconds": 1320,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Kann ich Angular auch ohne TypeScript benutzen, wenn ich nur JavaScript kann?",
+      "answer": "Nein, Angular setzt TypeScript zwingend voraus, es gibt keinen Weg daran vorbei. Das klingt nach einer Hürde, ist aber in der Praxis weniger schlimm, als es sich anhört. Die TypeScript-Grundlagen aus dem früheren Modul reichen für den Einstieg völlig aus, und Angulars Werkzeuge wie der Angular CLI erstellen automatisch das Grundgerüst mit den richtigen Typen. Wer JavaScript kann, lernt die zusätzliche TypeScript-Schreibweise in den ersten Tagen mit Angular ganz nebenbei."
+    },
+    {
+      "question": "Warum sollte ich Angular lernen, wenn ich React schon kann?",
+      "answer": "Weil Angular Konzepte vermittelt, die über ein einzelnes Framework hinausgehen. Dependency Injection ist ein universelles Entwurfsmuster, das in Java, C-Sharp und vielen serverseitigen Frameworks genauso benutzt wird. Die strikte Trennung von Logik und Aussehen in Angular schult den Blick für saubere Software-Architektur. Und nicht zuletzt suchen viele große Unternehmen gezielt Angular-Entwickler, weil ihre bestehenden Anwendungen damit gebaut sind. Ein zweites Framework zu kennen, macht den eigenen Werkzeugkasten breiter und den Lebenslauf interessanter."
+    },
+    {
+      "question": "Ist Angular nicht viel komplizierter als React, weil es so viele Konzepte auf einmal einführt?",
+      "answer": "Der Einstieg in Angular fühlt sich tatsächlich steiler an, weil man am Anfang mit mehr Konzepten gleichzeitig konfrontiert wird: Module, Komponenten, Angular-Services, Dependency Injection, Decorators. React lässt einen dagegen mit einer einzigen Funktion anfangen und Konzepte nach und nach dazulernen. Der Vorteil von Angulars Ansatz ist, dass nach der anfänglichen Lernkurve alles da ist und zusammenpasst, ohne dass man später feststellt, dass einem noch eine wichtige Bibliothek fehlt. Welcher Weg angenehmer ist, hängt vom eigenen Lernstil ab."
+    },
+    {
+      "question": "Kann ich Two-Way-Binding auch in React benutzen, wenn es so praktisch ist?",
+      "answer": "React bietet von Haus aus kein Two-Way-Binding, aber man kann es mit etwas zusätzlichem Code selbst nachbauen, indem man useState mit einer onChange-Funktion kombiniert. Viele React-Entwickler empfinden das aber nicht als Nachteil, sondern als bewusste Entscheidung für einen klareren Datenfluss. Der Einweg-Datenfluss von React macht es einfacher, Fehler zu finden, weil man immer genau weiß, aus welcher Richtung eine Änderung kam. Two-Way-Binding spart Tipparbeit bei Formularen, kann aber bei komplexen Anwendungen die Fehlersuche erschweren."
+    },
+    {
+      "question": "Gibt es auch in Angular so etwas wie Hooks, die ich aus React kenne?",
+      "answer": "Angular hat keine direkten Hooks wie useState oder useEffect, aber es gibt Lebenszyklus-Methoden wie ngOnInit, die ähnliche Aufgaben erfüllen. Statt useState benutzt Angular Klassen-Eigenschaften mit Two-Way-Binding. Statt useEffect gibt es ngOnInit für einmalige Initialisierung und ngOnChanges für Reaktionen auf geänderte Eingabedaten. Die Konzepte sind ähnlich, nur die Schreibweise ist anders: React setzt auf Funktionen und Hooks, Angular auf Klassen und Lebenszyklus-Methoden. Wer das eine kennt, findet sich im anderen schneller zurecht, als man denkt."
+    }
+  ]
+}

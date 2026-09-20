@@ -1,0 +1,730 @@
+{
+  "id": "M03-01-04",
+  "title": "Serverseitiges Rendern: Warum die Seite schon fertig ist, bevor sie ankommt",
+  "durationMinutes": 26,
+  "prerequisites": [
+    "M03-01-03"
+  ],
+  "terms": [
+    {
+      "term": "Clientseitiges Rendern",
+      "definition": "Der Browser lädt eine leere Hülle und baut die gesamte Seite erst danach mit JavaScript selbst zusammen."
+    },
+    {
+      "term": "Serverseitiges Rendern",
+      "definition": "Der Server schickt eine bereits fertig aufgebaute HTML-Seite, die der Browser nur noch anzeigen muss."
+    },
+    {
+      "term": "Static Site Generation",
+      "definition": "Alle Seiten werden einmal beim Bauen der Anwendung vorberechnet und als fertige Dateien abgelegt, ohne dass ein Server zur Laufzeit noch Arbeit leisten muss."
+    },
+    {
+      "term": "Server Components",
+      "definition": "React-Komponenten, die ausschließlich auf dem Server laufen und nie JavaScript an den Browser senden."
+    },
+    {
+      "term": "Hydration",
+      "definition": "Der Schritt, bei dem eine bereits sichtbare, vom Server gelieferte Seite nachträglich mit JavaScript-Leben gefüllt wird, damit Knöpfe und Eingabefelder interaktiv werden."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir ein Restaurant mit zwei verschiedenen Arten von Service vor. Bei der ersten Art bekommst du einen Teller mit lauter einzelnen Zutaten: Mehl, Eier, Tomaten, Käse. Du musst daraus selbst eine Pizza backen, in der kleinen Küche an deinem Tisch. Das ist clientseitiges Rendern: die Arbeit passiert beim Gast. Bei der zweiten Art bringt der Kellner eine fertig gebackene Pizza direkt aus der Profiküche, heiß und essbereit. Das ist serverseitiges Rendern: die Arbeit passiert in der Küche.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Und was hat das mit einer Webseite zu tun?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Eine Webseite kann auf zwei grundverschiedene Arten beim Besucher ankommen. Entweder als Bausatz aus rohen Zutaten, den der Browser erst mühsam zusammenbauen muss. Oder als fertiges Gericht, das nur noch serviert wird. Diese Entscheidung, wo und wann die Seite zusammengebaut wird, ist eine der wichtigsten architektonischen Entscheidungen beim Bau einer modernen Webanwendung. Sie bestimmt, wie schnell die Seite lädt, ob Suchmaschinen sie finden können und wie gut sie sich anfühlt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Die erste Art, bei der der Browser die Arbeit macht, nennt man clientseitiges Rendern, auf Englisch Client-Side Rendering, abgekürzt CSR.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Beim clientseitigen Rendern schickt der Server nur eine fast leere HTML-Datei mit einem einzigen Verweis auf eine JavaScript-Datei. Der Browser lädt diese JavaScript-Datei, führt sie aus, und das JavaScript baut dann die gesamte sichtbare Seite im Browser zusammen, Element für Element. Eine reine React-Anwendung ohne Next.js arbeitet standardmäßig genau so: der Server liefert ein leeres Gerüst, React übernimmt den Rest im Browser.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Das ist wichtig zu verstehen, weil clientseitiges Rendern eine direkte Folge davon ist, wie React ursprünglich gedacht war: als reine Browser-Bibliothek. Viele ältere React-Projekte funktionieren genau nach diesem Muster, und wer solchen Code später warten muss, sollte erkennen, warum die Seite beim ersten Laden kurz weiß bleibt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Warum sollte man eine Seite überhaupt erst im Browser zusammenbauen lassen, wenn der Server das doch viel schneller könnte?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Clientseitiges Rendern hat einen entscheidenden Vorteil: nach dem ersten Laden fühlt sich die Seite extrem schnell an. Klickt der Besucher auf einen Menüpunkt, muss nicht die ganze Seite neu vom Server geladen werden. Stattdessen tauscht React nur die Teile aus, die sich wirklich geändert haben. Die Seite verhält sich wie eine App auf dem Handy, nicht wie eine klassische Webseite, die bei jedem Klick kurz weiß flackert. Dieses flüssige Gefühl ohne Seitenneuladen ist einer der Hauptgründe, warum sich clientseitiges Rendern für hochinteraktive Anwendungen so gut eignet.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Das ist wichtig, weil diese App-ähnliche Geschwindigkeit nach dem ersten Laden der Hauptgrund war, warum Firmen wie Facebook und Instagram überhaupt React entwickelt haben. Eine klassische Webseite, die bei jedem Klick neu lädt, fühlt sich für eine Social-Media-Anwendung mit ständigen Interaktionen einfach zu langsam an.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir jetzt die zweite Art von Restaurant vor: Du bestellst, und nach kurzer Wartezeit kommt eine fertige Pizza aus der Profiküche. Du musst nichts mehr backen, nur noch essen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Genau so funktioniert die zweite Art, eine Webseite auszuliefern. Der Server bereitet die komplette Seite vor, baut das HTML mit allen Texten und Bildern fertig zusammen und schickt es als ein fertiges Paket an den Browser. Der Browser muss nur noch darstellen, was schon fertig ist, ohne selbst etwas zusammenbauen zu müssen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Diese zweite Art nennt man serverseitiges Rendern, auf Englisch Server-Side Rendering, abgekürzt SSR.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-portfolio, der Webseite von domenicmoran.de, wird genau dieses Verfahren benutzt. Wenn jemand die Seite aufruft, läuft auf einem Server eine Next.js-Anwendung, die React-Komponenten wie Nav und Footer bereits auf dem Server rendert. Der Browser bekommt fertiges HTML mit allen Texten, Überschriften und Links, lange bevor irgendein JavaScript geladen wurde. Die Seite ist sofort lesbar, auch wenn das JavaScript noch gar nicht fertig heruntergeladen ist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Heißt das, der Server muss für jeden einzelnen Besucher die Seite extra neu zusammenbauen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ja, genau das passiert bei jedem Aufruf. Der Server führt für jede eingehende Anfrage die React-Komponenten aus, setzt die Props ein und baut daraus eine frische HTML-Seite. Das klingt nach viel Arbeit, aber moderne Server sind darauf ausgelegt und Next.js hat viele Optimierungen eingebaut, damit das schnell genug geht. Außerdem kann der Server Ergebnisse zwischenspeichern, sodass wiederholte Aufrufe derselben Seite nicht jedes Mal von Grund auf neu berechnet werden müssen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Das ist wichtig, weil serverseitiges Rendern zwei große Vorteile bringt. Erstens sieht der Besucher sofort etwas, die Seite ist nicht sekundenlang weiß. Zweitens können Suchmaschinen wie Google den fertigen Inhalt lesen, weil sie das HTML direkt sehen, ohne selbst JavaScript ausführen zu müssen. Eine rein clientseitig gerenderte Seite ist für Suchmaschinen dagegen oft unsichtbar.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine Bäckerei vor, die jeden Morgen alle Brötchen für den ganzen Tag auf einmal backt, bevor der erste Kunde kommt. Die Brötchen liegen dann fertig im Regal, und jeder Kunde bekommt sofort eins, ohne warten zu müssen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Es gibt noch eine dritte Art, eine Webseite auszuliefern, die noch einen Schritt weiter geht als serverseitiges Rendern. Statt bei jedem Besucher die Seite neu zu bauen, werden alle Seiten ein einziges Mal vorab gebaut, und zwar schon während der Entwickler die Anwendung fertigstellt, lange bevor der erste Besucher die Seite überhaupt aufruft.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Diese dritte Art nennt man Static Site Generation, auf Deutsch etwa statische Seitenerzeugung, abgekürzt SSG.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Bei einer statisch erzeugten Seite läuft nach dem Bauen überhaupt kein Server mehr, der Arbeit leisten muss. Die fertigen HTML-Dateien liegen einfach als Dateien auf einer Festplatte oder in einem Cloud-Speicher und werden bei jedem Aufruf unverändert ausgeliefert, so wie die Brötchen aus dem Backregal. Ein Blog, bei dem sich die Artikel nur selten ändern, ist ein perfekter Kandidat für Static Site Generation. Auch repo-portfolio nutzt teilweise dieses Verfahren: Seiten, die sich nie ändern, wie das Impressum, werden einmal gebaut und dann als statische Datei abgelegt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Wenn statische Seiten so schnell sind, warum macht man dann nicht einfach alle Seiten statisch?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Weil nicht jede Seite vorab gebaut werden kann. Eine Seite, die personalisierte Inhalte zeigt, etwa den Warenkorb eines eingeloggten Kunden oder eine Trefferliste nach einer Suchanfrage, kann nicht vorab gebaut werden, weil der Inhalt erst im Moment der Anfrage feststeht. Static Site Generation eignet sich für Inhalte, die für alle Besucher gleich sind und sich selten ändern. Für alles andere braucht es eine der beiden anderen Arten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine Küche vor, die in zwei getrennte Bereiche aufgeteilt ist. In der Profiküche hinten bereiten Köche die aufwändigen Gerichte zu. Vorne im Gastraum steht nur ein kleiner Tresen, an dem der Kellner noch schnell frische Kräuter über das fertige Gericht streut.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Next.js hat mit der Version 13 eine neue Art von Komponenten eingeführt, die diese Aufteilung in der Programmierung nachbildet. Manche Komponenten laufen nur auf dem Server, andere nur im Browser. Der Entwickler kann für jede Komponente einzeln entscheiden, wo sie ausgeführt werden soll.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Komponenten, die ausschließlich auf dem Server laufen, heißen Server Components.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Eine Server Component kann direkt auf eine Datenbank zugreifen oder Dateien vom Server lesen, ohne dass dafür eine eigene API-Schnittstelle gebaut werden muss. Sie schickt niemals JavaScript an den Browser, sondern nur das fertige HTML-Ergebnis. Im Repo repo-portfolio sind die meisten Komponenten unter src/app Server Components, die ihre Arbeit komplett auf dem Server erledigen und dem Browser nur das fertige Ergebnis schicken. Eine typische Server Component in repo-portfolio ist die Seite selbst, die Daten aus Markdown-Dateien liest und daraus HTML baut.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Wenn eine Server Component kein JavaScript an den Browser schickt, wie kann dann ein Knopf darin auf einen Klick reagieren?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Genau das ist die entscheidende Einschränkung von Server Components: Sie können keine direkte Interaktivität wie Klick-Reaktionen oder Eingabefelder enthalten. Für alles, was interaktiv sein soll, braucht es eine Client Component, die sehr wohl JavaScript an den Browser schickt. Der Trick von Next.js ist, dass man beide Arten mischen kann: Eine Seite ist eine Server Component, aber ein einzelner interaktiver Knopf darin ist eine Client Component. Diese Mischung ist der Kern dessen, was Next.js so besonders macht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Das ist wichtig, weil diese Trennung das Beste aus beiden Welten vereint. Der Server erledigt die schwere Arbeit wie Datenbankzugriffe und schickt nur leichtes HTML. Der Browser bekommt JavaScript nur für die Teile, die wirklich interaktiv sein müssen. Das macht die Seite schneller, weil weniger JavaScript heruntergeladen und ausgeführt werden muss.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir ein aufblasbares Zelt vor, das bereits aufgebaut dasteht, aber noch schlaff ist, weil die Luft fehlt. Erst wenn du die Luftpumpe anschließt und das Zelt aufbläst, wird es stabil und voll nutzbar.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Wenn eine Seite per serverseitigem Rendern ausgeliefert wird, ist sie sofort sichtbar, aber noch nicht interaktiv. Das HTML steht schon da, die Texte sind lesbar, die Bilder sind zu sehen. Aber Knöpfe reagieren noch nicht auf Klicks, Eingabefelder nehmen noch keine Eingaben an. Die Seite ist wie das aufgestellte, aber noch schlaffe Zelt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Der Schritt, bei dem eine bereits sichtbare, vom Server gelieferte Seite nachträglich mit JavaScript-Leben gefüllt wird, heißt Hydration, zu Deutsch etwa Bewässerung oder Auffrischung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Während der Hydration lädt der Browser das React-JavaScript herunter und React geht das gesamte bereits sichtbare HTML durch. Es hängt an jedes Element unsichtbare Zuhörer an, die auf Klicks, Eingaben und andere Ereignisse warten. Erst wenn dieser Vorgang abgeschlossen ist, wird aus der statischen Seite eine interaktive Anwendung. Im Repo repo-portfolio passiert genau das: Die Navigationsleiste mit dem Sprachumschalter wird nach der Hydration interaktiv, vorher ist sie nur sichtbar, aber nicht klickbar.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Merk der Besucher diesen Moment, in dem die Seite von statisch auf interaktiv umschaltet?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Im Idealfall nicht, und genau das ist das Ziel guter Hydration. Wenn die Seite schnell genug lädt und das JavaScript klein genug ist, ist die Hydration abgeschlossen, bevor der Besucher überhaupt den ersten Knopf drücken will. Bei schlecht optimierten Seiten kann es aber passieren, dass der Besucher auf einen Knopf klickt und nichts passiert, weil die Hydration noch läuft. Dieses gefürchtete Problem nennt man im Englischen einen hydration mismatch, und es ist einer der Hauptgründe, warum Entwickler die Menge an JavaScript, die an den Browser geschickt wird, so gering wie möglich halten wollen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir drei verschiedene Wege vor, ein Abendessen zu bekommen. Weg eins: Du bekommst die Zutaten und kochst selbst. Weg zwei: Du bestellst und bekommst das fertige Essen geliefert. Weg drei: Du hast vorgekocht und wärmst nur noch auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Diese drei Wege entsprechen genau den drei Rendering-Arten. CSR ist das Selberkochen im Browser. SSR ist die Lieferung des fertigen Essens vom Server. SSG ist das Aufwärmen des vorgekochten Essens, das schon fertig bereitsteht. Und die Server Components sind die Entscheidung, welche Teile des Menüs in der Profiküche gekocht werden und welche der Gast selbst am Tisch zubereitet.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Welche dieser drei Arten ist denn nun die beste?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Keine einzelne Art ist für alles die beste, und genau deshalb beherrscht Next.js alle drei. Eine typische Next.js-Anwendung nutzt eine Mischung: die Startseite als statisch erzeugte Seite, weil sie sich selten ändert und für alle Besucher gleich ist. Eine Artikelseite per serverseitigem Rendern, weil der Artikel zwar gleich bleibt, aber es viele verschiedene Artikel gibt, die nicht alle vorab gebaut werden sollen. Und interaktive Teile wie ein Suchfeld oder ein Warenkorb als Client Components, die im Browser laufen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Das ist wichtig, weil die Kunst des modernen Webentwicklers nicht darin besteht, sich für eine einzige Rendering-Art zu entscheiden, sondern für jeden Teil der Anwendung die passende zu wählen. Eine Seite, die nur clientseitig rendert, ist schlecht für Suchmaschinen. Eine Seite, die nur serverseitig rendert, fühlt sich bei häufigen Interaktionen träge an. Die richtige Mischung macht eine gute Webseite aus.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "text": "Also noch einmal ganz kurz: Beim clientseitigen Rendern baut der Browser die Seite selbst zusammen, das fühlt sich nach dem ersten Laden schnell an, aber die Seite ist anfangs leer und für Suchmaschinen unsichtbar. Beim serverseitigen Rendern schickt der Server fertiges HTML, die Seite ist sofort lesbar und Suchmaschinen können sie erfassen. Bei der Static Site Generation werden alle Seiten einmal vorab gebaut und liegen als fertige Dateien bereit, ohne dass ein Server zur Laufzeit arbeiten muss. Server Components sind React-Komponenten, die nur auf dem Server laufen und nie JavaScript an den Browser senden. Und Hydration ist der Schritt, bei dem eine vom Server gelieferte Seite nachträglich interaktiv wird, indem React unsichtbare Zuhörer an die HTML-Elemente anhängt.",
+      "isKeySentence": true
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Clientseitiges Rendern bedeutet, dass der Browser eine leere Hülle lädt und die gesamte Seite erst danach mit JavaScript selbst zusammenbaut.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Serverseitiges Rendern bedeutet, dass der Server eine bereits fertig aufgebaute HTML-Seite schickt, die der Browser nur noch anzeigen muss.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Static Site Generation bedeutet, dass alle Seiten einmal beim Bauen der Anwendung vorberechnet und als fertige Dateien abgelegt werden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Server Components sind React-Komponenten, die ausschließlich auf dem Server laufen und nie JavaScript an den Browser senden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Hydration ist der Schritt, bei dem eine bereits sichtbare, vom Server gelieferte Seite nachträglich mit JavaScript-Leben gefüllt wird.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Kann eine Seite gleichzeitig clientseitiges und serverseitiges Rendern nutzen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ja, und genau das ist der Normalfall in modernen Next.js-Anwendungen. Die Seite wird zunächst auf dem Server gerendert und als fertiges HTML ausgeliefert, damit der Besucher sofort etwas sieht und Suchmaschinen den Inhalt erfassen können. Sobald das JavaScript im Browser geladen ist, übernimmt React die Seite und macht sie voll interaktiv. Dieses Zusammenspiel aus serverseitigem erstem Rendern und clientseitiger späterer Interaktivität ist der Kern dessen, was Next.js so leistungsfähig macht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Woher weiß Next.js, ob eine Komponente eine Server Component oder eine Client Component sein soll?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "In Next.js 13 und neuer sind alle Komponenten standardmäßig Server Components, außer sie tragen ganz oben in der Datei die Zeile use client. Diese eine Zeile, direkt an den Anfang der Datei geschrieben, macht die Komponente und alle ihre Unterkomponenten zu Client Components, die JavaScript an den Browser senden dürfen. Der Entwickler muss also nur bei interaktiven Komponenten aktiv werden, alle anderen bleiben automatisch auf dem Server.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was passiert, wenn das JavaScript während der Hydration einen anderen Inhalt erwartet, als der Server geliefert hat?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Dann entsteht ein hydration mismatch, ein Fehler, bei dem React eine Warnung in der Konsole ausgibt und im schlimmsten Fall den gesamten DOM-Baum neu aufbaut, was die Seite kurz flackern lässt. Typische Ursachen sind Zeitstempel, die auf dem Server und im Browser unterschiedlich sind, oder zufällige Werte, die bei jedem Rendern anders ausfallen. Die Lösung ist, solche Werte entweder nur im Browser zu erzeugen oder mit einem useEffect zu warten, bis die Hydration abgeschlossen ist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Ist Static Site Generation dasselbe wie eine klassische HTML-Seite von früher?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Nicht ganz, auch wenn das Ergebnis ähnlich aussieht. Eine klassische HTML-Seite wurde von Hand geschrieben oder mit einem einfachen Programm einmal erzeugt und dann nie wieder aktualisiert. Static Site Generation in Next.js bedeutet dagegen, dass die Seiten mit React-Komponenten gebaut werden und bei jeder Änderung am Code oder an den Daten automatisch neu gebaut werden können. Der große Unterschied ist, dass der Entwickler weiterhin mit React und Komponenten arbeitet und nicht mit rohem HTML.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Kann ich in einer Server Component überhaupt keine Benutzerinteraktion haben?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Doch, aber nur indirekt über Server Actions, ein Feature von Next.js, das seit Version 14 stabil ist. Eine Server Action ist eine Funktion, die auf dem Server läuft, aber von einer Client Component aus aufgerufen werden kann, etwa beim Abschicken eines Formulars. Der Knopf zum Abschicken muss in einer Client Component sein, aber die Verarbeitung der Formulardaten kann in einer Server Action auf dem Server passieren, ohne dass dafür eine eigene API-Route gebaut werden muss.",
+      "isKeySentence": false
+    }
+  ],
+  "practiceExample": {
+    "text": "Im Repo repo-portfolio, dem Quellcode von domenicmoran.de, lässt sich die Mischung der Rendering-Arten gut beobachten. Die Seiten unter src/app sind überwiegend Server Components, die ihre Inhalte aus Markdown-Dateien lesen und als fertiges HTML ausliefern. Die Navigationsleiste in src/components/Nav.tsx ist dagegen eine Client Component, erkennbar an der use client-Direktive ganz oben in der Datei, weil sie interaktive Elemente wie den Sprachumschalter und den Farbpaletten-Knopf enthält. Ein Lernender kann daran genau erkennen, wie eine reale Anwendung die Grenze zwischen Server und Client zieht.",
+    "repoNote": "repo-portfolio",
+    "location": "src/components/Nav.tsx (use client-Direktive) und src/app/(de)/page.tsx (Server Component ohne use client)"
+  },
+  "quiz": [
+    {
+      "question": "Welches Alltagsbild passt am besten zum clientseitigen Rendern?",
+      "area": "Rendering-Arten: CSR",
+      "options": [
+        {
+          "text": "Ein Gast bekommt rohe Zutaten und muss am Tisch selbst kochen.",
+          "isCorrect": true,
+          "explanation": "Richtig: Beim CSR liefert der Server nur Rohmaterial, der Browser baut die Seite selbst zusammen."
+        },
+        {
+          "text": "Ein Kellner bringt eine fertige Pizza aus der Profiküche, ohne dass der Gast noch kochen muss.",
+          "isCorrect": false,
+          "explanation": "Falsch: Das Bild der fertig gelieferten Pizza passt zum serverseitigen Rendern, nicht zum clientseitigen."
+        },
+        {
+          "text": "Eine Bäckerei backt alle Brötchen vor Ladenöffnung auf Vorrat, damit sie sofort verfügbar sind.",
+          "isCorrect": false,
+          "explanation": "Falsch: Das Vorbacken auf Vorrat passt zur Static Site Generation, nicht zum clientseitigen Rendern."
+        },
+        {
+          "text": "Ein aufblasbares Zelt, das bereits aufgebaut dasteht und nur noch mit Luft gefüllt werden muss.",
+          "isCorrect": false,
+          "explanation": "Falsch: Das aufblasbare Zelt passt zur Hydration, nicht zum clientseitigen Rendern."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der größte Nachteil von rein clientseitigem Rendern?",
+      "area": "Rendering-Arten: CSR",
+      "options": [
+        {
+          "text": "Die Seite ist anfangs leer und für Suchmaschinen oft unsichtbar.",
+          "isCorrect": true,
+          "explanation": "Richtig: CSR schickt nur eine leere Hülle, Suchmaschinen sehen ohne JavaScript keinen Inhalt."
+        },
+        {
+          "text": "Die Seite kann keine Bilder anzeigen, weil der Server keine Bilddaten mitschickt.",
+          "isCorrect": false,
+          "explanation": "Falsch: CSR kann sehr wohl Bilder anzeigen, das ist kein technisches Problem."
+        },
+        {
+          "text": "Der Server muss für jeden einzelnen Besucher die komplette Seite neu zusammenbauen.",
+          "isCorrect": false,
+          "explanation": "Falsch: Genau das Gegenteil ist der Fall, beim CSR macht der Server fast nichts."
+        },
+        {
+          "text": "Die Seite funktioniert ausschließlich auf Apple-Geräten und nicht auf anderen Plattformen.",
+          "isCorrect": false,
+          "explanation": "Falsch: CSR funktioniert in jedem modernen Browser, unabhängig vom Gerät."
+        }
+      ]
+    },
+    {
+      "question": "Welcher Vorteil trifft auf serverseitiges Rendern zu, nicht aber auf clientseitiges?",
+      "area": "Rendering-Arten: SSR",
+      "options": [
+        {
+          "text": "Die Seite ist sofort lesbar und Suchmaschinen können den Inhalt erfassen.",
+          "isCorrect": true,
+          "explanation": "Richtig: SSR liefert fertiges HTML, das sofort sichtbar und für Suchmaschinen lesbar ist."
+        },
+        {
+          "text": "Nach dem ersten Laden fühlen sich Seitenwechsel extrem schnell an, fast wie in einer App.",
+          "isCorrect": false,
+          "explanation": "Falsch: Die schnellen Seitenwechsel nach dem ersten Laden sind ein Vorteil von CSR, nicht von SSR."
+        },
+        {
+          "text": "Der Server muss keinerlei Arbeit leisten und kann komplett abgeschaltet werden.",
+          "isCorrect": false,
+          "explanation": "Falsch: Bei SSR leistet der Server sehr wohl Arbeit, er baut die Seite ja erst zusammen."
+        },
+        {
+          "text": "Es wird überhaupt kein JavaScript benötigt, die Seite kommt ganz ohne Scripte aus.",
+          "isCorrect": false,
+          "explanation": "Falsch: Auch bei SSR wird für interaktive Teile JavaScript benötigt, nur das erste HTML kommt ohne aus."
+        }
+      ]
+    },
+    {
+      "question": "Für welche Art von Seite eignet sich Static Site Generation am besten?",
+      "area": "Rendering-Arten: SSG",
+      "options": [
+        {
+          "text": "Ein Blog, dessen Artikel sich nur selten ändern.",
+          "isCorrect": true,
+          "explanation": "Richtig: Selten ändernde Inhalte wie Blogartikel sind ideal für SSG, weil sie einmal gebaut und dann schnell ausgeliefert werden können."
+        },
+        {
+          "text": "Eine personalisierte Warenkorb-Seite, die für jeden eingeloggten Kunden anders aussieht.",
+          "isCorrect": false,
+          "explanation": "Falsch: Personalisierte Inhalte können nicht vorab gebaut werden, weil sie für jeden Besucher anders sind."
+        },
+        {
+          "text": "Eine Suchseite mit ständig wechselnden Trefferlisten, die nie zweimal gleich ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: Suchergebnisse stehen erst bei der Anfrage fest und können nicht vorab gebaut werden."
+        },
+        {
+          "text": "Ein Live-Chat-Fenster mit Echtzeit-Nachrichten, die im Sekundentakt eintreffen.",
+          "isCorrect": false,
+          "explanation": "Falsch: Echtzeit-Inhalte ändern sich ständig und sind das Gegenteil von statischen Seiten."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der entscheidende Unterschied zwischen SSR und SSG?",
+      "area": "Rendering-Arten: Vergleich",
+      "options": [
+        {
+          "text": "SSR baut die Seite bei jeder Anfrage neu, SSG baut sie einmal vorab.",
+          "isCorrect": true,
+          "explanation": "Richtig: SSR rendert pro Anfrage, SSG rendert einmal beim Bauen der Anwendung."
+        },
+        {
+          "text": "SSR funktioniert nur mit React als Framework, SSG dagegen ausschließlich mit Vue.",
+          "isCorrect": false,
+          "explanation": "Falsch: Beide Verfahren sind nicht an ein bestimmtes Framework gebunden."
+        },
+        {
+          "text": "SSR braucht zwingend eine Datenbank im Hintergrund, SSG kommt ohne Datenbank aus.",
+          "isCorrect": false,
+          "explanation": "Falsch: Beide können mit oder ohne Datenbank arbeiten, das ist kein Unterscheidungsmerkmal."
+        },
+        {
+          "text": "SSR ist in jedem erdenklichen Fall immer schneller als SSG, ohne jede Ausnahme.",
+          "isCorrect": false,
+          "explanation": "Falsch: SSG ist in der Regel schneller, weil die Seite schon fertig bereitliegt und kein Server arbeiten muss."
+        }
+      ]
+    },
+    {
+      "question": "Was schickt eine Server Component niemals an den Browser?",
+      "area": "Server Components",
+      "options": [
+        {
+          "text": "JavaScript-Code.",
+          "isCorrect": true,
+          "explanation": "Richtig: Server Components senden ausschließlich HTML, niemals JavaScript an den Browser."
+        },
+        {
+          "text": "Fertiges HTML, das der Browser nur noch anzeigen muss.",
+          "isCorrect": false,
+          "explanation": "Falsch: HTML ist genau das, was Server Components an den Browser senden."
+        },
+        {
+          "text": "CSS-Stile für das Aussehen der dargestellten Elemente.",
+          "isCorrect": false,
+          "explanation": "Falsch: CSS kann durchaus Teil des Ergebnisses einer Server Component sein."
+        },
+        {
+          "text": "Verweise auf Bilddateien, die im HTML eingebettet sind.",
+          "isCorrect": false,
+          "explanation": "Falsch: Verweise auf Bilder sind im HTML enthalten, das ist kein Problem."
+        }
+      ]
+    },
+    {
+      "question": "Wie markiert man in Next.js eine Komponente als Client Component?",
+      "area": "Server Components",
+      "options": [
+        {
+          "text": "Mit der Zeile use client ganz oben in der Datei.",
+          "isCorrect": true,
+          "explanation": "Richtig: Die Direktive use client am Dateianfang macht eine Komponente zur Client Component."
+        },
+        {
+          "text": "Indem man die Datei in einen Ordner mit dem Namen client verschiebt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Der Ordnername hat keinen Einfluss, nur die use client-Direktive zählt."
+        },
+        {
+          "text": "Indem man den Komponentennamen mit einem kleinen Buchstaben beginnen lässt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Die Groß- und Kleinschreibung des Namens hat damit nichts zu tun."
+        },
+        {
+          "text": "Indem man die Komponente in einer Datei mit der Endung .client.tsx speichert.",
+          "isCorrect": false,
+          "explanation": "Falsch: Die Dateiendung spielt keine Rolle, nur die Direktive in der Datei selbst."
+        }
+      ]
+    },
+    {
+      "question": "Was passiert während der Hydration?",
+      "area": "Hydration",
+      "options": [
+        {
+          "text": "React hängt unsichtbare Zuhörer an das bereits sichtbare HTML an.",
+          "isCorrect": true,
+          "explanation": "Richtig: Bei der Hydration wird das statische HTML mit Event-Listenern versehen und so interaktiv gemacht."
+        },
+        {
+          "text": "Der Server baut die Seite ein zweites Mal neu und schickt eine frische Version.",
+          "isCorrect": false,
+          "explanation": "Falsch: Die Hydration passiert im Browser, nicht auf dem Server."
+        },
+        {
+          "text": "Die gesamte Seite wird komplett neu geladen und von Grund auf neu aufgebaut.",
+          "isCorrect": false,
+          "explanation": "Falsch: Bei der Hydration wird die Seite nicht neu geladen, das vorhandene HTML wird nur interaktiv gemacht."
+        },
+        {
+          "text": "Alle Bilder der Seite werden in einem anderen, komprimierten Format neu heruntergeladen.",
+          "isCorrect": false,
+          "explanation": "Falsch: Die Hydration hat nichts mit Bildformaten zu tun."
+        }
+      ]
+    },
+    {
+      "question": "Was ist ein hydration mismatch?",
+      "area": "Hydration",
+      "options": [
+        {
+          "text": "Ein Fehler, bei dem das HTML vom Server nicht zum erwarteten HTML im Browser passt.",
+          "isCorrect": true,
+          "explanation": "Richtig: Ein hydration mismatch entsteht, wenn Server und Browser unterschiedliche Inhalte für dieselbe Stelle erwarten."
+        },
+        {
+          "text": "Eine speziell entwickelte Technik, um Webseiten beim Laden deutlich zu beschleunigen.",
+          "isCorrect": false,
+          "explanation": "Falsch: Ein hydration mismatch ist ein Fehler, keine Technik zur Beschleunigung."
+        },
+        {
+          "text": "Ein automatisches Werkzeug, das fehlende Props in Komponenten selbstständig ergänzt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Ein hydration mismatch hat nichts mit Props zu tun."
+        },
+        {
+          "text": "Der genaue Zeitpunkt, an dem eine Server Component zu einer Client Component wird.",
+          "isCorrect": false,
+          "explanation": "Falsch: Server Components werden nicht zu Client Components, das sind getrennte Konzepte."
+        }
+      ]
+    },
+    {
+      "question": "Warum nutzt repo-portfolio eine Mischung aus Server und Client Components?",
+      "area": "Praxisbeispiel repo-portfolio",
+      "options": [
+        {
+          "text": "Weil die Seiten schnell laden sollen, aber die Navigation interaktiv sein muss.",
+          "isCorrect": true,
+          "explanation": "Richtig: Die Seiten sind Server Components für schnelles Laden, die Nav ist Client Component für Interaktivität."
+        },
+        {
+          "text": "Weil Next.js aus technischen Gründen keine Projekte erlaubt, die nur aus Server Components bestehen.",
+          "isCorrect": false,
+          "explanation": "Falsch: Next.js erlaubt durchaus Projekte, die nur aus Server Components bestehen."
+        },
+        {
+          "text": "Weil der Entwickler sich nicht zwischen den beiden Arten entscheiden konnte und beide ausprobiert hat.",
+          "isCorrect": false,
+          "explanation": "Falsch: Die Mischung ist eine bewusste architektonische Entscheidung, keine Unentschlossenheit."
+        },
+        {
+          "text": "Weil Client Components grundsätzlich sicherer sind als Server Components und deshalb bevorzugt werden.",
+          "isCorrect": false,
+          "explanation": "Falsch: Server Components sind in der Regel sicherer, weil sie keinen Code an den Browser senden."
+        }
+      ]
+    },
+    {
+      "question": "Welche der drei Rendering-Arten erfordert zur Laufzeit überhaupt keinen Server, der Arbeit leistet?",
+      "area": "Rendering-Arten: Vergleich",
+      "options": [
+        {
+          "text": "Static Site Generation.",
+          "isCorrect": true,
+          "explanation": "Richtig: Bei SSG liegen die Seiten als fertige Dateien bereit, es läuft kein Server, der rendert."
+        },
+        {
+          "text": "Serverseitiges Rendern, bei dem der Server die Seite vorab gebaut hat.",
+          "isCorrect": false,
+          "explanation": "Falsch: SSR braucht zwingend einen Server, der bei jeder Anfrage die Seite neu baut."
+        },
+        {
+          "text": "Clientseitiges Rendern, bei dem der Browser die gesamte Arbeit übernimmt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Auch CSR braucht einen Server, der zumindest die JavaScript-Dateien ausliefert."
+        },
+        {
+          "text": "Hydration, die vollständig ohne Server auskommt und nur im Browser läuft.",
+          "isCorrect": false,
+          "explanation": "Falsch: Hydration ist keine Rendering-Art, sondern ein Schritt, der nach dem Rendern im Browser passiert."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der Hauptgrund, warum moderne Frameworks wie Next.js alle drei Rendering-Arten beherrschen?",
+      "area": "Rendering-Arten: Zusammenhang",
+      "options": [
+        {
+          "text": "Weil verschiedene Teile einer Anwendung verschiedene Rendering-Strategien brauchen.",
+          "isCorrect": true,
+          "explanation": "Richtig: Eine gute Anwendung wählt für jeden Teil die passende Strategie, nicht eine für alles."
+        },
+        {
+          "text": "Weil der Browser technisch nur eine der drei Rendering-Arten gleichzeitig verarbeiten kann.",
+          "isCorrect": false,
+          "explanation": "Falsch: Der Browser kann durchaus mit mehreren Arten umgehen, das ist keine technische Grenze."
+        },
+        {
+          "text": "Weil jede neue Version von Next.js eine andere Rendering-Art als Standard vorschreibt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Next.js schreibt keine bestimmte Art vor, sondern stellt alle drei zur Wahl."
+        },
+        {
+          "text": "Weil React von Haus aus nur eine einzige Rendering-Art unterstützt und Next.js die anderen nachrüstet.",
+          "isCorrect": false,
+          "explanation": "Falsch: React selbst ist nur die Komponenten-Bibliothek, die Rendering-Strategie kommt von Next.js."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Öffne das Repo repo-portfolio im Browser und finde in der Datei src/components/Nav.tsx die Zeile use client. Suche dann in src/app/(de)/page.tsx nach derselben Zeile und stelle fest, dass sie dort fehlt. Erkläre in eigenen Worten, warum die eine Datei diese Zeile braucht und die andere nicht.",
+    "expectation": "Der Lernende erkennt, dass Nav.tsx interaktive Elemente enthält und deshalb eine Client Component sein muss, während page.tsx nur Inhalte darstellt und als Server Component ohne JavaScript auskommt.",
+    "checklist": [
+      "Das Repo repo-portfolio im Browser geöffnet.",
+      "Die Datei src/components/Nav.tsx gefunden und die use client-Direktive identifiziert.",
+      "Die Datei src/app/(de)/page.tsx gefunden und das Fehlen von use client festgestellt.",
+      "Den Unterschied zwischen Server und Client Components in eigenen Worten erklärt.",
+      "Mindestens ein interaktives Element in Nav.tsx benannt, das die use client-Direktive nötig macht."
+    ],
+    "portfolioItem": "P01"
+  },
+  "audio": {
+    "file": "M03-01-04.mp3",
+    "durationSeconds": 1280,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Kann eine Seite gleichzeitig clientseitiges und serverseitiges Rendern nutzen?",
+      "answer": "Ja, und genau das ist der Normalfall in modernen Next.js-Anwendungen. Die Seite wird zunächst auf dem Server gerendert und als fertiges HTML ausgeliefert, damit der Besucher sofort etwas sieht und Suchmaschinen den Inhalt erfassen können. Sobald das JavaScript im Browser geladen ist, übernimmt React die Seite und macht sie voll interaktiv. Dieses Zusammenspiel aus serverseitigem erstem Rendern und clientseitiger späterer Interaktivität ist der Kern dessen, was Next.js so leistungsfähig macht."
+    },
+    {
+      "question": "Woher weiß Next.js, ob eine Komponente eine Server Component oder eine Client Component sein soll?",
+      "answer": "In Next.js 13 und neuer sind alle Komponenten standardmäßig Server Components, außer sie tragen ganz oben in der Datei die Zeile use client. Diese eine Zeile, direkt an den Anfang der Datei geschrieben, macht die Komponente und alle ihre Unterkomponenten zu Client Components, die JavaScript an den Browser senden dürfen. Der Entwickler muss also nur bei interaktiven Komponenten aktiv werden, alle anderen bleiben automatisch auf dem Server."
+    },
+    {
+      "question": "Was passiert, wenn das JavaScript während der Hydration einen anderen Inhalt erwartet, als der Server geliefert hat?",
+      "answer": "Dann entsteht ein hydration mismatch, ein Fehler, bei dem React eine Warnung in der Konsole ausgibt und im schlimmsten Fall den gesamten DOM-Baum neu aufbaut, was die Seite kurz flackern lässt. Typische Ursachen sind Zeitstempel, die auf dem Server und im Browser unterschiedlich sind, oder zufällige Werte, die bei jedem Rendern anders ausfallen. Die Lösung ist, solche Werte entweder nur im Browser zu erzeugen oder mit einem useEffect zu warten, bis die Hydration abgeschlossen ist."
+    },
+    {
+      "question": "Ist Static Site Generation dasselbe wie eine klassische HTML-Seite von früher?",
+      "answer": "Nicht ganz, auch wenn das Ergebnis ähnlich aussieht. Eine klassische HTML-Seite wurde von Hand geschrieben oder mit einem einfachen Programm einmal erzeugt und dann nie wieder aktualisiert. Static Site Generation in Next.js bedeutet dagegen, dass die Seiten mit React-Komponenten gebaut werden und bei jeder Änderung am Code oder an den Daten automatisch neu gebaut werden können. Der große Unterschied ist, dass der Entwickler weiterhin mit React und Komponenten arbeitet und nicht mit rohem HTML."
+    },
+    {
+      "question": "Kann ich in einer Server Component überhaupt keine Benutzerinteraktion haben?",
+      "answer": "Doch, aber nur indirekt über Server Actions, ein Feature von Next.js, das seit Version 14 stabil ist. Eine Server Action ist eine Funktion, die auf dem Server läuft, aber von einer Client Component aus aufgerufen werden kann, etwa beim Abschicken eines Formulars. Der Knopf zum Abschicken muss in einer Client Component sein, aber die Verarbeitung der Formulardaten kann in einer Server Action auf dem Server passieren, ohne dass dafür eine eigene API-Route gebaut werden muss."
+    }
+  ]
+}
