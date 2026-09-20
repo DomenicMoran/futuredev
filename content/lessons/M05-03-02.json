@@ -1,0 +1,621 @@
+{
+  "id": "M05-03-02",
+  "title": "APK mit EAS bauen",
+  "durationMinutes": 33,
+  "prerequisites": [
+    "M05-03-01",
+    "M05-02-02"
+  ],
+  "terms": [
+    {
+      "term": "EAS Build",
+      "definition": "Der Cloud-Build-Dienst von Expo, der APKs und IPAs in der Cloud erstellt, signiert und zum Download bereitstellt. EAS Build verlagert den gesamten Build-Prozess von deinem lokalen Rechner auf Expo-Server, sodass du keine lokale Build-Umgebung einrichten musst."
+    },
+    {
+      "term": "eas.json",
+      "definition": "Die Konfigurationsdatei für EAS Build im Wurzelverzeichnis des Expo-Projekts. Sie definiert Build-Profile wie development, preview und production, die jeweils unterschiedliche Einstellungen für Signatur, Build-Typ und Umgebungsvariablen enthalten."
+    },
+    {
+      "term": "Build-Profil",
+      "definition": "Eine benannte Konfiguration in der eas.json, die festlegt, wie eine APK gebaut werden soll. Ein Development-Profil erstellt einen Development Build zum Testen, ein Preview-Profil eine installierbare APK ohne Store-Signatur, und ein Production-Profil eine APK für den Play Store mit Release-Signatur."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine Bäckerei vor. Du hast drei Arten von Brot, die du backen kannst: ein Übungsbrot, mit dem du neue Rezepte ausprobierst, ein Verkaufsbrot für den kleinen Laden um die Ecke und ein Premium-Brot für den großen Supermarkt. Jedes Brot hat andere Zutaten, eine andere Verpackung und ein anderes Siegel. Aber alle drei backst du in derselben Backstube mit denselben Grundzutaten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "EAS Build ist diese Backstube für deine Apps. Du definierst in der eas.json verschiedene Build-Profile: Development für Test-Builds, mit denen du neue Funktionen ausprobierst, Preview für APKs, die du an Tester verteilen kannst, und Production für die APK, die in den Play Store kommt. Jedes Profil hat andere Einstellungen für Signatur und Build-Typ, aber alle werden in derselben Expo-Cloud gebacken.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was genau ist EAS Build, und warum ist es besser als ein lokaler Build?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "EAS Build ist der Cloud-Build-Dienst von Expo. Statt auf deinem eigenen Rechner eine APK zu bauen, was Android Studio, das Android SDK, Gradle und viel Konfiguration erfordert, schickst du deinen Code an die Expo-Cloud und bekommst eine fertige, signierte APK zurück. Der gesamte Build-Prozess läuft auf Expo-Servern, die für diesen Zweck optimiert sind. Du brauchst keinen leistungsstarken Rechner, keinen großen Speicherplatz für das SDK und keine komplizierte Build-Konfiguration.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "EAS Build ist der Cloud-Build-Dienst von Expo, der APKs und IPAs in der Cloud erstellt, signiert und zum Download bereitstellt, ohne dass eine lokale Build-Umgebung nötig ist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Um eine APK mit EAS zu bauen, führst du eas build --platform android --profile preview aus. Expo packt deinen Code, lädt ihn in die Cloud, startet dort einen Android-Build, signiert die APK mit deinem Keystore und schickt dir einen Download-Link. Du musstest keinen einzigen Build-Schritt manuell ausführen. Der gesamte Prozess dauert je nach App-Größe zwischen fünf und fünfzehn Minuten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "EAS Build demokratisiert den App-Build. Früher war das Bauen einer APK eine Hürde, die stundenlange Einrichtung und einen leistungsstarken Rechner erforderte. Heute reicht ein Befehl, und jeder kann eine APK bauen, unabhängig von seiner Hardware oder seinem Betriebssystem.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist die eas.json, und wie konfiguriere ich meine Build-Profile?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir ein Bestellformular in der Bäckerei vor. Du kreuzt an: Welches Brot willst du? Mit welchem Mehl? Mit welcher Kruste? In welcher Verpackung? Das Formular stellt sicher, dass die Bäckerei genau das backt, was du bestellt hast, ohne dass du jedes Mal alle Details neu besprechen musst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Die eas.json ist dieses Bestellformular für EAS Build. Sie liegt im Wurzelverzeichnis deines Projekts und definiert ein oder mehrere Build-Profile. Jedes Profil hat einen Namen wie development, preview oder production und enthält Einstellungen für den Build-Typ, die Signatur, Umgebungsvariablen und den Ausgabetyp. Wenn du eas build --profile preview ausführst, liest EAS die Einstellungen aus dem preview-Profil und baut die APK genau nach diesen Vorgaben.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Die eas.json ist die Konfigurationsdatei für EAS Build, die Build-Profile mit unterschiedlichen Einstellungen für Signatur, Build-Typ und Umgebungsvariablen definiert.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Eine typische eas.json enthält drei Profile. Das development-Profil hat \"developmentClient\": true und baut einen Development Build. Das preview-Profil hat \"distribution\": \"internal\" und baut eine APK, die du per Link verteilen kannst. Das production-Profil hat \"distribution\": \"store\" und baut eine APK für den Play Store. Jedes Profil kann unterschiedliche Umgebungsvariablen und Signatur-Einstellungen haben.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die Trennung in Profile ist essenziell für einen professionellen Entwicklungsprozess. Du willst nicht versehentlich eine Test-APK in den Play Store hochladen oder eine Produktions-APK mit Debug-Signatur bauen. Die Profile in der eas.json stellen sicher, dass jeder Build die richtigen Einstellungen verwendet.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist ein Build-Profil, und welches Profil brauche ich für welchen Zweck?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein Build-Profil ist eine benannte Konfiguration, die festlegt, wie deine APK gebaut wird. Das Development-Profil erstellt einen Development Build, den du mit dem Expo-Development-Client auf deinem Handy testen kannst. Er enthält alle deine nativen Module und erlaubt schnelles Testen wie Expo Go. Das Preview-Profil erstellt eine eigenständige APK, die du per Link an Tester verteilen kannst, ohne den Play Store. Das Production-Profil erstellt die APK für den Play Store, mit Release-Signatur und optimiertem Code.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Ein Build-Profil ist eine benannte Konfiguration in der eas.json, die festlegt, wie eine APK gebaut werden soll, mit unterschiedlichen Einstellungen für Development, Preview und Production.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Während der Entwicklung nutzt du das Development-Profil: eas build --platform android --profile development. Das baut einen Development Build, den du einmal installierst und dann für schnelles Testen nutzt. Für einen Beta-Test nutzt du das Preview-Profil: eas build --platform android --profile preview. Das baut eine APK, die du an deine Tester schickst. Für die Veröffentlichung nutzt du das Production-Profil: eas build --platform android --profile production. Das baut die APK für den Play Store.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die richtige Wahl des Build-Profils spart Zeit und vermeidet Fehler. Ein Development Build ist in Minuten gebaut und perfekt für den täglichen Test. Ein Preview Build ist ideal, um eine Version an Tester zu geben, ohne den Play-Store-Prozess zu durchlaufen. Und der Production Build ist der finale Schritt vor der Veröffentlichung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Wie funktioniert der Build-Prozess in der Cloud technisch?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Wenn du eas build ausführst, passiert Folgendes: Expo packt deinen gesamten Projektordner, inklusive Quellcode, Assets und Konfiguration, und lädt ihn auf einen Expo-Build-Server. Dort wird eine virtuelle Maschine mit Android SDK und allen nötigen Werkzeugen gestartet. Dein Code wird kompiliert, die nativen Module werden gebaut, alles wird zu einer APK zusammengefügt und mit deinem Keystore signiert. Die fertige APK wird auf Expo-Servern gespeichert, und du bekommst einen Download-Link. Der gesamte Prozess ist automatisiert und erfordert kein Eingreifen von dir.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Während des Builds siehst du im Terminal die Build-Logs: Expo lädt dein Projekt hoch, installiert Abhängigkeiten, führt Gradle aus, kompiliert den Code und signiert die APK. Bei einem Fehler zeigen die Logs genau, was schiefgelaufen ist. Du kannst die Logs auch später noch auf der Expo-Webseite einsehen, falls der Build im Terminal nicht vollständig angezeigt wurde.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die Build-Logs zu lesen ist eine wichtige Fähigkeit. Wenn ein Build fehlschlägt, zeigen die Logs den genauen Fehler: eine fehlende Abhängigkeit, ein Konfigurationsfehler in der eas.json oder ein Problem mit dem Keystore. Ohne die Logs zu lesen, rätst du nur, und Raten führt selten zur Lösung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was mache ich, wenn der EAS-Build fehlschlägt?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der erste Schritt ist immer: Lies die Build-Logs. Die Logs zeigen den genauen Fehler und die Stelle, an der er aufgetreten ist. Häufige Fehler sind: eine fehlende oder falsch geschriebene Abhängigkeit in der package.json, ein Syntaxfehler im Code, der lokal nicht aufgefallen ist, weil er nur beim Build kompiliert wird, eine falsche Konfiguration in der eas.json oder ein Problem mit dem Keystore. Nachdem du den Fehler identifiziert hast, behebst du ihn, committest die Änderung und startest den Build erneut.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Build-Fehler sind normal und passieren jedem Entwickler. Der Unterschied zwischen einem Anfänger und einem Profi ist nicht, dass der Profi keine Fehler macht, sondern dass der Profi die Logs lesen und den Fehler gezielt beheben kann, statt ratlos auf den Bildschirm zu starren.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "text": "Also noch einmal ganz kurz: EAS Build ist der Cloud-Dienst von Expo, der deine APK in der Cloud baut und signiert. Die eas.json definiert Build-Profile für Development, Preview und Production. Jedes Profil hat eigene Einstellungen für Signatur und Build-Typ. Der Build-Prozess läuft vollautomatisch auf Expo-Servern, und bei Fehlern zeigen die Build-Logs die genaue Ursache.",
+      "isKeySentence": true
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "EAS Build ist der Cloud-Build-Dienst von Expo, der APKs und IPAs in der Cloud erstellt, signiert und zum Download bereitstellt. EAS Build verlagert den gesamten Build-Prozess von deinem lokalen Rechner auf Expo-Server, sodass du keine lokale Build-Umgebung einrichten musst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Die eas.json ist die Konfigurationsdatei für EAS Build im Wurzelverzeichnis des Expo-Projekts. Sie definiert Build-Profile wie development, preview und production, die jeweils unterschiedliche Einstellungen für Signatur, Build-Typ und Umgebungsvariablen enthalten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Ein Build-Profil ist eine benannte Konfiguration in der eas.json, die festlegt, wie eine APK gebaut werden soll. Ein Development-Profil erstellt einen Development Build zum Testen, ein Preview-Profil eine installierbare APK ohne Store-Signatur, und ein Production-Profil eine APK für den Play Store mit Release-Signatur.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Wie lange dauert ein EAS-Build?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Das hängt von der Größe deiner App und dem gewählten Profil ab. Ein Development Build dauert in der Regel fünf bis zehn Minuten, ein Preview Build zehn bis fünfzehn Minuten und ein Production Build fünfzehn bis zwanzig Minuten. Der erste Build dauert immer am längsten, weil alle Abhängigkeiten frisch installiert werden müssen. Folge-Builds sind schneller, weil EAS Build Abhängigkeiten zwischenspeichert. Im kostenpflichtigen Plan sind die Build-Zeiten deutlich kürzer, weil mehr Ressourcen zugewiesen werden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Kann ich den EAS-Build auch lokal ausführen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ja, mit eas build --local. Das führt den Build auf deinem eigenen Rechner aus, statt in der Cloud. Dafür brauchst du Android Studio und das Android SDK lokal installiert. Der lokale Build ist sinnvoll, wenn du kein Internet hast oder dein kostenloses Cloud-Kontingent aufgebraucht ist. Für die allermeisten Fälle ist der Cloud-Build jedoch bequemer, weil du dich nicht um die lokale Einrichtung kümmern musst und deinen Rechner während des Builds für andere Aufgaben nutzen kannst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was ist der Unterschied zwischen einem Preview- und einem Production-Build?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ein Preview-Build ist für interne Tests gedacht. Er wird mit einem Debug-Keystore oder einem eigenen Test-Keystore signiert und kann per direktem Link verteilt werden. Ein Production-Build ist für den Play Store bestimmt. Er wird mit deinem Release-Keystore signiert, der Code ist optimiert und komprimiert, und die APK ist kleiner. Der Production-Build durchläuft zusätzliche Prüfungen und ist die Version, die deine Nutzer am Ende aus dem Play Store herunterladen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was mache ich, wenn mein EAS-Build mit einem Keystore-Fehler fehlschlägt?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Keystore-Fehler haben fast immer eine von zwei Ursachen: Entweder der Keystore existiert nicht an dem Pfad, den du in der eas.json angegeben hast, oder das Passwort ist falsch. Prüfe zuerst, ob die Datei am angegebenen Pfad liegt und ob der Pfad in der eas.json korrekt ist. Dann prüfe, ob das Keystore-Passwort, das Schlüssel-Passwort und der Alias korrekt sind. Wenn du den Keystore mit eas credentials erstellt hast, verwaltet Expo ihn für dich, und du brauchst keinen lokalen Pfad anzugeben.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Kann ich mit EAS Build auch eine APK für einen Kunden bauen, der seinen eigenen Keystore hat?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ja, du kannst in der eas.json einen Pfad zu einem beliebigen Keystore angeben. Der Kunde gibt dir seinen Keystore und das Passwort, du trägst den Pfad in der eas.json ein, und EAS Build signiert die APK mit dem Keystore des Kunden. Wichtig: Der Keystore sollte über einen sicheren Kanal übertragen werden, nicht per E-Mail. Und nach dem Build solltest du die lokale Kopie des Kunden-Keystores löschen, wenn du sie nicht mehr brauchst.",
+      "isKeySentence": false
+    }
+  ],
+  "practiceExample": {
+    "text": "EAS Build erstellt APKs in der Cloud mit verschiedenen Profilen. Die eas.json konfiguriert Development-, Preview- und Production-Builds mit unterschiedlichen Signatur-Einstellungen.",
+    "repoNote": "repo-futuredev",
+    "location": "apps/mobile/eas.json (Build-Profile der FutureDev-App)"
+  },
+  "quiz": [
+    {
+      "question": "Welches Alltagsbild beschreibt EAS Build am treffendsten?",
+      "area": "EAS-Build",
+      "options": [
+        {
+          "text": "Eine Bäckerei, die verschiedene Brotsorten nach deinem Bestellformular backt.",
+          "isCorrect": true,
+          "explanation": "Richtig: EAS Build backt verschiedene APK-Typen nach deinen Profilen."
+        },
+        {
+          "text": "Ein Lieferdienst, der deine App zu den Nutzern bringt.",
+          "isCorrect": false,
+          "explanation": "Falsch: EAS Build liefert nicht aus, es baut nur."
+        },
+        {
+          "text": "Ein Kochbuch, das Rezepte für verschiedene Apps enthält.",
+          "isCorrect": false,
+          "explanation": "Falsch: EAS Build ist kein Kochbuch, sondern eine Backstube."
+        },
+        {
+          "text": "Ein Restaurant, in dem du deine App bestellen und essen kannst.",
+          "isCorrect": false,
+          "explanation": "Falsch: EAS Build ist kein Restaurant für fertige Apps."
+        }
+      ]
+    },
+    {
+      "question": "Was ist EAS Build?",
+      "area": "EAS-Build",
+      "options": [
+        {
+          "text": "Der Cloud-Build-Dienst von Expo, der APKs in der Cloud erstellt und signiert.",
+          "isCorrect": true,
+          "explanation": "Richtig: EAS Build verlagert den Build in die Cloud."
+        },
+        {
+          "text": "Ein lokales Build-Werkzeug, das auf deinem Rechner läuft.",
+          "isCorrect": false,
+          "explanation": "Falsch: EAS Build läuft in der Cloud, nicht lokal."
+        },
+        {
+          "text": "Ein Design-Werkzeug für App-Oberflächen.",
+          "isCorrect": false,
+          "explanation": "Falsch: EAS Build hat nichts mit Design zu tun."
+        },
+        {
+          "text": "Ein Test-Framework für Android-Apps.",
+          "isCorrect": false,
+          "explanation": "Falsch: EAS Build testet nicht, es baut."
+        }
+      ]
+    },
+    {
+      "question": "Was ist die eas.json?",
+      "area": "EAS-Build",
+      "options": [
+        {
+          "text": "Die Konfigurationsdatei, die Build-Profile mit Einstellungen für Signatur und Build-Typ definiert.",
+          "isCorrect": true,
+          "explanation": "Richtig: die eas.json ist das Bestellformular für EAS Build."
+        },
+        {
+          "text": "Eine Datei, die die Nutzerdaten der App speichert.",
+          "isCorrect": false,
+          "explanation": "Falsch: die eas.json speichert keine Nutzerdaten."
+        },
+        {
+          "text": "Eine Log-Datei, die alle Build-Fehler aufzeichnet.",
+          "isCorrect": false,
+          "explanation": "Falsch: die eas.json ist Konfiguration, kein Log."
+        },
+        {
+          "text": "Eine Zertifikatsdatei für die App-Signatur.",
+          "isCorrect": false,
+          "explanation": "Falsch: die eas.json ist kein Zertifikat."
+        }
+      ]
+    },
+    {
+      "question": "Welches Build-Profil nutzt du für die Play-Store-Veröffentlichung?",
+      "area": "EAS-Build",
+      "options": [
+        {
+          "text": "Production, weil es mit Release-Signatur und optimiertem Code baut.",
+          "isCorrect": true,
+          "explanation": "Richtig: nur das Production-Profil ist für den Play Store geeignet."
+        },
+        {
+          "text": "Development, weil es am schnellsten baut.",
+          "isCorrect": false,
+          "explanation": "Falsch: Development-Builds sind nicht für den Play Store."
+        },
+        {
+          "text": "Preview, weil es eine installierbare APK erstellt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Preview-Builds haben nicht die richtige Signatur für den Store."
+        },
+        {
+          "text": "Alle Profile sind für den Play Store geeignet.",
+          "isCorrect": false,
+          "explanation": "Falsch: nur das Production-Profil erfüllt die Store-Anforderungen."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der Hauptvorteil von EAS Build gegenüber einem lokalen Build?",
+      "area": "EAS-Build",
+      "options": [
+        {
+          "text": "Du brauchst keinen leistungsstarken Rechner und keine lokale Build-Umgebung.",
+          "isCorrect": true,
+          "explanation": "Richtig: die Cloud übernimmt den gesamten Build-Prozess."
+        },
+        {
+          "text": "Die APK ist grundsätzlich kleiner als bei einem lokalen Build.",
+          "isCorrect": false,
+          "explanation": "Falsch: die APK-Größe ist bei beiden Build-Arten ähnlich."
+        },
+        {
+          "text": "Der Build ist grundsätzlich schneller als lokal.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein lokaler Build kann schneller sein, wenn der Rechner leistungsstark ist."
+        },
+        {
+          "text": "Die App hat nach einem Cloud-Build weniger Bugs.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Build-Prozess beeinflusst nicht die Code-Qualität."
+        }
+      ]
+    },
+    {
+      "question": "Was passiert, wenn du eas build --platform android --profile preview ausführst?",
+      "area": "EAS-Build",
+      "options": [
+        {
+          "text": "Expo lädt deinen Code in die Cloud, baut eine APK mit Preview-Signatur und schickt dir einen Download-Link.",
+          "isCorrect": true,
+          "explanation": "Richtig: der gesamte Prozess läuft automatisch in der Cloud."
+        },
+        {
+          "text": "Expo öffnet Android Studio und startet dort einen lokalen Build.",
+          "isCorrect": false,
+          "explanation": "Falsch: EAS Build nutzt nicht Android Studio lokal."
+        },
+        {
+          "text": "Expo lädt die APK direkt in den Play Store hoch.",
+          "isCorrect": false,
+          "explanation": "Falsch: das Hochladen ist ein separater Schritt mit EAS Submit."
+        },
+        {
+          "text": "Expo testet die App automatisch auf Fehler.",
+          "isCorrect": false,
+          "explanation": "Falsch: EAS Build testet nicht, es baut nur."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der erste Schritt, wenn ein EAS-Build fehlschlägt?",
+      "area": "EAS-Build",
+      "options": [
+        {
+          "text": "Die Build-Logs lesen, um den genauen Fehler zu identifizieren.",
+          "isCorrect": true,
+          "explanation": "Richtig: die Logs zeigen die genaue Ursache des Fehlers."
+        },
+        {
+          "text": "Den Build sofort erneut starten, in der Hoffnung, dass er diesmal funktioniert.",
+          "isCorrect": false,
+          "explanation": "Falsch: ohne Fehlerbehebung wird der Build wieder fehlschlagen."
+        },
+        {
+          "text": "Das gesamte Projekt löschen und neu erstellen.",
+          "isCorrect": false,
+          "explanation": "Falsch: das ist eine unnötig radikale Maßnahme."
+        },
+        {
+          "text": "Den Expo-Support kontaktieren.",
+          "isCorrect": false,
+          "explanation": "Falsch: zuerst solltest du selbst die Logs prüfen."
+        }
+      ]
+    },
+    {
+      "question": "Kannst du EAS Build auch lokal ausführen?",
+      "area": "EAS-Build",
+      "options": [
+        {
+          "text": "Ja, mit eas build --local, aber dann brauchst du Android Studio lokal.",
+          "isCorrect": true,
+          "explanation": "Richtig: der lokale Build ist eine Alternative zum Cloud-Build."
+        },
+        {
+          "text": "Nein, EAS Build funktioniert nur in der Cloud.",
+          "isCorrect": false,
+          "explanation": "Falsch: es gibt die --local-Option für lokale Builds."
+        },
+        {
+          "text": "Ja, aber nur auf einem Mac.",
+          "isCorrect": false,
+          "explanation": "Falsch: lokale Builds funktionieren auf allen Betriebssystemen."
+        },
+        {
+          "text": "Nur wenn du ein kostenpflichtiges Expo-Konto hast.",
+          "isCorrect": false,
+          "explanation": "Falsch: lokale Builds sind auch mit dem kostenlosen Konto möglich."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der Unterschied zwischen einem Preview- und einem Production-Build?",
+      "area": "EAS-Build",
+      "options": [
+        {
+          "text": "Preview ist für interne Tests, Production für den Play Store mit Release-Signatur.",
+          "isCorrect": true,
+          "explanation": "Richtig: der Hauptunterschied liegt in Signatur und Verwendungszweck."
+        },
+        {
+          "text": "Es gibt keinen Unterschied, beide Profile bauen dieselbe APK.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Profile haben unterschiedliche Signatur- und Build-Einstellungen."
+        },
+        {
+          "text": "Preview ist für Android, Production für iOS.",
+          "isCorrect": false,
+          "explanation": "Falsch: beide Profile gibt es für beide Plattformen."
+        },
+        {
+          "text": "Preview ist kostenlos, Production kostet Geld.",
+          "isCorrect": false,
+          "explanation": "Falsch: beide Profile nutzen dasselbe Build-Kontingent."
+        }
+      ]
+    },
+    {
+      "question": "Wie lange dauert ein typischer EAS-Build?",
+      "area": "EAS-Build",
+      "options": [
+        {
+          "text": "Fünf bis zwanzig Minuten, je nach App-Größe und Profil.",
+          "isCorrect": true,
+          "explanation": "Richtig: der erste Build dauert am längsten, Folge-Builds sind schneller."
+        },
+        {
+          "text": "Weniger als eine Minute, weil die Cloud so schnell ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: auch in der Cloud dauert ein Build mehrere Minuten."
+        },
+        {
+          "text": "Mehrere Stunden, weil der Code erst in die Cloud geladen werden muss.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Upload ist schnell, der Build dauert Minuten, nicht Stunden."
+        },
+        {
+          "text": "Genau dreißig Minuten, das ist die festgelegte Build-Zeit.",
+          "isCorrect": false,
+          "explanation": "Falsch: es gibt keine festgelegte Build-Zeit."
+        }
+      ]
+    },
+    {
+      "question": "Was speichert EAS Build zwischen, um Folge-Builds zu beschleunigen?",
+      "area": "EAS-Build",
+      "options": [
+        {
+          "text": "Abhängigkeiten, damit sie nicht bei jedem Build neu installiert werden müssen.",
+          "isCorrect": true,
+          "explanation": "Richtig: der Abhängigkeits-Cache macht Folge-Builds schneller."
+        },
+        {
+          "text": "Die gesamte APK, damit sie nicht neu gebaut werden muss.",
+          "isCorrect": false,
+          "explanation": "Falsch: die APK wird bei jedem Build neu gebaut."
+        },
+        {
+          "text": "Die Nutzerdaten der App.",
+          "isCorrect": false,
+          "explanation": "Falsch: EAS Build speichert keine Nutzerdaten."
+        },
+        {
+          "text": "Nichts, jeder Build beginnt komplett von vorne.",
+          "isCorrect": false,
+          "explanation": "Falsch: Abhängigkeiten werden zwischengespeichert."
+        }
+      ]
+    },
+    {
+      "question": "Warum ist die Trennung in verschiedene Build-Profile wichtig?",
+      "area": "EAS-Build",
+      "options": [
+        {
+          "text": "Damit du nicht versehentlich eine Test-APK in den Play Store hochlädst.",
+          "isCorrect": true,
+          "explanation": "Richtig: die Profile verhindern gefährliche Verwechslungen."
+        },
+        {
+          "text": "Weil Expo für jedes Profil eine separate Gebühr verlangt.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Profile selbst kosten nichts extra."
+        },
+        {
+          "text": "Weil Android verschiedene APK-Formate für verschiedene Profile verlangt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Android verlangt keine profilbasierten Formate."
+        },
+        {
+          "text": "Damit verschiedene Entwickler im Team unterschiedliche Profile nutzen können.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Profile sind für Build-Typen, nicht für verschiedene Entwickler."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Erstelle eine eas.json mit drei Profilen: development, preview und production. Konfiguriere jedes Profil mit den passenden Einstellungen. Führe einen Preview-Build durch und installiere die APK auf deinem Handy. Führe dann einen Development-Build durch und teste deine App mit dem Development Client.",
+    "expectation": "Eine eas.json mit drei Profilen wurde erstellt, und sowohl ein Preview- als auch ein Development-Build wurden erfolgreich durchgeführt.",
+    "checklist": [
+      "Eine eas.json mit development-, preview- und production-Profil erstellt.",
+      "Jedes Profil mit den passenden Einstellungen konfiguriert.",
+      "Einen Preview-Build mit eas build --platform android --profile preview durchgeführt.",
+      "Die Preview-APK auf dem Handy installiert und getestet.",
+      "Einen Development-Build durchgeführt und mit dem Development Client getestet."
+    ],
+    "portfolioItem": "P04"
+  },
+  "audio": {
+    "file": "M05-03-02.mp3",
+    "durationSeconds": 1320,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Wie lange dauert ein EAS-Build?",
+      "answer": "Das hängt von der Größe deiner App und dem gewählten Profil ab. Ein Development Build dauert in der Regel fünf bis zehn Minuten, ein Preview Build zehn bis fünfzehn Minuten und ein Production Build fünfzehn bis zwanzig Minuten. Der erste Build dauert immer am längsten, weil alle Abhängigkeiten frisch installiert werden müssen. Folge-Builds sind schneller, weil EAS Build Abhängigkeiten zwischenspeichert. Im kostenpflichtigen Plan sind die Build-Zeiten deutlich kürzer, weil mehr Ressourcen zugewiesen werden."
+    },
+    {
+      "question": "Kann ich den EAS-Build auch lokal ausführen?",
+      "answer": "Ja, mit eas build --local. Das führt den Build auf deinem eigenen Rechner aus, statt in der Cloud. Dafür brauchst du Android Studio und das Android SDK lokal installiert. Der lokale Build ist sinnvoll, wenn du kein Internet hast oder dein kostenloses Cloud-Kontingent aufgebraucht ist. Für die allermeisten Fälle ist der Cloud-Build jedoch bequemer, weil du dich nicht um die lokale Einrichtung kümmern musst und deinen Rechner während des Builds für andere Aufgaben nutzen kannst."
+    },
+    {
+      "question": "Was ist der Unterschied zwischen einem Preview- und einem Production-Build?",
+      "answer": "Ein Preview-Build ist für interne Tests gedacht. Er wird mit einem Debug-Keystore oder einem eigenen Test-Keystore signiert und kann per direktem Link verteilt werden. Ein Production-Build ist für den Play Store bestimmt. Er wird mit deinem Release-Keystore signiert, der Code ist optimiert und komprimiert, und die APK ist kleiner. Der Production-Build durchläuft zusätzliche Prüfungen und ist die Version, die deine Nutzer am Ende aus dem Play Store herunterladen."
+    },
+    {
+      "question": "Was mache ich, wenn mein EAS-Build mit einem Keystore-Fehler fehlschlägt?",
+      "answer": "Keystore-Fehler haben fast immer eine von zwei Ursachen: Entweder der Keystore existiert nicht an dem Pfad, den du in der eas.json angegeben hast, oder das Passwort ist falsch. Prüfe zuerst, ob die Datei am angegebenen Pfad liegt und ob der Pfad in der eas.json korrekt ist. Dann prüfe, ob das Keystore-Passwort, das Schlüssel-Passwort und der Alias korrekt sind. Wenn du den Keystore mit eas credentials erstellt hast, verwaltet Expo ihn für dich, und du brauchst keinen lokalen Pfad anzugeben."
+    },
+    {
+      "question": "Kann ich mit EAS Build auch eine APK für einen Kunden bauen, der seinen eigenen Keystore hat?",
+      "answer": "Ja, du kannst in der eas.json einen Pfad zu einem beliebigen Keystore angeben. Der Kunde gibt dir seinen Keystore und das Passwort, du trägst den Pfad in der eas.json ein, und EAS Build signiert die APK mit dem Keystore des Kunden. Wichtig: Der Keystore sollte über einen sicheren Kanal übertragen werden, nicht per E-Mail. Und nach dem Build solltest du die lokale Kopie des Kunden-Keystores löschen, wenn du sie nicht mehr brauchst."
+    }
+  ]
+}

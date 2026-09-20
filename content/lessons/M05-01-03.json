@@ -1,0 +1,634 @@
+{
+  "id": "M05-01-03",
+  "title": "App vs Webseite",
+  "durationMinutes": 32,
+  "prerequisites": [
+    "M05-01-01",
+    "M01-00-03",
+    "M03-01-01"
+  ],
+  "terms": [
+    {
+      "term": "Native App",
+      "definition": "Eine App, die in der nativen Programmiersprache des Betriebssystems geschrieben ist, für Android also in Kotlin oder Java, für iOS in Swift. Native Apps haben vollen Zugriff auf alle Hardware-Funktionen des Geräts und laufen direkt auf dem Betriebssystem ohne Zwischenschicht."
+    },
+    {
+      "term": "Web-App",
+      "definition": "Eine Anwendung, die im Browser des Handys läuft und mit Web-Technologien wie HTML, CSS und JavaScript gebaut ist. Web-Apps werden nicht installiert, sondern über eine URL aufgerufen. Sie haben keinen Zugriff auf native Hardware-Funktionen wie Kamera oder GPS ohne ausdrückliche Browser-Berechtigungen."
+    },
+    {
+      "term": "Hybrid-App",
+      "definition": "Eine App, die mit Web-Technologien gebaut, aber in eine native Hülle verpackt wird, sodass sie wie eine native App installiert werden kann. Hybrid-Apps laufen in einer eingebetteten Browser-Ansicht, der WebView, und können über Brücken auf native Funktionen zugreifen."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir zwei Restaurants vor. Das erste ist ein festes Gebäude mit eigener Küche, eigenen Köchen und einer Speisekarte, die genau auf die Möglichkeiten der Küche abgestimmt ist. Das zweite ist ein Food-Truck, der an verschiedenen Orten steht und eine Standardkarte anbietet, die überall gleich schmeckt, aber nicht die vollen Möglichkeiten einer Profiküche hat.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Das erste Restaurant ist die native App: Sie ist fest auf dem Handy installiert, hat vollen Zugriff auf die Hardware und fühlt sich an wie ein natürlicher Teil des Geräts. Der Food-Truck ist die Web-App: Sie läuft im Browser, ist schnell verfügbar, aber hat nicht den vollen Zugriff auf die Hardware und fühlt sich nicht ganz so nahtlos an wie eine native App. Beide haben ihre Berechtigung, aber sie lösen unterschiedliche Probleme.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was genau ist eine native App, und worin unterscheidet sie sich von einer Web-App?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Eine native App ist in der Programmiersprache des Betriebssystems geschrieben: Kotlin oder Java für Android, Swift für iOS. Sie wird als APK oder IPA installiert, hat vollen Zugriff auf alle Hardware-Funktionen wie Kamera, GPS, Beschleunigungssensor und Fingerabdruckscanner und läuft direkt auf dem Betriebssystem. Eine Web-App hingegen ist eine Webseite, die im Browser des Handys läuft. Sie ist mit HTML, CSS und JavaScript gebaut, wird nicht installiert, sondern über eine URL aufgerufen und hat nur eingeschränkten Zugriff auf die Hardware.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Eine native App ist eine App, die in der nativen Programmiersprache des Betriebssystems geschrieben ist und vollen Zugriff auf alle Hardware-Funktionen des Geräts hat.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Google Maps ist eine native App. Sie greift auf das GPS zu, nutzt den Beschleunigungssensor für die Ausrichtung der Karte und speichert Kartenausschnitte auf dem Gerät für die Offline-Nutzung. Die mobile Webseite von Google Maps kann das alles auch, aber sie lädt langsamer, fühlt sich weniger flüssig an und kann keine Karten offline speichern. Der Unterschied ist spürbar, sobald du beide Versionen nebeneinander ausprobierst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die Entscheidung zwischen nativer App und Web-App ist eine der grundlegendsten, die du als Entwickler triffst. Sie bestimmt, welche Werkzeuge du nutzt, wie viel Zugriff auf die Hardware du hast und wie die App sich für den Nutzer anfühlt. Eine falsche Entscheidung kann Monate an Entwicklungszeit kosten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist eine Web-App, und wann ist sie die bessere Wahl?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine Zeitung vor, die du entweder als gedrucktes Exemplar im Briefkasten hast oder online auf deinem Handy liest. Die gedruckte Zeitung ist immer verfügbar, auch ohne Internet, und du kannst darin blättern, ohne dass etwas lädt. Die Online-Zeitung ist sofort da, sobald du die URL eingibst, aber ohne Internet siehst du nichts.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Eine Web-App ist im Kern eine Webseite, die sich wie eine App verhält. Sie läuft im Browser, wird nicht installiert und ist sofort über eine URL erreichbar. Der große Vorteil: Du musst keine APK bauen, keine Store-Richtlinien einhalten und keine Updates verteilen. Jede Änderung ist sofort für alle Nutzer verfügbar, sobald du sie auf deinen Server lädst. Der Nachteil: Du hast keinen Zugriff auf viele Hardware-Funktionen, die App fühlt sich weniger flüssig an, und ohne Internet funktioniert sie nicht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Eine Web-App ist eine Anwendung, die im Browser des Handys läuft, mit Web-Technologien gebaut ist und über eine URL aufgerufen wird, ohne installiert werden zu müssen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Die FutureDev-Lernplattform ist eine Web-App. Du rufst sie im Browser auf, loggst dich ein und lernst deine Lektionen. Du musst nichts installieren, und jede neue Lektion ist sofort verfügbar, sobald sie veröffentlicht wird. Wäre FutureDev eine native App, müsstest du für jede neue Lektion ein Update aus dem Play Store laden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Web-Apps sind ideal für Inhalte und Dienste, die keine intensive Hardware-Nutzung brauchen. Lernplattformen, Nachrichtenseiten, soziale Netzwerke und Produktivitätswerkzeuge funktionieren als Web-App oft genauso gut wie als native App, sind aber viel einfacher zu entwickeln und zu warten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist eine Hybrid-App, und wie kombiniert sie das Beste aus beiden Welten?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir ein Auto vor, das sowohl mit Benzin als auch mit Strom fahren kann. In der Stadt fährst du elektrisch, leise und sauber. Auf der Langstrecke schaltest du auf Benzin um und hast die volle Reichweite. Du hast nicht die maximale Leistung eines reinen Benziners oder die maximale Effizienz eines reinen Elektroautos, aber du bist flexibel.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Eine Hybrid-App ist eine App, die mit Web-Technologien wie HTML, CSS und JavaScript gebaut wird, aber in eine native Hülle verpackt ist. Diese Hülle, bei Android eine WebView, ist ein eingebetteter Browser ohne sichtbare Adressleiste. Der Nutzer sieht eine ganz normale App mit Icon und Vollbild-Darstellung, aber im Inneren läuft eine Webseite. Über Brücken, sogenannte Bridges, kann die Webseite auf native Funktionen wie Kamera oder GPS zugreifen. React Native und Expo sind moderne Weiterentwicklungen dieses Ansatzes.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Eine Hybrid-App ist eine App, die mit Web-Technologien gebaut, aber in eine native Hülle verpackt wird, sodass sie wie eine native App installiert werden kann und über Brücken auf native Funktionen zugreift.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Viele Apps, die du täglich nutzt, sind Hybrid-Apps, ohne dass du es merkst. Instagram war lange eine Hybrid-App, ebenso wie die mobile Version von Twitter. Sie fühlen sich an wie native Apps, haben ein Icon auf dem Bildschirm und Zugriff auf die Kamera, aber ein großer Teil der Benutzeroberfläche ist mit Web-Technologien gebaut.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Hybrid-Apps sind der pragmatische Mittelweg. Du kannst dein Web-Wissen nutzen, um eine App zu bauen, die im Store landet und auf Hardware zugreifen kann, ohne zwei separate native Apps für Android und iOS schreiben zu müssen. Für die meisten geschäftlichen Apps ist das der wirtschaftlich sinnvollste Weg.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist eine Progressive Web App, und ist sie eine echte Alternative?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Eine Progressive Web App, kurz PWA, ist eine Web-App, die sich wie eine native App verhält. Sie kann auf dem Startbildschirm installiert werden, hat ein eigenes Icon, läuft im Vollbild ohne Browser-Leiste und kann mit einem Service Worker auch offline funktionieren. PWAs nutzen moderne Browser-Funktionen, um die Lücke zwischen Web-App und nativer App zu schließen. Sie werden nicht über den Play Store verteilt, sondern direkt über die Webseite installiert.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der Vorteil einer PWA: Du brauchst keinen Play Store, keine APK-Signatur und keine Store-Gebühren. Der Nachteil: Auf iOS sind PWAs stark eingeschränkt, weil Apple den Zugriff auf viele Browser-Funktionen begrenzt. Push-Benachrichtigungen zum Beispiel funktionieren auf iOS erst seit Kurzem und nur eingeschränkt. Für Android sind PWAs eine echte Alternative, für iOS leider nicht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "PWAs sind ein spannender Ansatz, aber noch nicht die universelle Lösung. Wenn deine Zielgruppe hauptsächlich Android nutzt, kann eine PWA die schnellere und günstigere Alternative zu einer nativen App sein. Wenn du aber beide Plattformen gleichermaßen bedienen musst, bist du mit React Native oder einer Hybrid-App besser beraten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Wann sollte ich welche Art von App wählen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Die Entscheidung hängt von drei Faktoren ab: den benötigten Hardware-Funktionen, dem Budget und der Zielgruppe. Brauchst du vollen Zugriff auf Kamera, GPS, Sensoren und Bluetooth, führt kein Weg an einer nativen oder hybriden App vorbei. Ist dein Budget klein und die Zeit knapp, ist eine Web-App oder PWA der schnellste Weg. Musst du beide Plattformen bedienen und hast ein begrenztes Budget, ist React Native die beste Wahl. Hast du viel Zeit und Geld und willst die bestmögliche Performance, baust du zwei native Apps.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Ein Spiel mit aufwendiger 3D-Grafik sollte nativ gebaut werden, weil es jeden Tropfen Leistung aus der Hardware holen muss. Eine Lernplattform wie FutureDev funktioniert perfekt als Web-App. Eine Social-Media-App mit Kamerazugriff und Profilbild-Upload ist der ideale Fall für React Native: eine Codebasis, beide Plattformen, volle Hardware-Unterstützung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die Wahl der richtigen Technologie zu Beginn eines Projekts spart Monate an Arbeit und Tausende von Euro. Eine falsche Entscheidung kann dazu führen, dass du die App später komplett neu bauen musst. Nimm dir die Zeit, die Anforderungen genau zu analysieren, bevor du dich für einen Ansatz entscheidest.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "text": "Also noch einmal ganz kurz: Eine native App ist in der Sprache des Betriebssystems geschrieben und hat vollen Hardware-Zugriff. Eine Web-App läuft im Browser, braucht keine Installation und ist sofort verfügbar. Eine Hybrid-App kombiniert Web-Technologien mit einer nativen Hülle und ist der pragmatische Mittelweg. Die Wahl hängt von den benötigten Hardware-Funktionen, dem Budget und der Zielgruppe ab.",
+      "isKeySentence": true
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Eine native App ist eine App, die in der nativen Programmiersprache des Betriebssystems geschrieben ist, für Android also in Kotlin oder Java, für iOS in Swift. Native Apps haben vollen Zugriff auf alle Hardware-Funktionen des Geräts und laufen direkt auf dem Betriebssystem ohne Zwischenschicht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Eine Web-App ist eine Anwendung, die im Browser des Handys läuft und mit Web-Technologien wie HTML, CSS und JavaScript gebaut ist. Web-Apps werden nicht installiert, sondern über eine URL aufgerufen. Sie haben keinen Zugriff auf native Hardware-Funktionen wie Kamera oder GPS ohne ausdrückliche Browser-Berechtigungen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Eine Hybrid-App ist eine App, die mit Web-Technologien gebaut, aber in eine native Hülle verpackt wird, sodass sie wie eine native App installiert werden kann. Hybrid-Apps laufen in einer eingebetteten Browser-Ansicht, der WebView, und können über Brücken auf native Funktionen zugreifen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Kann eine Web-App im Play Store veröffentlicht werden?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Nicht direkt. Der Play Store akzeptiert nur native oder hybride Apps, die als APK oder App-Bundle vorliegen. Du kannst deine Web-App jedoch mit einem Werkzeug wie PWABuilder in eine Hybrid-App verpacken, die im Kern deine Webseite in einer WebView anzeigt. Diese Verpackung kannst du dann als APK bauen und in den Play Store hochladen. Der Nachteil: Die App fühlt sich weniger nativ an, und Google könnte sie ablehnen, wenn sie nur eine Webseite ohne Mehrwert gegenüber der mobilen Webseite ist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Ist React Native eine Hybrid-Technologie?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "React Native ist eine Weiterentwicklung des Hybrid-Ansatzes, aber technisch anders. Während eine klassische Hybrid-App in einer WebView läuft und Web-Technologien rendert, übersetzt React Native deine JavaScript-Komponenten in echte native UI-Elemente. Ein Button in React Native wird zu einem echten Android-Button, nicht zu einem HTML-Button in einer WebView. Das Ergebnis fühlt sich deutlich nativer an als eine klassische Hybrid-App. React Native ist deshalb eher eine Cross-Plattform-Technologie als eine Hybrid-Technologie im klassischen Sinn.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Brauche ich für eine native App zwingend einen Mac?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Für Android nicht. Du kannst Android-Apps auf Windows, Linux und macOS entwickeln und bauen. Für iOS brauchst du zwingend einen Mac, weil Apple die Entwicklungswerkzeuge nur für macOS bereitstellt und iOS-Apps nur auf einem Mac gebaut und signiert werden können. Mit Expo und EAS Build kannst du iOS-Apps jedoch in der Cloud bauen lassen, ohne einen Mac zu besitzen. Der eigentliche Code kann auf jedem Betriebssystem geschrieben werden, nur der Build-Prozess braucht einen Mac oder einen Cloud-Dienst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was ist der größte Nachteil einer Web-App gegenüber einer nativen App?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Der fehlende Zugriff auf native Hardware-Funktionen und das weniger flüssige Gefühl. Eine Web-App kann nicht auf den Beschleunigungssensor, das Gyroskop oder den Fingerabdruckscanner zugreifen. Der Zugriff auf Kamera und GPS ist möglich, aber umständlicher und weniger zuverlässig als bei einer nativen App. Außerdem fühlt sich eine Web-App fast immer weniger flüssig an, weil sie im Browser läuft und nicht direkt auf dem Betriebssystem. Für viele Anwendungen ist das akzeptabel, für Spiele oder AR-Anwendungen ist es ein Ausschlusskriterium.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Kann ich eine bestehende Webseite einfach in eine App umwandeln?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Technisch ja, mit einer WebView-Hülle. Aber das Ergebnis wird selten gut sein. Eine Webseite ist für Maus und Tastatur optimiert, nicht für Touch-Bedienung auf einem kleinen Bildschirm. Die Navigation, die Schriftgrößen und die Interaktionselemente sind nicht fürs Handy gemacht. Wenn du aus einer Webseite eine gute App machen willst, musst du die Benutzeroberfläche für mobile Geräte neu gestalten und die Interaktionen auf Touch umstellen. Eine einfache WebView-Verpackung ohne Anpassung führt zu einer schlechten App, die im Store schlecht bewertet wird.",
+      "isKeySentence": false
+    }
+  ],
+  "practiceExample": {
+    "text": "Die FutureDev-Lernplattform ist eine Web-App, die im Browser läuft. Native Apps haben vollen Hardware-Zugriff, Web-Apps sind sofort verfügbar, und Hybrid-Apps kombinieren beide Ansätze.",
+    "repoNote": "repo-futuredev",
+    "location": "apps/mobile (React Native mit Expo, eine Cross-Plattform-App, die Web-Wissen mit nativer Hardware verbindet)"
+  },
+  "quiz": [
+    {
+      "question": "Welches Alltagsbild beschreibt den Unterschied zwischen nativer App und Web-App am treffendsten?",
+      "area": "App-Typen",
+      "options": [
+        {
+          "text": "Ein festes Restaurant mit eigener Küche im Vergleich zu einem Food-Truck mit Standardkarte.",
+          "isCorrect": true,
+          "explanation": "Richtig: die native App ist das feste Restaurant mit voller Ausstattung, die Web-App der flexible Food-Truck."
+        },
+        {
+          "text": "Ein Buch im Vergleich zu einem Film, weil beide unterschiedliche Medien sind.",
+          "isCorrect": false,
+          "explanation": "Falsch: Buch und Film sind grundverschiedene Medien, Apps und Web-Apps sind sich ähnlicher."
+        },
+        {
+          "text": "Ein Fahrrad im Vergleich zu einem Auto, weil eines schneller ist als das andere.",
+          "isCorrect": false,
+          "explanation": "Falsch: es geht nicht um Geschwindigkeit, sondern um Zugriff auf Hardware und Installation."
+        },
+        {
+          "text": "Ein Telefon im Vergleich zu einem Brief, weil eines synchron und das andere asynchron ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Unterschied liegt nicht in der Synchronität der Kommunikation."
+        }
+      ]
+    },
+    {
+      "question": "Was ist eine native App?",
+      "area": "App-Typen",
+      "options": [
+        {
+          "text": "Eine App, die in der Programmiersprache des Betriebssystems geschrieben ist und vollen Hardware-Zugriff hat.",
+          "isCorrect": true,
+          "explanation": "Richtig: native Apps sind in Kotlin/Java für Android oder Swift für iOS geschrieben."
+        },
+        {
+          "text": "Eine App, die im Browser läuft und keine Installation braucht.",
+          "isCorrect": false,
+          "explanation": "Falsch: das ist eine Web-App, keine native App."
+        },
+        {
+          "text": "Eine App, die nur auf einem bestimmten Handy-Modell läuft.",
+          "isCorrect": false,
+          "explanation": "Falsch: native Apps laufen auf allen Geräten mit dem entsprechenden Betriebssystem."
+        },
+        {
+          "text": "Eine App, die ohne Internet funktioniert.",
+          "isCorrect": false,
+          "explanation": "Falsch: Offline-Fähigkeit ist kein definierendes Merkmal nativer Apps."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der größte Vorteil einer Web-App?",
+      "area": "App-Typen",
+      "options": [
+        {
+          "text": "Keine Installation nötig, sofort über URL erreichbar, Updates sofort für alle Nutzer verfügbar.",
+          "isCorrect": true,
+          "explanation": "Richtig: Web-Apps sind sofort da und immer aktuell, ohne Store-Prozess."
+        },
+        {
+          "text": "Voller Zugriff auf alle Hardware-Funktionen des Handys.",
+          "isCorrect": false,
+          "explanation": "Falsch: das ist der Vorteil nativer Apps, nicht von Web-Apps."
+        },
+        {
+          "text": "Bessere Performance als native Apps.",
+          "isCorrect": false,
+          "explanation": "Falsch: Web-Apps sind in der Regel langsamer als native Apps."
+        },
+        {
+          "text": "Keine Internetverbindung nötig.",
+          "isCorrect": false,
+          "explanation": "Falsch: Web-Apps brauchen in der Regel eine Internetverbindung."
+        }
+      ]
+    },
+    {
+      "question": "Was ist eine Hybrid-App?",
+      "area": "App-Typen",
+      "options": [
+        {
+          "text": "Eine App, die mit Web-Technologien gebaut und in eine native Hülle verpackt wird.",
+          "isCorrect": true,
+          "explanation": "Richtig: Hybrid-Apps kombinieren Web-Code mit einer nativen Verpackung."
+        },
+        {
+          "text": "Eine App, die gleichzeitig auf Android und iOS läuft.",
+          "isCorrect": false,
+          "explanation": "Falsch: das ist Cross-Plattform, nicht zwingend hybrid."
+        },
+        {
+          "text": "Eine App, die sowohl online als auch offline funktioniert.",
+          "isCorrect": false,
+          "explanation": "Falsch: Offline-Fähigkeit definiert keine Hybrid-App."
+        },
+        {
+          "text": "Eine App, die aus zwei verschiedenen Programmiersprachen besteht.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Anzahl der Sprachen ist nicht das definierende Merkmal."
+        }
+      ]
+    },
+    {
+      "question": "Wofür steht die Abkürzung PWA?",
+      "area": "App-Typen",
+      "options": [
+        {
+          "text": "Progressive Web App, eine Web-App, die sich wie eine native App verhält.",
+          "isCorrect": true,
+          "explanation": "Richtig: PWAs schließen die Lücke zwischen Web und nativ."
+        },
+        {
+          "text": "Professional Web Application, eine Webseite für Unternehmen.",
+          "isCorrect": false,
+          "explanation": "Falsch: PWA steht für Progressive Web App."
+        },
+        {
+          "text": "Platform Web Access, ein Protokoll für den Zugriff auf Webseiten.",
+          "isCorrect": false,
+          "explanation": "Falsch: PWA ist kein Protokoll."
+        },
+        {
+          "text": "Personal Web Assistant, ein KI-gestützter Web-Assistent.",
+          "isCorrect": false,
+          "explanation": "Falsch: PWA hat nichts mit KI zu tun."
+        }
+      ]
+    },
+    {
+      "question": "Warum sind PWAs auf iOS eingeschränkt?",
+      "area": "App-Typen",
+      "options": [
+        {
+          "text": "Weil Apple den Zugriff auf viele Browser-Funktionen für PWAs begrenzt.",
+          "isCorrect": true,
+          "explanation": "Richtig: Apple schränkt PWAs ein, um den App Store zu schützen."
+        },
+        {
+          "text": "Weil iOS keine Webseiten anzeigen kann.",
+          "isCorrect": false,
+          "explanation": "Falsch: iOS kann selbstverständlich Webseiten anzeigen."
+        },
+        {
+          "text": "Weil PWAs eine Technologie von Google sind und Apple sie boykottiert.",
+          "isCorrect": false,
+          "explanation": "Falsch: PWAs sind ein offener Standard, keine Google-Technologie."
+        },
+        {
+          "text": "Weil iOS-Geräte keine Internetverbindung haben.",
+          "isCorrect": false,
+          "explanation": "Falsch: iOS-Geräte haben selbstverständlich Internet."
+        }
+      ]
+    },
+    {
+      "question": "Welche drei Faktoren bestimmen die Wahl zwischen nativer, hybrider und Web-App?",
+      "area": "App-Typen",
+      "options": [
+        {
+          "text": "Benötigte Hardware-Funktionen, Budget und Zielgruppe.",
+          "isCorrect": true,
+          "explanation": "Richtig: diese drei Faktoren sind die wichtigsten Entscheidungskriterien."
+        },
+        {
+          "text": "Farbe des App-Icons, Name der App und Alter des Entwicklers.",
+          "isCorrect": false,
+          "explanation": "Falsch: diese Faktoren haben keinen Einfluss auf die Technologiewahl."
+        },
+        {
+          "text": "Größe des Handys, Akkulaufzeit und Bildschirmauflösung.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Geräteeigenschaften bestimmen nicht die Technologiewahl."
+        },
+        {
+          "text": "Programmiersprache, Datenbank und Server-Standort.",
+          "isCorrect": false,
+          "explanation": "Falsch: das sind Implementierungsdetails, keine Entscheidungskriterien."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der technische Unterschied zwischen React Native und einer klassischen Hybrid-App?",
+      "area": "App-Typen",
+      "options": [
+        {
+          "text": "React Native rendert echte native UI-Elemente, Hybrid-Apps nutzen eine WebView.",
+          "isCorrect": true,
+          "explanation": "Richtig: React Native übersetzt in native Komponenten, Hybrid-Apps rendern HTML in einer WebView."
+        },
+        {
+          "text": "React Native ist schneller, weil es in C++ geschrieben ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: React Native ist in JavaScript geschrieben, nicht in C++."
+        },
+        {
+          "text": "Es gibt keinen Unterschied, beide Begriffe bedeuten dasselbe.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Unterschied ist fundamental für die Performance und das Nutzergefühl."
+        },
+        {
+          "text": "React Native läuft nur auf Android, Hybrid-Apps nur auf iOS.",
+          "isCorrect": false,
+          "explanation": "Falsch: React Native läuft auf beiden Plattformen."
+        }
+      ]
+    },
+    {
+      "question": "Brauchst du für die Entwicklung einer Android-App zwingend einen Mac?",
+      "area": "App-Typen",
+      "options": [
+        {
+          "text": "Nein, Android-Apps können auf Windows, Linux und macOS entwickelt werden.",
+          "isCorrect": true,
+          "explanation": "Richtig: nur für iOS brauchst du zwingend einen Mac."
+        },
+        {
+          "text": "Ja, alle mobilen Apps brauchen einen Mac für die Entwicklung.",
+          "isCorrect": false,
+          "explanation": "Falsch: das gilt nur für iOS, nicht für Android."
+        },
+        {
+          "text": "Ja, aber nur für Apps, die im Play Store veröffentlicht werden.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Play Store hat keine Mac-Pflicht."
+        },
+        {
+          "text": "Nein, aber du brauchst ein iPhone zum Testen.",
+          "isCorrect": false,
+          "explanation": "Falsch: du kannst Android-Apps mit dem Emulator testen."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der größte Nachteil einer Web-App gegenüber einer nativen App?",
+      "area": "App-Typen",
+      "options": [
+        {
+          "text": "Eingeschränkter Hardware-Zugriff und weniger flüssiges Nutzergefühl.",
+          "isCorrect": true,
+          "explanation": "Richtig: Web-Apps haben nicht den vollen Zugriff und fühlen sich weniger nativ an."
+        },
+        {
+          "text": "Web-Apps können keine Bilder anzeigen.",
+          "isCorrect": false,
+          "explanation": "Falsch: Web-Apps können selbstverständlich Bilder anzeigen."
+        },
+        {
+          "text": "Web-Apps funktionieren nur auf Samsung-Handys.",
+          "isCorrect": false,
+          "explanation": "Falsch: Web-Apps funktionieren auf allen Handys mit Browser."
+        },
+        {
+          "text": "Web-Apps können nicht aktualisiert werden.",
+          "isCorrect": false,
+          "explanation": "Falsch: Web-Apps sind sogar einfacher zu aktualisieren als native Apps."
+        }
+      ]
+    },
+    {
+      "question": "Für welche Art von Anwendung ist eine native App zwingend notwendig?",
+      "area": "App-Typen",
+      "options": [
+        {
+          "text": "Ein Spiel mit aufwendiger 3D-Grafik, das maximale Hardware-Leistung braucht.",
+          "isCorrect": true,
+          "explanation": "Richtig: für maximale Performance führt kein Weg an nativen Apps vorbei."
+        },
+        {
+          "text": "Eine Lernplattform mit Texten und Quizfragen.",
+          "isCorrect": false,
+          "explanation": "Falsch: Lernplattformen funktionieren perfekt als Web-App."
+        },
+        {
+          "text": "Eine Nachrichtenseite mit Artikeln und Bildern.",
+          "isCorrect": false,
+          "explanation": "Falsch: Nachrichtenseiten sind der ideale Fall für Web-Apps."
+        },
+        {
+          "text": "Ein Produktivitätswerkzeug wie eine To-Do-Liste.",
+          "isCorrect": false,
+          "explanation": "Falsch: To-Do-Listen funktionieren als Web-App oder PWA."
+        }
+      ]
+    },
+    {
+      "question": "Kannst du eine bestehende Webseite einfach in eine App umwandeln?",
+      "area": "App-Typen",
+      "options": [
+        {
+          "text": "Technisch ja, aber ohne Anpassung der Benutzeroberfläche wird das Ergebnis schlecht sein.",
+          "isCorrect": true,
+          "explanation": "Richtig: eine Webseite muss für Touch und kleine Bildschirme optimiert werden."
+        },
+        {
+          "text": "Nein, Webseiten und Apps sind technisch völlig inkompatibel.",
+          "isCorrect": false,
+          "explanation": "Falsch: mit einer WebView ist die Umwandlung technisch möglich."
+        },
+        {
+          "text": "Ja, mit einem Klick auf Umwandeln in den Entwicklertools des Browsers.",
+          "isCorrect": false,
+          "explanation": "Falsch: es gibt keinen automatischen Umwandlungsknopf."
+        },
+        {
+          "text": "Nur wenn die Webseite mit React gebaut wurde.",
+          "isCorrect": false,
+          "explanation": "Falsch: das Framework der Webseite ist nicht entscheidend."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Öffne drei Apps auf deinem Handy: eine native App wie Google Maps, eine Hybrid-App wie Instagram und eine Web-App wie die FutureDev-Plattform im Browser. Vergleiche das Nutzergefühl: Wie flüssig fühlt sich die Bedienung an? Wie schnell lädt die App? Wie sieht die Navigation aus? Notiere deine Beobachtungen. Erstelle dann eine einfache Web-App mit HTML, CSS und JavaScript, die eine Liste von Aufgaben anzeigt, und teste sie im mobilen Browser.",
+    "expectation": "Die Unterschiede zwischen nativer, hybrider und Web-App wurden praktisch erfahren und dokumentiert. Eine einfache Web-App wurde erstellt und im mobilen Browser getestet.",
+    "checklist": [
+      "Drei Apps unterschiedlichen Typs auf dem Handy geöffnet und verglichen.",
+      "Beobachtungen zu Flüssigkeit, Ladezeit und Navigation notiert.",
+      "Eine einfache Web-App mit HTML, CSS und JavaScript erstellt.",
+      "Die Web-App im mobilen Browser getestet.",
+      "Die Unterschiede im Nutzergefühl zwischen den App-Typen beschrieben."
+    ],
+    "portfolioItem": "P04"
+  },
+  "audio": {
+    "file": "M05-01-03.mp3",
+    "durationSeconds": 1280,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Kann eine Web-App im Play Store veröffentlicht werden?",
+      "answer": "Nicht direkt. Der Play Store akzeptiert nur native oder hybride Apps, die als APK oder App-Bundle vorliegen. Du kannst deine Web-App jedoch mit einem Werkzeug wie PWABuilder in eine Hybrid-App verpacken, die im Kern deine Webseite in einer WebView anzeigt. Diese Verpackung kannst du dann als APK bauen und in den Play Store hochladen. Der Nachteil: Die App fühlt sich weniger nativ an, und Google könnte sie ablehnen, wenn sie nur eine Webseite ohne Mehrwert gegenüber der mobilen Webseite ist."
+    },
+    {
+      "question": "Ist React Native eine Hybrid-Technologie?",
+      "answer": "React Native ist eine Weiterentwicklung des Hybrid-Ansatzes, aber technisch anders. Während eine klassische Hybrid-App in einer WebView läuft und Web-Technologien rendert, übersetzt React Native deine JavaScript-Komponenten in echte native UI-Elemente. Ein Button in React Native wird zu einem echten Android-Button, nicht zu einem HTML-Button in einer WebView. Das Ergebnis fühlt sich deutlich nativer an als eine klassische Hybrid-App. React Native ist deshalb eher eine Cross-Plattform-Technologie als eine Hybrid-Technologie im klassischen Sinn."
+    },
+    {
+      "question": "Brauche ich für eine native App zwingend einen Mac?",
+      "answer": "Für Android nicht. Du kannst Android-Apps auf Windows, Linux und macOS entwickeln und bauen. Für iOS brauchst du zwingend einen Mac, weil Apple die Entwicklungswerkzeuge nur für macOS bereitstellt und iOS-Apps nur auf einem Mac gebaut und signiert werden können. Mit Expo und EAS Build kannst du iOS-Apps jedoch in der Cloud bauen lassen, ohne einen Mac zu besitzen. Der eigentliche Code kann auf jedem Betriebssystem geschrieben werden, nur der Build-Prozess braucht einen Mac oder einen Cloud-Dienst."
+    },
+    {
+      "question": "Was ist der größte Nachteil einer Web-App gegenüber einer nativen App?",
+      "answer": "Der fehlende Zugriff auf native Hardware-Funktionen und das weniger flüssige Gefühl. Eine Web-App kann nicht auf den Beschleunigungssensor, das Gyroskop oder den Fingerabdruckscanner zugreifen. Der Zugriff auf Kamera und GPS ist möglich, aber umständlicher und weniger zuverlässig als bei einer nativen App. Außerdem fühlt sich eine Web-App fast immer weniger flüssig an, weil sie im Browser läuft und nicht direkt auf dem Betriebssystem. Für viele Anwendungen ist das akzeptabel, für Spiele oder AR-Anwendungen ist es ein Ausschlusskriterium."
+    },
+    {
+      "question": "Kann ich eine bestehende Webseite einfach in eine App umwandeln?",
+      "answer": "Technisch ja, mit einer WebView-Hülle. Aber das Ergebnis wird selten gut sein. Eine Webseite ist für Maus und Tastatur optimiert, nicht für Touch-Bedienung auf einem kleinen Bildschirm. Die Navigation, die Schriftgrößen und die Interaktionselemente sind nicht fürs Handy gemacht. Wenn du aus einer Webseite eine gute App machen willst, musst du die Benutzeroberfläche für mobile Geräte neu gestalten und die Interaktionen auf Touch umstellen. Eine einfache WebView-Verpackung ohne Anpassung führt zu einer schlechten App, die im Store schlecht bewertet wird."
+    }
+  ]
+}

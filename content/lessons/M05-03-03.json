@@ -1,0 +1,603 @@
+{
+  "id": "M05-03-03",
+  "title": "Schlüssel sicher aufbewahren",
+  "durationMinutes": 30,
+  "prerequisites": [
+    "M05-03-01",
+    "M01-02-03"
+  ],
+  "terms": [
+    {
+      "term": "Keystore-Passwort",
+      "definition": "Das Passwort, das den Keystore verschlüsselt und ohne das der private Signaturschlüssel nicht genutzt werden kann. Das Keystore-Passwort muss stark sein, sicher aufbewahrt werden und darf niemals im Code, in Konfigurationsdateien oder in Git-Repositories erscheinen."
+    },
+    {
+      "term": "EAS Secret",
+      "definition": "Eine von Expo verwaltete Umgebungsvariable, die verschlüsselt in der Expo-Cloud gespeichert und während des Build-Prozesses in die Build-Umgebung eingefügt wird. EAS Secrets eignen sich für Keystore-Passwörter, API-Schlüssel und andere sensible Daten, die beim Build benötigt werden."
+    },
+    {
+      "term": "Credential-Management",
+      "definition": "Die Gesamtheit aller Prozesse und Werkzeuge zur sicheren Erstellung, Speicherung, Verteilung und Rotation von Zugangsdaten wie Passwörtern, Schlüsseln und Tokens. Gutes Credential-Management stellt sicher, dass sensible Daten niemals im Klartext im Code oder in Repositories erscheinen."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du hast einen Tresor mit all deinen Wertsachen. Der Tresor hat einen Zahlencode. Wenn du den Code auf einen Zettel schreibst und an die Tür klebst, kann jeder, der vorbeikommt, den Tresor öffnen. Wenn du den Code in deinem Kopf behältst, bist du sicher, aber was, wenn du ihn vergisst? Die Lösung: Du schreibst den Code auf und legst ihn in einen zweiten, kleineren Tresor, den nur du öffnen kannst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Genau vor diesem Problem stehst du als App-Entwickler. Dein Keystore ist der große Tresor mit deinem Signaturschlüssel. Das Keystore-Passwort ist der Zahlencode. Dieses Passwort darf niemals im Code stehen, nicht in der eas.json, nicht in einer Konfigurationsdatei und schon gar nicht in deinem Git-Repository. Aber der Build-Prozess braucht das Passwort, um die APK zu signieren. Die Lösung: EAS Secrets und Umgebungsvariablen, die das Passwort sicher speichern und nur während des Builds bereitstellen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Warum darf das Keystore-Passwort niemals im Code oder in Git stehen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Weil alles, was in Git steht, potenziell öffentlich ist. Selbst ein privates Repository kann kompromittiert werden, und jeder, der Zugriff auf das Repository hat, kann das Passwort lesen. Wenn dein Keystore-Passwort bekannt wird, kann jeder, der auch deinen Keystore in die Hände bekommt, Apps mit deiner Signatur signieren. Das bedeutet: Jemand könnte eine gefälschte Version deiner App mit Schadcode veröffentlichen, und Android würde sie als echt akzeptieren, weil die Signatur gültig ist. Das ist der Albtraum jedes App-Entwicklers.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Das Keystore-Passwort ist das Passwort, das den Keystore verschlüsselt und ohne das der private Signaturschlüssel nicht genutzt werden kann, und es darf niemals im Code oder in Git erscheinen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Ein häufiger Fehler: Du schreibst das Keystore-Passwort in die eas.json, weil es bequem ist. Dann committest du die eas.json, weil sie ja zur Projektkonfiguration gehört. Jetzt steht dein Keystore-Passwort im Git-Repository, für immer in der History, auch wenn du es später entfernst. Jeder, der jemals Zugriff auf das Repository hatte oder haben wird, kann das Passwort lesen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die Sicherheit deines Keystore-Passworts ist die Sicherheit deiner App. Ein kompromittiertes Passwort bedeutet, dass du die Kontrolle über deine App verlieren kannst. Das ist kein theoretisches Risiko, sondern passiert regelmäßig, weil Entwickler Passwörter aus Bequemlichkeit in Konfigurationsdateien schreiben.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was sind EAS Secrets, und wie nutze ich sie für mein Keystore-Passwort?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen Boten vor, der dir einen versiegelten Umschlag bringt. Du weißt, was im Umschlag ist, weil du ihn selbst verschlossen hast, aber niemand sonst kann den Inhalt lesen. Der Bote übergibt den Umschlag nur an die Person, für die er bestimmt ist, und nur zum richtigen Zeitpunkt. Danach wird der Umschlag vernichtet.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "EAS Secrets sind diese versiegelten Umschläge für deine Build-Umgebung. Du erstellst ein Secret mit eas secret:create, gibst ihm einen Namen und einen Wert, und Expo speichert es verschlüsselt in der Cloud. Während des Builds fügt EAS das Secret als Umgebungsvariable in die Build-Umgebung ein, wo dein Build-Skript es lesen kann. Nach dem Build ist das Secret nicht mehr zugänglich. Der Wert erscheint niemals im Code, in Konfigurationsdateien oder in Logs.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Ein EAS Secret ist eine von Expo verschlüsselt gespeicherte Umgebungsvariable, die nur während des Build-Prozesses in die Build-Umgebung eingefügt wird und sich für Keystore-Passwörter und API-Schlüssel eignet.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "So nutzt du EAS Secrets für dein Keystore-Passwort: Du erstellst ein Secret mit eas secret:create --name KEYSTORE_PASSWORD --value dein-sicheres-passwort. In deiner eas.json referenzierst du das Secret mit \"KEYSTORE_PASSWORD\": \"$KEYSTORE_PASSWORD\". Während des Builds ersetzt EAS die Referenz durch den echten Wert. Dein Passwort steht nie im Klartext in einer Datei, die in Git landen könnte.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "EAS Secrets sind der sicherste Weg, sensible Daten in den Build-Prozess zu bringen. Sie sind verschlüsselt, nur während des Builds verfügbar und erscheinen niemals in Logs oder Konfigurationsdateien. Für Keystore-Passwörter, API-Schlüssel und andere Geheimnisse sind sie die richtige Wahl.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist Credential-Management, und warum brauche ich einen Plan dafür?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen Hausmeister vor, der die Schlüssel für alle Wohnungen in einem Hochhaus verwaltet. Er muss wissen, welcher Schlüssel zu welcher Wohnung gehört, wer einen Ersatzschlüssel haben darf und was passiert, wenn ein Schlüssel verloren geht. Ohne ein System würde er den Überblick verlieren, und irgendwann hätte jemand einen Schlüssel, der ihm nicht zusteht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Credential-Management ist die Verwaltung aller deiner Zugangsdaten: Keystore-Passwörter, API-Schlüssel, Datenbank-Passwörter, Cloud-Zugänge. Ein guter Plan beantwortet diese Fragen: Wo werden die Zugangsdaten gespeichert? Wer hat Zugriff darauf? Wie werden sie an den Build-Prozess übergeben? Was passiert, wenn ein Zugangsdatum kompromittiert wird? Wie oft werden Passwörter rotiert? Ohne einen Plan verwaltest du Zugangsdaten ad hoc, und Ad-hoc-Verwaltung führt zu Sicherheitslücken.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Credential-Management ist die Gesamtheit aller Prozesse zur sicheren Erstellung, Speicherung, Verteilung und Rotation von Zugangsdaten, die sicherstellt, dass sensible Daten niemals im Klartext im Code erscheinen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Ein minimaler Credential-Management-Plan für deine App: Keystore und Passwort werden nach der Drei-zwei-eins-Regel gesichert. Das Passwort wird zusätzlich als EAS Secret gespeichert. API-Schlüssel für Dienste wie Supabase oder Stripe werden ebenfalls als EAS Secrets gespeichert. Lokale Entwicklung nutzt eine .env-Datei, die in der .gitignore steht und niemals committet wird. Einmal im Jahr werden alle Passwörter rotiert.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Credential-Management ist keine einmalige Aufgabe, sondern ein fortlaufender Prozess. Je mehr Dienste deine App nutzt, desto mehr Zugangsdaten musst du verwalten. Ein durchdachter Plan von Anfang an verhindert, dass du den Überblick verlierst und sensible Daten versehentlich in Git landen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was mache ich, wenn mein Keystore-Passwort doch kompromittiert wurde?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Wenn dein Keystore-Passwort kompromittiert wurde, musst du schnell handeln. Der erste Schritt: Erstelle einen neuen Keystore mit einem neuen Passwort. Der zweite Schritt: Kontaktiere den Google Play Support und beantrage ein Schlüssel-Upgrade. Google erlaubt unter bestimmten Umständen, den Signaturschlüssel einer App zu wechseln, besonders wenn du App Signing by Google Play nutzt. Der dritte Schritt: Veröffentliche ein Update, das mit dem neuen Schlüssel signiert ist. Der vierte Schritt: Informiere deine Nutzer, falls die Kompromittierung Auswirkungen auf sie haben könnte.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Ein kompromittiertes Passwort ist kein Weltuntergang, aber es erfordert sofortiges Handeln. Je schneller du reagierst, desto geringer der Schaden. Mit App Signing by Google Play ist der Prozess einfacher, weil der eigentliche Signaturschlüssel bei Google liegt und nur dein Upload-Schlüssel betroffen ist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "text": "Also noch einmal ganz kurz: Das Keystore-Passwort darf niemals im Code oder in Git stehen. EAS Secrets speichern sensible Daten verschlüsselt in der Cloud und stellen sie nur während des Builds bereit. Credential-Management ist der fortlaufende Prozess, alle Zugangsdaten sicher zu verwalten. Ein kompromittiertes Passwort erfordert sofortiges Handeln, ist aber mit App Signing by Google Play beherrschbar.",
+      "isKeySentence": true
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Das Keystore-Passwort ist das Passwort, das den Keystore verschlüsselt und ohne das der private Signaturschlüssel nicht genutzt werden kann. Das Keystore-Passwort muss stark sein, sicher aufbewahrt werden und darf niemals im Code, in Konfigurationsdateien oder in Git-Repositories erscheinen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Ein EAS Secret ist eine von Expo verwaltete Umgebungsvariable, die verschlüsselt in der Expo-Cloud gespeichert und während des Build-Prozesses in die Build-Umgebung eingefügt wird. EAS Secrets eignen sich für Keystore-Passwörter, API-Schlüssel und andere sensible Daten, die beim Build benötigt werden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Credential-Management ist die Gesamtheit aller Prozesse und Werkzeuge zur sicheren Erstellung, Speicherung, Verteilung und Rotation von Zugangsdaten wie Passwörtern, Schlüsseln und Tokens. Gutes Credential-Management stellt sicher, dass sensible Daten niemals im Klartext im Code oder in Repositories erscheinen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Kann ich mein Keystore-Passwort in einer .env-Datei speichern?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ja, für die lokale Entwicklung ist das in Ordnung, solange die .env-Datei in der .gitignore steht und niemals committet wird. Für den Cloud-Build mit EAS sind EAS Secrets die bessere Wahl, weil sie verschlüsselt in der Expo-Cloud liegen und nicht versehentlich in Git landen können. Eine .env-Datei auf deinem Rechner ist sicher, solange dein Rechner sicher ist. Aber sobald du den Build in die Cloud verlagerst, brauchst du einen Cloud-sicheren Weg, die Geheimnisse zu übergeben, und das sind EAS Secrets.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was ist der Unterschied zwischen EAS Secrets und GitHub Secrets?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Beide dienen demselben Zweck: sensible Daten sicher zu speichern und nur während automatisierter Prozesse bereitzustellen. GitHub Secrets werden in GitHub Actions verwendet, EAS Secrets in EAS Build. Wenn du CI/CD mit GitHub Actions nutzt, speicherst du deine Geheimnisse als GitHub Secrets. Wenn du direkt mit EAS baust, nutzt du EAS Secrets. Du kannst auch beide kombinieren: GitHub Secrets für die CI/CD-Pipeline, die dann die Werte als EAS Secrets an den Build weitergibt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Wie oft sollte ich meine Passwörter und Schlüssel rotieren?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Für die meisten Zugangsdaten reicht eine jährliche Rotation. Der Keystore und sein Passwort müssen nicht rotiert werden, solange sie nicht kompromittiert sind, weil ein Wechsel des Signaturschlüssels aufwendig ist. API-Schlüssel für Dienste wie Supabase oder Stripe solltest du jährlich rotieren oder sofort, wenn du den Verdacht hast, dass sie kompromittiert wurden. Datenbank-Passwörter rotierst du am besten automatisch, wenn dein Hoster das unterstützt. Die Faustregel: Je sensibler die Daten, die hinter dem Zugangsdatum liegen, desto häufiger solltest du es rotieren.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was mache ich, wenn ich versehentlich ein Passwort in Git committet habe?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Erstens: Ändere das Passwort sofort. Ein Commit in Git kann nicht rückgängig gemacht werden, die History bleibt für immer. Zweitens: Entferne das Passwort aus der aktuellen Version der Datei und committe die Bereinigung. Drittens: Wenn das Repository öffentlich ist, kontaktiere den Support des betroffenen Dienstes und erkläre die Situation. Viertens: Nutze ein Werkzeug wie git-filter-repo, um das Passwort aus der gesamten History zu entfernen, und force-pushe die bereinigte History. Das ist aufwendig, aber notwendig, wenn das Passwort nicht geändert werden kann.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Brauche ich für jedes Projekt einen eigenen Credential-Management-Plan?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Nicht unbedingt. Wenn du mehrere ähnliche Projekte hast, kannst du einen einheitlichen Plan für alle nutzen. Der Plan sollte dokumentieren, wo Zugangsdaten gespeichert werden, wer Zugriff hat und wie sie rotiert werden. Für ein einzelnes Projekt reicht eine einfache Checkliste: Keystore nach Drei-zwei-eins gesichert, Passwörter als EAS Secrets, .env-Dateien in .gitignore, jährliche Rotation. Wichtiger als die Form ist, dass du überhaupt einen Plan hast und ihn befolgst.",
+      "isKeySentence": false
+    }
+  ],
+  "practiceExample": {
+    "text": "Sensible Daten wie Keystore-Passwörter werden als EAS Secrets gespeichert und nur während des Builds bereitgestellt. Credential-Management stellt sicher, dass keine Geheimnisse im Code oder in Git landen.",
+    "repoNote": "repo-futuredev",
+    "location": "apps/mobile/.gitignore (schließt .env-Dateien und Keystores vom Git-Tracking aus)"
+  },
+  "quiz": [
+    {
+      "question": "Welches Alltagsbild beschreibt das Problem der sicheren Passwort-Aufbewahrung am treffendsten?",
+      "area": "Credential-Management",
+      "options": [
+        {
+          "text": "Ein Tresor mit Zahlencode, dessen Code man nicht an die Tür kleben darf.",
+          "isCorrect": true,
+          "explanation": "Richtig: das Passwort muss sicher aufbewahrt werden, nicht öffentlich sichtbar."
+        },
+        {
+          "text": "Ein Fahrradschloss, dessen Schlüssel man immer dabei hat.",
+          "isCorrect": false,
+          "explanation": "Falsch: es geht um die sichere Aufbewahrung, nicht um ständige Verfügbarkeit."
+        },
+        {
+          "text": "Eine Alarmanlage, die bei Einbruch losgeht.",
+          "isCorrect": false,
+          "explanation": "Falsch: es geht um Prävention, nicht um Alarmierung."
+        },
+        {
+          "text": "Ein Briefkasten, in den jeder Post einwerfen kann.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Zugang soll gerade nicht für jeden offen sein."
+        }
+      ]
+    },
+    {
+      "question": "Warum darf das Keystore-Passwort niemals in Git stehen?",
+      "area": "Credential-Management",
+      "options": [
+        {
+          "text": "Weil alles in Git potenziell öffentlich ist und die History das Passwort für immer enthält.",
+          "isCorrect": true,
+          "explanation": "Richtig: Git-History ist dauerhaft, ein einmal committetes Passwort bleibt für immer."
+        },
+        {
+          "text": "Weil Git Passwörter automatisch an Google meldet.",
+          "isCorrect": false,
+          "explanation": "Falsch: Git meldet keine Passwörter."
+        },
+        {
+          "text": "Weil Git keine Dateien mit Passwörtern speichern kann.",
+          "isCorrect": false,
+          "explanation": "Falsch: Git kann technisch alle Dateien speichern."
+        },
+        {
+          "text": "Weil das Passwort dann zu lang für Git wäre.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Länge des Passworts ist nicht das Problem."
+        }
+      ]
+    },
+    {
+      "question": "Was ist ein EAS Secret?",
+      "area": "Credential-Management",
+      "options": [
+        {
+          "text": "Eine verschlüsselt gespeicherte Umgebungsvariable, die nur während des Builds bereitgestellt wird.",
+          "isCorrect": true,
+          "explanation": "Richtig: EAS Secrets sind der sichere Weg, sensible Daten in den Build zu bringen."
+        },
+        {
+          "text": "Ein verstecktes Feature in der Expo-App.",
+          "isCorrect": false,
+          "explanation": "Falsch: EAS Secrets sind kein App-Feature."
+        },
+        {
+          "text": "Ein spezieller Ordner für geheime Dateien.",
+          "isCorrect": false,
+          "explanation": "Falsch: EAS Secrets sind keine Ordner."
+        },
+        {
+          "text": "Ein Passwort für den Expo-Account.",
+          "isCorrect": false,
+          "explanation": "Falsch: EAS Secrets sind nicht das Account-Passwort."
+        }
+      ]
+    },
+    {
+      "question": "Wie erstellst du ein EAS Secret?",
+      "area": "Credential-Management",
+      "options": [
+        {
+          "text": "Mit eas secret:create --name NAME --value WERT.",
+          "isCorrect": true,
+          "explanation": "Richtig: eas secret:create legt ein neues Secret an."
+        },
+        {
+          "text": "Indem du es in die eas.json schreibst.",
+          "isCorrect": false,
+          "explanation": "Falsch: Secrets gehören nicht in die eas.json."
+        },
+        {
+          "text": "Indem du eine .env-Datei in den Projektordner legst.",
+          "isCorrect": false,
+          "explanation": "Falsch: das ist eine lokale .env-Datei, kein EAS Secret."
+        },
+        {
+          "text": "Indem du den Expo-Support kontaktierst.",
+          "isCorrect": false,
+          "explanation": "Falsch: Secrets erstellst du selbst per Befehl."
+        }
+      ]
+    },
+    {
+      "question": "Was ist Credential-Management?",
+      "area": "Credential-Management",
+      "options": [
+        {
+          "text": "Die Gesamtheit aller Prozesse zur sicheren Erstellung, Speicherung und Rotation von Zugangsdaten.",
+          "isCorrect": true,
+          "explanation": "Richtig: Credential-Management ist ein fortlaufender Prozess, keine einmalige Aufgabe."
+        },
+        {
+          "text": "Ein Programm, das automatisch Passwörter generiert.",
+          "isCorrect": false,
+          "explanation": "Falsch: Credential-Management ist mehr als nur Passwort-Generierung."
+        },
+        {
+          "text": "Eine Google-Dienstleistung für Unternehmen.",
+          "isCorrect": false,
+          "explanation": "Falsch: Credential-Management ist kein Google-Dienst."
+        },
+        {
+          "text": "Ein Zertifikat, das die Identität eines Entwicklers bestätigt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Credential-Management ist ein Prozess, kein Zertifikat."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der erste Schritt, wenn dein Keystore-Passwort kompromittiert wurde?",
+      "area": "Credential-Management",
+      "options": [
+        {
+          "text": "Einen neuen Keystore mit neuem Passwort erstellen.",
+          "isCorrect": true,
+          "explanation": "Richtig: das kompromittierte Passwort muss sofort ersetzt werden."
+        },
+        {
+          "text": "Abwarten, ob jemand das Passwort tatsächlich nutzt.",
+          "isCorrect": false,
+          "explanation": "Falsch: bei Kompromittierung ist sofortiges Handeln nötig."
+        },
+        {
+          "text": "Die App aus dem Play Store löschen.",
+          "isCorrect": false,
+          "explanation": "Falsch: das Löschen der App ist die letzte Option, nicht die erste."
+        },
+        {
+          "text": "Den Google Play Support ignorieren und selbst lösen.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Google-Support kann beim Schlüssel-Wechsel helfen."
+        }
+      ]
+    },
+    {
+      "question": "Darfst du dein Keystore-Passwort in einer .env-Datei speichern?",
+      "area": "Credential-Management",
+      "options": [
+        {
+          "text": "Ja, für lokale Entwicklung, wenn die .env-Datei in der .gitignore steht.",
+          "isCorrect": true,
+          "explanation": "Richtig: lokal ist das okay, solange die Datei nicht in Git landet."
+        },
+        {
+          "text": "Nein, .env-Dateien sind grundsätzlich unsicher.",
+          "isCorrect": false,
+          "explanation": "Falsch: .env-Dateien sind für lokale Entwicklung sicher genug."
+        },
+        {
+          "text": "Ja, und du solltest sie committen, damit das Team sie hat.",
+          "isCorrect": false,
+          "explanation": "Falsch: .env-Dateien dürfen niemals committet werden."
+        },
+        {
+          "text": "Nur wenn die Datei mit einem Passwort geschützt ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Schutz kommt von .gitignore, nicht von einem Datei-Passwort."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der Unterschied zwischen EAS Secrets und GitHub Secrets?",
+      "area": "Credential-Management",
+      "options": [
+        {
+          "text": "EAS Secrets werden in EAS Build verwendet, GitHub Secrets in GitHub Actions.",
+          "isCorrect": true,
+          "explanation": "Richtig: beide dienen demselben Zweck in unterschiedlichen Umgebungen."
+        },
+        {
+          "text": "EAS Secrets sind sicher, GitHub Secrets sind unsicher.",
+          "isCorrect": false,
+          "explanation": "Falsch: beide sind sicher, wenn korrekt verwendet."
+        },
+        {
+          "text": "Es gibt keinen Unterschied, beide sind identisch.",
+          "isCorrect": false,
+          "explanation": "Falsch: sie werden in unterschiedlichen Systemen verwendet."
+        },
+        {
+          "text": "EAS Secrets sind kostenlos, GitHub Secrets kosten Geld.",
+          "isCorrect": false,
+          "explanation": "Falsch: beide sind in ihren jeweiligen kostenlosen Plänen enthalten."
+        }
+      ]
+    },
+    {
+      "question": "Wie oft solltest du API-Schlüssel rotieren?",
+      "area": "Credential-Management",
+      "options": [
+        {
+          "text": "Jährlich oder sofort bei Verdacht auf Kompromittierung.",
+          "isCorrect": true,
+          "explanation": "Richtig: regelmäßige Rotation ist Teil guten Credential-Managements."
+        },
+        {
+          "text": "Nie, ein einmal erstellter Schlüssel bleibt für immer gültig.",
+          "isCorrect": false,
+          "explanation": "Falsch: regelmäßige Rotation ist eine Sicherheitspraxis."
+        },
+        {
+          "text": "Einmal im Monat, unabhängig vom Risiko.",
+          "isCorrect": false,
+          "explanation": "Falsch: monatliche Rotation ist für die meisten Schlüssel übertrieben."
+        },
+        {
+          "text": "Nur wenn der Dienst den Schlüssel für ungültig erklärt.",
+          "isCorrect": false,
+          "explanation": "Falsch: du solltest proaktiv rotieren, nicht nur reagieren."
+        }
+      ]
+    },
+    {
+      "question": "Was machst du, wenn du versehentlich ein Passwort in Git committet hast?",
+      "area": "Credential-Management",
+      "options": [
+        {
+          "text": "Passwort sofort ändern, aus der Datei entfernen und die History bereinigen.",
+          "isCorrect": true,
+          "explanation": "Richtig: ändern, entfernen, History bereinigen, in dieser Reihenfolge."
+        },
+        {
+          "text": "Den Commit rückgängig machen, dann ist alles wieder gut.",
+          "isCorrect": false,
+          "explanation": "Falsch: die History bleibt, auch wenn du den Commit rückgängig machst."
+        },
+        {
+          "text": "Nichts, das Passwort ist durch Git verschlüsselt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Git verschlüsselt keine Dateiinhalte."
+        },
+        {
+          "text": "Das gesamte Repository löschen und neu erstellen.",
+          "isCorrect": false,
+          "explanation": "Falsch: das ist unnötig radikal, die History kann bereinigt werden."
+        }
+      ]
+    },
+    {
+      "question": "Warum ist App Signing by Google Play hilfreich bei einem kompromittierten Passwort?",
+      "area": "Credential-Management",
+      "options": [
+        {
+          "text": "Weil der eigentliche Signaturschlüssel bei Google liegt und nur der Upload-Schlüssel betroffen ist.",
+          "isCorrect": true,
+          "explanation": "Richtig: der Upload-Schlüssel kann zurückgesetzt werden, der Signaturschlüssel bleibt sicher."
+        },
+        {
+          "text": "Weil Google das kompromittierte Passwort automatisch ändert.",
+          "isCorrect": false,
+          "explanation": "Falsch: Google ändert keine Passwörter automatisch."
+        },
+        {
+          "text": "Weil Google die App dann ohne Signatur veröffentlicht.",
+          "isCorrect": false,
+          "explanation": "Falsch: Apps werden nie ohne Signatur veröffentlicht."
+        },
+        {
+          "text": "Weil Google den Schaden finanziell ersetzt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Google ersetzt keine finanziellen Schäden."
+        }
+      ]
+    },
+    {
+      "question": "Was gehört in einen minimalen Credential-Management-Plan?",
+      "area": "Credential-Management",
+      "options": [
+        {
+          "text": "Keystore-Sicherung, EAS Secrets, .gitignore für .env, jährliche Rotation.",
+          "isCorrect": true,
+          "explanation": "Richtig: diese vier Punkte decken die wichtigsten Aspekte ab."
+        },
+        {
+          "text": "Nur ein starkes Passwort für den Keystore.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Plan umfasst mehr als nur ein starkes Passwort."
+        },
+        {
+          "text": "Eine Excel-Tabelle mit allen Passwörtern.",
+          "isCorrect": false,
+          "explanation": "Falsch: eine Excel-Tabelle ist kein sicherer Aufbewahrungsort."
+        },
+        {
+          "text": "Gar nichts, Credential-Management ist nur für große Firmen relevant.",
+          "isCorrect": false,
+          "explanation": "Falsch: auch Einzelentwickler brauchen Credential-Management."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Erstelle ein EAS Secret für ein fiktives Keystore-Passwort. Konfiguriere deine eas.json so, dass sie das Secret referenziert. Erstelle eine .env.example-Datei, die zeigt, welche Umgebungsvariablen dein Projekt braucht, ohne die echten Werte preiszugeben. Stelle sicher, dass .env in der .gitignore steht.",
+    "expectation": "Ein EAS Secret wurde erstellt und in der eas.json referenziert. Eine .env.example zeigt die benötigten Variablen ohne echte Werte, und .env ist in .gitignore.",
+    "checklist": [
+      "Ein EAS Secret mit eas secret:create erstellt.",
+      "Die eas.json so konfiguriert, dass sie das Secret referenziert.",
+      "Eine .env.example-Datei mit Platzhaltern für alle benötigten Variablen erstellt.",
+      "Sichergestellt, dass .env in der .gitignore steht.",
+      "Verstanden, dass .env.example committed werden darf, .env aber nicht."
+    ],
+    "portfolioItem": "P04"
+  },
+  "audio": {
+    "file": "M05-03-03.mp3",
+    "durationSeconds": 1200,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Kann ich mein Keystore-Passwort in einer .env-Datei speichern?",
+      "answer": "Ja, für die lokale Entwicklung ist das in Ordnung, solange die .env-Datei in der .gitignore steht und niemals committet wird. Für den Cloud-Build mit EAS sind EAS Secrets die bessere Wahl, weil sie verschlüsselt in der Expo-Cloud liegen und nicht versehentlich in Git landen können. Eine .env-Datei auf deinem Rechner ist sicher, solange dein Rechner sicher ist. Aber sobald du den Build in die Cloud verlagerst, brauchst du einen Cloud-sicheren Weg, die Geheimnisse zu übergeben, und das sind EAS Secrets."
+    },
+    {
+      "question": "Was ist der Unterschied zwischen EAS Secrets und GitHub Secrets?",
+      "answer": "Beide dienen demselben Zweck: sensible Daten sicher zu speichern und nur während automatisierter Prozesse bereitzustellen. GitHub Secrets werden in GitHub Actions verwendet, EAS Secrets in EAS Build. Wenn du CI/CD mit GitHub Actions nutzt, speicherst du deine Geheimnisse als GitHub Secrets. Wenn du direkt mit EAS baust, nutzt du EAS Secrets. Du kannst auch beide kombinieren: GitHub Secrets für die CI/CD-Pipeline, die dann die Werte als EAS Secrets an den Build weitergibt."
+    },
+    {
+      "question": "Wie oft sollte ich meine Passwörter und Schlüssel rotieren?",
+      "answer": "Für die meisten Zugangsdaten reicht eine jährliche Rotation. Der Keystore und sein Passwort müssen nicht rotiert werden, solange sie nicht kompromittiert sind, weil ein Wechsel des Signaturschlüssels aufwendig ist. API-Schlüssel für Dienste wie Supabase oder Stripe solltest du jährlich rotieren oder sofort, wenn du den Verdacht hast, dass sie kompromittiert wurden. Datenbank-Passwörter rotierst du am besten automatisch, wenn dein Hoster das unterstützt. Die Faustregel: Je sensibler die Daten, die hinter dem Zugangsdatum liegen, desto häufiger solltest du es rotieren."
+    },
+    {
+      "question": "Was mache ich, wenn ich versehentlich ein Passwort in Git committet habe?",
+      "answer": "Erstens: Ändere das Passwort sofort. Ein Commit in Git kann nicht rückgängig gemacht werden, die History bleibt für immer. Zweitens: Entferne das Passwort aus der aktuellen Version der Datei und committe die Bereinigung. Drittens: Wenn das Repository öffentlich ist, kontaktiere den Support des betroffenen Dienstes und erkläre die Situation. Viertens: Nutze ein Werkzeug wie git-filter-repo, um das Passwort aus der gesamten History zu entfernen, und force-pushe die bereinigte History. Das ist aufwendig, aber notwendig, wenn das Passwort nicht geändert werden kann."
+    },
+    {
+      "question": "Brauche ich für jedes Projekt einen eigenen Credential-Management-Plan?",
+      "answer": "Nicht unbedingt. Wenn du mehrere ähnliche Projekte hast, kannst du einen einheitlichen Plan für alle nutzen. Der Plan sollte dokumentieren, wo Zugangsdaten gespeichert werden, wer Zugriff hat und wie sie rotiert werden. Für ein einzelnes Projekt reicht eine einfache Checkliste: Keystore nach Drei-zwei-eins gesichert, Passwörter als EAS Secrets, .env-Dateien in .gitignore, jährliche Rotation. Wichtiger als die Form ist, dass du überhaupt einen Plan hast und ihn befolgst."
+    }
+  ]
+}

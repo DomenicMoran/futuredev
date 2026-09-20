@@ -1,0 +1,609 @@
+{
+  "id": "M05-05-01",
+  "title": "Natives Android mit Kotlin",
+  "durationMinutes": 33,
+  "prerequisites": [
+    "M05-01-01",
+    "M05-01-02"
+  ],
+  "terms": [
+    {
+      "term": "Kotlin",
+      "definition": "Eine moderne Programmiersprache, die von JetBrains entwickelt wurde und seit 2017 die offizielle Sprache für Android-Entwicklung ist. Kotlin ist vollständig kompatibel mit Java, aber kürzer, sicherer und ausdrucksstärker. Es eliminiert ganze Klassen von Fehlern, die in Java häufig sind, wie Null-Pointer-Exceptions."
+    },
+    {
+      "term": "Android SDK",
+      "definition": "Das Software Development Kit für Android, eine Sammlung von Werkzeugen, Bibliotheken und Dokumentationen, die du brauchst, um Android-Apps zu bauen. Das SDK enthält den Android-Emulator, Build-Werkzeuge, Debugging-Werkzeuge und die Android-APIs für den Zugriff auf Kamera, GPS und andere Hardware."
+    },
+    {
+      "term": "Jetpack Compose",
+      "definition": "Das moderne UI-Framework von Google für native Android-Apps, das deklarative UI-Programmierung ähnlich wie React ermöglicht. Statt XML-Layouts zu schreiben, beschreibst du deine Oberfläche in Kotlin-Code, und Compose aktualisiert sie automatisch, wenn sich der Zustand ändert."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir zwei Arten vor, ein Haus zu bauen. Bei der ersten Art bestellst du Fertigteile, die du nur noch zusammensetzen musst: Wände, Decken, Fenster. Das geht schnell, und du brauchst kein Spezialwissen über Statik oder Materialkunde. Bei der zweiten Art gießt du das Fundament selbst, mauerst die Wände Stein für Stein und ziehst die Leitungen eigenhändig. Das dauert länger, aber du hast die volle Kontrolle über jedes Detail und kannst Dinge bauen, die mit Fertigteilen nicht möglich sind.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "React Native mit Expo ist das Bauen mit Fertigteilen: schnell, effizient und für die meisten Häuser völlig ausreichend. Natives Android mit Kotlin ist das Bauen Stein für Stein: aufwendiger, aber mit voller Kontrolle über jedes Detail. Beide Wege führen zu einem fertigen Haus, aber sie unterscheiden sich fundamental in Aufwand, Kontrolle und Flexibilität.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist Kotlin, und warum hat es Java als Android-Sprache abgelöst?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Kotlin ist eine moderne Programmiersprache, die von der Firma JetBrains entwickelt wurde. Google hat Kotlin 2017 zur offiziellen Android-Sprache erklärt, weil es viele Probleme von Java löst. Kotlin ist kürzer: Wo du in Java zehn Zeilen brauchst, reichen in Kotlin oft drei. Kotlin ist sicherer: Es unterscheidet zwischen Variablen, die null sein können, und solchen, die es nicht sein können, und eliminiert damit die gefürchteten Null-Pointer-Exceptions. Kotlin ist ausdrucksstärker: Funktionale Konzepte wie Lambdas und Extension Functions sind direkt in die Sprache eingebaut.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Kotlin ist eine moderne Programmiersprache von JetBrains, die seit 2017 die offizielle Sprache für Android-Entwicklung ist und durch Kürze, Sicherheit und Ausdrucksstärke überzeugt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Eine einfache Datenklasse in Java braucht zwanzig Zeilen mit Konstruktor, Gettern, Settern und equals-Methoden. In Kotlin schreibst du data class User(val name: String, val age: Int). Eine Zeile, die alles enthält. Das ist kein Spielzeug, sondern produktiver Code, der in Millionen von Apps läuft.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Kotlin zu kennen ist wertvoll, auch wenn du hauptsächlich mit React Native arbeitest. Wenn du an die Grenzen von React Native stößt und ein natives Modul schreiben musst, schreibst du es in Kotlin. Außerdem ist Kotlin eine der am schnellsten wachsenden Sprachen und wird auch für Server-Anwendungen mit Ktor oder Spring Boot eingesetzt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist das Android SDK, und welche Werkzeuge enthält es?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen voll ausgestatteten Handwerksbetrieb vor: Du hast eine Werkbank, an der du arbeitest, einen Werkzeugschrank mit allen erdenklichen Werkzeugen, einen Messraum, in dem du deine Arbeit prüfst, und ein Lager mit allen Materialien, die du brauchst. Ohne diesen Handwerksbetrieb könntest du kein einziges Möbelstück bauen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Das Android SDK ist dieser Handwerksbetrieb für Android-Entwickler. Es enthält den Android-Emulator zum Testen, die Build-Werkzeuge zum Kompilieren und Verpacken deiner App, Debugging-Werkzeuge zum Finden von Fehlern und vor allem die Android-APIs: tausende von vorgefertigten Klassen und Methoden, mit denen du auf die Hardware zugreifst, die Benutzeroberfläche baust und mit dem System kommunizierst. Das SDK ist der Grundstock, auf dem jede Android-App aufbaut, egal ob nativ oder mit React Native.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Das Android SDK ist die Sammlung von Werkzeugen, Bibliotheken und Dokumentationen, die du zum Bauen von Android-Apps brauchst, inklusive Emulator, Build-Werkzeugen und APIs.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Wenn du in Kotlin auf die Kamera zugreifen willst, nutzt du die CameraX-API aus dem Android SDK. Du fügst die Abhängigkeit zu deinem Projekt hinzu, schreibst ein paar Zeilen Kotlin-Code, und das SDK kümmert sich um den Rest: Es verwaltet die Kamera-Hardware, zeigt das Vorschaubild an und liefert dir das aufgenommene Foto. Du musst nicht wissen, wie der Kamera-Chip funktioniert, das SDK abstrahiert das für dich.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Das Android SDK zu verstehen hilft dir auch als React-Native-Entwickler. Wenn ein natives Modul nicht funktioniert, liegt das Problem oft in der SDK-API, die das Modul nutzt. Wenn du die SDK-Dokumentation lesen kannst, findest du den Fehler viel schneller.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist Jetpack Compose, und wie unterscheidet es sich vom alten XML-Layout?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir zwei Arten vor, ein Bild zu malen. Bei der ersten Art malst du nach Zahlen: Jedes Feld hat eine Nummer, und du füllst es mit der entsprechenden Farbe. Das Ergebnis ist vorhersehbar, aber jede Änderung bedeutet, dass du Felder neu nummerieren musst. Bei der zweiten Art malst du frei auf einer Leinwand: Du beschreibst, was du sehen willst, und das Bild entsteht aus deiner Beschreibung. Änderungen sind einfach, weil du nur die Beschreibung änderst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Das alte XML-Layout ist das Malen nach Zahlen: Du definierst in einer separaten XML-Datei, wo jedes Element steht, und der Code referenziert diese Elemente. Jetpack Compose ist das Malen auf der Leinwand: Du beschreibst deine Oberfläche direkt in Kotlin-Code, und Compose kümmert sich darum, sie darzustellen und bei Änderungen zu aktualisieren. Das ist dasselbe deklarative Prinzip wie bei React: Du sagst, was du sehen willst, nicht wie es gebaut wird.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Jetpack Compose ist das moderne UI-Framework von Google für native Android-Apps, das deklarative UI-Programmierung in Kotlin ermöglicht und die Oberfläche automatisch bei Zustandsänderungen aktualisiert.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Ein Button mit Compose: Button(onClick = { /* Aktion */ }) { Text(\"Klick mich\") }. Das ist alles. Kein XML, keine findViewById-Aufrufe, keine Trennung zwischen Layout und Logik. Wenn sich der Zustand ändert, aktualisiert Compose automatisch den Button. Als React-Entwickler fühlst du dich sofort zu Hause, weil das Konzept fast identisch mit React-Komponenten ist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Jetpack Compose ist die Zukunft der nativen Android-Entwicklung. Google investiert massiv in Compose, und neue APIs werden zuerst für Compose bereitgestellt. Wenn du in die native Android-Entwicklung einsteigen willst, ist Compose der richtige Startpunkt, nicht das alte XML-Layout.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Wie sieht eine native Android-App mit Kotlin und Compose in der Praxis aus?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Eine native Android-App besteht aus mehreren Schichten. Die UI-Schicht wird mit Compose gebaut und beschreibt, was der Nutzer sieht. Die Logik-Schicht enthält die Geschäftslogik, oft in einem ViewModel, das den Zustand der UI hält und von Compose beobachtet wird. Die Daten-Schicht greift auf Datenbanken, Netzwerk und andere Datenquellen zu. Diese Architektur ist Google's empfohlene Architektur und ähnelt dem, was du aus React mit State, Komponenten und API-Aufrufen kennst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Eine einfache App mit Compose: Du definierst eine Composable-Funktion, die deine UI beschreibt. Ein ViewModel hält den Zustand. Wenn der Nutzer auf einen Button tippt, ändert sich der Zustand im ViewModel, und Compose aktualisiert automatisch die UI. Das ist fast identisch mit useState in React: Zustand ändern, UI aktualisiert sich von selbst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die konzeptionelle Nähe zwischen React und Compose ist kein Zufall. Google hat sich bei der Entwicklung von Compose bewusst an React orientiert, weil das deklarative Modell sich als überlegen erwiesen hat. Als React-Entwickler hast du einen Vorsprung beim Lernen von Compose, weil du das Denkmodell bereits kennst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "text": "Also noch einmal ganz kurz: Kotlin ist die moderne, offizielle Sprache für Android-Entwicklung, die kürzer und sicherer als Java ist. Das Android SDK ist der Werkzeugkasten mit Emulator, Build-Werkzeugen und APIs. Jetpack Compose ist das moderne UI-Framework, das deklarative Oberflächen in Kotlin ermöglicht und konzeptionell React sehr ähnlich ist. Als React-Entwickler hast du einen Vorsprung beim Einstieg in die native Android-Entwicklung.",
+      "isKeySentence": true
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Kotlin ist eine moderne Programmiersprache, die von JetBrains entwickelt wurde und seit 2017 die offizielle Sprache für Android-Entwicklung ist. Kotlin ist vollständig kompatibel mit Java, aber kürzer, sicherer und ausdrucksstärker. Es eliminiert ganze Klassen von Fehlern, die in Java häufig sind, wie Null-Pointer-Exceptions.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Das Android SDK ist das Software Development Kit für Android, eine Sammlung von Werkzeugen, Bibliotheken und Dokumentationen, die du brauchst, um Android-Apps zu bauen. Das SDK enthält den Android-Emulator, Build-Werkzeuge, Debugging-Werkzeuge und die Android-APIs für den Zugriff auf Kamera, GPS und andere Hardware.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Jetpack Compose ist das moderne UI-Framework von Google für native Android-Apps, das deklarative UI-Programmierung ähnlich wie React ermöglicht. Statt XML-Layouts zu schreiben, beschreibst du deine Oberfläche in Kotlin-Code, und Compose aktualisiert sie automatisch, wenn sich der Zustand ändert.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Muss ich Java können, um Kotlin zu lernen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Nein, du kannst Kotlin lernen, ohne jemals Java geschrieben zu haben. Kotlin ist eine eigenständige Sprache mit eigener Syntax und eigenen Konzepten. Die Kompatibilität mit Java bedeutet nur, dass du Java-Bibliotheken aus Kotlin heraus nutzen kannst, nicht dass du Java können musst. Wenn du bereits JavaScript oder TypeScript kannst, wirst du viele Konzepte in Kotlin wiedererkennen: Funktionen als Werte, Lambda-Ausdrücke, Destrukturierung und optionale Parameter. Der Umstieg von TypeScript auf Kotlin ist deutlich einfacher als der Umstieg von Java auf Kotlin.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Brauche ich Android Studio für native Android-Entwicklung?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Offiziell ja, Android Studio ist die empfohlene Entwicklungsumgebung von Google. Es basiert auf IntelliJ IDEA, derselben Plattform wie viele andere JetBrains-IDEs, und bietet spezielle Werkzeuge für Android: einen visuellen Layout-Editor, einen Emulator-Manager, einen Profiler für Performance-Analysen und eine tiefe Integration mit dem Android SDK. Du kannst Android-Apps auch mit anderen Editoren wie VS Code schreiben, aber dann fehlen dir viele der spezialisierten Werkzeuge, und du musst Builds und Emulator manuell über die Kommandozeile steuern.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Wie lange dauert es, Kotlin zu lernen, wenn ich schon React kann?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Für die Grundlagen reichen zwei bis vier Wochen intensives Lernen. Du musst die Syntax lernen, die Konzepte der objektorientierten Programmierung verstehen, falls du sie nicht aus TypeScript kennst, und dich mit der Android-Architektur vertraut machen. Für produktive native Entwicklung solltest du drei bis sechs Monate einplanen. Der Vorteil: Du musst nicht alles auf einmal lernen. Du kannst mit einfachen UIs in Compose anfangen und nach und nach tiefere Konzepte wie Coroutines für asynchrone Programmierung oder Dependency Injection mit Hilt lernen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Kann ich Kotlin auch außerhalb von Android nutzen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ja, Kotlin ist eine universelle Sprache. Du kannst damit Server-Anwendungen mit Ktor oder Spring Boot schreiben, plattformübergreifende Apps mit Kotlin Multiplatform bauen, die auf Android, iOS, Desktop und Web laufen, oder sogar Frontend-Code mit Kotlin/JS schreiben, das zu JavaScript kompiliert wird. Kotlin ist nicht auf Android beschränkt, sondern eine vollwertige Allzwecksprache, die in vielen Bereichen eingesetzt wird. Die Investition in Kotlin lohnt sich also auch dann, wenn du später nicht ausschließlich Android-Apps bauen willst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Ist Jetpack Compose bereit für produktive Apps?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ja, Compose ist seit 2021 stabil und wird von Google für neue Apps empfohlen. Große Apps wie Google Play, Google Maps und Twitter nutzen Compose in Teilen oder vollständig. Die Bibliothek ist ausgereift, die Performance ist gut, und das Ökosystem an Drittanbieter-Bibliotheken wächst schnell. Für neue Apps ist Compose der empfohlene Weg, und Google entwickelt neue Funktionen zuerst für Compose. Das alte XML-Layout wird nicht abgeschafft, aber es bekommt keine großen neuen Funktionen mehr.",
+      "isKeySentence": false
+    }
+  ],
+  "practiceExample": {
+    "text": "Kotlin ist die offizielle Android-Sprache, das Android SDK der Werkzeugkasten und Jetpack Compose das moderne UI-Framework mit deklarativem Programmiermodell ähnlich wie React.",
+    "repoNote": "repo-futuredev",
+    "location": "apps/mobile/android (native Android-Konfiguration mit Kotlin und Gradle)"
+  },
+  "quiz": [
+    {
+      "question": "Welches Alltagsbild beschreibt den Unterschied zwischen React Native und nativer Android-Entwicklung am treffendsten?",
+      "area": "Kotlin",
+      "options": [
+        {
+          "text": "Hausbau mit Fertigteilen versus Stein-für-Stein-Mauern.",
+          "isCorrect": true,
+          "explanation": "Richtig: React Native ist schneller, nativ gibt mehr Kontrolle."
+        },
+        {
+          "text": "Kochen mit Rezept versus Kochen ohne Rezept.",
+          "isCorrect": false,
+          "explanation": "Falsch: beide Wege folgen klaren Mustern, der Unterschied liegt in der Kontrolle."
+        },
+        {
+          "text": "Autofahren versus Fahrradfahren.",
+          "isCorrect": false,
+          "explanation": "Falsch: das eine ist nicht grundsätzlich schneller als das andere."
+        },
+        {
+          "text": "Lesen eines Buches versus Hören eines Hörbuchs.",
+          "isCorrect": false,
+          "explanation": "Falsch: es geht um den Bauprozess, nicht um die Konsumform."
+        }
+      ]
+    },
+    {
+      "question": "Was ist Kotlin?",
+      "area": "Kotlin",
+      "options": [
+        {
+          "text": "Die offizielle Programmiersprache für Android, entwickelt von JetBrains.",
+          "isCorrect": true,
+          "explanation": "Richtig: Kotlin ist seit 2017 die offizielle Android-Sprache."
+        },
+        {
+          "text": "Ein Betriebssystem für Smartphones.",
+          "isCorrect": false,
+          "explanation": "Falsch: Kotlin ist eine Programmiersprache, kein Betriebssystem."
+        },
+        {
+          "text": "Ein UI-Framework für Android-Apps.",
+          "isCorrect": false,
+          "explanation": "Falsch: das UI-Framework heißt Jetpack Compose."
+        },
+        {
+          "text": "Eine Datenbank für mobile Apps.",
+          "isCorrect": false,
+          "explanation": "Falsch: Kotlin ist keine Datenbank."
+        }
+      ]
+    },
+    {
+      "question": "Warum hat Kotlin Java als Android-Sprache abgelöst?",
+      "area": "Kotlin",
+      "options": [
+        {
+          "text": "Kotlin ist kürzer, sicherer und ausdrucksstärker als Java.",
+          "isCorrect": true,
+          "explanation": "Richtig: weniger Code, weniger Fehler, bessere Lesbarkeit."
+        },
+        {
+          "text": "Java war zu teuer, Kotlin ist kostenlos.",
+          "isCorrect": false,
+          "explanation": "Falsch: Java ist ebenfalls kostenlos."
+        },
+        {
+          "text": "Google hat Java aus Sicherheitsgründen verboten.",
+          "isCorrect": false,
+          "explanation": "Falsch: Java ist nicht verboten, Kotlin ist nur die empfohlene Sprache."
+        },
+        {
+          "text": "Kotlin wurde von Google entwickelt, Java nicht.",
+          "isCorrect": false,
+          "explanation": "Falsch: Kotlin wurde von JetBrains entwickelt, nicht von Google."
+        }
+      ]
+    },
+    {
+      "question": "Was ist das Android SDK?",
+      "area": "Kotlin",
+      "options": [
+        {
+          "text": "Die Sammlung von Werkzeugen, Bibliotheken und APIs zum Bauen von Android-Apps.",
+          "isCorrect": true,
+          "explanation": "Richtig: das SDK ist der Handwerksbetrieb für Android-Entwickler."
+        },
+        {
+          "text": "Eine Programmiersprache für Android.",
+          "isCorrect": false,
+          "explanation": "Falsch: das SDK ist keine Sprache, sondern eine Werkzeugsammlung."
+        },
+        {
+          "text": "Ein Online-Shop für Android-Apps.",
+          "isCorrect": false,
+          "explanation": "Falsch: das ist der Play Store."
+        },
+        {
+          "text": "Ein Testgerät von Google.",
+          "isCorrect": false,
+          "explanation": "Falsch: das SDK ist Software, kein Gerät."
+        }
+      ]
+    },
+    {
+      "question": "Was ist Jetpack Compose?",
+      "area": "Kotlin",
+      "options": [
+        {
+          "text": "Das moderne UI-Framework von Google mit deklarativer Programmierung in Kotlin.",
+          "isCorrect": true,
+          "explanation": "Richtig: Compose ist das deklarative Gegenstück zu React in der nativen Welt."
+        },
+        {
+          "text": "Ein Werkzeug zum Komprimieren von APK-Dateien.",
+          "isCorrect": false,
+          "explanation": "Falsch: Compose hat nichts mit Komprimierung zu tun."
+        },
+        {
+          "text": "Eine Bibliothek für Musik-Apps.",
+          "isCorrect": false,
+          "explanation": "Falsch: Compose ist ein UI-Framework, keine Musikbibliothek."
+        },
+        {
+          "text": "Ein Plugin für Android Studio.",
+          "isCorrect": false,
+          "explanation": "Falsch: Compose ist ein Framework, kein Plugin."
+        }
+      ]
+    },
+    {
+      "question": "Welches Konzept teilen React und Jetpack Compose?",
+      "area": "Kotlin",
+      "options": [
+        {
+          "text": "Deklarative UI-Programmierung: Du beschreibst, was du sehen willst, nicht wie es gebaut wird.",
+          "isCorrect": true,
+          "explanation": "Richtig: beide nutzen das deklarative Modell."
+        },
+        {
+          "text": "Beide nutzen JavaScript als Programmiersprache.",
+          "isCorrect": false,
+          "explanation": "Falsch: Compose nutzt Kotlin, nicht JavaScript."
+        },
+        {
+          "text": "Beide rendern HTML im Browser.",
+          "isCorrect": false,
+          "explanation": "Falsch: Compose rendert native UI, nicht HTML."
+        },
+        {
+          "text": "Es gibt keine Gemeinsamkeiten, sie sind grundverschieden.",
+          "isCorrect": false,
+          "explanation": "Falsch: das deklarative Modell ist eine fundamentale Gemeinsamkeit."
+        }
+      ]
+    },
+    {
+      "question": "Muss ich Java können, um Kotlin zu lernen?",
+      "area": "Kotlin",
+      "options": [
+        {
+          "text": "Nein, Kotlin ist eine eigenständige Sprache, die du ohne Java-Kenntnisse lernen kannst.",
+          "isCorrect": true,
+          "explanation": "Richtig: TypeScript-Kenntnisse helfen mehr als Java-Kenntnisse."
+        },
+        {
+          "text": "Ja, Kotlin baut auf Java auf und ist ohne Java-Kenntnisse nicht verständlich.",
+          "isCorrect": false,
+          "explanation": "Falsch: Kotlin ist eigenständig, Java-Kompatibilität ist ein Feature, keine Voraussetzung."
+        },
+        {
+          "text": "Nur wenn du Android-Apps bauen willst.",
+          "isCorrect": false,
+          "explanation": "Falsch: auch für Android brauchst du kein Java."
+        },
+        {
+          "text": "Nur für fortgeschrittene Themen wie Coroutines.",
+          "isCorrect": false,
+          "explanation": "Falsch: Coroutines sind ein Kotlin-Feature, kein Java-Feature."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der Vorteil von Kotlin gegenüber Java bei Null-Werten?",
+      "area": "Kotlin",
+      "options": [
+        {
+          "text": "Kotlin unterscheidet zwischen Variablen, die null sein können, und solchen, die es nicht sein können.",
+          "isCorrect": true,
+          "explanation": "Richtig: das eliminiert Null-Pointer-Exceptions zur Kompilierzeit."
+        },
+        {
+          "text": "Kotlin erlaubt keine null-Werte.",
+          "isCorrect": false,
+          "explanation": "Falsch: Kotlin erlaubt null, aber nur wenn explizit deklariert."
+        },
+        {
+          "text": "Kotlin fängt alle Null-Fehler automatisch ab und behebt sie.",
+          "isCorrect": false,
+          "explanation": "Falsch: Kotlin verhindert sie zur Kompilierzeit, fängt sie nicht zur Laufzeit."
+        },
+        {
+          "text": "Es gibt keinen Unterschied, beide behandeln null gleich.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Null-Sicherheit ist eines der Hauptmerkmale von Kotlin."
+        }
+      ]
+    },
+    {
+      "question": "Kannst du Kotlin auch außerhalb von Android nutzen?",
+      "area": "Kotlin",
+      "options": [
+        {
+          "text": "Ja, für Server, plattformübergreifende Apps und sogar Frontend mit Kotlin/JS.",
+          "isCorrect": true,
+          "explanation": "Richtig: Kotlin ist eine universelle Allzwecksprache."
+        },
+        {
+          "text": "Nein, Kotlin ist ausschließlich für Android gedacht.",
+          "isCorrect": false,
+          "explanation": "Falsch: Kotlin wird in vielen Bereichen eingesetzt."
+        },
+        {
+          "text": "Nur für Server-Anwendungen, nicht für Frontend.",
+          "isCorrect": false,
+          "explanation": "Falsch: Kotlin/JS ermöglicht Frontend-Entwicklung."
+        },
+        {
+          "text": "Nur wenn du ein JetBrains-Abonnement hast.",
+          "isCorrect": false,
+          "explanation": "Falsch: Kotlin ist Open Source und kostenlos."
+        }
+      ]
+    },
+    {
+      "question": "Wie lange dauert es ungefähr, Kotlin zu lernen, wenn du React kannst?",
+      "area": "Kotlin",
+      "options": [
+        {
+          "text": "Zwei bis vier Wochen für Grundlagen, drei bis sechs Monate für produktive Entwicklung.",
+          "isCorrect": true,
+          "explanation": "Richtig: die Lernkurve ist steil, aber machbar."
+        },
+        {
+          "text": "Ein bis zwei Tage, weil Kotlin JavaScript sehr ähnlich ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: Kotlin ist eine andere Sprache mit anderen Konzepten."
+        },
+        {
+          "text": "Mehrere Jahre, weil Kotlin eine komplett andere Denkweise erfordert.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Grundlagen sind in Wochen lernbar."
+        },
+        {
+          "text": "Genauso lange wie Java, etwa ein Jahr.",
+          "isCorrect": false,
+          "explanation": "Falsch: Kotlin ist schneller zu lernen als Java."
+        }
+      ]
+    },
+    {
+      "question": "Ist Jetpack Compose bereit für produktive Apps?",
+      "area": "Kotlin",
+      "options": [
+        {
+          "text": "Ja, seit 2021 stabil und von Google für neue Apps empfohlen.",
+          "isCorrect": true,
+          "explanation": "Richtig: Compose ist produktionsreif und wird von großen Apps genutzt."
+        },
+        {
+          "text": "Nein, Compose ist noch in der Beta-Phase.",
+          "isCorrect": false,
+          "explanation": "Falsch: Compose ist seit 2021 stabil."
+        },
+        {
+          "text": "Nur für kleine Apps, nicht für große Projekte.",
+          "isCorrect": false,
+          "explanation": "Falsch: auch große Apps wie Google Maps nutzen Compose."
+        },
+        {
+          "text": "Nur in Kombination mit XML-Layouts.",
+          "isCorrect": false,
+          "explanation": "Falsch: Compose kann XML vollständig ersetzen."
+        }
+      ]
+    },
+    {
+      "question": "Warum ist die konzeptionelle Nähe zwischen React und Compose hilfreich?",
+      "area": "Kotlin",
+      "options": [
+        {
+          "text": "Weil du das deklarative Denkmodell bereits kennst und nur die Syntax lernen musst.",
+          "isCorrect": true,
+          "explanation": "Richtig: das Denkmodell ist dasselbe, nur die Sprache ist anders."
+        },
+        {
+          "text": "Weil du React-Code direkt in Compose kopieren kannst.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Code ist nicht kompatibel, nur das Konzept."
+        },
+        {
+          "text": "Weil Compose in JavaScript geschrieben ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: Compose ist in Kotlin geschrieben."
+        },
+        {
+          "text": "Es gibt keine konzeptionelle Nähe, das ist ein Missverständnis.",
+          "isCorrect": false,
+          "explanation": "Falsch: Google hat sich bei Compose bewusst an React orientiert."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Installiere Android Studio und erstelle ein neues Projekt mit einer Empty Compose Activity. Ändere den Begrüßungstext und füge einen Button hinzu, der bei Klick einen Zähler erhöht. Starte die App im Emulator und beobachte, wie Compose die UI bei Zustandsänderungen automatisch aktualisiert.",
+    "expectation": "Ein natives Android-Projekt mit Kotlin und Jetpack Compose wurde erstellt und im Emulator getestet. Das deklarative UI-Modell von Compose wurde praktisch erfahren.",
+    "checklist": [
+      "Android Studio installiert und ein neues Projekt mit Empty Compose Activity erstellt.",
+      "Den Begrüßungstext geändert.",
+      "Einen Button mit Zähler-Logik hinzugefügt.",
+      "Die App im Emulator gestartet.",
+      "Die automatische UI-Aktualisierung bei Zustandsänderungen beobachtet."
+    ],
+    "portfolioItem": "P04"
+  },
+  "audio": {
+    "file": "M05-05-01.mp3",
+    "durationSeconds": 1320,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Muss ich Java können, um Kotlin zu lernen?",
+      "answer": "Nein, du kannst Kotlin lernen, ohne jemals Java geschrieben zu haben. Kotlin ist eine eigenständige Sprache mit eigener Syntax und eigenen Konzepten. Die Kompatibilität mit Java bedeutet nur, dass du Java-Bibliotheken aus Kotlin heraus nutzen kannst, nicht dass du Java können musst. Wenn du bereits JavaScript oder TypeScript kannst, wirst du viele Konzepte in Kotlin wiedererkennen: Funktionen als Werte, Lambda-Ausdrücke, Destrukturierung und optionale Parameter. Der Umstieg von TypeScript auf Kotlin ist deutlich einfacher als der Umstieg von Java auf Kotlin."
+    },
+    {
+      "question": "Brauche ich Android Studio für native Android-Entwicklung?",
+      "answer": "Offiziell ja, Android Studio ist die empfohlene Entwicklungsumgebung von Google. Es basiert auf IntelliJ IDEA, derselben Plattform wie viele andere JetBrains-IDEs, und bietet spezielle Werkzeuge für Android: einen visuellen Layout-Editor, einen Emulator-Manager, einen Profiler für Performance-Analysen und eine tiefe Integration mit dem Android SDK. Du kannst Android-Apps auch mit anderen Editoren wie VS Code schreiben, aber dann fehlen dir viele der spezialisierten Werkzeuge, und du musst Builds und Emulator manuell über die Kommandozeile steuern."
+    },
+    {
+      "question": "Wie lange dauert es, Kotlin zu lernen, wenn ich schon React kann?",
+      "answer": "Für die Grundlagen reichen zwei bis vier Wochen intensives Lernen. Du musst die Syntax lernen, die Konzepte der objektorientierten Programmierung verstehen, falls du sie nicht aus TypeScript kennst, und dich mit der Android-Architektur vertraut machen. Für produktive native Entwicklung solltest du drei bis sechs Monate einplanen. Der Vorteil: Du musst nicht alles auf einmal lernen. Du kannst mit einfachen UIs in Compose anfangen und nach und nach tiefere Konzepte wie Coroutines für asynchrone Programmierung oder Dependency Injection mit Hilt lernen."
+    },
+    {
+      "question": "Kann ich Kotlin auch außerhalb von Android nutzen?",
+      "answer": "Ja, Kotlin ist eine universelle Sprache. Du kannst damit Server-Anwendungen mit Ktor oder Spring Boot schreiben, plattformübergreifende Apps mit Kotlin Multiplatform bauen, die auf Android, iOS, Desktop und Web laufen, oder sogar Frontend-Code mit Kotlin/JS schreiben, das zu JavaScript kompiliert wird. Kotlin ist nicht auf Android beschränkt, sondern eine vollwertige Allzwecksprache, die in vielen Bereichen eingesetzt wird. Die Investition in Kotlin lohnt sich also auch dann, wenn du später nicht ausschließlich Android-Apps bauen willst."
+    },
+    {
+      "question": "Ist Jetpack Compose bereit für produktive Apps?",
+      "answer": "Ja, Compose ist seit 2021 stabil und wird von Google für neue Apps empfohlen. Große Apps wie Google Play, Google Maps und Twitter nutzen Compose in Teilen oder vollständig. Die Bibliothek ist ausgereift, die Performance ist gut, und das Ökosystem an Drittanbieter-Bibliotheken wächst schnell. Für neue Apps ist Compose der empfohlene Weg, und Google entwickelt neue Funktionen zuerst für Compose. Das alte XML-Layout wird nicht abgeschafft, aber es bekommt keine großen neuen Funktionen mehr."
+    }
+  ]
+}

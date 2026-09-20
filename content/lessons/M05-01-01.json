@@ -1,0 +1,655 @@
+{
+  "id": "M05-01-01",
+  "title": "Wie eine App auf dem Handy läuft",
+  "durationMinutes": 34,
+  "prerequisites": [
+    "M01-01-03",
+    "M01-03-01",
+    "M01-05-02"
+  ],
+  "terms": [
+    {
+      "term": "APK",
+      "definition": "Android Package Kit, das Installationspaket für Android-Apps. Eine APK-Datei ist ein ZIP-Archiv, das den kompilierten Code, Ressourcen wie Bilder und Layouts, die Manifest-Datei und eine digitale Signatur enthält. Ohne gültige Signatur verweigert Android die Installation."
+    },
+    {
+      "term": "Sandbox",
+      "definition": "Eine isolierte Laufzeitumgebung, in der jede App unter Android und iOS betrieben wird. Die Sandbox stellt sicher, dass eine App nicht auf die Daten einer anderen App zugreifen kann, es sei denn, das Betriebssystem erlaubt es ausdrücklich über Berechtigungen oder definierte Schnittstellen."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir ein Haus mit vielen Wohnungen vor. Jede Wohnung hat ihre eigene Tür, ihre eigenen Räume und ihre eigenen Möbel. Die Bewohner einer Wohnung können nicht einfach in eine andere Wohnung gehen, ohne zu klingeln oder einen Schlüssel zu haben. Das Treppenhaus und der Fahrstuhl gehören allen, aber die Wohnungen sind privat.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Genau so funktioniert eine App auf deinem Handy. Jede App ist wie eine eigene Wohnung in einem großen Haus, dem Betriebssystem. Sie hat ihren eigenen Speicherbereich, ihre eigenen Daten und ihre eigenen Regeln. Das Betriebssystem ist der Vermieter, der dafür sorgt, dass keine App unerlaubt in die Wohnung einer anderen App eindringt. Wenn eine App die Kamera oder das Mikrofon nutzen will, muss sie beim Vermieter anfragen, genau wie ein Bewohner den Hausmeister um den Schlüssel für den Dachboden bitten muss.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was genau ist eine App, und woraus besteht sie technisch?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Eine App, kurz für Application, ist ein eigenständiges Programm, das auf einem mobilen Betriebssystem läuft. Technisch besteht eine Android-App aus mehreren Teilen: dem kompilierten Code, der in der Programmiersprache Kotlin oder Java geschrieben und in eine für Android verständliche Form übersetzt wurde, den Ressourcen wie Bilder, Texte und Layout-Dateien, einer Manifest-Datei, die dem Betriebssystem sagt, was die App alles braucht und darf, und einer digitalen Signatur, die die Echtheit der App bestätigt. All diese Teile werden in eine einzige Datei verpackt, die APK.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Eine App, kurz für Application, ist ein eigenständiges Programm, das auf einem mobilen Betriebssystem wie Android oder iOS läuft und als signiertes Paket installiert wird.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Wenn du im Play Store auf Installieren tippst, lädt dein Handy eine APK-Datei herunter. Diese Datei enthält alles, was die App zum Laufen braucht. Das Android-System öffnet die APK, prüft die Signatur, liest die Manifest-Datei, um zu wissen, welche Berechtigungen die App braucht, und installiert dann den Code und die Ressourcen in einem eigenen, geschützten Bereich. Erst danach erscheint das App-Symbol auf deinem Bildschirm und du kannst die App starten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Zu verstehen, was in einer APK steckt, ist wichtig, weil du als Entwickler genau diese APK baust. Jeder Fehler in der Manifest-Datei, jede fehlende Ressource und jede ungültige Signatur führt dazu, dass deine App nicht installiert werden kann. Wenn du weißt, was Android von deiner APK erwartet, kannst du Fehler bei der Installation gezielt vermeiden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist eine APK genau, und warum ist sie mehr als nur eine EXE-Datei fürs Handy?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen Umzugskarton vor, in den du alle Sachen für deine neue Wohnung packst: Kleidung, Bücher, Küchengeräte und einen Zettel mit deinem Namen und deiner neuen Adresse. Der Karton wird mit einem speziellen Klebeband verschlossen, das nur du öffnen kannst, und mit einem Siegel versehen, das beweist, dass der Karton wirklich von dir kommt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Die APK ist dieser Umzugskarton für Android. Sie ist ein ZIP-Archiv, das den gesamten Code der App, alle Bilder, Layouts und Texte, die Manifest-Datei mit den Metadaten und eine digitale Signatur enthält. Anders als eine EXE-Datei unter Windows, die einfach nur ausführbarer Code ist, enthält eine APK auch alle Ressourcen und vor allem die Signatur, ohne die Android die Installation komplett verweigert. Die APK ist also ein signiertes, vollständiges Paket, das alles mitbringt, was die App zum Leben braucht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Eine APK, Android Package Kit, ist das signierte Installationspaket für Android-Apps, das kompilierten Code, Ressourcen, die Manifest-Datei und eine digitale Signatur in einem ZIP-Archiv bündelt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Wenn du deine App mit Expo oder Android Studio baust, erzeugt das Build-Werkzeug eine APK-Datei. Diese Datei kannst du auf dein Handy kopieren und installieren, oder du lädst sie in den Play Store hoch. Der Play Store prüft die Signatur, scannt die APK auf Schadsoftware und stellt sie dann zum Download bereit. Der Nutzer sieht von all dem nichts, er tippt nur auf Installieren, aber im Hintergrund läuft genau dieser Prozess ab.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die APK ist das Endprodukt deiner Arbeit als App-Entwickler. Alles, was du programmierst, gestaltest und konfigurierst, landet am Ende in dieser einen Datei. Wenn du verstehst, wie eine APK aufgebaut ist und welche Rolle die Signatur spielt, kannst du Probleme beim Bauen und Verteilen deiner App viel schneller lösen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist die Sandbox, und warum ist sie das wichtigste Sicherheitskonzept auf dem Handy?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen Sandkasten auf einem Spielplatz vor. Jedes Kind hat seinen eigenen Bereich im Sand, mit eigenen Förmchen und Eimern. Die Kinder können sich sehen und miteinander reden, aber sie können nicht einfach die Förmchen eines anderen Kindes nehmen. Wenn ein Kind dem anderen ein Förmchen leihen will, muss es das Förmchen über den Rand des Sandkastens reichen, und beide müssen einverstanden sein.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Die Sandbox ist genau dieser Sandkasten, nur für Apps. Jede App unter Android und iOS läuft in einer streng isolierten Umgebung, ihrer eigenen Sandbox. Sie hat ihren eigenen Speicherbereich, ihre eigenen Dateien und ihre eigenen Prozesse. Eine App kann nicht auf die Daten einer anderen App zugreifen, nicht deren Dateien lesen und nicht deren Netzwerkverbindungen sehen. Wenn eine App mit einer anderen App kommunizieren will, muss sie dafür die vom Betriebssystem bereitgestellten, kontrollierten Schnittstellen nutzen. Die Sandbox ist das Fundament der mobilen Sicherheit.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Die Sandbox ist eine isolierte Laufzeitumgebung, in der jede App unter Android und iOS betrieben wird und die den Zugriff auf Daten anderer Apps ohne ausdrückliche Erlaubnis des Betriebssystems verhindert.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Wenn du eine Foto-App und eine Chat-App auf deinem Handy hast, kann die Chat-App nicht einfach auf deine Fotos zugreifen. Sie muss dich erst um Erlaubnis fragen, und du musst dem Betriebssystem sagen: Ja, die Chat-App darf auf die Fotos zugreifen. Das Betriebssystem öffnet dann eine kontrollierte Tür zwischen den beiden Sandboxen. Ohne deine Zustimmung bleibt die Tür zu, und die Chat-App sieht kein einziges Foto.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die Sandbox ist der Grund, warum Handys so viel sicherer sind als Desktop-Computer. Auf einem Desktop kann ein Programm oft auf alle Dateien des Benutzers zugreifen. Auf einem Handy ist das ohne ausdrückliche Berechtigung unmöglich. Als Entwickler musst du die Sandbox-Regeln kennen, weil jede Berechtigung, die deine App braucht, im Manifest deklariert und vom Nutzer genehmigt werden muss.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Wie startet eine App eigentlich, und was passiert dabei im Hintergrund?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Wenn du auf das Symbol einer App tippst, startet das Betriebssystem einen neuen Prozess für diese App. Ein Prozess ist ein laufendes Programm mit eigenem Speicher. Das Betriebssystem lädt den Code der App aus der APK in den Speicher, richtet die Sandbox ein und übergibt der App die Kontrolle. Die App beginnt dann, ihre Benutzeroberfläche aufzubauen und auf Eingaben zu warten. Dieser Startvorgang dauert nur den Bruchteil einer Sekunde, aber in dieser Zeit laufen Dutzende von Systemfunktionen ab, die die App startklar machen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Anders als eine Webseite, die bei jedem Besuch komplett neu geladen wird, bleibt eine App nach dem Start im Speicher, bis du sie bewusst schließt oder das Betriebssystem sie aus Speichermangel beendet. Wenn du zwischen Apps wechselst, friert das Betriebssystem die nicht sichtbare App ein und taut sie wieder auf, wenn du zurückkehrst. Dieses Verhalten spart Akku und macht das Wechseln zwischen Apps schnell und flüssig.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Den App-Lebenszyklus zu verstehen ist für Entwickler entscheidend. Wenn deine App in den Hintergrund tritt, musst du wichtige Daten speichern, weil das Betriebssystem die App jederzeit beenden kann, um Speicher freizugeben. Wenn die App wieder in den Vordergrund kommt, musst du den letzten Zustand wiederherstellen. Wer diesen Zyklus ignoriert, produziert Apps, die abstürzen oder Daten verlieren.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist der Unterschied zwischen Android und iOS bei der App-Ausführung?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Android und iOS verfolgen unterschiedliche Ansätze bei der App-Ausführung. Android erlaubt Apps mehr Freiheiten: Sie können im Hintergrund laufen, Dienste starten und auf mehr Hardware zugreifen. iOS ist restriktiver: Apps werden strenger überwacht, Hintergrundaktivitäten sind stark eingeschränkt, und der Zugriff auf Hardware ist stärker reglementiert. Beide Systeme nutzen die Sandbox, aber iOS setzt sie noch strenger durch als Android.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Für dich als Entwickler bedeutet das: Eine App, die auf Android problemlos läuft, verhält sich auf iOS möglicherweise anders, weil iOS Hintergrundaufgaben schneller beendet oder bestimmte Hardwarezugriffe anders handhabt. Cross-Plattform-Werkzeuge wie React Native gleichen diese Unterschiede größtenteils aus, aber du solltest die grundlegenden Unterschiede kennen, um Überraschungen zu vermeiden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Auch wenn du hauptsächlich für Android entwickelst, wirst du früher oder später mit iOS in Berührung kommen, sei es, weil ein Kunde eine iOS-Version wünscht oder weil du deine eigene App auf beiden Plattformen anbieten willst. Die Unterschiede zwischen den Plattformen zu kennen, hilft dir, von Anfang an plattformübergreifend zu denken und spätere Überraschungen zu vermeiden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Wie testet man eine App, ohne sie jedes Mal auf ein echtes Handy zu laden?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Dafür gibt es Emulatoren und Simulatoren. Ein Emulator ist ein Programm, das ein echtes Handy auf deinem Computer nachbildet, inklusive Prozessor, Speicher, Kamera und Sensoren. Android-Entwickler nutzen den Android-Emulator, der mit Android Studio kommt. Ein Simulator, wie der iOS-Simulator von Apple, bildet das Gerät weniger hardwarenah nach, ist dafür aber schneller. Beide erlauben dir, deine App auf deinem Entwicklungsrechner zu starten und zu testen, als ob sie auf einem echten Gerät liefe.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Wenn du mit Expo eine App entwickelst, kannst du sie mit dem Befehl npx expo start auf deinem Handy oder im Emulator testen. Expo Go, eine spezielle App von Expo, lädt deinen Code über das Netzwerk und führt ihn aus, ohne dass du eine APK bauen musst. Das beschleunigt die Entwicklung enorm, weil du Änderungen in Sekunden statt in Minuten siehst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Der Emulator ist dein wichtigstes Werkzeug während der Entwicklung. Ohne ihn müsstest du nach jeder Code-Änderung eine APK bauen, auf dein Handy kopieren und installieren, was mehrere Minuten dauert. Mit dem Emulator siehst du Änderungen in Sekunden. Das ist der Unterschied zwischen flüssigem Arbeiten und ständigem Warten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "text": "Also noch einmal ganz kurz: Eine App ist ein eigenständiges Programm, das als signiertes APK-Paket installiert wird und in einer streng isolierten Sandbox läuft. Die APK enthält Code, Ressourcen, Manifest und Signatur in einem ZIP-Archiv. Die Sandbox verhindert, dass eine App ohne Erlaubnis auf die Daten einer anderen App zugreift. Der Emulator erlaubt dir, die App während der Entwicklung auf deinem Rechner zu testen, ohne sie jedes Mal auf ein echtes Handy laden zu müssen.",
+      "isKeySentence": true
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Eine App, kurz für Application, ist ein eigenständiges Programm, das auf einem mobilen Betriebssystem wie Android oder iOS läuft. Eine App wird als Paket installiert, hat einen eigenen Speicherbereich und kann über das Betriebssystem mit Hardware wie Kamera oder GPS kommunizieren.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Eine APK, Android Package Kit, ist das Installationspaket für Android-Apps. Eine APK-Datei ist ein ZIP-Archiv, das den kompilierten Code, Ressourcen wie Bilder und Layouts, die Manifest-Datei und eine digitale Signatur enthält. Ohne gültige Signatur verweigert Android die Installation.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Die Sandbox ist eine isolierte Laufzeitumgebung, in der jede App unter Android und iOS betrieben wird. Die Sandbox stellt sicher, dass eine App nicht auf die Daten einer anderen App zugreifen kann, es sei denn, das Betriebssystem erlaubt es ausdrücklich über Berechtigungen oder definierte Schnittstellen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Warum kann ich eine Android-App nicht einfach wie eine EXE-Datei doppelklicken und installieren?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Weil Android ein anderes Sicherheitsmodell als Windows hat. Eine APK muss digital signiert sein, und Android prüft diese Signatur vor der Installation. Ohne gültige Signatur wird die Installation komplett verweigert. Zusätzlich muss die APK eine Manifest-Datei enthalten, die dem Betriebssystem sagt, welche Berechtigungen die App braucht. Eine EXE-Datei unter Windows hat diese Anforderungen nicht, deshalb ist der direkte Vergleich irreführend. Die APK ist ein vollständiges, signiertes Paket, kein einfaches ausführbares Programm.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Kann eine App ohne meine Erlaubnis auf meine Kamera zugreifen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Nein, dank der Sandbox und des Berechtigungssystems von Android ist das nicht möglich. Jede App muss die Kamera-Berechtigung in ihrer Manifest-Datei deklarieren, und seit Android 6 muss der Nutzer diese Berechtigung zur Laufzeit ausdrücklich erteilen. Die App kann die Kamera erst nutzen, nachdem du auf Erlauben getippt hast. Du kannst erteilte Berechtigungen jederzeit in den Einstellungen deines Handys widerrufen, und die App verliert sofort den Zugriff.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was passiert mit meiner App, wenn ich das Handy ausschalte?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Wenn du das Handy ausschaltest, beendet das Betriebssystem alle laufenden Apps und gibt den belegten Speicher frei. Beim nächsten Einschalten sind alle Apps wieder im Ausgangszustand und müssen neu gestartet werden. Gut programmierte Apps speichern ihren Zustand, bevor sie beendet werden, sodass du nach dem Neustart genau da weitermachen kannst, wo du aufgehört hast. Apps, die ihren Zustand nicht speichern, verlieren alle nicht gesicherten Daten, wenn das Handy ausgeschaltet wird oder der Akku leer ist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Brauche ich ein echtes Android-Handy zum Entwickeln?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Nein, du kannst den Android-Emulator nutzen, der mit Android Studio kommt oder von Expo gestartet wird. Der Emulator bildet ein echtes Handy auf deinem Computer nach und reicht für die allermeisten Entwicklungsarbeiten völlig aus. Für bestimmte Tests, zum Beispiel die Kamerafunktion oder GPS, ist ein echtes Gerät jedoch besser geeignet, weil der Emulator diese Hardware nur simulieren kann. Vor der Veröffentlichung solltest du deine App auf jeden Fall auf mindestens einem echten Gerät testen, um sicherzugehen, dass alles wie erwartet funktioniert.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Warum sind Apps auf dem Handy sicherer als Programme auf dem Computer?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Weil mobile Betriebssysteme von Grund auf mit der Sandbox als zentralem Sicherheitskonzept entwickelt wurden. Jede App läuft isoliert, und der Zugriff auf Hardware, Daten anderer Apps und Systemfunktionen ist streng reglementiert. Desktop-Betriebssysteme wie Windows oder macOS haben diese Isolation erst nachträglich eingebaut und bieten Programme oft mehr Freiheiten, als sie eigentlich brauchen. Hinzu kommt, dass mobile Apps nur aus kontrollierten Stores installiert werden können, die jede App vor der Veröffentlichung prüfen, während man auf dem Desktop Programme aus beliebigen Quellen installieren kann.",
+      "isKeySentence": false
+    }
+  ],
+  "practiceExample": {
+    "text": "Jede App unter Android läuft in einer eigenen Sandbox und wird als signierte APK installiert. Die APK enthält Code, Ressourcen und eine Manifest-Datei, die dem Betriebssystem sagt, was die App darf und braucht.",
+    "repoNote": "repo-futuredev",
+    "location": "apps/mobile/android/app/src/main/AndroidManifest.xml (Manifest-Datei der FutureDev-App)"
+  },
+  "quiz": [
+    {
+      "question": "Welches Alltagsbild beschreibt die Sandbox einer App am treffendsten?",
+      "area": "App-Grundlagen",
+      "options": [
+        {
+          "text": "Eine eigene Wohnung in einem Mehrfamilienhaus, mit eigenem Schloss und eigenen Räumen.",
+          "isCorrect": true,
+          "explanation": "Richtig: jede App hat ihren eigenen isolierten Bereich, wie eine Wohnung im Haus des Betriebssystems."
+        },
+        {
+          "text": "Ein öffentlicher Park, in dem jeder machen kann, was er will, solange er niemanden stört.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Sandbox ist streng isoliert, nicht öffentlich und frei zugänglich."
+        },
+        {
+          "text": "Ein Bürogebäude, in dem alle Mitarbeiter Zugriff auf alle Akten haben.",
+          "isCorrect": false,
+          "explanation": "Falsch: in der Sandbox hat keine App Zugriff auf die Daten einer anderen App."
+        },
+        {
+          "text": "Ein Supermarkt, in dem jeder Kunde alle Produkte anfassen und mitnehmen kann.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Sandbox verhindert genau diesen unkontrollierten Zugriff."
+        }
+      ]
+    },
+    {
+      "question": "Wofür steht die Abkürzung APK?",
+      "area": "App-Grundlagen",
+      "options": [
+        {
+          "text": "Android Package Kit, das signierte Installationspaket für Android-Apps.",
+          "isCorrect": true,
+          "explanation": "Richtig: APK steht für Android Package Kit und ist das Standard-Installationsformat."
+        },
+        {
+          "text": "Android Programming Kernel, der Kern jeder Android-App.",
+          "isCorrect": false,
+          "explanation": "Falsch: APK steht für Android Package Kit, nicht für Programming Kernel."
+        },
+        {
+          "text": "Application Process Key, ein Sicherheitsschlüssel für Apps.",
+          "isCorrect": false,
+          "explanation": "Falsch: APK ist das Installationspaket, kein Sicherheitsschlüssel."
+        },
+        {
+          "text": "Android Platform Kit, das Entwicklerwerkzeug von Google.",
+          "isCorrect": false,
+          "explanation": "Falsch: das Entwicklerwerkzeug heißt Android SDK, nicht APK."
+        }
+      ]
+    },
+    {
+      "question": "Was enthält eine APK-Datei?",
+      "area": "App-Grundlagen",
+      "options": [
+        {
+          "text": "Kompilierten Code, Ressourcen, die Manifest-Datei und eine digitale Signatur in einem ZIP-Archiv.",
+          "isCorrect": true,
+          "explanation": "Richtig: die APK bündelt alle diese Bestandteile in einer Datei."
+        },
+        {
+          "text": "Nur den Quellcode der App, den Android bei der Installation selbst kompiliert.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Code ist bereits kompiliert, Android kompiliert nicht bei der Installation."
+        },
+        {
+          "text": "Ausschließlich Bilder und Layout-Dateien, der Code wird separat geladen.",
+          "isCorrect": false,
+          "explanation": "Falsch: die APK enthält auch den kompilierten Code, nicht nur Ressourcen."
+        },
+        {
+          "text": "Nur die Manifest-Datei und die Signatur, der Rest wird aus dem Play Store nachgeladen.",
+          "isCorrect": false,
+          "explanation": "Falsch: die APK ist ein vollständiges Paket, nichts wird nachgeladen."
+        }
+      ]
+    },
+    {
+      "question": "Was passiert, wenn eine APK keine gültige Signatur hat?",
+      "area": "App-Grundlagen",
+      "options": [
+        {
+          "text": "Android verweigert die Installation komplett.",
+          "isCorrect": true,
+          "explanation": "Richtig: ohne gültige Signatur keine Installation, das ist eine harte Sicherheitsregel."
+        },
+        {
+          "text": "Android installiert die App, zeigt aber eine Warnung an.",
+          "isCorrect": false,
+          "explanation": "Falsch: Android verweigert die Installation, nicht nur eine Warnung."
+        },
+        {
+          "text": "Android installiert die App nur im abgesicherten Modus.",
+          "isCorrect": false,
+          "explanation": "Falsch: es gibt keinen abgesicherten Modus für unsignierte Apps."
+        },
+        {
+          "text": "Android fragt den Nutzer, ob er der nicht signierten App vertraut.",
+          "isCorrect": false,
+          "explanation": "Falsch: Android fragt nicht, es verweigert die Installation ohne Signatur."
+        }
+      ]
+    },
+    {
+      "question": "Warum ist die Sandbox das wichtigste Sicherheitskonzept auf dem Handy?",
+      "area": "App-Grundlagen",
+      "options": [
+        {
+          "text": "Weil sie verhindert, dass eine App ohne Erlaubnis auf die Daten einer anderen App zugreift.",
+          "isCorrect": true,
+          "explanation": "Richtig: die Sandbox isoliert jede App streng von allen anderen."
+        },
+        {
+          "text": "Weil sie die App schneller macht, indem sie den Speicherverbrauch begrenzt.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Sandbox dient der Sicherheit, nicht der Geschwindigkeit."
+        },
+        {
+          "text": "Weil sie verhindert, dass der Nutzer die App deinstalliert.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Sandbox hat nichts mit der Deinstallation zu tun."
+        },
+        {
+          "text": "Weil sie die App vor Viren schützt, die aus dem Internet kommen.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Sandbox isoliert Apps voneinander, sie ist kein Virenscanner."
+        }
+      ]
+    },
+    {
+      "question": "Was ist ein Emulator in der App-Entwicklung?",
+      "area": "App-Grundlagen",
+      "options": [
+        {
+          "text": "Ein Programm, das ein echtes Handy auf dem Computer nachbildet, um Apps zu testen.",
+          "isCorrect": true,
+          "explanation": "Richtig: der Emulator simuliert ein echtes Gerät auf dem Entwicklungsrechner."
+        },
+        {
+          "text": "Ein Werkzeug, das den Code der App automatisch verbessert und Fehler behebt.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Emulator testet die App, er verbessert nicht automatisch den Code."
+        },
+        {
+          "text": "Ein spezielles Kabel, das das Handy mit dem Computer verbindet.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Emulator ist eine Software, kein Kabel."
+        },
+        {
+          "text": "Ein Online-Dienst, der die App auf vielen verschiedenen Geräten gleichzeitig testet.",
+          "isCorrect": false,
+          "explanation": "Falsch: das wäre ein Test-Dienst, kein Emulator."
+        }
+      ]
+    },
+    {
+      "question": "Was passiert mit einer App, wenn du auf deinem Handy zwischen Apps wechselst?",
+      "area": "App-Grundlagen",
+      "options": [
+        {
+          "text": "Das Betriebssystem friert die nicht sichtbare App ein und taut sie beim Zurückkehren wieder auf.",
+          "isCorrect": true,
+          "explanation": "Richtig: Einfrieren und Auftauen spart Akku und macht den Wechsel schnell."
+        },
+        {
+          "text": "Die App wird sofort beendet und muss beim nächsten Mal komplett neu starten.",
+          "isCorrect": false,
+          "explanation": "Falsch: die App wird nicht sofort beendet, sondern eingefroren."
+        },
+        {
+          "text": "Die App läuft im Hintergrund unverändert weiter, als ob sie sichtbar wäre.",
+          "isCorrect": false,
+          "explanation": "Falsch: Hintergrund-Apps werden eingeschränkt, um Akku zu sparen."
+        },
+        {
+          "text": "Die App wird auf eine externe Speicherkarte ausgelagert.",
+          "isCorrect": false,
+          "explanation": "Falsch: die App bleibt im Arbeitsspeicher, sie wird nicht ausgelagert."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der wichtigste Unterschied zwischen einer APK und einer EXE-Datei?",
+      "area": "App-Grundlagen",
+      "options": [
+        {
+          "text": "Die APK muss digital signiert sein und enthält alle Ressourcen, die EXE nicht zwingend.",
+          "isCorrect": true,
+          "explanation": "Richtig: Signaturpflicht und Ressourcenbündelung unterscheiden die APK von der EXE."
+        },
+        {
+          "text": "Die APK ist kleiner als eine EXE-Datei.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Größe ist kein definierender Unterschied."
+        },
+        {
+          "text": "Die APK läuft nur auf Samsung-Handys, die EXE nur auf Windows.",
+          "isCorrect": false,
+          "explanation": "Falsch: APKs laufen auf allen Android-Geräten, nicht nur Samsung."
+        },
+        {
+          "text": "Die APK enthält nur Bilder, die EXE nur Code.",
+          "isCorrect": false,
+          "explanation": "Falsch: beide enthalten Code, die APK zusätzlich Ressourcen."
+        }
+      ]
+    },
+    {
+      "question": "Warum musst du als Entwickler den App-Lebenszyklus verstehen?",
+      "area": "App-Grundlagen",
+      "options": [
+        {
+          "text": "Weil du Daten speichern musst, bevor das Betriebssystem deine App beendet, um Speicher freizugeben.",
+          "isCorrect": true,
+          "explanation": "Richtig: ohne Verständnis des Lebenszyklus verlierst du Daten bei App-Wechseln."
+        },
+        {
+          "text": "Weil du sonst keine App in den Play Store hochladen kannst.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Play Store prüft den Lebenszyklus nicht."
+        },
+        {
+          "text": "Weil Android-Apps ohne Lebenszyklus-Management doppelt so viel Akku verbrauchen.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Akkuverbrauch hängt nicht direkt vom Lebenszyklus-Verständnis ab."
+        },
+        {
+          "text": "Weil der Lebenszyklus gesetzlich vorgeschrieben ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: es gibt kein Gesetz, das den App-Lebenszyklus vorschreibt."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der Hauptgrund, warum Handys sicherer sind als Desktop-Computer?",
+      "area": "App-Grundlagen",
+      "options": [
+        {
+          "text": "Die Sandbox-Architektur, die jede App streng isoliert und Zugriffe nur mit Berechtigung erlaubt.",
+          "isCorrect": true,
+          "explanation": "Richtig: die Sandbox ist das Fundament der mobilen Sicherheit."
+        },
+        {
+          "text": "Handys haben kleinere Bildschirme und sind deshalb weniger angreifbar.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Bildschirmgröße hat nichts mit Sicherheit zu tun."
+        },
+        {
+          "text": "Mobile Apps werden in einer anderen Programmiersprache geschrieben als Desktop-Programme.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Programmiersprache bestimmt nicht die Sicherheit."
+        },
+        {
+          "text": "Handys haben keinen Internetzugang, deshalb können sie nicht angegriffen werden.",
+          "isCorrect": false,
+          "explanation": "Falsch: Handys haben selbstverständlich Internetzugang."
+        }
+      ]
+    },
+    {
+      "question": "Welche Rolle spielt die Manifest-Datei in einer APK?",
+      "area": "App-Grundlagen",
+      "options": [
+        {
+          "text": "Sie teilt dem Betriebssystem mit, welche Berechtigungen und Komponenten die App benötigt.",
+          "isCorrect": true,
+          "explanation": "Richtig: das Manifest ist die Deklaration aller Anforderungen der App an das System."
+        },
+        {
+          "text": "Sie enthält die Nutzungsbedingungen, die der Nutzer vor der Installation akzeptieren muss.",
+          "isCorrect": false,
+          "explanation": "Falsch: Nutzungsbedingungen sind nicht Teil der Manifest-Datei."
+        },
+        {
+          "text": "Sie speichert die Passwörter aller Nutzer der App.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Manifest-Datei speichert keine Nutzerdaten."
+        },
+        {
+          "text": "Sie ist das Icon, das auf dem Bildschirm des Handys angezeigt wird.",
+          "isCorrect": false,
+          "explanation": "Falsch: das Icon ist eine separate Bilddatei, nicht die Manifest-Datei."
+        }
+      ]
+    },
+    {
+      "question": "Warum ist der Emulator das wichtigste Werkzeug während der Entwicklung?",
+      "area": "App-Grundlagen",
+      "options": [
+        {
+          "text": "Weil du Änderungen in Sekunden statt in Minuten siehst, ohne jedes Mal eine APK bauen zu müssen.",
+          "isCorrect": true,
+          "explanation": "Richtig: der Emulator macht den Entwicklungszyklus um ein Vielfaches schneller."
+        },
+        {
+          "text": "Weil der Emulator automatisch alle Fehler im Code findet und behebt.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Emulator findet keine Fehler automatisch."
+        },
+        {
+          "text": "Weil Google für die Play-Store-Veröffentlichung einen Emulator-Test vorschreibt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Google schreibt keinen Emulator-Test vor."
+        },
+        {
+          "text": "Weil der Emulator die App für dich in den Play Store hochlädt.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Emulator hat nichts mit dem Play-Store-Upload zu tun."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Installiere Android Studio und starte den Android-Emulator mit einem beliebigen Geräteprofil. Öffne die Einstellungen des emulierten Geräts und navigiere zu den App-Informationen einer vorinstallierten App. Betrachte die Berechtigungen, die diese App deklariert. Notiere drei Berechtigungen und überlege, warum die App sie braucht. Öffne dann den Play Store im Emulator und suche nach einer beliebigen App. Lies die Beschreibung und die aufgelisteten Berechtigungen.",
+    "expectation": "Der Android-Emulator wurde gestartet, die Berechtigungen einer vorinstallierten App wurden eingesehen und mit ihrer Funktion in Verbindung gebracht. Das Konzept der APK als signiertes Paket und der Sandbox als isolierte Laufzeitumgebung wurde praktisch nachvollzogen.",
+    "checklist": [
+      "Android Studio installiert und den Emulator mit einem Geräteprofil gestartet.",
+      "Die Einstellungen des emulierten Geräts geöffnet.",
+      "Zu den App-Informationen einer vorinstallierten App navigiert.",
+      "Drei Berechtigungen der App notiert und ihre Notwendigkeit begründet.",
+      "Den Play Store im Emulator geöffnet und eine App gesucht.",
+      "Die Beschreibung und Berechtigungen der App gelesen."
+    ],
+    "portfolioItem": "P04"
+  },
+  "audio": {
+    "file": "M05-01-01.mp3",
+    "durationSeconds": 1360,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Warum kann ich eine Android-App nicht einfach wie eine EXE-Datei doppelklicken und installieren?",
+      "answer": "Weil Android ein anderes Sicherheitsmodell als Windows hat. Eine APK muss digital signiert sein, und Android prüft diese Signatur vor der Installation. Ohne gültige Signatur wird die Installation komplett verweigert. Zusätzlich muss die APK eine Manifest-Datei enthalten, die dem Betriebssystem sagt, welche Berechtigungen die App braucht. Eine EXE-Datei unter Windows hat diese Anforderungen nicht, deshalb ist der direkte Vergleich irreführend. Die APK ist ein vollständiges, signiertes Paket, kein einfaches ausführbares Programm."
+    },
+    {
+      "question": "Kann eine App ohne meine Erlaubnis auf meine Kamera zugreifen?",
+      "answer": "Nein, dank der Sandbox und des Berechtigungssystems von Android ist das nicht möglich. Jede App muss die Kamera-Berechtigung in ihrer Manifest-Datei deklarieren, und seit Android 6 muss der Nutzer diese Berechtigung zur Laufzeit ausdrücklich erteilen. Die App kann die Kamera erst nutzen, nachdem du auf Erlauben getippt hast. Du kannst erteilte Berechtigungen jederzeit in den Einstellungen deines Handys widerrufen, und die App verliert sofort den Zugriff."
+    },
+    {
+      "question": "Was passiert mit meiner App, wenn ich das Handy ausschalte?",
+      "answer": "Wenn du das Handy ausschaltest, beendet das Betriebssystem alle laufenden Apps und gibt den belegten Speicher frei. Beim nächsten Einschalten sind alle Apps wieder im Ausgangszustand und müssen neu gestartet werden. Gut programmierte Apps speichern ihren Zustand, bevor sie beendet werden, sodass du nach dem Neustart genau da weitermachen kannst, wo du aufgehört hast. Apps, die ihren Zustand nicht speichern, verlieren alle nicht gesicherten Daten, wenn das Handy ausgeschaltet wird oder der Akku leer ist."
+    },
+    {
+      "question": "Brauche ich ein echtes Android-Handy zum Entwickeln?",
+      "answer": "Nein, du kannst den Android-Emulator nutzen, der mit Android Studio kommt oder von Expo gestartet wird. Der Emulator bildet ein echtes Handy auf deinem Computer nach und reicht für die allermeisten Entwicklungsarbeiten völlig aus. Für bestimmte Tests, zum Beispiel die Kamerafunktion oder GPS, ist ein echtes Gerät jedoch besser geeignet, weil der Emulator diese Hardware nur simulieren kann. Vor der Veröffentlichung solltest du deine App auf jeden Fall auf mindestens einem echten Gerät testen, um sicherzugehen, dass alles wie erwartet funktioniert."
+    },
+    {
+      "question": "Warum sind Apps auf dem Handy sicherer als Programme auf dem Computer?",
+      "answer": "Weil mobile Betriebssysteme von Grund auf mit der Sandbox als zentralem Sicherheitskonzept entwickelt wurden. Jede App läuft isoliert, und der Zugriff auf Hardware, Daten anderer Apps und Systemfunktionen ist streng reglementiert. Desktop-Betriebssysteme wie Windows oder macOS haben diese Isolation erst nachträglich eingebaut und bieten Programme oft mehr Freiheiten, als sie eigentlich brauchen. Hinzu kommt, dass mobile Apps nur aus kontrollierten Stores installiert werden können, die jede App vor der Veröffentlichung prüfen, während man auf dem Desktop Programme aus beliebigen Quellen installieren kann."
+    }
+  ]
+}

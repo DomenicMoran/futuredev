@@ -1,0 +1,653 @@
+{
+  "id": "M05-01-02",
+  "title": "Android-Berechtigungen",
+  "durationMinutes": 33,
+  "prerequisites": [
+    "M05-01-01",
+    "M01-05-02"
+  ],
+  "terms": [
+    {
+      "term": "Berechtigung",
+      "definition": "Eine vom Betriebssystem verwaltete Erlaubnis, die eine App einholen muss, bevor sie auf geschützte Hardware wie Kamera oder Mikrofon oder auf sensible Daten wie Kontakte oder Standort zugreifen darf. Berechtigungen werden in der Manifest-Datei deklariert und seit Android 6 zur Laufzeit vom Nutzer bestätigt."
+    },
+    {
+      "term": "AndroidManifest.xml",
+      "definition": "Die zentrale Konfigurationsdatei jeder Android-App im XML-Format. Sie deklariert alle Komponenten der App, alle benötigten Berechtigungen, die Mindestversion von Android und die Einstiegspunkte der App. Ohne diese Datei kann Android die App nicht starten."
+    },
+    {
+      "term": "Runtime-Permission",
+      "definition": "Eine Berechtigung, die die App nicht bei der Installation, sondern erst zur Laufzeit vom Nutzer anfordern muss. Seit Android 6 fallen alle sensiblen Berechtigungen wie Kamera, Standort oder Mikrofon unter diese Kategorie. Der Nutzer sieht einen Dialog und kann die Berechtigung erteilen oder verweigern."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir ein Museum vor, in dem verschiedene Räume unterschiedliche Sicherheitsstufen haben. Der Eingangsbereich ist für jeden zugänglich. Für die normale Ausstellung brauchst du eine Eintrittskarte. Für das Archiv mit den wertvollen alten Büchern brauchst du eine Sondergenehmigung, die du vorher beantragen musst. Und den Tresorraum mit den wertvollsten Stücken betrittst du nur in Begleitung eines Museumsmitarbeiters, der dich persönlich prüft.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Genau so funktionieren Android-Berechtigungen. Deine App ist der Museumsbesucher, das Betriebssystem ist die Museumsverwaltung. Für normale Funktionen wie das Anzeigen einer Liste braucht die App keine besondere Erlaubnis, das ist der Eingangsbereich. Für den Zugriff auf das Internet braucht sie eine einfache Eintrittskarte, die bei der Installation automatisch ausgestellt wird. Für die Kamera oder den Standort braucht sie eine Sondergenehmigung, die der Nutzer persönlich erteilen muss. Und für besonders sensible Dinge wie das Lesen von SMS muss der Nutzer die App sogar in den Einstellungen manuell freischalten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was genau ist eine Berechtigung, und warum gibt es verschiedene Arten davon?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Eine Berechtigung ist eine vom Betriebssystem verwaltete Erlaubnis, die eine App einholen muss, bevor sie auf geschützte Ressourcen zugreifen darf. Android teilt Berechtigungen in drei Kategorien ein. Install-Time-Permissions werden bei der Installation automatisch erteilt, ohne dass der Nutzer gefragt wird. Dazu gehören harmlose Dinge wie der Internetzugriff. Runtime-Permissions müssen zur Laufzeit vom Nutzer bestätigt werden, zum Beispiel der Zugriff auf die Kamera. Special-Permissions sind besonders sensibel und können nur in den Systemeinstellungen erteilt werden, etwa der Zugriff auf Benachrichtigungen anderer Apps.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Eine Berechtigung ist eine vom Betriebssystem verwaltete Erlaubnis, die eine App einholen muss, bevor sie auf geschützte Hardware oder sensible Daten zugreifen darf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Wenn deine App ein Foto machen will, braucht sie die Berechtigung CAMERA. Du deklarierst sie im Manifest, und beim ersten Mal, wenn die App die Kamera nutzen will, zeigt Android einen Dialog: App möchte auf die Kamera zugreifen, Erlauben oder Ablehnen. Der Nutzer entscheidet, und die App muss mit beiden Antworten umgehen können. Lehnt der Nutzer ab, muss die App trotzdem funktionieren, nur eben ohne Kamerafunktion.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Das Berechtigungssystem zu verstehen ist überlebenswichtig für deine App. Wenn du eine Berechtigung nicht im Manifest deklarierst, stürzt deine App ab, sobald sie versucht, auf die geschützte Ressource zuzugreifen. Wenn du die Ablehnung einer Berechtigung nicht behandelst, stürzt deine App ebenfalls ab. Und wenn du zu viele Berechtigungen verlangst, wird deine App im Play Store schlecht bewertet oder gar nicht erst veröffentlicht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist die AndroidManifest.xml, und warum ist sie die Schaltzentrale jeder App?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir den Personalausweis einer Person vor. Auf dem Ausweis stehen Name, Geburtsdatum, Staatsangehörigkeit und manchmal auch besondere Merkmale. Ohne diesen Ausweis kann die Person nicht nachweisen, wer sie ist und was sie darf. Behörden und Banken verlangen den Ausweis, bevor sie bestimmte Dienstleistungen erbringen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Die AndroidManifest.xml ist der Personalausweis deiner App. Sie ist eine XML-Datei, die im Wurzelverzeichnis jeder APK liegt und dem Betriebssystem alles mitteilt, was es über die App wissen muss: den Namen der App, das Icon, die Mindestversion von Android, alle Activities und Services, die die App enthält, und vor allem alle Berechtigungen, die die App benötigt. Ohne diese Datei weiß Android nicht, wie es die App starten soll, und verweigert die Installation.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Die AndroidManifest.xml ist die zentrale Konfigurationsdatei jeder Android-App, die alle Komponenten, Berechtigungen und Metadaten im XML-Format deklariert.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In einem typischen Manifest findest du Zeilen wie uses-permission android:name=\"android.permission.CAMERA\". Diese eine Zeile sagt Android: Diese App will die Kamera nutzen. Ohne diese Zeile würde jeder Versuch, die Kamera zu öffnen, mit einem Fehler abbrechen. Das Manifest ist also nicht nur eine Formalität, sondern die technische Voraussetzung für fast alles, was deine App tut.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Das Manifest ist die erste Datei, die Android liest, wenn es deine App installiert. Jeder Fehler im Manifest, jede vergessene Berechtigung und jede falsche Konfiguration führt dazu, dass deine App nicht funktioniert. Das Manifest zu beherrschen ist deshalb eine der grundlegendsten Fähigkeiten eines Android-Entwicklers.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist eine Runtime-Permission, und warum wurde sie eingeführt?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du gehst in ein Restaurant und der Kellner fragt dich, bevor du überhaupt die Karte gesehen hast, ob du heute Abend den Wein des Hauses trinken wirst, ob du ein Taxi nach Hause brauchst und ob du mit Kreditkarte zahlen willst. Das wäre lästig und unnötig. Besser ist es, wenn der Kellner dich erst dann fragt, wenn es wirklich relevant wird: den Wein, wenn du das Essen bestellst, das Taxi, wenn du gehen willst, und die Kreditkarte, wenn die Rechnung kommt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Vor Android 6 wurden alle Berechtigungen bei der Installation auf einmal abgefragt. Der Nutzer sah eine lange Liste und musste allem zustimmen, sonst konnte er die App nicht installieren. Das war schlecht für die Sicherheit, weil Nutzer einfach auf Akzeptieren tippten, ohne zu lesen. Seit Android 6 gibt es Runtime-Permissions: sensible Berechtigungen wie Kamera, Standort oder Mikrofon werden nicht mehr bei der Installation, sondern erst dann abgefragt, wenn die App sie tatsächlich braucht. Der Nutzer sieht einen Dialog und kann einzeln entscheiden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Eine Runtime-Permission ist eine sensible Berechtigung, die die App nicht bei der Installation, sondern erst zur Laufzeit vom Nutzer anfordern muss und die der Nutzer jederzeit widerrufen kann.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Wenn deine App den Standort des Nutzers braucht, deklarierst du ACCESS_FINE_LOCATION im Manifest. Aber sobald die App das erste Mal den Standort abfragt, zeigt Android einen Dialog. Der Nutzer kann Erlauben oder Ablehnen tippen. Er kann auch Nur diesmal erlauben wählen, dann wird die Berechtigung nach dem Schließen der App automatisch widerrufen. Deine App muss all diese Fälle behandeln können.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Runtime-Permissions sind der Standard für alle modernen Android-Apps. Wenn du sie ignorierst und deine App auf alten Install-Time-Permissions aufbaust, wird sie auf aktuellen Android-Versionen entweder abstürzen oder vom Play Store abgelehnt werden. Der richtige Umgang mit Runtime-Permissions ist keine Option, sondern eine Pflicht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Wie fordert meine App eine Berechtigung an, und was muss ich als Entwickler dabei beachten?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der Ablauf ist immer gleich: Zuerst deklarierst du die Berechtigung im Manifest. Dann prüfst du zur Laufzeit, ob die Berechtigung bereits erteilt wurde. Wenn ja, nutzt du die geschützte Funktion. Wenn nein, zeigst du dem Nutzer eine Erklärung, warum du die Berechtigung brauchst, und forderst sie dann an. Der Nutzer entscheidet, und du behandelst beide Antworten. Wichtig ist, dass du die Ablehnung nicht als Fehler behandelst, sondern als gültige Entscheidung des Nutzers. Deine App muss auch ohne die Berechtigung funktionieren, wenn auch mit eingeschränktem Funktionsumfang.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In React Native mit Expo sieht das so aus: Du installierst expo-camera, deklarierst die Kamera-Berechtigung in der app.json, und dann rufst du Camera.requestPermissionsAsync() auf. Expo zeigt den Systemdialog, und du bekommst das Ergebnis zurück. Lehnt der Nutzer ab, zeigst du eine Nachricht wie Ohne Kamera kannst du keine Fotos aufnehmen und bietest eine Alternative an.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Der richtige Umgang mit abgelehnten Berechtigungen unterscheidet gute von schlechten Apps. Eine App, die abstürzt, weil der Nutzer eine Berechtigung abgelehnt hat, wird deinstalliert. Eine App, die die Ablehnung akzeptiert und eine Alternative anbietet, bleibt installiert und wird weiter genutzt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Welche Berechtigungen sind harmlos, und welche sind sensibel?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Android teilt Berechtigungen in Schutzstufen ein. Normal-Berechtigungen wie INTERNET oder ACCESS_NETWORK_STATE sind harmlos und werden bei der Installation automatisch erteilt. Dangerous-Berechtigungen wie CAMERA, ACCESS_FINE_LOCATION oder READ_CONTACTS sind sensibel und müssen zur Laufzeit vom Nutzer bestätigt werden. Signature-Berechtigungen werden nur erteilt, wenn die anfragende App mit demselben Zertifikat signiert ist wie die App, die die Berechtigung definiert hat. Das ist für System-Apps und Apps desselben Entwicklers relevant.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Als Faustregel gilt: Alles, was persönliche Daten des Nutzers betrifft, ist eine Dangerous-Berechtigung. Kamera, Mikrofon, Standort, Kontakte, Kalender, SMS, Telefon und Speicher sind die wichtigsten Kategorien. Alles, was nur die technische Funktion der App betrifft, wie Internetzugriff oder Vibrationsalarm, ist eine Normal-Berechtigung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die Unterscheidung zwischen Normal- und Dangerous-Berechtigungen bestimmt, wie viel Aufwand du in die Berechtigungslogik deiner App stecken musst. Für Normal-Berechtigungen reicht ein Eintrag im Manifest. Für Dangerous-Berechtigungen brauchst du zusätzlich Laufzeitabfragen, Erklärungstexte und Fallback-Logik für den Ablehnungsfall.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was passiert, wenn der Nutzer eine bereits erteilte Berechtigung nachträglich widerruft?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der Nutzer kann jede Berechtigung jederzeit in den Systemeinstellungen widerrufen. Deine App bekommt davon nichts mit, es gibt keine automatische Benachrichtigung. Wenn deine App das nächste Mal versucht, auf die geschützte Ressource zuzugreifen, schlägt der Zugriff fehl, als ob die Berechtigung nie erteilt worden wäre. Deshalb musst du vor jedem Zugriff auf eine geschützte Ressource prüfen, ob die Berechtigung noch gilt, und nicht davon ausgehen, dass eine einmal erteilte Berechtigung für immer gilt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Diese jederzeitige Widerrufbarkeit ist ein zentrales Sicherheitsmerkmal von Android. Als Entwickler musst du sie in deiner App berücksichtigen, sonst stürzt deine App ab, wenn der Nutzer eine Berechtigung widerruft und deine App beim nächsten Start ungeprüft auf die Ressource zugreift.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "text": "Also noch einmal ganz kurz: Berechtigungen sind die vom Betriebssystem verwalteten Erlaubnisse, die eine App braucht, um auf geschützte Hardware oder Daten zuzugreifen. Die AndroidManifest.xml ist die zentrale Konfigurationsdatei, in der alle Berechtigungen deklariert werden. Runtime-Permissions sind sensible Berechtigungen, die die App zur Laufzeit vom Nutzer anfordern muss und die jederzeit widerrufen werden können. Der richtige Umgang mit Berechtigungen, besonders mit Ablehnungen und Widerrufen, unterscheidet gute von schlechten Apps.",
+      "isKeySentence": true
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Eine Berechtigung ist eine vom Betriebssystem verwaltete Erlaubnis, die eine App einholen muss, bevor sie auf geschützte Hardware wie Kamera oder Mikrofon oder auf sensible Daten wie Kontakte oder Standort zugreifen darf. Berechtigungen werden in der Manifest-Datei deklariert und seit Android 6 zur Laufzeit vom Nutzer bestätigt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Die AndroidManifest.xml ist die zentrale Konfigurationsdatei jeder Android-App im XML-Format. Sie deklariert alle Komponenten der App, alle benötigten Berechtigungen, die Mindestversion von Android und die Einstiegspunkte der App. Ohne diese Datei kann Android die App nicht starten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Eine Runtime-Permission ist eine Berechtigung, die die App nicht bei der Installation, sondern erst zur Laufzeit vom Nutzer anfordern muss. Seit Android 6 fallen alle sensiblen Berechtigungen wie Kamera, Standort oder Mikrofon unter diese Kategorie. Der Nutzer sieht einen Dialog und kann die Berechtigung erteilen oder verweigern.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was passiert, wenn ich eine Berechtigung nicht im Manifest deklariere, aber trotzdem versuche, sie zu nutzen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Deine App stürzt mit einem Fehler ab. Android prüft bei jedem Zugriff auf eine geschützte Ressource, ob die entsprechende Berechtigung im Manifest deklariert ist. Fehlt der Eintrag, wirft das System eine SecurityException, und wenn deine App diese nicht abfängt, wird sie beendet. Deshalb ist der Manifest-Eintrag immer der erste Schritt, noch vor jeder Laufzeitprüfung. Ohne Manifest-Eintrag hat deine App keine Chance, die Berechtigung jemals zu bekommen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Kann ich den Berechtigungsdialog beliebig oft anzeigen, wenn der Nutzer ablehnt?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Nein, und das ist Absicht. Wenn der Nutzer eine Berechtigung zweimal ablehnt, zeigt Android den Dialog beim dritten Mal nicht mehr an, sondern verweigert die Berechtigung stillschweigend. Der Nutzer kann die Berechtigung dann nur noch in den Systemeinstellungen erteilen. Deine App sollte den Nutzer in diesem Fall zu den Einstellungen führen und erklären, wie er die Berechtigung dort manuell erteilen kann. Endlos wiederholte Anfragen nerven den Nutzer und führen zu schlechten Bewertungen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Muss ich für jede Berechtigung einen Erklärungstext anzeigen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Nicht zwingend, aber es ist eine bewährte Praxis. Wenn der Nutzer versteht, warum deine App eine Berechtigung braucht, ist er viel eher bereit, sie zu erteilen. Eine App, die einfach nur Kamera erlauben? fragt, ohne zu erklären, warum, wird häufiger abgelehnt als eine App, die sagt: Wir brauchen die Kamera, um dein Profilfoto aufzunehmen. Zeige den Erklärungstext, bevor du den Systemdialog öffnest, nicht danach. Der Nutzer soll die Entscheidung mit vollständigem Wissen treffen können.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was ist der Unterschied zwischen einer Dangerous-Berechtigung und einer Normal-Berechtigung?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Normal-Berechtigungen wie INTERNET werden bei der Installation automatisch erteilt, ohne dass der Nutzer gefragt wird. Sie gelten als harmlos und betreffen keine persönlichen Daten. Dangerous-Berechtigungen wie CAMERA oder ACCESS_FINE_LOCATION müssen zur Laufzeit vom Nutzer bestätigt werden, weil sie auf sensible Hardware oder persönliche Daten zugreifen. Der Nutzer sieht einen Dialog und kann einzeln entscheiden. Diese Unterscheidung wurde mit Android 6 eingeführt, um Nutzern mehr Kontrolle über ihre Daten zu geben.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Wie viele Berechtigungen sollte meine App maximal verlangen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "So wenige wie möglich. Jede zusätzliche Berechtigung ist ein Grund für den Nutzer, deine App nicht zu installieren oder schlecht zu bewerten. Google prüft bei der Play-Store-Veröffentlichung, ob deine App Berechtigungen verlangt, die sie nicht offensichtlich braucht. Eine Taschenlampen-App, die auf die Kontakte zugreifen will, wird abgelehnt. Frage dich bei jeder Berechtigung: Braucht meine App das wirklich, um ihre Kernfunktion zu erfüllen? Wenn die Antwort nein ist, lass die Berechtigung weg.",
+      "isKeySentence": false
+    }
+  ],
+  "practiceExample": {
+    "text": "Jede Android-App deklariert ihre Berechtigungen in der AndroidManifest.xml. Sensible Berechtigungen wie Kamera oder Standort muss die App zur Laufzeit vom Nutzer anfordern und mit Ablehnungen umgehen können.",
+    "repoNote": "repo-futuredev",
+    "location": "apps/mobile/android/app/src/main/AndroidManifest.xml (Berechtigungsdeklarationen der FutureDev-App)"
+  },
+  "quiz": [
+    {
+      "question": "Welches Alltagsbild beschreibt das Android-Berechtigungssystem am treffendsten?",
+      "area": "Berechtigungen",
+      "options": [
+        {
+          "text": "Ein Museum mit verschiedenen Räumen, die unterschiedliche Zugangsberechtigungen erfordern.",
+          "isCorrect": true,
+          "explanation": "Richtig: wie im Museum braucht die App für verschiedene Ressourcen unterschiedliche Berechtigungen."
+        },
+        {
+          "text": "Ein Supermarkt, in dem jeder Kunde alle Produkte ohne Einschränkung kaufen kann.",
+          "isCorrect": false,
+          "explanation": "Falsch: im Supermarkt gibt es keine abgestuften Zugangsrechte."
+        },
+        {
+          "text": "Eine Bibliothek, in der jedes Buch für jeden Leser frei zugänglich ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: Berechtigungen schränken den Zugriff ein, sie gewähren ihn nicht für alle."
+        },
+        {
+          "text": "Ein Park, in dem jeder machen kann, was er will, ohne Regeln.",
+          "isCorrect": false,
+          "explanation": "Falsch: das Berechtigungssystem ist ein strenges Regelwerk, kein rechtsfreier Raum."
+        }
+      ]
+    },
+    {
+      "question": "Was ist die AndroidManifest.xml?",
+      "area": "Berechtigungen",
+      "options": [
+        {
+          "text": "Die zentrale Konfigurationsdatei, die alle Komponenten und Berechtigungen der App deklariert.",
+          "isCorrect": true,
+          "explanation": "Richtig: das Manifest ist der Personalausweis der App für das Betriebssystem."
+        },
+        {
+          "text": "Eine Datei, die die Nutzungsbedingungen der App enthält.",
+          "isCorrect": false,
+          "explanation": "Falsch: Nutzungsbedingungen sind nicht Teil des Manifests."
+        },
+        {
+          "text": "Ein Zertifikat, das die Echtheit der App bestätigt.",
+          "isCorrect": false,
+          "explanation": "Falsch: das Manifest ist kein Zertifikat, die Signatur ist separat."
+        },
+        {
+          "text": "Eine Log-Datei, die alle Abstürze der App aufzeichnet.",
+          "isCorrect": false,
+          "explanation": "Falsch: das Manifest ist eine Konfigurationsdatei, kein Log."
+        }
+      ]
+    },
+    {
+      "question": "Seit welcher Android-Version gibt es Runtime-Permissions?",
+      "area": "Berechtigungen",
+      "options": [
+        {
+          "text": "Seit Android 6, um Nutzern mehr Kontrolle über sensible Berechtigungen zu geben.",
+          "isCorrect": true,
+          "explanation": "Richtig: Android 6 führte das Laufzeit-Berechtigungsmodell ein."
+        },
+        {
+          "text": "Seit Android 4, mit der Einführung des Play Store.",
+          "isCorrect": false,
+          "explanation": "Falsch: Android 4 hatte noch keine Runtime-Permissions."
+        },
+        {
+          "text": "Seit Android 10, als Reaktion auf die DSGVO.",
+          "isCorrect": false,
+          "explanation": "Falsch: Runtime-Permissions kamen viel früher, mit Android 6."
+        },
+        {
+          "text": "Seit Android 12, mit dem neuen Material-You-Design.",
+          "isCorrect": false,
+          "explanation": "Falsch: Runtime-Permissions gibt es seit Android 6, nicht erst seit 12."
+        }
+      ]
+    },
+    {
+      "question": "Was passiert, wenn du eine Berechtigung nicht im Manifest deklarierst, aber trotzdem nutzt?",
+      "area": "Berechtigungen",
+      "options": [
+        {
+          "text": "Die App stürzt mit einer SecurityException ab.",
+          "isCorrect": true,
+          "explanation": "Richtig: ohne Manifest-Eintrag verweigert Android den Zugriff mit einem Fehler."
+        },
+        {
+          "text": "Android erteilt die Berechtigung automatisch, wenn die App sie braucht.",
+          "isCorrect": false,
+          "explanation": "Falsch: Android erteilt niemals automatisch Berechtigungen ohne Manifest-Eintrag."
+        },
+        {
+          "text": "Die App funktioniert normal, aber der Play Store lehnt sie ab.",
+          "isCorrect": false,
+          "explanation": "Falsch: die App stürzt ab, sie funktioniert nicht normal."
+        },
+        {
+          "text": "Android fragt den Nutzer, ob es die Berechtigung nachträglich ins Manifest eintragen soll.",
+          "isCorrect": false,
+          "explanation": "Falsch: Android kann das Manifest nicht nachträglich ändern."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der Unterschied zwischen Normal- und Dangerous-Berechtigungen?",
+      "area": "Berechtigungen",
+      "options": [
+        {
+          "text": "Normal-Berechtigungen werden automatisch erteilt, Dangerous-Berechtigungen muss der Nutzer bestätigen.",
+          "isCorrect": true,
+          "explanation": "Richtig: Normal ist harmlos und automatisch, Dangerous braucht Nutzerzustimmung."
+        },
+        {
+          "text": "Normal-Berechtigungen sind kostenlos, Dangerous-Berechtigungen kosten Geld.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Bezeichnungen haben nichts mit Kosten zu tun."
+        },
+        {
+          "text": "Normal-Berechtigungen gelten nur für Spiele, Dangerous für alle anderen Apps.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Kategorien gelten für alle Apps, nicht nur für bestimmte Typen."
+        },
+        {
+          "text": "Es gibt keinen Unterschied, beide Begriffe bedeuten dasselbe.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Unterscheidung ist fundamental für das Android-Sicherheitsmodell."
+        }
+      ]
+    },
+    {
+      "question": "Was muss deine App tun, wenn der Nutzer eine Runtime-Permission ablehnt?",
+      "area": "Berechtigungen",
+      "options": [
+        {
+          "text": "Die Ablehnung akzeptieren und ohne die geschützte Funktion weiterarbeiten oder eine Alternative anbieten.",
+          "isCorrect": true,
+          "explanation": "Richtig: die App muss mit beiden Antworten umgehen können."
+        },
+        {
+          "text": "Die App sofort beenden, weil sie ohne die Berechtigung nicht funktionieren kann.",
+          "isCorrect": false,
+          "explanation": "Falsch: die App sollte nicht abstürzen, nur weil eine Berechtigung fehlt."
+        },
+        {
+          "text": "Den Dialog sofort erneut anzeigen, bis der Nutzer zustimmt.",
+          "isCorrect": false,
+          "explanation": "Falsch: wiederholte Anfragen nerven den Nutzer und werden vom System unterbunden."
+        },
+        {
+          "text": "Die Berechtigung trotzdem nutzen, weil der Nutzer sie ja irgendwann erteilen wird.",
+          "isCorrect": false,
+          "explanation": "Falsch: ohne Erlaubnis ist der Zugriff technisch unmöglich."
+        }
+      ]
+    },
+    {
+      "question": "Was passiert, wenn der Nutzer eine Berechtigung in den Einstellungen widerruft?",
+      "area": "Berechtigungen",
+      "options": [
+        {
+          "text": "Die App verliert sofort den Zugriff, und der nächste Zugriffsversuch schlägt fehl.",
+          "isCorrect": true,
+          "explanation": "Richtig: der Widerruf gilt sofort, die App muss vor jedem Zugriff prüfen."
+        },
+        {
+          "text": "Die App behält die Berechtigung bis zum nächsten Neustart des Handys.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Widerruf gilt sofort, nicht erst nach einem Neustart."
+        },
+        {
+          "text": "Die App bekommt eine Benachrichtigung und kann den Widerruf rückgängig machen.",
+          "isCorrect": false,
+          "explanation": "Falsch: die App bekommt keine Benachrichtigung und kann den Widerruf nicht verhindern."
+        },
+        {
+          "text": "Der Widerruf wird erst wirksam, wenn die App das nächste Mal aktualisiert wird.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Widerruf gilt sofort, nicht erst bei der nächsten Aktualisierung."
+        }
+      ]
+    },
+    {
+      "question": "Warum sollte deine App vor dem Berechtigungsdialog einen Erklärungstext zeigen?",
+      "area": "Berechtigungen",
+      "options": [
+        {
+          "text": "Weil Nutzer eine Berechtigung viel eher erteilen, wenn sie verstehen, warum die App sie braucht.",
+          "isCorrect": true,
+          "explanation": "Richtig: Transparenz erhöht die Akzeptanz von Berechtigungsanfragen."
+        },
+        {
+          "text": "Weil Android den Berechtigungsdialog sonst gar nicht anzeigt.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Dialog erscheint auch ohne Erklärungstext."
+        },
+        {
+          "text": "Weil der Play Store einen Erklärungstext für jede Berechtigung vorschreibt.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Play Store schreibt keinen Erklärungstext vor."
+        },
+        {
+          "text": "Weil der Erklärungstext die Berechtigung automatisch erteilt, ohne den Nutzer zu fragen.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Erklärungstext ersetzt nicht den Systemdialog."
+        }
+      ]
+    },
+    {
+      "question": "Welche Berechtigung gehört zur Kategorie Normal?",
+      "area": "Berechtigungen",
+      "options": [
+        {
+          "text": "INTERNET, weil der Internetzugriff keine persönlichen Daten des Nutzers betrifft.",
+          "isCorrect": true,
+          "explanation": "Richtig: INTERNET ist eine harmlose Normal-Berechtigung."
+        },
+        {
+          "text": "CAMERA, weil jede App die Kamera nutzen können sollte.",
+          "isCorrect": false,
+          "explanation": "Falsch: CAMERA ist eine Dangerous-Berechtigung, weil sie sensible Hardware betrifft."
+        },
+        {
+          "text": "ACCESS_FINE_LOCATION, weil Standortdaten öffentlich sind.",
+          "isCorrect": false,
+          "explanation": "Falsch: Standort ist eine Dangerous-Berechtigung, weil er persönliche Daten preisgibt."
+        },
+        {
+          "text": "READ_CONTACTS, weil Kontakte für soziale Apps wichtig sind.",
+          "isCorrect": false,
+          "explanation": "Falsch: Kontakte sind eine Dangerous-Berechtigung wegen der sensiblen Daten."
+        }
+      ]
+    },
+    {
+      "question": "Wie oft kann deine App den Berechtigungsdialog anzeigen, wenn der Nutzer ablehnt?",
+      "area": "Berechtigungen",
+      "options": [
+        {
+          "text": "Maximal zweimal, danach verweigert Android die Berechtigung stillschweigend.",
+          "isCorrect": true,
+          "explanation": "Richtig: nach zweimaliger Ablehnung zeigt Android den Dialog nicht mehr an."
+        },
+        {
+          "text": "Beliebig oft, bis der Nutzer zustimmt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Android begrenzt die Anzahl der Anfragen, um Nutzer zu schützen."
+        },
+        {
+          "text": "Genau einmal, danach muss die App deinstalliert und neu installiert werden.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Nutzer kann die Berechtigung in den Einstellungen manuell erteilen."
+        },
+        {
+          "text": "Fünfmal, dann wird die App automatisch deinstalliert.",
+          "isCorrect": false,
+          "explanation": "Falsch: es gibt keine automatische Deinstallation bei abgelehnten Berechtigungen."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der wichtigste Grundsatz bei der Auswahl von Berechtigungen für deine App?",
+      "area": "Berechtigungen",
+      "options": [
+        {
+          "text": "So wenige wie möglich: jede Berechtigung muss für die Kernfunktion der App notwendig sein.",
+          "isCorrect": true,
+          "explanation": "Richtig: weniger Berechtigungen bedeuten mehr Vertrauen und weniger Ablehnung."
+        },
+        {
+          "text": "So viele wie möglich: die App soll für alle zukünftigen Funktionen vorbereitet sein.",
+          "isCorrect": false,
+          "explanation": "Falsch: unnötige Berechtigungen schrecken Nutzer ab und führen zur Play-Store-Ablehnung."
+        },
+        {
+          "text": "Alle Dangerous-Berechtigungen, damit die App maximalen Funktionsumfang hat.",
+          "isCorrect": false,
+          "explanation": "Falsch: jede Berechtigung muss einzeln begründet sein."
+        },
+        {
+          "text": "Nur Normal-Berechtigungen, weil Dangerous-Berechtigungen zu kompliziert sind.",
+          "isCorrect": false,
+          "explanation": "Falsch: manche Apps brauchen zwingend Dangerous-Berechtigungen für ihre Funktion."
+        }
+      ]
+    },
+    {
+      "question": "Was ist eine Signature-Berechtigung?",
+      "area": "Berechtigungen",
+      "options": [
+        {
+          "text": "Eine Berechtigung, die nur erteilt wird, wenn die anfragende App mit demselben Zertifikat signiert ist.",
+          "isCorrect": true,
+          "explanation": "Richtig: Signature-Berechtigungen sind für Apps desselben Entwicklers gedacht."
+        },
+        {
+          "text": "Eine Berechtigung, die der Nutzer mit seiner Unterschrift bestätigen muss.",
+          "isCorrect": false,
+          "explanation": "Falsch: Signature bezieht sich auf das App-Zertifikat, nicht auf die Nutzerunterschrift."
+        },
+        {
+          "text": "Eine Berechtigung, die nur für signierte E-Mails gilt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Signature-Berechtigungen haben nichts mit E-Mails zu tun."
+        },
+        {
+          "text": "Eine Berechtigung, die automatisch erteilt wird, wenn die App im Play Store veröffentlicht ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Play-Store-Veröffentlichung hat keinen Einfluss auf Signature-Berechtigungen."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Öffne die AndroidManifest.xml der FutureDev-App unter apps/mobile/android/app/src/main/. Identifiziere alle deklarierten Berechtigungen und ordne sie den Kategorien Normal, Dangerous und Signature zu. Erstelle eine kleine React-Native-App mit Expo, die die Kamera-Berechtigung anfordert. Behandle sowohl den Fall, dass der Nutzer die Berechtigung erteilt, als auch den Fall, dass er sie ablehnt. Teste beide Fälle im Emulator.",
+    "expectation": "Die Berechtigungen der FutureDev-App wurden identifiziert und kategorisiert. Eine Test-App wurde erstellt, die die Kamera-Berechtigung anfordert und beide Antworten des Nutzers korrekt behandelt.",
+    "checklist": [
+      "Die AndroidManifest.xml der FutureDev-App geöffnet und alle Berechtigungen identifiziert.",
+      "Jede Berechtigung einer Kategorie zugeordnet.",
+      "Eine React-Native-App mit Expo erstellt.",
+      "Die Kamera-Berechtigung in der app.json deklariert.",
+      "Die Berechtigung zur Laufzeit angefordert.",
+      "Beide Fälle behandelt: Berechtigung erteilt und Berechtigung abgelehnt.",
+      "Beide Fälle im Emulator getestet."
+    ],
+    "portfolioItem": "P04"
+  },
+  "audio": {
+    "file": "M05-01-02.mp3",
+    "durationSeconds": 1320,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Was passiert, wenn ich eine Berechtigung nicht im Manifest deklariere, aber trotzdem versuche, sie zu nutzen?",
+      "answer": "Deine App stürzt mit einem Fehler ab. Android prüft bei jedem Zugriff auf eine geschützte Ressource, ob die entsprechende Berechtigung im Manifest deklariert ist. Fehlt der Eintrag, wirft das System eine SecurityException, und wenn deine App diese nicht abfängt, wird sie beendet. Deshalb ist der Manifest-Eintrag immer der erste Schritt, noch vor jeder Laufzeitprüfung. Ohne Manifest-Eintrag hat deine App keine Chance, die Berechtigung jemals zu bekommen."
+    },
+    {
+      "question": "Kann ich den Berechtigungsdialog beliebig oft anzeigen, wenn der Nutzer ablehnt?",
+      "answer": "Nein, und das ist Absicht. Wenn der Nutzer eine Berechtigung zweimal ablehnt, zeigt Android den Dialog beim dritten Mal nicht mehr an, sondern verweigert die Berechtigung stillschweigend. Der Nutzer kann die Berechtigung dann nur noch in den Systemeinstellungen erteilen. Deine App sollte den Nutzer in diesem Fall zu den Einstellungen führen und erklären, wie er die Berechtigung dort manuell erteilen kann. Endlos wiederholte Anfragen nerven den Nutzer und führen zu schlechten Bewertungen."
+    },
+    {
+      "question": "Muss ich für jede Berechtigung einen Erklärungstext anzeigen?",
+      "answer": "Nicht zwingend, aber es ist eine bewährte Praxis. Wenn der Nutzer versteht, warum deine App eine Berechtigung braucht, ist er viel eher bereit, sie zu erteilen. Eine App, die einfach nur Kamera erlauben? fragt, ohne zu erklären, warum, wird häufiger abgelehnt als eine App, die sagt: Wir brauchen die Kamera, um dein Profilfoto aufzunehmen. Zeige den Erklärungstext, bevor du den Systemdialog öffnest, nicht danach. Der Nutzer soll die Entscheidung mit vollständigem Wissen treffen können."
+    },
+    {
+      "question": "Was ist der Unterschied zwischen einer Dangerous-Berechtigung und einer Normal-Berechtigung?",
+      "answer": "Normal-Berechtigungen wie INTERNET werden bei der Installation automatisch erteilt, ohne dass der Nutzer gefragt wird. Sie gelten als harmlos und betreffen keine persönlichen Daten. Dangerous-Berechtigungen wie CAMERA oder ACCESS_FINE_LOCATION müssen zur Laufzeit vom Nutzer bestätigt werden, weil sie auf sensible Hardware oder persönliche Daten zugreifen. Der Nutzer sieht einen Dialog und kann einzeln entscheiden. Diese Unterscheidung wurde mit Android 6 eingeführt, um Nutzern mehr Kontrolle über ihre Daten zu geben."
+    },
+    {
+      "question": "Wie viele Berechtigungen sollte meine App maximal verlangen?",
+      "answer": "So wenige wie möglich. Jede zusätzliche Berechtigung ist ein Grund für den Nutzer, deine App nicht zu installieren oder schlecht zu bewerten. Google prüft bei der Play-Store-Veröffentlichung, ob deine App Berechtigungen verlangt, die sie nicht offensichtlich braucht. Eine Taschenlampen-App, die auf die Kontakte zugreifen will, wird abgelehnt. Frage dich bei jeder Berechtigung: Braucht meine App das wirklich, um ihre Kernfunktion zu erfüllen? Wenn die Antwort nein ist, lass die Berechtigung weg."
+    }
+  ]
+}

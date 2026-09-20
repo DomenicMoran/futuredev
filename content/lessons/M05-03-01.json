@@ -1,0 +1,609 @@
+{
+  "id": "M05-03-01",
+  "title": "Signatur bei Apps",
+  "durationMinutes": 32,
+  "prerequisites": [
+    "M05-01-01",
+    "M01-05-02"
+  ],
+  "terms": [
+    {
+      "term": "APK-Signatur",
+      "definition": "Eine digitale Unterschrift, die an die APK-Datei angehängt wird und deren Echtheit und Unversehrtheit garantiert. Die Signatur stellt sicher, dass die APK seit ihrer Erstellung nicht verändert wurde und dass sie tatsächlich vom angegebenen Entwickler stammt. Android verweigert die Installation einer nicht oder ungültig signierten APK."
+    },
+    {
+      "term": "Keystore",
+      "definition": "Eine verschlüsselte Datei, die den privaten Schlüssel für die APK-Signatur enthält. Der Keystore ist durch ein Passwort geschützt und muss sicher aufbewahrt werden. Geht der Keystore verloren, können keine Updates für die App mehr veröffentlicht werden, weil jede neue Version mit demselben Schlüssel signiert werden muss."
+    },
+    {
+      "term": "Debug-Keystore",
+      "definition": "Ein automatisch von den Entwicklungswerkzeugen erstellter Keystore, der während der Entwicklung zum Signieren von Test-APKs verwendet wird. Der Debug-Keystore hat ein bekanntes Standardpasswort und darf niemals für die Veröffentlichung im Play Store verwendet werden, weil er keine echte Identität des Entwicklers nachweist."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen Notar vor, der ein wichtiges Dokument beglaubigt. Du unterschreibst das Dokument, der Notar prüft deinen Ausweis und bestätigt mit seinem Siegel und seiner Unterschrift: Diese Person hat dieses Dokument unterschrieben, und das Dokument wurde seitdem nicht verändert. Jeder, der das Dokument später sieht, kann anhand des Siegels erkennen, dass es echt ist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Die APK-Signatur ist das notarielle Siegel für deine App. Wenn du eine APK baust, wird sie mit deinem privaten Schlüssel signiert. Dieser Schlüssel ist einmalig und gehört nur dir. Android prüft bei der Installation die Signatur und stellt fest: Diese APK wurde seit der Signatur nicht verändert, und sie stammt von dem Entwickler, dessen Schlüssel zur Signatur verwendet wurde. Ohne gültige Signatur verweigert Android die Installation komplett.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was genau ist eine APK-Signatur, und warum ist sie so wichtig?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Eine APK-Signatur ist eine kryptografische Unterschrift, die zwei Dinge garantiert: Authentizität und Integrität. Authentizität bedeutet, dass die APK wirklich von dir stammt und nicht von jemandem, der sich als du ausgibt. Integrität bedeutet, dass die APK seit der Signatur nicht verändert wurde, kein einziges Byte. Wenn jemand deine APK nach der Signatur manipuliert, um Schadcode einzuschleusen, wird die Signatur ungültig und Android verweigert die Installation. Die Signatur ist also der Schutz des Nutzers vor manipulierten Apps.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Die APK-Signatur ist eine digitale Unterschrift, die die Echtheit und Unversehrtheit der APK garantiert und ohne die Android die Installation verweigert.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Wenn du deine App im Play Store veröffentlichst, signierst du die APK mit deinem Release-Keystore. Google prüft diese Signatur und stellt sicher, dass sie gültig ist. Wenn du ein Update veröffentlichst, muss die neue APK mit demselben Schlüssel signiert sein wie die erste Version. Ist sie das nicht, lehnt Google das Update ab, weil es nicht nachweisen kann, dass das Update wirklich von dir stammt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die Signatur ist das Fundament des Vertrauens im Android-Ökosystem. Ohne Signatur könnte jeder eine gefälschte Version deiner App verbreiten, und der Nutzer hätte keine Möglichkeit, die echte von der gefälschten zu unterscheiden. Die Signatur schützt sowohl dich als Entwickler als auch deine Nutzer.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist ein Keystore, und warum ist sein Verlust eine Katastrophe?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen Tresor vor, in dem der einzige Schlüssel zu deiner Wohnung liegt. Der Tresor selbst ist mit einem Zahlencode gesichert. Wenn du den Tresor verlierst oder den Zahlencode vergisst, kommst du nie wieder in deine Wohnung. Du kannst die Tür nicht austauschen, weil das Schloss fest mit der Tür verbunden ist. Du bist für immer ausgesperrt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der Keystore ist dieser Tresor. Er ist eine verschlüsselte Datei, die deinen privaten Signaturschlüssel enthält. Der Keystore selbst ist mit einem Passwort geschützt. Wenn du den Keystore verlierst, kannst du keine Updates mehr für deine App signieren, weil jede neue Version mit demselben Schlüssel signiert werden muss. Du kannst keinen neuen Keystore erstellen, weil Android und der Play Store nur Updates akzeptieren, die mit dem ursprünglichen Schlüssel signiert sind. Deine App ist dann praktisch tot: Sie kann nicht mehr aktualisiert werden, und du müsstest eine komplett neue App unter einem neuen Paketnamen veröffentlichen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Der Keystore ist eine verschlüsselte Datei, die den privaten Signaturschlüssel enthält und deren Verlust bedeutet, dass keine Updates mehr für die App veröffentlicht werden können.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Es gibt unzählige Geschichten von Entwicklern, die ihren Keystore verloren haben: Festplatte kaputt, Laptop gestohlen, versehentlich gelöscht. In jedem Fall war die App verloren. Die Nutzer konnten keine Updates mehr bekommen, Sicherheitslücken blieben offen, und der Entwickler musste eine neue App mit neuem Namen veröffentlichen und hoffen, dass die Nutzer migrieren. Ein verlorener Keystore ist das Ende der App.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Der Keystore ist die wertvollste Datei deines Projekts, wertvoller als der gesamte Quellcode. Den Quellcode kannst du aus dem Git-Repository wiederherstellen. Den Keystore nicht. Sichere ihn an mehreren Orten, verschlüsselt und mit einem starken Passwort. Ein verlorener Keystore ist kein technisches Problem, das man lösen kann, sondern ein Geschäftsproblem, das deine App beendet.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist der Debug-Keystore, und warum darf ich ihn nicht für die Veröffentlichung nutzen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen Übungsführerschein vor, den du in der Fahrschule bekommst. Mit dem Übungsführerschein darfst du auf dem Übungsplatz fahren, aber nicht auf der öffentlichen Straße. Der Übungsführerschein hat ein Standardpasswort, das jeder Fahrlehrer kennt, und er weist nicht deine echte Identität nach, sondern nur, dass du Fahrschüler bist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der Debug-Keystore ist der Übungsführerschein für deine App. Er wird automatisch von Android Studio oder Expo erstellt, wenn du dein Projekt anlegst. Er hat ein bekanntes Standardpasswort, das bei jedem Entwickler gleich ist, und er enthält keinen echten Identitätsnachweis. Der Debug-Keystore ist nur für die Entwicklung gedacht, um Test-APKs auf deinem Emulator oder deinem eigenen Handy zu installieren. Für die Veröffentlichung im Play Store brauchst du einen Release-Keystore, den du selbst erstellst und mit einem eigenen, starken Passwort sicherst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Der Debug-Keystore ist ein automatisch erstellter Keystore mit bekanntem Standardpasswort, der nur für die Entwicklung verwendet werden darf und niemals für die Veröffentlichung im Play Store.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Wenn du mit Expo eine App entwickelst, signiert Expo deine Test-APKs automatisch mit einem Debug-Keystore. Das reicht, um die App auf deinem Handy zu testen. Sobald du aber eas build --platform android --profile production ausführst, fragt Expo dich nach deinem Release-Keystore oder erstellt einen für dich. Diesen Keystore musst du dann sicher aufbewahren, denn er ist der echte, der deine Identität als Entwickler nachweist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Den Debug-Keystore für die Veröffentlichung zu nutzen, ist einer der häufigsten und folgenschwersten Fehler von Anfängern. Der Play Store akzeptiert keine Apps, die mit einem Debug-Keystore signiert sind. Und selbst wenn er es täte: Jeder andere Entwickler hat denselben Debug-Keystore und könnte Updates für deine App veröffentlichen. Der Release-Keystore ist deine digitale Identität als Entwickler.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Wie erstelle ich einen Release-Keystore, und worauf muss ich dabei achten?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Einen Release-Keystore erstellst du mit dem Java-Keytool, das Teil des Android SDK ist. Der Befehl lautet keytool -genkey -v -keystore release.keystore -alias meineapp -keyalg RSA -keysize 2048 -validity 10000. Dabei wirst du nach einem Passwort gefragt und nach deinem Namen, deiner Organisation und deinem Standort. Diese Informationen werden in das selbstsignierte Zertifikat eingebettet, das der Keystore enthält. Mit Expo kannst du den Keystore auch mit eas credentials erstellen lassen, was den Prozess deutlich vereinfacht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Mit Expo erstellst du deinen Release-Keystore so: eas credentials, dann Android wählen, dann Production-Keystore, dann Set up new keystore. Expo generiert den Keystore in der Cloud, zeigt dir das Passwort einmalig an und speichert den Keystore sicher. Du musst das Passwort notieren und den Keystore zusätzlich lokal sichern. Expo bietet auch an, den Keystore für dich zu verwalten, sodass du ihn nicht selbst sichern musst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die Erstellung des Release-Keystores ist ein einmaliger Vorgang, aber einer der wichtigsten in der gesamten App-Entwicklung. Nimm dir die Zeit, ein starkes Passwort zu wählen, die Daten sorgfältig einzugeben und den Keystore an mehreren sicheren Orten zu speichern. Ein Fehler hier kann Jahre später deine App zerstören.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "text": "Also noch einmal ganz kurz: Die APK-Signatur ist die digitale Unterschrift, die Echtheit und Unversehrtheit der App garantiert. Der Keystore enthält den privaten Schlüssel für diese Signatur und ist die wertvollste Datei des Projekts. Der Debug-Keystore ist nur für die Entwicklung, der Release-Keystore für die Veröffentlichung. Ein verlorener Release-Keystore bedeutet das Ende der App, weil keine Updates mehr signiert werden können.",
+      "isKeySentence": true
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Die APK-Signatur ist eine digitale Unterschrift, die an die APK-Datei angehängt wird und deren Echtheit und Unversehrtheit garantiert. Die Signatur stellt sicher, dass die APK seit ihrer Erstellung nicht verändert wurde und dass sie tatsächlich vom angegebenen Entwickler stammt. Android verweigert die Installation einer nicht oder ungültig signierten APK.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Der Keystore ist eine verschlüsselte Datei, die den privaten Schlüssel für die APK-Signatur enthält. Der Keystore ist durch ein Passwort geschützt und muss sicher aufbewahrt werden. Geht der Keystore verloren, können keine Updates für die App mehr veröffentlicht werden, weil jede neue Version mit demselben Schlüssel signiert werden muss.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Der Debug-Keystore ist ein automatisch von den Entwicklungswerkzeugen erstellter Keystore, der während der Entwicklung zum Signieren von Test-APKs verwendet wird. Der Debug-Keystore hat ein bekanntes Standardpasswort und darf niemals für die Veröffentlichung im Play Store verwendet werden, weil er keine echte Identität des Entwicklers nachweist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was passiert, wenn ich mein Keystore-Passwort vergesse?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Du kannst keine APKs mehr signieren. Der Keystore ist mit dem Passwort verschlüsselt, und ohne Passwort kommst du nicht an den privaten Schlüssel. Es gibt keine Möglichkeit, das Passwort zurückzusetzen oder zu umgehen. Deshalb ist es so wichtig, das Passwort an einem sicheren Ort zu notieren, getrennt vom Keystore selbst. Ein Passwort-Manager ist der richtige Ort dafür. Notiere das Passwort niemals in einer Datei, die im selben Verzeichnis wie der Keystore liegt, und gib es niemals in dein Git-Repository ein.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Kann Google meinen verlorenen Keystore wiederherstellen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Nein. Google hat keinen Zugriff auf deinen privaten Schlüssel und kann ihn nicht wiederherstellen. Der private Schlüssel existiert nur in deinem Keystore und nirgendwo sonst. Google speichert nur den öffentlichen Teil des Schlüssels, um Signaturen zu prüfen, aber nicht den privaten Teil, der zum Signieren benötigt wird. Wenn du den Keystore verlierst, ist der private Schlüssel für immer verloren. Es gibt keine Hintertür, keinen Support-Kontakt und keinen Wiederherstellungsprozess.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Muss ich für jede App einen eigenen Keystore erstellen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Nein, du kannst denselben Keystore für mehrere Apps verwenden. Der Keystore enthält deinen privaten Schlüssel, und du kannst beliebig viele Apps mit demselben Schlüssel signieren. Das ist sogar praktisch, weil du dann nur einen Keystore sichern musst. Der Play Store identifiziert dich als Entwickler anhand deines Google-Kontos, nicht anhand des Keystores. Der Keystore beweist nur, dass zwei Versionen derselben App vom selben Entwickler stammen. Für verschiedene Apps kannst du also denselben Keystore nutzen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was ist der Unterschied zwischen App Signing by Google Play und meinem eigenen Keystore?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "App Signing by Google Play ist ein Dienst, bei dem Google deinen Signaturschlüssel verwaltet. Du lädst deine App mit deinem Upload-Schlüssel signiert in den Play Store hoch, und Google signiert sie vor der Auslieferung an die Nutzer mit einem separaten App-Signaturschlüssel. Der Vorteil: Wenn du deinen Upload-Schlüssel verlierst, kannst du ihn über den Google-Support zurücksetzen lassen, weil der eigentliche App-Signaturschlüssel bei Google liegt. Der Nachteil: Du gibst die Kontrolle über den endgültigen Signaturschlüssel an Google ab. Für die meisten Entwickler überwiegen die Vorteile.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Wie sichere ich meinen Keystore richtig?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Nach der Drei-zwei-eins-Regel: drei Kopien, auf zwei verschiedenen Medien, eine davon an einem anderen Ort. Eine Kopie auf deinem Entwicklungsrechner, eine auf einem verschlüsselten USB-Stick und eine in einem Cloud-Speicher mit starker Zwei-Faktor-Authentifizierung. Das Passwort speicherst du getrennt vom Keystore in einem Passwort-Manager. Den Keystore niemals in ein Git-Repository einchecken, auch nicht in ein privates. Wenn das Repository kompromittiert wird, ist auch dein Keystore kompromittiert.",
+      "isKeySentence": false
+    }
+  ],
+  "practiceExample": {
+    "text": "Jede Android-App muss signiert sein. Der Keystore enthält den privaten Schlüssel und ist die wertvollste Datei des Projekts. Der Debug-Keystore ist nur für Tests, der Release-Keystore für die Veröffentlichung.",
+    "repoNote": "repo-futuredev",
+    "location": "apps/mobile/android (Gradle-Konfiguration für Signatur mit Release-Keystore)"
+  },
+  "quiz": [
+    {
+      "question": "Welches Alltagsbild beschreibt die APK-Signatur am treffendsten?",
+      "area": "Signatur",
+      "options": [
+        {
+          "text": "Ein Notar, der ein Dokument mit Siegel und Unterschrift beglaubigt.",
+          "isCorrect": true,
+          "explanation": "Richtig: die Signatur beglaubigt Echtheit und Unversehrtheit wie ein Notar."
+        },
+        {
+          "text": "Ein Passwort, das den Zugriff auf die App schützt.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Signatur ist kein Passwort für den Nutzer."
+        },
+        {
+          "text": "Eine Versicherung, die Schäden durch die App abdeckt.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Signatur ist keine Versicherung."
+        },
+        {
+          "text": "Ein Gütesiegel, das die Qualität der App bewertet.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Signatur bewertet nicht die Qualität, sondern die Echtheit."
+        }
+      ]
+    },
+    {
+      "question": "Was garantiert die APK-Signatur?",
+      "area": "Signatur",
+      "options": [
+        {
+          "text": "Authentizität und Integrität: die App ist echt und wurde nicht verändert.",
+          "isCorrect": true,
+          "explanation": "Richtig: die Signatur beweist, wer die App gebaut hat und dass sie unverändert ist."
+        },
+        {
+          "text": "Dass die App keine Bugs enthält.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Signatur sagt nichts über die Qualität des Codes aus."
+        },
+        {
+          "text": "Dass die App kostenlos ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Signatur hat nichts mit dem Preis zu tun."
+        },
+        {
+          "text": "Dass die App auf allen Android-Versionen läuft.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Signatur garantiert keine Kompatibilität."
+        }
+      ]
+    },
+    {
+      "question": "Was ist ein Keystore?",
+      "area": "Signatur",
+      "options": [
+        {
+          "text": "Eine verschlüsselte Datei, die den privaten Schlüssel für die APK-Signatur enthält.",
+          "isCorrect": true,
+          "explanation": "Richtig: der Keystore ist der Tresor für den Signaturschlüssel."
+        },
+        {
+          "text": "Ein Cloud-Speicher für App-Daten.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Keystore speichert keine App-Daten, sondern den Signaturschlüssel."
+        },
+        {
+          "text": "Eine Datenbank für Nutzerpasswörter.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Keystore hat nichts mit Nutzerpasswörtern zu tun."
+        },
+        {
+          "text": "Ein Ordner, in dem alle Versionen der App gespeichert werden.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Keystore speichert keine App-Versionen."
+        }
+      ]
+    },
+    {
+      "question": "Was passiert, wenn du deinen Release-Keystore verlierst?",
+      "area": "Signatur",
+      "options": [
+        {
+          "text": "Du kannst keine Updates mehr für deine App veröffentlichen, die App ist praktisch tot.",
+          "isCorrect": true,
+          "explanation": "Richtig: ohne den ursprünglichen Schlüssel sind keine Updates möglich."
+        },
+        {
+          "text": "Du kannst einen neuen Keystore erstellen und einfach weitermachen.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Play Store akzeptiert keine Updates mit einem anderen Schlüssel."
+        },
+        {
+          "text": "Google stellt dir einen Ersatz-Keystore aus.",
+          "isCorrect": false,
+          "explanation": "Falsch: Google hat keinen Zugriff auf deinen privaten Schlüssel."
+        },
+        {
+          "text": "Die App funktioniert weiter, du kannst nur keine neuen Nutzer gewinnen.",
+          "isCorrect": false,
+          "explanation": "Falsch: du kannst gar keine Updates mehr veröffentlichen."
+        }
+      ]
+    },
+    {
+      "question": "Warum darfst du den Debug-Keystore nicht für die Veröffentlichung nutzen?",
+      "area": "Signatur",
+      "options": [
+        {
+          "text": "Er hat ein bekanntes Standardpasswort und weist keine echte Entwickleridentität nach.",
+          "isCorrect": true,
+          "explanation": "Richtig: der Debug-Keystore ist wie ein Übungsführerschein, nicht für die echte Straße."
+        },
+        {
+          "text": "Er ist zu klein und kann keine großen Apps signieren.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Größe des Keystores ist nicht das Problem."
+        },
+        {
+          "text": "Er läuft nach 30 Tagen ab.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Debug-Keystore hat kein Ablaufdatum."
+        },
+        {
+          "text": "Er funktioniert nur auf Samsung-Handys.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Debug-Keystore funktioniert auf allen Geräten."
+        }
+      ]
+    },
+    {
+      "question": "Mit welchem Werkzeug erstellst du einen Release-Keystore?",
+      "area": "Signatur",
+      "options": [
+        {
+          "text": "Mit dem Java-Keytool oder mit eas credentials von Expo.",
+          "isCorrect": true,
+          "explanation": "Richtig: keytool ist das Standardwerkzeug, eas credentials der Expo-Weg."
+        },
+        {
+          "text": "Mit dem Google Play Store direkt.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Play Store erstellt keinen Keystore."
+        },
+        {
+          "text": "Mit Android Studio, indem du auf Datei und dann Neu klickst.",
+          "isCorrect": false,
+          "explanation": "Falsch: Android Studio nutzt keytool im Hintergrund."
+        },
+        {
+          "text": "Mit einem beliebigen Texteditor.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Keystore ist eine binäre, verschlüsselte Datei."
+        }
+      ]
+    },
+    {
+      "question": "Was ist App Signing by Google Play?",
+      "area": "Signatur",
+      "options": [
+        {
+          "text": "Ein Dienst, bei dem Google den App-Signaturschlüssel verwaltet und du einen Upload-Schlüssel nutzt.",
+          "isCorrect": true,
+          "explanation": "Richtig: Google signiert die App vor der Auslieferung mit seinem Schlüssel."
+        },
+        {
+          "text": "Ein Dienst, der deine App automatisch im Play Store bewirbt.",
+          "isCorrect": false,
+          "explanation": "Falsch: App Signing hat nichts mit Werbung zu tun."
+        },
+        {
+          "text": "Eine Funktion, die deine App auf Malware prüft.",
+          "isCorrect": false,
+          "explanation": "Falsch: das ist Play Protect, nicht App Signing."
+        },
+        {
+          "text": "Ein Zertifikat, das die App als besonders sicher auszeichnet.",
+          "isCorrect": false,
+          "explanation": "Falsch: App Signing ist kein Gütesiegel."
+        }
+      ]
+    },
+    {
+      "question": "Nach welcher Regel solltest du deinen Keystore sichern?",
+      "area": "Signatur",
+      "options": [
+        {
+          "text": "Drei-zwei-eins: drei Kopien, zwei Medien, eine Kopie an einem anderen Ort.",
+          "isCorrect": true,
+          "explanation": "Richtig: diese Backup-Regel gilt besonders für den unersetzlichen Keystore."
+        },
+        {
+          "text": "Eine Kopie auf dem Entwicklungsrechner reicht völlig aus.",
+          "isCorrect": false,
+          "explanation": "Falsch: wenn der Rechner kaputt geht, ist der Keystore verloren."
+        },
+        {
+          "text": "Der Keystore sollte nur in der Cloud gespeichert werden.",
+          "isCorrect": false,
+          "explanation": "Falsch: eine einzelne Cloud-Kopie ist zu riskant."
+        },
+        {
+          "text": "Der Keystore muss nicht gesichert werden, Google hat eine Kopie.",
+          "isCorrect": false,
+          "explanation": "Falsch: Google hat keine Kopie deines privaten Schlüssels."
+        }
+      ]
+    },
+    {
+      "question": "Darfst du deinen Keystore in ein Git-Repository einchecken?",
+      "area": "Signatur",
+      "options": [
+        {
+          "text": "Nein, niemals, auch nicht in ein privates Repository.",
+          "isCorrect": true,
+          "explanation": "Richtig: der Keystore gehört nicht unter Versionskontrolle."
+        },
+        {
+          "text": "Ja, in ein privates Repository ist das sicher.",
+          "isCorrect": false,
+          "explanation": "Falsch: auch private Repositories können kompromittiert werden."
+        },
+        {
+          "text": "Ja, aber nur wenn das Passwort in einer separaten Datei liegt.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Keystore selbst sollte nie im Repository sein."
+        },
+        {
+          "text": "Nur wenn das Repository mit einem Passwort geschützt ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Keystore gehört nicht ins Repository, egal wie es geschützt ist."
+        }
+      ]
+    },
+    {
+      "question": "Kannst du denselben Keystore für mehrere Apps verwenden?",
+      "area": "Signatur",
+      "options": [
+        {
+          "text": "Ja, ein Keystore kann beliebig viele Apps signieren.",
+          "isCorrect": true,
+          "explanation": "Richtig: der Keystore enthält deinen Schlüssel, nicht app-spezifische Daten."
+        },
+        {
+          "text": "Nein, jede App braucht zwingend einen eigenen Keystore.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Keystore kann für mehrere Apps genutzt werden."
+        },
+        {
+          "text": "Nur wenn die Apps denselben Namen haben.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Name der App ist nicht entscheidend."
+        },
+        {
+          "text": "Nur wenn die Apps vom selben Google-Konto veröffentlicht werden.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Keystore ist unabhängig vom Google-Konto."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der Vorteil von App Signing by Google Play?",
+      "area": "Signatur",
+      "options": [
+        {
+          "text": "Wenn du deinen Upload-Schlüssel verlierst, kannst du ihn über den Google-Support zurücksetzen lassen.",
+          "isCorrect": true,
+          "explanation": "Richtig: der eigentliche Signaturschlüssel liegt bei Google und geht nicht verloren."
+        },
+        {
+          "text": "Die App wird im Play Store höher platziert.",
+          "isCorrect": false,
+          "explanation": "Falsch: App Signing beeinflusst nicht das Ranking."
+        },
+        {
+          "text": "Die App läuft schneller auf dem Handy.",
+          "isCorrect": false,
+          "explanation": "Falsch: App Signing hat keinen Einfluss auf die Performance."
+        },
+        {
+          "text": "Die App ist automatisch vor Viren geschützt.",
+          "isCorrect": false,
+          "explanation": "Falsch: App Signing ist kein Virenschutz."
+        }
+      ]
+    },
+    {
+      "question": "Was passiert, wenn jemand deine APK nach der Signatur manipuliert?",
+      "area": "Signatur",
+      "options": [
+        {
+          "text": "Die Signatur wird ungültig und Android verweigert die Installation.",
+          "isCorrect": true,
+          "explanation": "Richtig: jede Änderung nach der Signatur macht die Signatur ungültig."
+        },
+        {
+          "text": "Die App funktioniert normal, die Signatur wird automatisch aktualisiert.",
+          "isCorrect": false,
+          "explanation": "Falsch: Signaturen werden nicht automatisch aktualisiert."
+        },
+        {
+          "text": "Android zeigt eine Warnung, installiert die App aber trotzdem.",
+          "isCorrect": false,
+          "explanation": "Falsch: Android verweigert die Installation komplett."
+        },
+        {
+          "text": "Die App stürzt beim Start ab.",
+          "isCorrect": false,
+          "explanation": "Falsch: die App wird gar nicht erst installiert."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Erstelle einen Release-Keystore mit dem Java-Keytool. Notiere das Passwort in einem Passwort-Manager. Erstelle dann mit Expo einen weiteren Keystore über eas credentials und vergleiche die beiden Prozesse. Konfiguriere dein Expo-Projekt so, dass es den lokalen Keystore für den Build verwendet. Führe einen Preview-Build mit diesem Keystore durch.",
+    "expectation": "Ein Release-Keystore wurde mit keytool und mit eas credentials erstellt. Der Unterschied zwischen Debug- und Release-Keystore wurde verstanden, und ein Build mit Release-Keystore wurde durchgeführt.",
+    "checklist": [
+      "Einen Release-Keystore mit keytool erstellt und das Passwort notiert.",
+      "Einen Keystore mit eas credentials erstellt und den Prozess verglichen.",
+      "Das Expo-Projekt für die Verwendung des lokalen Keystores konfiguriert.",
+      "Einen Preview-Build mit dem Release-Keystore durchgeführt.",
+      "Den Keystore nach der Drei-zwei-eins-Regel gesichert."
+    ],
+    "portfolioItem": "P04"
+  },
+  "audio": {
+    "file": "M05-03-01.mp3",
+    "durationSeconds": 1280,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Was passiert, wenn ich mein Keystore-Passwort vergesse?",
+      "answer": "Du kannst keine APKs mehr signieren. Der Keystore ist mit dem Passwort verschlüsselt, und ohne Passwort kommst du nicht an den privaten Schlüssel. Es gibt keine Möglichkeit, das Passwort zurückzusetzen oder zu umgehen. Deshalb ist es so wichtig, das Passwort an einem sicheren Ort zu notieren, getrennt vom Keystore selbst. Ein Passwort-Manager ist der richtige Ort dafür. Notiere das Passwort niemals in einer Datei, die im selben Verzeichnis wie der Keystore liegt, und gib es niemals in dein Git-Repository ein."
+    },
+    {
+      "question": "Kann Google meinen verlorenen Keystore wiederherstellen?",
+      "answer": "Nein. Google hat keinen Zugriff auf deinen privaten Schlüssel und kann ihn nicht wiederherstellen. Der private Schlüssel existiert nur in deinem Keystore und nirgendwo sonst. Google speichert nur den öffentlichen Teil des Schlüssels, um Signaturen zu prüfen, aber nicht den privaten Teil, der zum Signieren benötigt wird. Wenn du den Keystore verlierst, ist der private Schlüssel für immer verloren. Es gibt keine Hintertür, keinen Support-Kontakt und keinen Wiederherstellungsprozess."
+    },
+    {
+      "question": "Muss ich für jede App einen eigenen Keystore erstellen?",
+      "answer": "Nein, du kannst denselben Keystore für mehrere Apps verwenden. Der Keystore enthält deinen privaten Schlüssel, und du kannst beliebig viele Apps mit demselben Schlüssel signieren. Das ist sogar praktisch, weil du dann nur einen Keystore sichern musst. Der Play Store identifiziert dich als Entwickler anhand deines Google-Kontos, nicht anhand des Keystores. Der Keystore beweist nur, dass zwei Versionen derselben App vom selben Entwickler stammen. Für verschiedene Apps kannst du also denselben Keystore nutzen."
+    },
+    {
+      "question": "Was ist der Unterschied zwischen App Signing by Google Play und meinem eigenen Keystore?",
+      "answer": "App Signing by Google Play ist ein Dienst, bei dem Google deinen Signaturschlüssel verwaltet. Du lädst deine App mit deinem Upload-Schlüssel signiert in den Play Store hoch, und Google signiert sie vor der Auslieferung an die Nutzer mit einem separaten App-Signaturschlüssel. Der Vorteil: Wenn du deinen Upload-Schlüssel verlierst, kannst du ihn über den Google-Support zurücksetzen lassen, weil der eigentliche App-Signaturschlüssel bei Google liegt. Der Nachteil: Du gibst die Kontrolle über den endgültigen Signaturschlüssel an Google ab. Für die meisten Entwickler überwiegen die Vorteile."
+    },
+    {
+      "question": "Wie sichere ich meinen Keystore richtig?",
+      "answer": "Nach der Drei-zwei-eins-Regel: drei Kopien, auf zwei verschiedenen Medien, eine davon an einem anderen Ort. Eine Kopie auf deinem Entwicklungsrechner, eine auf einem verschlüsselten USB-Stick und eine in einem Cloud-Speicher mit starker Zwei-Faktor-Authentifizierung. Das Passwort speicherst du getrennt vom Keystore in einem Passwort-Manager. Den Keystore niemals in ein Git-Repository einchecken, auch nicht in ein privates. Wenn das Repository kompromittiert wird, ist auch dein Keystore kompromittiert."
+    }
+  ]
+}

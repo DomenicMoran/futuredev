@@ -1,0 +1,603 @@
+{
+  "id": "M05-04-02",
+  "title": "Direktdownload",
+  "durationMinutes": 30,
+  "prerequisites": [
+    "M05-03-02",
+    "M05-04-01"
+  ],
+  "terms": [
+    {
+      "term": "Sideloading",
+      "definition": "Die Installation einer App außerhalb des Play Stores, indem die APK-Datei direkt von einer Webseite heruntergeladen oder per USB-Kabel auf das Gerät übertragen wird. Sideloading erfordert, dass der Nutzer in den Einstellungen die Installation aus unbekannten Quellen erlaubt, und ist die einzige legale Möglichkeit, Apps ohne Play Store auf Android zu installieren."
+    },
+    {
+      "term": "Unbekannte Quellen",
+      "definition": "Eine Android-Sicherheitseinstellung, die die Installation von Apps aus anderen Quellen als dem Play Store erlaubt oder verbietet. Standardmäßig ist diese Einstellung deaktiviert, und der Nutzer muss sie für jede App, die APKs installieren will, einzeln aktivieren."
+    },
+    {
+      "term": "OTA-Update",
+      "definition": "Over-the-Air-Update, eine Aktualisierung, die direkt über das Internet auf das Gerät geladen wird, ohne dass der Nutzer eine neue APK manuell installieren muss. OTA-Updates sind der Standard für Play-Store-Apps, können aber auch für direkt verteilte Apps mit Diensten wie EAS Update realisiert werden."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir zwei Wege vor, wie du dein selbstgebackenes Brot an Kunden bringst. Der erste Weg: Du lieferst es an einen Supermarkt, der es ins Regal stellt, bewirbt und verkauft. Der Kunde geht in den Supermarkt, sieht dein Brot zwischen vielen anderen und kauft es. Der zweite Weg: Du verkaufst es direkt ab Hof. Der Kunde muss zu dir kommen, kennt dich vielleicht schon und vertraut dir. Dafür bekommst du den vollen Preis und hast direkten Kontakt zum Kunden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der Play Store ist der Supermarkt, der Direktdownload ist der Hofverkauf. Im Play Store wird deine App von Google geprüft, gelistet und Millionen von Nutzern präsentiert. Beim Direktdownload lädst du die APK auf deine eigene Webseite oder einen Download-Dienst, und der Nutzer installiert sie direkt. Der Play Store gibt dir Reichweite und Vertrauen, der Direktdownload gibt dir Kontrolle und Unabhängigkeit. Beide Wege haben ihre Berechtigung, und oft ergänzen sie sich.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist Sideloading, und wie installiert der Nutzer meine App ohne Play Store?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Sideloading ist die Installation einer App außerhalb des Play Stores. Der Nutzer lädt die APK-Datei von deiner Webseite herunter, öffnet sie und Android fragt, ob es die App aus dieser unbekannten Quelle installieren soll. Der Nutzer muss einmalig in den Einstellungen die Installation aus unbekannten Quellen für die App erlauben, die die APK öffnet, meist der Browser oder der Dateimanager. Danach wird die App ganz normal installiert und erscheint wie jede andere App auf dem Bildschirm.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Sideloading ist die Installation einer App außerhalb des Play Stores durch direkten Download der APK, wobei der Nutzer die Installation aus unbekannten Quellen erlauben muss.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Du baust eine Preview-APK mit EAS Build, lädst sie auf deine Webseite und schickst den Link an deine Tester. Die Tester öffnen den Link, laden die APK herunter, erlauben einmalig die Installation aus dem Browser und installieren die App. Kein Play Store, keine Prüfung, keine Wartezeit. Der gesamte Prozess vom Build bis zur Installation dauert weniger als eine Stunde.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Sideloading ist der schnellste Weg, eine App auf ein Gerät zu bringen. Für interne Tests, für Kunden-Apps, die nicht öffentlich sein sollen, und für Nischen-Apps, die den Play-Store-Richtlinien nicht entsprechen, ist Sideloading die richtige Wahl. Es ist auch ein wichtiges Werkzeug für die Entwicklung, weil du Test-Builds direkt auf deinem Gerät installieren kannst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was sind unbekannte Quellen, und warum ist diese Einstellung wichtig?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine Tür mit einem Sicherheitsschloss vor. Normalerweise geht die Tür nur auf, wenn jemand mit einem geprüften Schlüssel kommt, den der Sicherheitsdienst ausgegeben hat. Aber du kannst das Schloss umstellen, sodass die Tür auch mit selbstgemachten Schlüsseln aufgeht. Das ist praktisch, wenn du deinen eigenen Schlüssel hast, aber gefährlich, wenn jemand mit einem gefälschten Schlüssel kommt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Unbekannte Quellen ist die Sicherheitseinstellung, die dieses Schloss steuert. Standardmäßig erlaubt Android nur die Installation von Apps aus dem Play Store, weil Google jede App dort prüft. Wenn du eine APK direkt installieren willst, musst du die Installation aus unbekannten Quellen für die App erlauben, die die APK öffnet. Seit Android 8 gilt diese Erlaubnis nicht mehr pauschal für das ganze Gerät, sondern nur für die jeweilige App. Das ist sicherer, weil du nicht allen Apps die Installation aus unbekannten Quellen erlaubst, sondern nur dem Browser oder dem Dateimanager.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Unbekannte Quellen ist eine Android-Sicherheitseinstellung, die die Installation von Apps außerhalb des Play Stores erlaubt oder verbietet und seit Android 8 für jede App einzeln gesteuert wird.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Wenn dein Tester deine APK aus dem Browser herunterlädt und öffnet, zeigt Android einen Dialog: Installation aus unbekannten Quellen erlauben? Der Tester tippt auf Einstellungen, aktiviert den Schalter für den Browser und kehrt zur Installation zurück. Beim nächsten Mal ist der Schalter bereits aktiv und die Installation geht ohne Nachfrage. Das ist der einzige zusätzliche Schritt im Vergleich zur Play-Store-Installation.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die Einstellung für unbekannte Quellen ist der Grund, warum Sideloading auf Android sicher ist. Der Nutzer muss bewusst zustimmen, und die Erlaubnis gilt nur für die eine App, die die APK öffnet. Als Entwickler musst du deine Nutzer durch diesen Prozess führen, sonst brechen sie ab, weil sie nicht wissen, was sie tun sollen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was sind OTA-Updates, und wie kann ich sie für direkt verteilte Apps nutzen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du hast dein Brot direkt an den Kunden verkauft. Jetzt hast du das Rezept verbessert und willst allen Kunden das neue Brot bringen. Du könntest jedem Kunden einen neuen Laib vorbeibringen, aber das ist aufwendig. Besser: Du schickst jedem Kunden eine Backmischung, mit der er das neue Brot zu Hause selbst backen kann.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "OTA-Updates, Over-the-Air-Updates, sind Aktualisierungen, die direkt über das Internet auf das Gerät geladen werden. Bei Play-Store-Apps passiert das automatisch: Google benachrichtigt den Nutzer, und das Update wird im Hintergrund geladen. Bei direkt verteilten Apps musst du selbst für Updates sorgen. Mit EAS Update von Expo kannst du OTA-Updates auch für direkt verteilte Apps realisieren: Du veröffentlichst ein Update in der Expo-Cloud, und die App lädt es beim nächsten Start automatisch herunter.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Ein OTA-Update ist eine Aktualisierung, die direkt über das Internet auf das Gerät geladen wird, ohne dass der Nutzer eine neue APK manuell installieren muss.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Mit EAS Update veröffentlichst du ein Update mit eas update --branch production. Deine App prüft beim Start, ob ein neues Update verfügbar ist, lädt es herunter und wendet es beim nächsten Start an. Der Nutzer bekommt die neue Version, ohne eine APK herunterladen und installieren zu müssen. Das funktioniert sowohl für Play-Store-Apps als auch für direkt verteilte Apps.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "OTA-Updates sind der Schlüssel zur langfristigen Wartbarkeit direkt verteilter Apps. Ohne OTA-Updates müsstest du deine Nutzer bei jeder Änderung bitten, eine neue APK herunterzuladen und zu installieren. Das ist unpraktisch und führt dazu, dass viele Nutzer auf alten Versionen bleiben. Mit OTA-Updates sind deine Nutzer immer auf dem neuesten Stand, ohne etwas tun zu müssen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Wann ist Direktdownload die bessere Wahl als der Play Store?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Direktdownload ist in mehreren Fällen die bessere Wahl. Erstens: Interne Unternehmens-Apps, die nur für Mitarbeiter bestimmt sind und nicht öffentlich im Play Store stehen sollen. Zweitens: Apps für Kunden, die du persönlich betreust und die keinen Play-Store-Zugang haben oder wollen. Drittens: Beta-Tests, bei denen du schnell eine Version an Tester verteilen willst, ohne den Play-Store-Testkanal zu nutzen. Viertens: Apps, die gegen Play-Store-Richtlinien verstoßen, zum Beispiel weil sie Funktionen anbieten, die Google nicht erlaubt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Der Play Store ist nicht für jede App der richtige Ort. Wenn deine App nur für eine geschlossene Gruppe bestimmt ist, ist der Direktdownload einfacher, schneller und privater. Du sparst dir die Play-Store-Prüfung und behältst die volle Kontrolle über die Verteilung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "text": "Also noch einmal ganz kurz: Sideloading ist die Installation einer App außerhalb des Play Stores durch direkten APK-Download. Unbekannte Quellen ist die Sicherheitseinstellung, die der Nutzer einmalig aktivieren muss. OTA-Updates mit EAS Update halten direkt verteilte Apps automatisch aktuell. Direktdownload ist ideal für interne Apps, Kundensysteme und schnelle Tests, während der Play Store die bessere Wahl für öffentliche Apps mit großer Reichweite ist.",
+      "isKeySentence": true
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Sideloading ist die Installation einer App außerhalb des Play Stores, indem die APK-Datei direkt von einer Webseite heruntergeladen oder per USB-Kabel auf das Gerät übertragen wird. Sideloading erfordert, dass der Nutzer in den Einstellungen die Installation aus unbekannten Quellen erlaubt, und ist die einzige legale Möglichkeit, Apps ohne Play Store auf Android zu installieren.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Unbekannte Quellen ist eine Android-Sicherheitseinstellung, die die Installation von Apps aus anderen Quellen als dem Play Store erlaubt oder verbietet. Standardmäßig ist diese Einstellung deaktiviert, und der Nutzer muss sie für jede App, die APKs installieren will, einzeln aktivieren.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Ein OTA-Update, Over-the-Air-Update, ist eine Aktualisierung, die direkt über das Internet auf das Gerät geladen wird, ohne dass der Nutzer eine neue APK manuell installieren muss. OTA-Updates sind der Standard für Play-Store-Apps, können aber auch für direkt verteilte Apps mit Diensten wie EAS Update realisiert werden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Ist Sideloading legal?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ja, Sideloading ist völlig legal. Android erlaubt es ausdrücklich, Apps aus anderen Quellen als dem Play Store zu installieren. Es ist dein Gerät, und du darfst darauf installieren, was du willst. Google warnt lediglich vor den Sicherheitsrisiken, weil Apps aus unbekannten Quellen nicht von Google geprüft wurden. Solange du deine eigene App oder eine App aus einer vertrauenswürdigen Quelle installierst, gibt es keine rechtlichen Probleme.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Wie signiere ich eine APK für den Direktdownload?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Genau wie für den Play Store, mit deinem Release-Keystore. Der einzige Unterschied: Du lädst die signierte APK nicht in die Play Console hoch, sondern auf deine Webseite oder einen Download-Dienst. Die Signatur ist genauso wichtig wie bei einer Play-Store-App, weil Android auch bei direkt installierten Apps die Signatur prüft. Wenn du die App später aktualisieren willst, muss die neue APK mit demselben Schlüssel signiert sein wie die erste, sonst verweigert Android die Aktualisierung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Kann ich OTA-Updates auch ohne Expo nutzen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ja, es gibt mehrere Dienste für OTA-Updates, zum Beispiel CodePush von Microsoft oder selbstgebaute Lösungen. Das Prinzip ist immer dasselbe: Die App lädt beim Start eine Liste verfügbarer Updates von einem Server, vergleicht die Version mit der installierten und lädt bei Bedarf das Update herunter. EAS Update von Expo ist die einfachste Lösung, wenn du bereits Expo nutzt, weil es nahtlos integriert ist. Für reine React-Native-Projekte ohne Expo ist CodePush eine gute Alternative.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was sind die Nachteile des Direktdownloads gegenüber dem Play Store?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Der größte Nachteil ist die fehlende Reichweite. Im Play Store kann deine App von Millionen Nutzern gefunden werden, beim Direktdownload nur von denen, die den Link kennen. Zweitens das Vertrauen: Nutzer vertrauen Play-Store-Apps mehr als direkt heruntergeladenen APKs. Drittens die Updates: Ohne OTA-Updates musst du die Nutzer bei jeder neuen Version bitten, die APK manuell zu aktualisieren. Viertens die Sicherheit: Du bist selbst für die Sicherheit deiner Download-Infrastruktur verantwortlich, während Google den Play Store absichert.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Kann ich meine App gleichzeitig im Play Store und per Direktdownload anbieten?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ja, das ist eine gängige Praxis. Du veröffentlichst die App im Play Store für die breite Öffentlichkeit und bietest zusätzlich einen Direktdownload für spezielle Nutzergruppen an, zum Beispiel für Beta-Tester oder für Nutzer in Ländern, in denen der Play Store nicht verfügbar ist. Die APKs müssen mit demselben Keystore signiert sein, damit Nutzer zwischen den Versionen wechseln können. Beachte aber die Play-Store-Richtlinien: Du darfst Nutzer nicht aktiv aus dem Play Store auf deine Direktdownload-Seite lotsen.",
+      "isKeySentence": false
+    }
+  ],
+  "practiceExample": {
+    "text": "Sideloading erlaubt die Installation von Apps außerhalb des Play Stores. OTA-Updates mit EAS Update halten direkt verteilte Apps aktuell, ohne dass Nutzer manuell APKs installieren müssen.",
+    "repoNote": "repo-futuredev",
+    "location": "apps/mobile (EAS-Update-Konfiguration für OTA-Updates der FutureDev-App)"
+  },
+  "quiz": [
+    {
+      "question": "Welches Alltagsbild beschreibt den Direktdownload am treffendsten?",
+      "area": "Direktdownload",
+      "options": [
+        {
+          "text": "Hofverkauf statt Supermarkt: direkter Kontakt zum Kunden, aber weniger Reichweite.",
+          "isCorrect": true,
+          "explanation": "Richtig: Direktdownload ist der direkte Weg ohne Zwischenhändler."
+        },
+        {
+          "text": "Ein Lieferservice, der die App zum Nutzer bringt.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Nutzer holt die App selbst ab, sie wird nicht geliefert."
+        },
+        {
+          "text": "Ein Flohmarkt, auf dem jeder seine Apps anbieten kann.",
+          "isCorrect": false,
+          "explanation": "Falsch: Direktdownload ist kein Marktplatz, sondern eine direkte Verteilung."
+        },
+        {
+          "text": "Eine Bibliothek, in der Apps ausgeliehen werden.",
+          "isCorrect": false,
+          "explanation": "Falsch: Apps werden nicht ausgeliehen, sondern installiert."
+        }
+      ]
+    },
+    {
+      "question": "Was ist Sideloading?",
+      "area": "Direktdownload",
+      "options": [
+        {
+          "text": "Die Installation einer App außerhalb des Play Stores durch direkten APK-Download.",
+          "isCorrect": true,
+          "explanation": "Richtig: Sideloading umgeht den Play Store."
+        },
+        {
+          "text": "Das gleichzeitige Laden mehrerer Apps.",
+          "isCorrect": false,
+          "explanation": "Falsch: Sideloading hat nichts mit gleichzeitigem Laden zu tun."
+        },
+        {
+          "text": "Eine spezielle Art, Apps auf die SD-Karte zu installieren.",
+          "isCorrect": false,
+          "explanation": "Falsch: Sideloading bezieht sich auf die Quelle, nicht auf den Speicherort."
+        },
+        {
+          "text": "Ein Werkzeug zum Testen von Apps während der Entwicklung.",
+          "isCorrect": false,
+          "explanation": "Falsch: Sideloading ist eine Installationsmethode, kein Testwerkzeug."
+        }
+      ]
+    },
+    {
+      "question": "Was muss der Nutzer tun, um eine APK per Sideloading zu installieren?",
+      "area": "Direktdownload",
+      "options": [
+        {
+          "text": "In den Einstellungen die Installation aus unbekannten Quellen für die öffnende App erlauben.",
+          "isCorrect": true,
+          "explanation": "Richtig: einmalig die Sicherheitseinstellung aktivieren."
+        },
+        {
+          "text": "Das Handy rooten, um volle Systemrechte zu bekommen.",
+          "isCorrect": false,
+          "explanation": "Falsch: Rooten ist nicht nötig für Sideloading."
+        },
+        {
+          "text": "Ein Google-Konto erstellen und sich im Play Store anmelden.",
+          "isCorrect": false,
+          "explanation": "Falsch: Sideloading funktioniert ohne Google-Konto."
+        },
+        {
+          "text": "Nichts, die Installation funktioniert ohne zusätzliche Schritte.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Einstellung für unbekannte Quellen muss aktiviert werden."
+        }
+      ]
+    },
+    {
+      "question": "Wofür steht die Abkürzung OTA?",
+      "area": "Direktdownload",
+      "options": [
+        {
+          "text": "Over-the-Air, eine Aktualisierung direkt über das Internet.",
+          "isCorrect": true,
+          "explanation": "Richtig: OTA-Updates werden drahtlos übertragen."
+        },
+        {
+          "text": "Online Test Application, eine App zum Testen von Updates.",
+          "isCorrect": false,
+          "explanation": "Falsch: OTA steht für Over-the-Air."
+        },
+        {
+          "text": "Open Transfer Access, ein offenes Übertragungsprotokoll.",
+          "isCorrect": false,
+          "explanation": "Falsch: OTA ist kein Protokoll."
+        },
+        {
+          "text": "Onboard Testing Automation, ein automatisches Testsystem.",
+          "isCorrect": false,
+          "explanation": "Falsch: OTA hat nichts mit automatischen Tests zu tun."
+        }
+      ]
+    },
+    {
+      "question": "Wie realisierst du OTA-Updates mit Expo?",
+      "area": "Direktdownload",
+      "options": [
+        {
+          "text": "Mit EAS Update: eas update --branch production veröffentlicht ein Update in der Cloud.",
+          "isCorrect": true,
+          "explanation": "Richtig: EAS Update ist der Expo-Weg für OTA-Updates."
+        },
+        {
+          "text": "Indem du die APK per E-Mail an alle Nutzer schickst.",
+          "isCorrect": false,
+          "explanation": "Falsch: das ist kein OTA-Update, sondern manuelle Verteilung."
+        },
+        {
+          "text": "OTA-Updates sind mit Expo nicht möglich.",
+          "isCorrect": false,
+          "explanation": "Falsch: EAS Update ist genau für OTA-Updates gemacht."
+        },
+        {
+          "text": "Indem du die App im Play Store aktualisierst.",
+          "isCorrect": false,
+          "explanation": "Falsch: das ist ein Play-Store-Update, kein OTA-Update für direkt verteilte Apps."
+        }
+      ]
+    },
+    {
+      "question": "Wann ist Direktdownload die bessere Wahl als der Play Store?",
+      "area": "Direktdownload",
+      "options": [
+        {
+          "text": "Für interne Unternehmens-Apps und geschlossene Nutzergruppen.",
+          "isCorrect": true,
+          "explanation": "Richtig: nicht jede App muss öffentlich im Play Store stehen."
+        },
+        {
+          "text": "Immer, der Play Store ist grundsätzlich die schlechtere Wahl.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Play Store hat viele Vorteile für öffentliche Apps."
+        },
+        {
+          "text": "Nur wenn die App weniger als zehn Megabyte groß ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Größe der App ist nicht entscheidend."
+        },
+        {
+          "text": "Nur für Spiele, nicht für andere Apps.",
+          "isCorrect": false,
+          "explanation": "Falsch: Direktdownload ist für alle App-Typen möglich."
+        }
+      ]
+    },
+    {
+      "question": "Ist Sideloading legal?",
+      "area": "Direktdownload",
+      "options": [
+        {
+          "text": "Ja, Android erlaubt es ausdrücklich, Apps aus anderen Quellen zu installieren.",
+          "isCorrect": true,
+          "explanation": "Richtig: es ist dein Gerät, du darfst installieren, was du willst."
+        },
+        {
+          "text": "Nein, Sideloading ist in den meisten Ländern illegal.",
+          "isCorrect": false,
+          "explanation": "Falsch: Sideloading ist legal."
+        },
+        {
+          "text": "Nur mit einer speziellen Genehmigung von Google.",
+          "isCorrect": false,
+          "explanation": "Falsch: du brauchst keine Genehmigung von Google."
+        },
+        {
+          "text": "Nur für Entwickler, nicht für normale Nutzer.",
+          "isCorrect": false,
+          "explanation": "Falsch: jeder Nutzer kann Apps sideloaden."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der größte Nachteil des Direktdownloads?",
+      "area": "Direktdownload",
+      "options": [
+        {
+          "text": "Fehlende Reichweite und geringeres Vertrauen der Nutzer.",
+          "isCorrect": true,
+          "explanation": "Richtig: ohne Play Store fehlen Sichtbarkeit und Vertrauensvorschuss."
+        },
+        {
+          "text": "Die App ist grundsätzlich langsamer als im Play Store.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Performance ist dieselbe."
+        },
+        {
+          "text": "Die App kann keine In-App-Käufe anbieten.",
+          "isCorrect": false,
+          "explanation": "Falsch: In-App-Käufe sind auch ohne Play Store möglich."
+        },
+        {
+          "text": "Die App funktioniert nur auf Samsung-Handys.",
+          "isCorrect": false,
+          "explanation": "Falsch: direkt installierte Apps funktionieren auf allen Android-Geräten."
+        }
+      ]
+    },
+    {
+      "question": "Muss eine direkt verteilte APK signiert sein?",
+      "area": "Direktdownload",
+      "options": [
+        {
+          "text": "Ja, Android prüft die Signatur bei jeder Installation, egal woher die APK kommt.",
+          "isCorrect": true,
+          "explanation": "Richtig: die Signaturpflicht gilt für alle APKs."
+        },
+        {
+          "text": "Nein, die Signatur ist nur für den Play Store nötig.",
+          "isCorrect": false,
+          "explanation": "Falsch: Android verweigert die Installation unsignierter APKs."
+        },
+        {
+          "text": "Nur wenn die App mehr als zehn Megabyte groß ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Größe hat keinen Einfluss auf die Signaturpflicht."
+        },
+        {
+          "text": "Nur wenn der Nutzer die App das erste Mal installiert.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Signatur wird bei jeder Installation geprüft."
+        }
+      ]
+    },
+    {
+      "question": "Kannst du deine App gleichzeitig im Play Store und per Direktdownload anbieten?",
+      "area": "Direktdownload",
+      "options": [
+        {
+          "text": "Ja, solange beide Versionen mit demselben Keystore signiert sind.",
+          "isCorrect": true,
+          "explanation": "Richtig: gleicher Schlüssel ermöglicht Wechsel zwischen den Versionen."
+        },
+        {
+          "text": "Nein, Google verbietet das in den Play-Store-Richtlinien.",
+          "isCorrect": false,
+          "explanation": "Falsch: Google verbietet es nicht, solange du Nutzer nicht aktiv abwirbst."
+        },
+        {
+          "text": "Nur wenn die App kostenlos ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Preis der App ist nicht entscheidend."
+        },
+        {
+          "text": "Nur mit einer speziellen Genehmigung von Google.",
+          "isCorrect": false,
+          "explanation": "Falsch: du brauchst keine Genehmigung."
+        }
+      ]
+    },
+    {
+      "question": "Seit welcher Android-Version gilt die Einstellung für unbekannte Quellen pro App?",
+      "area": "Direktdownload",
+      "options": [
+        {
+          "text": "Seit Android 8, um die Sicherheit zu erhöhen.",
+          "isCorrect": true,
+          "explanation": "Richtig: vorher galt die Einstellung für das ganze Gerät."
+        },
+        {
+          "text": "Seit Android 4, mit der Einführung des Play Store.",
+          "isCorrect": false,
+          "explanation": "Falsch: Android 4 hatte noch die geräteweite Einstellung."
+        },
+        {
+          "text": "Seit Android 12, mit dem neuen Sicherheitsmodell.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Änderung kam viel früher."
+        },
+        {
+          "text": "Das war schon immer so, seit der ersten Android-Version.",
+          "isCorrect": false,
+          "explanation": "Falsch: früher galt die Einstellung für das ganze Gerät."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der Vorteil von OTA-Updates für direkt verteilte Apps?",
+      "area": "Direktdownload",
+      "options": [
+        {
+          "text": "Nutzer bekommen Updates automatisch, ohne eine neue APK manuell installieren zu müssen.",
+          "isCorrect": true,
+          "explanation": "Richtig: OTA-Updates machen die Wartung direkt verteilter Apps praktikabel."
+        },
+        {
+          "text": "OTA-Updates machen die App schneller.",
+          "isCorrect": false,
+          "explanation": "Falsch: OTA-Updates verbessern nicht die Performance."
+        },
+        {
+          "text": "OTA-Updates ersetzen die APK-Signatur.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Signatur bleibt unverändert."
+        },
+        {
+          "text": "OTA-Updates laden die App automatisch in den Play Store hoch.",
+          "isCorrect": false,
+          "explanation": "Falsch: OTA-Updates haben nichts mit dem Play Store zu tun."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Baue eine Preview-APK mit EAS Build und lade sie auf einen Datei-Hosting-Dienst wie Google Drive oder Dropbox hoch. Teile den Link mit einem Freund und lass ihn die APK per Sideloading installieren. Dokumentiere die Schritte, die der Nutzer durchführen muss, und erstelle eine kurze Anleitung für zukünftige Tester.",
+    "expectation": "Eine Preview-APK wurde per Direktdownload verteilt und von einem Tester per Sideloading installiert. Der Prozess wurde dokumentiert.",
+    "checklist": [
+      "Eine Preview-APK mit EAS Build gebaut.",
+      "Die APK auf einen Datei-Hosting-Dienst hochgeladen.",
+      "Den Link mit einem Tester geteilt.",
+      "Der Tester hat die APK per Sideloading installiert.",
+      "Die notwendigen Schritte für den Nutzer dokumentiert."
+    ],
+    "portfolioItem": "P04"
+  },
+  "audio": {
+    "file": "M05-04-02.mp3",
+    "durationSeconds": 1200,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Ist Sideloading legal?",
+      "answer": "Ja, Sideloading ist völlig legal. Android erlaubt es ausdrücklich, Apps aus anderen Quellen als dem Play Store zu installieren. Es ist dein Gerät, und du darfst darauf installieren, was du willst. Google warnt lediglich vor den Sicherheitsrisiken, weil Apps aus unbekannten Quellen nicht von Google geprüft wurden. Solange du deine eigene App oder eine App aus einer vertrauenswürdigen Quelle installierst, gibt es keine rechtlichen Probleme."
+    },
+    {
+      "question": "Wie signiere ich eine APK für den Direktdownload?",
+      "answer": "Genau wie für den Play Store, mit deinem Release-Keystore. Der einzige Unterschied: Du lädst die signierte APK nicht in die Play Console hoch, sondern auf deine Webseite oder einen Download-Dienst. Die Signatur ist genauso wichtig wie bei einer Play-Store-App, weil Android auch bei direkt installierten Apps die Signatur prüft. Wenn du die App später aktualisieren willst, muss die neue APK mit demselben Schlüssel signiert sein wie die erste, sonst verweigert Android die Aktualisierung."
+    },
+    {
+      "question": "Kann ich OTA-Updates auch ohne Expo nutzen?",
+      "answer": "Ja, es gibt mehrere Dienste für OTA-Updates, zum Beispiel CodePush von Microsoft oder selbstgebaute Lösungen. Das Prinzip ist immer dasselbe: Die App lädt beim Start eine Liste verfügbarer Updates von einem Server, vergleicht die Version mit der installierten und lädt bei Bedarf das Update herunter. EAS Update von Expo ist die einfachste Lösung, wenn du bereits Expo nutzt, weil es nahtlos integriert ist. Für reine React-Native-Projekte ohne Expo ist CodePush eine gute Alternative."
+    },
+    {
+      "question": "Was sind die Nachteile des Direktdownloads gegenüber dem Play Store?",
+      "answer": "Der größte Nachteil ist die fehlende Reichweite. Im Play Store kann deine App von Millionen Nutzern gefunden werden, beim Direktdownload nur von denen, die den Link kennen. Zweitens das Vertrauen: Nutzer vertrauen Play-Store-Apps mehr als direkt heruntergeladenen APKs. Drittens die Updates: Ohne OTA-Updates musst du die Nutzer bei jeder neuen Version bitten, die APK manuell zu aktualisieren. Viertens die Sicherheit: Du bist selbst für die Sicherheit deiner Download-Infrastruktur verantwortlich, während Google den Play Store absichert."
+    },
+    {
+      "question": "Kann ich meine App gleichzeitig im Play Store und per Direktdownload anbieten?",
+      "answer": "Ja, das ist eine gängige Praxis. Du veröffentlichst die App im Play Store für die breite Öffentlichkeit und bietest zusätzlich einen Direktdownload für spezielle Nutzergruppen an, zum Beispiel für Beta-Tester oder für Nutzer in Ländern, in denen der Play Store nicht verfügbar ist. Die APKs müssen mit demselben Keystore signiert sein, damit Nutzer zwischen den Versionen wechseln können. Beachte aber die Play-Store-Richtlinien: Du darfst Nutzer nicht aktiv aus dem Play Store auf deine Direktdownload-Seite lotsen."
+    }
+  ]
+}

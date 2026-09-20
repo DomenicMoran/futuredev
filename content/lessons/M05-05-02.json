@@ -1,0 +1,615 @@
+{
+  "id": "M05-05-02",
+  "title": "Kotlin vs React Native",
+  "durationMinutes": 32,
+  "prerequisites": [
+    "M05-05-01",
+    "M05-02-01"
+  ],
+  "terms": [
+    {
+      "term": "Cross-Plattform",
+      "definition": "Der Ansatz, eine App einmal zu schreiben und auf mehreren Plattformen wie Android und iOS laufen zu lassen. React Native ist eine Cross-Plattform-Technologie, die eine gemeinsame Codebasis für beide Plattformen nutzt, während native Entwicklung für jede Plattform eigenen Code erfordert."
+    },
+    {
+      "term": "Native Performance",
+      "definition": "Die Ausführungsgeschwindigkeit einer App, die direkt auf dem Betriebssystem läuft, ohne Zwischenschichten wie eine JavaScript-Bridge. Native Performance ist besonders bei grafikintensiven Anwendungen, Spielen und Echtzeitverarbeitung wichtig, wo jede Millisekunde zählt."
+    },
+    {
+      "term": "Code-Sharing",
+      "definition": "Die Wiederverwendung von Code zwischen verschiedenen Plattformen oder Projekten. React Native ermöglicht Code-Sharing zwischen Android und iOS, oft mit über neunzig Prozent gemeinsamen Code. Native Entwicklung erfordert separate Codebasen, ermöglicht aber plattformspezifische Optimierungen."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du willst in zwei Ländern ein Restaurant eröffnen: in Deutschland und in Japan. Du hast zwei Möglichkeiten. Entweder du entwickelst ein Einheitskonzept, das in beiden Ländern funktioniert: gleiche Speisekarte, gleiche Einrichtung, gleiche Abläufe. Das spart Zeit und Geld, aber du kannst nicht auf lokale Besonderheiten eingehen. Oder du entwickelst für jedes Land ein eigenes Konzept, das perfekt auf die lokalen Geschmäcker und Gewohnheiten abgestimmt ist. Das kostet mehr, aber die Restaurants sind optimal angepasst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "React Native ist das Einheitskonzept: eine Codebasis für beide Plattformen, schnell entwickelt, aber mit Kompromissen bei plattformspezifischen Funktionen. Native Entwicklung mit Kotlin für Android und Swift für iOS sind die landesspezifischen Konzepte: perfekt angepasst, aber doppelter Aufwand. Die Entscheidung zwischen diesen Ansätzen ist eine der wichtigsten, die du als mobiler Entwickler triffst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was genau bedeutet Cross-Plattform, und wie viel Code kann ich wirklich teilen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Cross-Plattform bedeutet, dass du eine App einmal schreibst und sie auf mehreren Plattformen läuft. Bei React Native teilst du in der Regel achtzig bis fünfundneunzig Prozent des Codes zwischen Android und iOS. Der gemeinsame Code umfasst die gesamte Geschäftslogik, die State-Verwaltung, die API-Aufrufe und den größten Teil der Benutzeroberfläche. Die plattformspezifischen fünf bis zwanzig Prozent sind Dinge wie die Status-Bar-Konfiguration, plattformspezifische UI-Anpassungen und native Module, die auf jeder Plattform anders implementiert sind.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Cross-Plattform ist der Ansatz, eine App einmal zu schreiben und auf mehreren Plattformen laufen zu lassen, wobei React Native typischerweise über neunzig Prozent Code-Sharing ermöglicht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Die FutureDev-App teilt etwa fünfundneunzig Prozent des Codes zwischen Android und iOS. Nur die Dateien für die native Konfiguration wie das AndroidManifest und die iOS-Info.plist sind plattformspezifisch. Der gesamte React-Code, alle Komponenten, die Navigation und die API-Aufrufe sind identisch. Das bedeutet: Ein Bugfix in der Lernlogik wird einmal geschrieben und behebt den Fehler auf beiden Plattformen gleichzeitig.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Code-Sharing ist der größte wirtschaftliche Vorteil von React Native. Statt zwei Teams für Android und iOS zu bezahlen, brauchst du ein Team. Statt zwei Codebasen zu warten, wartest du eine. Statt Bugs zweimal zu fixen, fixt du sie einmal. Das spart nicht nur Geld, sondern auch Zeit und Nerven.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was bedeutet Native Performance, und wann ist sie wirklich wichtig?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir zwei Autos vor. Das eine hat einen Direktantrieb: Der Motor ist direkt mit den Rädern verbunden, jede Umdrehung geht ohne Verlust auf die Straße. Das andere hat eine Automatik mit Drehmomentwandler: Der Motor dreht, der Wandler überträgt die Kraft, und ein kleiner Teil der Energie geht dabei verloren. Bei normaler Fahrt merkst du den Unterschied nicht. Aber wenn du mit Höchstgeschwindigkeit fährst oder einen schweren Anhänger ziehst, macht der Direktantrieb den entscheidenden Unterschied.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Native Performance ist der Direktantrieb: Der Code läuft direkt auf dem Betriebssystem, ohne Zwischenschichten. React Native hat die Automatik mit Drehmomentwandler: Die JavaScript-Bridge übersetzt jeden Befehl, und das kostet eine winzige Menge Zeit. Bei normalen Apps wie einer Lernplattform, einer To-Do-Liste oder einer Nachrichten-App merkst du diesen Unterschied nicht. Aber bei grafikintensiven Spielen, Augmented Reality, Echtzeit-Videoverarbeitung oder komplexen Animationen mit sechzig Bildern pro Sekunde kann die Bridge zum Flaschenhals werden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Native Performance ist die Ausführungsgeschwindigkeit einer App, die direkt auf dem Betriebssystem läuft, und sie ist besonders bei grafikintensiven Anwendungen und Echtzeitverarbeitung wichtig.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Ein 3D-Spiel wie Asphalt läuft nativ, weil es jeden Tropfen Leistung aus der GPU holen muss. Eine Banking-App läuft perfekt mit React Native, weil sie hauptsächlich Listen, Formulare und Texte anzeigt. Der Performance-Unterschied existiert, aber er ist für die meisten Apps nicht relevant. Die Frage ist nicht, ob nativ schneller ist, sondern ob React Native schnell genug für deine spezielle App ist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die Performance-Frage wird oft überbewertet. Für neunzig Prozent aller Apps ist React Native mehr als schnell genug. Die restlichen zehn Prozent wissen meist schon vorher, dass sie native Performance brauchen, weil sie an die Grenzen des Machbaren gehen. Für alle anderen ist die Entwicklungsgeschwindigkeit der entscheidende Faktor, und da gewinnt React Native.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was sind die versteckten Kosten der nativen Entwicklung?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Die offensichtlichen Kosten sind zwei Codebasen, zwei Teams und doppelte Entwicklungszeit. Die versteckten Kosten sind gravierender: Zwei Codebasen driften mit der Zeit auseinander. Ein Feature wird auf Android anders implementiert als auf iOS, und plötzlich verhalten sich die Apps unterschiedlich. Bugs müssen in zwei verschiedenen Sprachen mit zwei verschiedenen Debuggern gefunden werden. Neue Teammitglieder müssen zwei Technologie-Stacks lernen. Und wenn eine neue Plattform wie Wear OS oder Android TV dazukommt, brauchst du eine dritte Codebasis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die versteckten Kosten der nativen Entwicklung sind der Hauptgrund, warum selbst große Unternehmen wie Meta, Microsoft und Shopify React Native einsetzen. Sie könnten sich native Entwicklung leisten, aber sie wollen die Komplexität von zwei Codebasen nicht managen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Wann sollte ich mich trotz der Kosten für native Entwicklung entscheiden?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Es gibt klare Fälle, in denen native Entwicklung die richtige Wahl ist. Erstens: Deine App braucht maximale Performance, wie ein 3D-Spiel oder eine AR-App. Zweitens: Deine App nutzt plattformspezifische Hardware intensiv, die React Native nicht gut unterstützt, wie Bluetooth Low Energy oder NFC. Drittens: Du baust eine App, die tief in das Betriebssystem integriert sein muss, wie ein Launcher oder eine Tastatur. Viertens: Dein Team besteht aus erfahrenen nativen Entwicklern, die schneller nativ als mit React Native arbeiten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Ein konkretes Beispiel: Du baust eine App, die über Bluetooth mit einem medizinischen Gerät kommuniziert und die Daten in Echtzeit verarbeitet. React Native hat Bluetooth-Unterstützung, aber sie ist nicht so ausgereift wie die native API. Die Echtzeitverarbeitung profitiert von nativer Performance. In diesem Fall ist native Entwicklung die sicherere Wahl, weil du dir keine Sorgen machen musst, ob die Bridge mitspielt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die Entscheidung für oder gegen native Entwicklung sollte nie dogmatisch sein. Es geht nicht darum, welche Technologie besser ist, sondern welche für dein spezielles Projekt die richtige ist. Ein guter Entwickler kennt beide Ansätze und wählt je nach Projekt den passenden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Kann ich React Native und native Entwicklung kombinieren?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ja, und das ist einer der größten Vorteile von React Native. Du kannst den Großteil deiner App in React Native bauen und nur die performance-kritischen Teile nativ in Kotlin und Swift schreiben. Diese nativen Module bindest du über die Bridge in deine React-Native-App ein. So bekommst du das Beste aus beiden Welten: schnelle Entwicklung mit React Native für den Großteil der App und native Performance für die kritischen Teile.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Eine Video-App könnte die Benutzeroberfläche, die Navigation und die API-Anbindung in React Native bauen, aber den Videoplayer nativ, weil er Hardware-Dekodierung und flüssige Wiedergabe braucht. Der Nutzer merkt keinen Unterschied, aber der Entwickler spart Monate an Arbeit für den React-Native-Teil und bekommt trotzdem perfekte Videowiedergabe.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die Kombinierbarkeit von React Native mit nativem Code macht die Entscheidung weniger schwarz-weiß. Du musst dich nicht für das eine oder das andere entscheiden, sondern kannst den Mix wählen, der für dein Projekt optimal ist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "text": "Also noch einmal ganz kurz: Cross-Plattform mit React Native spart Zeit und Geld durch Code-Sharing von über neunzig Prozent. Native Performance ist nur für grafikintensive Apps und Echtzeitanwendungen wirklich wichtig. Die versteckten Kosten der nativen Entwicklung sind zwei auseinanderdriftende Codebasen und doppelter Wartungsaufwand. Und das Beste: Du kannst beide Ansätze kombinieren, indem du native Module in deine React-Native-App einbindest.",
+      "isKeySentence": true
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Cross-Plattform ist der Ansatz, eine App einmal zu schreiben und auf mehreren Plattformen wie Android und iOS laufen zu lassen. React Native ist eine Cross-Plattform-Technologie, die eine gemeinsame Codebasis für beide Plattformen nutzt, während native Entwicklung für jede Plattform eigenen Code erfordert.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Native Performance ist die Ausführungsgeschwindigkeit einer App, die direkt auf dem Betriebssystem läuft, ohne Zwischenschichten wie eine JavaScript-Bridge. Native Performance ist besonders bei grafikintensiven Anwendungen, Spielen und Echtzeitverarbeitung wichtig, wo jede Millisekunde zählt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Code-Sharing ist die Wiederverwendung von Code zwischen verschiedenen Plattformen oder Projekten. React Native ermöglicht Code-Sharing zwischen Android und iOS, oft mit über neunzig Prozent gemeinsamen Code. Native Entwicklung erfordert separate Codebasen, ermöglicht aber plattformspezifische Optimierungen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Ist React Native grundsätzlich langsamer als native Entwicklung?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Technisch ja, aber praktisch ist der Unterschied für die meisten Apps nicht spürbar. Die JavaScript-Bridge fügt eine minimale Latenz hinzu, die bei normalen UI-Interaktionen wie Scrollen, Tippen und Navigieren nicht wahrnehmbar ist. Erst bei extrem performance-kritischen Operationen wie komplexen Animationen mit vielen gleichzeitigen Bewegungen oder Echtzeit-Videoverarbeitung wird der Unterschied relevant. Für eine typische Business-App, eine Social-Media-App oder eine Lernplattform ist React Native mehr als schnell genug. Die meisten Nutzer können nicht erkennen, ob eine App mit React Native oder nativ gebaut wurde.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Welche großen Apps nutzen React Native?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Meta nutzt React Native für Facebook, Instagram und den Facebook Ads Manager. Microsoft nutzt es für Office, Outlook und Teams. Shopify, Coinbase, Pinterest und Discord nutzen es ebenfalls. Diese Unternehmen könnten sich problemlos native Entwicklung leisten, haben sich aber für React Native entschieden, weil die Vorteile des Code-Sharings die Nachteile der nicht-nativen Performance überwiegen. Wenn React Native für diese Apps mit hunderten Millionen Nutzern gut genug ist, ist es das für deine App mit hoher Wahrscheinlichkeit auch.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Kann ich mit React Native anfangen und später auf nativ umsteigen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ja, und das ist ein gängiger Pfad. Du startest mit React Native, weil es schneller geht und du schneller eine erste Version im Store hast. Wenn die App wächst und du an Performance-Grenzen stößt, schreibst du die kritischen Teile nativ und bindest sie als native Module ein. Du musst nicht die gesamte App neu schreiben, sondern nur die Teile, die wirklich von nativer Performance profitieren. Dieser graduelle Ansatz ist wirtschaftlich sinnvoll, weil du nicht von Anfang an in native Entwicklung investierst, bevor du weißt, ob die App überhaupt erfolgreich ist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was ist der größte Nachteil von React Native gegenüber nativer Entwicklung?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Die Abhängigkeit von Drittanbieter-Modulen für native Funktionen. Wenn du eine native Funktion brauchst, für die es noch kein React-Native-Modul gibt, musst du entweder selbst ein natives Modul schreiben oder warten, bis jemand anderes es tut. In der nativen Entwicklung hast du sofort Zugriff auf alle APIs des Betriebssystems. In der Praxis ist das aber selten ein Problem, weil die React-Native-Community für fast jede gängige Funktion ein Modul bereitstellt. Nur bei brandneuen Android-APIs kann es einige Monate dauern, bis ein Modul verfügbar ist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Lohnt es sich, beide Ansätze zu lernen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ja, absolut. React Native ist der schnellste Weg zu einer funktionierenden App und deckt neunzig Prozent aller Anforderungen ab. Kotlin und native Entwicklung geben dir die volle Kontrolle für die restlichen zehn Prozent. Ein Entwickler, der beide Ansätze beherrscht, kann für jedes Projekt die optimale Technologie wählen und ist nicht auf einen Ansatz beschränkt. Außerdem macht dich die Kombination aus React-Native- und Kotlin-Kenntnissen auf dem Arbeitsmarkt besonders wertvoll, weil du die Lücke zwischen Web- und nativer Entwicklung schließen kannst.",
+      "isKeySentence": false
+    }
+  ],
+  "practiceExample": {
+    "text": "React Native ermöglicht Cross-Plattform-Entwicklung mit über neunzig Prozent Code-Sharing. Native Performance ist nur für grafikintensive Apps relevant, und beide Ansätze lassen sich kombinieren.",
+    "repoNote": "repo-futuredev",
+    "location": "apps/mobile (React Native mit Expo für Cross-Plattform, native Module in android/ für plattformspezifische Funktionen)"
+  },
+  "quiz": [
+    {
+      "question": "Welches Alltagsbild beschreibt den Unterschied zwischen Cross-Plattform und nativer Entwicklung am treffendsten?",
+      "area": "Vergleich",
+      "options": [
+        {
+          "text": "Ein Einheitsrestaurant für zwei Länder versus zwei landesspezifische Restaurants.",
+          "isCorrect": true,
+          "explanation": "Richtig: Cross-Plattform ist das Einheitskonzept, nativ die lokale Anpassung."
+        },
+        {
+          "text": "Ein Auto versus ein Fahrrad.",
+          "isCorrect": false,
+          "explanation": "Falsch: das eine ist nicht grundsätzlich besser als das andere."
+        },
+        {
+          "text": "Ein Buch versus einen Film.",
+          "isCorrect": false,
+          "explanation": "Falsch: es geht um Entwicklungsansätze, nicht um Medienformate."
+        },
+        {
+          "text": "Eine Brille versus Kontaktlinsen.",
+          "isCorrect": false,
+          "explanation": "Falsch: beide lösen dasselbe Problem auf unterschiedliche Weise."
+        }
+      ]
+    },
+    {
+      "question": "Wie viel Code teilen React-Native-Apps typischerweise zwischen Android und iOS?",
+      "area": "Vergleich",
+      "options": [
+        {
+          "text": "Achtzig bis fünfundneunzig Prozent.",
+          "isCorrect": true,
+          "explanation": "Richtig: der Großteil des Codes ist plattformübergreifend."
+        },
+        {
+          "text": "Null Prozent, jede Plattform braucht eigenen Code.",
+          "isCorrect": false,
+          "explanation": "Falsch: Code-Sharing ist der Hauptvorteil von React Native."
+        },
+        {
+          "text": "Fünfzig Prozent, die Hälfte ist plattformspezifisch.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Anteil des plattformspezifischen Codes ist viel geringer."
+        },
+        {
+          "text": "Einhundert Prozent, es gibt keinen plattformspezifischen Code.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein kleiner Teil wie native Konfiguration ist immer plattformspezifisch."
+        }
+      ]
+    },
+    {
+      "question": "Wann ist Native Performance wirklich wichtig?",
+      "area": "Vergleich",
+      "options": [
+        {
+          "text": "Bei grafikintensiven Spielen, AR und Echtzeit-Videoverarbeitung.",
+          "isCorrect": true,
+          "explanation": "Richtig: nur bei extremen Performance-Anforderungen wird der Unterschied spürbar."
+        },
+        {
+          "text": "Bei jeder App, weil Nutzer den Unterschied immer merken.",
+          "isCorrect": false,
+          "explanation": "Falsch: bei den meisten Apps ist der Unterschied nicht spürbar."
+        },
+        {
+          "text": "Nur bei iOS-Apps, Android ist immer schnell genug.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Plattform ist nicht entscheidend."
+        },
+        {
+          "text": "Nur bei Apps mit mehr als einer Million Nutzern.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Nutzerzahl hat keinen Einfluss auf die Performance-Anforderungen."
+        }
+      ]
+    },
+    {
+      "question": "Was sind versteckte Kosten der nativen Entwicklung?",
+      "area": "Vergleich",
+      "options": [
+        {
+          "text": "Zwei auseinanderdriftende Codebasen und doppelter Wartungsaufwand.",
+          "isCorrect": true,
+          "explanation": "Richtig: die Komplexität von zwei Codebasen wird oft unterschätzt."
+        },
+        {
+          "text": "Höhere Store-Gebühren für native Apps.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Store-Gebühren sind für alle Apps gleich."
+        },
+        {
+          "text": "Native Apps verbrauchen mehr Akku.",
+          "isCorrect": false,
+          "explanation": "Falsch: native Apps sind oft sogar akkusparender."
+        },
+        {
+          "text": "Native Apps können nur im Play Store veröffentlicht werden.",
+          "isCorrect": false,
+          "explanation": "Falsch: native Apps können auch per Direktdownload verteilt werden."
+        }
+      ]
+    },
+    {
+      "question": "Welche großen Unternehmen nutzen React Native?",
+      "area": "Vergleich",
+      "options": [
+        {
+          "text": "Meta, Microsoft, Shopify, Coinbase und Pinterest.",
+          "isCorrect": true,
+          "explanation": "Richtig: diese Unternehmen setzen auf React Native trotz ihrer Ressourcen."
+        },
+        {
+          "text": "Nur kleine Startups, große Unternehmen nutzen immer native Entwicklung.",
+          "isCorrect": false,
+          "explanation": "Falsch: auch große Unternehmen nutzen React Native."
+        },
+        {
+          "text": "Nur Google, weil sie React Native entwickelt haben.",
+          "isCorrect": false,
+          "explanation": "Falsch: React Native wurde von Meta entwickelt, nicht von Google."
+        },
+        {
+          "text": "Ausschließlich Spielefirmen.",
+          "isCorrect": false,
+          "explanation": "Falsch: Spiele werden meist nativ entwickelt."
+        }
+      ]
+    },
+    {
+      "question": "Kannst du React Native und native Entwicklung kombinieren?",
+      "area": "Vergleich",
+      "options": [
+        {
+          "text": "Ja, du kannst native Module in Kotlin und Swift schreiben und in React Native einbinden.",
+          "isCorrect": true,
+          "explanation": "Richtig: die Kombination gibt dir das Beste aus beiden Welten."
+        },
+        {
+          "text": "Nein, du musst dich für einen Ansatz entscheiden.",
+          "isCorrect": false,
+          "explanation": "Falsch: React Native ist explizit für die Kombination mit nativem Code ausgelegt."
+        },
+        {
+          "text": "Nur wenn du ein kostenpflichtiges Expo-Konto hast.",
+          "isCorrect": false,
+          "explanation": "Falsch: native Module sind auch mit dem kostenlosen Expo-Konto möglich."
+        },
+        {
+          "text": "Nur für Android, nicht für iOS.",
+          "isCorrect": false,
+          "explanation": "Falsch: native Module funktionieren auf beiden Plattformen."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der größte Nachteil von React Native gegenüber nativer Entwicklung?",
+      "area": "Vergleich",
+      "options": [
+        {
+          "text": "Die Abhängigkeit von Drittanbieter-Modulen für native Funktionen.",
+          "isCorrect": true,
+          "explanation": "Richtig: neue APIs brauchen Zeit, bis Module verfügbar sind."
+        },
+        {
+          "text": "React-Native-Apps können nicht im Play Store veröffentlicht werden.",
+          "isCorrect": false,
+          "explanation": "Falsch: React-Native-Apps werden ganz normal im Play Store veröffentlicht."
+        },
+        {
+          "text": "React Native unterstützt keine Kamera.",
+          "isCorrect": false,
+          "explanation": "Falsch: React Native hat volle Kamera-Unterstützung."
+        },
+        {
+          "text": "React Native ist grundsätzlich unsicherer als native Entwicklung.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Sicherheit hängt von der Implementierung ab, nicht vom Framework."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der größte wirtschaftliche Vorteil von React Native?",
+      "area": "Vergleich",
+      "options": [
+        {
+          "text": "Ein Team, eine Codebasis, halbe Entwicklungszeit im Vergleich zu zwei nativen Apps.",
+          "isCorrect": true,
+          "explanation": "Richtig: Code-Sharing spart Zeit, Geld und Nerven."
+        },
+        {
+          "text": "React-Native-Apps sind im Play Store grundsätzlich höher platziert.",
+          "isCorrect": false,
+          "explanation": "Falsch: das Framework hat keinen Einfluss auf das Store-Ranking."
+        },
+        {
+          "text": "React Native ist kostenlos, native Entwicklung kostet Lizenzgebühren.",
+          "isCorrect": false,
+          "explanation": "Falsch: beide sind kostenlos."
+        },
+        {
+          "text": "React-Native-Apps haben grundsätzlich mehr Nutzer.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Nutzerzahl hängt von der App ab, nicht vom Framework."
+        }
+      ]
+    },
+    {
+      "question": "Kannst du mit React Native anfangen und später auf nativ umsteigen?",
+      "area": "Vergleich",
+      "options": [
+        {
+          "text": "Ja, du kannst kritische Teile nach und nach nativ schreiben und als Module einbinden.",
+          "isCorrect": true,
+          "explanation": "Richtig: der graduelle Umstieg ist ein gängiger und wirtschaftlich sinnvoller Pfad."
+        },
+        {
+          "text": "Nein, du musst die gesamte App neu schreiben.",
+          "isCorrect": false,
+          "explanation": "Falsch: du musst nur die kritischen Teile nativ schreiben."
+        },
+        {
+          "text": "Nur wenn die App weniger als zehntausend Nutzer hat.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Nutzerzahl ist nicht entscheidend."
+        },
+        {
+          "text": "Nur mit einer speziellen Google-Genehmigung.",
+          "isCorrect": false,
+          "explanation": "Falsch: du brauchst keine Genehmigung."
+        }
+      ]
+    },
+    {
+      "question": "Lohnt es sich, beide Ansätze zu lernen?",
+      "area": "Vergleich",
+      "options": [
+        {
+          "text": "Ja, die Kombination macht dich flexibler und auf dem Arbeitsmarkt wertvoller.",
+          "isCorrect": true,
+          "explanation": "Richtig: beide Ansätze zu beherrschen ist ein großer Vorteil."
+        },
+        {
+          "text": "Nein, du solltest dich auf einen Ansatz spezialisieren.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Kombination ist wertvoller als die Spezialisierung."
+        },
+        {
+          "text": "Nur wenn du in einem großen Unternehmen arbeitest.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Kombination ist für Entwickler jeder Größe wertvoll."
+        },
+        {
+          "text": "Nur wenn du ausschließlich Android-Apps baust.",
+          "isCorrect": false,
+          "explanation": "Falsch: Kotlin ist auch außerhalb von Android nützlich."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der Hauptgrund, warum selbst große Unternehmen React Native nutzen?",
+      "area": "Vergleich",
+      "options": [
+        {
+          "text": "Sie wollen die Komplexität von zwei nativen Codebasen nicht managen.",
+          "isCorrect": true,
+          "explanation": "Richtig: Code-Sharing reduziert Komplexität, selbst für große Teams."
+        },
+        {
+          "text": "React Native ist grundsätzlich sicherer als native Entwicklung.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Sicherheit ist nicht der Hauptgrund."
+        },
+        {
+          "text": "Google zwingt große Unternehmen, React Native zu nutzen.",
+          "isCorrect": false,
+          "explanation": "Falsch: es gibt keinen Zwang."
+        },
+        {
+          "text": "Native Entwicklung ist für große Unternehmen zu teuer.",
+          "isCorrect": false,
+          "explanation": "Falsch: große Unternehmen könnten sich native Entwicklung leisten."
+        }
+      ]
+    },
+    {
+      "question": "Für welche Art von App ist native Entwicklung die klar bessere Wahl?",
+      "area": "Vergleich",
+      "options": [
+        {
+          "text": "Eine App, die über Bluetooth mit medizinischen Geräten kommuniziert und Echtzeitdaten verarbeitet.",
+          "isCorrect": true,
+          "explanation": "Richtig: intensive Hardware-Nutzung und Echtzeitanforderungen sprechen für nativ."
+        },
+        {
+          "text": "Eine Lernplattform mit Texten und Quizfragen.",
+          "isCorrect": false,
+          "explanation": "Falsch: inhaltsbasierte Apps sind der ideale Fall für React Native."
+        },
+        {
+          "text": "Eine To-Do-Liste mit Cloud-Synchronisation.",
+          "isCorrect": false,
+          "explanation": "Falsch: einfache Apps funktionieren perfekt mit React Native."
+        },
+        {
+          "text": "Eine Nachrichten-App mit Text und Bildern.",
+          "isCorrect": false,
+          "explanation": "Falsch: Nachrichten-Apps sind ein klassischer React-Native-Anwendungsfall."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Vergleiche die FutureDev-App (React Native) mit einer beliebigen nativen Android-App deiner Wahl. Achte auf Ladezeit, Scroll-Verhalten, Animationen und das allgemeine Nutzergefühl. Notiere deine Beobachtungen. Überlege dann, welche Teile der FutureDev-App von nativer Performance profitieren würden und welche nicht.",
+    "expectation": "Der praktische Unterschied zwischen React Native und nativer Entwicklung wurde anhand echter Apps erfahren und dokumentiert.",
+    "checklist": [
+      "Die FutureDev-App und eine native Android-App geöffnet und verglichen.",
+      "Ladezeit, Scroll-Verhalten und Animationen beider Apps beobachtet.",
+      "Beobachtungen zum Nutzergefühl notiert.",
+      "Überlegt, welche Teile der FutureDev-App von nativer Performance profitieren würden.",
+      "Die Erkenntnisse dokumentiert."
+    ],
+    "portfolioItem": "P04"
+  },
+  "audio": {
+    "file": "M05-05-02.mp3",
+    "durationSeconds": 1280,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Ist React Native grundsätzlich langsamer als native Entwicklung?",
+      "answer": "Technisch ja, aber praktisch ist der Unterschied für die meisten Apps nicht spürbar. Die JavaScript-Bridge fügt eine minimale Latenz hinzu, die bei normalen UI-Interaktionen wie Scrollen, Tippen und Navigieren nicht wahrnehmbar ist. Erst bei extrem performance-kritischen Operationen wie komplexen Animationen mit vielen gleichzeitigen Bewegungen oder Echtzeit-Videoverarbeitung wird der Unterschied relevant. Für eine typische Business-App, eine Social-Media-App oder eine Lernplattform ist React Native mehr als schnell genug. Die meisten Nutzer können nicht erkennen, ob eine App mit React Native oder nativ gebaut wurde."
+    },
+    {
+      "question": "Welche großen Apps nutzen React Native?",
+      "answer": "Meta nutzt React Native für Facebook, Instagram und den Facebook Ads Manager. Microsoft nutzt es für Office, Outlook und Teams. Shopify, Coinbase, Pinterest und Discord nutzen es ebenfalls. Diese Unternehmen könnten sich problemlos native Entwicklung leisten, haben sich aber für React Native entschieden, weil die Vorteile des Code-Sharings die Nachteile der nicht-nativen Performance überwiegen. Wenn React Native für diese Apps mit hunderten Millionen Nutzern gut genug ist, ist es das für deine App mit hoher Wahrscheinlichkeit auch."
+    },
+    {
+      "question": "Kann ich mit React Native anfangen und später auf nativ umsteigen?",
+      "answer": "Ja, und das ist ein gängiger Pfad. Du startest mit React Native, weil es schneller geht und du schneller eine erste Version im Store hast. Wenn die App wächst und du an Performance-Grenzen stößt, schreibst du die kritischen Teile nativ und bindest sie als native Module ein. Du musst nicht die gesamte App neu schreiben, sondern nur die Teile, die wirklich von nativer Performance profitieren. Dieser graduelle Ansatz ist wirtschaftlich sinnvoll, weil du nicht von Anfang an in native Entwicklung investierst, bevor du weißt, ob die App überhaupt erfolgreich ist."
+    },
+    {
+      "question": "Was ist der größte Nachteil von React Native gegenüber nativer Entwicklung?",
+      "answer": "Die Abhängigkeit von Drittanbieter-Modulen für native Funktionen. Wenn du eine native Funktion brauchst, für die es noch kein React-Native-Modul gibt, musst du entweder selbst ein natives Modul schreiben oder warten, bis jemand anderes es tut. In der nativen Entwicklung hast du sofort Zugriff auf alle APIs des Betriebssystems. In der Praxis ist das aber selten ein Problem, weil die React-Native-Community für fast jede gängige Funktion ein Modul bereitstellt. Nur bei brandneuen Android-APIs kann es einige Monate dauern, bis ein Modul verfügbar ist."
+    },
+    {
+      "question": "Lohnt es sich, beide Ansätze zu lernen?",
+      "answer": "Ja, absolut. React Native ist der schnellste Weg zu einer funktionierenden App und deckt neunzig Prozent aller Anforderungen ab. Kotlin und native Entwicklung geben dir die volle Kontrolle für die restlichen zehn Prozent. Ein Entwickler, der beide Ansätze beherrscht, kann für jedes Projekt die optimale Technologie wählen und ist nicht auf einen Ansatz beschränkt. Außerdem macht dich die Kombination aus React-Native- und Kotlin-Kenntnissen auf dem Arbeitsmarkt besonders wertvoll, weil du die Lücke zwischen Web- und nativer Entwicklung schließen kannst."
+    }
+  ]
+}

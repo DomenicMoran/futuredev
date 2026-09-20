@@ -1,0 +1,628 @@
+{
+  "id": "M05-02-01",
+  "title": "App mit Web-Wissen bauen",
+  "durationMinutes": 35,
+  "prerequisites": [
+    "M05-01-03",
+    "M03-01-01",
+    "M02-03-01"
+  ],
+  "terms": [
+    {
+      "term": "React Native",
+      "definition": "Ein von Meta entwickeltes Framework, mit dem du mobile Apps in JavaScript und React schreiben kannst. React Native übersetzt deine Komponenten in echte native UI-Elemente, sodass die App sich wie eine native App anfühlt, obwohl der Code in JavaScript geschrieben ist."
+    },
+    {
+      "term": "JavaScript-Core",
+      "definition": "Die JavaScript-Laufzeitumgebung, die in React Native auf dem Handy läuft. Anders als im Browser, wo die V8-Engine von Google oder SpiderMonkey von Firefox läuft, nutzt React Native auf iOS JavaScript-Core von Apple und auf Android die Hermes-Engine, die speziell für mobile Geräte optimiert ist."
+    },
+    {
+      "term": "Native Bridge",
+      "definition": "Die Kommunikationsbrücke zwischen der JavaScript-Welt und der nativen Welt in React Native. Über die Bridge sendet der JavaScript-Code Befehle an die native Plattform, zum Beispiel um einen Button zu rendern oder auf die Kamera zuzugreifen, und die native Plattform sendet Ereignisse wie Touch-Eingaben zurück."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen Dolmetscher vor, der zwischen zwei Menschen vermittelt, die verschiedene Sprachen sprechen. Der eine spricht Deutsch, der andere Japanisch. Der Dolmetscher hört den deutschen Satz, übersetzt ihn im Kopf und spricht ihn auf Japanisch aus. Die Antwort kommt auf Japanisch zurück, der Dolmetscher übersetzt sie ins Deutsche. Die beiden können sich unterhalten, ohne die Sprache des anderen zu lernen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "React Native funktioniert wie dieser Dolmetscher. Du schreibst deine App in JavaScript, einer Sprache, die du bereits aus der Webentwicklung kennst. React Native übersetzt deinen JavaScript-Code in Befehle, die das native Betriebssystem versteht. Ein Button in deinem Code wird zu einem echten Android-Button, eine Liste wird zu einer echten Android-Liste. Du musst kein Kotlin oder Java lernen, um eine App zu bauen, die sich nativ anfühlt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was genau ist React Native, und wie unterscheidet es sich von React im Browser?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "React Native ist ein Framework von Meta, das die gleichen Konzepte wie React nutzt: Komponenten, State, Props und Hooks. Der entscheidende Unterschied: Im Browser rendert React HTML-Elemente wie div, span und button. React Native rendert stattdessen native UI-Elemente wie View, Text und TouchableOpacity. Diese werden nicht als HTML im Browser dargestellt, sondern als echte native Widgets auf dem Handy. Das Ergebnis ist eine App, die sich anfühlt wie mit Kotlin oder Swift gebaut, obwohl der Code in JavaScript geschrieben ist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "React Native ist ein Framework, mit dem du mobile Apps in JavaScript und React schreiben kannst, wobei deine Komponenten in echte native UI-Elemente übersetzt werden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In React Native schreibst du View style={styles.container} Text Hallo Welt /Text /View statt div class=\"container\" p Hallo Welt /p /div. Die View wird zu einer android.view.View, der Text zu einem android.widget.TextView. Der Nutzer sieht eine native App, aber du hast sie mit deinem Web-Wissen gebaut.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "React Native ist der schnellste Weg für Web-Entwickler, mobile Apps zu bauen. Du musst keine neue Programmiersprache lernen, keine neue Entwicklungsumgebung einrichten und keine neuen Konzepte verstehen. Du nimmst dein React-Wissen und wendest es auf eine neue Plattform an. Das spart Monate an Lernzeit.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist JavaScript-Core, und warum läuft auf dem Handy eine andere Engine als im Browser?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen Motor vor. Ein Auto hat einen Benzinmotor, ein Flugzeug hat ein Triebwerk. Beide erzeugen Kraft, aber sie sind für unterschiedliche Umgebungen optimiert. Der Benzinmotor ist für die Straße gebaut, das Triebwerk für die Luft. Du würdest keinen Flugzeugmotor in ein Auto einbauen, obwohl beide das gleiche Grundprinzip nutzen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Genau so ist es mit JavaScript-Engines. Im Browser läuft die V8-Engine von Google oder SpiderMonkey von Firefox, optimiert für schnelles Laden und Ausführen von Webseiten. Auf dem Handy läuft eine andere Engine: Auf iOS ist es JavaScript-Core, die Engine von Apple, die tief ins Betriebssystem integriert ist. Auf Android nutzt React Native die Hermes-Engine, die Meta speziell für mobile Apps entwickelt hat. Hermes ist kleiner, startet schneller und verbraucht weniger Speicher als V8, was auf einem Handy mit begrenzten Ressourcen entscheidend ist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "JavaScript-Core ist die JavaScript-Laufzeitumgebung, die auf dem Handy läuft und deinen React-Native-Code ausführt, wobei auf Android die speziell für mobile Geräte optimierte Hermes-Engine zum Einsatz kommt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Wenn du eine React-Native-App startest, lädt das Betriebssystem die Hermes-Engine, die dann deinen JavaScript-Code ausführt. Hermes kompiliert deinen Code bereits beim Bauen der App in effizienten Bytecode, statt ihn zur Laufzeit zu interpretieren. Das macht den Start der App deutlich schneller als bei einer WebView-basierten Hybrid-App, die den Code erst im Browser interpretieren muss.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die Wahl der JavaScript-Engine hat direkte Auswirkungen auf die Performance deiner App. Hermes reduziert die Startzeit um bis zu fünfzig Prozent und den Speicherverbrauch um bis zu dreißig Prozent im Vergleich zur Standard-Engine. Das ist der Unterschied zwischen einer App, die sich flüssig anfühlt, und einer, die ruckelt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist die Native Bridge, und warum ist sie das Herzstück von React Native?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine Brücke über einen Fluss vor. Auf der einen Seite steht die JavaScript-Welt mit all deinem Code, deinen Komponenten und deiner Logik. Auf der anderen Seite steht die native Welt mit der Kamera, dem GPS, dem Touchscreen und allen anderen Hardware-Funktionen. Die Brücke verbindet beide Welten, und über sie laufen alle Nachrichten hin und her.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Die Native Bridge ist die Kommunikationsbrücke zwischen deinem JavaScript-Code und der nativen Plattform. Wenn du in React Native einen Button anklickst, läuft das so ab: Der Touchscreen registriert die Berührung, das native System schickt ein Ereignis über die Bridge an JavaScript, dein Event-Handler wird ausgeführt, und wenn sich dadurch die Oberfläche ändert, schickt JavaScript die neuen Anweisungen über die Bridge zurück an die native Seite, die dann die UI aktualisiert. Alles in Millisekunden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Die Native Bridge ist die Kommunikationsbrücke zwischen der JavaScript-Welt und der nativen Plattform in React Native, über die alle Befehle und Ereignisse ausgetauscht werden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Wenn du in deiner App die Kamera öffnen willst, rufst du in JavaScript eine Funktion wie launchCamera() auf. Diese Funktion schickt einen Befehl über die Bridge an die native Seite. Die native Seite öffnet die Kamera-App, der Nutzer macht ein Foto, und das Ergebnis wird als Ereignis über die Bridge zurück an JavaScript geschickt. Dein Code bekommt das Bild und kann es anzeigen. Du hast keinen nativen Code geschrieben, aber die Bridge hat die Kommunikation für dich übernommen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die Bridge zu verstehen ist wichtig, weil sie die Grenzen von React Native definiert. Alles, was über die Bridge läuft, ist asynchron und hat eine gewisse Latenz. Für die allermeisten Anwendungen ist das kein Problem, aber für extrem performance-kritische Dinge wie komplexe Animationen oder Echtzeit-Audioverarbeitung kann die Bridge zum Flaschenhals werden. Dann musst du nativen Code schreiben, der direkt auf der nativen Seite läuft, ohne die Bridge zu überqueren.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Wie fange ich praktisch mit React Native an, wenn ich schon React kann?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der einfachste Einstieg ist Expo. Expo ist ein Werkzeugkasten rund um React Native, der dir den ganzen komplizierten Einrichtungskram abnimmt. Du installierst Node.js, führst npx create-expo-app meine-app aus, und fünf Minuten später hast du eine lauffähige App auf deinem Handy oder im Emulator. Du schreibst ganz normales React mit Komponenten, State und Hooks, nur dass du statt div und span die Komponenten View und Text verwendest.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Eine einfache React-Native-App mit Expo sieht so aus: import { View, Text, StyleSheet } from 'react-native'. Dann export default function App() { return ( View style={styles.container} Text Hallo Welt! /Text /View ) }. Das ist fast identisch mit einer React-Web-App, nur die importierten Komponenten sind anders. Dein gesamtes React-Wissen über Komponenten, State, Props und Hooks gilt unverändert weiter.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Der fließende Übergang von React zu React Native ist der größte Vorteil dieses Frameworks. Du musst nicht bei Null anfangen, sondern kannst dein bestehendes Wissen direkt anwenden. Die Lernkurve ist flach, und du siehst schnell Ergebnisse, was die Motivation hoch hält.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was sind die Grenzen von React Native, und wann brauche ich doch nativen Code?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "React Native deckt etwa neunzig Prozent aller App-Anforderungen ab. Die restlichen zehn Prozent sind Fälle, in denen du nativen Code schreiben musst: komplexe Animationen mit sechzig Bildern pro Sekunde, Echtzeit-Audioverarbeitung, Augmented Reality, Bluetooth-Kommunikation mit externen Geräten oder plattformspezifische Funktionen, für die es noch kein React-Native-Modul gibt. In diesen Fällen schreibst du ein natives Modul in Kotlin oder Swift und bindest es über die Bridge in deine React-Native-App ein.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die Möglichkeit, nativen Code einzubinden, macht React Native zukunftssicher. Du bist nicht auf das beschränkt, was das Framework mitbringt. Wenn du an eine Grenze stößt, schreibst du den fehlenden Teil nativ und bindest ihn ein. Deine App wächst mit deinen Anforderungen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "text": "Also noch einmal ganz kurz: React Native lässt dich mobile Apps mit deinem React-Wissen bauen, indem es deine JavaScript-Komponenten in echte native UI-Elemente übersetzt. Die JavaScript-Core-Engine, auf Android optimiert durch Hermes, führt deinen Code auf dem Handy aus. Die Native Bridge verbindet die JavaScript-Welt mit der nativen Plattform und ermöglicht den Zugriff auf Kamera, GPS und andere Hardware. Für die meisten Apps reicht React Native völlig aus, und für die restlichen Fälle kannst du nativen Code einbinden.",
+      "isKeySentence": true
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "React Native ist ein von Meta entwickeltes Framework, mit dem du mobile Apps in JavaScript und React schreiben kannst. React Native übersetzt deine Komponenten in echte native UI-Elemente, sodass die App sich wie eine native App anfühlt, obwohl der Code in JavaScript geschrieben ist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "JavaScript-Core ist die JavaScript-Laufzeitumgebung, die in React Native auf dem Handy läuft. Anders als im Browser, wo die V8-Engine von Google oder SpiderMonkey von Firefox läuft, nutzt React Native auf iOS JavaScript-Core von Apple und auf Android die Hermes-Engine, die speziell für mobile Geräte optimiert ist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Die Native Bridge ist die Kommunikationsbrücke zwischen der JavaScript-Welt und der nativen Welt in React Native. Über die Bridge sendet der JavaScript-Code Befehle an die native Plattform, zum Beispiel um einen Button zu rendern oder auf die Kamera zuzugreifen, und die native Plattform sendet Ereignisse wie Touch-Eingaben zurück.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Muss ich Kotlin oder Swift lernen, um React Native zu nutzen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Nein, für die allermeisten Apps reicht JavaScript und React-Wissen völlig aus. React Native stellt hunderte von vorgefertigten Komponenten und APIs bereit, die die nativen Funktionen kapseln. Du rufst Camera.launchCameraAsync() auf und React Native kümmert sich um den Rest. Nur wenn du eine Funktion brauchst, für die es noch kein Modul gibt, musst du nativen Code schreiben. Das ist aber selten, und selbst dann reicht es, das native Modul einmal zu schreiben und dann aus JavaScript heraus aufzurufen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Kann ich meine bestehende React-Web-App einfach in React Native umwandeln?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Nicht einfach, aber du kannst einen großen Teil der Logik wiederverwenden. Deine State-Verwaltung, deine API-Aufrufe, deine Geschäftslogik und sogar viele deiner Hooks können unverändert bleiben. Was du neu schreiben musst, ist die Benutzeroberfläche: Statt HTML-Elementen verwendest du React-Native-Komponenten, und das Layout funktioniert mit Flexbox statt mit CSS Grid. Der Aufwand lohnt sich aber, weil du am Ende eine echte App hast, die im Play Store stehen kann, statt nur einer Webseite im Browser.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was ist der Unterschied zwischen React Native und Expo?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "React Native ist das Framework, Expo ist der Werkzeugkasten drumherum. React Native stellt die Grundfunktionen bereit: Komponenten, die Bridge, den Packager. Expo fügt eine Menge darüber hinaus hinzu: vorkonfigurierte native Module für Kamera, Standort und Benachrichtigungen, einen Cloud-Build-Dienst, mit dem du APKs bauen kannst, ohne Android Studio zu installieren, und eine Test-App, mit der du deine App ohne Build auf dem Handy testen kannst. Expo macht den Einstieg in React Native deutlich einfacher und ist der empfohlene Weg für neue Projekte.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Wie schnell ist React Native im Vergleich zu einer echten nativen App?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Für die allermeisten Anwendungen ist der Unterschied nicht spürbar. Listen scrollen flüssig, Übergänge sind weich, und die App reagiert sofort auf Eingaben. Der Overhead der Bridge macht sich nur bei extrem performance-kritischen Operationen bemerkbar, etwa bei komplexen Animationen mit vielen gleichzeitigen Bewegungen oder bei der Verarbeitung von Kamerabildern in Echtzeit. Für eine typische Business-App, eine Social-Media-App oder ein einfaches Spiel ist React Native mehr als schnell genug. Die meisten Nutzer werden nicht erkennen können, ob eine App mit React Native oder nativ gebaut wurde.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Kann ich mit React Native auch iOS-Apps bauen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ja, das ist einer der Hauptvorteile von React Native. Du schreibst deinen Code einmal in JavaScript und kannst daraus sowohl eine Android-APK als auch eine iOS-IPA bauen. Die UI-Komponenten werden automatisch an die jeweilige Plattform angepasst: Ein Button sieht auf Android aus wie ein Android-Button und auf iOS wie ein iOS-Button. Für den iOS-Build brauchst du allerdings einen Mac oder einen Cloud-Dienst wie EAS Build, weil Apple das Bauen von iOS-Apps nur auf macOS erlaubt.",
+      "isKeySentence": false
+    }
+  ],
+  "practiceExample": {
+    "text": "React Native übersetzt JavaScript-Komponenten in native UI-Elemente. Die Hermes-Engine führt den Code auf dem Handy aus, und die Native Bridge verbindet JavaScript mit der nativen Plattform.",
+    "repoNote": "repo-lexipulse",
+    "location": "apps/mobile (React Native mit Expo, zeigt den Einsatz von Web-Wissen für mobile Apps)"
+  },
+  "quiz": [
+    {
+      "question": "Welches Alltagsbild beschreibt die Native Bridge in React Native am treffendsten?",
+      "area": "React Native",
+      "options": [
+        {
+          "text": "Ein Dolmetscher, der zwischen zwei Menschen übersetzt, die verschiedene Sprachen sprechen.",
+          "isCorrect": true,
+          "explanation": "Richtig: die Bridge übersetzt zwischen JavaScript und der nativen Plattform."
+        },
+        {
+          "text": "Eine Autobahn, auf der Daten mit Höchstgeschwindigkeit transportiert werden.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Bridge ist keine Autobahn, sondern ein Übersetzer zwischen zwei Welten."
+        },
+        {
+          "text": "Ein Lagerhaus, in dem alle Daten der App gespeichert werden.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Bridge speichert keine Daten, sie vermittelt Kommunikation."
+        },
+        {
+          "text": "Ein Schutzschild, das die App vor Angriffen aus dem Internet schützt.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Bridge ist kein Sicherheitsmechanismus."
+        }
+      ]
+    },
+    {
+      "question": "Was ist React Native?",
+      "area": "React Native",
+      "options": [
+        {
+          "text": "Ein Framework von Meta, das JavaScript-Komponenten in echte native UI-Elemente übersetzt.",
+          "isCorrect": true,
+          "explanation": "Richtig: React Native rendert native Widgets, nicht HTML."
+        },
+        {
+          "text": "Eine Programmiersprache, die speziell für mobile Apps entwickelt wurde.",
+          "isCorrect": false,
+          "explanation": "Falsch: React Native ist ein Framework, keine Programmiersprache."
+        },
+        {
+          "text": "Ein Betriebssystem für Handys, das auf React basiert.",
+          "isCorrect": false,
+          "explanation": "Falsch: React Native ist kein Betriebssystem."
+        },
+        {
+          "text": "Eine Datenbank, die speziell für mobile Apps optimiert ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: React Native ist keine Datenbank."
+        }
+      ]
+    },
+    {
+      "question": "Welche JavaScript-Engine nutzt React Native auf Android?",
+      "area": "React Native",
+      "options": [
+        {
+          "text": "Hermes, eine von Meta speziell für mobile Geräte optimierte Engine.",
+          "isCorrect": true,
+          "explanation": "Richtig: Hermes ist kleiner, schneller und sparsamer als V8."
+        },
+        {
+          "text": "V8, die gleiche Engine wie im Chrome-Browser.",
+          "isCorrect": false,
+          "explanation": "Falsch: V8 wird im Browser genutzt, React Native nutzt Hermes auf Android."
+        },
+        {
+          "text": "SpiderMonkey, die Engine von Firefox.",
+          "isCorrect": false,
+          "explanation": "Falsch: SpiderMonkey wird nicht in React Native verwendet."
+        },
+        {
+          "text": "Node.js, die serverseitige JavaScript-Umgebung.",
+          "isCorrect": false,
+          "explanation": "Falsch: Node.js läuft auf Servern, nicht auf Handys."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der Hauptunterschied zwischen React im Browser und React Native?",
+      "area": "React Native",
+      "options": [
+        {
+          "text": "React rendert HTML-Elemente, React Native rendert native UI-Elemente.",
+          "isCorrect": true,
+          "explanation": "Richtig: div vs View, span vs Text, das ist der fundamentale Unterschied."
+        },
+        {
+          "text": "React ist in JavaScript, React Native in Python geschrieben.",
+          "isCorrect": false,
+          "explanation": "Falsch: beide sind in JavaScript geschrieben."
+        },
+        {
+          "text": "React läuft nur auf Apple-Geräten, React Native nur auf Android.",
+          "isCorrect": false,
+          "explanation": "Falsch: React läuft im Browser auf allen Plattformen."
+        },
+        {
+          "text": "Es gibt keinen Unterschied, beide sind identisch.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Unterschied in der Rendering-Engine ist fundamental."
+        }
+      ]
+    },
+    {
+      "question": "Warum ist Hermes als JavaScript-Engine auf dem Handy besser als V8?",
+      "area": "React Native",
+      "options": [
+        {
+          "text": "Hermes startet schneller und verbraucht weniger Speicher, was auf dem Handy entscheidend ist.",
+          "isCorrect": true,
+          "explanation": "Richtig: Hermes ist für die begrenzten Ressourcen mobiler Geräte optimiert."
+        },
+        {
+          "text": "Hermes kann auch Kotlin-Code ausführen, V8 nicht.",
+          "isCorrect": false,
+          "explanation": "Falsch: Hermes führt JavaScript aus, nicht Kotlin."
+        },
+        {
+          "text": "Hermes ist kostenlos, V8 kostet Lizenzgebühren.",
+          "isCorrect": false,
+          "explanation": "Falsch: beide sind Open Source und kostenlos."
+        },
+        {
+          "text": "Hermes hat eine eingebaute Kamera-Funktion, V8 nicht.",
+          "isCorrect": false,
+          "explanation": "Falsch: keine JavaScript-Engine hat eine eingebaute Kamera-Funktion."
+        }
+      ]
+    },
+    {
+      "question": "Was passiert, wenn du in React Native die Kamera öffnest?",
+      "area": "React Native",
+      "options": [
+        {
+          "text": "JavaScript schickt einen Befehl über die Bridge, die native Seite öffnet die Kamera, das Ergebnis kommt zurück.",
+          "isCorrect": true,
+          "explanation": "Richtig: die Bridge vermittelt den gesamten Kamera-Zugriff."
+        },
+        {
+          "text": "JavaScript öffnet die Kamera direkt, ohne die native Seite einzubeziehen.",
+          "isCorrect": false,
+          "explanation": "Falsch: JavaScript hat keinen direkten Zugriff auf die Hardware."
+        },
+        {
+          "text": "Die Kamera kann in React Native gar nicht genutzt werden.",
+          "isCorrect": false,
+          "explanation": "Falsch: React Native hat vollen Kamera-Zugriff über die Bridge."
+        },
+        {
+          "text": "Die App stürzt ab, weil JavaScript keine Hardware ansteuern kann.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Bridge ermöglicht den Hardware-Zugriff aus JavaScript."
+        }
+      ]
+    },
+    {
+      "question": "Für welche Art von Anwendung stößt React Native an seine Grenzen?",
+      "area": "React Native",
+      "options": [
+        {
+          "text": "Komplexe Animationen mit 60 Bildern pro Sekunde oder Echtzeit-Audioverarbeitung.",
+          "isCorrect": true,
+          "explanation": "Richtig: bei extrem performance-kritischen Aufgaben kann die Bridge zum Flaschenhals werden."
+        },
+        {
+          "text": "Eine einfache To-Do-Liste mit Texteingabe.",
+          "isCorrect": false,
+          "explanation": "Falsch: einfache Apps sind der ideale Anwendungsfall für React Native."
+        },
+        {
+          "text": "Eine Lernplattform mit Texten und Quizfragen.",
+          "isCorrect": false,
+          "explanation": "Falsch: inhaltsbasierte Apps funktionieren perfekt mit React Native."
+        },
+        {
+          "text": "Eine App, die eine Liste von Produkten anzeigt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Listen sind eine der Stärken von React Native."
+        }
+      ]
+    },
+    {
+      "question": "Was ist Expo im Verhältnis zu React Native?",
+      "area": "React Native",
+      "options": [
+        {
+          "text": "Ein Werkzeugkasten, der React Native um Cloud-Build, vorkonfigurierte Module und eine Test-App ergänzt.",
+          "isCorrect": true,
+          "explanation": "Richtig: Expo macht den Einstieg in React Native deutlich einfacher."
+        },
+        {
+          "text": "Ein Konkurrenzprodukt, das React Native ersetzen will.",
+          "isCorrect": false,
+          "explanation": "Falsch: Expo baut auf React Native auf, es ersetzt es nicht."
+        },
+        {
+          "text": "Eine Programmiersprache, die React Native ablösen soll.",
+          "isCorrect": false,
+          "explanation": "Falsch: Expo ist keine Programmiersprache."
+        },
+        {
+          "text": "Ein Design-System für mobile Apps.",
+          "isCorrect": false,
+          "explanation": "Falsch: Expo ist mehr als ein Design-System, es ist ein vollständiger Werkzeugkasten."
+        }
+      ]
+    },
+    {
+      "question": "Kannst du deine bestehende React-Web-App ohne Änderungen in React Native nutzen?",
+      "area": "React Native",
+      "options": [
+        {
+          "text": "Nein, die UI musst du neu schreiben, aber Logik, State und API-Aufrufe kannst du wiederverwenden.",
+          "isCorrect": true,
+          "explanation": "Richtig: die Geschäftslogik bleibt, die Oberfläche muss angepasst werden."
+        },
+        {
+          "text": "Ja, du kannst den Code eins zu eins kopieren und es funktioniert.",
+          "isCorrect": false,
+          "explanation": "Falsch: HTML-Elemente funktionieren nicht in React Native."
+        },
+        {
+          "text": "Nein, du musst alles komplett neu schreiben, nichts ist wiederverwendbar.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein großer Teil der Logik ist wiederverwendbar."
+        },
+        {
+          "text": "Ja, aber nur wenn die Web-App mit TypeScript geschrieben ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: TypeScript ändert nichts an der grundsätzlichen Inkompatibilität der UI."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der größte Vorteil von React Native für Web-Entwickler?",
+      "area": "React Native",
+      "options": [
+        {
+          "text": "Du kannst dein React-Wissen direkt anwenden und musst keine neue Sprache lernen.",
+          "isCorrect": true,
+          "explanation": "Richtig: der fließende Übergang von React zu React Native spart Monate an Lernzeit."
+        },
+        {
+          "text": "React Native-Apps sind grundsätzlich schneller als native Apps.",
+          "isCorrect": false,
+          "explanation": "Falsch: React Native ist nicht grundsätzlich schneller als native Apps."
+        },
+        {
+          "text": "React Native ist die einzige Möglichkeit, Apps für Android zu bauen.",
+          "isCorrect": false,
+          "explanation": "Falsch: es gibt viele Wege, Android-Apps zu bauen."
+        },
+        {
+          "text": "React Native-Apps brauchen keinen Play Store.",
+          "isCorrect": false,
+          "explanation": "Falsch: auch React-Native-Apps werden über den Play Store verteilt."
+        }
+      ]
+    },
+    {
+      "question": "Wie bindest du nativen Code in eine React-Native-App ein?",
+      "area": "React Native",
+      "options": [
+        {
+          "text": "Du schreibst ein natives Modul in Kotlin oder Swift und bindest es über die Bridge ein.",
+          "isCorrect": true,
+          "explanation": "Richtig: native Module erweitern React Native um plattformspezifische Funktionen."
+        },
+        {
+          "text": "Du schreibst den nativen Code direkt in die JavaScript-Datei.",
+          "isCorrect": false,
+          "explanation": "Falsch: nativer Code kann nicht in JavaScript-Dateien stehen."
+        },
+        {
+          "text": "Du kannst keinen nativen Code einbinden, React Native ist eine geschlossene Plattform.",
+          "isCorrect": false,
+          "explanation": "Falsch: React Native ist explizit dafür ausgelegt, nativen Code einzubinden."
+        },
+        {
+          "text": "Du musst die gesamte App in Kotlin neu schreiben.",
+          "isCorrect": false,
+          "explanation": "Falsch: du schreibst nur das fehlende Modul nativ, nicht die ganze App."
+        }
+      ]
+    },
+    {
+      "question": "Kannst du mit React Native auch iOS-Apps bauen?",
+      "area": "React Native",
+      "options": [
+        {
+          "text": "Ja, aus derselben Codebasis kannst du sowohl Android- als auch iOS-Apps bauen.",
+          "isCorrect": true,
+          "explanation": "Richtig: das ist einer der Hauptvorteile von React Native."
+        },
+        {
+          "text": "Nein, React Native funktioniert nur auf Android.",
+          "isCorrect": false,
+          "explanation": "Falsch: React Native wurde von Meta ursprünglich für iOS entwickelt."
+        },
+        {
+          "text": "Ja, aber nur wenn du einen Windows-Computer benutzt.",
+          "isCorrect": false,
+          "explanation": "Falsch: für iOS-Builds brauchst du einen Mac oder Cloud-Dienst."
+        },
+        {
+          "text": "Nein, für iOS brauchst du eine separate App in Swift.",
+          "isCorrect": false,
+          "explanation": "Falsch: React Native erzeugt native iOS-Apps aus derselben Codebasis."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Erstelle eine neue React-Native-App mit Expo: npx create-expo-app meine-app. Öffne die App.js und ersetze den Inhalt durch eine eigene Komponente mit einem Text und einem Button. Starte die App mit npx expo start und teste sie im Emulator oder auf deinem Handy mit Expo Go. Ändere den Text und beobachte, wie die App ohne Neubau aktualisiert wird.",
+    "expectation": "Eine lauffähige React-Native-App wurde mit Expo erstellt und im Emulator oder auf dem Handy getestet. Die grundlegenden Konzepte von React Native wurden praktisch angewendet.",
+    "checklist": [
+      "Eine neue React-Native-App mit npx create-expo-app erstellt.",
+      "Die App.js mit einer eigenen Komponente ersetzt.",
+      "Die App mit npx expo start gestartet.",
+      "Die App im Emulator oder auf dem Handy mit Expo Go getestet.",
+      "Eine Änderung am Text vorgenommen und die Aktualisierung beobachtet."
+    ],
+    "portfolioItem": "P04"
+  },
+  "audio": {
+    "file": "M05-02-01.mp3",
+    "durationSeconds": 1400,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Muss ich Kotlin oder Swift lernen, um React Native zu nutzen?",
+      "answer": "Nein, für die allermeisten Apps reicht JavaScript und React-Wissen völlig aus. React Native stellt hunderte von vorgefertigten Komponenten und APIs bereit, die die nativen Funktionen kapseln. Du rufst Camera.launchCameraAsync() auf und React Native kümmert sich um den Rest. Nur wenn du eine Funktion brauchst, für die es noch kein Modul gibt, musst du nativen Code schreiben. Das ist aber selten, und selbst dann reicht es, das native Modul einmal zu schreiben und dann aus JavaScript heraus aufzurufen."
+    },
+    {
+      "question": "Kann ich meine bestehende React-Web-App einfach in React Native umwandeln?",
+      "answer": "Nicht einfach, aber du kannst einen großen Teil der Logik wiederverwenden. Deine State-Verwaltung, deine API-Aufrufe, deine Geschäftslogik und sogar viele deiner Hooks können unverändert bleiben. Was du neu schreiben musst, ist die Benutzeroberfläche: Statt HTML-Elementen verwendest du React-Native-Komponenten, und das Layout funktioniert mit Flexbox statt mit CSS Grid. Der Aufwand lohnt sich aber, weil du am Ende eine echte App hast, die im Play Store stehen kann, statt nur einer Webseite im Browser."
+    },
+    {
+      "question": "Was ist der Unterschied zwischen React Native und Expo?",
+      "answer": "React Native ist das Framework, Expo ist der Werkzeugkasten drumherum. React Native stellt die Grundfunktionen bereit: Komponenten, die Bridge, den Packager. Expo fügt eine Menge darüber hinaus hinzu: vorkonfigurierte native Module für Kamera, Standort und Benachrichtigungen, einen Cloud-Build-Dienst, mit dem du APKs bauen kannst, ohne Android Studio zu installieren, und eine Test-App, mit der du deine App ohne Build auf dem Handy testen kannst. Expo macht den Einstieg in React Native deutlich einfacher und ist der empfohlene Weg für neue Projekte."
+    },
+    {
+      "question": "Wie schnell ist React Native im Vergleich zu einer echten nativen App?",
+      "answer": "Für die allermeisten Anwendungen ist der Unterschied nicht spürbar. Listen scrollen flüssig, Übergänge sind weich, und die App reagiert sofort auf Eingaben. Der Overhead der Bridge macht sich nur bei extrem performance-kritischen Operationen bemerkbar, etwa bei komplexen Animationen mit vielen gleichzeitigen Bewegungen oder bei der Verarbeitung von Kamerabildern in Echtzeit. Für eine typische Business-App, eine Social-Media-App oder ein einfaches Spiel ist React Native mehr als schnell genug. Die meisten Nutzer werden nicht erkennen können, ob eine App mit React Native oder nativ gebaut wurde."
+    },
+    {
+      "question": "Kann ich mit React Native auch iOS-Apps bauen?",
+      "answer": "Ja, das ist einer der Hauptvorteile von React Native. Du schreibst deinen Code einmal in JavaScript und kannst daraus sowohl eine Android-APK als auch eine iOS-IPA bauen. Die UI-Komponenten werden automatisch an die jeweilige Plattform angepasst: Ein Button sieht auf Android aus wie ein Android-Button und auf iOS wie ein iOS-Button. Für den iOS-Build brauchst du allerdings einen Mac oder einen Cloud-Dienst wie EAS Build, weil Apple das Bauen von iOS-Apps nur auf macOS erlaubt."
+    }
+  ]
+}
