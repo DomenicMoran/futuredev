@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { Redirect, Stack, usePathname } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import * as SplashScreen from 'expo-splash-screen';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import TrackPlayer from 'react-native-track-player';
 import { useTheme } from '../src/theme/useTheme.js';
 import { useOnboardingStore } from '../src/state/onboarding.js';
@@ -23,7 +24,19 @@ TrackPlayer.registerPlaybackService(() => PlaybackService);
 
 // Root-Layout: Onboarding-Weiterleitung (Technikvorgabe 9), Statusleiste je
 // Farbschema. Die Reiterleiste selbst lebt in app/(tabs)/_layout.tsx.
+// SafeAreaProvider umschliesst alles: react-native-safe-area-context
+// (statt des veralteten SafeAreaView aus react-native, Pruefbericht Phase 3
+// B-05) braucht diesen Provider, sonst liefert jede SafeAreaView weiter
+// unten Insets von 0 und die Statusleiste ueberlappt Inhalte.
 export default function RootLayout() {
+  return (
+    <SafeAreaProvider>
+      <RootLayoutInner />
+    </SafeAreaProvider>
+  );
+}
+
+function RootLayoutInner() {
   const theme = useTheme();
   const completed = useOnboardingStore((s) => s.completed);
   const hydrated = useSettingsStore((s) => s.hydrated);

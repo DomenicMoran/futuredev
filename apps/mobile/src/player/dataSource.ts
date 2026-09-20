@@ -32,7 +32,15 @@ async function fetchRemoteLesson(lessonId: string): Promise<Lesson> {
   if (!response.ok) {
     throw new Error(`getLessonForPlayback: Lektionsabruf fehlgeschlagen (HTTP ${response.status})`);
   }
-  return lessonSchema.parse(await response.json());
+  // safeParse statt parse: ein ungueltiges Manifest/eine ungueltige
+  // Basis-URL (Pruefbericht Phase 3, B-01) darf nie als unbehandelter
+  // ZodError bis zur Oberflaeche durchschlagen, sondern wird als normaler
+  // Error mit klarer Meldung gemeldet, den die Aufrufer bereits abfangen.
+  const parsed = lessonSchema.safeParse(await response.json());
+  if (!parsed.success) {
+    throw new Error(`getLessonForPlayback: ${lessonId} entspricht nicht dem Lektionsschema`);
+  }
+  return parsed.data;
 }
 
 /** Lädt eine Lektion für die Wiedergabe: lokal (nach Erststart-Kopie/Sync) vor Netz. */

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { FlatList, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { FlatList, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { ChevronDown, ChevronLeft, ChevronRight, Moon, Pause, Play, Rewind, FastForward, BookOpen, X } from 'lucide-react-native';
 import { useTheme } from '../src/theme/useTheme.js';

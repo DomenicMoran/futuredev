@@ -1,9 +1,13 @@
-import { useMemo, useRef, useState } from 'react';
-import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { Alert, Animated, BackHandler, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useNavigation } from 'expo-router';
 import type { QuizAnswer, QuizQuestionInput, QuizResult } from '@futuredev/core';
 import { useTheme } from '../theme/useTheme.js';
 import { de } from '../i18n/de.js';
+import { useReducedMotion } from '../accessibility/useReducedMotion.js';
+import { resolveAnimationDuration } from '../accessibility/motion.js';
 import { drawRound, evaluateRound, collectWrongAnswers, type QuizRound, type QuizScope } from './roundLogic.js';
+import { shouldConfirmExit } from './exitGuard.js';
 import { recordQuizRound } from './results.js';
 
 interface QuizRunnerProps {
@@ -22,6 +26,9 @@ type Phase = 'rules' | 'question' | 'feedback' | 'result';
 // Rückmeldung mit Begründung, Fortschrittsbalken, Ergebnisbildschirm.
 export function QuizRunner({ pool, desiredCount, scope, heading, onExit, onNextLesson }: QuizRunnerProps) {
   const theme = useTheme();
+  const navigation = useNavigation();
+  const reducedMotion = useReducedMotion();
+  const progressAnim = useRef(new Animated.Value(0)).current;
   const seedRef = useRef(Date.now());
   const [round, setRound] = useState<QuizRound>(() => drawRound(pool, desiredCount, seedRef.current));
   const [phase, setPhase] = useState<Phase>('rules');
@@ -30,12 +37,27 @@ export function QuizRunner({ pool, desiredCount, scope, heading, onExit, onNextL
   const [chosen, setChosen] = useState<number | null>(null);
   const [result, setResult] = useState<QuizResult | null>(null);
   const [saving, setSaving] = useState(false);
+  const phaseRef = useRef(phase);
+  phaseRef.current = phase;
 
   const question = round.drawn[index];
   const wrongAnswers = useMemo(
     () => (result ? collectWrongAnswers(round, answers) : []),
     [result, round, answers],
   );
+  const progress = round.drawn.length > 0 ? (index + (phase === 'feedback' ? 1 : 0)) / round.drawn.length : 0;
+
+  // Fortschrittsbalken-Wachstum animiert (design-system.md: 150 bis 250 ms
+  // fuer alle Uebergaenge), aber nur, wenn Reduced Motion aus ist
+  // (Pruefbericht Phase 3, B-06): eine reine CSS-Medienabfrage waere hier
+  // wirkungslos, weil dies eine Animated-getriebene Bewegung ist.
+  useEffect(() => {
+    Animated.timing(progressAnim, {
+      toValue: progress,
+      duration: resolveAnimationDuration(reducedMotion, 200),
+      useNativeDriver: false,
+    }).start();
+  }, [progress, reducedMotion, progressAnim]);
 
   function startQuiz() {
     setPhase('question');
@@ -76,6 +98,40 @@ export function QuizRunner({ pool, desiredCount, scope, heading, onExit, onNextL
       { text: de.quiz.cancelConfirmYes, style: 'destructive', onPress: onExit },
     ]);
   }
+
+  // Abbruch-Rueckfrage (Pruefbericht Phase 3, B-02): jeder Weg aus einer
+  // laufenden Runde heraus, nicht nur der Abbrechen-Text oben rechts, muss
+  // erst bestaetigt werden. `beforeRemove` deckt Navigation im Allgemeinen ab
+  // (Zurueck-Geste, Kopfzeile, ein programmatischer Wechsel wie ein
+  // Reiterwechsel, sofern die Pruefung je in einem Reiter statt in einer
+  // eigenen Route liefe); `BackHandler` deckt zusaetzlich die physische
+  // Zurueck-Taste auf Android ab, die manche Geraete nicht als
+  // Navigationsereignis, sondern als eigenes Systemereignis melden.
+  useEffect(() => {
+    const beforeRemoveSub = navigation.addListener('beforeRemove', (e) => {
+      if (!shouldConfirmExit(phaseRef.current)) return;
+      e.preventDefault();
+      Alert.alert(de.quiz.cancelConfirmTitle, de.quiz.cancelConfirmBody, [
+        { text: de.quiz.cancelConfirmNo, style: 'cancel' },
+        {
+          text: de.quiz.cancelConfirmYes,
+          style: 'destructive',
+          onPress: () => navigation.dispatch(e.data.action),
+        },
+      ]);
+    });
+
+    const backHandlerSub = BackHandler.addEventListener('hardwareBackPress', () => {
+      if (!shouldConfirmExit(phaseRef.current)) return false;
+      requestCancel();
+      return true;
+    });
+
+    return () => {
+      beforeRemoveSub();
+      backHandlerSub.remove();
+    };
+  }, [navigation]);
 
   function retryWithNewDraw() {
     seedRef.current = Date.now();
@@ -179,22 +235,28 @@ export function QuizRunner({ pool, desiredCount, scope, heading, onExit, onNextL
 
   if (!question) return null;
 
-  const progress = (index + (phase === 'feedback' ? 1 : 0)) / round.drawn.length;
+  const progressPercent = Math.round(progress * 100);
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.bg }]}>
-      <View style={[styles.progressTrack, { backgroundColor: theme.colors.border }]}>
-        <View
+      <View
+        style={[styles.progressTrack, { backgroundColor: theme.colors.border, borderRadius: theme.radius.full }]}
+      >
+        <Animated.View
           style={[
             styles.progressFill,
-            { backgroundColor: theme.colors.accent, width: `${Math.round(progress * 100)}%` },
+            {
+              backgroundColor: theme.colors.accent,
+              borderRadius: theme.radius.full,
+              width: progressAnim.interpolate({ inputRange: [0, 1], outputRange: ['0%', '100%'] }),
+            },
           ]}
         />
       </View>
       <ScrollView contentContainerStyle={{ padding: theme.spacing.lg }}>
         <View style={styles.topRow}>
           <Text style={[styles.smallBody, { color: theme.colors.textWeak }]}>
-            {de.quiz.questionOf(index + 1, round.drawn.length)}
+            {de.quiz.questionOf(index + 1, round.drawn.length)} · {progressPercent}%
           </Text>
           <Pressable accessibilityRole="button" accessibilityLabel={de.quiz.cancel} onPress={requestCancel}>
             <Text style={[styles.smallBody, { color: theme.colors.textWeak }]}>{de.quiz.cancel}</Text>
@@ -323,8 +385,8 @@ const styles = StyleSheet.create({
   body: { fontSize: 16, lineHeight: 24 },
   smallBody: { fontSize: 13, lineHeight: 18 },
   topRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  progressTrack: { height: 4, width: '100%' },
-  progressFill: { height: 4 },
+  progressTrack: { height: 8, width: '100%', overflow: 'hidden' },
+  progressFill: { height: 8 },
   option: { borderWidth: StyleSheet.hairlineWidth, justifyContent: 'center', paddingHorizontal: 16, paddingVertical: 12 },
   optionLabel: { fontSize: 16, lineHeight: 22, fontWeight: '500' },
   primaryButton: { justifyContent: 'center', alignItems: 'center', paddingHorizontal: 20 },

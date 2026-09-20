@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect } from 'expo-router';
 import { Headphones, Download, ListMusic, Trash2 } from 'lucide-react-native';
 import { useTheme } from '../../src/theme/useTheme.js';
@@ -23,6 +24,20 @@ export default function HoerenScreen() {
   const [modules, setModules] = useState<ModuleListEntry[]>([]);
   const [continueCard, setContinueCard] = useState<ContinueCard | null>(null);
   const [downloaded, setDownloaded] = useState<Record<string, boolean>>({});
+  const [playbackError, setPlaybackError] = useState(false);
+
+  // Faengt einen Fehler beim Starten der Wiedergabe/Warteschlange ab
+  // (Pruefbericht Phase 3, B-01: ein ungueltiges Manifest/eine ungueltige
+  // Basis-URL darf nie als unbehandelte Promise-Ablehnung enden), zeigt
+  // stattdessen ein Banner mit de.player.loadError statt eines Absturzes.
+  const runPlayback = useCallback(async (action: () => Promise<void>) => {
+    setPlaybackError(false);
+    try {
+      await action();
+    } catch {
+      setPlaybackError(true);
+    }
+  }, []);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -95,9 +110,15 @@ export default function HoerenScreen() {
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.bg }]}>
       <ScrollView contentContainerStyle={{ padding: theme.spacing.base, gap: theme.spacing.lg }}>
+        {playbackError ? (
+          <View style={[styles.banner, { backgroundColor: theme.colors.surface, borderColor: theme.colors.error }]}>
+            <Text style={{ color: theme.colors.error }}>{de.player.loadError}</Text>
+          </View>
+        ) : null}
+
         {continueCard ? (
           <Pressable
-            onPress={() => void playLesson(continueCard.lessonId)}
+            onPress={() => void runPlayback(() => playLesson(continueCard.lessonId))}
             accessibilityRole="button"
             accessibilityLabel={`${de.hoeren.continueCard}: ${continueCard.title}`}
             style={[
@@ -118,11 +139,11 @@ export default function HoerenScreen() {
               </Text>
               <Pressable
                 onPress={() => {
-                  void (async () => {
+                  void runPlayback(async () => {
                     await enqueueModule(module.id);
                     const first = module.subModules[0]?.lessons[0];
                     if (first) await playLesson(first.id);
-                  })();
+                  });
                 }}
                 accessibilityRole="button"
                 accessibilityLabel={`${de.hoeren.playModule}: ${module.title}`}
@@ -136,7 +157,7 @@ export default function HoerenScreen() {
             {module.subModules.flatMap((sub) => sub.lessons).map((lesson) => (
               <Pressable
                 key={lesson.id}
-                onPress={() => void playLesson(lesson.id)}
+                onPress={() => void runPlayback(() => playLesson(lesson.id))}
                 accessibilityRole="button"
                 accessibilityLabel={`${lesson.title}, ${lesson.durationMinutes} Minuten, ${downloaded[lesson.id] ? de.hoeren.downloaded : de.hoeren.notDownloaded}`}
                 style={[
@@ -151,7 +172,7 @@ export default function HoerenScreen() {
                 <Pressable
                   onPress={(e) => {
                     e.stopPropagation();
-                    void (async () => {
+                    void runPlayback(async () => {
                       if (downloaded[lesson.id]) {
                         await deleteDownload(lesson.id);
                         setDownloaded((d) => ({ ...d, [lesson.id]: false }));
@@ -159,7 +180,7 @@ export default function HoerenScreen() {
                         await downloadLesson(lesson.id);
                         setDownloaded((d) => ({ ...d, [lesson.id]: true }));
                       }
-                    })();
+                    });
                   }}
                   accessibilityRole="button"
                   accessibilityLabel={downloaded[lesson.id] ? de.player.deleteDownload : de.player.download}
@@ -238,4 +259,5 @@ const styles = StyleSheet.create({
   lessonTitle: { flex: 1, fontSize: 15 },
   lessonDuration: { fontSize: 13 },
   storage: { padding: 16, borderWidth: StyleSheet.hairlineWidth },
+  banner: { padding: 12, borderRadius: 8, borderWidth: StyleSheet.hairlineWidth },
 });

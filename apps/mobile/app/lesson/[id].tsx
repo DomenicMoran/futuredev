@@ -3,7 +3,6 @@ import {
   Linking,
   Modal,
   Pressable,
-  SafeAreaView,
   SectionList,
   StyleSheet,
   Text,
@@ -11,6 +10,7 @@ import {
   View,
   type ViewToken,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
 import { BookOpen, Bookmark, BookmarkCheck, ExternalLink, MessageSquarePlus } from 'lucide-react-native';
 import type { Lesson, SpeechBlock } from '@futuredev/content-schema';

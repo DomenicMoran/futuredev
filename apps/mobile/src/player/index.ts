@@ -115,9 +115,16 @@ async function loadCueSheet(lessonId: string): Promise<CueSheet> {
     }
     raw = await response.text();
   }
-  const cueSheet = cueSheetSchema.parse(JSON.parse(raw));
-  usePlayerStore.getState().setCueSheet(lessonId, cueSheet);
-  return cueSheet;
+  // safeParse statt parse (Pruefbericht Phase 3, B-01): eine kaputte oder
+  // ueber eine ungueltige Basis-URL geladene Cue-Datei darf nie als
+  // unbehandelter ZodError enden, sondern wird als normaler Error gemeldet,
+  // den playLesson/enqueueLessons-Aufrufer abfangen.
+  const parsedCueSheet = cueSheetSchema.safeParse(JSON.parse(raw));
+  if (!parsedCueSheet.success) {
+    throw new Error(`loadCueSheet: Kapitelmarken fuer ${lessonId} entsprechen nicht dem Schema`);
+  }
+  usePlayerStore.getState().setCueSheet(lessonId, parsedCueSheet.data);
+  return parsedCueSheet.data;
 }
 
 /** Lokal heruntergeladen (documentDirectory/audio/<id>.mp3) oder über die Netz-URL. */
