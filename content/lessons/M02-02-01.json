@@ -1,0 +1,1071 @@
+{
+  "id": "M02-02-01",
+  "title": "Das Box-Modell: wie jedes Element Platz braucht",
+  "durationMinutes": 20,
+  "prerequisites": [
+    "M02-01-01",
+    "M02-01-02"
+  ],
+  "terms": [
+    {
+      "term": "CSS",
+      "definition": "Die Sprache, mit der du festlegst, wie eine Webseite aussieht: Farben, Abstände, Größen."
+    },
+    {
+      "term": "Box-Modell",
+      "definition": "Die Regel, dass jedes Element auf einer Webseite als Kasten behandelt wird, mit Inhalt, Innenabstand, Rahmen und Außenabstand."
+    },
+    {
+      "term": "padding",
+      "definition": "Der Innenabstand einer Box: der Platz zwischen dem Inhalt und dem Rahmen."
+    },
+    {
+      "term": "border",
+      "definition": "Der Rahmen einer Box: eine sichtbare Linie um den Inhalt und den Innenabstand herum."
+    },
+    {
+      "term": "margin",
+      "definition": "Der Außenabstand einer Box: der Platz zwischen dem Rahmen und den Nachbar-Elementen."
+    },
+    {
+      "term": "width",
+      "definition": "Die Breite, die du dem Inhalt einer Box fest vorgibst."
+    },
+    {
+      "term": "Selektor",
+      "definition": "Die Angabe in CSS, welches Element auf der Seite gemeint ist."
+    },
+    {
+      "term": "Klasse",
+      "definition": "Ein selbst vergebener Name an einem HTML-Element, über den CSS genau dieses Element oder mehrere gleiche Elemente anspricht."
+    },
+    {
+      "term": "CSS-Eigenschaft",
+      "definition": "Das Merkmal einer Box, das du in CSS veränderst, etwa die Farbe oder der Abstand."
+    },
+    {
+      "term": "CSS-Wert",
+      "definition": "Die konkrete Angabe hinter einer CSS-Eigenschaft, zum Beispiel eine Zahl, eine Farbe oder ein Wort."
+    },
+    {
+      "term": "Stylesheet",
+      "definition": "Eine eigene Datei, in der CSS-Regeln gesammelt gespeichert werden, getrennt von der HTML-Datei."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "text": "Stell dir ein gerahmtes Foto an der Wand vor.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Ganz innen liegt das Foto selbst. Darum herum liegt ein Passepartout, dieser breite, helle Papierrand. Darum herum liegt der eigentliche Rahmen aus Holz oder Metall. Und zwischen dem Rahmen und der Wand daneben ist noch einmal Luft.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "B",
+      "text": "Also vier Schichten: Foto, Passepartout, Rahmen, Luft zur Wand?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau diese vier Schichten hat auch jeder einzelne Baustein auf einer Webseite, jede Überschrift, jeder Absatz, jedes Bild.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "In der letzten Lektion hast du gelernt, dass HTML das Grundgerüst einer Webseite baut: Überschriften, Absätze, Bilder, Listen.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "HTML sagt nur, was auf der Seite steht. Es sagt nichts darüber, wie es aussieht, welche Farbe ein Absatz hat oder wie viel Platz um eine Überschrift frei bleibt.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau dafür gibt es eine zweite Sprache. Sie heißt CSS.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "CSS. C, S, S.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir ein rohes Holzhaus vor, gerade fertig gebaut, noch ohne Farbe und ohne Vorhänge. Die Wände stehen, die Fenster sind eingesetzt, alles ist an seinem Platz. Das ist HTML. CSS ist dann die Farbe an der Wand, der Teppich, die Vorhänge, der Abstand zwischen Sofa und Tisch.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Ohne CSS sieht jede Webseite gleich grau und eng aus, egal welche Firma dahintersteckt. Mit CSS bekommt jede Seite ihr eigenes Gesicht.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Und wo schreibe ich dieses CSS überhaupt hin? In dieselbe Datei wie das HTML?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Dazu kommen wir gleich noch genau, das ist eine eigene Baustelle. Zuerst zum Wichtigsten: was CSS mit jedem einzelnen Baustein macht.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Zurück zu unserem Bilderrahmen an der Wand. Jeder Baustein auf einer Webseite, wirklich jeder, wird von CSS als so ein gerahmtes Bild behandelt.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Diese Regel, dass jeder Baustein aus denselben vier Schichten besteht, hat einen Namen: das Box-Modell.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "B",
+      "text": "Box wie Kiste?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau, Box wie Kiste oder Kasten, das Box-Modell eben. Ein Absatz Text ist für den Browser eine Box. Eine Überschrift ist eine Box. Ein Bild ist eine Box. Sogar eine unsichtbare Box, die nur andere Boxen zusammenhält, ist eine Box.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Wenn du verstehst, wie diese Box aufgebaut ist, verstehst du fast jeden Abstand und jede Größe auf einer Webseite, ohne raten zu müssen.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Schauen wir uns die vier Schichten der Box einzeln an, von innen nach außen, genau wie beim Bilderrahmen.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Ganz innen liegt der Inhalt. Bei einem Absatz ist das der Text selbst. Bei einem Bild ist das die Bilddatei.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Direkt um den Inhalt herum liegt eine Schicht Luft, so wie das Passepartout um das Foto herum liegt.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Diese Luft zwischen dem Inhalt und dem nächsten sichtbaren Rand nennt man Innenabstand oder mit dem englischen Fachwort padding.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "B",
+      "text": "Und wieso braucht der Inhalt überhaupt Luft um sich herum?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Denk an eine Postkarte. Der Text steht nie ganz am Rand der Karte, sonst wirkt sie eng und unordentlich. Genauso braucht Text auf einer Webseite Luft, sonst klebt er an der nächsten Linie.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein Knopf ohne padding sieht aus wie eine dünne Linie mit Buchstaben darauf, kaum klickbar. Mit padding wird aus derselben Linie ein bequemer, großzügiger Knopf.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Nach dem padding kommt beim Bilderrahmen der eigentliche Rahmen aus Holz oder Metall, eine feste, sichtbare Linie.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau diese sichtbare Linie um eine Box herum heißt in CSS border.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein border kann dünn oder dick sein, durchgezogen oder gepunktet, in jeder Farbe. Eine Karteikarte mit einem schwarzen Rand wirkt sofort wie ein eigenständiger Kasten, ganz ohne Rahmen wirkt sie wie loses Papier.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein border trennt eine Box optisch von allem, was daneben liegt, ganz ohne dass du dafür eine Linie zeichnen musst.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Und die Luft zwischen dem Rahmen und der Wand daneben, die vierte Schicht?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau die kommt jetzt. Stell dir zwei Bilderrahmen nebeneinander an der Wand vor, mit etwas Abstand dazwischen, damit sie nicht aneinanderkleben.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Dieser Abstand außerhalb des Rahmens, zu den Nachbarn hin, heißt in CSS margin.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Zwei Absätze ohne margin kleben direkt aneinander, kaum lesbar. Mit margin bekommt jeder Absatz seinen eigenen Luftraum, so wie zwei Regale im Laden, zwischen denen ein Gang bleibt.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "margin ist der Grund, warum eine gut gestaltete Seite luftig wirkt und eine schlecht gestaltete Seite gequetscht.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "padding, border und margin sind also alle drei Abstände oder Linien um den Inhalt herum. Es fehlt noch, wie groß der Inhalt selbst sein darf.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir vor, du bestellst beim Rahmenmacher ein Passepartout, sagst ihm aber nicht, wie breit das Foto in der Mitte werden soll. Er müsste raten.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau diese Angabe, wie breit der Inhalt selbst sein soll, heißt in CSS width.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Gibst du einer Box eine width von 300 Pixeln, bleibt der Inhalt genau 300 Pixel breit, egal wie groß der Bildschirm daneben ist. Ohne width nimmt sich der Inhalt oft die ganze verfügbare Breite.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Ohne width kontrollierst du nie, ob eine Zeile Text zu breit und schwer lesbar wird oder ob ein Bild den ganzen Bildschirm sprengt.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Also erst kommt die width, dann außen herum padding, dann border, dann margin, richtig so?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau in dieser Reihenfolge, von innen nach außen: width für die Breite des Inhalts, padding als Luft direkt um den Inhalt, border als sichtbare Linie, margin als Luft zu den Nachbarn.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Woher weiß ich eigentlich, wie breit padding, border und margin bei einem Element gerade tatsächlich sind, wenn ich nur auf die Seite schaue?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir eine Werkstatt-Lupe vor, mit der du an jedem Werkstück genau messen kannst, wie breit jede Schicht wirklich ist, auch wenn du es von außen nicht sofort siehst.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Jeder Browser hat eingebaute Werkzeuge für Entwickler, mit denen du dir für jede Box am Bildschirm genau anzeigen lassen kannst, wie viele Pixel Inhalt, padding, border und margin gerade haben.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Klickst du mit der rechten Maustaste auf ein Element und wählst die Prüf-Funktion, zeigt dir der Browser vier ineinander liegende, farbige Rechtecke, genau nach dem Muster von Inhalt, padding, border und margin.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Ohne dieses Werkzeug müsstest du bei jedem Abstandsproblem raten, welche der vier Schichten gerade zu groß oder zu klein ist. Mit der Lupe siehst du es sofort in Zahlen.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Und was, wenn ich width auf 300 Pixel setze, aber der Browser das Fenster viel schmaler macht, weil ich zum Beispiel auf dem Handy bin?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Dann bleibt die Box trotzdem 300 Pixel breit und ragt notfalls über den sichtbaren Bereich hinaus. Deshalb gibt es neben einer festen width auch die Möglichkeit, eine Breite in Prozent der verfügbaren Fläche anzugeben, sodass sich die Box automatisch anpasst. Wie das genau funktioniert, gehört in eine eigene, spätere Lektion über Seiten, die auf jedem Bildschirm passen.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Jetzt weißt du, woraus eine Box besteht. Als Nächstes brauchst du eine Möglichkeit, dem Browser zu sagen, welche Box du überhaupt meinst.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir eine Postangestellte vor, die einen Brief zustellen soll. Ohne eine Adresse auf dem Umschlag weiß sie nicht, zu welcher Tür sie gehen muss.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Diese Adresse, mit der CSS einen bestimmten Baustein auf der Seite findet, heißt Selektor.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Der einfachste Selektor ist der Name des HTML-Bausteins selbst. Schreibst du in CSS einfach p, meinst du damit jeden Absatz auf der Seite. Schreibst du h1, meinst du jede Hauptüberschrift.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Ohne Selektor könnte CSS niemals sagen, für welchen Baustein eine Regel gilt, die Regel würde einfach überall oder nirgends greifen.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Aber was, wenn ich nur einen einzigen Absatz besonders gestalten will, nicht alle Absätze auf der Seite?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Sehr gute Frage, dafür gibt es einen zweiten, genaueren Weg, einen Baustein zu adressieren.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir vor, du klebst auf bestimmte Kisten im Lager zusätzlich einen farbigen Aufkleber mit einem Namen darauf, zum Beispiel 'zerbrechlich'. Nur diese markierten Kisten bekommen dann eine besondere Behandlung.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau so einen selbst vergebenen Aufkleber gibt es auch in HTML, er heißt Klasse.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "In HTML schreibst du dem Absatz die Klasse 'hinweis' zu. In CSS sprichst du diese Klasse dann mit einem Punkt davor an, also .hinweis, und nur dieser eine Absatz, oder alle Absätze mit dieser Klasse, bekommen die neue Gestaltung.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Mit Klassen gestaltest du gezielt einzelne Bausteine oder eine bestimmte Gruppe, ohne dass jeder Absatz auf der Seite automatisch gleich aussehen muss.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Jetzt weißt du, wie CSS einen Baustein findet. Als Nächstes brauchst du, wie du diesem Baustein sagst, was sich an ihm ändern soll.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir ein Formular in der Werkstatt vor, mit zwei Spalten: links steht, worum es geht, rechts steht die konkrete Angabe dazu, etwa 'Farbe: Rot' oder 'Länge: 30 Zentimeter'.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau nach diesem Muster ist jede CSS-Regel aufgebaut: links das Merkmal, das sich ändern soll, das nennt man CSS-Eigenschaft, rechts die konkrete Angabe dazu.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "'padding' ist so eine CSS-Eigenschaft, genauso wie 'border', 'margin', 'width' oder auch die Farbe eines Textes.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Ohne einen klaren Namen für jedes Merkmal müsste jede Regel jedes Mal neu in Worten erklärt werden, statt kurz und eindeutig zu sein.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Und die rechte Spalte auf dem Formular, die konkrete Angabe, wie 'Rot' oder '30 Zentimeter'?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau diese Angabe heißt in CSS ein CSS-Wert.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Bei der CSS-Eigenschaft padding kann der CSS-Wert zum Beispiel '20px' sein, zwanzig Pixel Abstand. Bei der CSS-Eigenschaft border-color kann der CSS-Wert 'rot' oder eine genaue Farbangabe sein.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "CSS-Eigenschaft und CSS-Wert gehören immer als Paar zusammen, eine CSS-Eigenschaft allein sagt noch nicht, wie stark oder in welcher Farbe etwas gelten soll.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Eine ganze CSS-Regel besteht also aus dem Selektor, der sagt, welcher Baustein gemeint ist, und dahinter, in geschweiften Klammern, aus einer CSS-Eigenschaft und einem CSS-Wert, getrennt durch einen Doppelpunkt, beendet mit einem Semikolon.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Zum Beispiel so: p { padding: 20px; }. Das heißt übersetzt: Jeder Absatz bekommt zwanzig Pixel Innenabstand.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Verstanden, aber wo schreibe ich diese Regel jetzt tatsächlich hin?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Jetzt sind wir bei genau der Frage von vorhin. CSS kann an drei verschiedenen Orten stehen.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir eine Werkstatt vor, in der du drei Möglichkeiten hast, eine Notiz an ein Werkzeug zu heften. Du kannst sie direkt auf das Werkzeug kleben, an eine Tafel in der Werkstatt schreiben, oder in ein eigenes Notizheft im Regal eintragen.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genauso kannst du CSS direkt an einen einzelnen HTML-Baustein kleben, in einen Bereich mitten in der HTML-Datei schreiben, oder komplett in eine eigene Datei auslagern.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Die mittlere Möglichkeit, CSS mitten in der HTML-Datei, benutzt einen eigenen HTML-Baustein namens style, meist ganz oben in der Datei im Bereich head.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Die dritte und in der Praxis übliche Möglichkeit ist eine ganz eigene Datei, nur für CSS-Regeln. So eine Datei nennt man Stylesheet.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "So ein Stylesheet heißt zum Beispiel style.css und wird in der HTML-Datei einmal verlinkt. Danach gelten alle Regeln aus diesem Stylesheet für die ganze Webseite, egal wie viele HTML-Dateien es gibt.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein eigenes Stylesheet hält Inhalt und Gestaltung sauber getrennt: Die HTML-Datei bleibt übersichtlich, und alle Farben und Abstände der ganzen Seite stehen an einem Ort, den du nur einmal ändern musst.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Heißt das, wenn ich später zehn Seiten habe, reicht es, das Stylesheet einmal anzupassen, statt jede Seite einzeln?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau das ist der Vorteil. Ein Stylesheet, das von zehn Seiten benutzt wird, ändert mit einer einzigen Regel das Aussehen aller zehn Seiten auf einmal.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Also noch einmal kurz zusammengefasst: CSS bestimmt das Aussehen, jeder Baustein ist eine Box mit width für die Breite, padding als Innenabstand, border als sichtbarem Rahmen und margin als Außenabstand zu den Nachbarn. Ein Selektor, oft eine Klasse, sagt, welcher Baustein gemeint ist, und jede Regel besteht aus einer CSS-Eigenschaft und einem CSS-Wert, meist gesammelt in einem eigenen Stylesheet.",
+      "isKeySentence": true,
+      "role": "key"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau so ein Stylesheet mit Abständen aus einer festen Skala findest du auch im echten Portfolio-Projekt von Domenic.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Im Repo portfolio liegt die Datei src/app/globals.css. Dort stehen ganz oben, im Bereich mit dem Namen theme, feste Werte für Farben und Schriftgrößen, etwa die Zeilen 10 bis 46.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Abstände wie padding und margin werden auf dieser Seite nicht als eigene, selbst erfundene Zahl pro Baustein vergeben, sondern immer aus derselben festen Werkzeugkiste genommen. In der Datei src/components/Footer.tsx, Zeile 72, steht zum Beispiel die Klasse 'pt-10', ein Innenabstand oben von genau zehn Schritten aus dieser Werkzeugkiste, dieselbe Zahl zehn wie an vielen anderen Stellen der Seite.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Würde jede Box ihre eigene, frei erfundene Zahl für Abstand bekommen, sähe die Seite an jeder Stelle leicht anders eng oder weit aus. Eine feste, wiederverwendete Werkzeugkiste an Abständen sorgt dafür, dass die ganze Seite aus einem Guss wirkt.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Jetzt bist du dran. Öffne eine leere HTML-Datei mit einem Absatz darin, oder benutze eine, die du in der letzten Lektion schon gebaut hast.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Lege daneben eine Datei namens style.css an und verlinke sie im head-Bereich deiner HTML-Datei. Schreibe dann eine Regel für den Absatz: eine Hintergrundfarbe deiner Wahl, außerdem padding, border und margin, jeweils mit einem eigenen Wert in Pixeln.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Speichere die Datei und lade die Seite im Browser neu. Du solltest jetzt einen farbigen Kasten um deinen Text sehen, mit sichtbarem Rahmen und etwas Luft zu den Rändern der Seite. Stimmt etwas nicht, öffne die Entwickler-Werkzeuge deines Browsers und schau dir dort die vier Schichten deiner Box genau an.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Fassen wir die Begriffe von heute noch einmal als Liste zusammen.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "CSS: die Sprache, mit der du festlegst, wie eine Webseite aussieht, Farben, Abstände, Größen.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Box-Modell: die Regel, dass jeder Baustein als Kasten behandelt wird, mit Inhalt, Innenabstand, Rahmen und Außenabstand.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "width: die Breite, die du dem Inhalt einer Box fest vorgibst.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "padding: der Innenabstand einer Box, der Platz zwischen Inhalt und Rahmen.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "border: der sichtbare Rahmen einer Box.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "margin: der Außenabstand einer Box, der Platz zu den Nachbar-Bausteinen.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Selektor: die Angabe in CSS, welcher Baustein auf der Seite gemeint ist.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Klasse: ein selbst vergebener Name an einem HTML-Baustein, über den CSS ihn gezielt anspricht.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "CSS-Eigenschaft: das Merkmal einer Box, das du in CSS veränderst.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "CSS-Wert: die konkrete Angabe hinter einer CSS-Eigenschaft.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Stylesheet: eine eigene Datei, in der CSS-Regeln gesammelt gespeichert werden.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss ich in jeder einzelnen HTML-Datei ein eigenes Stylesheet anlegen, oder kann ich eines für mehrere Seiten benutzen?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein Stylesheet kannst du problemlos von mehreren HTML-Dateien gleichzeitig verlinken. Genau darin liegt der Vorteil: Änderst du eine Regel im Stylesheet, ändert sich das Aussehen auf allen verlinkten Seiten gleichzeitig, ohne dass du jede Seite einzeln anfassen musst.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Was passiert, wenn ich in CSS eine Eigenschaft falsch schreibe, zum Beispiel 'padin' statt 'padding'?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Der Browser zeigt normalerweise keine Fehlermeldung dafür an. Er überspringt die Regel, die er nicht kennt, still und einfach, und die Box sieht so aus, als hättest du die Regel gar nicht geschrieben. Deshalb lohnt es sich, nach einer Änderung im Browser immer nachzuschauen, ob wirklich etwas passiert ist.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann ein Baustein mehr als eine Klasse gleichzeitig haben?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, das geht. Du schreibst dann einfach mehrere Klassennamen, durch ein Leerzeichen getrennt, in dasselbe class-Attribut. Ein Absatz kann so zum Beispiel gleichzeitig die Klasse 'hinweis' und die Klasse 'wichtig' tragen, und beide zugehörigen CSS-Regeln gelten dann für ihn.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Was ist, wenn margin bei zwei Boxen übereinander sich irgendwie überlappt, addieren sich die Abstände dann einfach?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Das ist tatsächlich eine Besonderheit: Bei zwei Boxen direkt übereinander wird meist nicht addiert, sondern der größere der beiden margin-Werte gewinnt, der kleinere verschwindet einfach. Diese Regel heißt margin-collapsing und ist am Anfang oft überraschend, wenn ein Abstand kleiner ausfällt als erwartet.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Verändert padding eigentlich die Gesamtgröße einer Box nach außen hin?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Normalerweise ja: Setzt du width auf 300 Pixel und padding auf 20 Pixel, wird die Box insgesamt breiter als 300 Pixel, weil padding standardmäßig oben draufkommt. Später lernst du eine zusätzliche Eigenschaft kennen, mit der du das umstellen kannst, sodass padding innerhalb der angegebenen Breite bleibt.",
+      "isKeySentence": false,
+      "role": "faq"
+    }
+  ],
+  "practiceExample": {
+    "text": "Im Repo portfolio wird jeder Abstand aus einer festen Skala genommen statt frei erfunden: In src/components/Footer.tsx, Zeile 72, steht die Klasse 'pt-10' für den oberen Innenabstand, dieselbe Zahl zehn taucht an vielen anderen Stellen der Seite wieder auf. Die Grundwerte für Farben und Schriftgrößen liegen zusätzlich gesammelt in src/app/globals.css, Zeilen 10 bis 46, in einem Bereich mit dem Namen theme.",
+    "repoNote": "repo-portfolio",
+    "location": "src/components/Footer.tsx:72 und src/app/globals.css:10-46 (Bereich @theme)"
+  },
+  "quiz": [
+    {
+      "question": "Was macht CSS, im Unterschied zu HTML?",
+      "area": "CSS-Grundlagen",
+      "options": [
+        {
+          "text": "CSS legt fest, was auf der Seite steht, HTML legt das Aussehen fest, eine Verwechslung, die am Anfang häufig vorkommt.",
+          "isCorrect": false,
+          "explanation": "Das ist genau vertauscht: HTML legt den Inhalt fest, CSS das Aussehen."
+        },
+        {
+          "text": "CSS legt fest, wie eine Webseite aussieht, HTML legt fest, was auf ihr steht.",
+          "isCorrect": true,
+          "explanation": "Genau diese Aufgabenteilung wurde in der Lektion erklärt."
+        },
+        {
+          "text": "CSS und HTML machen genau dasselbe, nur mit anderen Wörtern.",
+          "isCorrect": false,
+          "explanation": "Beide haben unterschiedliche Aufgaben, keine Doppelung."
+        },
+        {
+          "text": "CSS speichert Bilder, HTML speichert Text.",
+          "isCorrect": false,
+          "explanation": "Das ist keine der beiden tatsächlichen Aufgaben."
+        }
+      ]
+    },
+    {
+      "question": "Welche vier Schichten hat eine Box im Box-Modell, von innen nach außen?",
+      "area": "Box-Modell",
+      "options": [
+        {
+          "text": "margin, border, padding, Inhalt",
+          "isCorrect": false,
+          "explanation": "Das ist die genau umgekehrte Reihenfolge, von außen nach innen."
+        },
+        {
+          "text": "Inhalt, padding, border, margin",
+          "isCorrect": true,
+          "explanation": "So wurden die vier Schichten in der Lektion von innen nach außen erklärt."
+        },
+        {
+          "text": "Inhalt, margin, padding, border",
+          "isCorrect": false,
+          "explanation": "margin liegt ganz außen, nicht direkt am Inhalt."
+        },
+        {
+          "text": "border, Inhalt, padding, margin",
+          "isCorrect": false,
+          "explanation": "Der Rahmen liegt nicht direkt am Inhalt, dazwischen liegt padding."
+        }
+      ]
+    },
+    {
+      "question": "Ein Knopf auf einer Webseite wirkt wie eine dünne Linie mit Buchstaben, kaum klickbar. Welche Eigenschaft fehlt ihm am ehesten?",
+      "area": "Box-Modell",
+      "options": [
+        {
+          "text": "margin, weil der Knopf mehr Abstand zu den Nachbarn braucht, auch wenn margin am Ende noch fehlt.",
+          "isCorrect": false,
+          "explanation": "margin würde den Knopf verschieben, nicht ihn selbst größer machen."
+        },
+        {
+          "text": "padding, weil der Knopf innen mehr Luft um seinen Text braucht.",
+          "isCorrect": true,
+          "explanation": "Genau dieses Beispiel stand in der Lektion: padding macht aus einer Linie einen bequemen Knopf."
+        },
+        {
+          "text": "border, weil der Knopf eine dickere Linie braucht.",
+          "isCorrect": false,
+          "explanation": "Eine dickere Linie löst das Platzproblem im Inneren nicht."
+        },
+        {
+          "text": "Selektor, weil der Knopf falsch angesprochen wird.",
+          "isCorrect": false,
+          "explanation": "Ein falscher Selektor würde die Regel gar nicht greifen lassen, nicht nur die Größe verändern."
+        }
+      ]
+    },
+    {
+      "question": "Zwei Absätze auf einer Webseite kleben ohne jeden Zwischenraum direkt aneinander. Welche Eigenschaft würde das beheben?",
+      "area": "Box-Modell",
+      "options": [
+        {
+          "text": "width, weil die Absätze breiter werden müssen, weil sich Abstand zu Nachbarn anders anfühlt als Innenabstand.",
+          "isCorrect": false,
+          "explanation": "Die Breite ändert nichts am senkrechten Abstand zwischen den Absätzen."
+        },
+        {
+          "text": "border, weil ein Rahmen sie sichtbar trennt.",
+          "isCorrect": false,
+          "explanation": "Ein Rahmen macht die Grenze sichtbar, schafft aber keinen echten Abstand."
+        },
+        {
+          "text": "margin, weil damit Platz zu den Nachbar-Bausteinen entsteht.",
+          "isCorrect": true,
+          "explanation": "margin ist genau der Außenabstand zu Nachbar-Bausteinen."
+        },
+        {
+          "text": "Klasse, weil die Absätze eine andere Klasse brauchen.",
+          "isCorrect": false,
+          "explanation": "Eine Klasse allein ändert noch nichts, erst die Regel dahinter."
+        }
+      ]
+    },
+    {
+      "question": "Was ist ein Selektor in CSS?",
+      "area": "CSS-Grundlagen",
+      "options": [
+        {
+          "text": "Die Angabe, welches Baustein auf der Seite mit einer Regel gemeint ist.",
+          "isCorrect": true,
+          "explanation": "Genau das ist die Aufgabe eines Selektors, so wie eine Adresse auf einem Brief."
+        },
+        {
+          "text": "Die konkrete Zahl hinter einer Eigenschaft, etwa '20px', was aber die eigentliche Ursache nicht wirklich trifft.",
+          "isCorrect": false,
+          "explanation": "Das beschreibt einen Wert, nicht einen Selektor."
+        },
+        {
+          "text": "Der Name der CSS-Datei selbst.",
+          "isCorrect": false,
+          "explanation": "Der Dateiname hat nichts mit dem Ansprechen einzelner Bausteine zu tun."
+        },
+        {
+          "text": "Ein anderer Name für das Box-Modell.",
+          "isCorrect": false,
+          "explanation": "Selektor und Box-Modell sind zwei ganz unterschiedliche Dinge."
+        }
+      ]
+    },
+    {
+      "question": "Du willst nur einen bestimmten Absatz auf der Seite besonders gestalten, nicht alle Absätze. Was ist der übliche Weg dafür?",
+      "area": "CSS-Grundlagen",
+      "options": [
+        {
+          "text": "Dem Absatz in HTML eine eigene Klasse geben und diese Klasse in CSS ansprechen.",
+          "isCorrect": true,
+          "explanation": "Genau dafür sind Klassen gedacht: gezielt einzelne Bausteine oder eine Gruppe treffen."
+        },
+        {
+          "text": "Die Eigenschaft 'p' in ein anderes Wort umbenennen, eine Verwechslung mit einer ganz anderen CSS-Eigenschaft.",
+          "isCorrect": false,
+          "explanation": "HTML-Bausteine lassen sich so nicht umbenennen, das ist kein gültiger Weg."
+        },
+        {
+          "text": "Das Stylesheet für diese eine Seite komplett löschen.",
+          "isCorrect": false,
+          "explanation": "Damit würde die gesamte Gestaltung der Seite verschwinden, nicht nur eines Absatzes."
+        },
+        {
+          "text": "margin auf null setzen.",
+          "isCorrect": false,
+          "explanation": "margin auf null ändert den Außenabstand, wählt aber kein bestimmtes Baustein gezielt aus."
+        }
+      ]
+    },
+    {
+      "question": "Wie ist eine CSS-Regel aufgebaut?",
+      "area": "CSS-Grundlagen",
+      "options": [
+        {
+          "text": "Nur aus einem Wert, zum Beispiel '20px', was in der Praxis technisch überhaupt nicht funktioniert.",
+          "isCorrect": false,
+          "explanation": "Ein Wert allein ohne Eigenschaft und Selektor ergibt keine gültige Regel."
+        },
+        {
+          "text": "Aus einem Selektor, gefolgt von Eigenschaft und Wert in geschweiften Klammern.",
+          "isCorrect": true,
+          "explanation": "Genau dieser Aufbau wurde am Beispiel 'p { padding: 20px; }' gezeigt."
+        },
+        {
+          "text": "Aus zwei Selektoren hintereinander, ohne Eigenschaft.",
+          "isCorrect": false,
+          "explanation": "Ohne Eigenschaft und Wert weiß der Browser nicht, was sich ändern soll."
+        },
+        {
+          "text": "Aus dem Dateinamen des Stylesheets.",
+          "isCorrect": false,
+          "explanation": "Der Dateiname gehört nicht in eine einzelne CSS-Regel."
+        }
+      ]
+    },
+    {
+      "question": "Warum ist ein eigenes Stylesheet in der Praxis meist besser als CSS direkt an jedes einzelne Baustein zu kleben?",
+      "area": "CSS-Grundlagen",
+      "options": [
+        {
+          "text": "Weil direkt geklebtes CSS technisch gar nicht funktioniert.",
+          "isCorrect": false,
+          "explanation": "Direkt geklebtes CSS funktioniert durchaus, ist nur unpraktisch bei vielen Bausteinen."
+        },
+        {
+          "text": "Weil ein Stylesheet automatisch schneller lädt als jede andere Methode.",
+          "isCorrect": false,
+          "explanation": "Ladegeschwindigkeit war nicht der in der Lektion genannte Grund."
+        },
+        {
+          "text": "Weil eine Änderung im Stylesheet gleichzeitig für alle verlinkten Seiten gilt, statt jede Seite einzeln anzufassen.",
+          "isCorrect": true,
+          "explanation": "Genau dieser Vorteil der zentralen Änderung wurde in der Lektion erklärt."
+        },
+        {
+          "text": "Weil ein Stylesheet keine Klassen benutzen darf.",
+          "isCorrect": false,
+          "explanation": "Ein Stylesheet kann Klassen genauso ansprechen wie jede andere Selektor-Art."
+        }
+      ]
+    },
+    {
+      "question": "Was passiert im Portfolio-Beispiel, wenn Abstände wie 'pt-10' aus einer festen Skala genommen werden, statt jedes Mal eine neue Zahl zu erfinden?",
+      "area": "Praxisbeispiel",
+      "options": [
+        {
+          "text": "Die Seite lädt dadurch messbar schneller, ein Effekt, der in der Lektion so nicht beschrieben wurde.",
+          "isCorrect": false,
+          "explanation": "Die Lektion nannte als Grund die einheitliche Wirkung, keine Ladezeit."
+        },
+        {
+          "text": "Die Seite wirkt einheitlich, weil überall dieselben Abstandswerte wiederverwendet werden.",
+          "isCorrect": true,
+          "explanation": "Genau das war der Punkt am Beispiel aus Footer.tsx."
+        },
+        {
+          "text": "Jedes Baustein bekommt automatisch eine andere Farbe.",
+          "isCorrect": false,
+          "explanation": "Farbe und Abstand sind zwei unterschiedliche Eigenschaften."
+        },
+        {
+          "text": "Der Browser zeigt bei fester Skala eine Fehlermeldung an.",
+          "isCorrect": false,
+          "explanation": "Eine feste Abstandsskala löst keine Fehlermeldung aus."
+        }
+      ]
+    },
+    {
+      "question": "Du setzt bei einer Box width auf 300 Pixel und zusätzlich padding auf 20 Pixel. Was passiert normalerweise mit der Gesamtbreite?",
+      "area": "Box-Modell",
+      "options": [
+        {
+          "text": "Die Box bleibt exakt 300 Pixel breit, padding wird von der Breite abgezogen, was in der Lektion so nicht als Ursache genannt wurde.",
+          "isCorrect": false,
+          "explanation": "Das ist ein anderes, später erklärtes Verhalten, nicht das übliche Standardverhalten."
+        },
+        {
+          "text": "Die Box wird insgesamt breiter als 300 Pixel, weil padding standardmäßig zur Breite dazukommt.",
+          "isCorrect": true,
+          "explanation": "Genau das wurde in der letzten FAQ-Antwort der Lektion erklärt."
+        },
+        {
+          "text": "padding wird bei jeder Box ignoriert, sobald width gesetzt ist.",
+          "isCorrect": false,
+          "explanation": "padding wird nicht ignoriert, es wirkt weiterhin auf die Box."
+        },
+        {
+          "text": "Die Box wird automatisch schmaler als 300 Pixel.",
+          "isCorrect": false,
+          "explanation": "padding vergrößert die Box eher, statt sie zu verkleinern."
+        }
+      ]
+    },
+    {
+      "question": "Zwei Boxen stehen direkt übereinander, beide mit margin nach unten beziehungsweise oben. Was passiert mit diesen beiden margin-Werten meist?",
+      "area": "Box-Modell",
+      "options": [
+        {
+          "text": "Sie addieren sich immer zu einem größeren Gesamtabstand.",
+          "isCorrect": false,
+          "explanation": "Genau das passiert bei margin-collapsing meist nicht, wie in der FAQ erklärt."
+        },
+        {
+          "text": "Der größere der beiden Werte gewinnt, der kleinere verschwindet.",
+          "isCorrect": true,
+          "explanation": "Das ist die in der Lektion genannte Besonderheit margin-collapsing."
+        },
+        {
+          "text": "Beide Werte werden automatisch auf null gesetzt.",
+          "isCorrect": false,
+          "explanation": "Keiner der beiden margin-Werte wird dabei einfach gelöscht."
+        },
+        {
+          "text": "border verschwindet dadurch komplett.",
+          "isCorrect": false,
+          "explanation": "border ist von margin-collapsing überhaupt nicht betroffen."
+        }
+      ]
+    },
+    {
+      "question": "Du schreibst in CSS aus Versehen 'padin' statt 'padding'. Was macht der Browser meistens damit?",
+      "area": "CSS-Grundlagen",
+      "options": [
+        {
+          "text": "Er zeigt eine deutliche Fehlermeldung mitten auf der Webseite an.",
+          "isCorrect": false,
+          "explanation": "Genau das tut ein Browser bei einer unbekannten CSS-Eigenschaft in der Regel nicht."
+        },
+        {
+          "text": "Er überspringt die unbekannte Regel einfach still, ohne Meldung.",
+          "isCorrect": true,
+          "explanation": "Das wurde in der FAQ so beschrieben: keine Fehlermeldung, die Regel wird ignoriert."
+        },
+        {
+          "text": "Er löscht automatisch die ganze restliche Datei.",
+          "isCorrect": false,
+          "explanation": "Ein Tippfehler in einer Eigenschaft löscht keine andere Regel im Stylesheet."
+        },
+        {
+          "text": "Er ersetzt 'padin' automatisch selbst durch 'padding'.",
+          "isCorrect": false,
+          "explanation": "Browser korrigieren Tippfehler in CSS-Eigenschaften nicht automatisch."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Lege eine HTML-Datei mit einem Absatz an, dazu eine eigene Datei style.css, verlinkt im head-Bereich. Gib dem Absatz eine Hintergrundfarbe sowie eigene Werte für padding, border und margin.",
+    "expectation": "Im Browser siehst du einen farbigen Kasten um deinen Text, mit sichtbarem Rahmen und Luft zu den Rändern der Seite und zu anderen Bausteinen.",
+    "checklist": [
+      "style.css angelegt und im head-Bereich der HTML-Datei verlinkt",
+      "Absatz hat eine Hintergrundfarbe bekommen",
+      "padding, border und margin sind jeweils gesetzt und im Browser sichtbar unterscheidbar",
+      "Seite im Browser neu geladen und das Ergebnis kontrolliert"
+    ]
+  },
+  "audio": {
+    "file": "M02-02-01.mp3",
+    "durationSeconds": 1200,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Muss ich in jeder einzelnen HTML-Datei ein eigenes Stylesheet anlegen, oder kann ich eines für mehrere Seiten benutzen?",
+      "answer": "Ein Stylesheet kannst du problemlos von mehreren HTML-Dateien gleichzeitig verlinken. Genau darin liegt der Vorteil: Änderst du eine Regel im Stylesheet, ändert sich das Aussehen auf allen verlinkten Seiten gleichzeitig, ohne dass du jede Seite einzeln anfassen musst."
+    },
+    {
+      "question": "Was passiert, wenn ich in CSS eine Eigenschaft falsch schreibe, zum Beispiel 'padin' statt 'padding'?",
+      "answer": "Der Browser zeigt normalerweise keine Fehlermeldung dafür an. Er überspringt die Regel, die er nicht kennt, still und einfach, und die Box sieht so aus, als hättest du die Regel gar nicht geschrieben. Deshalb lohnt es sich, nach einer Änderung im Browser immer nachzuschauen, ob wirklich etwas passiert ist."
+    },
+    {
+      "question": "Kann ein Baustein mehr als eine Klasse gleichzeitig haben?",
+      "answer": "Ja, das geht. Du schreibst dann einfach mehrere Klassennamen, durch ein Leerzeichen getrennt, in dasselbe class-Attribut. Ein Absatz kann so zum Beispiel gleichzeitig die Klasse 'hinweis' und die Klasse 'wichtig' tragen, und beide zugehörigen CSS-Regeln gelten dann für ihn."
+    },
+    {
+      "question": "Was ist, wenn margin bei zwei Boxen übereinander sich irgendwie überlappt, addieren sich die Abstände dann einfach?",
+      "answer": "Das ist tatsächlich eine Besonderheit: Bei zwei Boxen direkt übereinander wird meist nicht addiert, sondern der größere der beiden margin-Werte gewinnt, der kleinere verschwindet einfach. Diese Regel heißt margin-collapsing und ist am Anfang oft überraschend, wenn ein Abstand kleiner ausfällt als erwartet."
+    },
+    {
+      "question": "Verändert padding eigentlich die Gesamtgröße einer Box nach außen hin?",
+      "answer": "Normalerweise ja: Setzt du width auf 300 Pixel und padding auf 20 Pixel, wird die Box insgesamt breiter als 300 Pixel, weil padding standardmäßig oben draufkommt. Später lernst du eine zusätzliche Eigenschaft kennen, mit der du das umstellen kannst, sodass padding innerhalb der angegebenen Breite bleibt."
+    }
+  ]
+}

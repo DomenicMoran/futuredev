@@ -1,0 +1,1106 @@
+{
+  "id": "M02-05-02",
+  "title": "Commits, Branches und Merge",
+  "durationMinutes": 17,
+  "prerequisites": [
+    "M02-05-01"
+  ],
+  "terms": [
+    {
+      "term": "Commit",
+      "definition": "Ein fest eingefrorener, beschrifteter Stand eines Projekts in der Versionsgeschichte, mit einer kurzen Nachricht, was sich geändert hat."
+    },
+    {
+      "term": "Staging-Bereich",
+      "definition": "Der Zwischenschritt in Git, auf dem Änderungen abgelegt werden, die im nächsten Commit enthalten sein sollen."
+    },
+    {
+      "term": "Branch",
+      "definition": "Ein eigener, paralleler Abzweig der Versionsgeschichte, der von einem bestimmten Punkt aus unabhängig weiterläuft."
+    },
+    {
+      "term": "Merge",
+      "definition": "Das Zusammenführen zweier Branches, wobei alle Commits des einen Branches in den anderen übernommen werden."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "text": "Stell dir vor, du machst von deiner Werkstatt ein Foto, immer genau dann, wenn ein Werkstück einen wichtigen Schritt weiter ist.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Unter jedes Foto schreibst du eine kurze Notiz, was du gerade gemacht hast, zum Beispiel Beine angeschraubt oder Platte geschliffen.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "So ein beschriftetes Foto ist mehr als nur ein Bild, es ist ein Beleg für einen bestimmten, abgeschlossenen Arbeitsschritt.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Und in der vorigen Lektion war doch schon von Schritten in der Versionsgeschichte die Rede. Ist das jetzt genau so ein Schritt?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau, das ist derselbe Schritt, den git log dir anzeigt. Heute lernst du, wie du selbst so einen Schritt anlegst.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "So ein beschrifteter, gespeicherter Schritt in Git heißt ein Commit.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein Commit ist genau so ein Foto mit Beschriftung: ein fest eingefrorener Stand deines Projekts, dazu eine kurze Nachricht, was sich seit dem letzten Commit verändert hat.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss ich für jede kleinste Änderung sofort einen eigenen Commit machen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, aber ein Commit sollte einen einzigen, klar benennbaren Gedanken enthalten, so wie ein Foto einen einzelnen fertigen Arbeitsschritt zeigt und nicht drei völlig verschiedene Arbeiten gleichzeitig.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Kleine, klare Commits machen die spätere Versionsgeschichte übersichtlich, weil du genau nachvollziehen kannst, wann welche einzelne Sache dazukam.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Bevor du das Foto von deiner Werkstatt machst, räumst du meist kurz auf: du legst genau die Werkzeuge auf die Werkbank, die auf dem Foto zu sehen sein sollen.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Vielleicht liegen in der Werkstatt noch weitere, unfertige Sachen herum, die du bewusst nicht mit aufs Bild nehmen willst, weil sie noch nicht fertig sind.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann ich in Git auch selbst auswählen, welche Änderungen auf das nächste Bild, also den nächsten Commit, sollen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, genau dafür gibt es einen eigenen Zwischenschritt in Git, bevor ein Commit tatsächlich entsteht.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Dieser Zwischenschritt heißt der Staging-Bereich, das englische Wort staging bedeutet ungefähr bereitstellen oder auf die Bühne bringen.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Der Staging-Bereich ist wie die Werkbank, auf der du genau die Änderungen ablegst, die gleich auf dem nächsten Foto, also im nächsten Commit, zu sehen sein sollen.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Und wie lege ich eine Änderung konkret auf diese Werkbank?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Mit dem Befehl git add, gefolgt vom Namen der Datei, zum Beispiel git add bericht.txt. Willst du gleich alle geänderten Dateien auf einmal draufllegen, tippst du git add, ein Leerzeichen, dann einen einzelnen Punkt.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Nach git add zeigt dir git status aus der vorigen Lektion an, welche Dateien jetzt bereit für den nächsten Commit auf der Werkbank liegen.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Was passiert mit einer Datei, die ich geändert, aber noch nicht mit git add auf die Werkbank gelegt habe?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Diese Änderung bleibt einfach in deinem Arbeitsverzeichnis liegen, unverändert und in Ruhe. Sie wird erst Teil eines Commits, sobald du sie ausdrücklich mit git add dazu holst.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Dieser Zwischenschritt gibt dir die Freiheit, aus vielen gleichzeitigen Änderungen nur einen sinnvollen, zusammengehörigen Teil für den nächsten Commit auszuwählen.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Liegen die richtigen Werkzeuge auf der Werkbank, drückst du endlich auf den Auslöser der Kamera und machst das eigentliche Foto.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau das entspricht dem Befehl git commit. Er nimmt alles, was gerade im Staging-Bereich liegt, und macht daraus einen einzigen, festen Commit in der Versionsgeschichte.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Wie gebe ich denn diesem Commit die Beschriftung, also die kurze Nachricht dazu?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Du hängst an git commit den Zusatz minus m an, gefolgt von deiner Nachricht in Anführungszeichen, zum Beispiel git commit minus m Anführungszeichen Bericht fertiggestellt Anführungszeichen.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Ohne diesen Zusatz würde Git dich in einem eigenen Textfenster nach der Nachricht fragen, für den Anfang ist der direkte Weg mit minus m aber einfacher.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Was, wenn ich vergesse, vorher git add zu benutzen, und direkt git commit aufrufe?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Dann landet in diesem Commit nur das, was schon vorher im Staging-Bereich lag, meist also gar nichts Neues. Git meldet dir das in diesem Fall auch deutlich.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir vor, du blätterst Jahre später durch dein Fotoalbum und liest unter einem Foto nur das eine Wort Sachen.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Diese Beschriftung hilft dir überhaupt nicht, dich an den Moment zu erinnern, obwohl das Foto selbst noch da ist.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "B",
+      "text": "Gilt das für Commit-Nachrichten in Git genauso?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, eine Commit-Nachricht wie Änderungen oder Fix hilft niemandem weiter, weder dir selbst später noch anderen, die mit demselben Projekt arbeiten.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Eine gute Commit-Nachricht beschreibt kurz und konkret, was sich geändert hat, zum Beispiel Login-Formular prüft jetzt leere Eingaben, statt nur allgemein Fehler behoben zu schreiben.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Gute Nachrichten sparen später viel Zeit, weil du mit git log sofort verstehst, was in jedem einzelnen Schritt wirklich passiert ist, ohne den ganzen Code noch einmal lesen zu müssen.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir eine lange Straße vor, die sich an einer Kreuzung in zwei getrennte Straßen aufteilt.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Auf der einen Straße fährst du weiter deinen gewohnten Weg, auf der anderen probierst du eine neue Abkürzung aus, ohne die gewohnte Straße zu verlassen oder kaputtzumachen.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Beide Straßen existieren gleichzeitig, unabhängig voneinander, bis du dich entscheidest, was mit der neuen Abkürzung geschehen soll.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "So ein Abzweig in der Versionsgeschichte eines Projekts heißt ein Branch, das englische Wort für Ast oder Zweig.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein Branch ist eine eigene, parallele Linie von Commits, die von einem bestimmten Punkt der Versionsgeschichte abzweigt, ohne die ursprüngliche Linie zu verändern.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Gibt es dann immer schon einen Branch, sobald ich mit git init beginne, auch wenn ich noch nie selbst einen angelegt habe?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, schon der allererste Commit liegt automatisch auf einem Branch, meist main genannt, dem Hauptzweig deines Projekts. Jeder weitere Branch zweigt später von diesem oder einem anderen Punkt ab.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Ohne Branches müsstest du jede riskante, neue Idee direkt in der Hauptlinie ausprobieren und könntest dabei versehentlich etwas Funktionierendes kaputt machen.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Wie lege ich denn selbst so einen neuen Abzweig, also einen neuen Branch, an?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Mit dem Befehl git branch, gefolgt von einem Namen für den neuen Branch, zum Beispiel git branch neue-idee. Das legt den Abzweig an, wechselt dich aber noch nicht automatisch dorthin.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Wie wechsle ich dann tatsächlich zu diesem neuen Branch hinüber?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Dafür benutzt du git switch, gefolgt vom Namen des Branches, also git switch neue-idee. Ab jetzt landen alle neuen Commits, die du machst, auf diesem neuen Abzweig, nicht mehr auf dem Hauptzweig.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Möchtest du gleich beim Anlegen direkt auf den neuen Branch wechseln, geht das auch in einem einzigen Schritt: git switch mit dem Zusatz minus c und dem gewünschten Namen.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann ich jederzeit wieder zurück zum Hauptzweig wechseln?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, mit git switch main wechselst du jederzeit zurück, deine Commits auf dem anderen Branch bleiben dabei unverändert erhalten und warten einfach auf dich.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Fassen wir das kurz zusammen: git add legt Änderungen auf die Werkbank, git commit macht daraus ein beschriftetes Foto in der Versionsgeschichte. Ein Branch ist ein eigener Abzweig für eine neue Idee, ohne den Hauptzweig zu berühren.",
+      "isKeySentence": true,
+      "role": "key"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir zwei kleine Flüsse vor, die getrennt durch eine Landschaft fließen und sich irgendwann zu einem einzigen, größeren Fluss vereinigen.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Ab dieser Vereinigung fließt nur noch ein Fluss weiter, der beide vorherigen Wassermengen in sich trägt.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "B",
+      "text": "Passiert genau das auch mit zwei Branches in Git, wenn man mit einer neuen Idee fertig ist?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, wenn die Arbeit auf einem Branch fertig und geprüft ist, führt man ihn wieder mit einem anderen Branch zusammen, meist mit dem Hauptzweig.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Dieses Zusammenführen zweier Branches nennt man Merge, vom englischen Wort für verschmelzen.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein Merge nimmt alle Commits, die auf dem einen Branch entstanden sind, und fügt sie in den anderen Branch ein, so wie die beiden Flüsse zu einem einzigen werden.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Wie führe ich so einen Merge in Git tatsächlich aus?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Zuerst wechselst du mit git switch main auf den Branch, der die Änderungen empfangen soll, dann tippst du git merge, gefolgt vom Namen des anderen Branches, also git merge neue-idee.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Git übernimmt danach automatisch alle Commits von neue-idee in den Hauptzweig main, sofern sich beide Branches nicht an denselben Stellen widersprechen.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Und wenn beide Branches an genau derselben Stelle unterschiedliche Änderungen vorgenommen haben?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Dann kann Git nicht allein entscheiden, welche Version gelten soll. Das nennt man einen Merge-Konflikt, den lernst du ausführlich in der übernächsten Lektion kennen.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein Merge ist der letzte Schritt einer Idee auf einem eigenen Branch: erst ausprobieren, ohne den Hauptzweig zu stören, dann bei Erfolg zusammenführen.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir vor, eine Werkstatt hat vor Jahren eine alte Werkzeugkiste eingeführt, mit der man sowohl Schrauben eindrehen als auch Nägel einschlagen konnte, beides mit demselben Griff.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Später kam eine neue, eigene Kiste nur für Schrauben dazu, weil das für Anfänger klarer und weniger verwirrend ist.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "B",
+      "text": "Hat Git früher auch so ein Allzweck-Werkzeug für das Wechseln zwischen Branches gehabt?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, das ältere Kommando dafür heißt git checkout. Es kann Branches wechseln, aber auch andere, unterschiedliche Dinge tun, und ist deshalb für den Einstieg leicht verwirrend.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "git switch wurde später gezielt eingeführt, nur für das Wechseln zwischen Branches, klar und ohne die zusätzlichen, verwirrenden Möglichkeiten von git checkout.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss ich mir git checkout also trotzdem merken?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Für den Anfang reicht git switch völlig aus. Begegnet dir git checkout später in einer Anleitung von jemand anderem, weißt du jetzt zumindest, wozu es grob dient.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir eine Straßenkarte vor, auf der du mit einem Stift jede befahrene Straße nachzeichnest, inklusive jeder Abzweigung.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "So eine Karte zeigt dir auf einen Blick, wo sich Wege getrennt haben und wo sie sich später wieder vereint haben.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann git log mir auch so eine Art Karte über mehrere Branches zeigen, nicht nur eine einzelne, gerade Liste?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, mit dem Zusatz minus minus graph zeichnet git log eine kleine Textkarte mit Linien, die genau zeigt, wo ein Branch abgezweigt ist und wo ein Merge zwei Linien wieder zusammengeführt hat.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Für den täglichen Einstieg reicht das einfache git log völlig aus, die grafische Form lernst du am besten erst, sobald du selbst mehrere Branches gleichzeitig offen hast.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir vor, du fotografierst deine Werkstatt nur einmal im Monat, nachdem du in dieser Zeit zehn völlig verschiedene Möbelstücke gleichzeitig bearbeitet hast.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Auf diesem einen riesigen Foto lässt sich kaum noch erkennen, welches Detail zu welchem Möbelstück gehört und wann genau es entstanden ist.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "B",
+      "text": "Ist das der Grund, warum kleine, häufige Commits besser sind als wenige riesige?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau. Ein Commit, der zehn völlig unterschiedliche Änderungen gleichzeitig enthält, lässt sich später kaum noch sinnvoll rückgängig machen oder einzeln nachvollziehen.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Im Repo verified-done zeigt sich das gut: jeder der vier Skills bekam einen eigenen Commit, nicht alle vier vermischt in einem einzigen riesigen Schritt.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann ich einen zu groß geratenen Commit im Nachhinein noch in mehrere kleinere aufteilen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Das ist mit fortgeschritteneren Git-Befehlen möglich, geht aber über den heutigen Einstieg hinaus. Am einfachsten ist es, von Anfang an in überschaubaren, klar benannten Schritten zu committen.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir wieder die Werkstatt mit zwei Kollegen vor, diesmal mit Branches statt bloßem Zufall.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Jeder Kollege bekommt seinen eigenen Branch für seine eigene Aufgabe. Beide können gleichzeitig arbeiten, committen und ausprobieren, ohne sich gegenseitig in die Quere zu kommen.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Und am Ende führt dann jeder seinen eigenen Branch wieder mit dem Hauptzweig zusammen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau, sobald die eigene Aufgabe fertig und geprüft ist, folgt ein Merge in den Hauptzweig main. Danach steht die neue Arbeit für alle im Team bereit.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Ohne Branches müssten beide Kollegen sich ständig eng absprechen, welche Zeile gerade wer verändert, das würde die Arbeit stark verlangsamen.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir vor, du hast versehentlich auf der falschen Werkbank weitergearbeitet, weil du dich in der Werkstatt kurz vertan hast.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann mir das auch mit einem Branch in Git passieren, dass ich versehentlich am falschen Branch weiterarbeite?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, gerade am Anfang passiert es leicht, dass man vergisst, vorher mit git switch auf den richtigen Branch zu wechseln, und dann dort committet.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Deshalb lohnt sich vor jedem neuen Commit ein kurzer Blick mit git status, das zeigt dir immer auch, auf welchem Branch du gerade stehst, bevor du etwas Neues speicherst.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Sollte dir das doch einmal passieren, gibt es in Git spätere, fortgeschrittenere Wege, einen Commit auf einen anderen Branch zu verschieben. Für den heutigen Einstieg reicht die Gewohnheit, vorher kurz zu prüfen, wo du gerade stehst.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Ist so ein Fehler dann wenigstens ungefährlich, oder kann dabei etwas endgültig verloren gehen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein Commit auf dem falschen Branch ist ungefährlich, er geht nicht verloren, er liegt nur an einer anderen Stelle als geplant. Solange du selbst nicht ausdrücklich etwas löschst, bleibt in Git so gut wie nichts endgültig verschwunden.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Fassen wir die Begriffe von heute noch einmal als Liste zusammen.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Commit: Ein fest eingefrorener, beschrifteter Stand eines Projekts in der Versionsgeschichte, mit einer kurzen Nachricht, was sich geändert hat.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Staging-Bereich: Der Zwischenschritt in Git, auf dem Änderungen abgelegt werden, die im nächsten Commit enthalten sein sollen.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Branch: Ein eigener, paralleler Abzweig der Versionsgeschichte, der von einem bestimmten Punkt aus unabhängig weiterläuft.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Merge: Das Zusammenführen zweier Branches, wobei alle Commits des einen Branches in den anderen übernommen werden.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann ich einen Commit im Nachhinein wieder rückgängig machen?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, Git bietet dafür eigene Befehle, mit denen du zu einem früheren Commit zurückkehren oder einen Commit gezielt aufheben kannst. Diese Befehle gehen über den heutigen Einstieg hinaus und werden in einer fortgeschritteneren Lektion ausführlich behandelt.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss ich vor jedem Commit unbedingt git add benutzen?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, git commit nimmt ausschließlich das, was gerade im Staging-Bereich liegt, also durch git add dorthin gelegt wurde. Tippst du git add für eine neue Änderung nicht vorher ein, bleibt der nächste Commit leer oder enthält nur ältere, bereits vorbereitete Änderungen.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Kostet das Anlegen eines neuen Branches viel Zeit oder Speicherplatz?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, ein neuer Branch entsteht in Git fast augenblicklich und braucht kaum zusätzlichen Speicherplatz, weil er zunächst nur auf denselben Commit zeigt wie sein Ausgangspunkt. Erst eigene, neue Commits auf diesem Branch fügen wirklich neue Inhalte hinzu.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Verliere ich Arbeit, wenn ich mit git switch zu einem anderen Branch wechsle?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, solange du deine Änderungen vorher committet oder ausdrücklich zwischengespeichert hast, bleiben sie auf ihrem jeweiligen Branch vollständig erhalten. Nicht committete Änderungen im Arbeitsverzeichnis können den Wechsel allerdings manchmal blockieren, bis du sie erst committest.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Wie viele Branches darf ein Projekt gleichzeitig haben?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Es gibt praktisch keine feste Obergrenze, größere Projekte haben oft gleichzeitig viele Branches für unterschiedliche Aufgaben. Wichtig ist nur, nicht mehr Branches offen zu lassen, als du selbst noch überblicken kannst.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Was passiert mit einem Branch, nachdem er erfolgreich in den Hauptzweig gemerged wurde?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Der Branch selbst existiert danach meist einfach weiter, seine Commits sind aber jetzt auch Teil des Hauptzweigs. Aus Gründen der Übersicht löschen viele Entwickler einen Branch, sobald sein Merge erledigt und nicht mehr gebraucht wird.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss der Name eines neuen Branches irgendwelche festen Regeln erfüllen?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Git erlaubt viele verschiedene Namen, meist aus Buchstaben, Ziffern und Bindestrichen, ohne Leerzeichen dazwischen. In Teams hat sich zusätzlich oft eine eigene Namensordnung eingebürgert, etwa ein kurzes Kürzel für die Art der Aufgabe vor dem eigentlichen Namen, das ist aber eine freiwillige Absprache, keine Vorgabe von Git selbst.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Sehe ich in git status, auf welchem Branch ich mich gerade befinde?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, git status zeigt ganz oben immer den Namen des Branches an, auf dem du gerade stehst. Das ist besonders hilfreich, wenn du zwischen mehreren Branches hin und her wechselst und kurz sicherstellen willst, wo du gerade bist, bevor du einen neuen Commit machst.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Brauche ich für jeden einzelnen Commit eine völlig neue, eigene Idee?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, viele aufeinanderfolgende Commits gehören oft zur selben größeren Aufgabe, nur in kleine, klar nachvollziehbare Teilschritte zerlegt. Wichtig ist nicht, dass jeder Commit eine neue Idee zeigt, sondern dass jeder Commit für sich verständlich bleibt, ohne mehrere völlig verschiedene Dinge zu vermischen.",
+      "isKeySentence": false,
+      "role": "faq"
+    }
+  ],
+  "practiceExample": {
+    "text": "Im Repo verified-done zeigt der Verlauf von git log, wie jeder der vier Skills in einem eigenen, klar benannten Commit entstand, nicht alle vier auf einmal in einem einzigen unübersichtlichen Schritt. Jede Commit-Nachricht beschreibt konkret, welcher Skill oder welche Regel dazukam, statt nur allgemein Änderungen zu schreiben, genau das Prinzip guter Commit-Nachrichten aus dieser Lektion.",
+    "repoNote": "repo-verified-done",
+    "location": "Git-Verlauf des Repos (git log), vier Skill-Ordner unter skills/, je Skill eigene SKILL.md"
+  },
+  "quiz": [
+    {
+      "question": "Was ist ein Commit?",
+      "area": "Commit-Grundlagen",
+      "options": [
+        {
+          "text": "Ein fest eingefrorener, beschrifteter Stand eines Projekts in der Versionsgeschichte.",
+          "isCorrect": true,
+          "explanation": "Genau das ist die Definition, wie ein Foto mit Beschriftung."
+        },
+        {
+          "text": "Ein neuer, paralleler Abzweig der Versionsgeschichte, unabhängig vom bisherigen Verlauf.",
+          "isCorrect": false,
+          "explanation": "Das beschreibt einen Branch, nicht einen Commit."
+        },
+        {
+          "text": "Das Zusammenführen zweier unterschiedlicher Branches zu einem einzigen.",
+          "isCorrect": false,
+          "explanation": "Das beschreibt einen Merge, nicht einen Commit."
+        },
+        {
+          "text": "Ein Ordner, in dem Git alle Dateien eines Projekts ablegt.",
+          "isCorrect": false,
+          "explanation": "Das wäre eher das Arbeitsverzeichnis, nicht ein einzelner Commit."
+        }
+      ]
+    },
+    {
+      "question": "Wozu dient der Staging-Bereich?",
+      "area": "Commit-Grundlagen",
+      "options": [
+        {
+          "text": "Er sammelt genau die Änderungen, die in den nächsten Commit sollen.",
+          "isCorrect": true,
+          "explanation": "Genau das ist seine Aufgabe, wie die Werkbank vor dem Foto."
+        },
+        {
+          "text": "Er speichert dauerhaft die gesamte fertige Versionsgeschichte eines Projekts.",
+          "isCorrect": false,
+          "explanation": "Die gesamte Versionsgeschichte liegt in den Commits selbst, nicht im Staging-Bereich."
+        },
+        {
+          "text": "Er zeigt eine Liste aller im Internet verfügbaren Branches an.",
+          "isCorrect": false,
+          "explanation": "Das hat mit dem Staging-Bereich nichts zu tun, dieser bleibt zunächst lokal."
+        },
+        {
+          "text": "Er löscht automatisch alle Dateien, die seit dem letzten Commit entstanden sind.",
+          "isCorrect": false,
+          "explanation": "Der Staging-Bereich löscht nichts, er bereitet nur den nächsten Commit vor."
+        }
+      ]
+    },
+    {
+      "question": "Welcher Befehl legt eine Änderung im Staging-Bereich ab?",
+      "area": "Terminal-Befehle",
+      "options": [
+        {
+          "text": "git add",
+          "isCorrect": true,
+          "explanation": "git add legt eine Datei auf die Werkbank für den nächsten Commit."
+        },
+        {
+          "text": "git commit",
+          "isCorrect": false,
+          "explanation": "git commit macht aus dem Staging-Bereich einen festen, beschrifteten Schritt."
+        },
+        {
+          "text": "git branch",
+          "isCorrect": false,
+          "explanation": "git branch legt einen neuen Abzweig an, keine Vorbereitung für einen Commit."
+        },
+        {
+          "text": "git merge",
+          "isCorrect": false,
+          "explanation": "git merge führt zwei Branches zusammen, es befüllt keinen Staging-Bereich."
+        }
+      ]
+    },
+    {
+      "question": "Was macht der Befehl git commit minus m Anführungszeichen Bericht fertiggestellt Anführungszeichen?",
+      "area": "Terminal-Befehle",
+      "options": [
+        {
+          "text": "Er erstellt einen neuen Commit mit der Nachricht Bericht fertiggestellt.",
+          "isCorrect": true,
+          "explanation": "Der Zusatz minus m übergibt genau diese Commit-Nachricht direkt im Befehl."
+        },
+        {
+          "text": "Er benennt einen bestehenden Branch in Bericht fertiggestellt um.",
+          "isCorrect": false,
+          "explanation": "Das Umbenennen eines Branches ist ein anderer, hier nicht gezeigter Befehl."
+        },
+        {
+          "text": "Er legt einen neuen Branch mit dem Namen Bericht fertiggestellt an.",
+          "isCorrect": false,
+          "explanation": "Neue Branches legt git branch an, nicht git commit."
+        },
+        {
+          "text": "Er löscht alle bisherigen Commits mit älteren Nachrichten.",
+          "isCorrect": false,
+          "explanation": "git commit erzeugt neue Schritte, es löscht keine bestehenden Commits."
+        }
+      ]
+    },
+    {
+      "question": "Warum ist eine Commit-Nachricht wie einfach nur Änderungen schlecht?",
+      "area": "Commit-Grundlagen",
+      "options": [
+        {
+          "text": "Sie verrät später nicht, was genau in diesem Schritt wirklich geändert wurde.",
+          "isCorrect": true,
+          "explanation": "Genau das war das Problem der Beschriftung Sachen im Fotoalbum-Bild."
+        },
+        {
+          "text": "Git akzeptiert so eine kurze Nachricht technisch überhaupt nicht.",
+          "isCorrect": false,
+          "explanation": "Git akzeptiert technisch jede Nachricht, das Problem ist rein inhaltlich."
+        },
+        {
+          "text": "Eine solche Nachricht macht den Commit ungültig und wird automatisch verworfen.",
+          "isCorrect": false,
+          "explanation": "Der Commit bleibt gültig, nur die Nachricht ist inhaltlich wenig hilfreich."
+        },
+        {
+          "text": "Eine solche Nachricht verhindert jeden späteren Merge mit einem anderen Branch.",
+          "isCorrect": false,
+          "explanation": "Ein Merge hängt nicht von der Qualität der Commit-Nachricht ab."
+        }
+      ]
+    },
+    {
+      "question": "Was ist ein Branch?",
+      "area": "Branch-Grundlagen",
+      "options": [
+        {
+          "text": "Ein eigener, paralleler Abzweig der Versionsgeschichte.",
+          "isCorrect": true,
+          "explanation": "Genau das Bild der abzweigenden Straße beschreibt einen Branch."
+        },
+        {
+          "text": "Ein einzelner, beschrifteter Schritt in der Versionsgeschichte.",
+          "isCorrect": false,
+          "explanation": "Das beschreibt einen Commit, nicht einen Branch."
+        },
+        {
+          "text": "Der Ort, an dem Git die Zugangsdaten eines Projekts speichert.",
+          "isCorrect": false,
+          "explanation": "Zugangsdaten gehören nicht in einen Branch, sie gehören überhaupt nicht in die Versionsgeschichte."
+        },
+        {
+          "text": "Eine Liste aller Commit-Nachrichten eines Projekts.",
+          "isCorrect": false,
+          "explanation": "Diese Liste zeigt eher git log, ein Branch ist selbst kein solcher Listen-Befehl."
+        }
+      ]
+    },
+    {
+      "question": "Wie heißt der Standard-Hauptzweig, auf dem der allererste Commit meist liegt?",
+      "area": "Branch-Grundlagen",
+      "options": [
+        {
+          "text": "main",
+          "isCorrect": true,
+          "explanation": "main ist der übliche Name für den Hauptzweig eines Projekts."
+        },
+        {
+          "text": "merge",
+          "isCorrect": false,
+          "explanation": "merge ist der Name des Zusammenführens, kein Branch-Name."
+        },
+        {
+          "text": "commit",
+          "isCorrect": false,
+          "explanation": "commit bezeichnet einen einzelnen Schritt, keinen Branch-Namen."
+        },
+        {
+          "text": "status",
+          "isCorrect": false,
+          "explanation": "status ist ein Anzeigebefehl aus der vorigen Lektion, kein Branch-Name."
+        }
+      ]
+    },
+    {
+      "question": "Welcher Befehl wechselt zu einem bereits bestehenden Branch?",
+      "area": "Terminal-Befehle",
+      "options": [
+        {
+          "text": "git switch, gefolgt vom Namen des Branches.",
+          "isCorrect": true,
+          "explanation": "Genau dieser Befehl wechselt zwischen bestehenden Branches."
+        },
+        {
+          "text": "git add, gefolgt vom Namen des Branches.",
+          "isCorrect": false,
+          "explanation": "git add legt Änderungen im Staging-Bereich ab, es wechselt keine Branches."
+        },
+        {
+          "text": "git init, gefolgt vom Namen des Branches.",
+          "isCorrect": false,
+          "explanation": "git init richtet eine neue Versionsgeschichte ein, es wechselt keine Branches."
+        },
+        {
+          "text": "git status, gefolgt vom Namen des Branches.",
+          "isCorrect": false,
+          "explanation": "git status zeigt nur den aktuellen Zustand an, es wechselt nichts."
+        }
+      ]
+    },
+    {
+      "question": "Was macht ein Merge?",
+      "area": "Merge-Grundlagen",
+      "options": [
+        {
+          "text": "Er führt die Commits eines Branches in einen anderen Branch zusammen.",
+          "isCorrect": true,
+          "explanation": "Genau das ist das Bild der beiden zusammenfließenden Flüsse."
+        },
+        {
+          "text": "Er legt einen völlig neuen, leeren Branch ohne jede Verbindung zum Hauptzweig an.",
+          "isCorrect": false,
+          "explanation": "Das würde git branch tun, ein Merge führt bestehende Branches zusammen."
+        },
+        {
+          "text": "Er löscht dauerhaft alle Commits eines nicht mehr gebrauchten Branches.",
+          "isCorrect": false,
+          "explanation": "Ein Merge löscht keine Commits, er übernimmt sie in den anderen Branch."
+        },
+        {
+          "text": "Er zeigt lediglich an, wie viele Branches ein Projekt gerade besitzt.",
+          "isCorrect": false,
+          "explanation": "Ein Merge verändert aktiv die Versionsgeschichte, er zeigt nur nichts an."
+        }
+      ]
+    },
+    {
+      "question": "Was passiert, wenn zwei Branches beim Merge dieselbe Stelle unterschiedlich verändert haben?",
+      "area": "Merge-Grundlagen",
+      "options": [
+        {
+          "text": "Git kann nicht allein entscheiden, es entsteht ein Merge-Konflikt.",
+          "isCorrect": true,
+          "explanation": "Genau das wurde als Ausblick auf die übernächste Lektion angekündigt."
+        },
+        {
+          "text": "Git übernimmt automatisch immer die ältere der beiden Änderungen.",
+          "isCorrect": false,
+          "explanation": "Git entscheidet nicht automatisch, sondern meldet einen Konflikt."
+        },
+        {
+          "text": "Der gesamte Merge-Vorgang wird sofort und endgültig unmöglich gemacht.",
+          "isCorrect": false,
+          "explanation": "Ein Merge-Konflikt lässt sich lösen, er macht den Merge nicht dauerhaft unmöglich."
+        },
+        {
+          "text": "Beide Branches werden automatisch und ohne Rückfrage gelöscht.",
+          "isCorrect": false,
+          "explanation": "Git löscht bei einem Konflikt keine Branches, es fragt eine Entscheidung nach."
+        }
+      ]
+    },
+    {
+      "question": "Warum sind Branches in einem Team mit mehreren Mitarbeitern nützlich?",
+      "area": "Praxis",
+      "options": [
+        {
+          "text": "Jeder kann an seiner eigenen Aufgabe arbeiten, ohne den Hauptzweig zu stören.",
+          "isCorrect": true,
+          "explanation": "Genau das zeigt das Beispiel mit den zwei Kollegen in der Werkstatt."
+        },
+        {
+          "text": "Branches ersetzen vollständig die Notwendigkeit, überhaupt jemals zu committen.",
+          "isCorrect": false,
+          "explanation": "Commits bleiben weiterhin nötig, Branches ordnen sie nur in parallele Linien."
+        },
+        {
+          "text": "Branches verhindern, dass mehr als eine Person gleichzeitig am Projekt arbeitet.",
+          "isCorrect": false,
+          "explanation": "Branches ermöglichen gerade gleichzeitiges, unabhängiges Arbeiten, sie verhindern es nicht."
+        },
+        {
+          "text": "Branches speichern automatisch eine Kopie des Projekts auf einem fremden Rechner.",
+          "isCorrect": false,
+          "explanation": "Branches bleiben zunächst lokal, ein fremder Rechner kommt erst mit einem Remote ins Spiel."
+        }
+      ]
+    },
+    {
+      "question": "Was zeigt das Praxisbeispiel aus dem Repo verified-done zum Thema gute Commit-Nachrichten?",
+      "area": "Praxis",
+      "options": [
+        {
+          "text": "Jeder Skill entstand in einem eigenen Commit mit einer konkreten Beschreibung.",
+          "isCorrect": true,
+          "explanation": "Genau das zeigt der Git-Verlauf des Repos laut Praxisbeispiel."
+        },
+        {
+          "text": "Alle vier Skills entstanden in einem einzigen, unbeschrifteten Commit gleichzeitig.",
+          "isCorrect": false,
+          "explanation": "Das Gegenteil ist im Repo zu sehen, jeder Skill hat einen eigenen, beschrifteten Commit."
+        },
+        {
+          "text": "Das Repo verzichtet vollständig auf Commit-Nachrichten.",
+          "isCorrect": false,
+          "explanation": "Die Nachrichten sind gerade das Beispiel für gute, konkrete Beschriftung."
+        },
+        {
+          "text": "Die Commit-Nachrichten bestehen nur aus zufälligen Zahlenfolgen ohne Bedeutung.",
+          "isCorrect": false,
+          "explanation": "Die Nachrichten beschreiben konkret den jeweiligen Skill oder die jeweilige Regel."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Wechsle im Terminal in den Übungsordner aus der vorigen Lektion. Lege eine kleine Textdatei an und mache dazu deinen ersten Commit mit git add und git commit minus m. Lege danach mit git branch einen neuen Branch an, wechsle mit git switch dorthin, ändere die Datei erneut und mache dort einen zweiten Commit. Wechsle zurück zu main und mache dort einen dritten, unabhängigen Commit.",
+    "expectation": "git log zeigt auf dem neuen Branch zwei Commits, auf main einen eigenen dritten Commit, und beide Branches existieren gleichzeitig nebeneinander.",
+    "checklist": [
+      "Erste Textdatei angelegt und mit git add sowie git commit gespeichert",
+      "Mit git branch einen neuen Branch angelegt",
+      "Mit git switch auf den neuen Branch gewechselt und dort committet",
+      "Mit git switch main zurückgewechselt und dort einen weiteren, unabhängigen Commit gemacht"
+    ]
+  },
+  "audio": {
+    "file": "M02-05-02.mp3",
+    "durationSeconds": 1012,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Kann ich einen Commit im Nachhinein wieder rückgängig machen?",
+      "answer": "Ja, Git bietet dafür eigene Befehle, mit denen du zu einem früheren Commit zurückkehren oder einen Commit gezielt aufheben kannst. Diese Befehle gehen über den heutigen Einstieg hinaus und werden in einer fortgeschritteneren Lektion ausführlich behandelt."
+    },
+    {
+      "question": "Muss ich vor jedem Commit unbedingt git add benutzen?",
+      "answer": "Ja, git commit nimmt ausschließlich das, was gerade im Staging-Bereich liegt, also durch git add dorthin gelegt wurde. Tippst du git add für eine neue Änderung nicht vorher ein, bleibt der nächste Commit leer oder enthält nur ältere, bereits vorbereitete Änderungen."
+    },
+    {
+      "question": "Kostet das Anlegen eines neuen Branches viel Zeit oder Speicherplatz?",
+      "answer": "Nein, ein neuer Branch entsteht in Git fast augenblicklich und braucht kaum zusätzlichen Speicherplatz, weil er zunächst nur auf denselben Commit zeigt wie sein Ausgangspunkt. Erst eigene, neue Commits auf diesem Branch fügen wirklich neue Inhalte hinzu."
+    },
+    {
+      "question": "Verliere ich Arbeit, wenn ich mit git switch zu einem anderen Branch wechsle?",
+      "answer": "Nein, solange du deine Änderungen vorher committet oder ausdrücklich zwischengespeichert hast, bleiben sie auf ihrem jeweiligen Branch vollständig erhalten. Nicht committete Änderungen im Arbeitsverzeichnis können den Wechsel allerdings manchmal blockieren, bis du sie erst committest."
+    },
+    {
+      "question": "Wie viele Branches darf ein Projekt gleichzeitig haben?",
+      "answer": "Es gibt praktisch keine feste Obergrenze, größere Projekte haben oft gleichzeitig viele Branches für unterschiedliche Aufgaben. Wichtig ist nur, nicht mehr Branches offen zu lassen, als du selbst noch überblicken kannst."
+    },
+    {
+      "question": "Was passiert mit einem Branch, nachdem er erfolgreich in den Hauptzweig gemerged wurde?",
+      "answer": "Der Branch selbst existiert danach meist einfach weiter, seine Commits sind aber jetzt auch Teil des Hauptzweigs. Aus Gründen der Übersicht löschen viele Entwickler einen Branch, sobald sein Merge erledigt und nicht mehr gebraucht wird."
+    },
+    {
+      "question": "Muss der Name eines neuen Branches irgendwelche festen Regeln erfüllen?",
+      "answer": "Git erlaubt viele verschiedene Namen, meist aus Buchstaben, Ziffern und Bindestrichen, ohne Leerzeichen dazwischen. In Teams hat sich zusätzlich oft eine eigene Namensordnung eingebürgert, etwa ein kurzes Kürzel für die Art der Aufgabe vor dem eigentlichen Namen, das ist aber eine freiwillige Absprache, keine Vorgabe von Git selbst."
+    },
+    {
+      "question": "Sehe ich in git status, auf welchem Branch ich mich gerade befinde?",
+      "answer": "Ja, git status zeigt ganz oben immer den Namen des Branches an, auf dem du gerade stehst. Das ist besonders hilfreich, wenn du zwischen mehreren Branches hin und her wechselst und kurz sicherstellen willst, wo du gerade bist, bevor du einen neuen Commit machst."
+    },
+    {
+      "question": "Brauche ich für jeden einzelnen Commit eine völlig neue, eigene Idee?",
+      "answer": "Nein, viele aufeinanderfolgende Commits gehören oft zur selben größeren Aufgabe, nur in kleine, klar nachvollziehbare Teilschritte zerlegt. Wichtig ist nicht, dass jeder Commit eine neue Idee zeigt, sondern dass jeder Commit für sich verständlich bleibt, ohne mehrere völlig verschiedene Dinge zu vermischen."
+    }
+  ]
+}

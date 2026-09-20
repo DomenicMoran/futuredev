@@ -1,0 +1,1021 @@
+{
+  "id": "M02-02-02",
+  "title": "Flexbox für Reihen und Spalten",
+  "durationMinutes": 20,
+  "prerequisites": [
+    "M02-02-01"
+  ],
+  "terms": [
+    {
+      "term": "Flexbox",
+      "definition": "Ein Layout-System in CSS, mit dem Boxen automatisch in eine Reihe oder Spalte einsortiert werden."
+    },
+    {
+      "term": "Flex-Container",
+      "definition": "Die Box, die mit display: flex zum Regal wird, in dem sich die anderen Boxen einordnen."
+    },
+    {
+      "term": "Flex-Item",
+      "definition": "Eine Box, die direkt in einem Flex-Container liegt und von ihm einsortiert wird."
+    },
+    {
+      "term": "flex-direction",
+      "definition": "Die CSS-Eigenschaft, die festlegt, ob die Boxen im Flex-Container als Reihe oder als Spalte angeordnet werden."
+    },
+    {
+      "term": "justify-content",
+      "definition": "Die CSS-Eigenschaft, die festlegt, wie die Boxen entlang der Hauptrichtung des Flex-Containers verteilt werden."
+    },
+    {
+      "term": "align-items",
+      "definition": "Die CSS-Eigenschaft, die festlegt, wie die Boxen quer zur Hauptrichtung des Flex-Containers ausgerichtet werden."
+    },
+    {
+      "term": "gap",
+      "definition": "Die CSS-Eigenschaft, die einen festen Abstand zwischen den Boxen im Flex-Container setzt."
+    },
+    {
+      "term": "flex-wrap",
+      "definition": "Die CSS-Eigenschaft, die festlegt, ob Boxen in eine neue Zeile umbrechen, wenn der Platz nicht mehr reicht."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "text": "Stell dir ein Regal in einem Laden vor, mit mehreren Fächern nebeneinander, in jedem Fach ordentlich eine Ware.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "In der letzten Lektion hast du gelernt, dass jede Box aus Inhalt, padding, border und margin besteht.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Was noch fehlt: wie mehrere Boxen nebeneinander oder untereinander angeordnet werden, so ordentlich wie Waren in einem Regal.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Ordnet sich das nicht von selbst, einfach der Reihe nach, so wie ich es in HTML schreibe?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ohne weitere Angabe stapelt der Browser viele Boxen einfach untereinander, wie Bücher in einem einzigen Stapel. Für ein Regal mit mehreren Fächern nebeneinander brauchst du eine eigene Anweisung.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau diese Anweisung heißt Flexbox.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Flexbox. F, L, E, X, B, O, X.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir einen Küchenschrank vor, dessen Fächer sich automatisch an die Größe der Töpfe darin anpassen, mal ein breites Fach, mal ein schmales, immer ordentlich nebeneinander. Genau so verteilt Flexbox Platz zwischen Boxen, automatisch und ohne dass du jede Breite von Hand ausrechnen musst.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Ohne Flexbox müsstest du für drei Karten nebeneinander jede Breite und jeden Abstand selbst in Pixeln ausrechnen, und bei jeder neuen Karte alles neu anpassen.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Wie haben Webseiten das denn früher gemacht, bevor es Flexbox gab?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Früher haben viele Entwickler eine Eigenschaft namens float benutzt, die eigentlich dafür gedacht war, Text um ein Bild fließen zu lassen, nicht dafür, ganze Layouts zu bauen. Das funktionierte, war aber fehleranfällig und schwer zu verstehen.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir vor, du willst mit Wäscheklammern und einer einzigen Leine ein ganzes Regalsystem nachbauen. Es geht irgendwie, aber jedes Fach verrutscht leicht, sobald sich ein Nachbarfach ändert.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau das war das Problem mit float-Layouts: Eine kleine Änderung an einer Karte konnte alle Karten daneben verschieben, ohne dass sofort klar war, warum. Flexbox löst genau dieses Problem: Jede Box im Regal reagiert vorhersehbar auf die anderen, ohne unerwartete Verschiebungen an ganz anderer Stelle der Seite.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Wie sage ich einer Box denn, dass sie so ein Regal sein soll?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau dafür gibt es eine CSS-Eigenschaft namens display, mit dem Wert flex.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir eine leere Werkstatt-Wand vor. Sobald du dort ein Lochplatten-System montierst, kannst du Werkzeuge ordentlich nebeneinander einhängen. Vorher war die Wand nur eine Fläche ohne Ordnung.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau diese Rolle spielt die Box, auf der du display: flex einträgst. Sie wird zum Flex-Container.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Schreibst du zum Beispiel .regal { display: flex; }, wird jede Box, die direkt in dieser Regal-Box liegt, automatisch nebeneinander statt untereinander angeordnet.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Ohne diese eine Zeile bleibt jede Box für sich allein in ihrer eigenen Zeile, mit dieser einen Zeile ordnen sich alle direkten Kind-Boxen von selbst nebeneinander.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Schauen wir uns das im HTML an. Innerhalb einer Box mit der Klasse 'regal' liegen drei Boxen mit der Klasse 'karte'. Sobald 'regal' in CSS display: flex bekommt, ordnen sich die drei 'karte'-Boxen automatisch nebeneinander.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss ich für jede einzelne Karte auch noch etwas Besonderes in CSS eintragen, damit das funktioniert?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, die Regel steht nur einmal auf dem Regal, nicht auf jeder einzelnen Karte. Das ist genau der Vorteil: eine Zeile CSS auf der äußeren Box ordnet beliebig viele innere Boxen gleichzeitig.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Und die Karten oder Boxen, die dann in diesem Regal nebeneinander liegen, wie heißen die?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir die einzelnen Werkzeuge auf der Lochplatte vor, jedes für sich, aber alle Teil desselben Systems an der Wand.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Jede Box, die direkt in einem Flex-Container liegt, nennt man Flex-Item.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Hast du drei Karten in einer Regal-Box mit display: flex, ist jede dieser drei Karten ein eigenes Flex-Item, das sich automatisch einreiht.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Nur was direkt im Flex-Container liegt, wird als Flex-Item behandelt. Eine Box tiefer drin folgt wieder ihren eigenen Regeln. Das gilt auch dann, wenn eine tiefer liegende Box zufällig denselben Klassennamen trägt wie ein echtes Flex-Item weiter oben.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Passen sich die Flex-Items eigentlich von selbst an, wenn im Regal mal mehr, mal weniger Platz ist?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, standardmäßig schrumpfen Flex-Items ein Stück, wenn zu wenig Platz da ist, damit trotzdem alle in eine Zeile passen, solange kein flex-wrap eingreift. Wird ein Fach im Gegenteil größer als nötig, bleiben die Kisten meist bei ihrer ursprünglichen Größe stehen, es sei denn, du sagst ihnen ausdrücklich, dass sie wachsen dürfen. Diese Feineinstellung gehört in eine vertiefende Lektion, heute reicht dir das Grundverständnis.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Jetzt hast du ein Regal und Fächer darin. Als Nächstes: soll das Regal nebeneinander oder übereinander aufgebaut sein?",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann ein Regal nicht immer nur nebeneinander sein?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir zwei Möbelstücke vor: ein Regal mit Fächern nebeneinander, und einen Schrank mit Schubladen übereinander. Beides ordnet, nur in unterschiedliche Richtungen.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Welche Richtung ein Flex-Container benutzt, legst du mit der CSS-Eigenschaft flex-direction fest.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Der Wert row ordnet die Flex-Items nebeneinander an, wie ein Regal. Der Wert column ordnet sie übereinander an, wie ein Schrank mit Schubladen. Fehlt flex-direction ganz, gilt row als Standard.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Mit flex-direction entscheidest du bei jedem Regal neu, ob es zu einer breiten Menüleiste oder zu einer schmalen Seitenleiste werden soll, mit derselben Grundtechnik.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Als Nächstes: wie verteilst du Platz, wenn im Regal noch Luft übrig ist?",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir ein Regal vor, in dem nur drei kleine Kisten stehen, aber viel Platz frei bleibt. Du kannst die Kisten ganz links zusammenschieben, gleichmäßig über das Regal verteilen, oder mit Lücken dazwischen anordnen.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau diese Verteilung entlang der Hauptrichtung des Regals legst du mit justify-content fest.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Bei justify-content schiebt der Wert center alle Flex-Items in die Mitte zusammen. Der Wert space-between schiebt sie an die Ränder und verteilt den restlichen Platz gleichmäßig dazwischen. Der Wert flex-start lässt sie am Anfang zusammenrücken, der Wert space-around verteilt zusätzlich etwas Luft auch an den äußeren Rändern.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir eine Kleiderstange in einem Geschäft vor: Bei space-between hängen die ersten und letzten Kleiderbügel ganz außen an der Stange, alle übrigen verteilen sich gleichmäßig dazwischen. Bei center rutschen alle Bügel eng zusammen in die Mitte der Stange.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Probierst du mehrere Werte von justify-content nacheinander aus und schaust dir jedes Mal das Ergebnis im Browser an, verstehst du den Unterschied schneller, als jede Definition allein erklären könnte.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Und wenn ich statt Luft dazwischen lieber einen ganz genauen, immer gleichen Abstand zwischen den Kisten will?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ohne justify-content müsstest du für jede Anzahl von Flex-Items den Abstand von Hand neu berechnen, jedes Mal, wenn sich etwas ändert.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir vor, du legst zwischen jedes Werkzeug auf der Lochplatte ein gleich breites Stück Abstandshalter, egal wie viele Werkzeuge es gerade sind.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau so einen festen Abstand zwischen den Flex-Items setzt du mit der CSS-Eigenschaft gap.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Schreibst du gap: 16px, liegt zwischen jedem Flex-Item ein Abstand von genau sechzehn Pixeln, egal ob zwei oder zehn Flex-Items im Regal stehen.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "gap ist genau der margin, den du früher mühsam nur an jeder einzelnen Box einzeln setzen konntest, jetzt in einer einzigen Zeile für den ganzen Flex-Container auf einmal.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Wie hat man denn Abstand zwischen Boxen gesetzt, bevor es gap gab?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Vorher musste man margin an jede einzelne Box setzen und aufpassen, dass die letzte Box in der Reihe keinen überflüssigen Abstand nach außen bekommt, sonst verschiebt sich das ganze Regal ungewollt. Das kostete zusätzliche, leicht fehleranfällige CSS-Regeln nur für diese eine Ausnahme.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Bisher ging es immer um die Hauptrichtung des Regals. Aber ein Regal hat auch eine Höhe, in der die Kisten stehen können.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Meinst du damit, ob eine Kiste oben, unten oder mittig im Fach steht?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir ein Regalfach vor, in dem eine kleine Kiste einmal ganz oben klebt, einmal ganz unten steht, und einmal genau in der Mitte schwebt, obwohl das Fach viel höher ist als die Kiste selbst.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Wie die Flex-Items quer zur Hauptrichtung stehen, legst du mit align-items fest.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Bei flex-direction row ist die Hauptrichtung waagerecht, align-items regelt dann die senkrechte Position. Der Wert center zentriert alle Flex-Items in der Höhe des Flex-Containers, egal wie hoch das Regal ist.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Ohne align-items kleben Flex-Items oft unschön am oberen Rand, selbst wenn im Fach darunter noch viel Platz frei ist. Ein solches Layout wirkt schnell unfertig, obwohl jede einzelne CSS-Regel für sich genommen korrekt geschrieben ist.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Also justify-content und align-items sind wie zwei unterschiedliche Linien, eine für jede Richtung?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau. Stell dir ein Blatt Papier mit einem waagerechten und einem senkrechten Lineal an den Rändern vor. justify-content misst und verteilt entlang der Hauptrichtung, align-items entlang der Richtung quer dazu. Beide zusammen legen fest, wo genau eine Box im Regal landet.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein letztes Problem bleibt: was passiert, wenn zu viele Kisten in ein zu schmales Regal sollen?",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Werden die Kisten dann einfach immer schmaler gequetscht, bis alle irgendwie hineinpassen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir ein zu kleines Regal vor, in das du trotzdem versuchst, sieben große Kisten in eine einzige Reihe zu quetschen. Irgendwann platzt entweder das Regal, oder eine zweite Reihe muss darüber entstehen.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Ob eine zweite Reihe entstehen darf, wenn kein Platz mehr reicht, legst du mit flex-wrap fest.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Ohne flex-wrap oder mit dem Wert nowrap quetscht der Browser alle Flex-Items in eine einzige Reihe, notfalls bis sie winzig klein werden. Mit dem Wert wrap darf eine neue Reihe beginnen, sobald der Platz nicht mehr reicht.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "flex-wrap entscheidet, ob deine Karten auf einem schmalen Handybildschirm zu winzigen Streifen zusammengequetscht werden oder ordentlich in eine zweite Zeile umbrechen.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Denk an eine Menüleiste oben auf einer Webseite, mit sechs oder sieben Links nebeneinander. Auf einem breiten Bildschirm passen alle Links bequem in eine Zeile.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Und auf einem schmalen Handybildschirm reicht der Platz dann nicht mehr für alle sechs Links auf einmal?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau. Ohne flex-wrap würden die Links auf dem Handy immer schmaler gequetscht, bis die Schrift kaum noch lesbar ist. Mit flex-wrap: wrap rutschen die überzähligen Links einfach in eine zweite, gut lesbare Zeile darunter.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Kombinierst du flex-wrap mit gap, bleibt der Abstand zwischen den Links sogar dann gleichmäßig, wenn eine zweite Zeile entsteht: gap wirkt zwischen allen Flex-Items, egal ob sie in einer oder in mehreren Zeilen liegen.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Kannst du das alles noch einmal kurz zusammenfassen, wie ich jetzt so ein Regal für drei Karten nebeneinander baue?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "B",
+      "text": "Also noch einmal ganz kurz zusammengefasst: Du machst eine Box mit display: flex zum Flex-Container, alle direkt darin liegenden Boxen werden zu Flex-Items. flex-direction bestimmt Reihe oder Spalte, justify-content verteilt Platz in der Hauptrichtung, align-items richtet quer dazu aus, gap setzt festen Abstand, und flex-wrap erlaubt eine neue Zeile, wenn der Platz nicht mehr reicht.",
+      "isKeySentence": true,
+      "role": "key"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau so ein Regal mit Flexbox findet sich auch im echten Portfolio-Projekt von Domenic.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Im Repo portfolio, in der Datei src/components/Footer.tsx, Zeile 74, steht die Klasse 'flex flex-col gap-3'. Das ist ein Flex-Container mit der Richtung Spalte und einem festen Abstand von drei Schritten zwischen den Flex-Items.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "So bleiben die Links in jeder Spalte des Fußbereichs sauber untereinander aufgereiht, mit immer demselben Abstand, egal wie viele Links in einer Spalte stehen.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein vollständiges Beispiel für ein Regal mit drei Karten könnte so aussehen: .regal { display: flex; flex-direction: row; justify-content: space-between; align-items: center; gap: 16px; }. Jede dieser fünf Zeilen beantwortet genau eine der Fragen, die wir heute besprochen haben.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss ich mir die Reihenfolge dieser fünf Zeilen merken, damit es funktioniert?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, die Reihenfolge der Zeilen innerhalb der geschweiften Klammern spielt für CSS keine Rolle. Wichtig ist nur, dass jede CSS-Eigenschaft mit ihrem eigenen CSS-Wert steht und mit einem Semikolon endet, so wie du es in der letzten Lektion über das Box-Modell gelernt hast. So bleibt jede CSS-Regel für sich lesbar, auch wenn du später eine weitere Zeile ergänzt oder eine bestehende entfernst.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Jetzt bist du dran. Lege eine HTML-Datei mit drei Karten in einem gemeinsamen umgebenden Kasten an, jede Karte mit etwas Text und einem sichtbaren border.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Mache den umgebenden Kasten in deinem Stylesheet zu einem Flex-Container mit display: flex, setze gap auf einen Wert deiner Wahl, und probiere justify-content sowie align-items mit unterschiedlichen Werten aus.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Gib dem umgebenden Kasten außerdem eine feste Höhe, etwa 200 Pixel, damit du align-items auch wirklich sehen kannst. Ohne zusätzliche Höhe ist der Kasten sonst genauso hoch wie seine Karten, eine Verschiebung nach oben oder unten fällt dann kaum auf.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Und wenn ich mich zwischendrin vertippe, zum Beispiel flex-driection statt flex-direction schreibe?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau wie bei jeder anderen falsch geschriebenen CSS-Eigenschaft überspringt der Browser die Zeile einfach, ohne eine Meldung zu zeigen. Deine Karten bleiben dann in der Standardanordnung stehen, als hättest du die Zeile nie geschrieben. Ein Blick in die Entwickler-Werkzeuge deines Browsers zeigt dir meist, welche Zeile er nicht verstanden hat.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Am Ende solltest du deine drei Karten sauber nebeneinander sehen, mit gleichmäßigem Abstand, und beobachten, wie sich justify-content und align-items jeweils auf die Anordnung auswirken. Verändere danach die Fensterbreite deines Browsers testweise, um zu sehen, wie sich deine Anordnung verhält.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Fassen wir die Begriffe von heute noch einmal als Liste zusammen.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Flexbox: ein Layout-System in CSS, mit dem Boxen automatisch in eine Reihe oder Spalte einsortiert werden.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Flex-Container: die Box, die mit display: flex zum Regal wird, in dem sich andere Boxen einordnen.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Flex-Item: eine Box, die direkt in einem Flex-Container liegt und von ihm einsortiert wird.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "flex-direction: die CSS-Eigenschaft, die Reihe oder Spalte festlegt.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "justify-content: die CSS-Eigenschaft, die die Verteilung entlang der Hauptrichtung festlegt.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "align-items: die CSS-Eigenschaft, die die Ausrichtung quer zur Hauptrichtung festlegt.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "gap: die CSS-Eigenschaft, die einen festen Abstand zwischen den Boxen setzt.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "flex-wrap: die CSS-Eigenschaft, die den Umbruch in eine neue Zeile erlaubt oder verhindert.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "B",
+      "text": "Was ist, wenn ich display: flex vergesse, aber trotzdem justify-content oder align-items schreibe?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Dann passiert einfach gar nichts, weil justify-content und align-items nur innerhalb eines Flex-Containers wirken. Ohne display: flex bleibt die Box ein ganz gewöhnlicher Kasten, und diese beiden Eigenschaften werden vom Browser stillschweigend übersprungen.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann eine Box gleichzeitig ein Flex-Container und ein Flex-Item sein?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, das ist sogar sehr üblich. Eine Box kann als Flex-Item in einem äußeren Regal liegen und selbst gleichzeitig mit ihrem eigenen display: flex ein Regal für weitere Boxen sein. So entstehen verschachtelte Layouts, ein Regal im Regal.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Was passiert, wenn ich flex-direction auf column setze, aber justify-content weiterhin benutze, ändert sich dann die Bedeutung?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, tatsächlich dreht sich die Bedeutung mit. Bei column verläuft die Hauptrichtung senkrecht, also verteilt justify-content dann den Platz von oben nach unten statt von links nach rechts. align-items übernimmt dafür die waagerechte Ausrichtung.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss gap immer denselben Abstand für alle Flex-Items erzeugen, oder kann ich einzelne Abstände unterschiedlich groß machen?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "gap gilt gleichmäßig für alle Abstände zwischen den Flex-Items eines Containers. Möchtest du einen einzelnen Abstand ausnahmsweise größer machen, setzt du zusätzlich margin an genau diesem einen Flex-Item, das kannst du mit gap kombinieren.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Auf wie vielen Ebenen kann ich Flexbox eigentlich verschachteln, gibt es da eine Grenze?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Eine feste Grenze gibt es praktisch nicht, du kannst Flex-Container beliebig oft ineinander verschachteln. In der Praxis wird ein Layout aber schnell unübersichtlich, wenn zu viele Ebenen ineinanderstecken, deshalb lohnt sich für ganze Seiten oft ein anderes Werkzeug, das du in der nächsten Lektion kennenlernst.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Was ist eigentlich der Unterschied zwischen gap und margin, wenn beide für Abstand sorgen können?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "margin setzt du an einer einzelnen Box und wirkt auch außerhalb eines Flex-Containers, sogar bei einer ganz gewöhnlichen Box ohne display: flex. gap dagegen steht auf dem Flex-Container selbst und wirkt automatisch zwischen allen seinen Flex-Items gleichzeitig, ohne dass du jede Box einzeln anfassen musst. Für den Abstand innerhalb eines Regals ist gap deshalb meist die aufgeräumtere Wahl, für einen Abstand außerhalb eines Flex-Containers bleibt margin nötig. Beide Werkzeuge schließen sich nicht aus, du kannst sie an derselben Seite kombiniert einsetzen.",
+      "isKeySentence": false,
+      "role": "faq"
+    }
+  ],
+  "practiceExample": {
+    "text": "Im Repo portfolio steht in src/components/Footer.tsx, Zeile 74, die Klasse 'flex flex-col gap-3': ein Flex-Container mit der Richtung Spalte (flex-col) und einem festen Abstand von drei Schritten (gap-3) zwischen den enthaltenen Links. So bleiben die Links jeder Fußzeilen-Spalte sauber und gleichmäßig untereinander aufgereiht.",
+    "repoNote": "repo-portfolio",
+    "location": "src/components/Footer.tsx:74 (Klasse 'flex flex-col gap-3')"
+  },
+  "quiz": [
+    {
+      "question": "Was passiert mit mehreren Boxen untereinander in HTML, wenn du keine besondere Anordnung angibst?",
+      "area": "Flexbox-Grundlagen",
+      "options": [
+        {
+          "text": "Der Browser stapelt sie ohne weitere Angabe einfach untereinander.",
+          "isCorrect": true,
+          "explanation": "Genau das wurde am Anfang der Lektion mit dem Bücherstapel erklärt."
+        },
+        {
+          "text": "Der Browser ordnet sie automatisch als Regal nebeneinander an, auch ohne Flexbox.",
+          "isCorrect": false,
+          "explanation": "Nebeneinander passiert nur mit einer ausdrücklichen Anweisung wie Flexbox."
+        },
+        {
+          "text": "Der Browser zeigt eine Fehlermeldung, weil keine Anordnung angegeben wurde.",
+          "isCorrect": false,
+          "explanation": "Fehlende Anordnung ist kein Fehler, der Browser benutzt einfach eine Standardanordnung."
+        },
+        {
+          "text": "Der Browser löscht Boxen ohne Anordnung von der Seite.",
+          "isCorrect": false,
+          "explanation": "Fehlende Anordnung führt nicht zum Löschen von Inhalt."
+        }
+      ]
+    },
+    {
+      "question": "Womit machst du eine Box zu einem Flex-Container?",
+      "area": "Flexbox-Grundlagen",
+      "options": [
+        {
+          "text": "Mit border: flex;",
+          "isCorrect": false,
+          "explanation": "border regelt den Rahmen einer Box, nicht die Anordnung ihrer Kinder."
+        },
+        {
+          "text": "Mit display: flex;",
+          "isCorrect": true,
+          "explanation": "Genau diese Eigenschaft macht aus einer Box ein Regal für ihre Kind-Boxen."
+        },
+        {
+          "text": "Mit padding: flex;",
+          "isCorrect": false,
+          "explanation": "padding regelt den Innenabstand, dafür gibt es keinen Wert namens flex."
+        },
+        {
+          "text": "Mit width: flex;",
+          "isCorrect": false,
+          "explanation": "width regelt die Breite einer Box, nicht deren Anordnung."
+        }
+      ]
+    },
+    {
+      "question": "Was ist ein Flex-Item?",
+      "area": "Flexbox-Grundlagen",
+      "options": [
+        {
+          "text": "Eine Box, die irgendwo tief verschachtelt in einem Flex-Container liegt, egal wie tief.",
+          "isCorrect": false,
+          "explanation": "Nur direkte Kind-Boxen werden zu Flex-Items, tiefer verschachtelte folgen ihren eigenen Regeln."
+        },
+        {
+          "text": "Eine Box, die direkt in einem Flex-Container liegt und von ihm einsortiert wird.",
+          "isCorrect": true,
+          "explanation": "Genau das wurde mit dem Bild der Werkzeuge auf der Lochplatte erklärt."
+        },
+        {
+          "text": "Der Name für den Selektor, mit dem CSS die Box findet.",
+          "isCorrect": false,
+          "explanation": "Das beschreibt einen Selektor, keinen Flex-Item."
+        },
+        {
+          "text": "Ein anderer Name für gap.",
+          "isCorrect": false,
+          "explanation": "Flex-Item und gap sind zwei ganz unterschiedliche Begriffe."
+        }
+      ]
+    },
+    {
+      "question": "Welchen Wert gibst du flex-direction, damit sich Boxen wie Schubladen übereinander anordnen?",
+      "area": "Flexbox-Richtung",
+      "options": [
+        {
+          "text": "row",
+          "isCorrect": false,
+          "explanation": "row ordnet Boxen nebeneinander an, wie ein Regal, nicht übereinander."
+        },
+        {
+          "text": "column",
+          "isCorrect": true,
+          "explanation": "column ordnet die Boxen übereinander an, wie Schubladen in einem Schrank."
+        },
+        {
+          "text": "wrap",
+          "isCorrect": false,
+          "explanation": "wrap ist ein Wert von flex-wrap, nicht von flex-direction."
+        },
+        {
+          "text": "center",
+          "isCorrect": false,
+          "explanation": "center ist ein Wert von justify-content oder align-items, nicht von flex-direction."
+        }
+      ]
+    },
+    {
+      "question": "In einem Regal mit viel freiem Platz sollen drei Kisten gleichmäßig verteilt an den Rändern und dazwischen stehen. Welche Eigenschaft regelt das?",
+      "area": "Flexbox-Verteilung",
+      "options": [
+        {
+          "text": "gap, weil damit der Abstand zwischen den Kisten geregelt wird.",
+          "isCorrect": false,
+          "explanation": "gap setzt einen festen Abstand, verteilt aber nicht automatisch über freien Platz."
+        },
+        {
+          "text": "justify-content, weil damit der freie Platz entlang der Hauptrichtung verteilt wird.",
+          "isCorrect": true,
+          "explanation": "Genau dafür wurde der Wert space-between in der Lektion erklärt."
+        },
+        {
+          "text": "align-items, weil damit die Höhe der Kisten geregelt wird.",
+          "isCorrect": false,
+          "explanation": "align-items regelt die Ausrichtung quer zur Hauptrichtung, nicht die Verteilung entlang davon."
+        },
+        {
+          "text": "flex-wrap, weil damit eine zweite Zeile entsteht.",
+          "isCorrect": false,
+          "explanation": "flex-wrap regelt den Zeilenumbruch, nicht die Verteilung von freiem Platz."
+        }
+      ]
+    },
+    {
+      "question": "Eine kleine Kiste in einem hohen Regalfach soll genau in der Mitte des Fachs schweben, statt oben zu kleben. Welche Eigenschaft hilft?",
+      "area": "Flexbox-Ausrichtung",
+      "options": [
+        {
+          "text": "align-items mit dem Wert center, weil damit quer zur Hauptrichtung zentriert wird.",
+          "isCorrect": true,
+          "explanation": "Genau dieses Beispiel wurde mit dem Regalfach in der Lektion erklärt."
+        },
+        {
+          "text": "gap, weil damit die Kiste in die Mitte rutscht.",
+          "isCorrect": false,
+          "explanation": "gap setzt nur Abstand zwischen Boxen, keine Zentrierung einer einzelnen Box."
+        },
+        {
+          "text": "flex-direction, weil damit die Kiste zentriert wird.",
+          "isCorrect": false,
+          "explanation": "flex-direction legt nur die Richtung fest, nicht die Zentrierung."
+        },
+        {
+          "text": "border, weil ein sichtbarer Rahmen die Kiste automatisch zentriert, eine Verwechslung mit einer ganz anderen CSS-Eigenschaft für Abstände.",
+          "isCorrect": false,
+          "explanation": "Ein Rahmen ändert nichts an der Position einer Box."
+        }
+      ]
+    },
+    {
+      "question": "Wozu dient die CSS-Eigenschaft gap in einem Flex-Container?",
+      "area": "Flexbox-Verteilung",
+      "options": [
+        {
+          "text": "Sie setzt einen festen Abstand zwischen den Flex-Items, egal wie viele es sind.",
+          "isCorrect": true,
+          "explanation": "Genau das wurde mit dem Abstandshalter auf der Lochplatte erklärt."
+        },
+        {
+          "text": "Sie macht aus einer Box überhaupt erst einen Flex-Container, was in der Lektion so nicht als Ursache für eine zweite Zeile beschrieben wurde.",
+          "isCorrect": false,
+          "explanation": "Dafür ist display: flex zuständig, nicht gap."
+        },
+        {
+          "text": "Sie bestimmt, ob Boxen in eine neue Zeile umbrechen.",
+          "isCorrect": false,
+          "explanation": "Das ist die Aufgabe von flex-wrap, nicht von gap."
+        },
+        {
+          "text": "Sie legt fest, ob Boxen nebeneinander oder übereinander stehen.",
+          "isCorrect": false,
+          "explanation": "Das regelt flex-direction, nicht gap."
+        }
+      ]
+    },
+    {
+      "question": "Sieben große Kisten sollen in ein zu schmales Regal, ohne dass sie winzig zusammengequetscht werden. Welche Eigenschaft erlaubt eine zweite Reihe?",
+      "area": "Flexbox-Umbruch",
+      "options": [
+        {
+          "text": "flex-wrap mit dem Wert wrap, weil damit eine neue Zeile beginnen darf.",
+          "isCorrect": true,
+          "explanation": "Genau dieses Beispiel mit den sieben Kisten wurde in der Lektion erklärt."
+        },
+        {
+          "text": "justify-content, weil damit automatisch eine zweite Zeile entsteht, was hier nicht die tatsächliche Fehlerursache trifft.",
+          "isCorrect": false,
+          "explanation": "justify-content verteilt nur innerhalb einer Zeile, es erzeugt keine neue Zeile."
+        },
+        {
+          "text": "gap, weil größerer Abstand automatisch eine zweite Zeile erzwingt.",
+          "isCorrect": false,
+          "explanation": "gap ändert nur den Abstand zwischen Boxen, keine Zeilenzahl."
+        },
+        {
+          "text": "width, weil eine größere Breite automatisch umbricht.",
+          "isCorrect": false,
+          "explanation": "width allein entscheidet nicht, ob eine zweite Zeile erlaubt ist."
+        }
+      ]
+    },
+    {
+      "question": "Was passiert standardmäßig, ohne flex-wrap zu setzen, wenn zu viele Flex-Items in eine Zeile sollen?",
+      "area": "Flexbox-Umbruch",
+      "options": [
+        {
+          "text": "Der Browser zeigt eine Fehlermeldung und lädt die Seite nicht, ein Effekt, der so in der Lektion nicht beschrieben wurde.",
+          "isCorrect": false,
+          "explanation": "Zu viele Flex-Items in einer Zeile führen zu keiner Fehlermeldung."
+        },
+        {
+          "text": "Die Flex-Items werden notfalls immer schmaler gequetscht, bis alle in eine Zeile passen.",
+          "isCorrect": true,
+          "explanation": "Genau das ist der Standardwert nowrap, so in der Lektion erklärt."
+        },
+        {
+          "text": "Überzählige Flex-Items werden automatisch von der Seite entfernt.",
+          "isCorrect": false,
+          "explanation": "Flexbox entfernt keine Boxen von der Seite."
+        },
+        {
+          "text": "Jedes Flex-Item bekommt automatisch eine eigene neue Zeile.",
+          "isCorrect": false,
+          "explanation": "Das würde flex-wrap in Kombination mit sehr wenig Platz je Zeile bedeuten, ist aber nicht das Standardverhalten."
+        }
+      ]
+    },
+    {
+      "question": "Im Portfolio-Beispiel steht die Klasse 'flex flex-col gap-3'. Was bedeutet das?",
+      "area": "Praxisbeispiel",
+      "options": [
+        {
+          "text": "Ein Flex-Container mit Richtung Spalte und einem festen Abstand von drei Schritten zwischen den Flex-Items.",
+          "isCorrect": true,
+          "explanation": "Genau so wurde die Klasse in der Lektion Zeile für Zeile übersetzt."
+        },
+        {
+          "text": "Ein Flex-Container mit Richtung Reihe und ganz ohne Abstand.",
+          "isCorrect": false,
+          "explanation": "flex-col bedeutet Spalte, nicht Reihe, und gap-3 setzt sehr wohl einen Abstand."
+        },
+        {
+          "text": "Eine Box ganz ohne display: flex, nur mit einer Hintergrundfarbe, was so nicht dem in der Lektion erklärten Standardverhalten entspricht.",
+          "isCorrect": false,
+          "explanation": "Die Klasse flex aktiviert gerade display: flex, es geht nicht um eine Farbe."
+        },
+        {
+          "text": "Ein CSS-Selektor für die gesamte Seite.",
+          "isCorrect": false,
+          "explanation": "Das sind CSS-Eigenschafts-Klassen für eine bestimmte Box, kein Selektor für die ganze Seite."
+        }
+      ]
+    },
+    {
+      "question": "Kann eine Box gleichzeitig Flex-Item eines äußeren Regals und selbst Flex-Container für eigene Boxen sein?",
+      "area": "Flexbox-Grundlagen",
+      "options": [
+        {
+          "text": "Nein, eine Box darf immer nur eine der beiden Rollen gleichzeitig haben.",
+          "isCorrect": false,
+          "explanation": "Genau das Gegenteil wurde in der FAQ der Lektion erklärt."
+        },
+        {
+          "text": "Ja, eine Box kann Flex-Item und gleichzeitig eigener Flex-Container sein, so entstehen verschachtelte Regale.",
+          "isCorrect": true,
+          "explanation": "Genau das wurde in der FAQ als verschachteltes Layout beschrieben."
+        },
+        {
+          "text": "Nur, wenn beide Boxen dieselbe Klasse tragen.",
+          "isCorrect": false,
+          "explanation": "Die Klasse spielt für diese Verschachtelung keine Rolle, nur die CSS-Eigenschaften zählen."
+        },
+        {
+          "text": "Nein, das würde der Browser mit einer Fehlermeldung ablehnen.",
+          "isCorrect": false,
+          "explanation": "Verschachtelte Flex-Container sind technisch problemlos möglich, keine Fehlermeldung."
+        }
+      ]
+    },
+    {
+      "question": "Du setzt flex-direction auf column. Was verändert sich dadurch an justify-content und align-items?",
+      "area": "Flexbox-Richtung",
+      "options": [
+        {
+          "text": "justify-content verteilt jetzt senkrecht, align-items richtet jetzt waagerecht aus.",
+          "isCorrect": true,
+          "explanation": "Genau dieser Rollentausch wurde in der FAQ der Lektion erklärt."
+        },
+        {
+          "text": "Beide Eigenschaften funktionieren dann überhaupt nicht mehr.",
+          "isCorrect": false,
+          "explanation": "Beide Eigenschaften bleiben wirksam, sie tauschen nur ihre Richtung."
+        },
+        {
+          "text": "justify-content wird automatisch zu gap umbenannt, eine Verwechslung, die den Rollentausch der beiden Eigenschaften nicht trifft.",
+          "isCorrect": false,
+          "explanation": "Die Namen der Eigenschaften ändern sich durch flex-direction nicht."
+        },
+        {
+          "text": "align-items wirkt dann gar nicht mehr, nur noch justify-content.",
+          "isCorrect": false,
+          "explanation": "Beide Eigenschaften bleiben aktiv, nur die Richtung, in der sie wirken, dreht sich."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Lege eine HTML-Datei mit einem umgebenden Kasten und drei Karten darin an, jede Karte mit etwas Text und einem sichtbaren border. Mache den umgebenden Kasten im Stylesheet zu einem Flex-Container mit display: flex und gap, und probiere justify-content sowie align-items mit unterschiedlichen Werten aus.",
+    "expectation": "Im Browser siehst du deine drei Karten sauber nebeneinander, mit gleichmäßigem Abstand, und kannst beobachten, wie sich justify-content und align-items auf ihre Anordnung auswirken.",
+    "checklist": [
+      "Ein umgebender Kasten mit drei Karten darin steht in der HTML-Datei",
+      "Der umgebende Kasten hat display: flex und einen gap-Wert",
+      "justify-content mit mindestens zwei unterschiedlichen Werten ausprobiert",
+      "align-items mit mindestens zwei unterschiedlichen Werten ausprobiert",
+      "Ergebnis im Browser nach jeder Änderung kontrolliert"
+    ]
+  },
+  "audio": {
+    "file": "M02-02-02.mp3",
+    "durationSeconds": 1250,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Was ist, wenn ich display: flex vergesse, aber trotzdem justify-content oder align-items schreibe?",
+      "answer": "Dann passiert einfach gar nichts, weil justify-content und align-items nur innerhalb eines Flex-Containers wirken. Ohne display: flex bleibt die Box ein ganz gewöhnlicher Kasten, und diese beiden Eigenschaften werden vom Browser stillschweigend übersprungen."
+    },
+    {
+      "question": "Kann eine Box gleichzeitig ein Flex-Container und ein Flex-Item sein?",
+      "answer": "Ja, das ist sogar sehr üblich. Eine Box kann als Flex-Item in einem äußeren Regal liegen und selbst gleichzeitig mit ihrem eigenen display: flex ein Regal für weitere Boxen sein. So entstehen verschachtelte Layouts, ein Regal im Regal."
+    },
+    {
+      "question": "Was passiert, wenn ich flex-direction auf column setze, aber justify-content weiterhin benutze, ändert sich dann die Bedeutung?",
+      "answer": "Ja, tatsächlich dreht sich die Bedeutung mit. Bei column verläuft die Hauptrichtung senkrecht, also verteilt justify-content dann den Platz von oben nach unten statt von links nach rechts. align-items übernimmt dafür die waagerechte Ausrichtung."
+    },
+    {
+      "question": "Muss gap immer denselben Abstand für alle Flex-Items erzeugen, oder kann ich einzelne Abstände unterschiedlich groß machen?",
+      "answer": "gap gilt gleichmäßig für alle Abstände zwischen den Flex-Items eines Containers. Möchtest du einen einzelnen Abstand ausnahmsweise größer machen, setzt du zusätzlich margin an genau diesem einen Flex-Item, das kannst du mit gap kombinieren."
+    },
+    {
+      "question": "Auf wie vielen Ebenen kann ich Flexbox eigentlich verschachteln, gibt es da eine Grenze?",
+      "answer": "Eine feste Grenze gibt es praktisch nicht, du kannst Flex-Container beliebig oft ineinander verschachteln. In der Praxis wird ein Layout aber schnell unübersichtlich, wenn zu viele Ebenen ineinanderstecken, deshalb lohnt sich für ganze Seiten oft ein anderes Werkzeug, das du in der nächsten Lektion kennenlernst."
+    },
+    {
+      "question": "Was ist eigentlich der Unterschied zwischen gap und margin, wenn beide für Abstand sorgen können?",
+      "answer": "margin setzt du an einer einzelnen Box und wirkt auch außerhalb eines Flex-Containers, sogar bei einer ganz gewöhnlichen Box ohne display: flex. gap dagegen steht auf dem Flex-Container selbst und wirkt automatisch zwischen allen seinen Flex-Items gleichzeitig, ohne dass du jede Box einzeln anfassen musst. Für den Abstand innerhalb eines Regals ist gap deshalb meist die aufgeräumtere Wahl, für einen Abstand außerhalb eines Flex-Containers bleibt margin nötig. Beide Werkzeuge schließen sich nicht aus, du kannst sie an derselben Seite kombiniert einsetzen."
+    }
+  ]
+}

@@ -1,0 +1,844 @@
+{
+  "id": "M02-03-02",
+  "title": "DOM-Manipulation: die Seite verändern",
+  "durationMinutes": 22,
+  "prerequisites": [
+    "M02-03-01",
+    "M02-02-01"
+  ],
+  "terms": [
+    {
+      "term": "DOM",
+      "definition": "die Darstellung einer Webseite als Baum aus Elementen, mit der JavaScript im Browser arbeitet, um die Seite zu lesen und zu verändern."
+    },
+    {
+      "term": "querySelector",
+      "definition": "eine Funktion des document-Objekts, die das erste Element auf der Seite zurückgibt, das zu einem angegebenen Selektor passt."
+    },
+    {
+      "term": "textContent",
+      "definition": "eine Eigenschaft eines Elements, über die JavaScript seinen sichtbaren Text lesen oder ändern kann."
+    },
+    {
+      "term": "createElement",
+      "definition": "eine Funktion des document-Objekts, die ein neues, noch unsichtbares Element erzeugt, das man danach in die Seite einhängen kann."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir einen Stammbaum vor, wie ihn manche Familien an die Wand hängen. Ganz oben steht eine Person, darunter ihre Kinder, darunter wieder deren Kinder."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Jede Person im Stammbaum hat genau eine übergeordnete Person und kann selbst mehrere untergeordnete Personen haben. So entsteht ein Baum aus Ästen."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Eine Webseite ist innerlich genauso aufgebaut. Ganz oben steht die Seite selbst, darunter Bereiche wie Kopf und Hauptteil, darunter wieder Überschriften, Absätze und Knöpfe."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "In der letzten Lektion hast du das document-Objekt kennengelernt, die Werkbank, über die JavaScript die Seite erreicht. Dieses document-Objekt ist genau die Wurzel dieses Baums, ganz oben im Stammbaum."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Hat dieser Baum aus Elementen der Webseite einen eigenen Namen?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Ja. Man nennt diesen Baum das DOM. D, O, M, ausgeschrieben Document Object Model. Es ist die Darstellung der Seite, mit der JavaScript arbeitet, nicht die HTML-Datei selbst."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Im DOM steht zum Beispiel der Knopf, den ein Nutzer anklickt, als eigener Ast unterhalb des Bereichs, in dem er in der HTML-Datei stand. Verändert JavaScript diesen Ast, ändert sich sofort das, was der Nutzer auf dem Bildschirm sieht, ganz ohne dass die Seite neu lädt."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Verändert sich dabei auch die HTML-Datei auf der Festplatte des Servers?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Nein, das ist ein wichtiger Unterschied. Das DOM lebt nur im Browser, während du die Seite anschaust. Die ursprüngliche HTML-Datei bleibt unangetastet, sie wird nur beim nächsten Laden wieder als Ausgangspunkt für ein neues, frisches DOM benutzt."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir eine Bibliothek vor, in der du ein bestimmtes Buch suchst. Du gibst dem Bibliothekar eine genaue Beschreibung: das Buch mit dieser Signatur, in diesem Regal, in dieser Reihe."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Genau so muss JavaScript zuerst ein Element im DOM finden, bevor es etwas daran ändern kann. Ohne eine genaue Beschreibung weiß der Browser nicht, welches der vielen Elemente gemeint ist."
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Für diese Suche gibt es die Funktion querySelector. Man ruft sie am document-Objekt auf und übergibt ihr einen Selektor, genau die Art von Beschreibung, die du schon aus CSS kennst."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Ein Beispiel aus dem Portfolio-Repository von Domenic: die Zeile document Punkt querySelector Klammer auf Anführungszeichen Raute zurück Anführungszeichen Klammer zu sucht das Element mit der id zurück. Sie liefert es zurück, oder nichts, wenn die Seite es gerade nicht enthält."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Was passiert, wenn querySelector kein passendes Element findet?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Dann liefert querySelector den besonderen Wert null zurück, ein Zeichen für nichts gefunden. Guter Code prüft das immer, bevor er mit dem Ergebnis weiterarbeitet, sonst meldet die Konsole einen Fehler, sobald man versucht, an einem nicht vorhandenen Element etwas zu ändern."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir eine Tafel in der Küche vor, auf der der Einkaufszettel steht. Du wischst das alte Wort weg und schreibst ein neues hin, die Tafel selbst bleibt dieselbe."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Genau das macht textContent mit einem gefundenen Element. Es liest den aktuell sichtbaren Text oder ersetzt ihn durch einen neuen, ohne das Element selbst zu entfernen."
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "textContent ist eine Eigenschaft eines Elements. Man liest sie mit einem Punkt danach, oder man setzt einen neuen Text, indem man ihr mit einem Gleichheitszeichen einen neuen Text zuweist."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Ein Beispiel: die Zeile knopf Punkt textContent gleich Anführungszeichen Geklickt Anführungszeichen ändert sofort den sichtbaren Text des zuvor gefundenen Knopfes in das Wort Geklickt, ohne dass sich sonst irgendetwas an der Seite ändert."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Reicht das schon für die Praxisaufgabe, ein Knopf, der einen Text ändert?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Genau diese beiden Bausteine reichen dafür: querySelector, um den Knopf und den Text zu finden, textContent, um den Text zu ändern. Die nächste Lektion zeigt dann, wie man das an einen wirklichen Klick koppelt, hier geht es erst um das Ändern selbst."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir eine Werkstatt vor, in der du ein neues Regalbrett zuschneidest. Solange es noch auf der Werkbank liegt, sieht niemand es im fertigen Regal. Erst wenn du es einbaust, wird es sichtbar."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "JavaScript kann auf dieselbe Weise ein völlig neues Element bauen, das anfangs nirgendwo auf der Seite hängt. Erst ein zweiter Schritt hängt es tatsächlich in den sichtbaren Baum der Seite ein."
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Der erste Schritt heißt createElement. Man ruft sie am document-Objekt auf und gibt ihr den Namen des HTML-Tags, das entstehen soll, etwa a für einen Link oder p für einen Absatz."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Im Portfolio-Repository entsteht so ein Download-Link: die Zeile document Punkt createElement Klammer auf Anführungszeichen a Anführungszeichen Klammer zu erzeugt ein neues a-Element. Direkt danach setzt der Code dessen href und weitere Eigenschaften, bevor die Zeile document Punkt body Punkt append das fertige Element tatsächlich an die Seite anhängt und es damit sichtbar macht."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Warum baut man ein Element erst getrennt und hängt es dann erst an, statt es in einem Schritt zu erledigen?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Weil zwischen dem Bauen und dem Anhängen oft noch mehrere Eigenschaften gesetzt werden müssen, wie im Beispiel der Link-Adresse. Erst wenn das neue Element fertig eingerichtet ist, ergibt es Sinn, es sichtbar zu machen."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir einen Lichtschalter vor. Ein einziger Schalter kann ein Licht anschalten oder ausschalten, je nachdem, in welchem Zustand er gerade ist."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Aus M02-02 kennst du bereits eine Klasse: einen Namen, den ein Element trägt, damit CSS weiß, wie es aussehen soll. JavaScript kann diese Klasse wie einen Schalter an- oder abschalten, ohne selbst etwas über Farben oder Abstände zu wissen."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Ein Beispiel: die Zeile knopf Punkt classList Punkt toggle Klammer auf Anführungszeichen aktiv Anführungszeichen Klammer zu schaltet die Klasse aktiv am Knopf an, wenn sie fehlt, oder wieder ab, wenn sie schon da ist. Wie ein Element mit der Klasse aktiv tatsächlich aussieht, entscheidet allein das Stylesheet aus M02-02, nicht diese Zeile Code."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Also entscheidet JavaScript nur, ob die Klasse da ist, und CSS entscheidet, wie es dann aussieht?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Genau, und das ist eine sehr saubere Aufteilung. JavaScript kümmert sich um das Verhalten, an oder aus, CSS kümmert sich um das Aussehen. Ändert später jemand nur das Stylesheet, muss am JavaScript-Code nichts geändert werden."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Fassen wir die vier Bausteine dieser Lektion noch einmal im Zusammenhang zusammen, bevor es weitergeht. Zuerst braucht man das DOM, den Baum der Seite. Dann findet man mit querySelector ein bestimmtes Element darin."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Danach ändert man entweder den Text eines vorhandenen Elements mit textContent, oder man baut mit createElement ein ganz neues Element und hängt es an. Und mit classList.toggle schaltet man an einem Element eine bereits vorhandene CSS-Klasse an oder aus."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Kann ich all diese Werkzeuge auch mischen, in derselben Seite?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Ja, in der Praxis passiert genau das ständig. Eine einzige Webseite findet oft mehrere Elemente mit querySelector, ändert an manchen den Text, erzeugt an anderer Stelle neue Elemente und schaltet irgendwo eine Klasse um, alles als Reaktion auf das, was gerade passiert."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir vor, du rufst in einer Bibliothek an, bevor sie überhaupt geöffnet hat, und fragst nach einem Buch im Regal. Niemand kann dir helfen, das Regal ist noch gar nicht eingeräumt."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Genau dieser Fehler passiert oft am Anfang: Ein Script-Element steht ganz oben in der HTML-Datei, bevor der Knopf oder Absatz weiter unten überhaupt im DOM steht. querySelector sucht dann nach etwas, das noch gar nicht existiert, und findet null." },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Das klingt nach demselben Problem, das schon in der letzten Lektion beim Script-Element vorkam. Hängt das zusammen?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Ja, genau derselbe Grund. Deshalb steht ein Script-Element mit DOM-Manipulation fast immer am Ende der Seite, kurz vor dem schließenden body-Tag, damit der ganze Baum schon fertig steht, wenn querySelector zum ersten Mal sucht." },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir eine Werkstatt vor, in der jemand ein fertiges Regal komplett auseinandernimmt und mit denselben Brettern ein neues, anderes Möbelstück baut, ohne die Werkstatt zu verlassen." },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Vor DOM-Manipulation musste eine Webseite für jede sichtbare Änderung eine komplett neue HTML-Datei vom Server laden, mit einem sichtbaren, kurzen Neuladen der ganzen Seite. Mit querySelector, textContent und createElement kann JavaScript stattdessen einzelne Bretter austauschen, ohne die ganze Werkstatt neu aufzubauen." },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Ist das der Grund, warum sich manche Webseiten wie Anwendungen anfühlen, nicht wie einfache Dokumente?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Genau das ist einer der wichtigsten Gründe. Eine Wetterseite, die nur eine Zahl austauscht, eine Aufgabenliste, die einen Eintrag hinzufügt, ein Formular, das ohne Neuladen antwortet: all das beruht auf denselben vier Bausteinen dieser Lektion. Deshalb ist DOM-Manipulation eines der wichtigsten Werkzeuge der ganzen Sprache." },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Ein letzter Hinweis, bevor wir zusammenfassen. Ein Element kann mehrere Klassen gleichzeitig tragen, getrennt durch ein Leerzeichen in der HTML-Datei. classList.toggle betrifft dabei immer nur genau die eine Klasse, deren Name man ihr als Text übergibt, alle anderen Klassen des Elements bleiben unverändert." },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Kann ich mit derselben Funktion also gezielt nur eine von mehreren Klassen umschalten, ohne die anderen zu beeinflussen?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Genau, das ist sogar der Normalfall in echten Projekten. Ein Knopf trägt oft mehrere feste Klassen für sein grundsätzliches Aussehen, und JavaScript schaltet zusätzlich noch eine einzelne Klasse um, etwa für einen aktiven oder ausgewählten Zustand." },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir eine Werkstatt vor, in der zwei Regale mit exakt demselben Namensschild beschriftet sind. Der Lehrling, der ein Werkzeug holen soll, weiß nicht, welches der beiden Regale gemeint ist, und nimmt einfach das erste, das er sieht."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Genau das passiert, wenn zwei Elemente auf einer Seite dieselbe id tragen, was eigentlich nicht erlaubt ist, aber in der Praxis manchmal doch vorkommt. querySelector findet dann immer nur das erste der beiden, das zweite bleibt für diesen Aufruf unsichtbar." },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Wie stelle ich sicher, dass ich wirklich das richtige Element erwische?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Am sichersten ist eine id, die auf der ganzen Seite nur ein einziges Mal vergeben wird, genau für dieses eine Element. Solange jede id eindeutig bleibt, findet querySelector mit der Raute davor immer genau das gemeinte Element, ohne jede Verwechslung." },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Ein zweiter Blick lohnt sich auch beim Zusammenspiel von textContent und createElement in echten Projekten. Häufig wird ein neues Element zunächst leer erzeugt, dann bekommt es über textContent gleich seinen ersten Text, bevor es überhaupt angehängt wird." },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Ein Beispiel: die Zeilen const eintrag gleich document Punkt createElement Klammer auf Anführungszeichen li Anführungszeichen Klammer zu, danach eintrag Punkt textContent gleich Anführungszeichen Milch kaufen Anführungszeichen, und erst danach liste Punkt append Klammer auf eintrag Klammer zu bauen einen neuen Eintrag für eine Aufgabenliste, geben ihm seinen Text und hängen ihn erst dann sichtbar an die Liste an." },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Warum nicht gleich den Text mitgeben, wenn man das Element erzeugt?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Weil createElement bewusst nur den nackten Elementtyp erzeugt, ohne Inhalt, Adresse oder sonstige Eigenschaften. Diese Aufteilung in kleine, einzelne Schritte hält jeden Schritt einfach und macht den Code leichter lesbar, auch wenn er dadurch aus mehr Zeilen besteht." },
+    {
+      "speaker": "B",
+      "role": "key",
+      "isKeySentence": true,
+      "text": "Halten wir fest: Das DOM ist der Baum aus Elementen, den der Browser aus der HTML-Datei baut und mit dem JavaScript arbeitet. Mit querySelector findet JavaScript ein bestimmtes Element über einen Selektor, mit textContent liest oder ändert es dessen sichtbaren Text, mit createElement baut es ein ganz neues Element, das es danach anhängen muss, und mit classList.toggle schaltet es eine vorhandene CSS-Klasse an oder aus. All das verändert sofort, was auf dem Bildschirm zu sehen ist, ohne dass die Seite neu lädt."
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "isKeySentence": false,
+      "text": "Noch einmal die Begriffe dieser Lektion. DOM: die Darstellung einer Webseite als Baum aus Elementen, mit der JavaScript im Browser arbeitet, um die Seite zu lesen und zu verändern. querySelector: eine Funktion des document-Objekts, die das erste Element auf der Seite zurückgibt, das zu einem angegebenen Selektor passt. textContent: eine Eigenschaft eines Elements, über die JavaScript seinen sichtbaren Text lesen oder ändern kann. createElement: eine Funktion des document-Objekts, die ein neues, noch unsichtbares Element erzeugt, das man danach in die Seite einhängen kann."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Was ist der Unterschied zwischen querySelector und querySelectorAll?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "querySelector liefert immer nur das erste passende Element, auch wenn es mehrere gibt. querySelectorAll liefert dagegen alle passenden Elemente auf einmal, als eine Liste, durch die man mit einer Schleife gehen kann, wie du sie schon aus M01-06 kennst."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Kann ich mit textContent auch neue HTML-Elemente einfügen, zum Beispiel eine fette Überschrift?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Nein, textContent behandelt alles, was man ihr zuweist, als reinen Text, auch spitze Klammern erscheinen dann einfach als Zeichen auf der Seite, statt als echtes Element zu wirken. Für echtes HTML als Inhalt gibt es eine andere Eigenschaft, innerHTML, die aber vorsichtiger benutzt werden muss, weil sie fremden Text als Code lesen kann."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Was passiert mit einem Element, das ich mit createElement gebaut, aber nie angehängt habe?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Es bleibt unsichtbar und existiert nur im Speicher des Browsers, solange eine Variable noch darauf zeigt. Niemand sieht es auf der Seite, und sobald keine Variable mehr darauf verweist, räumt der Browser es irgendwann von selbst weg."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Ändert classList.toggle etwas an der HTML-Datei auf dem Server?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Nein, genau wie bei allen anderen Änderungen dieser Lektion betrifft das nur das DOM im Browser der Person, die die Seite gerade ansieht. Die HTML-Datei auf dem Server bleibt unverändert und liefert beim nächsten Laden wieder den ursprünglichen Zustand ohne die Klasse."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Muss ich immer erst prüfen, ob querySelector wirklich ein Element gefunden hat?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Ja, das ist eine gute Gewohnheit von Anfang an. Versuchst du, an null etwas wie textContent zu ändern, meldet die Konsole einen Fehler und der restliche Code danach läuft oft gar nicht mehr weiter, deshalb lohnt sich eine kurze Prüfung davor."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Woher weiß ich, welchen Selektor ich bei querySelector angeben muss?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Genau dieselben Selektoren, die du in M02-02 für CSS gelernt hast, funktionieren auch hier: eine Raute für eine id, ein Punkt für eine Klasse, oder einfach der Name eines HTML-Tags. Das ist kein Zufall, sondern der ganze Sinn davon, dieselbe Sprache an zwei Stellen wiederzuverwenden."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Warum steht ein Script-Element mit DOM-Manipulation meistens am Ende der Seite und nicht am Anfang?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Weil der Browser die Seite von oben nach unten liest und aufbaut. Steht das Script-Element am Ende, existieren Knopf, Absatz und alle anderen Elemente im DOM schon, wenn querySelector nach ihnen sucht, statt dass sie noch fehlen."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Kann ein Element mehrere Klassen gleichzeitig tragen, und stört das classList.toggle?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Ja, ein Element kann beliebig viele Klassen gleichzeitig tragen, getrennt durch ein Leerzeichen in der HTML-Datei. classList.toggle betrifft dabei immer nur die eine Klasse, deren Name man ihr übergibt, alle anderen Klassen bleiben unangetastet."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Muss ich für jede DOM-Änderung erst createElement benutzen, auch wenn ich nur einen bestehenden Text ändern will?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Nein. createElement brauchst du nur, wenn wirklich ein neues Element entstehen soll, das vorher gar nicht existierte. Willst du nur den Text eines bereits vorhandenen Elements ändern, reicht querySelector, um es zu finden, und textContent, um seinen Text zu setzen."
+    }
+  ],
+  "practiceExample": {
+    "text": "Im Repository repo-portfolio findet die Befehlspalette ein Sprungziel mit document.querySelector(hash) und scrollt dorthin, wenn es existiert, sonst lädt sie eine andere Seite. Etwas weiter unten baut sie einen unsichtbaren Download-Link komplett neu: document.createElement(\"a\") erzeugt das Element, drei Zeilen setzen seine Adresse und seine Eigenschaften, document.body.append(verweis) hängt es an die Seite an, verweis.click() löst den Download aus, als hätte die Person selbst geklickt, und verweis.remove() entfernt das kurzlebige Element sofort wieder, weil es nach dem Klick keine Aufgabe mehr hat.",
+    "repoNote": "repo-portfolio",
+    "location": "src/components/CommandPalette.tsx, Zeile 72 (document.querySelector) und Zeilen 124 bis 130 (document.createElement, append, click, remove)"
+  },
+  "quiz": [
+    {
+      "question": "Welches Bild passt am besten zum DOM?",
+      "area": "DOM",
+      "options": [
+        {
+          "text": "Ein Stammbaum, in dem jede Person genau eine übergeordnete und mehrere untergeordnete Personen haben kann.",
+          "isCorrect": true,
+          "explanation": "Genau dieses Bild nutzt die Lektion, um die Baumstruktur des DOM zu erklären."
+        },
+        {
+          "text": "Eine flache Liste ohne jede Reihenfolge oder Beziehung zwischen den Einträgen, eine verbreitete Vorstellung, die aber nicht zur tatsächlichen Struktur einer Webseite im Speicher des Browsers passt.",
+          "isCorrect": false,
+          "explanation": "Das DOM ist kein flache Liste, sondern ein Baum mit übergeordneten und untergeordneten Elementen."
+        },
+        {
+          "text": "Ein einzelner Punkt ohne jede weitere Struktur.",
+          "isCorrect": false,
+          "explanation": "Das DOM besteht aus vielen miteinander verbundenen Elementen, nicht aus einem einzigen Punkt."
+        },
+        {
+          "text": "Eine Tabelle mit Zeilen und Spalten wie in einer Kalkulationssoftware.",
+          "isCorrect": false,
+          "explanation": "Das Baum-Bild passt zum DOM, das Tabellen-Bild beschreibt eine andere Art von Struktur."
+        }
+      ]
+    },
+    {
+      "question": "Was passiert mit der HTML-Datei auf dem Server, wenn JavaScript das DOM im Browser verändert?",
+      "area": "DOM",
+      "options": [
+        {
+          "text": "Nichts, die Datei auf dem Server bleibt unverändert.",
+          "isCorrect": true,
+          "explanation": "Das DOM lebt nur im Browser, die ursprüngliche HTML-Datei bleibt davon unberührt."
+        },
+        {
+          "text": "Der Server speichert die Änderung sofort in der Datei.",
+          "isCorrect": false,
+          "explanation": "Eine reine DOM-Änderung erreicht den Server gar nicht, sie bleibt im Browser der Person."
+        },
+        {
+          "text": "Die HTML-Datei wird beim nächsten Laden automatisch gelöscht.",
+          "isCorrect": false,
+          "explanation": "Die Datei bleibt bestehen, ihr Inhalt dient beim nächsten Laden wieder als Ausgangspunkt."
+        },
+        {
+          "text": "Alle Besucher der Seite sehen die geänderte Version sofort.",
+          "isCorrect": false,
+          "explanation": "Nur die Person, in deren Browser die Änderung passiert ist, sieht sie, andere Besucher laden weiter die unveränderte Datei."
+        }
+      ]
+    },
+    {
+      "question": "Wozu dient die Funktion querySelector?",
+      "area": "querySelector",
+      "options": [
+        {
+          "text": "Sie findet das erste Element im DOM, das zu einem angegebenen Selektor passt.",
+          "isCorrect": true,
+          "explanation": "Genau das ist die Aufgabe von querySelector, wie das Bibliotheks-Beispiel der Lektion zeigt."
+        },
+        {
+          "text": "Sie erstellt ein völlig neues Element auf der Seite, eine Aufgabe, die stattdessen der Funktion createElement zufällt, wie später in derselben Lektion gezeigt wird.",
+          "isCorrect": false,
+          "explanation": "Das Erstellen eines neuen Elements übernimmt createElement, nicht querySelector."
+        },
+        {
+          "text": "Sie ändert automatisch den Text aller gefundenen Elemente.",
+          "isCorrect": false,
+          "explanation": "querySelector findet nur, ändern muss man danach selbst, etwa mit textContent."
+        },
+        {
+          "text": "Sie lädt eine externe Skriptdatei nach.",
+          "isCorrect": false,
+          "explanation": "Das Laden externer Dateien ist Aufgabe des Script-Elements aus der vorigen Lektion, nicht von querySelector."
+        }
+      ]
+    },
+    {
+      "question": "Was liefert querySelector zurück, wenn kein Element zum Selektor passt?",
+      "area": "querySelector",
+      "options": [
+        {
+          "text": "Den besonderen Wert null.",
+          "isCorrect": true,
+          "explanation": "null ist genau das Zeichen dafür, dass nichts gefunden wurde."
+        },
+        {
+          "text": "Eine leere Zeichenkette ohne jeden Inhalt.",
+          "isCorrect": false,
+          "explanation": "Eine leere Zeichenkette wäre etwas anderes als kein gefundenes Element, querySelector liefert null."
+        },
+        {
+          "text": "Das zuletzt gefundene Element aus einem früheren Aufruf.",
+          "isCorrect": false,
+          "explanation": "querySelector merkt sich keine früheren Ergebnisse, jeder Aufruf sucht neu."
+        },
+        {
+          "text": "Eine Fehlermeldung, die das restliche Programm sofort stoppt.",
+          "isCorrect": false,
+          "explanation": "querySelector selbst wirft keinen Fehler, der Fehler entsteht erst, wenn man mit null wie mit einem Element weiterarbeitet."
+        }
+      ]
+    },
+    {
+      "question": "Was verändert die Zeile knopf.textContent = \"Geklickt\"?",
+      "area": "textContent",
+      "options": [
+        {
+          "text": "Den sichtbaren Text im Inneren des gefundenen Elements namens knopf.",
+          "isCorrect": true,
+          "explanation": "textContent ändert genau den sichtbaren Text eines Elements, sonst nichts."
+        },
+        {
+          "text": "Die Adresse, zu der ein Knopf beim Klicken führt, eine naheliegende, aber falsche Vermutung, weil Adressen über ein eigenes Attribut und nicht über den Text gesetzt werden.",
+          "isCorrect": false,
+          "explanation": "Eine Zieladresse würde über ein anderes Attribut gesetzt, nicht über textContent."
+        },
+        {
+          "text": "Die CSS-Klasse des Knopfes.",
+          "isCorrect": false,
+          "explanation": "Klassen werden über classList verändert, textContent betrifft ausschließlich den Text."
+        },
+        {
+          "text": "Den Namen der HTML-Datei, in der der Knopf steht.",
+          "isCorrect": false,
+          "explanation": "Dateinamen ändern sich dadurch nicht, textContent wirkt nur auf den Text im Browser."
+        }
+      ]
+    },
+    {
+      "question": "Ein Element wurde mit createElement gebaut, aber nicht angehängt. Was sieht die Person, die die Seite betrachtet?",
+      "area": "createElement",
+      "options": [
+        {
+          "text": "Nichts von diesem Element, es existiert nur unsichtbar im Speicher des Browsers.",
+          "isCorrect": true,
+          "explanation": "Ein nicht angehängtes Element bleibt komplett unsichtbar, wie ein Werkstück, das noch auf der Werkbank liegt."
+        },
+        {
+          "text": "Das Element erscheint automatisch am Ende der Seite, ein Verhalten, das der Browser an dieser Stelle tatsächlich nicht von sich aus auslöst, ohne ausdrücklichen Aufruf von append.",
+          "isCorrect": false,
+          "explanation": "Ohne ein ausdrückliches Anhängen erscheint ein mit createElement gebautes Element nirgendwo."
+        },
+        {
+          "text": "Das Element ersetzt automatisch das zuletzt gefundene Element.",
+          "isCorrect": false,
+          "explanation": "createElement baut nur ein neues Element, es ersetzt von sich aus nichts Bestehendes."
+        },
+        {
+          "text": "Der Browser meldet sofort einen schwerwiegenden Fehler.",
+          "isCorrect": false,
+          "explanation": "Ein nicht angehängtes Element verursacht keinen Fehler, es bleibt nur unsichtbar."
+        }
+      ]
+    },
+    {
+      "question": "Warum setzt der Code aus dem Portfolio-Beispiel mehrere Eigenschaften am neuen Link, bevor er ihn anhängt?",
+      "area": "createElement",
+      "options": [
+        {
+          "text": "Damit der Link schon vollständig eingerichtet ist, sobald er sichtbar wird.",
+          "isCorrect": true,
+          "explanation": "Erst bauen, dann einrichten, dann anhängen ist die übliche und sinnvolle Reihenfolge."
+        },
+        {
+          "text": "Weil append nur an bereits vollständig fertigen Elementen funktioniert, aus rein technischen Gründen.",
+          "isCorrect": false,
+          "explanation": "Append würde auch ein noch unvollständiges Element anhängen, der eigentliche Grund ist saubere Reihenfolge, nicht ein technischer Zwang."
+        },
+        {
+          "text": "Weil querySelector das neue Element sonst nicht finden würde.",
+          "isCorrect": false,
+          "explanation": "In diesem Beispiel wird querySelector auf das neue Element gar nicht angewendet."
+        },
+        {
+          "text": "Weil textContent sonst einen Fehler melden würde.",
+          "isCorrect": false,
+          "explanation": "textContent kommt in diesem konkreten Beispiel gar nicht vor."
+        }
+      ]
+    },
+    {
+      "question": "Was macht element.classList.toggle(\"aktiv\") an einem Element, das die Klasse aktiv schon trägt?",
+      "area": "classList",
+      "options": [
+        {
+          "text": "Sie entfernt die Klasse aktiv wieder.",
+          "isCorrect": true,
+          "explanation": "Toggle schaltet um: ist die Klasse schon da, entfernt sie sie, ist sie nicht da, fügt sie sie hinzu."
+        },
+        {
+          "text": "Sie fügt die Klasse aktiv ein zweites Mal hinzu.",
+          "isCorrect": false,
+          "explanation": "Ein Element kann eine Klasse nur einmal tragen, ein zweites Hinzufügen ändert nichts."
+        },
+        {
+          "text": "Sie löscht das Element vollständig von der Seite.",
+          "isCorrect": false,
+          "explanation": "classList.toggle betrifft nur die Klassenliste, nicht das Vorhandensein des Elements selbst."
+        },
+        {
+          "text": "Sie ändert automatisch den Text des Elements.",
+          "isCorrect": false,
+          "explanation": "Text wird über textContent geändert, classList.toggle betrifft ausschließlich Klassen."
+        }
+      ]
+    },
+    {
+      "question": "Welche Aufteilung beschreibt am besten, wie JavaScript und CSS beim Umschalten einer Klasse zusammenarbeiten?",
+      "area": "classList",
+      "options": [
+        {
+          "text": "JavaScript entscheidet, ob eine Klasse an einem Element vorhanden ist, CSS entscheidet, wie ein Element mit dieser Klasse aussieht.",
+          "isCorrect": true,
+          "explanation": "Genau diese saubere Trennung von Verhalten und Aussehen erklärt die Lektion mit dem Lichtschalter-Bild."
+        },
+        {
+          "text": "JavaScript entscheidet über das Aussehen, CSS über das Vorhandensein der Klasse.",
+          "isCorrect": false,
+          "explanation": "Das ist genau vertauscht, in Wahrheit ist es umgekehrt."
+        },
+        {
+          "text": "CSS kann Klassen an- und abschalten, JavaScript kümmert sich nur um Farben.",
+          "isCorrect": false,
+          "explanation": "Das An- und Abschalten von Klassen übernimmt JavaScript, nicht CSS."
+        },
+        {
+          "text": "Beide, JavaScript und CSS, entscheiden gemeinsam über dieselbe Eigenschaft gleichzeitig.",
+          "isCorrect": false,
+          "explanation": "Die Aufgaben sind klar getrennt, nicht gemeinsam für dieselbe Eigenschaft zuständig."
+        }
+      ]
+    },
+    {
+      "question": "Ein Element wird per querySelector gesucht, aber der Selektor hat einen Tippfehler. Welche Folge ist am wahrscheinlichsten?",
+      "area": "Fehlersuche",
+      "options": [
+        {
+          "text": "querySelector liefert null, und der nächste Zugriff darauf meldet in der Konsole einen Fehler, wenn nicht vorher geprüft wurde.",
+          "isCorrect": true,
+          "explanation": "Ein Tippfehler im Selektor führt meist dazu, dass nichts gefunden wird, mit den bekannten Folgen ohne Prüfung."
+        },
+        {
+          "text": "Der Browser korrigiert den Tippfehler automatisch.",
+          "isCorrect": false,
+          "explanation": "Selektoren werden nicht automatisch korrigiert, ein Tippfehler führt zu keinem Treffer."
+        },
+        {
+          "text": "Die ganze Webseite wird sofort weiß und unbenutzbar.",
+          "isCorrect": false,
+          "explanation": "Ein einzelner fehlgeschlagener Aufruf muss die restliche Seite nicht zerstören."
+        },
+        {
+          "text": "querySelector sucht automatisch nach dem ähnlichsten Selektor.",
+          "isCorrect": false,
+          "explanation": "Es gibt keine automatische Ähnlichkeitssuche, der Selektor muss genau passen."
+        }
+      ]
+    },
+    {
+      "question": "Warum betrifft eine DOM-Änderung nur die Person, die gerade selbst auf der Seite ist?",
+      "area": "DOM",
+      "options": [
+        {
+          "text": "Weil jedes geöffnete Browser-Fenster sein eigenes DOM aus derselben HTML-Datei aufbaut.",
+          "isCorrect": true,
+          "explanation": "Jede Person bekommt beim Laden ihr eigenes DOM, Änderungen darin bleiben lokal bei ihr."
+        },
+        {
+          "text": "Weil DOM-Änderungen automatisch an den Server gesendet und dort für alle gespeichert werden.",
+          "isCorrect": false,
+          "explanation": "Genau das passiert bei einer reinen DOM-Änderung nicht, sie bleibt beim eigenen Browser."
+        },
+        {
+          "text": "Weil jede Webseite nur von einer einzigen Person gleichzeitig besucht werden darf.",
+          "isCorrect": false,
+          "explanation": "Webseiten können von vielen Personen gleichzeitig besucht werden, jede mit ihrem eigenen DOM."
+        },
+        {
+          "text": "Weil das DOM in der HTML-Datei fest gespeichert ist.",
+          "isCorrect": false,
+          "explanation": "Das DOM entsteht erst im Browser, es ist nicht Teil der gespeicherten HTML-Datei."
+        }
+      ]
+    },
+    {
+      "question": "Welche Reihenfolge beschreibt am besten den Weg von der Idee bis zu einem neuen, sichtbaren Element?",
+      "area": "createElement",
+      "options": [
+        {
+          "text": "Element mit createElement bauen, Eigenschaften setzen, Element mit append anhängen.",
+          "isCorrect": true,
+          "explanation": "Genau diese Reihenfolge zeigt das Portfolio-Beispiel dieser Lektion."
+        },
+        {
+          "text": "Element mit append anhängen, danach erst mit createElement bauen.",
+          "isCorrect": false,
+          "explanation": "Ein Element muss zuerst gebaut werden, bevor es angehängt werden kann, nicht umgekehrt."
+        },
+        {
+          "text": "Element mit querySelector suchen, dann mit createElement überschreiben.",
+          "isCorrect": false,
+          "explanation": "createElement baut ein neues Element, es überschreibt kein gefundenes Element."
+        },
+        {
+          "text": "Element mit textContent erzeugen, dann mit classList sichtbar machen.",
+          "isCorrect": false,
+          "explanation": "textContent ändert nur Text an vorhandenen Elementen, es erzeugt keine neuen Elemente."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Erstelle eine kleine HTML-Datei mit einem Knopf und einem Absatz darunter. Schreibe in einem Script-Element JavaScript-Code, der mit querySelector den Knopf und den Absatz findet und mit der Zeile knopf.onclick = function() { absatz.textContent = \"Geklickt\"; } dafür sorgt, dass ein Klick auf den Knopf den Text im Absatz ändert. Wie man Klicks sauberer abfängt, zeigt die nächste Lektion, hier reicht dieses einfache Muster.",
+    "expectation": "Klickst du auf den Knopf, ändert sich der Text im Absatz sofort sichtbar, ohne dass die Seite neu lädt.",
+    "checklist": [
+      "HTML-Datei mit einem Knopf und einem Absatz erstellt",
+      "den Knopf mit querySelector gefunden",
+      "beim Klick den Text des Absatzes mit textContent geändert",
+      "die Seite im Browser getestet und den Klick mehrfach ausprobiert",
+      "die Konsole geöffnet und auf Fehlermeldungen geprüft"
+    ]
+  },
+  "audio": {
+    "file": "M02-03-02.mp3",
+    "durationSeconds": 1050,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Was ist der Unterschied zwischen querySelector und querySelectorAll?",
+      "answer": "querySelector liefert immer nur das erste passende Element, auch wenn es mehrere gibt. querySelectorAll liefert dagegen alle passenden Elemente auf einmal, als eine Liste, durch die man mit einer Schleife gehen kann, wie du sie schon aus M01-06 kennst."
+    },
+    {
+      "question": "Kann ich mit textContent auch neue HTML-Elemente einfügen, zum Beispiel eine fette Überschrift?",
+      "answer": "Nein, textContent behandelt alles, was man ihr zuweist, als reinen Text, auch spitze Klammern erscheinen dann einfach als Zeichen auf der Seite, statt als echtes Element zu wirken. Für echtes HTML als Inhalt gibt es eine andere Eigenschaft, innerHTML, die aber vorsichtiger benutzt werden muss, weil sie fremden Text als Code lesen kann."
+    },
+    {
+      "question": "Was passiert mit einem Element, das ich mit createElement gebaut, aber nie angehängt habe?",
+      "answer": "Es bleibt unsichtbar und existiert nur im Speicher des Browsers, solange eine Variable noch darauf zeigt. Niemand sieht es auf der Seite, und sobald keine Variable mehr darauf verweist, räumt der Browser es irgendwann von selbst weg."
+    },
+    {
+      "question": "Ändert classList.toggle etwas an der HTML-Datei auf dem Server?",
+      "answer": "Nein, genau wie bei allen anderen Änderungen dieser Lektion betrifft das nur das DOM im Browser der Person, die die Seite gerade ansieht. Die HTML-Datei auf dem Server bleibt unverändert und liefert beim nächsten Laden wieder den ursprünglichen Zustand ohne die Klasse."
+    },
+    {
+      "question": "Muss ich immer erst prüfen, ob querySelector wirklich ein Element gefunden hat?",
+      "answer": "Ja, das ist eine gute Gewohnheit von Anfang an. Versuchst du, an null etwas wie textContent zu ändern, meldet die Konsole einen Fehler und der restliche Code danach läuft oft gar nicht mehr weiter, deshalb lohnt sich eine kurze Prüfung davor."
+    },
+    {
+      "question": "Woher weiß ich, welchen Selektor ich bei querySelector angeben muss?",
+      "answer": "Genau dieselben Selektoren, die du in M02-02 für CSS gelernt hast, funktionieren auch hier: eine Raute für eine id, ein Punkt für eine Klasse, oder einfach der Name eines HTML-Tags. Das ist kein Zufall, sondern der ganze Sinn davon, dieselbe Sprache an zwei Stellen wiederzuverwenden."
+    },
+    {
+      "question": "Warum steht ein Script-Element mit DOM-Manipulation meistens am Ende der Seite und nicht am Anfang?",
+      "answer": "Weil der Browser die Seite von oben nach unten liest und aufbaut. Steht das Script-Element am Ende, existieren Knopf, Absatz und alle anderen Elemente im DOM schon, wenn querySelector nach ihnen sucht, statt dass sie noch fehlen."
+    },
+    {
+      "question": "Kann ein Element mehrere Klassen gleichzeitig tragen, und stört das classList.toggle?",
+      "answer": "Ja, ein Element kann beliebig viele Klassen gleichzeitig tragen, getrennt durch ein Leerzeichen in der HTML-Datei. classList.toggle betrifft dabei immer nur die eine Klasse, deren Name man ihr übergibt, alle anderen Klassen bleiben unangetastet."
+    },
+    {
+      "question": "Muss ich für jede DOM-Änderung erst createElement benutzen, auch wenn ich nur einen bestehenden Text ändern will?",
+      "answer": "Nein. createElement brauchst du nur, wenn wirklich ein neues Element entstehen soll, das vorher gar nicht existierte. Willst du nur den Text eines bereits vorhandenen Elements ändern, reicht querySelector, um es zu finden, und textContent, um seinen Text zu setzen."
+    }
+  ]
+}

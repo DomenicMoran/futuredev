@@ -1,0 +1,967 @@
+{
+  "id": "M02-01-02",
+  "title": "Semantisches HTML statt Div-Suppe",
+  "durationMinutes": 17,
+  "prerequisites": [
+    "M02-01-01"
+  ],
+  "terms": [
+    {
+      "term": "Div",
+      "definition": "Ein neutraler, bedeutungsloser Kasten in HTML, der nur eine Fläche bildet, ohne selbst zu sagen, was darin steht."
+    },
+    {
+      "term": "Semantik",
+      "definition": "Die Bedeutung, die ein Tag von sich aus mitbringt, unabhängig davon, wie er am Ende aussieht."
+    },
+    {
+      "term": "Screenreader",
+      "definition": "Ein Programm, das den Inhalt einer Webseite laut vorliest oder in Blindenschrift ausgibt, statt sie nur am Bildschirm anzuzeigen."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "B",
+      "text": "In der letzten Lektion hast du gesagt, fast jeder HTML-Tag ist wie ein Klammer-Baustein für ein Stück Inhalt. Reicht da nicht ein einziger, immer gleicher Baustein für alles?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau das probieren manche Anfänger aus, und genau darum geht diese Lektion: warum das eine schlechte Idee ist, und was man stattdessen benutzt.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Am Ende dieser Lektion siehst du einer fremden Webseite an, welcher Teil Kopf, welcher Navigation und welcher der eigentliche Inhalt ist, allein an den Tag-Namen im Seitenquelltext.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir eine gedruckte Zeitungsseite vor. Ganz oben steht der Zeitungskopf mit dem Namen der Zeitung und dem Datum.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Darunter folgt eine Leiste mit den Rubriken, Politik, Sport, Kultur, damit du sofort zum passenden Bereich blättern kannst. In der Mitte der Seite steht der eigentliche Artikel, und ganz unten ein kleiner Fuß mit Impressum und Seitenzahl.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Du erkennst jeden dieser Bereiche sofort, ohne ein einziges Wort zu lesen, allein an seiner Stelle auf der Seite und an seiner Form. Der Kopf sieht anders aus als der Artikel, und der Fuß sieht wieder anders aus.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Eine Webseite kann genauso aufgeteilt sein: ein Kopfbereich, eine Rubrikenleiste, ein Hauptartikel, ein Fuß. HTML hat für jeden dieser Bereiche einen eigenen HTML-Tag, der schon durch seinen Namen sagt, was darin steht.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Und wenn ich das nicht mache? Reicht nicht irgendein neutraler Kasten für jeden Bereich?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Das geht tatsächlich, und genau da beginnt das Problem, das wir jetzt genauer ansehen.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir einen Umzugskarton vor, auf dem nichts draufsteht, kein Wort, kein Bild, gar nichts. Du kannst trotzdem Bücher, Geschirr oder Kleidung hineinpacken, der Karton nimmt alles gleich gerne auf.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Beim Auspacken weißt du aber nicht mehr, was in welchem Karton liegt, du müsstest jeden einzeln öffnen und nachsehen.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau so ein neutraler, bedeutungsloser Kasten existiert auch in HTML. Er heißt Div, kurz für division, Aufteilung, und er tut nichts weiter, als eine Fläche zu bilden, in die andere Tags hineinkommen.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein Div sieht so aus: kleiner als div größer als Inhalt kleiner als Schrägstrich div größer als. Du könntest damit theoretisch eine ganze Webseite bauen, Kopf, Artikel und Fuß, alles nur mit Div, Div, Div.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Wenn das geht, warum ist das dann schlecht?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Weil ein Div, anders als der Umzugskarton am Ende beim Auspacken, nie wieder verrät, was eigentlich drin war. Ein Browser, ein Screenreader oder eine Suchmaschine sehen nur: hier ist irgendein Kasten, ohne zu wissen, ob darin ein Kopf, ein Artikel oder ein Fuß steckt.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau dieses Durcheinander aus lauter gleich aussehenden, bedeutungslosen Kästen hat unter Entwicklern sogar einen eigenen Spitznamen bekommen: Div-Suppe, weil am Ende alles im selben Topf landet, ohne erkennbare Zutat.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Fangen wir jetzt an, die Zeitungsseite von vorhin wirklich mit passenden Tags nachzubauen, statt mit lauter Div-Kästen.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Für den Zeitungskopf mit Name und Datum gibt es den HTML-Tag header. Kleiner als header größer als, darin zum Beispiel eine Überschrift mit dem Namen der Seite, kleiner als Schrägstrich header größer als.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Der Unterschied zum Div ist: header sagt schon durch seinen eigenen Namen, dass hier der Kopfbereich einer Seite oder eines Bereichs beginnt, ganz ohne dass du das irgendwo extra vermerken müsstest.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann eine Seite mehrere header haben?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, zum Beispiel einen header für die ganze Seite oben, und einen eigenen kleineren header innerhalb eines einzelnen Artikels, mit dem Titel nur dieses einen Artikels.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Das ist wichtig, weil ein Screenreader, das gleich noch genauer erklärt wird, damit sofort zum Anfang eines Bereichs springen kann, ohne erst den ganzen Text durchsuchen zu müssen.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Als Nächstes die Rubrikenleiste mit Politik, Sport, Kultur. Das ist im Grunde nichts anderes als eine Sammlung von Links, mit der du zu anderen Bereichen springst.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "So eine Sammlung von Links zur Navigation bekommt den HTML-Tag nav, kurz für navigation. Kleiner als nav größer als, darin mehrere Links mit dem HTML-Tag a aus der letzten Lektion, kleiner als Schrägstrich nav größer als.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Auf vielen Webseiten siehst du das oben als waagrechte Leiste mit mehreren Wörtern nebeneinander, jedes ein eigener Link. Politik, Sport, Kultur, jedes in einem eigenen a-HTML-Tag, alles zusammen in einem nav.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Wäre das ohne nav nicht auch mit ein paar normalen Links möglich?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Technisch schon, aber dann weiß niemand von außen, dass genau diese Links die Hauptnavigation der Seite bilden, im Unterschied zu einem einzelnen Link mitten im Text.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Das ist wichtig, weil viele Screenreader eine eigene Tastenkombination haben, mit der blinde Nutzerinnen und Nutzer direkt zur Navigation springen, aber nur, wenn sie tatsächlich in einem nav-HTML-Tag steht.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Fehlt das nav, muss sich dieselbe Person stattdessen Wort für Wort durch die ganze Seite vorlesen lassen, bis sie zufällig bei den Links landet.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir jetzt die Mitte der Zeitungsseite vor, den eigentlichen redaktionellen Inhalt, ohne Werbung am Rand und ohne die Rubrikenleiste.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau dieser eine, wichtigste Inhaltsbereich einer Seite bekommt den HTML-Tag main. Kleiner als main größer als, und darin der Hauptinhalt der Seite, kleiner als Schrägstrich main größer als.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Wichtig dabei: main kommt auf einer Webseite nur genau einmal vor, anders als header oder nav, die auch mehrfach auftauchen dürfen.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Warum nur einmal?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Weil main dem Browser und dem Screenreader sagt: das hier, und nur das hier, ist der eigentliche Grund, warum jemand diese Seite besucht. Gäbe es zwei main-Bereiche, wäre diese Aussage nicht mehr eindeutig.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Das ist wichtig, weil ein blinder Nutzer mit einem Sprung direkt zum main-HTML-Tag die ganze Werbung, Navigation und Fußzeile überspringen kann und sofort beim eigentlichen Inhalt landet.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Das spart bei einer langen Seite mit viel Navigation und Werbung oft mehrere Minuten Vorlesezeit, jedes Mal, wenn diese Person die Seite erneut besucht.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Innerhalb von main kann mehr als ein einzelner Artikel stehen, zum Beispiel auf einer Startseite mit drei kurzen Meldungen nebeneinander.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Für einen einzelnen, für sich allein stehenden Beitrag gibt es den HTML-Tag article, kurz für Artikel. Er eignet sich für alles, was auch für sich allein Sinn ergeben würde, etwa ein einzelner Blogeintrag.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Für einen Abschnitt, der nur zusammen mit dem Rest der Seite Sinn ergibt, etwa ein Kapitel innerhalb eines langen Artikels, gibt es stattdessen den HTML-Tag section, kurz für Abschnitt.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Auf einer Nachrichtenseite mit drei kurzen Meldungen stünde jede Meldung in einem eigenen article, weil jede für sich gelesen werden kann. Innerhalb eines langen Ratgeber-Artikels dagegen stünde jedes Kapitel in einem section, weil ein einzelnes Kapitel ohne den Rest oft wenig Sinn ergibt.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Das klingt nach einer feinen Unterscheidung. Macht das wirklich einen Unterschied?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Für das Auge auf dem Bildschirm oft nicht, beide können optisch völlig gleich aussehen. Für eine Suchmaschine oder einen Screenreader macht es aber einen Unterschied, ob etwas als eigenständiger Beitrag oder nur als Teil eines größeren Ganzen gilt.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Zum Schluss der Fuß der Zeitungsseite, mit Impressum, Seitenzahl und manchmal dem Erscheinungsdatum.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Dafür gibt es den HTML-Tag footer, für Fußzeile. Kleiner als footer größer als, darin zum Beispiel ein Link zum Impressum und eine Copyright-Angabe, kleiner als Schrägstrich footer größer als.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Wie header kann auch footer mehrfach vorkommen, einmal ganz unten für die gesamte Seite, und noch einmal kleiner am Ende eines einzelnen article, mit dem Autorennamen dieses einen Beitrags.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Was passiert eigentlich, wenn ich trotzdem überall nur Div benutze, so wie am Anfang beschrieben?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Die Seite sieht für sehende Menschen mit den Augen meistens völlig normal aus, weil das Aussehen von einer ganz anderen Sprache kommt, nicht von header, nav oder footer selbst.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Deshalb merkt ein Anfänger den Unterschied oft gar nicht, bis jemand die Seite mit einem Screenreader benutzt oder eine Suchmaschine sie schlechter einordnet, als sie es mit den richtigen Tags getan hätte.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Jetzt setzen wir das Ganze zusammen. All diese Tags, header, nav, main, article, section, footer, haben eines gemeinsam: ihr Name allein verrät schon, wofür sie da sind.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir zwei Ordner in einem Aktenschrank vor. Auf dem einen steht nur Ordner 1, auf dem anderen steht Rechnungen 2026. Beide können denselben Inhalt fassen, aber nur der zweite verrät dir sofort, was drinsteckt, ohne dass du ihn öffnest.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Diese Eigenschaft, dass ein Tag von sich aus schon Bedeutung trägt, statt nur eine leere Fläche zu sein, heißt Semantik.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Semantik ist die Bedeutung, die ein Tag von sich aus mitbringt, unabhängig davon, wie er am Ende aussieht.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Diese Semantik siehst du sofort am Tag-Namen selbst: header, nav und main verraten ihre Rolle allein dadurch, wie sie heißen, ganz ohne zusätzliche Erklärung.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "header, nav, main, article, section und footer sind alle semantisch, weil ihr Name direkt sagt, was darin steht. Ein Div dagegen ist nicht semantisch, es ist einfach nur eine leere Fläche ohne eigene Bedeutung.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Wer liest diese Bedeutung überhaupt aus, außer mir beim Schreiben?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Zum Beispiel ein Programm, das blinden oder sehbehinderten Menschen eine Webseite vorliest, statt sie am Bildschirm zu zeigen.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "So ein vorlesendes Programm heißt Screenreader.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein Screenreader ist ein Programm, das den Inhalt einer Webseite laut vorliest oder in Blindenschrift ausgibt, statt sie nur am Bildschirm anzuzeigen.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Trifft ein Screenreader auf ein nav, sagt er der Nutzerin oder dem Nutzer zum Beispiel Navigation, vier Einträge, bevor er die Links vorliest. Trifft er dagegen auf ein bedeutungsloses Div, kann er nur sagen: Bereich, ohne jede weitere Auskunft.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Auch eine Suchmaschine liest eine Webseite ähnlich wie ein Screenreader, ohne sie mit Augen zu sehen, und richtet sich stark danach, welcher Teil als Hauptinhalt (main) und welcher nur als Navigation oder Fußzeile gekennzeichnet ist.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Bauen wir jetzt die ganze Zeitungsseite von vorhin einmal komplett zusammen, Stück für Stück, mit allem, was du bisher gelernt hast.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Ganz oben im body steht ein header mit dem Namen der Seite als Überschrift. Direkt danach folgt ein nav mit den Links zu Politik, Sport und Kultur.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Darunter kommt das main, und darin, weil wir mehrere Meldungen zeigen wollen, drei einzelne article-Bereiche nebeneinander, jeder mit eigener kleiner Überschrift und eigenem Absatz.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Ganz am Ende, außerhalb von main, steht der footer mit dem Link zum Impressum und der Jahreszahl für das Copyright.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Kein einziger Div taucht in diesem Aufbau auf, und trotzdem lässt sich damit jede gewöhnliche Nachrichtenseite nachbauen, nur eben mit Tags, die von sich aus sagen, was sie sind.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Heißt das, ich brauche Div also nie mehr?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, Div bleibt weiterhin nützlich, aber nur für Stellen ohne eigene erkennbare Rolle, etwa um mehrere Bilder rein optisch nebeneinander zu gruppieren, ohne dass diese Gruppierung selbst eine Bedeutung wie Kopf oder Navigation trägt.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Die Faustregel lautet deshalb: erst prüfen, ob es einen passenden semantischen Tag für den Bereich gibt, und nur wenn keiner passt, zu Div greifen.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Diese Faustregel kostet dich beim Schreiben keine einzige zusätzliche Minute, sie ändert nur, welchen Namen du für einen Bereich wählst, den du sowieso schon geplant hast.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Neben dem Screenreader gibt es noch einen zweiten Grund, warum semantische Tags wichtig sind, und den hast du selbst schon einmal benutzt, ohne es zu merken.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir vor, du suchst in einer Suchmaschine nach einem Rezept. Die Suchmaschine zeigt dir oft schon in der Trefferliste eine kurze Vorschau mit dem Titel und den ersten Sätzen, bevor du überhaupt auf die Seite klickst.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Damit die Suchmaschine weiß, welcher Teil einer Seite der eigentliche Inhalt ist, und welcher Teil nur Navigation oder Fußzeile. Dafür schaut sie sich genau die gleichen Tags an, die auch ein Screenreader nutzt: header, nav, main, article, section, footer.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Eine Seite, die ihren Hauptinhalt sauber in main und article packt, statt alles in gleich aussehende Div-Kästen zu werfen, hat es deshalb leichter, mit dem richtigen Ausschnitt in der Trefferliste zu erscheinen.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Reicht semantisches HTML allein schon, um ganz oben in der Suchmaschine zu landen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, dafür spielen noch viele andere Dinge eine Rolle, etwa wie viele andere Seiten auf eine Seite verlinken. Semantisches HTML ist nur eine von mehreren Zutaten, aber eine, die du als Anfänger schon beim ersten Schreiben richtig machen kannst.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir zwei fast gleiche Rezeptseiten vor. Die eine packt Titel, Zutatenliste und Zubereitung alle drei nur in Div, die andere benutzt main und article dafür.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Bei gleichbleibendem Text hat die zweite Seite die besseren Voraussetzungen, weil die Suchmaschine dort klarer erkennt, wo der eigentliche Inhalt beginnt und endet, statt raten zu müssen.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Schauen wir uns dazu wieder das Repo portfolio an, den Quellcode von domenicmoran.de.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Dort gibt es sieben Architekturdiagramme, die nicht als fertiges Bild eingebunden sind, sondern jedes Mal aus einer Liste von Knoten und Kanten neu als HTML- und SVG-Struktur gebaut werden.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau deshalb, so beschreibt es die Repo-Notiz, sind diese Diagramme im Dokument durchsuchbar und tragen jeweils eine eigene, sprechende Beschreibung für Screenreader, statt nur ein starres Bild ohne jede Bedeutung dahinter zu sein.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Das ist dieselbe Idee wie header statt Div: lieber ein Baustein, der von sich aus sagt, was er ist und wofür er da ist, als ein stummer Kasten, der nur optisch etwas darstellt.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Ob mit sieben Architekturdiagrammen oder mit einem einzigen header-Tag: das Grundprinzip bleibt überall dasselbe, egal wie groß das Projekt am Ende wird.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Also noch einmal kurz zusammengefasst: statt alles in bedeutungslose Div-Kästen zu packen, benutze ich Tags wie header, nav, main, article, section und footer, die schon durch ihren Namen sagen, was in ihnen steht. Das nennt man semantisches HTML, und es hilft Screenreadern und Suchmaschinen, eine Seite richtig zu verstehen.",
+      "isKeySentence": true,
+      "role": "key"
+    },
+    {
+      "speaker": "A",
+      "text": "Zum Abschluss noch einmal die neuen Begriffe dieser Lektion.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Div: ein neutraler, bedeutungsloser Kasten in HTML, der nur eine Fläche bildet, ohne selbst zu sagen, was darin steht.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Semantik: die Bedeutung, die ein Tag von sich aus mitbringt, unabhängig davon, wie er am Ende aussieht.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Screenreader: ein Programm, das den Inhalt einer Webseite laut vorliest oder in Blindenschrift ausgibt, statt sie nur am Bildschirm anzuzeigen.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss ich jetzt jeden einzelnen Div in meinem HTML durch einen semantischen Tag ersetzen?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, Div bleibt sinnvoll für rein optische Gruppierungen ohne eigene Bedeutung, etwa um mehrere Bilder nebeneinander anzuordnen. Nur für Bereiche, die wirklich eine erkennbare Rolle wie Kopf, Navigation oder Hauptinhalt haben, lohnt sich der passende semantische Tag, und diese Prüfung dauert beim Schreiben nur wenige Sekunden.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Sieht eine Seite mit semantischen Tags anders aus als eine mit lauter Div?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Von Auge meistens nicht, denn das Aussehen kommt aus einer anderen Sprache, die für Farbe und Layout zuständig ist. Der Unterschied zeigt sich vor allem bei einem Screenreader oder einer Suchmaschine, die den Aufbau ohne Augen verstehen müssen, und erst dort merkst du, ob sich die Mühe gelohnt hat.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann ein main-Tag innerhalb eines article stehen?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, main ist für den einen zentralen Inhaltsbereich einer ganzen Seite gedacht und steht deshalb nicht verschachtelt in einem article oder section. Ein article kann dagegen problemlos innerhalb von main stehen, weil main der äußere Rahmen für den gesamten Hauptinhalt ist, und mehrere article-Bereiche dürfen sogar nebeneinander in diesem einen main stehen.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Woher weiß ich, ob ich article oder section benutzen soll?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Frag dich, ob der Inhalt auch für sich allein Sinn ergeben würde, zum Beispiel wenn ihn jemand aus dem Zusammenhang kopiert und an einer ganz anderen Stelle einfügt. Wenn ja, passt article, wenn der Abschnitt nur zusammen mit dem Rest der Seite verständlich ist, etwa ein einzelnes Kapitel mitten in einer langen Anleitung, passt section besser.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Benutzt wirklich jede professionelle Webseite diese semantischen Tags?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Die allermeisten modernen, gepflegten Webseiten nutzen sie, weil sie sowohl für die Barrierefreiheit als auch für Suchmaschinen einen echten Vorteil bringen, ohne zusätzlichen Aufwand beim Aussehen zu kosten. Ältere oder schnell zusammengebaute Seiten arbeiten dagegen manchmal noch mit sehr viel Div, was Fachleute als schlechten Stil ansehen, weil er spätere Änderungen unnötig schwer macht.",
+      "isKeySentence": false,
+      "role": "faq"
+    }
+  ],
+  "practiceExample": {
+    "text": "Im Repo portfolio werden sieben Architekturdiagramme nicht als fertiges Bild eingebunden, sondern jedes Mal aus einer Liste von Knoten und Kanten als durchsuchbare HTML- und SVG-Struktur gebaut, mit eigener Beschreibung für Screenreader. Das folgt derselben Idee wie header statt Div: lieber ein Baustein, der von sich aus sagt, was er ist, als ein stummes Bild ohne erkennbare Bedeutung.",
+    "repoNote": "repo-portfolio",
+    "location": "Tabelle 'Was man daran lernen kann', Zeile 'Architekturdiagramme als Daten statt Bild', Fundstelle src/components/ArchitectureDiagram.tsx"
+  },
+  "quiz": [
+    {
+      "question": "Was ist ein Div in HTML?",
+      "area": "Semantisches HTML",
+      "options": [
+        {
+          "text": "Ein neutraler Kasten ohne eigene Bedeutung.",
+          "isCorrect": true,
+          "explanation": "Ein Div bildet nur eine Fläche, ohne selbst zu sagen, was darin steht."
+        },
+        {
+          "text": "Ein Tag speziell für die Hauptnavigation.",
+          "isCorrect": false,
+          "explanation": "Für die Hauptnavigation gibt es den eigenen, sprechenden Tag nav."
+        },
+        {
+          "text": "Ein Tag, der nur einmal je Seite vorkommen darf.",
+          "isCorrect": false,
+          "explanation": "Div darf beliebig oft vorkommen, das main-Tag ist es, das nur einmal je Seite steht."
+        },
+        {
+          "text": "Ein Programm, das Webseiten vorliest.",
+          "isCorrect": false,
+          "explanation": "Ein Programm, das Webseiten vorliest, ist ein Screenreader, kein Div."
+        }
+      ]
+    },
+    {
+      "question": "Warum spricht man bei einer Seite aus lauter Div-Kästen von Div-Suppe?",
+      "area": "Semantisches HTML",
+      "options": [
+        {
+          "text": "Weil alles im selben bedeutungslosen Topf landet, ohne erkennbare Rolle.",
+          "isCorrect": true,
+          "explanation": "Genau das ist die Idee hinter dem Spitznamen: alles sieht für den Computer gleich aus, ohne erkennbare Zutat."
+        },
+        {
+          "text": "Weil die Datei dadurch besonders klein wird.",
+          "isCorrect": false,
+          "explanation": "Die Dateigröße hat mit dem Spitznamen nichts zu tun, es geht um fehlende Bedeutung."
+        },
+        {
+          "text": "Weil Div-Kästen automatisch bunt eingefärbt werden.",
+          "isCorrect": false,
+          "explanation": "Ein Div hat von sich aus keine Farbe, Farbe kommt aus einer anderen Sprache."
+        },
+        {
+          "text": "Weil man Div ausschließlich auf Rezept-Webseiten und sonst nirgendwo verwenden darf.",
+          "isCorrect": false,
+          "explanation": "Div wird auf jeder Art von Webseite verwendet, nicht nur bei Rezepten."
+        }
+      ]
+    },
+    {
+      "question": "Wofür steht der HTML-Tag header?",
+      "area": "Semantisches HTML",
+      "options": [
+        {
+          "text": "Für den Kopfbereich einer Seite oder eines Abschnitts.",
+          "isCorrect": true,
+          "explanation": "header kennzeichnet genau den einleitenden Kopfbereich, ähnlich dem Kopf einer Zeitungsseite."
+        },
+        {
+          "text": "Für den Fuß einer Seite mit Impressum.",
+          "isCorrect": false,
+          "explanation": "Der Fuß einer Seite trägt den eigenen Tag footer, nicht header."
+        },
+        {
+          "text": "Für eine Sammlung von Navigationslinks.",
+          "isCorrect": false,
+          "explanation": "Eine Sammlung von Navigationslinks trägt den eigenen Tag nav."
+        },
+        {
+          "text": "Für den zentralen Hauptinhalt einer Seite, unabhängig vom Kopfbereich.",
+          "isCorrect": false,
+          "explanation": "Der zentrale Hauptinhalt trägt den eigenen Tag main, nicht header."
+        }
+      ]
+    },
+    {
+      "question": "Wie oft darf der Tag main auf einer einzelnen Webseite vorkommen?",
+      "area": "Semantisches HTML",
+      "options": [
+        {
+          "text": "Nur genau einmal.",
+          "isCorrect": true,
+          "explanation": "main markiert den einen zentralen Inhaltsbereich, deshalb steht er nur einmal je Seite."
+        },
+        {
+          "text": "Beliebig oft, wie header und footer auch.",
+          "isCorrect": false,
+          "explanation": "Anders als header und footer ist main auf genau ein Vorkommen je Seite beschränkt."
+        },
+        {
+          "text": "Nur innerhalb eines article.",
+          "isCorrect": false,
+          "explanation": "main steht nicht innerhalb von article, sondern bildet den äußeren Rahmen für den Hauptinhalt."
+        },
+        {
+          "text": "Nur auf Seiten ohne Navigation.",
+          "isCorrect": false,
+          "explanation": "Ob eine Navigation vorhanden ist, hat keinen Einfluss darauf, wie oft main vorkommen darf."
+        }
+      ]
+    },
+    {
+      "question": "Wann passt der Tag article besser als section?",
+      "area": "Semantisches HTML",
+      "options": [
+        {
+          "text": "Wenn der Inhalt auch für sich allein Sinn ergeben würde.",
+          "isCorrect": true,
+          "explanation": "article eignet sich für eigenständige Beiträge wie einen einzelnen Blogeintrag."
+        },
+        {
+          "text": "Wenn der Inhalt nur zusammen mit dem Rest der Seite verständlich ist.",
+          "isCorrect": false,
+          "explanation": "Genau dafür eignet sich eher section, nicht article."
+        },
+        {
+          "text": "Wenn der Bereich unsichtbar bleiben soll.",
+          "isCorrect": false,
+          "explanation": "Sichtbarkeit hat nichts mit der Wahl zwischen article und section zu tun."
+        },
+        {
+          "text": "Wenn der Bereich nur Bilder ohne Text enthält.",
+          "isCorrect": false,
+          "explanation": "Die Entscheidung hängt vom Sinnzusammenhang ab, nicht davon, ob nur Bilder enthalten sind."
+        }
+      ]
+    },
+    {
+      "question": "Was kennzeichnet der Tag footer typischerweise?",
+      "area": "Semantisches HTML",
+      "options": [
+        {
+          "text": "Eine Fußzeile mit Angaben wie Impressum oder Autor.",
+          "isCorrect": true,
+          "explanation": "footer steht für die Fußzeile, vergleichbar mit dem Fuß einer Zeitungsseite."
+        },
+        {
+          "text": "Die Hauptnavigation ganz oben auf der Seite.",
+          "isCorrect": false,
+          "explanation": "Die Hauptnavigation trägt den eigenen Tag nav, nicht footer."
+        },
+        {
+          "text": "Den zentralen Inhaltsbereich der Seite.",
+          "isCorrect": false,
+          "explanation": "Der zentrale Inhaltsbereich trägt den eigenen Tag main, nicht footer."
+        },
+        {
+          "text": "Eine beliebige Sammlung bedeutungsloser Kästen ohne erkennbare eigene Rolle.",
+          "isCorrect": false,
+          "explanation": "Bedeutungslose Kästen wären Div, nicht footer, das selbst eine klare Bedeutung trägt."
+        }
+      ]
+    },
+    {
+      "question": "Was bedeutet Semantik im Zusammenhang mit HTML-Tags?",
+      "area": "Semantisches HTML",
+      "options": [
+        {
+          "text": "Die Bedeutung, die ein Tag schon durch seinen Namen mitbringt.",
+          "isCorrect": true,
+          "explanation": "Ein semantischer Tag verrät durch seinen Namen selbst, wofür er da ist."
+        },
+        {
+          "text": "Die Farbe, die ein Tag am Bildschirm bekommt, unabhängig von seinem Namen.",
+          "isCorrect": false,
+          "explanation": "Die Farbe hängt von einer anderen Sprache ab, nicht von der Semantik eines Tags."
+        },
+        {
+          "text": "Die Ladezeit einer Webseite im Browser.",
+          "isCorrect": false,
+          "explanation": "Die Ladezeit hat mit Semantik nichts zu tun, sie hängt von vielen anderen Faktoren ab."
+        },
+        {
+          "text": "Die Anzahl der Tags auf einer Seite.",
+          "isCorrect": false,
+          "explanation": "Die reine Anzahl der Tags sagt nichts über ihre Bedeutung aus."
+        }
+      ]
+    },
+    {
+      "question": "Was macht ein Screenreader mit einer Webseite?",
+      "area": "Semantisches HTML",
+      "options": [
+        {
+          "text": "Er liest den Inhalt laut vor oder gibt ihn in Blindenschrift aus.",
+          "isCorrect": true,
+          "explanation": "Genau das ist die Aufgabe eines Screenreaders, für Menschen, die den Bildschirm nicht sehen können."
+        },
+        {
+          "text": "Er speichert die Seite dauerhaft auf der Festplatte.",
+          "isCorrect": false,
+          "explanation": "Speichern ist nicht die Aufgabe eines Screenreaders, sondern höchstens eine Zusatzfunktion des Browsers."
+        },
+        {
+          "text": "Er übersetzt die Seite automatisch in andere Sprachen.",
+          "isCorrect": false,
+          "explanation": "Automatische Übersetzung ist eine eigene Funktion, kein Bestandteil eines Screenreaders."
+        },
+        {
+          "text": "Er macht aus HTML eine neue Programmiersprache.",
+          "isCorrect": false,
+          "explanation": "Ein Screenreader verändert die Sprache des HTML nicht, er liest den Inhalt nur vor."
+        }
+      ]
+    },
+    {
+      "question": "Warum kann ein Screenreader bei einem nav mehr sagen als bei einem Div?",
+      "area": "Semantisches HTML",
+      "options": [
+        {
+          "text": "Weil nav durch seinen Namen schon verrät, dass es sich um eine Navigation handelt.",
+          "isCorrect": true,
+          "explanation": "Ein Div verrät dagegen nichts über seinen Inhalt, deshalb kann der Screenreader nur Bereich sagen."
+        },
+        {
+          "text": "Weil ein nav immer lauter vorgelesen wird als ein Div.",
+          "isCorrect": false,
+          "explanation": "Die Lautstärke hat nichts mit dem verwendeten Tag zu tun."
+        },
+        {
+          "text": "Weil ein Div gar nicht vorgelesen werden kann.",
+          "isCorrect": false,
+          "explanation": "Ein Div wird durchaus vorgelesen, nur eben ohne zusätzliche Auskunft über seine Rolle."
+        },
+        {
+          "text": "Weil nav automatisch übersetzt wird, Div aber nicht.",
+          "isCorrect": false,
+          "explanation": "Übersetzung ist bei beiden Tags nicht automatisch eingebaut."
+        }
+      ]
+    },
+    {
+      "question": "Warum ist eine Suchmaschine an semantischen Tags interessiert?",
+      "area": "Semantisches HTML",
+      "options": [
+        {
+          "text": "Weil sie damit besser erkennt, was Hauptinhalt und was Navigation oder Fuß ist.",
+          "isCorrect": true,
+          "explanation": "Semantische Tags helfen der Suchmaschine, den wichtigsten Inhalt vom Rahmen drumherum zu unterscheiden."
+        },
+        {
+          "text": "Weil semantische Tags eine Seite automatisch schneller laden lassen.",
+          "isCorrect": false,
+          "explanation": "Ladegeschwindigkeit hängt von anderen Faktoren ab, nicht in erster Linie von semantischen Tags."
+        },
+        {
+          "text": "Weil eine Suchmaschine sonst gar keine Webseiten lesen kann.",
+          "isCorrect": false,
+          "explanation": "Eine Suchmaschine liest auch Seiten ohne semantische Tags, nur mit weniger klaren Hinweisen."
+        },
+        {
+          "text": "Weil semantische Tags die Adresse einer Seite verändern.",
+          "isCorrect": false,
+          "explanation": "Die Adresse einer Seite hat mit den verwendeten Tags nichts zu tun."
+        }
+      ]
+    },
+    {
+      "question": "Ändert sich das Aussehen einer Seite, nur weil sie semantische Tags statt Div benutzt?",
+      "area": "Semantisches HTML",
+      "options": [
+        {
+          "text": "Nicht von sich aus, das Aussehen kommt aus einer anderen Sprache.",
+          "isCorrect": true,
+          "explanation": "Semantische Tags und Div können optisch identisch aussehen, der Unterschied liegt in der Bedeutung, nicht im Erscheinungsbild."
+        },
+        {
+          "text": "Ja, semantische Tags sind immer bunter als Div.",
+          "isCorrect": false,
+          "explanation": "Kein Tag bringt von sich aus eine Farbe mit, das kommt aus einer anderen Sprache."
+        },
+        {
+          "text": "Ja, semantische Tags sind immer größer dargestellt.",
+          "isCorrect": false,
+          "explanation": "Die Größe hängt nicht vom gewählten Tag-Namen ab, sondern von zusätzlichen Angaben in einer anderen Sprache."
+        },
+        {
+          "text": "Ja, semantische Tags verschwinden automatisch auf kleinen Bildschirmen.",
+          "isCorrect": false,
+          "explanation": "Das Verhalten auf kleinen Bildschirmen hängt nicht vom Tag-Namen selbst ab."
+        }
+      ]
+    },
+    {
+      "question": "Was zeigt das Beispiel der Architekturdiagramme im Repo portfolio zum Thema Semantik?",
+      "area": "Semantisches HTML",
+      "options": [
+        {
+          "text": "Dass durchsuchbare, beschriftete Struktur einem starren Bild ohne Bedeutung vorgezogen wird.",
+          "isCorrect": true,
+          "explanation": "Die Diagramme werden bewusst als durchsuchbare Struktur mit eigener Beschreibung gebaut, statt als reines Bild."
+        },
+        {
+          "text": "Dass Bilder in HTML grundsätzlich verboten sind.",
+          "isCorrect": false,
+          "explanation": "Bilder sind in HTML erlaubt, das Beispiel zeigt nur eine bewusste Alternative dazu."
+        },
+        {
+          "text": "Dass Screenreader auf dieser Seite gar nicht funktionieren.",
+          "isCorrect": false,
+          "explanation": "Das Gegenteil ist der Fall, die Struktur ist gerade so gewählt, dass Screenreader gut damit arbeiten können."
+        },
+        {
+          "text": "Dass die Seite komplett ohne HTML auskommt.",
+          "isCorrect": false,
+          "explanation": "Am Ende liefert auch diese Seite gewöhnliches HTML aus, nur eben mit durchdachter Struktur."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Öffne deine eigene index.html aus der letzten Lektion im Editor. Baue die Struktur um: umschließe die Überschrift mit einem header-Tag, füge darunter ein nav mit zwei Links ein, packe den Absatz und das Bild in ein main mit einem article darin, und ergänze am Ende einen footer mit einem kurzen Copyright-Satz.",
+    "expectation": "Beim Öffnen im Browser sieht die Seite optisch fast gleich aus wie vorher, aber im Seitenquelltext stehen jetzt header, nav, main, article und footer statt nur nackter Absätze und Links direkt im body.",
+    "checklist": [
+      "header umschließt die Überschrift",
+      "nav enthält mindestens zwei Links",
+      "main enthält genau ein article mit Absatz und Bild",
+      "footer steht ganz am Ende mit einem Copyright-Satz",
+      "kein bedeutungsloser Div wurde für diese Bereiche benutzt"
+    ]
+  },
+  "audio": {
+    "file": "M02-01-02.mp3",
+    "durationSeconds": 1012,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Muss ich jetzt jeden einzelnen Div in meinem HTML durch einen semantischen Tag ersetzen?",
+      "answer": "Nein, Div bleibt sinnvoll für rein optische Gruppierungen ohne eigene Bedeutung, etwa um mehrere Bilder nebeneinander anzuordnen. Nur für Bereiche, die wirklich eine erkennbare Rolle wie Kopf, Navigation oder Hauptinhalt haben, lohnt sich der passende semantische Tag, und diese Prüfung dauert beim Schreiben nur wenige Sekunden."
+    },
+    {
+      "question": "Sieht eine Seite mit semantischen Tags anders aus als eine mit lauter Div?",
+      "answer": "Von Auge meistens nicht, denn das Aussehen kommt aus einer anderen Sprache, die für Farbe und Layout zuständig ist. Der Unterschied zeigt sich vor allem bei einem Screenreader oder einer Suchmaschine, die den Aufbau ohne Augen verstehen müssen, und erst dort merkst du, ob sich die Mühe gelohnt hat."
+    },
+    {
+      "question": "Kann ein main-Tag innerhalb eines article stehen?",
+      "answer": "Nein, main ist für den einen zentralen Inhaltsbereich einer ganzen Seite gedacht und steht deshalb nicht verschachtelt in einem article oder section. Ein article kann dagegen problemlos innerhalb von main stehen, weil main der äußere Rahmen für den gesamten Hauptinhalt ist, und mehrere article-Bereiche dürfen sogar nebeneinander in diesem einen main stehen."
+    },
+    {
+      "question": "Woher weiß ich, ob ich article oder section benutzen soll?",
+      "answer": "Frag dich, ob der Inhalt auch für sich allein Sinn ergeben würde, zum Beispiel wenn ihn jemand aus dem Zusammenhang kopiert und an einer ganz anderen Stelle einfügt. Wenn ja, passt article, wenn der Abschnitt nur zusammen mit dem Rest der Seite verständlich ist, etwa ein einzelnes Kapitel mitten in einer langen Anleitung, passt section besser."
+    },
+    {
+      "question": "Benutzt wirklich jede professionelle Webseite diese semantischen Tags?",
+      "answer": "Die allermeisten modernen, gepflegten Webseiten nutzen sie, weil sie sowohl für die Barrierefreiheit als auch für Suchmaschinen einen echten Vorteil bringen, ohne zusätzlichen Aufwand beim Aussehen zu kosten. Ältere oder schnell zusammengebaute Seiten arbeiten dagegen manchmal noch mit sehr viel Div, was Fachleute als schlechten Stil ansehen, weil er spätere Änderungen unnötig schwer macht."
+    }
+  ]
+}

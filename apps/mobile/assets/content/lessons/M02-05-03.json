@@ -1,0 +1,887 @@
+{
+  "id": "M02-05-03",
+  "title": "GitHub und Pull Requests",
+  "durationMinutes": 17,
+  "prerequisites": [
+    "M02-05-02"
+  ],
+  "terms": [
+    {
+      "term": "Remote",
+      "definition": "Eine Kopie einer Versionsgeschichte auf einem fremden, dauerhaft erreichbaren Rechner im Internet, mit der die eigene Versionsgeschichte verbunden ist."
+    },
+    {
+      "term": "GitHub",
+      "definition": "Eine Internetseite, auf der Menschen kostenlos ein Remote für eigene Projekte anlegen und öffentlich oder eingeschränkt teilen können."
+    },
+    {
+      "term": "Pull Request",
+      "definition": "Ein Vorschlag, die Änderungen von einem Branch in einen anderen zu übernehmen, verbunden mit einer eigenen Diskussion und Durchsicht."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "text": "Stell dir eine öffentliche Bibliothek vor, in der jedes Buch kostenlos ausgeliehen und gelesen werden kann, egal wer du bist.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Manche Bücher in dieser Bibliothek darfst du sogar selbst mitgestalten, wenn der Autor dich dazu einlädt oder deinen Vorschlag annimmt.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "B",
+      "text": "Gibt es so eine Art Bibliothek auch für die Versionsgeschichte eines Programmierprojekts?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, genau das ist die Idee dahinter. Bisher lag deine gesamte Versionsgeschichte nur auf deinem eigenen Rechner, niemand sonst konnte sie sehen.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Eine Kopie deines Projekts auf einem fremden Rechner im Internet, mit der deine eigene Versionsgeschichte verbunden ist, nennt man ein Remote.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein Remote ist wie ein Bibliotheksregal, in dem eine Kopie deines Buches öffentlich oder für ausgewählte Personen einsehbar steht, während dein eigenes Exemplar weiterhin auf deinem Schreibtisch liegt.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss ich meinen eigenen Rechner also ständig eingeschaltet lassen, damit andere meine Versionsgeschichte sehen können?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, genau das ist der Vorteil eines Remotes. Er liegt auf einem fremden, dauerhaft erreichbaren Rechner im Internet, unabhängig davon, ob dein eigener Rechner gerade an oder aus ist.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Der bekannteste Anbieter für so ein öffentliches Bibliotheksregal für Versionsgeschichten heißt GitHub.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "GitHub ist eine Internetseite, auf der du für eigene Projekte kostenlos so ein Regal, ein Remote, anlegen kannst, öffentlich einsehbar oder zunächst nur für dich selbst.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss ich mich bei GitHub extra anmelden, oder reicht mein Git auf dem eigenen Rechner dafür schon aus?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Du brauchst zusätzlich ein kostenloses Konto bei GitHub, ähnlich wie ein Konto bei einem E-Mail-Anbieter. Git selbst und GitHub sind zwei unterschiedliche Dinge, die gut zusammenarbeiten, aber nicht dasselbe sind.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Git ist das Werkzeug auf deinem eigenen Rechner für die Versionsgeschichte, GitHub ist der Ort im Internet, an dem du diese Versionsgeschichte öffentlich teilen kannst.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir vor, du hast dein fertiges Buch geschrieben und bringst es jetzt physisch in die Bibliothek, damit es dort ins Regal gestellt wird.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "B",
+      "text": "Wie bringe ich meine eigene Versionsgeschichte tatsächlich zu so einem Regal bei GitHub?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Dafür gibt es den Befehl git push. Er schickt alle deine bisher nur lokal gespeicherten Schritte hinüber zum Remote, damit sie dort ebenfalls sichtbar werden.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Nach einem erfolgreichen git push sieht jeder, der Zugriff auf dieses Remote hat, genau dieselbe Versionsgeschichte, die vorher nur auf deinem eigenen Rechner lag.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss ich jedes Mal, wenn ich einen neuen Schritt gemacht habe, sofort git push benutzen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, du kannst mehrere Schritte lokal sammeln und erst dann gemeinsam mit git push verschicken, wann immer es für dich passt.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir jetzt vor, während du geschrieben hast, hat auch jemand anderes ein neues Kapitel zum selben Buchregal beigetragen.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Damit du diese fremde Ergänzung auch auf deinem eigenen Schreibtisch hast, musst du sie dir aus der Bibliothek zurückholen.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "B",
+      "text": "Gibt es dafür auch einen eigenen Befehl, quasi das Gegenstück zu git push?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, das ist git pull. Er holt alle neuen Schritte, die inzwischen auf dem Remote entstanden sind, zu dir auf den eigenen Rechner.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "In einem Team benutzt man git pull am besten regelmäßig, bevor man mit neuer eigener Arbeit beginnt, damit man immer auf dem aktuellen, gemeinsamen Stand aufbaut.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Was passiert, wenn ich git pull vergesse und einfach mit einem veralteten Stand weiterarbeite?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Deine Arbeit bleibt zunächst gültig, aber später beim Zusammenführen kann es schwerer werden, weil sich inzwischen mehr auf dem Remote verändert hat. Regelmäßiges git pull hält diesen Abstand klein.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein Konto und ein erstes Remote bei GitHub anzulegen kostet dich keinen Cent, für öffentliche Projekte ist es dauerhaft kostenlos.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein solches öffentliches Remote ist gleichzeitig auch dein erster Baustein für ein späteres Portfolio, das du potenziellen Arbeitgebern zeigen kannst, dazu kommt eine spätere Lektion in dieser Reihe noch ausführlich.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir vor, du willst nicht ein eigenes, neues Buch beginnen, sondern ein bereits vorhandenes Buch aus dem Regal komplett für dich selbst mit nach Hause nehmen.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann ich mir auf diese Weise auch ein fremdes, bereits bestehendes Projekt von GitHub auf meinen eigenen Rechner holen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, dafür gibt es den Befehl git clone, gefolgt von der Internetadresse des Remotes. Er holt die komplette Versionsgeschichte des Projekts auf einen Schlag zu dir herunter.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Nach einem git clone ist bei dir lokal automatisch schon alles eingerichtet, was du sonst mit git init und dem Verbinden zu einem Remote von Hand erledigen müsstest.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Brauche ich git clone auch für mein eigenes, neu bei GitHub angelegtes Remote?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Nur dann, wenn du auf einem anderen Rechner weiterarbeiten willst. Für dasselbe Projekt auf demselben Rechner, das du selbst mit git init begonnen hast, reicht das spätere Verbinden mit dem Remote.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir vor, du kommst in eine fremde Werkstatt und findest direkt am Eingang einen kurzen Aushang, der erklärt, was hier überhaupt gebaut wird und wie man mitmachen kann.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "B",
+      "text": "Gibt es so einen Aushang auch für ein Projekt auf GitHub?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, das ist die README-Datei, die du bereits aus einer früheren Lektion kennst. GitHub zeigt sie automatisch direkt auf der Startseite eines Projekts an, sobald jemand das Remote öffnet.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Neben der README bietet GitHub für ein Projekt auch eine eigene Liste offener Aufgaben und gemeldeter Probleme, sowie eine kleine Zahl, wie oft andere Menschen das Projekt mit einem Stern markiert haben, ungefähr wie ein öffentliches Lesezeichen.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir vor, du legst versehentlich zusammen mit deinem Manuskript auch den Schlüssel zu deiner eigenen Wohnungstür offen ins öffentliche Bibliotheksregal.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann mir so etwas auch passieren, wenn ich mit git push arbeite?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, genau deshalb ist es so wichtig, niemals geheime Zugangsdaten in einen Commit aufzunehmen, den du dann zu einem öffentlichen Remote schickst. Einmal öffentlich hochgeladen, kann so ein Geheimnis von praktisch jedem gesehen worden sein, auch nach dem späteren Löschen.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Das Repo futuredev selbst hält sich strikt daran: geheime Zugangsdaten liegen dort bewusst außerhalb jeder Datei, die jemals mit git push verschickt wird, ein eigenes kleines Prüfwerkzeug im Projekt kontrolliert das vor jedem Commit.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Kurz zusammengefasst: ein Remote ist eine Kopie deiner Versionsgeschichte im Internet, GitHub ist ein beliebter Anbieter dafür. git push schickt deine Schritte dorthin, git pull holt neue Schritte von dort zurück.",
+      "isKeySentence": true,
+      "role": "key"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir vor, du liest ein fremdes Buch in der Bibliothek und findest einen kleinen Fehler auf Seite zwölf.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Statt das Buch einfach heimlich selbst zu ändern, schreibst du einen Vorschlag auf einen Zettel und legst ihn dem Autor vor, damit er selbst entscheidet, ob er die Änderung übernimmt.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "B",
+      "text": "Gibt es so einen Vorschlagszettel auch bei GitHub, für fremde oder gemeinsame Projekte?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, genau dafür gibt es die Pull Request. Sie ist ein Vorschlag, die Änderungen von einem Branch in einen anderen Branch zu übernehmen, verbunden mit einer eigenen Diskussion darüber.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Eine Pull Request zeigt genau, welche Zeilen sich ändern würden, dazu können andere Menschen Kommentare hinterlassen, Fragen stellen oder um kleine Anpassungen bitten, bevor der Vorschlag angenommen wird.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Wer entscheidet am Ende, ob so ein Vorschlag wirklich übernommen wird?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Das entscheiden die Verantwortlichen des jeweiligen Projekts, oft nach einer sogenannten Durchsicht, bei der jemand den vorgeschlagenen Code aufmerksam liest und dazu Rückmeldung gibt, bevor er endgültig übernommen wird.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Dieser Ablauf schützt ein Projekt davor, dass unüberlegte oder fehlerhafte Änderungen einfach ungeprüft in den Hauptzweig gelangen.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Wie läuft das ganz praktisch ab, wenn ich selbst eine Pull Request erstellen will?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Zuerst legst du wie in der vorigen Lektion gelernt einen eigenen Branch an und machst dort deine Commits. Dann schickst du diesen Branch mit git push zu GitHub.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Auf der GitHub-Internetseite bietet dir das Projekt danach von selbst an, aus diesem hochgeladenen Branch eine Pull Request zu erstellen, mit ein paar Klicks und einer kurzen Beschreibung, was du geändert hast.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss meine Pull Request sofort perfekt sein, bevor ich sie einreiche?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, eine Pull Request darf auch als erster Entwurf eingereicht werden. Die Diskussion und die Rückmeldungen anderer sind genau dazu da, sie gemeinsam bis zur Fertigstellung zu verbessern.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein öffentliches Projekt bei GitHub ist mehr als nur Übung, es wird später zu einem sichtbaren Teil deines eigenen Portfolios.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Schaut sich das später wirklich jemand an, oder bleibt das nur für mich selbst interessant?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Bei einer Bewerbung als Product Engineer schauen viele Personalverantwortliche tatsächlich in ein öffentliches GitHub-Profil, um echte Projekte statt nur Behauptungen im Lebenslauf zu sehen. Wie du dein Profil dafür aufräumst, zeigt eine spätere Lektion in dieser Reihe ausführlich.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Schon dein allererstes eigenes Remote bei GitHub ist also der erste kleine Baustein für dieses spätere Portfolio, auch wenn das Projekt darin noch winzig ist.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Schauen wir uns dazu ein echtes, öffentliches Projekt an, das Repo verified-done.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Es enthält vier kleine Werkzeuge, die verhindern sollen, dass eine KI-gestützte Programmierarbeit vorschnell als fertig gemeldet wird, bevor sie wirklich am laufenden System gezeigt wurde.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Und was genau hat das jetzt mit Pull Requests zu tun?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "In der zugehörigen Beschreibung des Projekts steht ausdrücklich, wie ehrlich mit unsicheren Ergebnissen umgegangen werden soll: der Satz Ich konnte das nicht überprüfen gilt dort ausdrücklich als akzeptable Antwort, besser als eine beschönigte Behauptung.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau diese Haltung ist auch der Kern einer guten Pull Request: lieber ehrlich zeigen, was noch unsicher oder unfertig ist, als eine Änderung als fertig auszugeben, die noch gar nicht wirklich geprüft wurde.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Heißt das, eine Durchsicht bei einer Pull Request ist auch eine Art Prüfung, ähnlich wie bei diesen vier Werkzeugen im Repo?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, genau. Beide verfolgen dieselbe Idee: eine Behauptung über fertige Arbeit ist wertlos, solange sie nicht durch einen echten Blick von außen oder einen echten Test bestätigt wurde.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Fassen wir die Begriffe von heute noch einmal als Liste zusammen.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Remote: Eine Kopie einer Versionsgeschichte auf einem fremden, dauerhaft erreichbaren Rechner im Internet, mit der die eigene Versionsgeschichte verbunden ist.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "GitHub: Eine Internetseite, auf der Menschen kostenlos ein Remote für eigene Projekte anlegen und öffentlich oder eingeschränkt teilen können.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Pull Request: Ein Vorschlag, die Änderungen von einem Branch in einen anderen zu übernehmen, verbunden mit einer eigenen Diskussion und Durchsicht.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss ein Remote bei GitHub immer öffentlich einsehbar sein?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, du kannst ein Remote bei GitHub auch als privat anlegen, dann sehen es nur du selbst und Personen, die du ausdrücklich einlädst. Für ein Portfolio-Projekt, das du später zeigen willst, ist ein öffentliches Remote aber meist die bessere Wahl.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Was passiert, wenn zwei Personen gleichzeitig git push zum selben Remote ausführen?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Git lässt nur die erste dieser beiden Aktionen ungehindert durch. Die zweite Person bekommt eine Rückmeldung, dass ihr eigener Stand nicht mehr aktuell ist, und sollte zuerst mit git pull die neuen Schritte abholen, bevor sie erneut push versucht.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann jeder eine Pull Request bei einem beliebigen fremden Projekt stellen?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, bei einem öffentlichen Projekt kann grundsätzlich jeder eine Pull Request vorschlagen. Ob dieser Vorschlag tatsächlich angenommen wird, entscheiden aber allein die Verantwortlichen des jeweiligen Projekts nach eigener Durchsicht.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Verändert eine Pull Request den Hauptzweig sofort, sobald sie erstellt wird?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, eine Pull Request ist zunächst nur ein Vorschlag mit einer eigenen Diskussion. Erst wenn sie von den Verantwortlichen ausdrücklich angenommen wird, fließen die vorgeschlagenen Änderungen tatsächlich in den Hauptzweig ein.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Brauche ich für git push und git pull jedes Mal eine Internetverbindung?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, beide Befehle sprechen mit dem entfernten Remote im Internet, dafür brauchst du in diesem Moment eine funktionierende Verbindung. Committen selbst geht weiterhin offline, nur das Verschicken oder Abholen über das Remote braucht Internet.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Kostet ein eigenes GitHub-Konto für ein Portfolio-Projekt etwas?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, ein Konto bei GitHub und öffentliche Remotes darauf sind für Einzelpersonen kostenlos nutzbar. Kosten entstehen erst bei bestimmten zusätzlichen, meist für größere Firmen gedachten Funktionen, die für ein eigenes Lernprojekt nicht gebraucht werden.",
+      "isKeySentence": false,
+      "role": "faq"
+    }
+  ],
+  "practiceExample": {
+    "text": "Das Repo verified-done liegt öffentlich auf GitHub unter dem Konto von Domenic Moran. In der README des Projekts steht ausdrücklich, dass eine ehrliche Rückmeldung wie Ich konnte das nicht überprüfen einer beschönigten Behauptung vorzuziehen ist, genau die Haltung, die auch eine gute Pull Request braucht: erst zeigen, was wirklich geprüft wurde, dann erst als fertig vorschlagen.",
+    "repoNote": "repo-verified-done",
+    "location": "README.md, Abschnitt \"Using them well\", Zitat \"'I could not verify this' is an acceptable answer. It is better than a hedge.\""
+  },
+  "quiz": [
+    {
+      "question": "Was ist ein Remote?",
+      "area": "GitHub-Grundlagen",
+      "options": [
+        {
+          "text": "Eine Kopie der eigenen Versionsgeschichte auf einem fremden Rechner im Internet.",
+          "isCorrect": true,
+          "explanation": "Genau das ist die Definition, wie das Bild vom Bibliotheksregal zeigt."
+        },
+        {
+          "text": "Ein einzelner, beschrifteter Schritt in der Versionsgeschichte.",
+          "isCorrect": false,
+          "explanation": "Das beschreibt einen Commit, nicht ein Remote."
+        },
+        {
+          "text": "Ein eigener, paralleler Abzweig der Versionsgeschichte.",
+          "isCorrect": false,
+          "explanation": "Das beschreibt einen Branch, nicht ein Remote."
+        },
+        {
+          "text": "Ein Programm, das ausschließlich auf dem eigenen Rechner läuft und niemals mit dem Internet spricht.",
+          "isCorrect": false,
+          "explanation": "Ein Remote liegt im Internet, nicht ausschließlich lokal."
+        }
+      ]
+    },
+    {
+      "question": "Was ist GitHub?",
+      "area": "GitHub-Grundlagen",
+      "options": [
+        {
+          "text": "Eine Internetseite, auf der Menschen Remotes für eigene Projekte anlegen können.",
+          "isCorrect": true,
+          "explanation": "Genau das leistet GitHub, kostenlos für einzelne Nutzer."
+        },
+        {
+          "text": "Ein anderer Name für das Programm Git selbst.",
+          "isCorrect": false,
+          "explanation": "Git und GitHub sind zwei unterschiedliche, wenn auch zusammenarbeitende Dinge."
+        },
+        {
+          "text": "Ein Befehl, den man im Terminal eingibt, um einen Commit zu machen.",
+          "isCorrect": false,
+          "explanation": "Das Committen übernimmt git commit, GitHub ist eine Internetseite."
+        },
+        {
+          "text": "Ein spezielles Betriebssystem, das eigens für Entwickler-Rechner entwickelt wurde.",
+          "isCorrect": false,
+          "explanation": "GitHub ist keine Betriebssystem, sondern ein Internet-Dienst."
+        }
+      ]
+    },
+    {
+      "question": "Was macht der Befehl git push?",
+      "area": "Terminal-Befehle",
+      "options": [
+        {
+          "text": "Er schickt lokal gespeicherte Schritte zum Remote hinüber.",
+          "isCorrect": true,
+          "explanation": "Genau das ist seine Aufgabe, wie das Bringen des Buches in die Bibliothek."
+        },
+        {
+          "text": "Er holt neue Schritte vom Remote auf den eigenen Rechner.",
+          "isCorrect": false,
+          "explanation": "Das übernimmt git pull, git push geht in die andere Richtung."
+        },
+        {
+          "text": "Er legt einen neuen Branch auf dem eigenen Rechner an.",
+          "isCorrect": false,
+          "explanation": "Das übernimmt git branch, nicht git push."
+        },
+        {
+          "text": "Er löscht das gesamte Remote unwiderruflich und ohne jede weitere Rückfrage oder Sicherung.",
+          "isCorrect": false,
+          "explanation": "git push verschickt Schritte, es löscht kein Remote."
+        }
+      ]
+    },
+    {
+      "question": "Was macht der Befehl git pull?",
+      "area": "Terminal-Befehle",
+      "options": [
+        {
+          "text": "Er holt neue Schritte vom Remote auf den eigenen Rechner.",
+          "isCorrect": true,
+          "explanation": "Genau das ist seine Aufgabe, das Gegenstück zu git push."
+        },
+        {
+          "text": "Er schickt eigene Schritte zum Remote hinüber.",
+          "isCorrect": false,
+          "explanation": "Das übernimmt git push, git pull geht in die andere Richtung."
+        },
+        {
+          "text": "Er erstellt automatisch eine neue Pull Request.",
+          "isCorrect": false,
+          "explanation": "Eine Pull Request wird über die GitHub-Internetseite erstellt, nicht durch git pull."
+        },
+        {
+          "text": "Er zeigt lediglich den aktuellen Zustand des Arbeitsverzeichnisses an.",
+          "isCorrect": false,
+          "explanation": "Das übernimmt git status, git pull holt aktiv neue Schritte."
+        }
+      ]
+    },
+    {
+      "question": "Was ist eine Pull Request?",
+      "area": "Pull-Request-Grundlagen",
+      "options": [
+        {
+          "text": "Ein Vorschlag, Änderungen von einem Branch in einen anderen zu übernehmen, mit eigener Diskussion.",
+          "isCorrect": true,
+          "explanation": "Genau das Bild vom Zettel mit dem Änderungsvorschlag zeigt das."
+        },
+        {
+          "text": "Ein Befehl, der automatisch alle Commits eines Projekts löscht.",
+          "isCorrect": false,
+          "explanation": "Eine Pull Request löscht nichts, sie schlägt eine Übernahme vor."
+        },
+        {
+          "text": "Ein anderes Wort für das Herunterladen einer Datei aus dem Internet.",
+          "isCorrect": false,
+          "explanation": "Eine Pull Request ist ein Änderungsvorschlag, kein einfacher Download."
+        },
+        {
+          "text": "Ein separates Zusatzprogramm, das sämtliche Git-Befehle im Hintergrund automatisch beschleunigen soll.",
+          "isCorrect": false,
+          "explanation": "Eine Pull Request beschleunigt keine Befehle, sie ist ein Vorschlag mit Diskussion."
+        }
+      ]
+    },
+    {
+      "question": "Wer entscheidet, ob eine Pull Request wirklich übernommen wird?",
+      "area": "Pull-Request-Grundlagen",
+      "options": [
+        {
+          "text": "Die Verantwortlichen des jeweiligen Projekts, oft nach einer Durchsicht.",
+          "isCorrect": true,
+          "explanation": "Genau das wurde in der Lektion erklärt, ähnlich wie bei einem Autor und seinem Buch."
+        },
+        {
+          "text": "GitHub selbst entscheidet automatisch, ohne dass ein Mensch das prüft.",
+          "isCorrect": false,
+          "explanation": "GitHub bietet nur die Werkzeuge an, entschieden wird von den Projektverantwortlichen."
+        },
+        {
+          "text": "Ausschließlich die Person, die die Pull Request selbst gestellt hat.",
+          "isCorrect": false,
+          "explanation": "Diese Person schlägt vor, entscheiden tun aber die Verantwortlichen des Projekts."
+        },
+        {
+          "text": "Der reine Zufall, mittels einer vollautomatischen, zufälligen Losentscheidung ohne jede menschliche Beteiligung.",
+          "isCorrect": false,
+          "explanation": "Eine Pull Request wird bewusst geprüft, nicht zufällig entschieden."
+        }
+      ]
+    },
+    {
+      "question": "Warum kann ein öffentliches Projekt auf GitHub später bei einer Bewerbung nützlich sein?",
+      "area": "Praxis",
+      "options": [
+        {
+          "text": "Weil Personalverantwortliche dort echte Projekte statt nur Behauptungen im Lebenslauf sehen können.",
+          "isCorrect": true,
+          "explanation": "Genau das wurde als Ausblick auf das spätere Portfolio erklärt."
+        },
+        {
+          "text": "Weil GitHub automatisch Bewerbungen an Firmen verschickt.",
+          "isCorrect": false,
+          "explanation": "GitHub verschickt keine Bewerbungen, es zeigt nur Projekte."
+        },
+        {
+          "text": "Weil ein öffentliches Projekt jede fachliche Prüfung im Vorstellungsgespräch überflüssig macht.",
+          "isCorrect": false,
+          "explanation": "Ein öffentliches Projekt hilft, ersetzt aber keine eigene Erklärfähigkeit im Gespräch."
+        },
+        {
+          "text": "Weil private Projekte auf GitHub grundsätzlich verboten sind.",
+          "isCorrect": false,
+          "explanation": "Private Projekte sind erlaubt, öffentliche sind für ein Portfolio nur zusätzlich hilfreich."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der Unterschied zwischen Git und GitHub?",
+      "area": "GitHub-Grundlagen",
+      "options": [
+        {
+          "text": "Git ist das Werkzeug auf dem eigenen Rechner, GitHub ist ein Anbieter im Internet dafür.",
+          "isCorrect": true,
+          "explanation": "Genau diese Unterscheidung wurde in der Lektion erklärt."
+        },
+        {
+          "text": "Beide Wörter bezeichnen exakt dasselbe Programm.",
+          "isCorrect": false,
+          "explanation": "Git und GitHub sind zwei unterschiedliche, wenn auch zusammenarbeitende Dinge."
+        },
+        {
+          "text": "GitHub ist älter als Git und wurde später durch Git ersetzt.",
+          "isCorrect": false,
+          "explanation": "Git ist das grundlegende Werkzeug, GitHub baut auf Git auf, nicht umgekehrt."
+        },
+        {
+          "text": "Git läuft nur im Internet, GitHub nur auf dem eigenen Rechner.",
+          "isCorrect": false,
+          "explanation": "Es ist eher umgekehrt: Git läuft lokal, GitHub liegt im Internet."
+        }
+      ]
+    },
+    {
+      "question": "Was zeigt das Praxisbeispiel aus dem Repo verified-done zum Thema ehrliche Rückmeldung?",
+      "area": "Praxis",
+      "options": [
+        {
+          "text": "Eine ehrliche Aussage über Unsicherheit gilt dort ausdrücklich als akzeptable Antwort.",
+          "isCorrect": true,
+          "explanation": "Genau das steht im Abschnitt Using them well der README."
+        },
+        {
+          "text": "Jede unsichere Aussage wird im Projekt automatisch von GitHub gelöscht.",
+          "isCorrect": false,
+          "explanation": "GitHub löscht keine Aussagen automatisch, das Praxisbeispiel handelt von einer bewussten Haltung."
+        },
+        {
+          "text": "Das Projekt verlangt, dass jede Pull Request sofort und ohne jede Durchsicht angenommen wird.",
+          "isCorrect": false,
+          "explanation": "Das widerspricht der beschriebenen sorgfältigen, ehrlichen Haltung des Projekts."
+        },
+        {
+          "text": "Unsichere Ergebnisse dürfen im Projekt niemals erwähnt werden.",
+          "isCorrect": false,
+          "explanation": "Das Gegenteil ist der Fall, unsichere Ergebnisse dürfen und sollen ehrlich benannt werden."
+        }
+      ]
+    },
+    {
+      "question": "Was passiert, wenn zwei Personen gleichzeitig zum selben Remote pushen wollen und die zweite Person nicht vorher gepullt hat?",
+      "area": "Terminal-Befehle",
+      "options": [
+        {
+          "text": "Der zweite Push wird zunächst abgelehnt, bis die neuen Schritte vorher abgeholt wurden.",
+          "isCorrect": true,
+          "explanation": "Genau das schützt davor, dass fremde Arbeit versehentlich überschrieben wird."
+        },
+        {
+          "text": "Beide Versionen werden automatisch und ohne jede Rückmeldung übereinandergelegt.",
+          "isCorrect": false,
+          "explanation": "Git meldet in diesem Fall ausdrücklich einen Konflikt, statt einfach stillschweigend zu überschreiben."
+        },
+        {
+          "text": "Das gesamte Remote wird bei einem solchen Zusammentreffen automatisch gelöscht.",
+          "isCorrect": false,
+          "explanation": "Ein Remote wird dabei nicht gelöscht, der zweite Push wird lediglich zunächst verweigert."
+        },
+        {
+          "text": "Git verbietet ab diesem Zeitpunkt jedes weitere push für dieses Projekt dauerhaft.",
+          "isCorrect": false,
+          "explanation": "Nach einem git pull lässt sich normal weiterarbeiten, es ist keine dauerhafte Sperre."
+        }
+      ]
+    },
+    {
+      "question": "Braucht git push eine Internetverbindung?",
+      "area": "Terminal-Befehle",
+      "options": [
+        {
+          "text": "Ja, weil er mit einem entfernten Remote im Internet spricht.",
+          "isCorrect": true,
+          "explanation": "Ohne Internetverbindung kann kein Remote erreicht werden."
+        },
+        {
+          "text": "Nein, git push funktioniert genau wie git init vollständig offline.",
+          "isCorrect": false,
+          "explanation": "git init arbeitet offline, git push braucht eine Verbindung zum Remote."
+        },
+        {
+          "text": "Nur bei privaten, aber nicht bei öffentlichen Remotes.",
+          "isCorrect": false,
+          "explanation": "Die Internetverbindung wird unabhängig davon gebraucht, ob das Remote öffentlich oder privat ist."
+        },
+        {
+          "text": "Nein, solange der eigene Rechner eingeschaltet ist.",
+          "isCorrect": false,
+          "explanation": "Das Einschalten des eigenen Rechners ersetzt keine Verbindung zum entfernten Remote."
+        }
+      ]
+    },
+    {
+      "question": "Welches Bild passt am besten zu einer Pull Request?",
+      "area": "Pull-Request-Grundlagen",
+      "options": [
+        {
+          "text": "Ein Zettel mit einem Änderungsvorschlag, den der Autor eines Buches selbst prüft.",
+          "isCorrect": true,
+          "explanation": "Genau dieses Bild wurde für die Pull Request eingeführt."
+        },
+        {
+          "text": "Ein bereits gedrucktes, fertiges Buch ohne jede Möglichkeit zur Änderung.",
+          "isCorrect": false,
+          "explanation": "Eine Pull Request ist gerade ein Vorschlag zur Änderung, kein endgültiger Zustand."
+        },
+        {
+          "text": "Ein leeres Regal ohne jedes Buch darin.",
+          "isCorrect": false,
+          "explanation": "Eine Pull Request enthält konkrete, vorgeschlagene Änderungen, kein leeres Regal."
+        },
+        {
+          "text": "Eine Bibliothek, die grundsätzlich keine Besucher hereinlässt.",
+          "isCorrect": false,
+          "explanation": "Eine Pull Request lebt gerade von Beteiligung und Diskussion, nicht von Ausschluss."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Lege ein kostenloses Konto bei GitHub an, falls du noch keins hast. Erstelle dort ein neues, leeres Remote und verbinde es mit deinem Übungsprojekt aus den vorigen Lektionen. Schicke deine bisherige Versionsgeschichte mit git push zu diesem Remote.",
+    "expectation": "Auf der GitHub-Seite deines Remotes sind alle deine bisherigen Commits sichtbar, genau wie vorher in deinem lokalen git log.",
+    "checklist": [
+      "Kostenloses Konto bei GitHub angelegt",
+      "Neues, leeres Remote auf GitHub erstellt",
+      "Eigenes Übungsprojekt mit diesem Remote verbunden",
+      "Mit git push die eigene Versionsgeschichte hochgeladen und auf GitHub überprüft"
+    ],
+    "portfolioItem": "P01"
+  },
+  "audio": {
+    "file": "M02-05-03.mp3",
+    "durationSeconds": 750,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Muss ein Remote bei GitHub immer öffentlich einsehbar sein?",
+      "answer": "Nein, du kannst ein Remote bei GitHub auch als privat anlegen, dann sehen es nur du selbst und Personen, die du ausdrücklich einlädst. Für ein Portfolio-Projekt, das du später zeigen willst, ist ein öffentliches Remote aber meist die bessere Wahl."
+    },
+    {
+      "question": "Was passiert, wenn zwei Personen gleichzeitig git push zum selben Remote ausführen?",
+      "answer": "Git lässt nur die erste dieser beiden Aktionen ungehindert durch. Die zweite Person bekommt eine Rückmeldung, dass ihr eigener Stand nicht mehr aktuell ist, und sollte zuerst mit git pull die neuen Schritte abholen, bevor sie erneut push versucht."
+    },
+    {
+      "question": "Kann jeder eine Pull Request bei einem beliebigen fremden Projekt stellen?",
+      "answer": "Ja, bei einem öffentlichen Projekt kann grundsätzlich jeder eine Pull Request vorschlagen. Ob dieser Vorschlag tatsächlich angenommen wird, entscheiden aber allein die Verantwortlichen des jeweiligen Projekts nach eigener Durchsicht."
+    },
+    {
+      "question": "Verändert eine Pull Request den Hauptzweig sofort, sobald sie erstellt wird?",
+      "answer": "Nein, eine Pull Request ist zunächst nur ein Vorschlag mit einer eigenen Diskussion. Erst wenn sie von den Verantwortlichen ausdrücklich angenommen wird, fließen die vorgeschlagenen Änderungen tatsächlich in den Hauptzweig ein."
+    },
+    {
+      "question": "Brauche ich für git push und git pull jedes Mal eine Internetverbindung?",
+      "answer": "Ja, beide Befehle sprechen mit dem entfernten Remote im Internet, dafür brauchst du in diesem Moment eine funktionierende Verbindung. Committen selbst geht weiterhin offline, nur das Verschicken oder Abholen über das Remote braucht Internet."
+    },
+    {
+      "question": "Kostet ein eigenes GitHub-Konto für ein Portfolio-Projekt etwas?",
+      "answer": "Nein, ein Konto bei GitHub und öffentliche Remotes darauf sind für Einzelpersonen kostenlos nutzbar. Kosten entstehen erst bei bestimmten zusätzlichen, meist für größere Firmen gedachten Funktionen, die für ein eigenes Lernprojekt nicht gebraucht werden."
+    }
+  ]
+}

@@ -8,22 +8,48 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { lessonSchema } from './lesson.js';
 import type { Manifest } from './manifest.js';
+import { MissingBaseUrlError, resolveManifestBaseUrls, type ManifestConfig } from './manifest-base-url.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const repoRoot = join(__dirname, '..', '..', '..');
 const contentDir = join(repoRoot, 'content');
 const lessonsDir = join(contentDir, 'lessons');
 const manifestPath = join(contentDir, 'manifest.json');
+const manifestConfigPath = join(contentDir, 'manifest.config.json');
 
-// Basis-URLs kommen aus der Umgebung (CONTENT_BASE_URL/AUDIO_BASE_URL), damit
-// dieses Skript nicht angepasst werden muss, wenn sich die Auslieferung
-// ändert (z. B. Übergang von Supabase auf einen GitHub-Release, siehe
-// AP-3.4/Teil 2). Ohne gesetzte Variable bleibt der bisherige
-// Supabase-Platzhalter erhalten, damit ein Lauf ohne Env unverändert bleibt.
-const CONTENT_BASE_URL =
-  process.env.CONTENT_BASE_URL ?? 'https://futuredev.supabase.co/storage/v1/object/public/content';
-const AUDIO_BASE_URL =
-  process.env.AUDIO_BASE_URL ?? 'https://futuredev.supabase.co/storage/v1/object/public/audio';
+/**
+ * Basis-URLs kommen aus der Umgebung (CONTENT_BASE_URL/AUDIO_BASE_URL) oder,
+ * falls nicht gesetzt, aus der committeten `content/manifest.config.json`.
+ * Kein erfundener Fallback (Pruefbericht Phase 3, B-01): fehlen beide
+ * Quellen fuer eine der beiden URLs, bricht der Lauf mit Rueckgabewert 1 und
+ * einer klaren Meldung ab, statt eine nicht existierende Adresse wie
+ * "futuredev.supabase.co" ins Manifest zu schreiben. Die eigentliche
+ * Aufloesung steckt in manifest-base-url.ts, damit sie mit Vitest ohne
+ * Prozessabbruch pruefbar ist.
+ */
+function loadManifestConfig(): ManifestConfig {
+  if (!existsSync(manifestConfigPath)) return {};
+  try {
+    return JSON.parse(readFileSync(manifestConfigPath, 'utf8')) as ManifestConfig;
+  } catch {
+    console.error(`content:manifest: ${manifestConfigPath} ist kein gueltiges JSON.`);
+    process.exit(1);
+  }
+}
+
+let CONTENT_BASE_URL: string;
+let AUDIO_BASE_URL: string;
+try {
+  const resolved = resolveManifestBaseUrls(process.env, loadManifestConfig());
+  CONTENT_BASE_URL = resolved.contentBaseUrl;
+  AUDIO_BASE_URL = resolved.audioBaseUrl;
+} catch (error) {
+  if (error instanceof MissingBaseUrlError) {
+    console.error(`content:manifest: ${error.message}`);
+    process.exit(1);
+  }
+  throw error;
+}
 
 function sha256(content: string): string {
   return createHash('sha256').update(content).digest('hex');

@@ -32,6 +32,18 @@ import lesson21 from './lessons/M01-06-02.json';
 import lesson22 from './lessons/M01-06-03.json';
 import lesson23 from './lessons/M01-06-04.json';
 import lesson24 from './lessons/M01-06-05.json';
+import lesson25 from './lessons/M02-01-01.json';
+import lesson26 from './lessons/M02-01-02.json';
+import lesson27 from './lessons/M02-01-03.json';
+import lesson28 from './lessons/M02-02-01.json';
+import lesson29 from './lessons/M02-02-02.json';
+import lesson30 from './lessons/M02-03-01.json';
+import lesson31 from './lessons/M02-03-02.json';
+import lesson32 from './lessons/M02-04-01.json';
+import lesson33 from './lessons/M02-04-02.json';
+import lesson34 from './lessons/M02-05-01.json';
+import lesson35 from './lessons/M02-05-02.json';
+import lesson36 from './lessons/M02-05-03.json';
 
 export const bundledManifest = manifest;
 export const bundledModules = modules;
@@ -61,4 +73,16 @@ export const bundledLessons: Record<string, unknown> = {
   'M01-06-03': lesson22,
   'M01-06-04': lesson23,
   'M01-06-05': lesson24,
+  'M02-01-01': lesson25,
+  'M02-01-02': lesson26,
+  'M02-01-03': lesson27,
+  'M02-02-01': lesson28,
+  'M02-02-02': lesson29,
+  'M02-03-01': lesson30,
+  'M02-03-02': lesson31,
+  'M02-04-01': lesson32,
+  'M02-04-02': lesson33,
+  'M02-05-01': lesson34,
+  'M02-05-02': lesson35,
+  'M02-05-03': lesson36,
 };

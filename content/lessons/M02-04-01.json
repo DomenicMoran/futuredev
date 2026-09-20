@@ -1,0 +1,969 @@
+{
+  "id": "M02-04-01",
+  "title": "Warum Typen Fehler vor dem Start verhindern",
+  "durationMinutes": 24,
+  "prerequisites": [
+    "M01-06-01",
+    "M01-06-04",
+    "M02-03-01"
+  ],
+  "terms": [
+    {
+      "term": "TypeScript",
+      "definition": "die Erweiterung von JavaScript, die geschriebene Etiketten für Werte einführt, also Typen."
+    },
+    {
+      "term": "Typangabe",
+      "definition": "eine geschriebene Angabe, die festlegt, welche Form ein Inhalt haben muss, damit er an eine bestimmte Stelle im Code passt, kurz auch Typ genannt."
+    },
+    {
+      "term": "Typfehler",
+      "definition": "die Meldung, die TypeScript zeigt, wenn ein Wert nicht zu seinem geschriebenen Typ passt."
+    },
+    {
+      "term": "Kompilierzeit",
+      "definition": "der Zeitpunkt, an dem TypeScript den Code prüft, bevor er läuft."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "text": "Stell dir eine Steckdose an der Wand vor, eine ganz gewöhnliche, mit drei runden Löchern.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Jetzt stell dir vor, jemand versucht, einen viereckigen Stecker aus einem ganz anderen Land hineinzudrücken. Es passt einfach nicht, die Form stimmt nicht überein.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "B",
+      "text": "Und was macht man dann, wenn die Form nicht passt?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Man merkt es sofort, schon bevor man den Stecker überhaupt in die Steckdose gesteckt hat, weil man beide Formen mit den Augen vergleichen kann. Niemand braucht erst Strom fließen zu lassen, um den Fehler zu bemerken.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau so ein Formvergleich passiert auch bei Code, nur dass dort niemand mit den Augen guckt. Ein Werkzeug übernimmt diesen Vergleich für uns.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Eine geschriebene Angabe, die festlegt, welche Form ein Inhalt haben muss, damit er an eine bestimmte Stelle passt, nennt man in der Programmierung eine Typangabe, oder kurz Typ.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Typangabe.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Aus der letzten Lektion kennst du schon den Datentyp: Zahl, Text oder Boolean, je nachdem, was in einer Variable liegt. Eine Typangabe ist eine geschriebene Angabe genau dazu, direkt im Code hingeschrieben, damit ein Werkzeug prüfen kann, ob eine Variable wirklich den passenden Datentyp bekommt, bevor irgendetwas läuft.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Das heißt, ein Typ ist wie ein Etikett, das vorher schon draufklebt?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau wie ein Etikett. Auf der Küchenschublade aus der letzten Lektion klebte ein Zettel mit dem Wort Gewürze. Ein Typ ist so ein Zettel, nur klebt er nicht auf einer Schublade, sondern direkt neben einer Variable im Code, und er sagt: hier darf nur eine Zahl hinein, oder hier darf nur Text hinein.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Das ist wichtig, weil ein Etikett vorher warnt. Ohne Etikett müsstest du jede Schublade erst öffnen, um zu sehen, was tatsächlich drin ist. Mit Etikett weißt du es, ohne überhaupt nachzusehen.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Aber JavaScript, das wir bisher gelernt haben, hat doch gar keine solchen Etiketten. Wo kommen die her?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Stimmt genau beobachtet. In gewöhnlichem JavaScript schreibst du keine Etiketten hin, der Computer merkt sich den Datentyp einer Variable erst, wenn das Programm tatsächlich läuft.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir eine Bäckerei vor, die zusätzlich zum normalen Verkauf noch eine Endkontrolle einführt: eine zweite Person, die jede Bestellung noch einmal gegenzeichnet, bevor sie das Haus verlässt. Der Verkauf läuft weiter wie vorher, nur mit dieser zusätzlichen Prüfung obendrauf.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Für JavaScript gibt es genau so eine zusätzliche Prüfschicht. Sie wurde von der Firma Microsoft gebaut und funktioniert wie eine Erweiterung von JavaScript, nicht wie eine völlig neue, fremde Sprache.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Diese Erweiterung von JavaScript um genau diese Etiketten, also um Typen, heißt TypeScript.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "TypeScript. T, Y, P, E, S, C, R, I, P, T.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Jede JavaScript-Datei, die du bisher kennengelernt hast, lässt sich fast unverändert auch als TypeScript-Datei behandeln. Der Unterschied zeigt sich erst, sobald du anfängst, an einzelne Variablen und Funktionen zusätzlich Etiketten zu schreiben.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss ich jetzt eine völlig neue Sprache von null lernen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, und genau das ist der große Vorteil. Alles, was du in den JavaScript-Lektionen gelernt hast, Variablen, Funktionen, Schleifen, bleibt genau gleich. TypeScript kommt oben drauf, es ersetzt nichts davon.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Wie sieht so ein Etikett im Code denn wirklich aus?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir ein Formular vor, in dem hinter jedem Eingabefeld in kleiner Schrift steht, was dort erwartet wird: Zahl, oder Name, oder Datum. Genau davor, direkt neben dem Feld.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "In TypeScript schreibst du das Etikett direkt hinter den Namen einer Variable, getrennt durch einen Doppelpunkt. Danach kommt eines von drei kurzen, immer klein geschriebenen Wörtern.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Für Text schreibst du das Wort string, für eine Zahl das Wort number, und für eine Wahr-oder-falsch-Angabe das Wort boolean, alle drei klein geschrieben. Eine Zeile sieht dann so aus: let alter Doppelpunkt number ist gleich 30.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Moment, Boolean kannten wir doch schon aus der letzten Lektion, mit großem B. Ist das jetzt etwas anderes?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Guter Fang. Gemeint ist derselbe Datentyp wie in der letzten Lektion, ein Inhalt, der nur wahr oder falsch sein kann. Nur wird er als geschriebenes Etikett in TypeScript klein geschrieben, boolean, während die Sache dahinter unverändert bleibt.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Diese drei Etiketten, string, number und boolean, brauchst du für den Anfang am häufigsten. Sie decken die drei Datentypen ab, die du schon aus JavaScript kennst, nur jetzt sichtbar hingeschrieben statt nur im Kopf mitgedacht.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Und was bringt mir so ein Etikett jetzt praktisch, außer dass es hübsch aussieht?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Erinnerst du dich an das Beispiel mit dem Formularfeld aus der letzten Lektion, wo zwei Zahlen aus einem Eingabefeld eigentlich Text waren, und sich beim Zusammenrechnen zu einer langen Zahlenkette aneinanderhängten, statt addiert zu werden?",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau so ein Fehler zeigt sich in gewöhnlichem JavaScript erst, wenn das Programm wirklich läuft, oft sogar erst bei einem echten Menschen, der gerade versucht, etwas zu bestellen oder zu bezahlen.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Mit einem Etikett davor kann ein Werkzeug diesen Fehler schon viel früher entdecken, nämlich bevor überhaupt jemand den Knopf zum Starten des Programms gedrückt hat.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Die Meldung, die TypeScript zeigt, wenn ein Inhalt nicht zu seinem geschriebenen Etikett passt, heißt Typfehler.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Typfehler.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Schreibst du let alter Doppelpunkt number ist gleich Anführungszeichen dreißig Anführungszeichen, also Text statt Zahl. TypeScript meldet dann sofort einen Typfehler, direkt beim Schreiben, meist schon während du noch tippst, mit einer roten Wellenlinie unter der Stelle.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Heißt das, das Programm stürzt dann direkt komplett ab?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, sogar besser: das Programm läuft in diesem Moment noch gar nicht, es wird also niemand von diesem Fehler überrascht, während er das fertige Programm tatsächlich benutzt. Der Fehler zeigt sich beim Schreiben, nicht erst beim Benutzen.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein Absturz beim echten Nutzer ist teuer und peinlich, weil er genau in dem Moment passiert, in dem jemand sich auf das Programm verlässt. Eine rote Wellenlinie beim Schreiben kostet dagegen nur den Programmierer ein paar Sekunden Aufmerksamkeit.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Wie nennt man diesen frühen Zeitpunkt, an dem TypeScript schon meckert, obwohl noch nichts läuft?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir eine Druckerei vor, die jedes Buch vor dem eigentlichen Druck noch einmal Korrektur liest. Findet die Korrekturleserin einen Fehler, wird er behoben, bevor auch nur eine einzige Seite gedruckt wird.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau diese Korrekturphase gibt es bei TypeScript auch, als eigener Abschnitt, bevor das eigentliche Programm überhaupt zu laufen beginnt.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Diesen Zeitpunkt, an dem TypeScript deinen Code prüft, bevor er läuft, nennt man Kompilierzeit.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Kompilierzeit.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein Typfehler wie das Beispiel von eben, Text statt Zahl, zeigt sich immer zur Kompilierzeit, also beim Prüfen, nie erst später, wenn ein echter Nutzer schon mit dem fertigen Programm arbeitet. Diesen späteren Zeitpunkt, wenn das Programm tatsächlich läuft, nennt man dagegen die Laufzeit.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Was ist denn schlimmer, ein Fehler zur Kompilierzeit oder ein Fehler zur Laufzeit?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein Fehler zur Kompilierzeit ist fast immer der freundlichere von beiden, weil ihn nur der Programmierer sieht, an seinem eigenen Bildschirm, in aller Ruhe. Ein Fehler zur Laufzeit kann dagegen genau in dem Moment auftreten, in dem ein echter Mensch gerade versucht, etwas zu kaufen oder abzuschicken.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Deshalb ist das ganze Versprechen von TypeScript in einem Satz zusammengefasst: möglichst viele Fehler von der Laufzeit weg, hin zur Kompilierzeit verschieben, also früher entdecken, bevor sie irgendjemandem schaden können.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Kannst du mir das an echtem Code aus einem echten kleinen Programmierpaket zeigen, so wie in den JavaScript-Lektionen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Gern. Wir bleiben sogar beim selben Paket wie in der Funktionen-Lektion, cron-last-due, das prüft, ob ein wiederkehrender Auftrag pünktlich gelaufen ist. Diesmal schauen wir uns aber die Etiketten an, die dort schon die ganze Zeit im Code standen, ohne dass wir sie bisher besprochen haben.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "In der Hauptdatei dieses Pakets, in Zeile 80, beginnt die Funktion parseCron. Wir lesen die Zeile jetzt Wort für Wort.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Dort steht sinngemäß: export function parseCron, Klammer auf, expression Doppelpunkt string, Klammer zu, Doppelpunkt, ParsedCron senkrechter Strich null, geschweifte Klammer auf.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "export bedeutet: diese Funktion darf auch aus anderen Dateien heraus benutzt werden, nicht nur aus dieser einen Datei selbst. function und parseCron kennst du schon, das Wort function beginnt die Funktion, parseCron ist ihr Name.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "In der runden Klammer steht expression Doppelpunkt string. Das ist genau das Etikett von eben: die Funktion erwartet als Parameter mit dem Namen expression einen Inhalt vom Typ string, also Text, zum Beispiel den Zeitplan null sieben Stern Stern eins bis fünf.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Direkt hinter der schließenden runden Klammer steht ein zweiter Doppelpunkt, gefolgt von ParsedCron senkrechter Strich null. Dieser zweite Doppelpunkt gehört nicht mehr zu einem Parameter, sondern zur ganzen Funktion selbst.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein Etikett hinter der Klammer einer Funktion, das festlegt, welchen Typ das Ergebnis der Funktion hat, nennt man den Rückgabetyp.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "ParsedCron ist hier der Name für die Form eines erfolgreich gelesenen Zeitplans, mit Feldern für Minute, Stunde und so weiter, mehr dazu in der nächsten Lektion. Der senkrechte Strich bedeutet oder: das Ergebnis ist entweder ein ParsedCron, oder es ist null.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Und was bedeutet dieses null in einem Rückgabetyp genau?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "null bedeutet hier: absichtlich kein Ergebnis vorhanden. Diese Funktion versucht, einen Zeitplan-Text zu lesen. Manchmal ist der Text falsch getippt und ergibt keinen Sinn. Für genau diesen Fall gibt die Funktion null zurück, statt irgendetwas zu erfinden.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Der Rückgabetyp verspricht das schon vorher, ParsedCron senkrechter Strich null. Deshalb weiß jeder, der diese Funktion später benutzt, dass er nach dem Aufruf zuerst prüfen muss, ob wirklich ein ParsedCron zurückkam oder ob es null war, bevor er mit dem Ergebnis weiterarbeitet.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Ohne dieses Etikett könnte jemand versehentlich vergessen, auf null zu prüfen, und würde erst zur Laufzeit einen Absturz erleben, in dem Moment, in dem ein Zeitplan wirklich einmal falsch getippt war. Mit dem Etikett meldet TypeScript einen Typfehler schon beim Schreiben, sobald jemand das Ergebnis benutzt, als wäre es sicher niemals null.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Das heißt, dieses eine kleine Etikett verhindert also einen ganz konkreten Absturz?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau das ist der Kern dieser ganzen Lektion. Ein einziges geschriebenes Etikett, hier senkrechter Strich null, zwingt jeden, der die Funktion benutzt, den Sonderfall kein Ergebnis nicht zu vergessen, lange bevor irgendjemand das Programm tatsächlich startet.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Merkt man den Vorteil von Typen eigentlich schon allein, oder erst, wenn mehrere Leute am selben Code arbeiten?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir eine Werkstatt vor, in der drei Handwerker gemeinsam an einer Maschine bauen, jeder an einem anderen Teil. Damit die Teile später zusammenpassen, braucht jeder eine genaue Zeichnung, welche Maße das Teil der anderen hat, nicht nur sein eigenes.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Bei Code ist es ganz ähnlich, sobald mehr als ein Mensch daran arbeitet. Schreibt eine Kollegin eine Funktion, die du später benutzt, musst du wissen, welche Werte sie erwartet und welche sie zurückgibt, ohne extra bei ihr nachzufragen.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Steht bei einer fremden Funktion das Etikett expression Doppelpunkt string dabei, weißt du sofort, ohne ein einziges Wort mit der Kollegin zu wechseln: hier gehört Text hinein, keine Zahl und keine Wahr-oder-falsch-Angabe.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Das spart nicht nur Zeit beim Nachfragen. Es verhindert auch, dass jemand aus Versehen einen falschen Inhalt an eine fremde Funktion übergibt, weil er ihre Regeln gar nicht genau kannte. Je mehr Menschen an einem Programm arbeiten, desto wertvoller werden solche geschriebenen Etiketten.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Hilft mir das auch, wenn ich ganz allein programmiere, ohne Team?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, sogar dann. Schreibprogramme, mit denen Programmierer arbeiten, lesen diese Etiketten mit und schlagen dir passende Werte automatisch vor, während du tippst, so wie eine Autovervollständigung beim Schreiben einer Nachricht auf dem Handy.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Tippst du den Namen einer Funktion mit einem bekannten Rückgabetyp, zeigt dir das Schreibprogramm sofort, welche Felder in diesem Ergebnis stecken, ganz ohne dass du erst die ganze Funktion nachlesen musst.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Auch dein eigenes zukünftiges Ich profitiert davon. Kommst du nach einem halben Jahr Pause zu deinem eigenen Code zurück, erinnern dich die Etiketten sofort daran, was jede Funktion erwartet und liefert, ganz ohne dass du dich mühsam wieder einlesen musst.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann man TypeScript irgendwie austricksen, wenn man gerade keine Lust auf ein Etikett hat?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir eine Zollkontrolle am Flughafen vor, die für ein einziges, extra gekennzeichnetes Gepäckstück ausdrücklich keine Kontrolle durchführt, egal was darin ist.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau so ein Sonderfall existiert auch in TypeScript, für Stellen, an denen wirklich jeder beliebige Inhalt erlaubt sein soll. Am Anfang begegnet er dir vor allem, wenn TypeScript den Typ einer Stelle gar nicht von selbst erraten kann.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Dieses Sonder-Etikett heißt any, geschrieben a, n, y, und bedeutet: hier darf wirklich jeder Inhalt hinein, Zahl, Text, Boolean, alles gleichzeitig erlaubt.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Benutzt man any zu oft, verliert man aber genau den Vorteil dieser ganzen Lektion wieder: TypeScript kann für so eine Stelle dann keinen einzigen Typfehler mehr melden, ganz egal, was dort tatsächlich hineingerät. Für den Anfang reicht es, zu wissen, dass dieser Ausweg existiert, ihn aber möglichst selten zu benutzen.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Also noch einmal ganz kurz: ein Typ ist ein geschriebenes Etikett, das festlegt, welche Form ein Inhalt haben muss. TypeScript prüft dieses Etikett zur Kompilierzeit, also bevor das Programm läuft, und meldet bei einem Widerspruch einen Typfehler, statt dass der Fehler erst bei einem echten Nutzer zur Laufzeit auftaucht.",
+      "isKeySentence": true,
+      "role": "key"
+    },
+    {
+      "speaker": "A",
+      "text": "Zum Schluss noch einmal alle neuen Begriffe von heute in einer kurzen Liste.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "TypeScript: die Erweiterung von JavaScript, die geschriebene Etiketten für Werte einführt, also Typen.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Typangabe, kurz auch Typ genannt: eine geschriebene Angabe, die festlegt, welche Form ein Inhalt haben muss, damit er an eine bestimmte Stelle im Code passt.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Typfehler: die Meldung, die TypeScript zeigt, wenn ein Inhalt nicht zu seinem geschriebenen Typ passt.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Kompilierzeit: der Zeitpunkt, an dem TypeScript den Code prüft, bevor er läuft.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss ich TypeScript extra herunterladen, um damit zu arbeiten?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, TypeScript kommt nicht automatisch im Browser mit, anders als JavaScript. Es wird über einen Paketmanager wie in einer früheren Lektion installiert, das übernehmen wir gemeinsam in einer der nächsten Lektionen dieses Untermoduls.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann ich TypeScript auch benutzen, ohne überall Etiketten hinzuschreiben?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, technisch kannst du fast überall Etiketten weglassen, TypeScript rät dann selbst, welcher Typ gemeint ist. In dieser Lektion schreiben wir die Etiketten trotzdem bewusst aus, weil das am Anfang das Verständnis erleichtert.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Was passiert mit einem Typfehler, wenn ich ihn einfach ignoriere?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein Typfehler verhindert für sich allein noch nicht, dass du den Code irgendwann laufen lässt, er ist zunächst nur eine Warnung deines Werkzeugs. In der Lektion zu tsconfig und strict lernst du, wie man TypeScript zwingt, bei einem Typfehler wirklich zu stoppen, statt nur zu warnen.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Sind string, number und boolean die einzigen Typen, die es gibt?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, das sind nur die drei einfachsten, eingebauten Typen für einzelne Werte. In den nächsten Lektionen dieses Untermoduls lernst du eigene, selbst gebaute Typen für ganze Objekte kennen, und Typen, die für viele verschiedene Sorten von Werten gleichzeitig funktionieren.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Warum hat cron-last-due schon vorher Etiketten benutzt, obwohl wir TypeScript erst jetzt lernen?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Das Paket wurde von Anfang an in TypeScript geschrieben, weil erfahrene Programmierer die Etiketten meistens direkt von Beginn an mitschreiben, statt sie später nachzurüsten. Für uns war das ein guter Anlass, echten Code zu zeigen, bevor wir das Wort TypeScript überhaupt kannten.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss ich mir jetzt für jede einzelne Variable in meinem gesamten Code ein Etikett ausdenken?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Am Anfang reicht es völlig, Etiketten dort zu schreiben, wo es dir hilft, den Überblick zu behalten, vor allem bei Funktionen mit Parametern und Rückgabewerten. Mit der Übung entwickelst du ein Gefühl dafür, an welchen Stellen ein Etikett wirklich Klarheit bringt und wo TypeScript den Typ ohnehin von selbst richtig errät.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Woher weiß TypeScript einen Typ, wenn ich gar kein Etikett hinschreibe?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "TypeScript schaut sich in vielen Fällen einfach an, welcher Inhalt direkt zugewiesen wird, und übernimmt dessen Datentyp automatisch als Typ, ganz ohne dass du selbst ein Etikett tippen musst. Steht rechts vom Gleichheitszeichen eine Zahl ohne Anführungszeichen, geht TypeScript von selbst davon aus, dass die Variable dauerhaft eine Zahl bleiben soll.",
+      "isKeySentence": false,
+      "role": "faq"
+    }
+  ],
+  "practiceExample": {
+    "text": "Im Repo cron-last-due trägt die Funktion parseCron in Zeile 80 zwei Etiketten: der Parameter expression ist als string ausgezeichnet, und der Rückgabetyp der ganzen Funktion ist ParsedCron senkrechter Strich null. Dieses Etikett zwingt jeden, der die Funktion benutzt, den Fall kein Ergebnis nicht zu vergessen, schon bevor das Programm läuft.",
+    "repoNote": "repo-cron-last-due",
+    "location": "src/index.ts:80, Funktion parseCron, Rückgabetyp ParsedCron | null"
+  },
+  "quiz": [
+    {
+      "question": "Welches Alltagsbild beschreibt diese Lektion für einen Typ?",
+      "area": "Typen-Grundlagen",
+      "options": [
+        {
+          "text": "Eine Steckdose, in die nur ein passender Stecker hineinpasst.",
+          "isCorrect": true,
+          "explanation": "Genau dieses Bild eröffnet die Lektion: die Form muss passen, sonst geht es nicht hinein."
+        },
+        {
+          "text": "Ein Kochtopf, der auf jeder handelsüblichen Herdplatte ganz genauso heiß wird wie auf jeder anderen.",
+          "isCorrect": false,
+          "explanation": "Dieses Bild kommt in der Lektion nicht vor und beschreibt keinen Formvergleich."
+        },
+        {
+          "text": "Ein Fenster, das sich bei Regen automatisch schließt.",
+          "isCorrect": false,
+          "explanation": "Auch dieses Bild wird in der Lektion nicht benutzt."
+        },
+        {
+          "text": "Ein Briefkasten, der jede Postsendung annimmt.",
+          "isCorrect": false,
+          "explanation": "Ein Briefkasten, der alles annimmt, ist sogar das Gegenteil der Idee eines Typs."
+        }
+      ]
+    },
+    {
+      "question": "Was genau ist ein Typ laut dieser Lektion?",
+      "area": "Typen-Grundlagen",
+      "options": [
+        {
+          "text": "Eine geschriebene Angabe, die festlegt, welche Form ein Inhalt haben muss.",
+          "isCorrect": true,
+          "explanation": "Das ist die Definition aus der Lektion, wie ein Etikett neben einer Variable."
+        },
+        {
+          "text": "Ein Name, den man einer Funktion frei ausdenkt.",
+          "isCorrect": false,
+          "explanation": "Das beschreibt einen Funktionsnamen aus einer früheren Lektion, keinen Typ."
+        },
+        {
+          "text": "Eine Kurzschreibweise für eine Fehlermeldung im Browser.",
+          "isCorrect": false,
+          "explanation": "Eine Fehlermeldung ist etwas anderes als das Etikett, das den Typ festlegt."
+        },
+        {
+          "text": "Ein Datenpaket, das über das Internet von einem Rechner zu einem anderen verschickt wird.",
+          "isCorrect": false,
+          "explanation": "Ein Datenpaket gehört zu einer ganz anderen, früheren Lektion über Netzwerke."
+        }
+      ]
+    },
+    {
+      "question": "Wie verhält sich TypeScript gegenüber JavaScript laut dieser Lektion?",
+      "area": "TypeScript als Sprache",
+      "options": [
+        {
+          "text": "TypeScript erweitert JavaScript um geschriebene Etiketten, ersetzt es aber nicht.",
+          "isCorrect": true,
+          "explanation": "Genau das ist die Bäckerei-Endkontrolle aus der Lektion: eine zusätzliche Prüfschicht obendrauf."
+        },
+        {
+          "text": "TypeScript ist eine völlig eigenständige Sprache, die mit JavaScript überhaupt nichts zu tun hat.",
+          "isCorrect": false,
+          "explanation": "Die Lektion beschreibt TypeScript ausdrücklich als Erweiterung, nicht als eigenständige, fremde Sprache."
+        },
+        {
+          "text": "TypeScript läuft nur auf Servern, niemals im Browser.",
+          "isCorrect": false,
+          "explanation": "Darüber trifft diese Lektion keine Aussage, das Thema kommt erst in einer späteren Lektion."
+        },
+        {
+          "text": "TypeScript kann nur Zahlen verarbeiten, keinen Text.",
+          "isCorrect": false,
+          "explanation": "Die Lektion nennt ausdrücklich auch string für Text als eingebauten Typ."
+        }
+      ]
+    },
+    {
+      "question": "Welches Wort schreibt man in TypeScript als Etikett für eine Zahl?",
+      "area": "Eingebaute Typen",
+      "options": [
+        {
+          "text": "Das Wort number.",
+          "isCorrect": true,
+          "explanation": "number ist laut Lektion das Etikett für eine Zahl."
+        },
+        {
+          "text": "Das Wort string.",
+          "isCorrect": false,
+          "explanation": "string ist das Etikett für Text, nicht für eine Zahl."
+        },
+        {
+          "text": "Das Wort boolean.",
+          "isCorrect": false,
+          "explanation": "boolean ist das Etikett für eine Wahr-oder-falsch-Angabe, keine Zahl."
+        },
+        {
+          "text": "Das deutsche Wort Zahl.",
+          "isCorrect": false,
+          "explanation": "Das deutsche Wort Zahl ist kein gültiges TypeScript-Etikett, nur der Name des Datentyps."
+        }
+      ]
+    },
+    {
+      "question": "Was ist laut Lektion der Unterschied zwischen boolean und Boolean aus der vorherigen Lektion?",
+      "area": "Eingebaute Typen",
+      "options": [
+        {
+          "text": "Beides meint denselben Datentyp, nur boolean ist die klein geschriebene Etikett-Schreibweise.",
+          "isCorrect": true,
+          "explanation": "Genau das erklärt die Lektion: gleicher Datentyp, nur als geschriebenes Etikett klein geschrieben."
+        },
+        {
+          "text": "boolean speichert Text, Boolean speichert Zahlen.",
+          "isCorrect": false,
+          "explanation": "Beide beziehen sich auf denselben Wahr-oder-falsch-Datentyp, keiner der beiden speichert Text oder Zahlen."
+        },
+        {
+          "text": "boolean gibt es laut dieser Lektion angeblich nur in JavaScript, Boolean dagegen nur in TypeScript.",
+          "isCorrect": false,
+          "explanation": "Es ist umgekehrt beschrieben: Boolean stammt aus der JavaScript-Lektion, boolean ist das TypeScript-Etikett."
+        },
+        {
+          "text": "Die beiden Wörter haben laut Lektion überhaupt nichts miteinander zu tun.",
+          "isCorrect": false,
+          "explanation": "Die Lektion stellt ausdrücklich eine Verbindung zwischen beiden Schreibweisen her."
+        }
+      ]
+    },
+    {
+      "question": "Wann zeigt TypeScript laut Lektion einen Typfehler an?",
+      "area": "Typfehler",
+      "options": [
+        {
+          "text": "Schon beim Schreiben des Codes, bevor das Programm läuft.",
+          "isCorrect": true,
+          "explanation": "Genau das ist der Kernvorteil, den die Lektion beschreibt: der Fehler zeigt sich vor dem Start."
+        },
+        {
+          "text": "Nur, nachdem ein echter Nutzer das fertige Programm benutzt hat.",
+          "isCorrect": false,
+          "explanation": "Das beschreibt eher einen typischen Laufzeitfehler in gewöhnlichem JavaScript, nicht den TypeScript-Vorteil."
+        },
+        {
+          "text": "Nur einmal im Jahr, bei einer großen Codeprüfung.",
+          "isCorrect": false,
+          "explanation": "Ein Typfehler zeigt sich laufend beim Schreiben, nicht nur zu einem festen Jahrestermin."
+        },
+        {
+          "text": "Erst, wenn der Computer komplett neu gestartet wird.",
+          "isCorrect": false,
+          "explanation": "Ein Neustart des Computers hat mit dem Anzeigen eines Typfehlers nichts zu tun."
+        }
+      ]
+    },
+    {
+      "question": "Was passiert laut Lektion, wenn ein Inhalt vom Typ string in eine mit number etikettierte Variable geschrieben wird?",
+      "area": "Typfehler",
+      "options": [
+        {
+          "text": "TypeScript meldet einen Typfehler, weil die Formen nicht zusammenpassen.",
+          "isCorrect": true,
+          "explanation": "Genau dieses Beispiel steht in der Lektion, mit dreißig in Anführungszeichen statt als Zahl."
+        },
+        {
+          "text": "TypeScript wandelt den Text automatisch in eine Zahl um, ohne Meldung.",
+          "isCorrect": false,
+          "explanation": "Die Lektion beschreibt genau das Gegenteil: TypeScript warnt, statt heimlich umzuwandeln."
+        },
+        {
+          "text": "Der Computer schaltet sich zum Schutz komplett ab.",
+          "isCorrect": false,
+          "explanation": "Ein Typfehler betrifft nur diese eine Codestelle, nicht den ganzen Computer."
+        },
+        {
+          "text": "Nichts, TypeScript kennt den Unterschied zwischen Text und Zahl gar nicht.",
+          "isCorrect": false,
+          "explanation": "TypeScript kennt den Unterschied sehr genau, das ist gerade der Grund für die Etiketten."
+        }
+      ]
+    },
+    {
+      "question": "Welches Bild benutzt die Lektion für den Unterschied zwischen Kompilierzeit und Laufzeit?",
+      "area": "Kompilierzeit",
+      "options": [
+        {
+          "text": "Eine Druckerei, die vor dem Druck noch Korrektur liest.",
+          "isCorrect": true,
+          "explanation": "Genau dieses Bild führt die Lektion für die Kompilierzeit als Prüfphase vor dem eigentlichen Lauf ein."
+        },
+        {
+          "text": "Ein Zug, der nach Fahrplan pünktlich abfährt.",
+          "isCorrect": false,
+          "explanation": "Dieses Bild kommt in der Lektion nicht vor."
+        },
+        {
+          "text": "Ein Regal, in dem Bücher alphabetisch geordnet stehen.",
+          "isCorrect": false,
+          "explanation": "Auch dieses Bild wird in der Lektion nicht verwendet."
+        },
+        {
+          "text": "Eine Ampel, die bei Rot automatisch auf Grün wechselt.",
+          "isCorrect": false,
+          "explanation": "Dieses Bild gehört zu keiner Stelle dieser Lektion."
+        }
+      ]
+    },
+    {
+      "question": "Warum gilt ein Fehler zur Kompilierzeit laut Lektion als freundlicher als ein Fehler zur Laufzeit?",
+      "area": "Kompilierzeit",
+      "options": [
+        {
+          "text": "Weil ihn nur der Programmierer in Ruhe am eigenen Bildschirm sieht, bevor ein echter Nutzer betroffen ist.",
+          "isCorrect": true,
+          "explanation": "Das ist genau die Begründung aus der Lektion für das Verschieben von Fehlern in Richtung Kompilierzeit."
+        },
+        {
+          "text": "Weil ein Fehler zur Kompilierzeit den Computer schneller macht.",
+          "isCorrect": false,
+          "explanation": "Über die Geschwindigkeit des Computers macht die Lektion an dieser Stelle keine Aussage."
+        },
+        {
+          "text": "Weil ein Fehler zur Kompilierzeit automatisch von selbst verschwindet.",
+          "isCorrect": false,
+          "explanation": "Ein Typfehler verschwindet nicht von selbst, er muss behoben werden."
+        },
+        {
+          "text": "Weil zur Kompilierzeit ohnehin niemand hinschaut.",
+          "isCorrect": false,
+          "explanation": "Das Gegenteil ist richtig: genau zur Kompilierzeit schaut der Programmierer hin."
+        }
+      ]
+    },
+    {
+      "question": "Was bedeutet der Rückgabetyp ParsedCron senkrechter Strich null bei der Funktion parseCron im Beispiel?",
+      "area": "Praxisbeispiel cron-last-due",
+      "options": [
+        {
+          "text": "Das Ergebnis ist entweder ein gelesener Zeitplan oder ausdrücklich kein Ergebnis.",
+          "isCorrect": true,
+          "explanation": "Genau das erklärt die Lektion: senkrechter Strich bedeutet oder, null bedeutet absichtlich kein Ergebnis."
+        },
+        {
+          "text": "Die Funktion gibt bei jedem einzelnen Aufruf immer sowohl ein vollständiges ParsedCron als auch gleichzeitig null zurück.",
+          "isCorrect": false,
+          "explanation": "Der senkrechte Strich bedeutet oder, nicht und, es kommt immer nur eines von beidem heraus."
+        },
+        {
+          "text": "ParsedCron und null sind laut Beispiel exakt dasselbe.",
+          "isCorrect": false,
+          "explanation": "Es sind zwei unterschiedliche mögliche Ergebnisse, keine Wiederholung desselben Werts."
+        },
+        {
+          "text": "Der Rückgabetyp legt fest, in welcher Programmiersprache die Funktion geschrieben ist.",
+          "isCorrect": false,
+          "explanation": "Ein Rückgabetyp beschreibt das Ergebnis der Funktion, nicht die verwendete Sprache."
+        }
+      ]
+    },
+    {
+      "question": "Was passiert laut Lektion, wenn jemand vergisst, im Code auf null zu prüfen, obwohl der Rückgabetyp es verlangt?",
+      "area": "Praxisbeispiel cron-last-due",
+      "options": [
+        {
+          "text": "TypeScript meldet einen Typfehler an der Stelle, wo das Ergebnis benutzt wird, als wäre null unmöglich.",
+          "isCorrect": true,
+          "explanation": "Das ist genau der beschriebene Nutzen: das Etikett zwingt zur Prüfung, schon vor dem Start."
+        },
+        {
+          "text": "TypeScript ergänzt ganz automatisch und ohne jede Nachfrage eine eigene, unsichtbare Prüfung im Hintergrund.",
+          "isCorrect": false,
+          "explanation": "TypeScript meldet den Fehler, es schreibt aber keine zusätzliche Prüfung von sich aus in den Code."
+        },
+        {
+          "text": "Das Programm läuft in jedem Fall genauso weiter wie ohne Etikett.",
+          "isCorrect": false,
+          "explanation": "Gerade der Unterschied liegt darin, dass TypeScript in diesem Fall eine Meldung zeigt."
+        },
+        {
+          "text": "Der Rückgabetyp wird dadurch automatisch gelöscht.",
+          "isCorrect": false,
+          "explanation": "Ein Typfehler löscht keine Angaben aus dem Code, er weist nur auf ein Problem hin."
+        }
+      ]
+    },
+    {
+      "question": "Welche Aussage fasst die Kernidee dieser Lektion am besten zusammen?",
+      "area": "Zusammenfassung",
+      "options": [
+        {
+          "text": "Geschriebene Etiketten lassen Fehler schon vor dem Start erkennen statt erst beim echten Benutzen.",
+          "isCorrect": true,
+          "explanation": "Das ist genau der Kernsatz der Lektion, in Sprecher B zusammengefasst."
+        },
+        {
+          "text": "TypeScript macht Programme automatisch schneller im Betrieb.",
+          "isCorrect": false,
+          "explanation": "Über Geschwindigkeit im Betrieb sagt diese Lektion nichts aus."
+        },
+        {
+          "text": "TypeScript ersetzt das Schreiben von Funktionen vollständig.",
+          "isCorrect": false,
+          "explanation": "Funktionen werden weiterhin genauso geschrieben wie in JavaScript, das ändert TypeScript nicht."
+        },
+        {
+          "text": "Ein Typfehler kann nur direkt auf einem Server entdeckt werden.",
+          "isCorrect": false,
+          "explanation": "Die Lektion beschreibt gerade das Gegenteil: der Typfehler zeigt sich schon am eigenen Bildschirm beim Schreiben."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Öffne im Browser die Seite typescriptlang.org, dort den Bereich Playground (in der oberen Leiste). Schreibe dort eine eigene Zeile: let lieblingszahl Doppelpunkt number ist gleich Anführungszeichen sieben Anführungszeichen (also bewusst Text statt Zahl). Beobachte, was direkt unter der Zeile angezeigt wird.",
+    "expectation": "Eine rote Wellenlinie unter dem eingetippten Text und eine Fehlermeldung, die erklärt, dass ein String nicht dem Typ number zugewiesen werden kann. Ein Screenshot dieser Meldung.",
+    "checklist": [
+      "Seite typescriptlang.org im Browser geöffnet",
+      "Playground-Bereich gefunden und geöffnet",
+      "Eigene Zeile mit einem Etikett und einem falsch passenden Wert eingetippt",
+      "Rote Wellenlinie mit Fehlermeldung im Screenshot sichtbar",
+      "Die Zeile danach so verbessert, dass keine Fehlermeldung mehr erscheint"
+    ]
+  },
+  "audio": {
+    "file": "M02-04-01.mp3",
+    "durationSeconds": 1200,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Muss ich TypeScript extra herunterladen, um damit zu arbeiten?",
+      "answer": "Ja, TypeScript kommt nicht automatisch im Browser mit, anders als JavaScript. Es wird über einen Paketmanager wie in einer früheren Lektion installiert, das übernehmen wir gemeinsam in einer der nächsten Lektionen dieses Untermoduls."
+    },
+    {
+      "question": "Kann ich TypeScript auch benutzen, ohne überall Etiketten hinzuschreiben?",
+      "answer": "Ja, technisch kannst du fast überall Etiketten weglassen, TypeScript rät dann selbst, welcher Typ gemeint ist. In dieser Lektion schreiben wir die Etiketten trotzdem bewusst aus, weil das am Anfang das Verständnis erleichtert."
+    },
+    {
+      "question": "Was passiert mit einem Typfehler, wenn ich ihn einfach ignoriere?",
+      "answer": "Ein Typfehler verhindert für sich allein noch nicht, dass du den Code irgendwann laufen lässt, er ist zunächst nur eine Warnung deines Werkzeugs. In der Lektion zu tsconfig und strict lernst du, wie man TypeScript zwingt, bei einem Typfehler wirklich zu stoppen, statt nur zu warnen."
+    },
+    {
+      "question": "Sind string, number und boolean die einzigen Typen, die es gibt?",
+      "answer": "Nein, das sind nur die drei einfachsten, eingebauten Typen für einzelne Werte. In den nächsten Lektionen dieses Untermoduls lernst du eigene, selbst gebaute Typen für ganze Objekte kennen, und Typen, die für viele verschiedene Sorten von Werten gleichzeitig funktionieren."
+    },
+    {
+      "question": "Warum hat cron-last-due schon vorher Etiketten benutzt, obwohl wir TypeScript erst jetzt lernen?",
+      "answer": "Das Paket wurde von Anfang an in TypeScript geschrieben, weil erfahrene Programmierer die Etiketten meistens direkt von Beginn an mitschreiben, statt sie später nachzurüsten. Für uns war das ein guter Anlass, echten Code zu zeigen, bevor wir das Wort TypeScript überhaupt kannten."
+    },
+    {
+      "question": "Muss ich mir jetzt für jede einzelne Variable in meinem gesamten Code ein Etikett ausdenken?",
+      "answer": "Am Anfang reicht es völlig, Etiketten dort zu schreiben, wo es dir hilft, den Überblick zu behalten, vor allem bei Funktionen mit Parametern und Rückgabewerten. Mit der Übung entwickelst du ein Gefühl dafür, an welchen Stellen ein Etikett wirklich Klarheit bringt und wo TypeScript den Typ ohnehin von selbst richtig errät."
+    },
+    {
+      "question": "Woher weiß TypeScript einen Typ, wenn ich gar kein Etikett hinschreibe?",
+      "answer": "TypeScript schaut sich in vielen Fällen einfach an, welcher Inhalt direkt zugewiesen wird, und übernimmt dessen Datentyp automatisch als Typ, ganz ohne dass du selbst ein Etikett tippen musst. Steht rechts vom Gleichheitszeichen eine Zahl ohne Anführungszeichen, geht TypeScript von selbst davon aus, dass die Variable dauerhaft eine Zahl bleiben soll."
+    }
+  ]
+}
