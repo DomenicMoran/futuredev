@@ -1,0 +1,654 @@
+{
+  "id": "M03-03-03",
+  "title": "Das relationale Datenmodell: wie Tabellen miteinander sprechen",
+  "durationMinutes": 28,
+  "prerequisites": [
+    "M03-03-02"
+  ],
+  "terms": [
+    {
+      "term": "Fremdschlüssel",
+      "definition": "eine Spalte in einer Tabelle, die den Primärschlüssel einer anderen Tabelle enthält und so eine Verbindung zwischen beiden herstellt."
+    },
+    {
+      "term": "1:n-Beziehung",
+      "definition": "die häufigste Verknüpfung zwischen zwei Tabellen, bei der eine Zeile der ersten Tabelle mit vielen Zeilen der zweiten verbunden sein kann, aber jede Zeile der zweiten zu genau einer der ersten gehört."
+    },
+    {
+      "term": "n:m-Beziehung",
+      "definition": "eine Verknüpfung, bei der beide Seiten viele sein können und die eine dritte Junction-Tabelle mit zwei Fremdschlüsseln erfordert."
+    },
+    {
+      "term": "Junction-Tabelle",
+      "definition": "die vermittelnde Tabelle bei einer n:m-Beziehung, die mindestens zwei Fremdschlüssel enthält und jede einzelne Verbindung als eigene Zeile speichert."
+    },
+    {
+      "term": "Normalisierung",
+      "definition": "der Prozess, eine Datenbank so in Tabellen zu zerlegen, dass jede Information nur einmal gespeichert wird und alle Abhängigkeiten über Fremdschlüssel abgebildet sind."
+    },
+    {
+      "term": "ER-Diagramm",
+      "definition": "eine Zeichnung, in der Tabellen als Rechtecke mit ihren Spalten und Beziehungen als Linien mit Endmarkierungen dargestellt werden, der Bauplan einer Datenbank."
+    },
+    {
+      "term": "Referentielle Integrität",
+      "definition": "die Regel, die sicherstellt, dass jeder Fremdschlüssel-Wert auf einen tatsächlich existierenden Primärschlüssel verweist und keine verwaisten Zeilen entstehen."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir zwei Karteikästen nebeneinander vor: einer für Bücher, einer für Autoren. Auf jeder Buchkarte steht eine Autorennummer, aber nicht der Name. Um den Namen zu erfahren, musst du die Buchkarte mit der Autorenkarte zusammenbringen, die dieselbe Nummer trägt."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "In der letzten Lektion hast du JOIN kennengelernt, den Befehl, der zwei Tabellen vorübergehend verbindet. Jetzt geht es darum, warum Daten überhaupt auf mehrere Tabellen verteilt werden und welche Regeln dafür sorgen, dass die Verbindungen sauber bleiben."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Warum verteilt man Daten überhaupt auf mehrere Tabellen? Eine einzige große Tabelle wäre doch viel einfacher, oder nicht?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Weil eine einzige große Tabelle mit wiederholten Daten drei Probleme hat: Sie verschwendet Speicherplatz, sie wird bei Änderungen zur Fehlerquelle, und sie lässt sich nicht mehr sauber durchsuchen, sobald die Datenmenge wächst."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir eine Bibliothek vor, in der auf jeder Buchkarte nicht nur der Autorname steht, sondern die gesamte Biografie des Autors, seine Adresse und alle seine anderen Bücher. Ändert der Autor seine Adresse, müsstest du hunderte Karten einzeln korrigieren."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Genau das passiert, wenn du alle Daten in eine einzige Tabelle packst. Die Lösung heißt: Daten werden nach Themen getrennt, und jede Tabelle bekommt nur die Daten, die zu ihrem Thema gehören. Die Verbindung zwischen den Tabellen stellt ein Verweis her."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Wie heißt dieser Verweis, der eine Zeile in der einen Tabelle mit einer Zeile in der anderen Tabelle verbindet?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Dieser Verweis heißt Fremdschlüssel. Ein Fremdschlüssel ist eine Spalte in einer Tabelle, die den Primärschlüssel einer anderen Tabelle enthält und so eine Verbindung zwischen beiden herstellt."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil der Fremdschlüssel das zentrale Werkzeug ist, mit dem ein relationales Datenmodell Beziehungen abbildet. Ohne Fremdschlüssel wären Tabellen isolierte Inseln ohne jede Verbindung zueinander."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "In der Tabelle app_events aus der FutureDev-Datenbank ist die Spalte install_id ein Fremdschlüssel. Sie enthält den Primärschlüssel einer Zeile aus der Tabelle installations und verbindet so jedes Ereignis mit der App-Installation, von der es ausgelöst wurde."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir einen Autor vor, der mehrere Bücher geschrieben hat. Im Karteikasten gibt es eine Karte für den Autor und viele Karten für seine Bücher. Jede Buchkarte trägt die Nummer des Autors. Ein Autor, viele Bücher."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Die häufigste Beziehung zwischen zwei Tabellen ist die Eins-zu-viele-Beziehung. Eine Zeile in der einen Tabelle kann mit vielen Zeilen in der anderen Tabelle verbunden sein, aber jede Zeile der anderen Tabelle gehört zu genau einer Zeile der ersten."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Wie heißt diese Beziehung, und woran erkenne ich sie im Datenmodell?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Diese Beziehung heißt 1:n-Beziehung, gesprochen Eins-zu-n-Beziehung. Das n steht für eine beliebige Anzahl, also eins zu vielen."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil die 1:n-Beziehung die mit Abstand häufigste Verknüpfung in jeder Datenbank ist. Fast jede Tabelle, die du in einem echten Projekt siehst, steht in einer 1:n-Beziehung zu mindestens einer anderen Tabelle."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "In der FutureDev-Datenbank besteht eine 1:n-Beziehung zwischen installations und app_events: eine Installation kann viele Ereignisse auslösen, aber jedes Ereignis gehört zu genau einer Installation. Der Fremdschlüssel install_id in app_events setzt diese Beziehung um."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Und was ist, wenn beide Seiten viele sein können? Ein Buch kann mehrere Autoren haben, und ein Autor kann mehrere Bücher schreiben. Das ist doch keine 1:n-Beziehung mehr."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir eine Brücke zwischen zwei Ufern vor. Auf dem einen Ufer stehen die Bücher, auf dem anderen die Autoren. Die Brücke selbst ist eine eigene, dritte Konstruktion, die für jede Verbindung zwischen einem Buch und einem Autor einen eigenen Pfeiler hat. Diese Brücke ist das Bild für eine n:m-Beziehung: zwei Ufer, verbunden durch eine dritte Struktur."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Wenn beide Seiten viele sein können, reicht ein einfacher Fremdschlüssel nicht mehr aus. Du brauchst eine dritte Tabelle, die nur aus Fremdschlüsseln besteht und jede einzelne Verbindung als eigene Zeile speichert."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Wie heißt diese Beziehung und die dritte Tabelle, die sie möglich macht?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Diese Beziehung heißt n:m-Beziehung, gesprochen n-zu-m-Beziehung. Die vermittelnde Tabelle heißt Junction-Tabelle oder Verknüpfungstabelle und enthält mindestens zwei Fremdschlüssel, je einen auf jede der beiden verbundenen Tabellen."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil viele reale Beziehungen n:m sind und ohne Junction-Tabelle nicht abgebildet werden können. Ein typisches Beispiel sind Schüler und Kurse: ein Schüler besucht viele Kurse, ein Kurs hat viele Schüler."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "In einer Datenbank für eine Bibliothek gäbe es eine Tabelle books, eine Tabelle authors und eine Junction-Tabelle book_authors mit den Spalten book_id und author_id. Jede Zeile in book_authors sagt: dieses Buch wurde von diesem Autor geschrieben. Ein Buch mit zwei Autoren hat zwei Zeilen in book_authors."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir einen unaufgeräumten Schreibtisch vor, auf dem Zettel, Bücher und Stifte wild durcheinanderliegen. Daneben ein Aktenschrank mit beschrifteten Ordnern, in denen jedes Blatt genau einmal an seinem richtigen Platz steckt. Der Aktenschrank ist das Bild für Normalisierung: jede Information an genau einem Ort."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Daten in einer Datenbank können mehr oder weniger gut organisiert sein. Die Kunst, Daten so auf Tabellen zu verteilen, dass nichts doppelt vorkommt und alle Abhängigkeiten sauber aufgelöst sind, hat einen eigenen Namen."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Wie heißt diese Kunst, und warum lohnt sich der Aufwand?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Diese Kunst heißt Normalisierung. Normalisierung ist der Prozess, eine Datenbank so in Tabellen zu zerlegen, dass jede Information nur einmal gespeichert wird und alle Abhängigkeiten über Fremdschlüssel abgebildet sind."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil eine nicht normalisierte Datenbank drei gefährliche Anomalien hat: Änderungsanomalie, Einfügeanomalie und Löschanomalie. Diese Anomalien führen früher oder später zu widersprüchlichen oder verlorenen Daten."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Stell dir eine einzige Tabelle mit Spalten für event_name und install_id vor, in der auch der Gerätetyp der Installation steht. Wenn ein Nutzer sein Gerät wechselt, müsstest du den Gerätetyp in jeder einzelnen Zeile dieser Installation ändern. In einer normalisierten Datenbank steht der Gerätetyp nur einmal in der Tabelle installations, und alle Ereignisse verweisen nur auf die install_id."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Gibt es eine Zeichnung, mit der man solche Beziehungen plant, bevor man die Tabellen baut?"
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir den Bauplan eines Hauses vor, bevor der erste Stein gesetzt ist. Darauf siehst du Räume als Rechtecke und Linien als Türen dazwischen. Genau so eine Zeichnung gibt es auch für Datenbanken."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Bevor du eine Datenbank baust, zeichnest du einen Plan, der alle Tabellen als Kästchen und alle Beziehungen als Linien darstellt. Dieser Plan heißt ER-Diagramm und ist die gemeinsame Sprache, mit der Entwickler über Datenmodelle sprechen."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Wie sieht so ein ER-Diagramm aus, und welche Symbole verwendet es?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Ein ER-Diagramm, kurz für Entity-Relationship-Diagramm, ist eine Zeichnung, in der Tabellen als Rechtecke mit ihren Spalten und Beziehungen als Linien mit Endmarkierungen dargestellt werden. Eine 1:n-Beziehung hat an einem Ende eine Eins und am anderen eine Krähenfuß-Markierung."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil ein ER-Diagramm der Bauplan ist, den du mit anderen Entwicklern teilst, bevor du die erste Zeile SQL schreibst. Es macht Missverständnisse sichtbar, bevor sie zu Fehlern in der Datenbank werden."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Das ER-Diagramm der FutureDev-Datenbank zeigt drei Rechtecke: installations, app_events und feedback. Eine Linie mit einer Eins an installations und einem Krähenfuß an app_events zeigt die 1:n-Beziehung. Die Spalte install_id in app_events ist der Fremdschlüssel, der diese Linie in der echten Datenbank umsetzt."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Was passiert, wenn ich eine Zeile lösche, auf die ein Fremdschlüssel in einer anderen Tabelle zeigt?"
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir einen Türsteher vor einem Club vor, der jeden Gast prüft, bevor er ihn einlässt. Wer keine gültige Eintrittskarte hat, kommt nicht rein. Genau so wacht eine Regel in der Datenbank über die Fremdschlüssel."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Eine Datenbank kann so eingerichtet werden, dass sie bestimmte Regeln automatisch durchsetzt. Die wichtigste dieser Regeln betrifft die Fremdschlüssel: eine Datenbank kann verbieten, dass ein Fremdschlüssel auf eine nicht existierende Zeile zeigt."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Wie heißt diese Regel, und was genau verhindert sie?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Diese Regel heißt referentielle Integrität. Referentielle Integrität stellt sicher, dass jeder Fremdschlüssel-Wert auf einen tatsächlich existierenden Primärschlüssel in der anderen Tabelle verweist, und verhindert das Löschen einer Zeile, auf die noch Fremdschlüssel zeigen."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil ohne referentielle Integrität verwaiste Zeilen entstehen würden, die auf etwas zeigen, das es nicht mehr gibt. Eine App, die versucht, zu einem Ereignis die Installation anzuzeigen, würde ins Leere greifen und abstürzen."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "In der FutureDev-Datenbank verhindert die referentielle Integrität, dass du eine Zeile aus installations löschst, solange es noch app_events-Zeilen mit dieser install_id gibt. Du müsstest zuerst alle Ereignisse der Installation löschen, dann erst die Installation selbst. Oder du richtest die Regel so ein, dass das Löschen einer Installation automatisch alle ihre Ereignisse mitlöscht."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Woher weiß ich, welche der drei Löschregeln ich für einen Fremdschlüssel wählen soll?"
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Die Wahl hängt davon ab, was die abhängigen Daten ohne ihre Hauptzeile wert sind. RESTRICT nimmst du, wenn die abhängigen Zeilen ohne die Hauptzeile keinen Sinn ergeben und du verhindern willst, dass jemand versehentlich löscht. CASCADE nimmst du, wenn die abhängigen Zeilen mit der Hauptzeile stehen und fallen sollen, etwa die Ereignisse einer Installation, die du endgültig entfernst. SET NULL nimmst du, wenn die abhängigen Zeilen auch ohne Zuordnung weiterleben dürfen, etwa Feedback, das auch nach Löschung der Lektion erhalten bleiben soll."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir drei verschiedene Türsteher vor einem Club vor. Der erste lässt niemanden raus, der noch ein volles Glas in der Hand hält. Der zweite schickt alle Gäste mit raus, wenn ihr Gastgeber geht. Der dritte erlaubt dem Gastgeber zu gehen, aber die Gäste dürfen bleiben und bekommen einen neuen Platz an der Bar."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "In der FutureDev-Datenbank verwendet die Migration für den Fremdschlüssel von app_events auf installations die Regel ON DELETE CASCADE. Das bedeutet: wenn eine Installation gelöscht wird, verschwinden automatisch alle ihre Ereignisse mit. Das ist hier sinnvoll, weil Ereignisse ohne ihre Installation keinen Wert mehr haben und nur noch Speicherplatz belegen würden."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Wie lese ich ein ER-Diagramm, wenn ich es zum ersten Mal sehe und noch nie mit dieser Datenbank gearbeitet habe?"
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Du beginnst mit den Rechtecken, denn jedes Rechteck ist eine Tabelle. Die Spalten darin sagen dir, welche Daten diese Tabelle speichert. Dann folgst du den Linien: eine Linie mit einer Eins am einen und einem Krähenfuß am anderen Ende ist eine 1:n-Beziehung. Der Fremdschlüssel steht immer auf der Krähenfuß-Seite. Eine Linie, die zu einer Junction-Tabelle führt, verrät dir eine n:m-Beziehung zwischen den beiden Tabellen, von denen die Fremdschlüssel in der Junction-Tabelle kommen."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil du in jedem neuen Projekt als Erstes auf das ER-Diagramm schaust, um zu verstehen, wie die Daten zusammenhängen. Ohne dieses Verständnis schreibst du JOINs, die falsche Ergebnisse liefern, oder du versuchst, Daten in eine Tabelle zu schreiben, die dort nach den Regeln des Modells gar nicht hingehören. Ein kurzer Blick auf das Diagramm erspart dir stundenlanges Debugging und Nachbessern."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Kann ein Fremdschlüssel auch auf die eigene Tabelle zeigen, also auf eine andere Zeile in derselben Tabelle?"
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Ja, das nennt man einen selbstreferenzierenden Fremdschlüssel. Ein typisches Beispiel ist eine Tabelle mitarbeitende, in der jede Zeile eine Spalte vorgesetzter_id hat, die auf die id eines anderen Mitarbeitenden in derselben Tabelle zeigt. Der Chef hat in dieser Spalte keinen Wert, weil er keinen Vorgesetzten hat. Alle anderen zeigen auf die id der Person, die ihnen gegenüber weisungsbefugt ist. Die referentielle Integrität gilt auch hier: du kannst keine vorgesetzter_id eintragen, die nicht als id in derselben Tabelle existiert."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil selbstreferenzierende Fremdschlüssel in vielen realen Datenmodellen vorkommen, etwa bei Hierarchien, Kategorien mit Unterkategorien oder Antworten auf andere Antworten in einem Forum. Das Prinzip ist dasselbe wie bei einem Fremdschlüssel zwischen zwei verschiedenen Tabellen, nur dass beide Enden der Beziehung in derselben Tabelle liegen."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Bevor wir zum Abschluss kommen, hier noch einmal alle neuen Begriffe dieser Lektion im Überblick, kurz erklärt zum Nachschlagen und zum Lernen."
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "isKeySentence": false,
+      "text": "Fremdschlüssel: eine Spalte in einer Tabelle, die den Primärschlüssel einer anderen Tabelle enthält und so eine Verbindung zwischen beiden herstellt."
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "isKeySentence": false,
+      "text": "1:n-Beziehung: die häufigste Verknüpfung zwischen zwei Tabellen, bei der eine Zeile der ersten Tabelle mit vielen Zeilen der zweiten verbunden sein kann, aber jede Zeile der zweiten zu genau einer der ersten gehört."
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "isKeySentence": false,
+      "text": "n:m-Beziehung: eine Verknüpfung, bei der beide Seiten viele sein können und die eine dritte Junction-Tabelle mit zwei Fremdschlüsseln erfordert."
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "isKeySentence": false,
+      "text": "Junction-Tabelle: die vermittelnde Tabelle bei einer n:m-Beziehung, die mindestens zwei Fremdschlüssel enthält und jede einzelne Verbindung als eigene Zeile speichert."
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "isKeySentence": false,
+      "text": "Normalisierung: der Prozess, eine Datenbank so in Tabellen zu zerlegen, dass jede Information nur einmal gespeichert wird und alle Abhängigkeiten über Fremdschlüssel abgebildet sind."
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "isKeySentence": false,
+      "text": "ER-Diagramm: eine Zeichnung, in der Tabellen als Rechtecke mit ihren Spalten und Beziehungen als Linien mit Endmarkierungen dargestellt werden, der Bauplan einer Datenbank."
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "isKeySentence": false,
+      "text": "Referentielle Integrität: die Regel, die sicherstellt, dass jeder Fremdschlüssel-Wert auf einen tatsächlich existierenden Primärschlüssel verweist und keine verwaisten Zeilen entstehen."
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "isKeySentence": true,
+      "text": "Wenn ich das zusammenfasse: Ein Fremdschlüssel verbindet zwei Tabellen, indem er den Primärschlüssel der einen in der anderen speichert. Eine 1:n-Beziehung verbindet eine Zeile mit vielen, eine n:m-Beziehung braucht eine Junction-Tabelle. Normalisierung verhindert doppelte Daten, das ER-Diagramm ist der Bauplan, und referentielle Integrität sorgt dafür, dass keine Verbindung ins Leere zeigt."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Muss jede Tabelle einen Fremdschlüssel haben?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Nein, eine Tabelle braucht nur dann einen Fremdschlüssel, wenn sie auf eine andere Tabelle verweisen soll. Eine Tabelle wie app_events hat mit install_id einen Fremdschlüssel, aber eine rein eigenständige Tabelle ohne Beziehungen zu anderen käme ohne Fremdschlüssel aus. In der Praxis haben die meisten Tabellen jedoch mindestens einen Fremdschlüssel, weil die wenigsten Daten völlig isoliert stehen."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Kann eine Tabelle mehrere Fremdschlüssel haben?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Ja, eine Tabelle kann beliebig viele Fremdschlüssel haben, je einen für jede Beziehung zu einer anderen Tabelle. Eine Tabelle bestellungen könnte zum Beispiel einen Fremdschlüssel auf kunden, einen auf lieferadressen und einen auf zahlungsmethoden haben. Jeder dieser Fremdschlüssel ist eine eigene Spalte mit einem eigenen Namen und einer eigenen referentiellen Integritätsregel."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Was ist der Unterschied zwischen einer 1:n- und einer 1:1-Beziehung?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Bei einer 1:n-Beziehung kann eine Zeile der ersten Tabelle mit vielen Zeilen der zweiten verbunden sein, bei einer 1:1-Beziehung mit genau einer. Eine 1:1-Beziehung ist seltener und wird zum Beispiel genutzt, wenn eine Tabelle aus Sicherheitsgründen in zwei Teile geteilt wird. Technisch setzt du eine 1:1-Beziehung mit einem Fremdschlüssel um, der zusätzlich als eindeutig markiert ist, sodass kein zweiter Eintrag denselben Fremdschlüssel-Wert tragen darf."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Warum spricht man von der dritten Normalform? Gibt es auch eine erste und zweite?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Ja, die Normalisierung ist in mehreren Stufen definiert, von der ersten bis zur fünften Normalform. Die erste Normalform verlangt, dass jede Spalte nur einen einzigen Wert enthält, also keine Listen. Die zweite Normalform verlangt, dass jede Nicht-Schlüssel-Spalte vom gesamten Primärschlüssel abhängt, nicht nur von einem Teil. Die dritte Normalform, die in der Praxis meist ausreicht, verlangt, dass keine Nicht-Schlüssel-Spalte von einer anderen Nicht-Schlüssel-Spalte abhängt. Die vierte und fünfte Normalform sind Spezialfälle, die im Alltag selten vorkommen."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Kann ich ein ER-Diagramm auch automatisch aus einer bestehenden Datenbank erzeugen lassen?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Ja, viele Datenbankwerkzeuge können aus einer bestehenden Datenbank ein ER-Diagramm erstellen, indem sie die Tabellen, Spalten und Fremdschlüssel auslesen. Die meisten Datenbank-Plattformen zeigen im Table Editor automatisch die Beziehungen zwischen Tabellen an, sobald Fremdschlüssel definiert sind. Andersherum können manche Programmier-Werkzeuge aus einem Schema-Diagramm heraus die SQL-Befehle zum Erstellen der Tabellen erzeugen."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Was passiert mit den Ereignissen einer Installation, wenn ich die Installation lösche, aber die referentielle Integrität das Löschen verhindert?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Du hast drei Möglichkeiten, die du beim Erstellen des Fremdschlüssels festlegst. ON DELETE RESTRICT verbietet das Löschen, solange es noch abhängige Zeilen gibt. ON DELETE CASCADE löscht alle abhängigen Zeilen automatisch mit, wenn die Hauptzeile gelöscht wird. ON DELETE SET NULL setzt den Fremdschlüssel in allen abhängigen Zeilen auf leer, sodass die Ereignisse erhalten bleiben, aber keiner Installation mehr zugeordnet sind. Welche Variante die richtige ist, hängt vom fachlichen Zweck der Daten ab."
+    }
+  ],
+  "practiceExample": {
+    "text": "Die Tabelle app_events aus der Migration 0001_init.sql im Repo repo-futuredev zeigt alle Konzepte dieser Lektion an einem echten Beispiel. Die Spalte install_id ist ein Fremdschlüssel auf die Tabelle installations und stellt eine 1:n-Beziehung her: eine Installation hat viele Ereignisse, aber jedes Ereignis gehört zu genau einer Installation. Die referentielle Integrität wird in der Migration durch eine foreign key constraint mit ON DELETE CASCADE durchgesetzt, sodass beim Löschen einer Installation alle ihre Ereignisse automatisch mit entfernt werden. Das ER-Diagramm der FutureDev-Datenbank zeigt installations, app_events und feedback als Rechtecke mit Linien für die Fremdschlüssel-Beziehungen zwischen diesen drei Tabellen.",
+    "repoNote": "repo-futuredev",
+    "location": "supabase/migrations/0001_init.sql, Abschnitt \"create table if not exists public.app_events\" mit foreign key auf installations"
+  },
+  "quiz": [
+    {
+      "question": "Was ist ein Fremdschlüssel?",
+      "area": "Fremdschlüssel",
+      "options": [
+        { "text": "Eine Spalte mit dem Primärschlüssel einer anderen Tabelle zur Verbindung.", "isCorrect": true, "explanation": "Richtig: genau das ist die Definition eines Fremdschlüssels." },
+        { "text": "Eine Spalte, die in jeder Tabelle automatisch als erste Spalte angelegt wird, noch bevor irgendwelche Daten eingefügt werden können.", "isCorrect": false, "explanation": "Ein Fremdschlüssel wird nicht automatisch angelegt, sondern nur dann, wenn eine Beziehung zu einer anderen Tabelle gebraucht wird." },
+        { "text": "Ein Schlüssel, der nur aus Buchstaben besteht und keine Zahlen enthalten darf.", "isCorrect": false, "explanation": "Ein Fremdschlüssel kann jeden Datentyp haben, der zum Primärschlüssel der anderen Tabelle passt." },
+        { "text": "Ein zweiter Primärschlüssel in derselben Tabelle für den Fall, dass der erste verloren geht.", "isCorrect": false, "explanation": "Eine Tabelle hat genau einen Primärschlüssel, ein Fremdschlüssel ist etwas anderes." }
+      ]
+    },
+    {
+      "question": "Welche Beziehung besteht zwischen installations und app_events in der FutureDev-Datenbank?",
+      "area": "1:n-Beziehung",
+      "options": [
+        { "text": "Eine 1:n-Beziehung: eine Installation kann viele Ereignisse haben.", "isCorrect": true, "explanation": "Richtig: eine Installation löst viele Ereignisse aus, jedes Ereignis gehört zu genau einer Installation." },
+        { "text": "Eine n:m-Beziehung: eine Installation kann viele Ereignisse haben, und ein Ereignis kann zu vielen Installationen gehören.", "isCorrect": false, "explanation": "Ein Ereignis gehört immer zu genau einer Installation, nicht zu mehreren." },
+        { "text": "Eine 1:1-Beziehung: jede Installation hat genau ein Ereignis.", "isCorrect": false, "explanation": "Eine Installation kann viele Ereignisse haben, nicht nur eines." },
+        { "text": "Gar keine Beziehung, die beiden Tabellen sind unabhängig voneinander.", "isCorrect": false, "explanation": "Die Spalte install_id in app_events stellt eine direkte Beziehung her." }
+      ]
+    },
+    {
+      "question": "Warum braucht eine n:m-Beziehung eine Junction-Tabelle?",
+      "area": "n:m-Beziehung",
+      "options": [
+        { "text": "Weil ein einzelner Fremdschlüssel nur auf eine Zeile zeigen kann, nicht auf viele.", "isCorrect": true, "explanation": "Richtig: ein Fremdschlüssel speichert genau einen Wert, für mehrere Verbindungen braucht es mehrere Zeilen in einer Junction-Tabelle." },
+        { "text": "Weil die Datenbank sonst zu langsam wird und alle Abfragen Minuten dauern.", "isCorrect": false, "explanation": "Die Geschwindigkeit ist nicht der Grund, sondern die grundsätzliche Unmöglichkeit, mehrere Werte in einer Spalte zu speichern." },
+        { "text": "Weil Junction-Tabellen vom Gesetzgeber für alle Datenbanken vorgeschrieben sind.", "isCorrect": false, "explanation": "Es gibt kein Gesetz, das Junction-Tabellen vorschreibt, sie sind eine technische Notwendigkeit." },
+        { "text": "Eine n:m-Beziehung braucht gar keine Junction-Tabelle, zwei Fremdschlüssel reichen.", "isCorrect": false, "explanation": "Zwei Fremdschlüssel in einer Tabelle ergeben noch keine n:m-Beziehung, erst die Junction-Tabelle macht sie möglich." }
+      ]
+    },
+    {
+      "question": "Was verhindert die Normalisierung?",
+      "area": "Normalisierung",
+      "options": [
+        { "text": "Dass dieselbe Information mehrfach gespeichert wird und widersprüchlich werden kann.", "isCorrect": true, "explanation": "Richtig: Normalisierung sorgt dafür, dass jede Information nur einmal gespeichert wird." },
+        { "text": "Dass die Datenbank überhaupt gestartet werden kann, wenn sie zu wenige Tabellen hat.", "isCorrect": false, "explanation": "Die Anzahl der Tabellen hat keinen Einfluss darauf, ob die Datenbank startet." },
+        { "text": "Dass ein SELECT mehr als hundert Zeilen auf einmal zurückgibt und damit den Arbeitsspeicher des Servers überlastet.", "isCorrect": false, "explanation": "Normalisierung hat nichts mit der Anzahl der zurückgegebenen Zeilen zu tun." },
+        { "text": "Dass Fremdschlüssel auf nicht existierende Zeilen zeigen.", "isCorrect": false, "explanation": "Das verhindert die referentielle Integrität, nicht die Normalisierung." }
+      ]
+    },
+    {
+      "question": "Welches Symbol zeigt in einem ER-Diagramm die viele-Seite einer 1:n-Beziehung?",
+      "area": "ER-Diagramm",
+      "options": [
+        { "text": "Ein Krähenfuß mit drei auseinanderlaufenden Strichen.", "isCorrect": true, "explanation": "Richtig: der Krähenfuß ist das Standardsymbol für die viele-Seite." },
+        { "text": "Ein einzelner Punkt am Ende der Linie, der die Verbindung zwischen zwei Tabellen markiert.", "isCorrect": false, "explanation": "Ein Punkt ist kein Standard-Symbol in ER-Diagrammen." },
+        { "text": "Ein durchgezogener Kreis, der die Tabelle vollständig umschließt.", "isCorrect": false, "explanation": "Kreise werden in ER-Diagrammen nicht für die viele-Seite verwendet." },
+        { "text": "Eine gestrichelte Linie ohne jede Markierung am Ende.", "isCorrect": false, "explanation": "Gestrichelte Linien zeigen optionale Beziehungen, nicht die viele-Seite." }
+      ]
+    },
+    {
+      "question": "Was bewirkt referentielle Integrität?",
+      "area": "Referentielle Integrität",
+      "options": [
+        { "text": "Sie stellt sicher, dass Fremdschlüssel nur auf existierende Zeilen zeigen.", "isCorrect": true, "explanation": "Richtig: referentielle Integrität verhindert verwaiste Fremdschlüssel." },
+        { "text": "Sie sorgt dafür, dass alle Tabellen gleich viele Zeilen haben.", "isCorrect": false, "explanation": "Die Anzahl der Zeilen in verschiedenen Tabellen ist unabhängig voneinander." },
+        { "text": "Sie verschlüsselt alle Fremdschlüssel, damit sie von außen nicht lesbar sind.", "isCorrect": false, "explanation": "Verschlüsselung ist nicht die Aufgabe der referentiellen Integrität." },
+        { "text": "Sie erstellt automatisch ein vollständiges ER-Diagramm aus den vorhandenen Tabellen und ihren Spalten.", "isCorrect": false, "explanation": "Ein ER-Diagramm ist eine Zeichnung, die referentielle Integrität ist eine Datenbankregel." }
+      ]
+    },
+    {
+      "question": "Welche Spalte in app_events ist ein Fremdschlüssel?",
+      "area": "Fremdschlüssel",
+      "options": [
+        { "text": "install_id, weil sie auf installations verweist.", "isCorrect": true, "explanation": "Richtig: install_id verbindet jedes Ereignis mit seiner Installation." },
+        { "text": "id, weil sie der Primärschlüssel der Tabelle app_events selbst ist und jede Zeile eindeutig identifiziert.", "isCorrect": false, "explanation": "id ist der Primärschlüssel von app_events, kein Fremdschlüssel." },
+        { "text": "event_name, weil sie den Namen des Ereignisses aus einer anderen Tabelle holt.", "isCorrect": false, "explanation": "event_name ist eine normale Textspalte, kein Fremdschlüssel." },
+        { "text": "created_at, weil sie den Zeitpunkt aus einer anderen Tabelle übernimmt.", "isCorrect": false, "explanation": "created_at wird automatisch gesetzt und verweist auf keine andere Tabelle." }
+      ]
+    },
+    {
+      "question": "Was ist der entscheidende Unterschied zwischen einer 1:n- und einer n:m-Beziehung?",
+      "area": "Beziehungen",
+      "options": [
+        { "text": "Bei 1:n reicht ein Fremdschlüssel, bei n:m nicht.", "isCorrect": true, "explanation": "Richtig: das ist der technische Unterschied zwischen beiden Beziehungstypen." },
+        { "text": "1:n gibt es nur in PostgreSQL, n:m nur in MySQL.", "isCorrect": false, "explanation": "Beide Beziehungstypen gibt es in allen relationalen Datenbanken." },
+        { "text": "Bei 1:n sind beide Seiten der Beziehung in derselben Tabelle gespeichert, bei n:m auf zwei verteilt.", "isCorrect": false, "explanation": "Auch bei 1:n sind die Daten auf zwei Tabellen verteilt." },
+        { "text": "n:m ist nur ein anderer Name für 1:n, es gibt keinen Unterschied.", "isCorrect": false, "explanation": "1:n und n:m sind grundverschiedene Beziehungstypen." }
+      ]
+    },
+    {
+      "question": "Warum ist eine nicht normalisierte Tabelle problematisch?",
+      "area": "Normalisierung",
+      "options": [
+        { "text": "Weil wiederholte Daten bei Änderungen in jeder Zeile einzeln angepasst werden müssen.", "isCorrect": true, "explanation": "Richtig: das ist die Änderungsanomalie, das Hauptproblem nicht normalisierter Tabellen." },
+        { "text": "Weil sie grundsätzlich nicht mehr als zehn Spalten haben darf.", "isCorrect": false, "explanation": "Die Anzahl der Spalten ist nicht das Problem, sondern die Wiederholung von Daten." },
+        { "text": "Weil sie von keinem SQL-Befehl gelesen werden kann, auch nicht von einem einfachen SELECT ohne WHERE.", "isCorrect": false, "explanation": "Auch nicht normalisierte Tabellen können mit SELECT gelesen werden." },
+        { "text": "Weil sie automatisch nach sieben Tagen gelöscht wird.", "isCorrect": false, "explanation": "Es gibt keine automatische Löschung nicht normalisierter Tabellen." }
+      ]
+    },
+    {
+      "question": "Was zeigt ein ER-Diagramm?",
+      "area": "ER-Diagramm",
+      "options": [
+        { "text": "Tabellen als Rechtecke, Beziehungen als Linien.", "isCorrect": true, "explanation": "Richtig: das ist die Standarddarstellung eines ER-Diagramms." },
+        { "text": "Die genaue Reihenfolge, in der SQL-Befehle ausgeführt werden müssen.", "isCorrect": false, "explanation": "Die Ausführungsreihenfolge ist nicht Teil eines ER-Diagramms." },
+        { "text": "Eine Liste aller jemals ausgeführten SELECT-Befehle mit ihren Ergebnissen.", "isCorrect": false, "explanation": "Ein ER-Diagramm zeigt die Struktur, nicht die ausgeführten Befehle." },
+        { "text": "Die IP-Adressen aller Server, auf denen die Datenbank läuft, sowie deren Portnummern.", "isCorrect": false, "explanation": "Server-IPs haben nichts mit einem ER-Diagramm zu tun." }
+      ]
+    },
+    {
+      "question": "Was passiert beim Löschen einer Zeile, auf die Fremdschlüssel zeigen, wenn ON DELETE RESTRICT gesetzt ist?",
+      "area": "Referentielle Integrität",
+      "options": [
+        { "text": "Das Löschen wird verweigert, solange abhängige Zeilen existieren.", "isCorrect": true, "explanation": "Richtig: RESTRICT blockiert das Löschen, bis alle abhängigen Zeilen entfernt sind." },
+        { "text": "Die Datenbank löscht die Zeile und setzt alle Fremdschlüssel auf null.", "isCorrect": false, "explanation": "Das wäre ON DELETE SET NULL, nicht RESTRICT." },
+        { "text": "Die Datenbank löscht die Zeile mitsamt allen abhängigen Zeilen automatisch.", "isCorrect": false, "explanation": "Das wäre ON DELETE CASCADE, nicht RESTRICT." },
+        { "text": "Die Datenbank startet sich neu, um den Löschvorgang abzubrechen und alle zwischenzeitlich gesperrten Zeilen wieder freizugeben.", "isCorrect": false, "explanation": "Ein Neustart ist keine Reaktion auf einen Löschversuch." }
+      ]
+    },
+    {
+      "question": "Wie viele Fremdschlüssel hat eine Junction-Tabelle mindestens?",
+      "area": "n:m-Beziehung",
+      "options": [
+        { "text": "Zwei, je einen auf jede der beiden verbundenen Tabellen.", "isCorrect": true, "explanation": "Richtig: eine Junction-Tabelle braucht mindestens zwei Fremdschlüssel." },
+        { "text": "Einen, der beide Tabellen gleichzeitig referenziert.", "isCorrect": false, "explanation": "Ein einzelner Fremdschlüssel kann immer nur auf eine Tabelle zeigen." },
+        { "text": "Keinen, eine Junction-Tabelle kommt ohne Fremdschlüssel aus.", "isCorrect": false, "explanation": "Ohne Fremdschlüssel wäre es keine Junction-Tabelle." },
+        { "text": "Drei, weil jede Junction-Tabelle auch einen eigenen Primärschlüssel braucht.", "isCorrect": false, "explanation": "Der Primärschlüssel ist kein Fremdschlüssel, die Junction-Tabelle braucht mindestens zwei Fremdschlüssel." }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Zeichne ein ER-Diagramm für eine kleine Bibliotheksdatenbank mit drei Tabellen: books mit den Spalten id, title und year, authors mit den Spalten id und name, sowie eine Junction-Tabelle book_authors mit den Spalten book_id und author_id. Zeichne die Tabellen als Rechtecke mit ihren Spalten darin. Zeichne die 1:n-Beziehungen von books zu book_authors und von authors zu book_authors als Linien mit einer Eins am einen und einem Krähenfuß am anderen Ende. Markiere die Fremdschlüssel book_id und author_id in der Junction-Tabelle.",
+    "expectation": "Das ER-Diagramm zeigt drei Rechtecke für books, authors und book_authors. Jedes Rechteck enthält die Spaltennamen. Eine Linie mit 1 an books und Krähenfuß an book_authors zeigt die 1:n-Beziehung. Eine zweite Linie mit 1 an authors und Krähenfuß an book_authors zeigt die andere 1:n-Beziehung. Die Spalten book_id und author_id in book_authors sind als Fremdschlüssel markiert.",
+    "checklist": [
+      "Drei Rechtecke für books, authors und book_authors gezeichnet",
+      "Spalten in jedem Rechteck notiert",
+      "1:n-Beziehung von books zu book_authors mit 1 und Krähenfuß eingezeichnet",
+      "1:n-Beziehung von authors zu book_authors mit 1 und Krähenfuß eingezeichnet",
+      "Fremdschlüssel book_id und author_id in book_authors markiert"
+    ]
+  },
+  "audio": {
+    "file": "M03-03-03.mp3",
+    "durationSeconds": 1680,
+    "voices": ["A", "B"],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Muss jede Tabelle einen Fremdschlüssel haben?",
+      "answer": "Nein, eine Tabelle braucht nur dann einen Fremdschlüssel, wenn sie auf eine andere Tabelle verweisen soll. Eine Tabelle wie app_events hat mit install_id einen Fremdschlüssel, aber eine rein eigenständige Tabelle ohne Beziehungen zu anderen käme ohne Fremdschlüssel aus. In der Praxis haben die meisten Tabellen jedoch mindestens einen Fremdschlüssel, weil die wenigsten Daten völlig isoliert stehen."
+    },
+    {
+      "question": "Kann eine Tabelle mehrere Fremdschlüssel haben?",
+      "answer": "Ja, eine Tabelle kann beliebig viele Fremdschlüssel haben, je einen für jede Beziehung zu einer anderen Tabelle. Eine Tabelle bestellungen könnte zum Beispiel einen Fremdschlüssel auf kunden, einen auf lieferadressen und einen auf zahlungsmethoden haben. Jeder dieser Fremdschlüssel ist eine eigene Spalte mit einem eigenen Namen und einer eigenen referentiellen Integritätsregel."
+    },
+    {
+      "question": "Was ist der Unterschied zwischen einer 1:n- und einer 1:1-Beziehung?",
+      "answer": "Bei einer 1:n-Beziehung kann eine Zeile der ersten Tabelle mit vielen Zeilen der zweiten verbunden sein, bei einer 1:1-Beziehung mit genau einer. Eine 1:1-Beziehung ist seltener und wird zum Beispiel genutzt, wenn eine Tabelle aus Sicherheitsgründen in zwei Teile geteilt wird. Technisch setzt du eine 1:1-Beziehung mit einem Fremdschlüssel um, der zusätzlich als eindeutig markiert ist, sodass kein zweiter Eintrag denselben Fremdschlüssel-Wert tragen darf."
+    },
+    {
+      "question": "Warum spricht man von der dritten Normalform? Gibt es auch eine erste und zweite?",
+      "answer": "Ja, die Normalisierung ist in mehreren Stufen definiert, von der ersten bis zur fünften Normalform. Die erste Normalform verlangt, dass jede Spalte nur einen einzigen Wert enthält, also keine Listen. Die zweite Normalform verlangt, dass jede Nicht-Schlüssel-Spalte vom gesamten Primärschlüssel abhängt, nicht nur von einem Teil. Die dritte Normalform, die in der Praxis meist ausreicht, verlangt, dass keine Nicht-Schlüssel-Spalte von einer anderen Nicht-Schlüssel-Spalte abhängt. Die vierte und fünfte Normalform sind Spezialfälle, die im Alltag selten vorkommen."
+    },
+    {
+      "question": "Kann ich ein ER-Diagramm auch automatisch aus einer bestehenden Datenbank erzeugen lassen?",
+      "answer": "Ja, viele Datenbankwerkzeuge können aus einer bestehenden Datenbank ein ER-Diagramm erstellen, indem sie die Tabellen, Spalten und Fremdschlüssel auslesen. Die meisten Datenbank-Plattformen zeigen im Table Editor automatisch die Beziehungen zwischen Tabellen an, sobald Fremdschlüssel definiert sind. Andersherum können manche Programmier-Werkzeuge aus einem Schema-Diagramm heraus die SQL-Befehle zum Erstellen der Tabellen erzeugen."
+    },
+    {
+      "question": "Was passiert mit den Ereignissen einer Installation, wenn ich die Installation lösche, aber die referentielle Integrität das Löschen verhindert?",
+      "answer": "Du hast drei Möglichkeiten, die du beim Erstellen des Fremdschlüssels festlegst. ON DELETE RESTRICT verbietet das Löschen, solange es noch abhängige Zeilen gibt. ON DELETE CASCADE löscht alle abhängigen Zeilen automatisch mit, wenn die Hauptzeile gelöscht wird. ON DELETE SET NULL setzt den Fremdschlüssel in allen abhängigen Zeilen auf leer, sodass die Ereignisse erhalten bleiben, aber keiner Installation mehr zugeordnet sind. Welche Variante die richtige ist, hängt vom fachlichen Zweck der Daten ab."
+    }
+  ]
+}

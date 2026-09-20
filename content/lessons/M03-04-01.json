@@ -1,0 +1,644 @@
+{
+  "id": "M03-04-01",
+  "title": "Supabase: eine Datenbank, die mehr kann",
+  "durationMinutes": 30,
+  "prerequisites": [
+    "M03-03-02"
+  ],
+  "terms": [
+    {
+      "term": "Supabase",
+      "definition": "eine Open-Source-Plattform, die PostgreSQL um Auth, Storage, Realtime und eine automatische REST-API erweitert und als Alternative zu Firebase entwickelt wurde."
+    },
+    {
+      "term": "Auth",
+      "definition": "der Dienst in Supabase, der Benutzerregistrierung, Anmeldung, Passwort-Reset und soziale Logins verwaltet, ohne dass du diese Funktionen selbst bauen musst."
+    },
+    {
+      "term": "Storage",
+      "definition": "der Dienst in Supabase, der Dateien wie Bilder, Videos oder Dokumente in sogenannten Buckets speichert und über Zugriffsregeln absichert."
+    },
+    {
+      "term": "Realtime",
+      "definition": "der Dienst in Supabase, der Änderungen in der Datenbank über WebSockets an alle verbundenen Clients sendet, sodass die App ohne manuelles Neuladen reagiert."
+    },
+    {
+      "term": "Supabase-Client",
+      "definition": "die Programmbibliothek, die du in deiner App installierst und die alle Supabase-Dienste über eine einheitliche Schnittstelle ansprechbar macht, ohne dass du für jeden Dienst eigenen Netzwerkcode schreiben musst."
+    },
+    {
+      "term": "PostgREST",
+      "definition": "der Dienst in Supabase, der aus deinem PostgreSQL-Datenbankschema automatisch eine vollständige REST-API erzeugt, ohne dass du API-Routen von Hand programmieren musst."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir ein Schweizer Taschenmesser vor, das nicht nur eine Klinge hat, sondern auch eine Schere, eine Säge, einen Korkenzieher und eine Lupe. Ein einfaches Messer kann nur schneiden, das Taschenmesser kann ein Dutzend verschiedene Dinge."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "In den letzten Lektionen hast du PostgreSQL als reine Datenbank kennengelernt, die SQL-Befehle ausführt. Jetzt lernst du Supabase kennen, eine Plattform, die PostgreSQL als Kern nutzt, aber vier weitere Dienste obendrauf packt, die fast jede moderne App braucht."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Was genau ist Supabase, und warum sollte ich es statt einer normalen PostgreSQL-Datenbank nutzen?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Supabase ist eine Open-Source-Plattform, die PostgreSQL um Auth, Storage, Realtime und eine automatische REST-API erweitert und als Alternative zu Firebase entwickelt wurde."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil du mit Supabase nicht nur eine Datenbank bekommst, sondern eine komplette Server-Plattform aus einer Hand. Du sparst dir Wochen an Entwicklungszeit, die du sonst für Benutzerverwaltung, Datei-Uploads und Echtzeit-Updates aufwenden müsstest."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Die FutureDev-App nutzt Supabase als ihre Server-Umgebung. Die Datenbank unter apps/mobile speichert alle App-Ereignisse in der Tabelle app_events, die du schon aus den SQL-Lektionen kennst. Die Supabase-Migrationen unter supabase/migrations legen die Tabellen an, und der Supabase-Client in der App sendet jedes Ereignis direkt an die Datenbank."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir eine Schlüsselkarte in einem Hotel vor, die nicht nur deine Zimmertür öffnet, sondern auch die Tiefgarage, den Fitnessraum und die Minibar. Eine Karte, viele Türen. Ohne gültige Karte kommst du nirgends rein."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Jede App, die persönliche Daten speichert, braucht eine Benutzerverwaltung. Nutzer müssen sich registrieren, anmelden, ihr Passwort zurücksetzen können. Supabase liefert diesen Dienst fertig mit, er heißt Auth."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Was genau macht Auth in Supabase, und wie unterscheidet es sich von einer selbstgebauten Benutzerverwaltung?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Auth ist der Dienst in Supabase, der Benutzerregistrierung, Anmeldung, Passwort-Reset und soziale Logins verwaltet, ohne dass du diese Funktionen selbst bauen musst."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil eine selbstgebaute Benutzerverwaltung nicht nur viel Arbeit macht, sondern auch ein Sicherheitsrisiko ist. Ein einziger Fehler bei der Passwort-Speicherung oder der Sitzungsverwaltung kann dazu führen, dass fremde Personen auf die Daten aller Nutzer zugreifen können."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Mit Supabase Auth registriert sich ein Nutzer mit E-Mail und Passwort, und Supabase erzeugt einen Eintrag in der Tabelle auth.users, verschlüsselt das Passwort und stellt ein signiertes Sitzungstoken aus. Deine App muss nur den Supabase-Client aufrufen, den Rest erledigt Supabase."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir ein Lagerhaus vor, in dem du Kisten mit Aufschriften wie Profilbilder, Rechnungen oder Verträge in Regale stellst. Jede Kiste hat ein Schloss, und nur wer den passenden Schlüssel hat, darf sie öffnen oder herausnehmen."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Neben reinen Daten in Tabellen muss eine App oft auch Dateien speichern: Profilbilder, hochgeladene Dokumente, exportierte Berichte. Supabase hat dafür einen eigenen Dienst, der diese Dateien sicher ablegt und bei Bedarf wieder ausliefert."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Wie heißt dieser Datei-Dienst, und worin unterscheidet er sich von der Datenbank?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Dieser Dienst heißt Storage. Storage ist der Dienst in Supabase, der Dateien wie Bilder, Videos oder Dokumente in sogenannten Buckets speichert und über Zugriffsregeln absichert."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil du Dateien nicht in der Datenbank speichern solltest. PostgreSQL kann das zwar technisch, aber es wird langsam und teuer, sobald die Dateien größer werden. Storage ist für Dateien optimiert, so wie die Datenbank für strukturierte Zeilen und Spalten optimiert ist."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Ein Bucket namens avatars könnte die Profilbilder aller Nutzer speichern. Du legst mit einer Zugriffsregel fest, dass jeder nur sein eigenes Bild sehen und ändern darf. Der Supabase-Client lädt das Bild mit einer einzigen Methode hoch und liefert eine öffentliche URL zurück, die du direkt in der App anzeigen kannst."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir einen Live-Ticker bei einem Sportspiel vor, der jedes Tor sofort anzeigt, ohne dass du die Seite neu laden musst. Oder eine Chat-App, in der neue Nachrichten erscheinen, noch während die andere Person tippt."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Normale Datenbankabfragen sind wie ein Brief: du fragst an, die Datenbank antwortet, und dann ist die Verbindung beendet. Für viele moderne Apps reicht das nicht. Sie brauchen eine dauerhafte Leitung, über die die Datenbank von sich aus Nachrichten an die App schicken kann."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Wie heißt dieser Dienst, der Änderungen in Echtzeit an die App sendet?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Dieser Dienst heißt Realtime. Realtime ist der Dienst in Supabase, der Änderungen in der Datenbank über WebSockets an alle verbundenen Clients sendet, sodass die App ohne manuelles Neuladen reagiert."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil Nutzer heute Echtzeit-Updates erwarten. Eine Chat-App, in der du manuell auf Aktualisieren drücken musst, um neue Nachrichten zu sehen, würde niemand benutzen. Realtime macht aus deiner App eine lebendige Anwendung, die von selbst auf neue Daten reagiert."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "In der FutureDev-App könnte Realtime dafür sorgen, dass neue Lektionen sofort im Menü erscheinen, sobald sie in der Datenbank freigeschaltet werden, ohne dass der Nutzer die App neu starten muss. Der Supabase-Client abonniert dazu die Tabelle content_releases und aktualisiert die Anzeige bei jeder neuen Zeile."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir eine Universalfernbedienung vor, mit der du Fernseher, Soundanlage, Blu-ray-Player und Klimaanlage steuerst, ohne für jedes Gerät eine eigene Fernbedienung suchen zu müssen. Ein Gerät, alle Funktionen."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Alle diese Dienste, die Datenbank, Auth, Storage und Realtime, sprichst du nicht einzeln an, sondern über eine gemeinsame Programmbibliothek. Diese Bibliothek heißt Supabase-Client und ist der zentrale Einstiegspunkt für deine App."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Was genau ist der Supabase-Client, und wie binde ich ihn in mein Projekt ein?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Der Supabase-Client ist die Programmbibliothek, die du in deiner App installierst und die alle Supabase-Dienste über eine einheitliche Schnittstelle ansprechbar macht, ohne dass du für jeden Dienst eigenen Netzwerkcode schreiben musst."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil der Client dir viel Arbeit abnimmt. Er verwaltet die Netzwerkverbindungen, hängt automatisch die Auth-Tokens an jede Anfrage an und bietet für jeden Dienst eine eigene, gut dokumentierte Methode. Du schreibst client.from, Klammer auf, Anführungszeichen app_events, Anführungszeichen, Klammer zu, Punkt insert, und der Client erledigt den Rest."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "In einem Next.js-Projekt installierst du den Client mit pnpm add @supabase supabase-js. Dann erstellst du eine Datei, die den Client einmalig mit der Supabase-URL und dem öffentlichen Schlüssel initialisiert. Ab diesem Zeitpunkt kannst du in jeder Komponente Datenbankabfragen, Auth-Aufrufe und Storage-Uploads über dasselbe Client-Objekt ausführen, ohne dich um die Netzwerkdetails kümmern zu müssen."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir einen Dolmetscher vor, der zwischen zwei Sprachen übersetzt. Du sprichst Deutsch, dein Gegenüber spricht Japanisch, und der Dolmetscher sorgt dafür, dass ihr euch trotzdem versteht, ohne dass einer die Sprache des anderen lernen muss."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Wenn deine App eine Datenbankabfrage macht, spricht sie nicht direkt SQL mit der Datenbank. Stattdessen geht die Anfrage über eine REST-API, die Supabase automatisch aus deinem Datenbankschema erzeugt hat. Der Dienst, der diese Übersetzung leistet, heißt PostgREST."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Was ist PostgREST, und warum ist es eine so große Zeitersparnis?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "PostgREST ist der Dienst in Supabase, der aus deinem PostgreSQL-Datenbankschema automatisch eine vollständige REST-API erzeugt, ohne dass du API-Routen von Hand programmieren musst."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil du ohne PostgREST für jede Tabelle eigene API-Routen schreiben müsstest: eine für SELECT, eine für INSERT, eine für UPDATE, eine für DELETE, und das für jede Tabelle einzeln. PostgREST erledigt das automatisch, sobald du die Tabelle in PostgreSQL anlegst."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Sobald die Datei 0001_init.sql die Tabelle app_events in PostgreSQL anlegt, existiert automatisch eine REST-Schnittstelle unter /rest/v1/app_events. Ein GET auf diese Adresse liefert alle Zeilen, ein POST fügt eine neue hinzu. Du musst keine einzige Schnittstelle selbst programmieren, PostgREST liest das Datenbankschema und erzeugt die API daraus."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir einen Bauplatz vor, auf dem bereits Wasser, Strom und Glasfaseranschluss liegen, bevor du das erste Haus baust. Du musst dich nicht um die Infrastruktur kümmern, sondern kannst sofort mit dem Haus anfangen."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Ein Supabase-Projekt anzulegen dauert weniger als fünf Minuten. Du gehst auf supabase Punkt com, erstellst ein neues Projekt, wählst eine Region und ein Passwort, und Supabase richtet eine vollständige PostgreSQL-Datenbank plus Auth, Storage, Realtime und PostgREST für dich ein."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Wie fange ich ganz praktisch mit Supabase an, und was sind die ersten Schritte nach der Projekterstellung?"
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Nach der Projekterstellung bekommst du eine Projekt-URL und zwei Schlüssel: einen öffentlichen anon key für Lesezugriffe und einen geheimen service_role key für administrative Aufgaben, den du nie im Client-Code verwenden darfst. Du installierst den Supabase-Client in deinem Projekt, trägst URL und anon key in die Umgebungsvariablen ein, und schon kannst du die erste Abfrage schreiben."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Das FutureDev-Repository enthält unter supabase/config.toml die Projektkonfiguration und unter supabase/migrations die SQL-Dateien, die die Tabellen anlegen. Die Umgebungsvariablen NEXT_PUBLIC_SUPABASE_URL und NEXT_PUBLIC_SUPABASE_ANON_KEY in der Datei .env.local verbinden die App mit dem Supabase-Projekt. Die App selbst nutzt den Client dann für alle Datenbankzugriffe, von einfachen SELECT-Abfragen bis hin zu komplexen JOINs über mehrere Tabellen."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Woher weiß ich, welche Tabellen in meiner Datenbank schon existieren, und wie sehe ich ihre Struktur?"
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Supabase bietet dafür den Table Editor, eine grafische Oberfläche im Dashboard. Dort siehst du alle Tabellen mit ihren Spalten, Datentypen und Fremdschlüsseln auf einen Blick. Du kannst neue Zeilen einfügen, vorhandene bearbeiten und die Beziehungen zwischen Tabellen als Diagramm anzeigen lassen. Für SQL-Abfragen gibt es zusätzlich einen eingebauten SQL-Editor, in dem du SELECT, INSERT und alle anderen Befehle direkt ausführen kannst."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil du während der Entwicklung ständig prüfen musst, ob deine Abfragen die erwarteten Ergebnisse liefern. Der Table Editor und der SQL-Editor sind deine Werkzeuge, um schnell nachzusehen, was wirklich in der Datenbank steht, ohne dafür ein externes Programm installieren zu müssen."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Kann ich mit Supabase auch mehrere Projekte gleichzeitig verwalten, oder brauche ich für jedes Projekt ein eigenes Konto?"
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Ein Supabase-Konto kann beliebig viele Projekte enthalten, auch im kostenlosen Tarif. Jedes Projekt ist eine vollständig isolierte PostgreSQL-Datenbank mit eigener URL, eigenen Schlüsseln und eigenen Tabellen. Du kannst also für jede App, die du baust, ein neues Projekt anlegen, ohne ein zweites Konto zu erstellen. In der Übersicht deines Dashboards siehst du alle deine Projekte auf einen Blick und kannst zwischen ihnen wechseln."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil du im Lauf dieses Kurses mehrere kleine Projekte bauen wirst, und für jedes ein eigenes Supabase-Projekt brauchst. Die Trennung stellt sicher, dass die Daten der einen App nicht versehentlich in der Datenbank einer anderen App landen."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Was sind Migrationen, und warum werden sie in der FutureDev-App verwendet, statt die Tabellen direkt im Dashboard anzulegen?"
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Migrationen sind SQL-Dateien, die die Struktur der Datenbank Schritt für Schritt beschreiben, ähnlich wie eine Historie für das Datenbankschema. Jede dieser Dateien enthält die Befehle, die neue Tabellen anlegen oder bestehende verändern. Der Vorteil gegenüber dem direkten Anlegen im Dashboard ist, dass Migrationen als Code versioniert sind und auf jedem Rechner exakt dasselbe Ergebnis liefern, wenn sie ausgeführt werden. Du kannst sie im Repository ablegen und mit anderen Entwicklern teilen, sodass alle im Team dieselbe Datenbankstruktur haben."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Die Datei 0001_init.sql im FutureDev-Repository ist die erste dieser Dateien. Sie enthält CREATE TABLE-Befehle für app_events, installations, content_releases und feedback. Wenn ein neuer Entwickler das Repository klont, führt er diese Datei aus und hat sofort dieselbe Datenbankstruktur wie alle anderen im Team."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Was passiert mit meinem Supabase-Projekt, wenn ich es mehrere Wochen lang nicht benutze?"
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Im kostenlosen Tarif pausiert Supabase ein Projekt automatisch, wenn eine Woche lang keine Anfrage ankommt. Die Datenbank und alle Tabellen bleiben dabei vollständig erhalten, nur der Zugriff ist kurz gesperrt. Du reaktivierst das Projekt im Dashboard mit einem einzigen Klick, und nach wenigen Minuten läuft alles wie vorher. In einem kostenpflichtigen Tarif gibt es diese automatische Pause nicht."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil ein Lernprojekt oft tagelang ruht, während du andere Kapitel dieses Kurses bearbeitest. Ohne dieses Wissen wirkst du überrascht, wenn ein Abruf plötzlich fehlschlägt, obwohl du nichts geändert hast."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Bevor wir zum Abschluss kommen, hier noch einmal alle neuen Begriffe dieser Lektion im Überblick, kurz erklärt zum Nachschlagen und zum Lernen. Jeder dieser Begriffe steht für einen eigenen Dienst innerhalb der Supabase-Plattform."
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "isKeySentence": false,
+      "text": "Supabase: eine Open-Source-Plattform, die PostgreSQL um Auth, Storage, Realtime und eine automatische REST-API erweitert und als Alternative zu Firebase entwickelt wurde."
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "isKeySentence": false,
+      "text": "Auth: der Dienst in Supabase, der Benutzerregistrierung, Anmeldung, Passwort-Reset und soziale Logins verwaltet, ohne dass du diese Funktionen selbst bauen musst."
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "isKeySentence": false,
+      "text": "Storage: der Dienst in Supabase, der Dateien wie Bilder, Videos oder Dokumente in sogenannten Buckets speichert und über Zugriffsregeln absichert."
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "isKeySentence": false,
+      "text": "Realtime: der Dienst in Supabase, der Änderungen in der Datenbank über WebSockets an alle verbundenen Clients sendet, sodass die App ohne manuelles Neuladen reagiert."
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "isKeySentence": false,
+      "text": "Supabase-Client: die Programmbibliothek, die du in deiner App installierst und die alle Supabase-Dienste über eine einheitliche Schnittstelle ansprechbar macht, ohne dass du für jeden Dienst eigenen Netzwerkcode schreiben musst."
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "isKeySentence": false,
+      "text": "PostgREST: der Dienst in Supabase, der aus deinem PostgreSQL-Datenbankschema automatisch eine vollständige REST-API erzeugt, ohne dass du API-Routen von Hand programmieren musst."
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "isKeySentence": true,
+      "text": "Wenn ich das zusammenfasse: Supabase ist eine Plattform, die PostgreSQL um vier Dienste erweitert. Auth verwaltet Benutzer mit Registrierung und Anmeldung, Storage speichert Dateien in Buckets, Realtime sendet Änderungen in Echtzeit an die App, und PostgREST erzeugt aus dem Datenbankschema automatisch eine REST-API. Der Supabase-Client ist die zentrale Bibliothek, über die deine App alle diese Dienste mit einer einheitlichen Schnittstelle anspricht."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Ist Supabase kostenlos, oder muss ich dafür bezahlen?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Supabase hat einen großzügigen kostenlosen Tarif, der für Lernprojekte und kleine Apps völlig ausreicht. Du bekommst eine PostgreSQL-Datenbank mit 500 Megabyte Speicher, Auth für bis zu 50.000 monatlich aktive Nutzer, 1 Gigabyte Storage und 2 Gigabyte Realtime-Datenübertragung pro Monat. Erst wenn dein Projekt wächst und diese Grenzen überschreitet, brauchst du einen kostenpflichtigen Tarif. Für alles, was du in diesem Kurs baust, reicht der kostenlose Tarif."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Kann ich Supabase auch auf meinem eigenen Server betreiben, statt die Cloud-Version zu nutzen?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Ja, Supabase ist Open Source und kann mit Docker auf deinem eigenen Server oder lokal auf deinem Entwicklungsrechner betrieben werden. Die lokale Version nutzt du während der Entwicklung, um nicht versehentlich die Produktionsdatenbank zu verändern. Das FutureDev-Repository enthält eine docker-compose.yml, die eine vollständige lokale Supabase-Instanz startet, inklusive Datenbank, Auth, Storage und aller anderen Dienste."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Was ist der Unterschied zwischen dem anon key und dem service_role key?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Der anon key ist für den Client-Code in deiner App bestimmt und hat stark eingeschränkte Rechte. Er darf nur auf Tabellen zugreifen, für die du in den Row Level Security-Regeln ausdrücklich Lesezugriff erlaubt hast. Der service_role key umgeht diese Sicherheitsregeln vollständig und darf nur in serverseitigem Code oder in Admin-Werkzeugen verwendet werden. Wenn du den service_role key versehentlich in den Client-Code einbaust, kann jeder Nutzer deiner App die gesamte Datenbank lesen und verändern."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Brauche ich für Supabase überhaupt noch SQL-Kenntnisse, oder erledigt der Supabase-Client alles für mich?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Du brauchst SQL-Kenntnisse für zwei Dinge: das Anlegen der Tabellen über Migrationen und das Schreiben komplexer Abfragen, die über einfaches SELECT hinausgehen. Der Supabase-Client nimmt dir die Netzwerkkommunikation und die Anmeldung ab, aber das Datenbankschema und die Abfragen musst du selbst entwerfen. Die SQL-Grundlagen aus den Lektionen M03-03-01 und M03-03-02 sind deshalb die direkte Voraussetzung für diese Lektion."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Wie unterscheidet sich Supabase von Firebase, von dem ich schon gehört habe?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Firebase ist Googles geschlossene Plattform mit einer eigenen NoSQL-Datenbank, während Supabase auf der offenen, bewährten PostgreSQL-Datenbank aufbaut. Der größte Unterschied ist, dass du bei Supabase echtes SQL mit JOINs, Fremdschlüsseln und Transaktionen nutzen kannst, während Firebase eine andere, weniger mächtige Abfragesprache hat. Außerdem ist Supabase Open Source, sodass du nicht an einen einzelnen Anbieter gebunden bist und zur Not auf einen eigenen Server umziehen kannst."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Muss ich für jede Tabelle einzeln Row Level Security-Regeln schreiben?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Standardmäßig sind alle Tabellen ohne Row Level Security für jeden lesbar und schreibbar, der den anon key kennt, was ein erhebliches Sicherheitsrisiko ist. Du solltest für jede Tabelle, die sensible Daten enthält, eine RLS-Regel schreiben. Für einfache Fälle reicht eine Regel wie Nutzer dürfen nur ihre eigenen Zeilen sehen. Supabase bietet dafür eine grafische Oberfläche und vorgefertigte SQL-Vorlagen, sodass du die Regeln nicht von Grund auf selbst formulieren musst."
+    }
+  ],
+  "practiceExample": {
+    "text": "Das FutureDev-Repository unter C colon Backslash rnb Backslash FutureDev nutzt Supabase als Server-Umgebung. Die Konfiguration in supabase/config.toml definiert das Projekt, die Migrationen unter supabase/migrations legen die Tabellen app_events, content_releases und feedback an. Die App unter apps/mobile verwendet den Supabase-Client, um Ereignisse in die Tabelle app_events zu schreiben. Die Umgebungsvariablen in .env.local verbinden die App mit der Supabase-Instanz.",
+    "repoNote": "repo-futuredev",
+    "location": "supabase/config.toml und supabase/migrations/0001_init.sql, Client-Initialisierung in apps/mobile/lib/supabase.ts"
+  },
+  "quiz": [
+    {
+      "question": "Was ist Supabase?",
+      "area": "Supabase",
+      "options": [
+        { "text": "Eine Plattform, die PostgreSQL um Auth, Storage, Realtime und PostgREST erweitert.", "isCorrect": true, "explanation": "Richtig: Supabase ist mehr als nur eine Datenbank." },
+        { "text": "Eine reine NoSQL-Datenbank ohne SQL-Unterstützung, die nur über eine grafische Oberfläche bedient werden kann.", "isCorrect": false, "explanation": "Supabase nutzt PostgreSQL, eine SQL-Datenbank, und kann sowohl per SQL als auch per Client angesprochen werden." },
+        { "text": "Ein Betriebssystem für Server, das speziell für Datenbanken entwickelt wurde.", "isCorrect": false, "explanation": "Supabase ist kein Betriebssystem, sondern eine Server-Plattform." },
+        { "text": "Eine Programmiersprache, mit der man Datenbankabfragen schreibt.", "isCorrect": false, "explanation": "Supabase ist keine Programmiersprache, SQL ist die Sprache für die Abfragen." }
+      ]
+    },
+    {
+      "question": "Welche Aufgabe hat Auth in Supabase?",
+      "area": "Auth",
+      "options": [
+        { "text": "Benutzerregistrierung, Anmeldung und Passwort-Reset verwalten.", "isCorrect": true, "explanation": "Richtig: Auth ist der Dienst für die Benutzerverwaltung." },
+        { "text": "Die Datenbank vor unbefugten SQL-Abfragen schützen.", "isCorrect": false, "explanation": "Das übernehmen Row Level Security-Regeln, nicht Auth." },
+        { "text": "Dateien in Buckets speichern und mit Zugriffsregeln absichern.", "isCorrect": false, "explanation": "Das ist die Aufgabe von Storage, nicht von Auth." },
+        { "text": "Die Geschwindigkeit von Datenbankabfragen messen und optimieren.", "isCorrect": false, "explanation": "Performance-Messung ist nicht die Aufgabe von Auth." }
+      ]
+    },
+    {
+      "question": "Wofür ist Storage in Supabase zuständig?",
+      "area": "Storage",
+      "options": [
+        { "text": "Dateien wie Bilder und Dokumente in Buckets speichern.", "isCorrect": true, "explanation": "Richtig: Storage ist der Datei-Dienst von Supabase." },
+        { "text": "SQL-Abfragen zwischenspeichern, damit sie beim nächsten Mal schneller sind.", "isCorrect": false, "explanation": "Caching ist nicht die Aufgabe von Storage." },
+        { "text": "Die gesamte Datenbank als Sicherungskopie auf einem anderen Server ablegen.", "isCorrect": false, "explanation": "Backups sind nicht die Aufgabe von Storage." },
+        { "text": "Benutzersitzungen speichern, damit niemand bei jedem Seitenaufruf neu anmelden muss.", "isCorrect": false, "explanation": "Sitzungen verwaltet Auth, nicht Storage." }
+      ]
+    },
+    {
+      "question": "Wie funktioniert Realtime in Supabase?",
+      "area": "Realtime",
+      "options": [
+        { "text": "Es sendet Datenbankänderungen über WebSockets an alle verbundenen Clients.", "isCorrect": true, "explanation": "Richtig: Realtime nutzt WebSockets für Echtzeit-Updates." },
+        { "text": "Es führt SQL-Abfragen in Echtzeit aus, sodass sie immer null Millisekunden dauern.", "isCorrect": false, "explanation": "Auch Realtime-Abfragen brauchen Zeit, der Vorteil ist die automatische Benachrichtigung bei Änderungen." },
+        { "text": "Es erstellt automatisch jede Stunde eine Sicherungskopie der gesamten Datenbank.", "isCorrect": false, "explanation": "Automatische Backups sind nicht die Aufgabe von Realtime." },
+        { "text": "Es übersetzt SQL-Abfragen in Echtzeit in andere Programmiersprachen.", "isCorrect": false, "explanation": "Realtime übersetzt keine Abfragen, es sendet Änderungsbenachrichtigungen." }
+      ]
+    },
+    {
+      "question": "Was ist der Supabase-Client?",
+      "area": "Supabase-Client",
+      "options": [
+        { "text": "Die Bibliothek, über die deine App alle Supabase-Dienste anspricht.", "isCorrect": true, "explanation": "Richtig: der Client ist die zentrale Schnittstelle für Datenbank, Auth, Storage und Realtime." },
+        { "text": "Ein Desktop-Programm, mit dem du die Datenbank grafisch durchsuchen kannst.", "isCorrect": false, "explanation": "Das wäre das Supabase Dashboard, nicht der Client." },
+        { "text": "Der Benutzer, der sich als Erstes in einer neuen Supabase-Instanz anmeldet.", "isCorrect": false, "explanation": "Der erste Benutzer ist kein spezieller Client." },
+        { "text": "Ein externes Unternehmen, das Supabase für dich betreibt.", "isCorrect": false, "explanation": "Der Client ist eine Bibliothek, kein Unternehmen." }
+      ]
+    },
+    {
+      "question": "Was macht PostgREST in Supabase?",
+      "area": "PostgREST",
+      "options": [
+        { "text": "Es erzeugt aus dem Datenbankschema automatisch eine REST-API.", "isCorrect": true, "explanation": "Richtig: PostgREST übersetzt das Schema in API-Routen." },
+        { "text": "Es komprimiert die Datenbank, damit sie weniger Speicherplatz verbraucht.", "isCorrect": false, "explanation": "PostgREST hat nichts mit Speicherplatzkompression zu tun." },
+        { "text": "Es erstellt einmal pro Tag einen Bericht über die Datenbanknutzung.", "isCorrect": false, "explanation": "Berichte sind nicht die Aufgabe von PostgREST." },
+        { "text": "Es löscht automatisch alte Zeilen, die älter als dreißig Tage sind.", "isCorrect": false, "explanation": "Automatisches Löschen ist nicht die Aufgabe von PostgREST." }
+      ]
+    },
+    {
+      "question": "Welche beiden Schlüssel bekommst du nach der Erstellung eines Supabase-Projekts?",
+      "area": "Supabase",
+      "options": [
+        { "text": "Einen anon key für den Client und einen service_role key für den Server.", "isCorrect": true, "explanation": "Richtig: der anon key hat eingeschränkte Rechte, der service_role key umgeht alle Sicherheitsregeln." },
+        { "text": "Einen public key zum Verschlüsseln und einen private key zum Entschlüsseln.", "isCorrect": false, "explanation": "Supabase verwendet keine Public-Private-Key-Paare für die API." },
+        { "text": "Einen Lese-Schlüssel und einen Schreib-Schlüssel, je nach gewünschter Operation.", "isCorrect": false, "explanation": "Die Schlüssel unterscheiden nicht nach Lese- und Schreibzugriff." },
+        { "text": "Nur einen einzigen Schlüssel, der für alle Zwecke verwendet wird.", "isCorrect": false, "explanation": "Supabase stellt zwei verschiedene Schlüssel mit unterschiedlichen Berechtigungen bereit." }
+      ]
+    },
+    {
+      "question": "Warum sollte man Dateien nicht direkt in der PostgreSQL-Datenbank speichern?",
+      "area": "Storage",
+      "options": [
+        { "text": "Weil es langsam und teuer wird, sobald die Dateien größer sind.", "isCorrect": true, "explanation": "Richtig: Datenbanken sind für strukturierte Zeilen optimiert, nicht für große Dateien." },
+        { "text": "Weil PostgreSQL das Speichern von Dateien grundsätzlich nicht unterstützt.", "isCorrect": false, "explanation": "PostgreSQL kann technisch Dateien speichern, es ist nur nicht effizient." },
+        { "text": "Weil Dateien in der Datenbank nach sieben Tagen automatisch gelöscht werden.", "isCorrect": false, "explanation": "Es gibt keine automatische Löschung nach sieben Tagen." },
+        { "text": "Weil der Supabase-Client keine Methode zum Lesen von Dateien aus der Datenbank hat.", "isCorrect": false, "explanation": "Der Client kann auch Datenbankinhalte lesen, das ist nicht der Grund." }
+      ]
+    },
+    {
+      "question": "Was ist der Vorteil von PostgREST gegenüber selbstgeschriebenen API-Routen?",
+      "area": "PostgREST",
+      "options": [
+        { "text": "Die Routen entstehen automatisch aus dem Datenbankschema, ohne Programmierung.", "isCorrect": true, "explanation": "Richtig: sobald die Tabelle existiert, existiert auch die Route." },
+        { "text": "PostgREST-Routen sind grundsätzlich zehnmal schneller als jede selbstgeschriebene Route.", "isCorrect": false, "explanation": "Die Geschwindigkeit hängt von vielen Faktoren ab, nicht nur von PostgREST." },
+        { "text": "PostgREST ersetzt die gesamte Datenbank, sodass du gar kein PostgreSQL mehr brauchst.", "isCorrect": false, "explanation": "PostgREST setzt auf PostgreSQL auf, es ersetzt es nicht." },
+        { "text": "PostgREST schreibt automatisch die Dokumentation für deine API.", "isCorrect": false, "explanation": "PostgREST erzeugt die API, aber nicht automatisch deren Dokumentation." }
+      ]
+    },
+    {
+      "question": "Welche Umgebungsvariablen verbinden eine Next.js-App mit Supabase?",
+      "area": "Supabase-Client",
+      "options": [
+        { "text": "NEXT_PUBLIC_SUPABASE_URL und NEXT_PUBLIC_SUPABASE_ANON_KEY.", "isCorrect": true, "explanation": "Richtig: diese beiden Variablen braucht der Client für die Verbindung." },
+        { "text": "DATABASE_HOST und DATABASE_PASSWORD wie bei jeder anderen Datenbank auch.", "isCorrect": false, "explanation": "Supabase verwendet URL und anon key, nicht Host und Passwort." },
+        { "text": "SUPABASE_USERNAME und SUPABASE_PASSWORD für die Anmeldung am Dashboard.", "isCorrect": false, "explanation": "Dashboard-Zugangsdaten sind nicht die Client-Konfiguration." },
+        { "text": "API_ENDPOINT und API_SECRET, wie bei jeder REST-API üblich.", "isCorrect": false, "explanation": "Supabase verwendet eigene Bezeichnungen für die Umgebungsvariablen." }
+      ]
+    },
+    {
+      "question": "Warum darf der service_role key niemals im Client-Code stehen?",
+      "area": "Supabase",
+      "options": [
+        { "text": "Weil er alle Sicherheitsregeln umgeht und vollen Zugriff auf die Datenbank gibt.", "isCorrect": true, "explanation": "Richtig: der service_role key ist nur für serverseitigen Code bestimmt." },
+        { "text": "Weil er nur einmal pro Tag verwendet werden darf und sonst das Konto gesperrt wird.", "isCorrect": false, "explanation": "Es gibt keine tägliche Nutzungsbeschränkung für den service_role key." },
+        { "text": "Weil er zu lang ist und den Client-Code verlangsamen würde.", "isCorrect": false, "explanation": "Die Länge des Schlüssels hat keinen Einfluss auf die Geschwindigkeit." },
+        { "text": "Weil er nur in der Programmiersprache Python funktioniert.", "isCorrect": false, "explanation": "Der service_role key funktioniert mit jeder Sprache, das Problem ist die Sicherheit." }
+      ]
+    },
+    {
+      "question": "Wie unterscheidet sich Supabase grundlegend von Firebase?",
+      "area": "Supabase",
+      "options": [
+        { "text": "Supabase nutzt PostgreSQL mit SQL, Firebase hat eine eigene NoSQL-Datenbank.", "isCorrect": true, "explanation": "Richtig: das ist der fundamentale technische Unterschied." },
+        { "text": "Supabase gibt es nur in Europa, Firebase nur in den USA.", "isCorrect": false, "explanation": "Beide Plattformen sind weltweit verfügbar." },
+        { "text": "Supabase ist kostenlos, Firebase kostet immer Geld.", "isCorrect": false, "explanation": "Beide haben kostenlose und kostenpflichtige Tarife." },
+        { "text": "Supabase kann nur mit React verwendet werden, Firebase nur mit Angular.", "isCorrect": false, "explanation": "Beide Plattformen sind Framework-unabhängig." }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Erstelle ein kostenloses Supabase-Projekt auf supabase Punkt com. Gehe nach der Erstellung in den SQL-Editor und führe ein CREATE TABLE aus, das eine Tabelle notes mit den Spalten id, title, content und created_at anlegt. Gehe dann in den Table Editor und füge über die grafische Oberfläche zwei Testzeilen ein. Rufe anschließend im API-Bereich die automatisch von PostgREST erzeugte REST-URL für die Tabelle notes auf und sieh dir die Datenantwort mit deinen beiden Testzeilen an.",
+    "expectation": "Das Supabase-Projekt wurde erstellt. Die Tabelle notes existiert mit den vier Spalten. Zwei Testzeilen wurden eingefügt. Die REST-URL unter /rest/v1/notes liefert eine Datenantwort mit den beiden Zeilen. Der anon key wurde als Header mitgeschickt und die Anfrage war erfolgreich.",
+    "checklist": [
+      "Supabase-Projekt auf supabase.com erstellt",
+      "SQL-Editor geöffnet und CREATE TABLE für notes ausgeführt",
+      "Zwei Testzeilen über den Table Editor eingefügt",
+      "REST-URL /rest/v1/notes im Browser oder mit curl aufgerufen",
+      "Datenantwort mit beiden Zeilen gesehen"
+    ]
+  },
+  "audio": {
+    "file": "M03-04-01.mp3",
+    "durationSeconds": 1800,
+    "voices": ["A", "B"],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Ist Supabase kostenlos, oder muss ich dafür bezahlen?",
+      "answer": "Supabase hat einen großzügigen kostenlosen Tarif, der für Lernprojekte und kleine Apps völlig ausreicht. Du bekommst eine PostgreSQL-Datenbank mit 500 Megabyte Speicher, Auth für bis zu 50.000 monatlich aktive Nutzer, 1 Gigabyte Storage und 2 Gigabyte Realtime-Datenübertragung pro Monat. Erst wenn dein Projekt wächst und diese Grenzen überschreitet, brauchst du einen kostenpflichtigen Tarif. Für alles, was du in diesem Kurs baust, reicht der kostenlose Tarif."
+    },
+    {
+      "question": "Kann ich Supabase auch auf meinem eigenen Server betreiben, statt die Cloud-Version zu nutzen?",
+      "answer": "Ja, Supabase ist Open Source und kann mit Docker auf deinem eigenen Server oder lokal auf deinem Entwicklungsrechner betrieben werden. Die lokale Version nutzt du während der Entwicklung, um nicht versehentlich die Produktionsdatenbank zu verändern. Das FutureDev-Repository enthält eine docker-compose.yml, die eine vollständige lokale Supabase-Instanz startet, inklusive Datenbank, Auth, Storage und aller anderen Dienste."
+    },
+    {
+      "question": "Was ist der Unterschied zwischen dem anon key und dem service_role key?",
+      "answer": "Der anon key ist für den Client-Code in deiner App bestimmt und hat stark eingeschränkte Rechte. Er darf nur auf Tabellen zugreifen, für die du in den Row Level Security-Regeln ausdrücklich Lesezugriff erlaubt hast. Der service_role key umgeht diese Sicherheitsregeln vollständig und darf nur in serverseitigem Code oder in Admin-Werkzeugen verwendet werden. Wenn du den service_role key versehentlich in den Client-Code einbaust, kann jeder Nutzer deiner App die gesamte Datenbank lesen und verändern."
+    },
+    {
+      "question": "Brauche ich für Supabase überhaupt noch SQL-Kenntnisse, oder erledigt der Supabase-Client alles für mich?",
+      "answer": "Du brauchst SQL-Kenntnisse für zwei Dinge: das Anlegen der Tabellen über Migrationen und das Schreiben komplexer Abfragen, die über einfaches SELECT hinausgehen. Der Supabase-Client nimmt dir die Netzwerkkommunikation und die Anmeldung ab, aber das Datenbankschema und die Abfragen musst du selbst entwerfen. Die SQL-Grundlagen aus den Lektionen M03-03-01 und M03-03-02 sind deshalb die direkte Voraussetzung für diese Lektion."
+    },
+    {
+      "question": "Wie unterscheidet sich Supabase von Firebase, von dem ich schon gehört habe?",
+      "answer": "Firebase ist Googles geschlossene Plattform mit einer eigenen NoSQL-Datenbank, während Supabase auf der offenen, bewährten PostgreSQL-Datenbank aufbaut. Der größte Unterschied ist, dass du bei Supabase echtes SQL mit JOINs, Fremdschlüsseln und Transaktionen nutzen kannst, während Firebase eine andere, weniger mächtige Abfragesprache hat. Außerdem ist Supabase Open Source, sodass du nicht an einen einzelnen Anbieter gebunden bist und zur Not auf einen eigenen Server umziehen kannst."
+    },
+    {
+      "question": "Muss ich für jede Tabelle einzeln Row Level Security-Regeln schreiben?",
+      "answer": "Standardmäßig sind alle Tabellen ohne Row Level Security für jeden lesbar und schreibbar, der den anon key kennt, was ein erhebliches Sicherheitsrisiko ist. Du solltest für jede Tabelle, die sensible Daten enthält, eine RLS-Regel schreiben. Für einfache Fälle reicht eine Regel wie Nutzer dürfen nur ihre eigenen Zeilen sehen. Supabase bietet dafür eine grafische Oberfläche und vorgefertigte SQL-Vorlagen, sodass du die Regeln nicht von Grund auf selbst formulieren musst."
+    }
+  ]
+}
