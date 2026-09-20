@@ -1,0 +1,607 @@
+{
+  "id": "M03-02-02",
+  "title": "Node.js und Express: JavaScript auf dem Server",
+  "durationMinutes": 26,
+  "prerequisites": [
+    "M03-02-01"
+  ],
+  "terms": [
+    {
+      "term": "V8-Engine",
+      "definition": "die JavaScript-Engine von Google, die Node.js nutzt, um JavaScript-Code außerhalb des Browsers auf einem Server auszuführen, ohne dass dafür ein Browserfenster geöffnet sein muss."
+    },
+    {
+      "term": "Event Loop",
+      "definition": "die endlose Warteschleife in Node.js, die eingehende Anfragen annimmt und bearbeitet, ohne dass der Server bei einer langsamen Aufgabe für alle anderen Anfragen blockiert ist."
+    },
+    {
+      "term": "npm",
+      "definition": "der Paketmanager für Node.js, mit dem man fertige Code-Bausteine wie Express herunterlädt, versioniert und in das eigene Projekt einbindet."
+    },
+    {
+      "term": "Express",
+      "definition": "das am weitesten verbreitete Framework für Node.js, das Routen, Middleware und Antworten in wenigen Zeilen bereitstellt und dafür kaum mehr als eine JavaScript-Datei braucht."
+    },
+    {
+      "term": "Middleware",
+      "definition": "eine Funktion in Express, die zwischen Anfrage und Antwort geschaltet wird und Anfragen prüft, verändert oder ablehnt, bevor die eigentliche Route sie überhaupt zu sehen bekommt."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir eine Dolmetscherin vor, die eine Fremdsprache nicht nur für eine Person im selben Raum übersetzt, sondern für Hunderte gleichzeitig an ganz verschiedenen Orten der Welt, und das ohne einen einzigen gemeinsamen Bildschirm."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "In der vorigen Lektion hast du gelernt, was ein Backend grundsätzlich tut. Jetzt geht es um die Frage, mit welchen Werkzeugen man so ein Backend tatsächlich baut, und die erste Antwort darauf heißt Node.js."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Warum kann man JavaScript überhaupt auf einem Server benutzen, wenn es doch für den Browser erfunden wurde?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Weil jemand die JavaScript-Engine aus dem Browser genommen und zu einem eigenständigen Programm gemacht hat. Diese herausgelöste Engine heißt V8-Engine, und das Programm drumherum, das sie auf einem Server laufen lässt, heißt Node.js."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil du dadurch für Frontend und Backend nur eine einzige Sprache lernen musst, statt für jede Seite eine komplett neue. Die Funktionen, Variablen und Kontrollstrukturen aus M01-06 gelten auf dem Server genauso wie im Browser."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "In der Datei route.ts aus repo-lexipulse, die du schon aus M03-02-01 kennst, steht ganz oben export const runtime gleich Anführungszeichen nodejs Anführungszeichen. Diese eine Zeile legt fest, dass genau diese Backend-Datei in Node.js läuft und damit Zugriff auf dieselbe V8-Engine hat, die auch den Browser antreibt."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir einen Kellner vor, der nicht einfach eine Bestellung nach der anderen abarbeitet, sondern immer dann sofort zu einem Gast geht, wenn dieser bereit ist. Auch wenn der Gast am anderen Ende des Raums sitzt."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Ein Server muss oft warten, etwa darauf, dass eine Datenbank eine Antwort liefert oder eine Datei von der Festplatte gelesen wird. Würde der Server in dieser Wartezeit einfach stillstehen, käme keine einzige andere Anfrage durch."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Wie schafft Node.js es dann, während einer Wartezeit trotzdem andere Anfragen zu bearbeiten?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Genau dafür hat Node.js einen Mechanismus, der Event Loop heißt. Die Event Loop ist eine endlose Warteschleife, die eine Anfrage anstößt und sofort zur nächsten weitergeht. Später kommt sie zurück, wenn die erste Anfrage ihre Antwort bereit hat."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil ein Server ohne Event Loop bei der ersten langsamen Anfrage für alle anderen blockieren würde. Stell dir eine Bäckerei mit nur einer Verkäuferin vor, die bei der ersten Kundin eine Stunde lang wartet, statt schon die nächste zu bedienen."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "In route.ts aus repo-lexipulse ruft die Funktion POST irgendwann fetchHtml auf, um eine fremde Webseite aus dem Internet zu laden. Während dieser Ladezeit, die eine halbe Sekunde oder länger dauert, arbeitet die Event Loop weiter und bearbeitet bereits die nächste Anfrage einer ganz anderen Person."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir einen riesigen Baumarkt vor, in dem du nicht für jedes Brett selbst in den Wald fahren musst. Du nimmst fertig zugeschnittene Teile direkt aus dem Regal, jedes mit einem Etikett, wofür es gedacht ist."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Kaum jemand baut ein Backend heute von Grund auf neu, ohne fertige Bausteine. Für fast jede wiederkehrende Aufgabe, etwa das Lesen einer Anfrage oder das Verschicken einer Antwort, gibt es bereits getesteten, veröffentlichten Code, den jemand anderes geschrieben hat."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Woher bekommt man diese fertigen Bausteine, und woher weiß man, welche Version man braucht?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Der Paketmanager von Node.js heißt npm, kurz für Node Package Manager. npm ist ein Werkzeug, mit dem man fertige Code-Bausteine herunterlädt, versioniert und in das eigene Projekt einbindet, ganz ähnlich wie du in M01-02-03 gelernt hast, dass Software von einer zentralen Stelle im Internet bezogen wird."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil ein Projekt schnell Dutzende solcher Bausteine braucht. Jedes Mal von Hand den richtigen Code suchen, herunterladen und aktuell halten wäre viel zu aufwendig und würde fast sicher zu Fehlern führen. npm erledigt das mit einem einzigen Befehl."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Im Repo repo-futuredev, dem Quellcode der Lernplattform, in der du dich gerade befindest, steht in der Datei package.json ganz oben bei name der Wert futuredev. Weiter unten listet devDependencies viele solcher Bausteine auf, jeder mit einer genauen Versionsnummer dahinter. npm liest diese eine Datei und weiß dadurch genau, was es herunterladen muss."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir eine Rezeptionistin vor, die am Eingang eines großen Gebäudes sitzt und jeden Besucher einzeln fragt, zu wem er möchte, und ihn dann gezielt in den richtigen Stock und das richtige Zimmer schickt."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Ein Backend muss bei jeder Anfrage entscheiden, welche Funktion sie bearbeiten soll, abhängig von der aufgerufenen Adresse und der verwendeten Methode. Diese Aufgabe ist so grundlegend, dass es dafür ein eigenes, spezialisiertes Werkzeug gibt."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Kann man diese Aufgabe nicht einfach mit ein paar if-Abfragen aus M01-06-02 selbst lösen?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Bei drei Routen ginge das vielleicht noch, bei dreißig wird der Code aber schnell unlesbar. Du würdest fast sicher eine Adresse vergessen oder zwei Adressen versehentlich gleich behandeln. Ein spezialisiertes Werkzeug nimmt dir diese Fleißarbeit ab und sorgt mit einer erprobten Struktur dafür, dass nichts durchrutscht."
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Dieses spezialisierte Werkzeug für Node.js heißt Express. Express ist das am weitesten verbreitete Framework, das Routen, Middleware und Antworten in wenigen Zeilen bereitstellt, und dafür kaum mehr als eine einzige JavaScript-Datei braucht."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Ein minimaler Express-Server in einer einzelnen Datei namens server.js braucht nur vier Schritte. Erstens, mit require das Express-Paket laden. Zweitens, mit express Klammer auf Klammer zu eine neue Anwendung erzeugen. Drittens, mit app.get eine Route für Schrägstrich festlegen, die den Text Hallo Welt zurückschickt. Viertens, mit app.listen den Server auf einem Port starten. Das ist alles, vier Schritte, ein lauffähiges Backend."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil Express dadurch besonders leicht zu lernen ist. Anders als viele andere Frameworks zeigt Express von der ersten Minute an das fertige Ergebnis. Du verstehst sofort, was jede Zeile tut, statt von Dutzenden Dateien und Einstellungen erschlagen zu werden."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir eine Sicherheitsschleuse am Flughafen vor. Bevor du in den Abflugbereich kommst, musst du durch mehrere Kontrollen hintereinander. Jede prüft etwas anderes: den Ausweis, das Gepäck, die Bordkarte."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Eine Express-Route kann eine Anfrage nicht einfach ungeprüft annehmen, genau wie der Flughafen niemanden unkontrolliert in den Abflugbereich lässt. Zwischen dem Eintreffen der Anfrage und der eigentlichen Antwort können mehrere Prüfungen hintereinander geschaltet sein, eine nach der anderen."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Wie schaltet man diese Prüfungen in Express hintereinander, ohne dass sie sich gegenseitig in die Quere kommen?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Dafür gibt es in Express einen festen Begriff: Middleware. Eine Middleware ist eine Funktion, die zwischen Anfrage und Antwort geschaltet wird und Anfragen prüft, verändert oder ablehnt, bevor die eigentliche Route sie überhaupt zu sehen bekommt."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil du dadurch häufige Prüfungen, etwa ob eine Person überhaupt angemeldet ist, nur ein einziges Mal schreiben musst, statt sie in jeder einzelnen Route zu wiederholen. Jede einzelne Route bekommt immer nur bereits geprüfte Anfragen zu sehen."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "In einem Express-Backend steht vor allen anderen Routen eine einzige Zeile wie app.use authMiddleware. Diese eine Zeile sorgt dafür, dass jede einzelne Anfrage, ganz gleich an welche Adresse, zuerst diese Middleware durchläuft. Kommt die Anfrage ohne gültige Anmeldung, lehnt die Middleware sie sofort ab, und die darunterliegenden Routen bekommen sie nie zu Gesicht."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir eine Fabrikstraße vor, in der jedes Werkstück mehrere Stationen durchläuft. An der ersten Station wird es gereinigt, an der zweiten vermessen, an der dritten lackiert. Keine Station muss wissen, was die anderen tun."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Express verarbeitet eine Anfrage genauso von oben nach unten, Middleware für Middleware, bis eine davon die Anfrage beantwortet oder ablehnt. Die Reihenfolge, in der Middleware im Code steht, ist die Reihenfolge, in der sie ausgeführt wird."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Was passiert, wenn ich die Reihenfolge der Middleware in meinem Code versehentlich vertausche?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Dann kann eine Prüfung ins Leere laufen oder eine wichtige Kontrolle nie erreicht werden, und das ist einer der häufigsten Fehler beim Bau eines Express-Backends. Stell dir vor, du prüfst zuerst die Berechtigung und danach erst, ob die Person überhaupt angemeldet ist. Die Berechtigungsprüfung würde fast immer fehlschlagen, weil sie noch gar nicht weiß, wer die Anfrage schickt."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Die richtige Reihenfolge ist deshalb fast immer dieselbe. Ganz oben stehen Middleware für Dinge, die jede Anfrage braucht, etwa das Lesen des Anfragekörpers mit express.json Klammer auf Klammer zu. Darunter kommen optionale Prüfungen wie eine Anmeldung. Ganz unten stehen die eigentlichen Routen, die nur noch bereits geprüfte und vorbereitete Anfragen sehen."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "In route.ts aus repo-lexipulse läuft die Prüfung nach demselben Muster, auch wenn diese Datei kein reines Express ist. Erst wird die Anfrage mit request.json gelesen, dann wird die url auf Gültigkeit geprüft, dann kommt die Sicherheitsprüfung assertSafeUrl. Erst ganz am Ende folgt die eigentliche Arbeit mit fetchHtml. Genau dieses Muster, Prüfung vor Verarbeitung, ist das, was Express Middleware erzwingt."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir ein Schweizer Taschenmesser vor, das anders als ein gewöhnliches Messer nicht nur eine Klinge hat, sondern Schere, Dosenöffner, Korkenzieher und Feile, jedes Werkzeug für einen anderen Zweck, aber alle in einem einzigen Gerät."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Node.js mit Express allein kann noch keine Daten speichern, keine Bilder verarbeiten und keine E-Mails verschicken. Aber npm hat für jede dieser Aufgaben mindestens ein passendes Paket, oft sogar mehrere zur Auswahl, genau wie das Taschenmesser für jede Aufgabe ein eigenes kleines Werkzeug mitbringt."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Woher weiß ich als Anfängerin, welches der vielen npm-Pakete für eine Aufgabe das richtige ist?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist am Anfang tatsächlich die schwierigste Frage, und es gibt keine perfekte Antwort, nur drei gute Faustregeln aus der Praxis. Erstens: ein Paket, das regelmäßig aktualisiert wird und viele andere Projekte es schon benutzen, ist meist die sicherere Wahl. Zweitens: das offizielle Express-Paket oder ein von der Express-Community empfohlenes ist fast immer ein guter Startpunkt. Drittens: für den Lernanfang reichen die vier eingebauten Bausteine von Node.js, also http, fs, path und url, völlig aus, ohne ein einziges zusätzliches Paket."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Fassen wir den Werkzeugkasten dieser Lektion zusammen. Node.js bringt die V8-Engine auf den Server und mit ihr die Event Loop, die viele Anfragen gleichzeitig bedient. Express baut darauf auf und liefert Routen und Middleware, um Anfragen geordnet anzunehmen und zu prüfen. npm schließlich füllt den Werkzeugkasten mit tausenden fertigen Bausteinen, von denen du für ein erstes eigenes Backend nur eine Handvoll brauchst."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Reichen diese drei Werkzeuge, Node.js, Express und npm, für jedes nur denkbare Backend aus?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Für sehr viele ja, für manche nicht. Es gibt Aufgaben, bei denen andere Sprachen und andere Frameworks besser passen, etwa wenn ein Backend sehr viele Rechenaufgaben gleichzeitig ausführen muss. Oder wenn ein großes Team mit klaren Regeln über viele Jahre hinweg daran arbeitet. Genau diese andere Welt lernst du in der nächsten Lektion M03-02-03 kennen."
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "isKeySentence": true,
+      "text": "Halten wir also fest: Node.js ist die Laufzeitumgebung, die JavaScript mit der V8-Engine auf den Server bringt und über die Event Loop viele Anfragen gleichzeitig bedient, ohne zu blockieren. Express ist das schlanke Framework darauf, das jeder Anfrage eine Route zuweist und über Middleware Prüfungen vor die Verarbeitung schaltet, immer in einer festen Reihenfolge von oben nach unten. npm schließlich liefert tausende fertige Bausteine, mit denen aus den wenigen Zeilen eines minimalen Express-Servers ein vollständiges Backend wird, das mit Datenbanken spricht, Dateien ausliefert oder E-Mails verschickt. Alles, was du dafür an neuem Wissen brauchst, ist eine einzige Sprache, die du aus den früheren Lektionen bereits kennst: JavaScript."
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "isKeySentence": false,
+      "text": "Noch einmal die Begriffe dieser Lektion. V8-Engine: die JavaScript-Engine von Google, die Node.js nutzt, um JavaScript-Code außerhalb des Browsers auf einem Server auszuführen."
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "isKeySentence": false,
+      "text": "Event Loop: die endlose Warteschleife in Node.js, die eingehende Anfragen annimmt und bearbeitet, ohne dass der Server bei einer langsamen Aufgabe für alle anderen Anfragen blockiert ist."
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "isKeySentence": false,
+      "text": "npm: der Paketmanager für Node.js, mit dem man fertige Code-Bausteine wie Express herunterlädt, versioniert und in das eigene Projekt einbindet."
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "isKeySentence": false,
+      "text": "Express: das am weitesten verbreitete Framework für Node.js, das Routen, Middleware und Antworten in wenigen Zeilen bereitstellt."
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "isKeySentence": false,
+      "text": "Middleware: eine Funktion in Express, die zwischen Anfrage und Antwort geschaltet wird und Anfragen prüft, verändert oder ablehnt, bevor die eigentliche Route sie überhaupt zu sehen bekommt."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Kann ich mit Node.js auch ohne Express ein Backend bauen?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Ja, Node.js bringt von sich aus ein eingebautes http-Modul mit, das alle grundlegenden Aufgaben eines Servers erledigen kann. Sobald aber mehr als zwei oder drei verschiedene Routen dazukommen, wird der Code mit dem reinen http-Modul schnell unübersichtlich, weil du jede Adresse, jede Methode und jeden Fehler von Hand unterscheiden musst. Express nimmt dir genau diese Fleißarbeit ab und bleibt dabei so schlank, dass es sich kaum lohnt, darauf zu verzichten."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Muss ich Node.js und npm auf meinem Rechner installieren, um diese Lektion praktisch nachzuvollziehen?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Für diese Lektion reicht das Verständnis der Begriffe, aber die Praxisaufgabe am Ende setzt Node.js voraus. Die Installation ist einfach: Ein einziger Installer von nodejs.org bringt sowohl Node.js als auch npm auf deinen Rechner, in einer gemeinsamen Installation. Der Vorgang dauert etwa zwei Minuten und ist in der Aufgabe Schritt für Schritt beschrieben."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Was genau ist der Unterschied zwischen einer normalen JavaScript-Funktion und einer Middleware in Express?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Eine Middleware ist eine ganz normale JavaScript-Funktion, die zusätzlich drei besondere Parameter bekommt: das Anfrageobjekt, kurz req, das Antwortobjekt, kurz res, und eine Funktion namens next. Ruft die Middleware am Ende next Klammer auf Klammer zu auf, geht die Anfrage an die nächste Middleware oder Route weiter. Ruft sie stattdessen res.send auf, endet die Kette sofort, und keine weitere Middleware bekommt die Anfrage zu sehen."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Blockiert die Event Loop wirklich niemals, auch nicht bei tausend gleichzeitigen Anfragen?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Die Event Loop selbst blockiert nicht, aber dein eigener Code kann sie blockieren, wenn du eine sehr lange Rechenaufgabe in einer einzelnen Funktion ausführst, etwa eine aufwendige Berechnung, die mehrere Sekunden dauert. Solange eine solche Aufgabe läuft, kann Node.js keine andere Anfrage bearbeiten, weil die V8-Engine immer nur eine Sache gleichzeitig rechnet."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Woher weiß npm, welche Pakete mein Projekt braucht, ohne dass ich sie einzeln aufschreiben muss?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "npm muss die Pakete leider doch einzeln kennen, und zwar genau aus der Datei package.json im Wurzelverzeichnis des Projekts. In dieser Datei stehen unter dependencies die Pakete, die das Programm im laufenden Betrieb braucht, und unter devDependencies die Pakete, die nur beim Entwickeln helfen, etwa zum Testen. Der Befehl npm install liest diese eine Datei und lädt alle darin genannten Pakete in einer passenden Version herunter."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Kann ich Express auch für ein ganz kleines Backend mit nur zwei Routen benutzen, oder lohnt es sich da noch nicht?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Express lohnt sich selbst bei einer einzigen Route, weil es dir nicht nur die Adresse abnimmt, sondern auch die richtige Behandlung von Fehlern, das Setzen von Kopfzeilen und das Lesen des Anfragekörpers. Das alles bekommst du mit einer einzigen zusätzlichen npm-Installation. Ein Backend ohne Express müsste jede dieser Kleinigkeiten von Hand erledigen, und dabei schleichen sich fast immer vermeidbare Fehler ein."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Warum heißt die Engine ausgerechnet V8, und nicht einfach JavaScript-Engine?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "V8 ist der Name eines leistungsstarken Automotors, und die Entwickler bei Google fanden, dass eine schnelle, kraftvolle JavaScript-Engine genau so einen Namen verdient hat. Die V8-Engine ist in C Plus Plus geschrieben und übersetzt JavaScript in Maschinencode, also in Befehle, die der Prozessor direkt versteht. Ältere Engines lasen den Code dagegen nur Zeile für Zeile und legten ihn aus. Genau diese direkte Übersetzung macht Node.js so schnell, dass es für ein Backend überhaupt in Frage kommt."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Was passiert, wenn ich in Express dieselbe Adresse für zwei verschiedene Routen vergebe?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Express führt immer die erste passende Route aus, die es in der Reihenfolge von oben nach unten findet, und die zweite wird nie erreicht. Es sei denn, die erste ruft irgendwann next Klammer auf Klammer zu auf. Das ist kein Fehler, sondern das beabsichtigte Verhalten von Express. Aus diesem Grund stehen allgemeine Routen immer ganz unten im Code, damit sie nur greifen, wenn keine der spezifischen Routen darüber gepasst hat."
+    }
+  ],
+  "practiceExample": {
+    "text": "In route.ts aus repo-lexipulse, bekannt aus M03-02-01, legt export const runtime gleich Anführungszeichen nodejs Anführungszeichen fest, dass diese Datei in der Node.js-Laufzeitumgebung läuft. Der gesamte Ablauf aus request.json lesen, prüfen, fetchHtml aufrufen und mit NextResponse.json antworten folgt demselben Muster, das Express mit Middleware erzwingt: erst die Anfrage annehmen, dann prüfen, dann verarbeiten und zuletzt antworten. Die Event Loop von Node.js sorgt während der Wartezeit auf die Antwort der fremden Webseite dafür, dass der Server nicht blockiert.",
+    "repoNote": "repo-lexipulse",
+    "location": "apps/web/src/app/api/extract/route.ts, Zeile 20 (runtime nodejs), Zeilen 285 bis 303 (Funktion POST mit Vierschritt)"
+  },
+  "quiz": [
+    {
+      "question": "Was ist die V8-Engine?",
+      "area": "Node.js",
+      "options": [
+        { "text": "Die JavaScript-Engine von Google, die Node.js antreibt.", "isCorrect": true, "explanation": "Die V8-Engine ist die herausgelöste JavaScript-Engine, die Node.js antreibt." },
+        { "text": "Ein spezieller Motor im Rechenzentrum, der Server bei Hitze kühlt.", "isCorrect": false, "explanation": "Die V8-Engine ist Software, keine physische Kühlung." },
+        { "text": "Die eingebaute Datenbank von Node.js für alle Anfragen.", "isCorrect": false, "explanation": "Node.js hat keine eingebaute Datenbank." },
+        { "text": "Ein npm-Paket, das vor Node.js installiert werden muss.", "isCorrect": false, "explanation": "Die V8-Engine ist in Node.js bereits eingebaut." }
+      ]
+    },
+    {
+      "question": "Was macht die Event Loop in Node.js?",
+      "area": "Node.js",
+      "options": [
+        { "text": "Sie geht zur nächsten Anfrage weiter, während eine langsame Aufgabe läuft.", "isCorrect": true, "explanation": "Genau das beschreibt die Lektion mit dem Bild des Kellners." },
+        { "text": "Sie rechnet alle Anfragen streng nacheinander durch, ohne jemals zu einer vorherigen zur�ckzukehren.", "isCorrect": false, "explanation": "Das Gegenteil ist richtig: die Event Loop bearbeitet Anfragen parallel." },
+        { "text": "Sie schaltet den Server nach jeder Anfrage aus und wieder ein.", "isCorrect": false, "explanation": "Ein automatisches Aus- und Einschalten passiert nie." },
+        { "text": "Sie übersetzt JavaScript-Code in Maschinencode.", "isCorrect": false, "explanation": "Das Übersetzen übernimmt die V8-Engine, nicht die Event Loop." }
+      ]
+    },
+    {
+      "question": "Warum ist die Event Loop für ein Backend so wichtig?",
+      "area": "Node.js",
+      "options": [
+        { "text": "Ohne sie würde eine langsame Anfrage alle anderen blockieren.", "isCorrect": true, "explanation": "Genau diesen Grund nennt die Lektion." },
+        { "text": "Ohne sie könnte Node.js keine JavaScript-Datei lesen.", "isCorrect": false, "explanation": "Das Lesen von Dateien übernimmt das fs-Modul." },
+        { "text": "Ohne sie wüsste npm nicht, welche Pakete es herunterladen soll.", "isCorrect": false, "explanation": "npm liest die package.json, nicht die Event Loop." },
+        { "text": "Ohne sie würde der Server die Programmiersprache wechseln.", "isCorrect": false, "explanation": "Ein Sprachwechsel ist kein Konzept der Event Loop." }
+      ]
+    },
+    {
+      "question": "Welche Datei listet alle benötigten npm-Pakete eines Projekts auf?",
+      "area": "npm",
+      "options": [
+        { "text": "package.json", "isCorrect": true, "explanation": "Die package.json ist das Herzstück eines jeden npm-Projekts." },
+        { "text": "server.js", "isCorrect": false, "explanation": "server.js enthält den Code, nicht die Paketliste." },
+        { "text": "node_modules.txt", "isCorrect": false, "explanation": "Eine Datei node_modules.txt gibt es nicht." },
+        { "text": "Dockerfile", "isCorrect": false, "explanation": "Ein Dockerfile beschreibt eine Containerumgebung." }
+      ]
+    },
+    {
+      "question": "Was passiert bei zwei Express-Routen mit derselben Adresse?",
+      "area": "Express",
+      "options": [
+        { "text": "Nur die erste wird ausgeführt, es sei denn, sie ruft next auf.", "isCorrect": true, "explanation": "Genau das erklärt die FAQ dieser Lektion." },
+        { "text": "Beide Routen werden gleichzeitig ausgeführt.", "isCorrect": false, "explanation": "Express führt nie zwei Routen gleichzeitig für eine Anfrage aus." },
+        { "text": "Der Server meldet einen Fehler und startet nicht.", "isCorrect": false, "explanation": "Express startet trotzdem, die zweite Route bleibt unerreichbar." },
+        { "text": "Die zweite Route überschreibt automatisch die erste.", "isCorrect": false, "explanation": "Express überschreibt keine bestehenden Routen." }
+      ]
+    },
+    {
+      "question": "Welche drei besonderen Parameter bekommt jede Express-Middleware?",
+      "area": "Middleware",
+      "options": [
+        { "text": "req, res und next", "isCorrect": true, "explanation": "Genau diese drei Parameter nennt die Lektion." },
+        { "text": "app, port und host", "isCorrect": false, "explanation": "Diese gehören zur Servererzeugung, nicht zur Middleware." },
+        { "text": "get, post und put", "isCorrect": false, "explanation": "Das sind HTTP-Methoden, keine Middleware-Parameter." },
+        { "text": "error, request und response", "isCorrect": false, "explanation": "error ist ein optionaler vierter Parameter, nicht der Standard." }
+      ]
+    },
+    {
+      "question": "Warum steht die Anmeldungs-Middleware vor den Routen?",
+      "area": "Middleware",
+      "options": [
+        { "text": "Damit eine nicht angemeldete Anfrage vor der Route abgelehnt wird.", "isCorrect": true, "explanation": "Genau das erklärt die Lektion mit dem Bild der Sicherheitsschleuse." },
+        { "text": "Damit die Routen schneller antworten.", "isCorrect": false, "explanation": "Die Reihenfolge ändert die Logik, nicht die Ausführungszeit." },
+        { "text": "Weil Express Routen nur nach einer Prüfung ausführen darf.", "isCorrect": false, "explanation": "Express erzwingt keine Prüfung, der Entwickler legt die Reihenfolge fest." },
+        { "text": "Damit npm vor dem Start die Pakete laden kann.", "isCorrect": false, "explanation": "npm lädt Pakete unabhängig von der Middleware-Reihenfolge." }
+      ]
+    },
+    {
+      "question": "Welcher npm-Befehl liest die package.json und lädt alle Pakete herunter?",
+      "area": "npm",
+      "options": [
+        { "text": "npm install", "isCorrect": true, "explanation": "Genau diesen Befehl beschreibt die Lektion." },
+        { "text": "npm start", "isCorrect": false, "explanation": "npm start führt das start-Skript aus, lädt aber keine neuen Pakete." },
+        { "text": "npm run download", "isCorrect": false, "explanation": "Diesen Befehl gibt es nicht als Standard." },
+        { "text": "npm update", "isCorrect": false, "explanation": "npm update aktualisiert installierte Pakete, installiert keine neuen." }
+      ]
+    },
+    {
+      "question": "Was ist der Hauptvorteil von Express gegenüber dem http-Modul?",
+      "area": "Express",
+      "options": [
+        { "text": "Express unterscheidet Adressen, Methoden und Fehler automatisch.", "isCorrect": true, "explanation": "Genau das beschreibt die Lektion als Fleißarbeit, die Express übernimmt." },
+        { "text": "Express lässt den Server doppelt so schnell laufen.", "isCorrect": false, "explanation": "Express macht den Server nicht automatisch schneller." },
+        { "text": "Express ist eine komplett andere Programmiersprache.", "isCorrect": false, "explanation": "Express ist in JavaScript geschrieben und baut auf Node.js auf." },
+        { "text": "Express ersetzt die V8-Engine durch eine schnellere.", "isCorrect": false, "explanation": "Express benutzt dieselbe V8-Engine wie Node.js." }
+      ]
+    },
+    {
+      "question": "Wofür steht die Abkürzung npm?",
+      "area": "npm",
+      "options": [
+        { "text": "Node Package Manager", "isCorrect": true, "explanation": "Genau das sagt die Lektion." },
+        { "text": "New Project Maker", "isCorrect": false, "explanation": "New Project Maker ist ein erfundenes Backronym." },
+        { "text": "Network Protocol Module", "isCorrect": false, "explanation": "Network Protocol Module ist erfunden." },
+        { "text": "Node Process Monitor", "isCorrect": false, "explanation": "Node Process Monitor ist eine erfundene Abkürzung." }
+      ]
+    },
+    {
+      "question": "Warum ist es vorteilhaft, dass Node.js im Frontend und Backend JavaScript nutzt?",
+      "area": "Node.js",
+      "options": [
+        { "text": "Du musst nur eine einzige Programmiersprache lernen.", "isCorrect": true, "explanation": "Genau diesen Vorteil nennt die Lektion." },
+        { "text": "Der Browser kann direkt auf die Server-Datenbank zugreifen.", "isCorrect": false, "explanation": "Ein direkter Datenbankzugriff aus dem Browser wäre ein Sicherheitsrisiko." },
+        { "text": "Node.js läuft dann automatisch im Browser mit.", "isCorrect": false, "explanation": "Node.js läuft auf dem Server, nicht im Browser." },
+        { "text": "Das Internet entfällt als Übertragungsweg.", "isCorrect": false, "explanation": "Das Internet bleibt der Übertragungsweg, unabhängig von der Sprache." }
+      ]
+    },
+    {
+      "question": "Wann kann die Event Loop von Node.js trotzdem blockieren?",
+      "area": "Node.js",
+      "options": [
+        { "text": "Wenn dein Code eine sehr lange Rechenaufgabe in einer Funktion ausführt.", "isCorrect": true, "explanation": "Dein Code kann die Event Loop blockieren." },
+        { "text": "Wenn mehr als fünf npm-Pakete installiert sind.", "isCorrect": false, "explanation": "Die Anzahl der Pakete beeinflusst die Event Loop nicht." },
+        { "text": "Wenn der Server länger als 24 Stunden ohne Neustart läuft.", "isCorrect": false, "explanation": "Node.js kann wochenlang laufen, die Event Loop bleibt aktiv." },
+        { "text": "Wenn die package.json mehr als 100 Zeilen lang ist.", "isCorrect": false, "explanation": "Die Länge der package.json beeinflusst die Event Loop nicht." }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Installiere Node.js von nodejs.org, falls noch nicht geschehen. Erstelle einen neuen Ordner und darin eine Datei server.js mit folgendem Inhalt: const express gleich require in Klammern express, dann const app gleich express in Klammern, dann app Punkt get in Klammern Schrägstrich Komma Leerzeichen in Klammern req Komma res in geschweiften Klammern res Punkt send in Klammern Anführungszeichen Hallo Welt Anführungszeichen, dann app Punkt listen in Klammern dreitausend Komma Leerzeichen in Klammern in geschweiften Klammern console Punkt log in Klammern Anführungszeichen Server läuft auf Port 3000 Anführungszeichen. Führe danach nacheinander npm init minus y, npm install express und node server.js aus. Öffne zum Schluss im Browser die Adresse http colon Schrägstrich Schrägstrich localhost colon dreitausend und prüfe, ob Hallo Welt im Browserfenster erscheint.",
+    "expectation": "Im Browser erscheint der Text Hallo Welt, und im Terminal steht Server läuft auf Port 3000.",
+    "checklist": [
+      "Node.js von nodejs.org installiert und node --version erfolgreich ausgeführt",
+      "neuen Ordner erstellt und darin eine Datei server.js mit dem beschriebenen Code angelegt",
+      "npm init minus y ausgeführt und package.json entstanden",
+      "npm install express ausgeführt und node_modules entstanden",
+      "node server.js gestartet und im Browser http colon Schrägstrich Schrägstrich localhost colon dreitausend aufgerufen",
+      "Hallo Welt im Browser gesehen und den Server mit Strg+C beendet"
+    ]
+  },
+  "audio": {
+    "file": "M03-02-02.mp3",
+    "durationSeconds": 1560,
+    "voices": ["A", "B"],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Kann ich mit Node.js auch ohne Express ein Backend bauen?",
+      "answer": "Ja, Node.js bringt von sich aus ein eingebautes http-Modul mit, das alle grundlegenden Aufgaben eines Servers erledigen kann. Sobald aber mehr als zwei oder drei verschiedene Routen dazukommen, wird der Code mit dem reinen http-Modul schnell unübersichtlich, weil du jede Adresse, jede Methode und jeden Fehler von Hand unterscheiden musst. Express nimmt dir genau diese Fleißarbeit ab und bleibt dabei so schlank, dass es sich kaum lohnt, darauf zu verzichten."
+    },
+    {
+      "question": "Muss ich Node.js und npm auf meinem Rechner installieren, um diese Lektion praktisch nachzuvollziehen?",
+      "answer": "Für diese Lektion reicht das Verständnis der Begriffe, aber die Praxisaufgabe am Ende setzt Node.js voraus. Die Installation ist einfach: Ein einziger Installer von nodejs.org bringt sowohl Node.js als auch npm auf deinen Rechner, in einer gemeinsamen Installation. Der Vorgang dauert etwa zwei Minuten und ist in der Aufgabe Schritt für Schritt beschrieben."
+    },
+    {
+      "question": "Was genau ist der Unterschied zwischen einer normalen JavaScript-Funktion und einer Middleware in Express?",
+      "answer": "Eine Middleware ist eine ganz normale JavaScript-Funktion, die zusätzlich drei besondere Parameter bekommt: das Anfrageobjekt, kurz req, das Antwortobjekt, kurz res, und eine Funktion namens next. Ruft die Middleware am Ende next Klammer auf Klammer zu auf, geht die Anfrage an die nächste Middleware oder Route weiter. Ruft sie stattdessen res.send auf, endet die Kette sofort, und keine weitere Middleware bekommt die Anfrage zu sehen."
+    },
+    {
+      "question": "Blockiert die Event Loop wirklich niemals, auch nicht bei tausend gleichzeitigen Anfragen?",
+      "answer": "Die Event Loop selbst blockiert nicht, aber dein eigener Code kann sie blockieren, wenn du eine sehr lange Rechenaufgabe in einer einzelnen Funktion ausführst, etwa eine aufwendige Berechnung, die mehrere Sekunden dauert. Solange eine solche Aufgabe läuft, kann Node.js keine andere Anfrage bearbeiten, weil die V8-Engine immer nur eine Sache gleichzeitig rechnet."
+    },
+    {
+      "question": "Woher weiß npm, welche Pakete mein Projekt braucht, ohne dass ich sie einzeln aufschreiben muss?",
+      "answer": "npm muss die Pakete leider doch einzeln kennen, und zwar genau aus der Datei package.json im Wurzelverzeichnis des Projekts. In dieser Datei stehen unter dependencies die Pakete, die das Programm im laufenden Betrieb braucht, und unter devDependencies die Pakete, die nur beim Entwickeln helfen, etwa zum Testen. Der Befehl npm install liest diese eine Datei und lädt alle darin genannten Pakete in einer passenden Version herunter."
+    },
+    {
+      "question": "Kann ich Express auch für ein ganz kleines Backend mit nur zwei Routen benutzen, oder lohnt es sich da noch nicht?",
+      "answer": "Express lohnt sich selbst bei einer einzigen Route, weil es dir nicht nur die Adresse abnimmt, sondern auch die richtige Behandlung von Fehlern, das Setzen von Kopfzeilen und das Lesen des Anfragekörpers. Das alles bekommst du mit einer einzigen zusätzlichen npm-Installation. Ein Backend ohne Express müsste jede dieser Kleinigkeiten von Hand erledigen, und dabei schleichen sich fast immer vermeidbare Fehler ein."
+    },
+    {
+      "question": "Warum heißt die Engine ausgerechnet V8, und nicht einfach JavaScript-Engine?",
+      "answer": "V8 ist der Name eines leistungsstarken Automotors, und die Entwickler bei Google fanden, dass eine schnelle, kraftvolle JavaScript-Engine genau so einen Namen verdient hat. Die V8-Engine ist in C Plus Plus geschrieben und übersetzt JavaScript in Maschinencode, also in Befehle, die der Prozessor direkt versteht. Ältere Engines lasen den Code dagegen nur Zeile für Zeile und legten ihn aus. Genau diese direkte Übersetzung macht Node.js so schnell, dass es für ein Backend überhaupt in Frage kommt."
+    },
+    {
+      "question": "Was passiert, wenn ich in Express dieselbe Adresse für zwei verschiedene Routen vergebe?",
+      "answer": "Express führt immer die erste passende Route aus, die es in der Reihenfolge von oben nach unten findet, und die zweite wird nie erreicht. Es sei denn, die erste ruft irgendwann next Klammer auf Klammer zu auf. Das ist kein Fehler, sondern das beabsichtigte Verhalten von Express. Aus diesem Grund stehen allgemeine Routen immer ganz unten im Code, damit sie nur greifen, wenn keine der spezifischen Routen darüber gepasst hat."
+    }
+  ]
+}

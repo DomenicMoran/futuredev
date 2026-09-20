@@ -1,0 +1,613 @@
+{
+  "id": "M03-02-04",
+  "title": "REST-APIs bauen: wie zwei Programme miteinander sprechen",
+  "durationMinutes": 26,
+  "prerequisites": [
+    "M03-02-02",
+    "M03-02-03",
+    "M01-05-01",
+    "M01-05-03",
+    "M03-01-02"
+  ],
+  "terms": [
+    {
+      "term": "HTTP-Methode",
+      "definition": "ein Verb wie GET, POST, PUT oder DELETE, das einer Anfrage mitteilt, was der Client mit der angefragten Ressource tun will, lesen, neu anlegen, ändern oder löschen."
+    },
+    {
+      "term": "Endpunkt",
+      "definition": "eine vollständige Adresse, unter der eine bestimmte REST-Ressource erreichbar ist, bestehend aus der Domain des Servers und einem Pfad wie Schrägstrich users oder Schrägstrich articles Schrägstrich 42."
+    },
+    {
+      "term": "Postman",
+      "definition": "ein grafisches Werkzeug, mit dem man REST-Anfragen ohne eigenen Code abschicken, die Antworten lesen und Sammlungen von Anfragen für später speichern kann."
+    },
+    {
+      "term": "curl",
+      "definition": "ein Kommandozeilenwerkzeug, mit dem man REST-Anfragen direkt aus dem Terminal abschicken kann, ohne einen Browser oder ein grafisches Programm öffnen zu müssen."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir zwei Menschen vor, die verschiedene Sprachen sprechen und nur über einen schmalen Briefschlitz in einer Wand miteinander kommunizieren können. Sie brauchen zwingend ein gemeinsames Format und eine gemeinsame Art zu fragen und zu antworten, sonst versteht keiner den anderen."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "In den vorigen Lektionen hast du gelernt, wie ein einzelnes Backend mit Express oder mit Java und Spring Boot gebaut wird. Aber ein Backend, mit dem niemand spricht, ist nutzlos. Diese Lektion handelt von der gemeinsamen Sprache, die zwei verschiedene Programme miteinander sprechen, auch wenn sie in völlig verschiedenen Sprachen geschrieben sind."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Warum reicht es nicht, einfach irgendeine Anfrage an irgendeine Adresse zu schicken, so wie ein Browser das tut?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Weil eine Adresse allein nicht sagt, was du mit der angefragten Sache tun willst. Willst du sie nur lesen? Willst du sie neu anlegen? Willst du sie ändern oder löschen? Dieselbe Adresse kann vier völlig verschiedene Dinge bedeuten, je nachdem, welches Verb du vor die Adresse setzt."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir eine Bibliothek vor, in der du für jede Aktion eine eigene, farblich markierte Karteikarte ausfüllst. Eine grüne Karte für Bücher, die du nur lesen willst. Eine blaue Karte, um ein neues Buch in den Katalog aufzunehmen. Eine gelbe Karte zum Ändern. Eine rote Karte zum Löschen."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Programme, die über das Internet miteinander sprechen wollen, benutzen eine solche farbliche Markierung, aber statt Farben benutzen sie festgelegte Verben, die jede Anfrage begleiten."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Welche Verben gibt es, und wer hat festgelegt, was jedes einzelne bedeutet?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Diese Verben heißen HTTP-Methoden, und die vier wichtigsten sind GET, POST, PUT und DELETE. Eine HTTP-Methode ist das Verb, das vor einer Adresse steht und dem Backend sagt, was der Client mit der angefragten Ressource tun will."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil ohne diese Methoden jede Aktion eine eigene Adresse bräuchte. Ein Blog bräuchte dann Schrägstrich lesen Slash artikel Slash 42, Schrägstrich neu Slash artikel, Schrägstrich aendern Slash artikel Slash 42. Mit Methoden bleibt die Adresse immer gleich, nur das Verb ändert sich."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Ein Beispiel für den Einsatz einer HTTP-Methode: GET Schrägstrich users bedeutet, gib mir alle Benutzer, nur lesen. POST Schrägstrich users bedeutet, leg einen neuen Benutzer an. PUT Schrägstrich users Schrägstrich 42 bedeutet, ändere den Benutzer mit der Nummer 42. DELETE Schrägstrich users Schrägstrich 42 bedeutet, lösche ihn. Dieselbe Adresse, vier Aktionen, nur durch die HTTP-Methode unterschieden."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir eine Adresse auf einem Briefumschlag vor: der Name der Stadt und die Straße mit Hausnummer, eindeutig und ohne jede Mehrdeutigkeit, damit der Brief genau dort ankommt, wo er hin soll."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Ein Client, der mit einem Backend sprechen will, braucht eine vollständige Adresse, unter der die gewünschte Ressource erreichbar ist. Ohne diese Adresse wüsste das Backend gar nicht, welche seiner vielen Ressourcen der Client meint."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Woraus besteht eine solche Adresse, und was genau ist eigentlich eine Ressource?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Diese Adresse heißt Endpunkt. Ein Endpunkt ist eine vollständige Adresse, bestehend aus der Domain des Servers, etwa api Punkt example Punkt com, und einem Pfad wie Schrägstrich users, Schrägstrich articles oder Schrägstrich articles Schrägstrich 42. Eine Ressource ist das, was unter dieser Adresse zu finden ist, etwa ein einzelner Artikel oder eine Liste von Benutzern."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil ein einziges Backend Dutzende verschiedener Endpunkte gleichzeitig anbieten kann, für jede Ressource einen eigenen. Ohne die klare Aufteilung in Domain und Pfad wüsste der Client nicht, welchen Server er ansprechen soll und welche Ressource darauf gemeint ist."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Im Repo repo-resilient-ws-client wird eine Verbindung zu einem WebSocket-Endpunkt aufgebaut, dessen Adresse etwa wss colon Schrägstrich Schrägstrich api Punkt example Punkt com Schrägstrich ws lauten könnte. Das wss ist dasselbe wie https, nur für dauerhafte Verbindungen, und der Pfad Schrägstrich ws bezeichnet genau diese eine dauerhafte Ressource auf dem Server."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir einen genormten Paketschein vor, wie ihn alle Paketdienste der Welt verstehen. Absender, Empfänger, Gewicht, alles steht immer an derselben Stelle, in derselben Reihenfolge, in einem Format, das jede Filiale sofort lesen kann."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Wenn ein Client eine Anfrage an ein Backend schickt, muss nicht nur die Adresse und die Methode stimmen, sondern auch die Form der mitgeschickten Daten. Ein Backend, das eine Liste von Artikeln erwartet, kann nichts mit einem einzigen Bild anfangen, das ihm jemand stattdessen schickt."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "In welchem Format schickt man Daten an ein Backend, damit jedes Backend sie versteht, ganz gleich in welcher Sprache es geschrieben ist?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das gemeinsame Format heißt JSON, das du bereits aus einer früheren Lektion kennst. Es sieht aus wie ein JavaScript-Objekt, das du aus M01-06 kennst, nur als reiner Text ohne jede Funktion. JSON funktioniert in Java und C Sharp genauso wie in JavaScript, und genau diese Sprachunabhängigkeit macht es zum perfekten Format für REST-APIs."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Ein JSON-Objekt für einen neuen Artikel sieht so aus: geschweifte Klammer auf, Anführungszeichen title Anführungszeichen Doppelpunkt Anführungszeichen Mein erster Artikel Anführungszeichen, Komma, Anführungszeichen body Anführungszeichen Doppelpunkt Anführungszeichen Das ist der Inhalt Anführungszeichen, geschweifte Klammer zu. Diesen Text schickt der Client im Körper einer POST-Anfrage an Schrägstrich articles, und das Backend liest ihn und legt den neuen Artikel an."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir eine Ampel vor, die nicht einfach nur rot, gelb oder grün zeigt, sondern eine ganze Reihe verschiedener, eindeutiger Signale, jedes mit einer festen Bedeutung."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Wenn ein Backend eine Antwort zurückschickt, reicht es nicht, einfach nur die angeforderten Daten zu schicken. Der Client muss auch wissen, ob die Anfrage erfolgreich war, ob ein Fehler aufgetreten ist oder ob er etwas anderes tun muss, bevor es weitergehen kann."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Woran erkennt der Client, ob seine Anfrage erfolgreich war oder nicht?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Daran erinnert das Backend jede einzelne Antwort, mit einer Zahl, die du bereits aus einer früheren Lektion als Statuscode kennst. Ein Statuscode ist eine dreistellige Zahl, die dem Client auf einen Blick sagt, was genau passiert ist, und das häufigste Ergebnis ist 200, was einfach nur bedeutet, dass alles geklappt hat."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Ein typischer Ablauf in einer REST-API: Der Client schickt GET Schrägstrich articles Schrägstrich 42. Das Backend findet den Artikel, verpackt ihn in JSON und antwortet mit dem Statuscode 200 und dem JSON-Objekt des Artikels im Körper. Findet das Backend den Artikel nicht, antwortet es mit 404 und einem JSON-Objekt, das eine Fehlermeldung enthält."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir einen Postboten vor, der dir für jeden einzelnen ausgehändigten Brief eine schriftliche Quittung in die Hand drückt, bevor er zum nächsten Haus weitergeht."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Bevor du ein eigenes Backend baust, das eine REST-API anbietet, willst du es erst einmal testen können, am besten ohne dafür ein ganzes Frontend schreiben zu müssen. Dafür gibt es zwei Werkzeuge, die dasselbe tun, nur auf unterschiedliche Weise."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Welches Werkzeug nehme ich, wenn ich noch nie eine REST-Anfrage von Hand abgeschickt habe?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Das einfachste grafische Werkzeug dafür heißt Postman. Postman ist ein Programm, in dem du eine Methode und eine Adresse einträgst, auf Senden klickst und sofort die Antwort siehst, den Statuscode, die Kopfzeilen und den JSON-Körper, alles übersichtlich untereinander, ganz ohne eigenen Code."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil du ohne ein solches Werkzeug für jeden Test ein eigenes kleines Programm schreiben müsstest, nur um zu sehen, ob dein Backend auf eine bestimmte Anfrage richtig antwortet. Postman nimmt dir diese Arbeit ab und speichert deine Testanfragen sogar für später."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "In Postman wählst du oben links die Methode GET aus, schreibst daneben https colon Schrägstrich Schrägstrich jsonplaceholder Punkt typicode Punkt com Schrägstrich users und klickst auf Send. Darunter erscheint sofort eine Liste von zehn erfundenen Benutzern im JSON-Format, komplett mit Statuscode 200 und allen Kopfzeilen."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir einen zweiten Postboten vor, der keine grafische Schalterhalle hat, sondern nur ein einziges Texteingabefeld. Du tippst deinen Auftrag in einer festgelegten Kurzschrift ein, und das Ergebnis erscheint direkt als reiner Text darunter."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Neben Postman gibt es ein zweites, noch älteres Werkzeug, das denselben Zweck erfüllt, aber ohne jede grafische Oberfläche auskommt und direkt in der Kommandozeile läuft, die du aus M01-02-01 kennst."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Wozu braucht man ein Kommandozeilenwerkzeug, wenn es mit Postman doch ein viel einfacheres grafisches gibt?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Dieses Kommandozeilenwerkzeug heißt curl, ausgesprochen Curl. curl ist ein Programm, das du direkt im Terminal ausführst, mit einem einzigen Befehl aus einem Wort und einer Adresse, und es zeigt dir sofort die Antwort an, ohne ein Fenster öffnen zu müssen."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil du curl in eigenen Skripten benutzen kannst, etwa um jeden Morgen automatisch zu prüfen, ob dein Backend noch läuft. Oder um in einer automatischen Teststraße Hunderte von Endpunkten hintereinander zu testen. Postman ist bequemer für einen einzelnen Test von Hand, curl ist mächtiger für alles, was ohne menschliches Zutun ablaufen muss."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Ein curl-Befehl für denselben öffentlichen Test-Endpunkt von vorhin lautet: curl Leerzeichen https colon Schrägstrich Schrägstrich jsonplaceholder Punkt typicode Punkt com Schrägstrich users. Drückst du Enter, erscheint im Terminal sofort dieselbe Liste von zehn Benutzern im JSON-Format, die Postman dir in seinem grafischen Fenster gezeigt hätte."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir eine gut eingespielte Restaurantküche vor, in der Koch und Kellner dieselben Begriffe für dieselben Gerichte benutzen, ohne dass einer den anderen dreimal fragen muss."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Eine REST-API funktioniert nur dann reibungslos, wenn Client und Server dieselben Regeln befolgen und dieselben Begriffe meinen. Der Client schickt eine Methode und eine Adresse. Der Server prüft, ob er diese Kombination kennt, verarbeitet die Anfrage und schickt eine Antwort mit Statuscode und JSON-Daten zurück."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Was passiert, wenn Client und Server nicht dieselben Regeln befolgen, etwa der Client eine Methode schickt, die der Server nicht kennt?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Der Server lehnt die Anfrage ab, aber nicht mit einem vagen Fehler, sondern mit einem eigenen, genau dafür vorgesehenen Statuscode, der 405 Method Not Allowed. Der Client bekommt also eine klare Antwort, dass seine Methode an dieser Adresse nicht erlaubt ist, und kann darauf reagieren, statt im Ungewissen zu bleiben."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Im Repo repo-resilient-ws-client wird eine WebSocket-Verbindung aufgebaut, die anders als eine gewöhnliche REST-Anfrage dauerhaft offen bleibt. Der Client schickt seine erste Nachricht, der Server antwortet, aber die Verbindung bleibt bestehen. Bei einer REST-Anfrage ist dagegen nach jeder Antwort sofort Schluss, und die nächste Anfrage baut eine ganz neue Verbindung auf. Dieses Muster einer langlebigen Verbindung heißt WebSocket."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Fassen wir die gemeinsame Sprache einer REST-API in einer festen Reihenfolge zusammen. Erstens, der Client wählt eine HTTP-Methode. Zweitens, er schickt diese Methode an einen bestimmten Endpunkt. Drittens, bei POST und PUT fügt er neue Daten im JSON-Format hinzu. Viertens, der Server antwortet mit einem Statuscode und meist JSON-Daten. Fünftens, der Client liest den Statuscode und entscheidet über den weiteren Verlauf."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Muss eine REST-API wirklich immer JSON als Format benutzen, oder geht auch etwas anderes?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "JSON ist nicht das einzige Format, aber das bei weitem üblichste, weil es in jeder Programmiersprache gelesen und geschrieben werden kann. Ein Backend könnte auch reines HTML oder XML zurückschicken, aber das tut heute kaum noch jemand für eine API. JSON braucht weniger Zeichen und ist leichter zu lesen als die Alternativen."
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "isKeySentence": true,
+      "text": "Halten wir also fest: Eine REST-API ist die gemeinsame Sprache, mit der zwei Programme über das Internet miteinander sprechen, ganz gleich in welcher Sprache sie geschrieben sind. Der Client schickt eine HTTP-Methode wie GET, POST, PUT oder DELETE an einen Endpunkt, eine vollständige Adresse, fügt bei Bedarf Daten im JSON-Format hinzu und erhält eine Antwort mit einem Statuscode und meist JSON-Daten zurück. GET liest eine Ressource nur, POST legt sie neu an, PUT ändert eine bestehende und DELETE löscht sie, immer nach demselben Muster, das Client und Server gleichermaßen verstehen. Mit Werkzeugen wie Postman für die grafische Bedienung und curl für die Kommandozeile testest du jede REST-API, bevor du selbst eine Zeile Frontend-Code dafür geschrieben hast."
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "isKeySentence": false,
+      "text": "Noch einmal die Begriffe dieser Lektion. HTTP-Methode: ein Verb wie GET, POST, PUT oder DELETE, das einer Anfrage mitteilt, was der Client mit der angefragten Ressource tun will."
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "isKeySentence": false,
+      "text": "Endpunkt: eine vollständige Adresse, unter der eine bestimmte REST-Ressource erreichbar ist, bestehend aus Domain und Pfad."
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "isKeySentence": false,
+      "text": "Postman: ein grafisches Werkzeug, mit dem man REST-Anfragen ohne eigenen Code abschicken und die Antworten lesen kann."
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "isKeySentence": false,
+      "text": "curl: ein Kommandozeilenwerkzeug, mit dem man REST-Anfragen direkt aus dem Terminal abschicken kann."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Was genau bedeutet die Abkürzung REST?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "REST steht für einen englischen Fachbegriff, der besagt, dass der Server bei jeder Anfrage den gesamten aktuellen Stand der Ressource als Antwort schickt. Der Client kann diesen Stand bei der nächsten Anfrage zurückschicken. Der Name wurde vor über zwanzig Jahren in einer Doktorarbeit geprägt und hat sich seitdem als der Standard für APIs im Internet durchgesetzt."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Kann ich statt der vier Methoden GET, POST, PUT und DELETE auch eigene Methoden erfinden?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Technisch wäre das möglich, aber praktisch tut das niemand, weil jedes Programm, das mit deiner API sprechen will, deine eigenen Methoden nicht kennt und nicht weiß, was sie bedeuten. Die vier Methoden GET, POST, PUT und DELETE sind seit Jahrzehnten festgelegt und jedes HTTP-Werkzeug, von Postman über curl bis zum Browser, kennt sie und behandelt sie korrekt. Zusätzlich gibt es noch PATCH für teilweise Änderungen, das du später kennenlernst."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Muss ich für jeden Endpunkt vier Routen in Express schreiben, für GET, POST, PUT und DELETE?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Nur für die Methoden, die du wirklich brauchst. Eine öffentliche Blog-API braucht vielleicht GET für alle, die Artikel lesen wollen, aber DELETE nur für die Autorin selbst, und PUT nur, um einen eigenen Artikel zu ändern. Welche Methoden du für einen Endpunkt freischaltest, bestimmst du als Entwicklerin des Backends ganz nach den Anforderungen deiner Anwendung, und Express zwingt dich zu keiner, die du nicht willst."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Warum bekomme ich bei einer REST-Anfrage manchmal den Statuscode 201 statt 200?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Der Statuscode 201 bedeutet Created, also erfolgreich angelegt, und wird meist nach einer POST-Anfrage zurückgegeben, die eine neue Ressource erzeugt hat. Der Unterschied zu 200 ist wichtig, weil der Client an 201 erkennt, dass etwas Neues entstanden ist. Die Adresse der neuen Ressource bekommt der Client meist in der Antwortkopfzeile Location mit, ohne dass er die Adresse selbst erraten muss."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Kann ich mit curl auch POST-Anfragen mit JSON-Daten im Körper schicken?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Ja, curl kann das, mit einem zusätzlichen Schalter. Der vollständige Befehl lautet curl minus X POST minus H Anführungszeichen Content-Type colon application Schrägstrich json Anführungszeichen minus d Anführungszeichen in geschweiften Klammern die JSON-Daten Anführungszeichen und dann die Adresse. Der Schalter minus X legt die Methode fest, minus H setzt eine Kopfzeile, und minus d enthält die eigentlichen Daten. In Postman klickst du dafür nur auf POST und trägst die Daten in ein Textfeld ein, aber das Ergebnis ist dasselbe."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Woher weiß ich, welche Endpunkte ein fremdes Backend überhaupt anbietet?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Das steht in der Dokumentation der API, die jede öffentliche REST-API bereitstellen sollte, meist unter einer eigenen Adresse wie docs Punkt api Punkt example Punkt com. Ohne diese Dokumentation müsstest du raten, welche Endpunkte es gibt und welche Methoden sie erlauben, und das wäre mühsam und fehlerträchtig. Manche APIs liefern zusätzlich eine maschinenlesbare Beschreibung nach einem Standard namens OpenAPI, die Postman direkt einlesen und dir alle Endpunkte automatisch anzeigen kann."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Was ist der Unterschied zwischen einer REST-API und einer WebSocket-Verbindung wie in repo-resilient-ws-client?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Eine REST-API ist wie ein Brief: Der Client schickt eine Anfrage, der Server antwortet, und dann ist die Verbindung zu Ende. Bei der nächsten Anfrage baut der Client eine ganz neue Verbindung auf. Eine WebSocket-Verbindung dagegen bleibt dauerhaft offen, wie ein Telefonat, bei dem beide Seiten jederzeit etwas sagen können, ohne neu wählen zu müssen. Das lohnt sich für Anwendungen, bei denen der Server den Client von sich aus benachrichtigen will, etwa bei einer neuen Chat-Nachricht, ohne dass der Client ständig nachfragen muss."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Muss ich Postman installieren, oder läuft das auch im Browser?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Postman gibt es sowohl als Programm zum Herunterladen als auch als reine Browserversion unter web Punkt postman Punkt co, die ohne jede Installation läuft. Für den Anfang reicht die Browserversion völlig aus, und du kannst sofort die öffentliche Test-API aus dieser Lektion ausprobieren. Später, wenn du eigene APIs mit Anmeldung testest, ist das heruntergeladene Programm oft praktischer, weil es mehr Funktionen für gespeicherte Umgebungen und automatische Tests bietet."
+    }
+  ],
+  "practiceExample": {
+    "text": "Das Repo repo-resilient-ws-client enthält eine REST-Client-Bibliothek, die eine Verbindung zu einem Endpunkt aufbaut und nach demselben Muster arbeitet, das diese Lektion beschreibt. Der Client schickt eine Anfrage mit einer bestimmten Methode an eine vollständige Adresse, erhält eine Antwort mit einem Statuscode zurück und verarbeitet die JSON-Daten im Körper der Antwort. Anders als eine gewöhnliche REST-Anfrage, die nach jeder Antwort endet, bleibt die WebSocket-Verbindung in diesem Repo dauerhaft offen, aber das grundlegende Muster aus Anfrage, Statuscode und JSON-Antwort ist dasselbe.",
+    "repoNote": "repo-resilient-ws-client",
+    "location": "src/ (REST-Client mit WebSocket-Verbindung, grundlegendes Muster aus Anfrage, Statuscode und JSON-Antwort)"
+  },
+  "quiz": [
+    {
+      "question": "Welche HTTP-Methode benutzt du, um eine neue Ressource auf dem Server anzulegen?",
+      "area": "HTTP-Methoden",
+      "options": [
+        { "text": "die POST-Methode", "isCorrect": true, "explanation": "POST ist die Methode zum Anlegen einer neuen Ressource." },
+        { "text": "die GET-Methode", "isCorrect": false, "explanation": "GET liest nur eine bestehende Ressource, es legt keine neue an." },
+        { "text": "die DELETE-Methode", "isCorrect": false, "explanation": "DELETE löscht eine Ressource, es legt keine neue an." },
+        { "text": "die HEAD-Methode", "isCorrect": false, "explanation": "HEAD ist wie GET, aber ohne Körper, und legt nichts an." }
+      ]
+    },
+    {
+      "question": "Woraus besteht ein Endpunkt?",
+      "area": "Endpunkte",
+      "options": [
+        { "text": "Aus Domain und Pfad wie Schrägstrich users.", "isCorrect": true, "explanation": "Genau das ist die Definition eines Endpunkts." },
+        { "text": "Aus einem einzigen Buchstaben, der für den Server steht.", "isCorrect": false, "explanation": "Ein Endpunkt ist eine Adresse, kein einzelner Buchstabe." },
+        { "text": "Nur aus der Domain, ohne jeden Pfad dahinter.", "isCorrect": false, "explanation": "Ein Endpunkt hat fast immer einen Pfad." },
+        { "text": "Aus einer reinen Zahl, die den Port angibt.", "isCorrect": false, "explanation": "Der Port ist nur ein Teil der Adresse." }
+      ]
+    },
+    {
+      "question": "Warum benutzen REST-APIs JSON als Format für ihre Daten?",
+      "area": "JSON",
+      "options": [
+        { "text": "JSON kann in jeder Programmiersprache gelesen werden.", "isCorrect": true, "explanation": "Genau diese Sprachunabhängigkeit macht JSON perfekt." },
+        { "text": "JSON ist die einzige Möglichkeit, Daten im Internet zu schicken.", "isCorrect": false, "explanation": "Daten können auch als HTML oder XML geschickt werden." },
+        { "text": "Der Browser wandelt JSON automatisch in eine Webseite um.", "isCorrect": false, "explanation": "JSON wird nicht automatisch zu HTML." },
+        { "text": "JSON braucht weniger als zehn Zeichen pro Anfrage.", "isCorrect": false, "explanation": "JSON kann beliebig lang sein." }
+      ]
+    },
+    {
+      "question": "Welchen Statuscode schickt ein Backend, wenn eine Ressource nicht gefunden wurde?",
+      "area": "Statuscodes",
+      "options": [
+        { "text": "404 Not Found", "isCorrect": true, "explanation": "404 bedeutet Not Found, die Ressource existiert nicht." },
+        { "text": "200 OK", "isCorrect": false, "explanation": "200 bedeutet OK, die Anfrage war erfolgreich." },
+        { "text": "500 Internal Server Error", "isCorrect": false, "explanation": "500 ist ein allgemeiner Serverfehler." },
+        { "text": "302 Found", "isCorrect": false, "explanation": "302 ist eine Weiterleitung." }
+      ]
+    },
+    {
+      "question": "Wozu dient das Werkzeug Postman?",
+      "area": "Werkzeuge",
+      "options": [
+        { "text": "Um REST-Anfragen ohne Code zu testen und Antworten zu lesen.", "isCorrect": true, "explanation": "Genau das ist der Zweck von Postman." },
+        { "text": "Um einen eigenen Server im Rechenzentrum zu starten.", "isCorrect": false, "explanation": "Postman testet APIs, es startet keine Server." },
+        { "text": "Um Java-Code vor der Ausführung in Bytecode zu übersetzen.", "isCorrect": false, "explanation": "Das Übersetzen ist Aufgabe des Java-Compilers." },
+        { "text": "Um npm-Pakete auf die neueste Version zu aktualisieren.", "isCorrect": false, "explanation": "Das Aktualisieren erledigt npm, nicht Postman." }
+      ]
+    },
+    {
+      "question": "Was ist der Hauptvorteil von curl gegenüber Postman?",
+      "area": "Werkzeuge",
+      "options": [
+        { "text": "curl kann in Skripten und Teststraßen automatisch laufen.", "isCorrect": true, "explanation": "Genau das ist der Vorteil von curl." },
+        { "text": "curl zeigt die Antwort in einem schöneren Fenster an.", "isCorrect": false, "explanation": "curl zeigt Text im Terminal, Postman hat das schönere Fenster." },
+        { "text": "curl kann im Gegensatz zu Postman DELETE-Anfragen schicken.", "isCorrect": false, "explanation": "Postman kann genauso DELETE-Anfragen schicken." },
+        { "text": "curl braucht im Gegensatz zu Postman keinen Internetzugang.", "isCorrect": false, "explanation": "Beide Werkzeuge brauchen Internetzugang." }
+      ]
+    },
+    {
+      "question": "Welche Methode und welcher Statuscode sind typisch für eine neu angelegte Ressource?",
+      "area": "REST-Ablauf",
+      "options": [
+        { "text": "POST und 201 Created", "isCorrect": true, "explanation": "POST legt an, 201 Created bestätigt die Anlage." },
+        { "text": "GET und 200 OK", "isCorrect": false, "explanation": "GET liest nur, legt nichts an." },
+        { "text": "DELETE und 204 No Content", "isCorrect": false, "explanation": "DELETE löscht, legt nichts an." },
+        { "text": "PUT und 404 Not Found", "isCorrect": false, "explanation": "PUT ändert, 404 bedeutet nicht gefunden." }
+      ]
+    },
+    {
+      "question": "Was passiert bei POST an einen Endpunkt, der nur GET erlaubt?",
+      "area": "Statuscodes",
+      "options": [
+        { "text": "Der Server antwortet mit 405 Method Not Allowed.", "isCorrect": true, "explanation": "405 ist der Code für nicht erlaubte Methode." },
+        { "text": "Der Server stürzt ab und muss neu gestartet werden.", "isCorrect": false, "explanation": "Ein guter Server stürzt nicht bei falscher Methode ab." },
+        { "text": "Der Server behandelt POST trotzdem wie GET.", "isCorrect": false, "explanation": "Der Server unterscheidet Methoden streng." },
+        { "text": "Der Server antwortet mit 200 und ignoriert die Methode.", "isCorrect": false, "explanation": "200 würde Erfolg bedeuten, daher kommt 405." }
+      ]
+    },
+    {
+      "question": "Warum ist es sinnvoll, Schrägstrich users mit verschiedenen Methoden zu nutzen?",
+      "area": "REST-Ablauf",
+      "options": [
+        { "text": "Die Adresse bleibt gleich, nur das Verb unterscheidet die Aktion.", "isCorrect": true, "explanation": "Genau das ist die Kernidee von REST." },
+        { "text": "Ein Server kann nur eine einzige Adresse anbieten.", "isCorrect": false, "explanation": "Ein Server kann beliebig viele Adressen anbieten." },
+        { "text": "Browser laden keine Adressen mit mehr als einem Schrägstrich.", "isCorrect": false, "explanation": "Browser laden beliebig tiefe Pfade." },
+        { "text": "GET darf nicht allein an einer Adresse verwendet werden.", "isCorrect": false, "explanation": "GET allein ist der Normalfall für Lesezugriffe." }
+      ]
+    },
+    {
+      "question": "Welcher curl-Befehl schickt eine POST-Anfrage mit JSON-Daten?",
+      "area": "Werkzeuge",
+      "options": [
+        { "text": "curl minus X POST minus H Content-Type und minus d mit JSON.", "isCorrect": true, "explanation": "Genau diesen Befehl beschreibt die Lektion." },
+        { "text": "curl minus minus read minus minus address mit Adresse.", "isCorrect": false, "explanation": "Diese Schalter gibt es in curl nicht." },
+        { "text": "curl minus G minus u admin colon password minus p.", "isCorrect": false, "explanation": "Diese Schalter setzen Basic Auth." },
+        { "text": "curl minus minus post minus minus json mit Adresse.", "isCorrect": false, "explanation": "curl kennt keine langen Schalter für POST." }
+      ]
+    },
+    {
+      "question": "Was bedeutet der Statuscode 201 Created in einer REST-API?",
+      "area": "Statuscodes",
+      "options": [
+        { "text": "Eine neue Ressource wurde erfolgreich angelegt.", "isCorrect": true, "explanation": "201 Created bestätigt die erfolgreiche Anlage." },
+        { "text": "Der Server hat die Anfrage empfangen, aber nicht verarbeitet.", "isCorrect": false, "explanation": "Das wäre Statuscode 202 Accepted." },
+        { "text": "Die Ressource wurde an eine neue Adresse verschoben.", "isCorrect": false, "explanation": "Das wäre Statuscode 301 Moved Permanently." },
+        { "text": "Der Client muss sich vor der Anfrage anmelden.", "isCorrect": false, "explanation": "Das wäre Statuscode 401 Unauthorized." }
+      ]
+    },
+    {
+      "question": "Warum ist eine öffentlich zugängliche API-Dokumentation wichtig?",
+      "area": "REST-Ablauf",
+      "options": [
+        { "text": "Ohne sie weiß niemand, welche Endpunkte es gibt.", "isCorrect": true, "explanation": "Genau das erklärt die FAQ dieser Lektion." },
+        { "text": "Ohne sie kann der Server keine JSON-Daten schicken.", "isCorrect": false, "explanation": "JSON funktioniert auch ohne Dokumentation." },
+        { "text": "Jede REST-API muss eine gedruckte Anleitung beilegen.", "isCorrect": false, "explanation": "Es gibt kein Gesetz für gedruckte Anleitungen." },
+        { "text": "Der Browser schickt ohne Dokumentation keine HTTP-Anfragen.", "isCorrect": false, "explanation": "Der Browser schickt Anfragen unabhängig von Dokumentation." }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Öffne Postman im Browser unter web Punkt postman Punkt co oder installiere die App, je nachdem, was dir lieber ist. Lege eine neue Anfrage an, wähle als Methode GET und gib als Adresse https colon Schrägstrich Schrägstrich jsonplaceholder Punkt typicode Punkt com Schrägstrich users ein. Drücke auf Senden und sieh dir die Antwort an. Notiere den Statuscode, zähle die Anzahl der Benutzerobjekte im JSON-Körper und suche die Kopfzeile Content-Type in den Antwortkopfzeilen. Führe danach denselben Test im Terminal mit dem Befehl curl Leerzeichen https colon Schrägstrich Schrägstrich jsonplaceholder Punkt typicode Punkt com Schrägstrich users aus und vergleiche, ob dieselben Daten erscheinen.",
+    "expectation": "Sowohl Postman als auch curl zeigen dieselbe Liste von zehn Benutzern im JSON-Format, mit dem Statuscode 200 und der Kopfzeile Content-Type colon application Schrägstrich json.",
+    "checklist": [
+      "Postman im Browser oder als App geöffnet",
+      "eine neue GET-Anfrage an https colon Schrägstrich Schrägstrich jsonplaceholder Punkt typicode Punkt com Schrägstrich users erstellt",
+      "die Antwort mit Statuscode 200 gesehen",
+      "die zehn Benutzerobjekte im JSON-Körper gezählt",
+      "die Kopfzeile Content-Type in den Antwortkopfzeilen gefunden",
+      "denselben Test mit curl im Terminal ausgeführt und dieselben Daten erhalten"
+    ]
+  },
+  "audio": {
+    "file": "M03-02-04.mp3",
+    "durationSeconds": 1560,
+    "voices": ["A", "B"],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Was genau bedeutet die Abkürzung REST?",
+      "answer": "REST steht für einen englischen Fachbegriff, der besagt, dass der Server bei jeder Anfrage den gesamten aktuellen Stand der Ressource als Antwort schickt. Der Client kann diesen Stand bei der nächsten Anfrage zurückschicken. Der Name wurde vor über zwanzig Jahren in einer Doktorarbeit geprägt und hat sich seitdem als der Standard für APIs im Internet durchgesetzt."
+    },
+    {
+      "question": "Kann ich statt der vier Methoden GET, POST, PUT und DELETE auch eigene Methoden erfinden?",
+      "answer": "Technisch wäre das möglich, aber praktisch tut das niemand, weil jedes Programm, das mit deiner API sprechen will, deine eigenen Methoden nicht kennt und nicht weiß, was sie bedeuten. Die vier Methoden GET, POST, PUT und DELETE sind seit Jahrzehnten festgelegt und jedes HTTP-Werkzeug, von Postman über curl bis zum Browser, kennt sie und behandelt sie korrekt. Zusätzlich gibt es noch PATCH für teilweise Änderungen, das du später kennenlernst."
+    },
+    {
+      "question": "Muss ich für jeden Endpunkt vier Routen in Express schreiben, für GET, POST, PUT und DELETE?",
+      "answer": "Nur für die Methoden, die du wirklich brauchst. Eine öffentliche Blog-API braucht vielleicht GET für alle, die Artikel lesen wollen, aber DELETE nur für die Autorin selbst, und PUT nur, um einen eigenen Artikel zu ändern. Welche Methoden du für einen Endpunkt freischaltest, bestimmst du als Entwicklerin des Backends ganz nach den Anforderungen deiner Anwendung, und Express zwingt dich zu keiner, die du nicht willst."
+    },
+    {
+      "question": "Warum bekomme ich bei einer REST-Anfrage manchmal den Statuscode 201 statt 200?",
+      "answer": "Der Statuscode 201 bedeutet Created, also erfolgreich angelegt, und wird meist nach einer POST-Anfrage zurückgegeben, die eine neue Ressource erzeugt hat. Der Unterschied zu 200 ist wichtig, weil der Client an 201 erkennt, dass etwas Neues entstanden ist. Die Adresse der neuen Ressource bekommt der Client meist in der Antwortkopfzeile Location mit, ohne dass er die Adresse selbst erraten muss."
+    },
+    {
+      "question": "Kann ich mit curl auch POST-Anfragen mit JSON-Daten im Körper schicken?",
+      "answer": "Ja, curl kann das, mit einem zusätzlichen Schalter. Der vollständige Befehl lautet curl minus X POST minus H Anführungszeichen Content-Type colon application Schrägstrich json Anführungszeichen minus d Anführungszeichen in geschweiften Klammern die JSON-Daten Anführungszeichen und dann die Adresse. Der Schalter minus X legt die Methode fest, minus H setzt eine Kopfzeile, und minus d enthält die eigentlichen Daten. In Postman klickst du dafür nur auf POST und trägst die Daten in ein Textfeld ein, aber das Ergebnis ist dasselbe."
+    },
+    {
+      "question": "Woher weiß ich, welche Endpunkte ein fremdes Backend überhaupt anbietet?",
+      "answer": "Das steht in der Dokumentation der API, die jede öffentliche REST-API bereitstellen sollte, meist unter einer eigenen Adresse wie docs Punkt api Punkt example Punkt com. Ohne diese Dokumentation müsstest du raten, welche Endpunkte es gibt und welche Methoden sie erlauben, und das wäre mühsam und fehlerträchtig. Manche APIs liefern zusätzlich eine maschinenlesbare Beschreibung nach einem Standard namens OpenAPI, die Postman direkt einlesen und dir alle Endpunkte automatisch anzeigen kann."
+    },
+    {
+      "question": "Was ist der Unterschied zwischen einer REST-API und einer WebSocket-Verbindung wie in repo-resilient-ws-client?",
+      "answer": "Eine REST-API ist wie ein Brief: Der Client schickt eine Anfrage, der Server antwortet, und dann ist die Verbindung zu Ende. Bei der nächsten Anfrage baut der Client eine ganz neue Verbindung auf. Eine WebSocket-Verbindung dagegen bleibt dauerhaft offen, wie ein Telefonat, bei dem beide Seiten jederzeit etwas sagen können, ohne neu wählen zu müssen. Das lohnt sich für Anwendungen, bei denen der Server den Client von sich aus benachrichtigen will, etwa bei einer neuen Chat-Nachricht, ohne dass der Client ständig nachfragen muss."
+    },
+    {
+      "question": "Muss ich Postman installieren, oder läuft das auch im Browser?",
+      "answer": "Postman gibt es sowohl als Programm zum Herunterladen als auch als reine Browserversion unter web Punkt postman Punkt co, die ohne jede Installation läuft. Für den Anfang reicht die Browserversion völlig aus, und du kannst sofort die öffentliche Test-API aus dieser Lektion ausprobieren. Später, wenn du eigene APIs mit Anmeldung testest, ist das heruntergeladene Programm oft praktischer, weil es mehr Funktionen für gespeicherte Umgebungen und automatische Tests bietet."
+    }
+  ]
+}
