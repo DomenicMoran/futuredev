@@ -432,7 +432,7 @@
       "speaker": "A",
       "role": "faq",
       "isKeySentence": false,
-      "text": "Der anon key ist für den Client-Code in deiner App bestimmt und hat stark eingeschränkte Rechte. Er darf nur auf Tabellen zugreifen, für die du in den Row Level Security-Regeln ausdrücklich Lesezugriff erlaubt hast. Der service_role key umgeht diese Sicherheitsregeln vollständig und darf nur in serverseitigem Code oder in Admin-Werkzeugen verwendet werden. Wenn du den service_role key versehentlich in den Client-Code einbaust, kann jeder Nutzer deiner App die gesamte Datenbank lesen und verändern."
+      "text": "Der anon key ist für den Client-Code in deiner App bestimmt und hat stark eingeschränkte Rechte. Er darf nur auf Tabellen zugreifen, für die du in den Sicherheitsregeln auf Zeilenebene ausdrücklich Lesezugriff erlaubt hast. Der service_role key umgeht diese Sicherheitsregeln vollständig und darf nur in serverseitigem Code oder in Admin-Werkzeugen verwendet werden. Wenn du den service_role key versehentlich in den Client-Code einbaust, kann jeder Nutzer deiner App die gesamte Datenbank lesen und verändern."
     },
     {
       "speaker": "B",
@@ -462,13 +462,13 @@
       "speaker": "B",
       "role": "faq",
       "isKeySentence": false,
-      "text": "Muss ich für jede Tabelle einzeln Row Level Security-Regeln schreiben?"
+      "text": "Muss ich für jede Tabelle einzeln Sicherheitsregeln auf Zeilenebene schreiben?"
     },
     {
       "speaker": "A",
       "role": "faq",
       "isKeySentence": false,
-      "text": "Standardmäßig sind alle Tabellen ohne Row Level Security für jeden lesbar und schreibbar, der den anon key kennt, was ein erhebliches Sicherheitsrisiko ist. Du solltest für jede Tabelle, die sensible Daten enthält, eine RLS-Regel schreiben. Für einfache Fälle reicht eine Regel wie Nutzer dürfen nur ihre eigenen Zeilen sehen. Supabase bietet dafür eine grafische Oberfläche und vorgefertigte SQL-Vorlagen, sodass du die Regeln nicht von Grund auf selbst formulieren musst."
+      "text": "Standardmäßig sind alle Tabellen ohne Sicherheitsregeln auf Zeilenebene für jeden lesbar und schreibbar, der den anon key kennt, was ein erhebliches Sicherheitsrisiko ist. Du solltest für jede Tabelle, die sensible Daten enthält, eine Sicherheitsregel schreiben. Für einfache Fälle reicht eine Regel wie Nutzer dürfen nur ihre eigenen Zeilen sehen. Supabase bietet dafür eine grafische Oberfläche und vorgefertigte SQL-Vorlagen, sodass du die Regeln nicht von Grund auf selbst formulieren musst."
     }
   ],
   "practiceExample": {
@@ -492,7 +492,7 @@
       "area": "Auth",
       "options": [
         { "text": "Benutzerregistrierung, Anmeldung und Passwort-Reset verwalten.", "isCorrect": true, "explanation": "Richtig: Auth ist der Dienst für die Benutzerverwaltung." },
-        { "text": "Die Datenbank vor unbefugten SQL-Abfragen schützen.", "isCorrect": false, "explanation": "Das übernehmen Row Level Security-Regeln, nicht Auth." },
+        { "text": "Die Datenbank vor unbefugten SQL-Abfragen schützen.", "isCorrect": false, "explanation": "Das übernehmen Sicherheitsregeln auf Zeilenebene, nicht Auth." },
         { "text": "Dateien in Buckets speichern und mit Zugriffsregeln absichern.", "isCorrect": false, "explanation": "Das ist die Aufgabe von Storage, nicht von Auth." },
         { "text": "Die Geschwindigkeit von Datenbankabfragen messen und optimieren.", "isCorrect": false, "explanation": "Performance-Messung ist nicht die Aufgabe von Auth." }
       ]
@@ -626,7 +626,7 @@
     },
     {
       "question": "Was ist der Unterschied zwischen dem anon key und dem service_role key?",
-      "answer": "Der anon key ist für den Client-Code in deiner App bestimmt und hat stark eingeschränkte Rechte. Er darf nur auf Tabellen zugreifen, für die du in den Row Level Security-Regeln ausdrücklich Lesezugriff erlaubt hast. Der service_role key umgeht diese Sicherheitsregeln vollständig und darf nur in serverseitigem Code oder in Admin-Werkzeugen verwendet werden. Wenn du den service_role key versehentlich in den Client-Code einbaust, kann jeder Nutzer deiner App die gesamte Datenbank lesen und verändern."
+      "answer": "Der anon key ist für den Client-Code in deiner App bestimmt und hat stark eingeschränkte Rechte. Er darf nur auf Tabellen zugreifen, für die du in den Sicherheitsregeln auf Zeilenebene ausdrücklich Lesezugriff erlaubt hast. Der service_role key umgeht diese Sicherheitsregeln vollständig und darf nur in serverseitigem Code oder in Admin-Werkzeugen verwendet werden. Wenn du den service_role key versehentlich in den Client-Code einbaust, kann jeder Nutzer deiner App die gesamte Datenbank lesen und verändern."
     },
     {
       "question": "Brauche ich für Supabase überhaupt noch SQL-Kenntnisse, oder erledigt der Supabase-Client alles für mich?",
@@ -637,8 +637,8 @@
       "answer": "Firebase ist Googles geschlossene Plattform mit einer eigenen NoSQL-Datenbank, während Supabase auf der offenen, bewährten PostgreSQL-Datenbank aufbaut. Der größte Unterschied ist, dass du bei Supabase echtes SQL mit JOINs, Fremdschlüsseln und Transaktionen nutzen kannst, während Firebase eine andere, weniger mächtige Abfragesprache hat. Außerdem ist Supabase Open Source, sodass du nicht an einen einzelnen Anbieter gebunden bist und zur Not auf einen eigenen Server umziehen kannst."
     },
     {
-      "question": "Muss ich für jede Tabelle einzeln Row Level Security-Regeln schreiben?",
-      "answer": "Standardmäßig sind alle Tabellen ohne Row Level Security für jeden lesbar und schreibbar, der den anon key kennt, was ein erhebliches Sicherheitsrisiko ist. Du solltest für jede Tabelle, die sensible Daten enthält, eine RLS-Regel schreiben. Für einfache Fälle reicht eine Regel wie Nutzer dürfen nur ihre eigenen Zeilen sehen. Supabase bietet dafür eine grafische Oberfläche und vorgefertigte SQL-Vorlagen, sodass du die Regeln nicht von Grund auf selbst formulieren musst."
+      "question": "Muss ich für jede Tabelle einzeln Sicherheitsregeln auf Zeilenebene schreiben?",
+      "answer": "Standardmäßig sind alle Tabellen ohne Sicherheitsregeln auf Zeilenebene für jeden lesbar und schreibbar, der den anon key kennt, was ein erhebliches Sicherheitsrisiko ist. Du solltest für jede Tabelle, die sensible Daten enthält, eine Sicherheitsregel schreiben. Für einfache Fälle reicht eine Regel wie Nutzer dürfen nur ihre eigenen Zeilen sehen. Supabase bietet dafür eine grafische Oberfläche und vorgefertigte SQL-Vorlagen, sodass du die Regeln nicht von Grund auf selbst formulieren musst."
     }
   ]
 }
