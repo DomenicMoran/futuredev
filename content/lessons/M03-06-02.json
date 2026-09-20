@@ -1,0 +1,1133 @@
+{
+  "id": "M03-06-02",
+  "title": "Stripe Checkout einbauen",
+  "durationMinutes": 22,
+  "prerequisites": [
+    "M03-06-01",
+    "M01-02-03",
+    "M03-02-01"
+  ],
+  "terms": [
+    {
+      "term": "Checkout-Session",
+      "definition": "Ein einmaliger Kaufvorgang bei Stripe, den der eigene Server für genau diesen einen Kaufversuch eines Kunden anlegt."
+    },
+    {
+      "term": "Erfolgsseite",
+      "definition": "Die Seite, auf die Stripe den Kunden nach einer erfolgreichen Zahlung automatisch weiterleitet."
+    },
+    {
+      "term": "Abbruchseite",
+      "definition": "Die Seite, auf die Stripe den Kunden weiterleitet, wenn er den Kauf abbricht."
+    },
+    {
+      "term": "Publishable Key",
+      "definition": "Der öffentliche Zugangsschlüssel eines Zahlungsdienstleisters, der auch im Code des Browsers stehen darf."
+    },
+    {
+      "term": "Secret Key",
+      "definition": "Der geheime Zugangsschlüssel eines Zahlungsdienstleisters, der ausschließlich auf dem Server bleiben darf."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "text": "Stell dir vor, du eröffnest einen kleinen Laden und brauchst eine Kasse. Du könntest eine Kasse selbst konstruieren, mit Schublade, Tastatur und Kartenleser.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Das würde Monate dauern und du müsstest jede Sicherheitsregel selbst kennen. Die meisten Läden mieten deshalb eine fertige Kasse von einer spezialisierten Firma.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Ist das beim Programmieren einer Webseite genauso?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Fast identisch. In dieser Lektion baust du eine fertige, gemietete Kasse in eine Webseite ein, statt selbst eine zu bauen.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Denk an ein Preisschild an einem Regal im Supermarkt: es sagt genau, was das Ding ist und was es kostet.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Bevor du überhaupt etwas verkaufen kannst, muss der Zahlungsdienstleister wissen, was du verkaufst und zu welchem Preis.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Dafür legst du bei Stripe zwei Dinge an: ein Produkt, zum Beispiel \"Monatsabo Newsletter\", und einen Preis dazu, zum Beispiel neun Euro im Monat.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein Produkt ist die Sache, die du verkaufst, ein Preis ist ein Betrag mit Währung und Abrechnungsart, der zu genau einem Produkt gehört. Ein Produkt kann sogar mehrere Preise haben, etwa neun Euro im Monat oder neunzig Euro im Jahr.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Das klingt wie ein Regal im Laden mit mehreren Preisschildern für dieselbe Ware, je nach Packungsgröße.",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau dieser Vergleich passt gut. Ein Produkt bleibt gleich, aber es kann verschiedene Preise nebeneinander haben.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir eine Warteschlange an einer Kasse vor, in der für jeden Kunden ein eigener, einmaliger Bon vorbereitet wird, mit genau seinen Artikeln.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genauso baust du für jeden Kaufversuch eines Kunden einen eigenen, einmaligen Vorgang bei Stripe auf, statt eine dauerhafte Kasse für alle gleichzeitig zu benutzen.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Dieser einmalige Vorgang heißt Checkout-Session.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Eine Checkout-Session ist ein Datensatz bei Stripe, den dein Server anlegt: er enthält, welcher Preis gekauft wird, in welcher Währung, und wohin der Kunde nach dem Bezahlen geschickt wird. Stripe gibt dir dafür eine fertige Bezahlseite mit einer eigenen Webadresse zurück.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss ich diese Bezahlseite selbst gestalten?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, genau das ist der Vorteil: Stripe liefert die fertige Seite mit Kartenfeld direkt mit, du musst nur dorthin verlinken.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Das spart dir das komplette Bauen und Testen eines eigenen, sicheren Zahlungsformulars.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Denk an einen Fahrkartenautomaten am Bahnhof: er zeigt dir erst den Preis, den die Zentrale festgelegt hat, du selbst kannst den Preis am Automaten nicht einfach ändern.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Wenn der Preis direkt im Browser des Kunden stehen würde, könnte ein technisch findiger Kunde ihn theoretisch verändern, bevor die Zahlung losgeht.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Deshalb erstellt nicht der Browser die Checkout-Session, sondern dein eigener Server, mit dem echten Preis aus deiner eigenen Datenbank oder deinem eigenen Code.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Der Browser des Kunden schickt nur eine Anfrage wie \"ich möchte dieses Abo kaufen\" an deinen Server. Der Server prüft das, baut die Checkout-Session mit dem korrekten Preis, und schickt dem Browser nur den fertigen Link zur Bezahlseite zurück.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Also läuft der eigentlich wichtige Teil unsichtbar im Hintergrund auf dem Server?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau, und das ist kein Zufall, sondern eine ganz bewusste Sicherheitsentscheidung.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Ohne diesen Umweg über den Server könnte niemand sicher sein, dass der Kunde wirklich den richtigen Preis bezahlt.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir eine Quittung vor, die du nach dem Bezahlen im Laden bekommst, und einen Zettel, den du bekommst, wenn du den Einkauf doch noch abbrichst.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau zwei solche Wege legst du für die Checkout-Session vorher fest: was passiert bei Erfolg, und was passiert beim Abbrechen.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Die Seite nach einer erfolgreichen Zahlung heißt Erfolgsseite, die Seite nach einem Abbruch heißt Abbruchseite.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Bezahlt der Kunde erfolgreich, schickt Stripe ihn automatisch auf deine Erfolgsseite, zum Beispiel \"Danke für deinen Kauf\". Klickt der Kunde stattdessen auf Zurück oder bricht ab, landet er auf deiner Abbruchseite, zum Beispiel wieder im Warenkorb.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss ich auf der Erfolgsseite dem Kunden vertrauen, dass er wirklich bezahlt hat?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Gute Frage, und die Antwort ist Nein. Die Erfolgsseite allein beweist noch nichts, das lernst du in der nächsten Lektion mit dem Webhook genauer.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Diese zwei Seiten sind trotzdem wichtig, weil sie dem Kunden sofort eine verständliche Rückmeldung geben, egal wie die Zahlung ausgegangen ist.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Denk an einen Hausschlüssel, den jeder Besucher sehen darf, und einen Tresorschlüssel, den nur du selbst besitzt.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Bei Stripe bekommst du für dein Konto zwei verschiedene Zugangsschlüssel, mit ganz unterschiedlichen Rechten.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Der erste Schlüssel darf öffentlich sichtbar sein, sogar im Code, den der Browser lädt: der Publishable Key.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Der Publishable Key kann zum Beispiel im HTML einer Webseite stehen, weil er nur sehr eingeschränkte Dinge darf, etwa das Kartenfeld anzeigen. Selbst wenn ihn jemand kopiert, kann er damit kein Geld abbuchen.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Und der zweite Schlüssel?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Der zweite Schlüssel darf niemals öffentlich sein: der Secret Key.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Der Secret Key kann Checkout-Sessions anlegen, Geld einziehen und Rückerstattungen auslösen. Er gehört deshalb ausschließlich in eine Umgebungsvariable auf dem Server, niemals in Code, der zum Browser geschickt wird, genau wie du es schon aus der Lektion zu Umgebungsvariablen kennst.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Was würde denn passieren, wenn der Secret Key aus Versehen doch im Browser-Code landet?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Dann könnte jeder, der sich den Quelltext der Seite ansieht, mit deinem Secret Key in deinem Namen Zahlungen auslösen oder sogar Geld zurückerstatten. Genau das soll die strikte Trennung verhindern.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Diese Trennung ist der wichtigste einzelne Sicherheitspunkt beim Einbau von Stripe Checkout.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Denk an ein Bestellformular in einem Restaurant: der Kellner nimmt die Bestellung auf, gibt sie in der Küche weiter, und erst die Küche bereitet das Essen zu.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Der Ablauf beim Einbau von Checkout läuft in derselben Reihenfolge: der Browser fragt, der Server entscheidet, Stripe liefert die Bezahlseite.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Schritt eins: der Kunde klickt auf der Webseite auf einen Kaufen-Knopf. Der Browser schickt eine Anfrage an eine eigene Adresse auf deinem Server, zum Beispiel /checkout.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Schritt zwei: dein Server nimmt den Secret Key aus der Umgebungsvariable, legt bei Stripe eine Checkout-Session mit dem richtigen Preis an und bekommt von Stripe eine Webadresse zurück.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Schritt drei: dein Server schickt diese Webadresse als JSON an den Browser zurück, der Browser leitet den Kunden automatisch dorthin weiter.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Das gesamte Ergebnis dieser drei Schritte nennt man den Checkout-Fluss: vom Klick des Kunden bis zur fertigen Bezahlseite von Stripe.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Warum schickt der Server nicht gleich die ganze Bezahlseite mit, statt nur eine Webadresse?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Weil die eigentliche Bezahlseite direkt bei Stripe liegt, auf Stripes eigenen, besonders geschützten Servern, nicht auf deinem eigenen Server.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Das ist wieder derselbe Gedanke wie bei PCI aus der letzten Lektion: die sensiblen Kartendaten sollen deinen eigenen Server gar nicht erst berühren.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Denk an einen Ausweis, den sich jemand einfach zu Hause selbst ausdruckt, ohne dass ihn je ein Amt geprüft hat.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "So einen \"selbst ausgedruckten Ausweis\" gibt es tatsächlich auch im Code, wenn ein Zahlungsvorgang nicht wirklich vom Server geprüft wird.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein gutes Gegenbeispiel dafür liefert das Werkzeug SubGuard aus dem Repository microsaas.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "SubGuard erzeugt in der Funktion generiereLizenz einen Lizenzschlüssel rein im Speicher, mit Zufallsdaten aus crypto.randomBytes, und prüft ihn in validiereLizenz nur auf das richtige Aussehen, ohne jede Rückfrage bei einem Server oder einer Datenbank.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Das heißt, jeder könnte sich selbst so einen gültig aussehenden Schlüssel basteln, ganz ohne zu bezahlen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau das ist die ehrliche Schwäche, die auch die Vault-Notiz zu diesem Repo selbst nennt: als echte Lizenzsicherung ist SubGuard ungeeignet, weil niemand von außen bestätigt, dass wirklich bezahlt wurde.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Eine Stripe-Checkout-Session macht es dagegen fundamental anders: dein eigener Server legt die Session an, und wie du in der nächsten Lektion siehst, bestätigt Stripe selbst per Webhook, dass wirklich Geld geflossen ist.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Dieser Unterschied ist entscheidend: ein Schlüssel, der nur lokal aussieht wie gültig, ist etwas völlig anderes als eine Zahlung, die ein unabhängiger Zahlungsdienstleister bestätigt hat.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir eine Generalprobe im Theater vor, bei der alles genauso abläuft wie später, nur ohne echtes Publikum.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau so baust du deinen Checkout zuerst komplett im Testmodus, mit den Testschlüsseln aus der letzten Lektion.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Du testest den kompletten Ablauf: Klick auf Kaufen, Weiterleitung zu Stripe, Bezahlen mit einer Testkarte, Rückkehr auf deine Erfolgsseite.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Erst wenn dieser komplette Testlauf mehrfach fehlerfrei funktioniert, wechselst du Publishable Key und Secret Key auf die echten Schlüssel für den Echtbetrieb.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss ich dafür meinen ganzen Code umschreiben?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, meist nur die beiden Umgebungsvariablen austauschen, der restliche Code bleibt unverändert, weil Testmodus und Echtbetrieb technisch dieselbe Schnittstelle benutzen.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Das macht den Übergang vom Üben zum echten Verkauf sehr sicher und sehr einfach.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir eine Bestellliste vor, auf der ganz oben Name und Menge des Artikels stehen, bevor sie überhaupt zur Küche geht.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genauso beginnt der Code für Checkout meist mit einer kleinen Liste, was gekauft werden soll, bevor irgendetwas an Stripe geschickt wird.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Typisch ist ein kleines JSON-Objekt mit dem Preis-Kennzeichen aus deinem Stripe-Konto und der gewünschten Menge, zum Beispiel dem Preis für \"Testabo\" und der Menge eins.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Dieses JSON-Objekt schickt der Server dann an Stripe, zusammen mit dem Secret Key zur Anmeldung, und bekommt als Antwort wieder ein JSON-Objekt zurück, diesmal mit der fertigen Webadresse der Bezahlseite.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Also steckt hinter dem ganzen Vorgang am Ende nur der Austausch von JSON-Nachrichten zwischen meinem Server und Stripe?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau, im Kern schon. Die ganze Komplexität von Kartenprüfung, PCI und Sicherheit steckt für dich unsichtbar hinter dieser einfachen Anfrage.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Das ist der eigentliche Sinn eines Zahlungsdienstleisters: eine einfache Schnittstelle nach außen, riesige Komplexität dahinter versteckt.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Denk an einen Kunden, der ungeduldig zweimal hintereinander auf den Kaufen-Knopf klickt, weil die Seite kurz nicht reagiert.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Ohne Vorsichtsmaßnahme könnte das versehentlich zwei Checkout-Sessions und am Ende zwei Zahlungen erzeugen.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Stripe bietet dafür einen Schutz an: du kannst jeder Anfrage eine eigene Kennung mitgeben, mit der Stripe doppelte, gleichzeitig geschickte Anfragen erkennt und nur einmal ausführt.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Diese Schutztechnik hat einen eigenen Fachnamen, den du in der nächsten Lektion beim Thema Webhooks kennenlernst, dort geht es um ein sehr ähnliches Doppel-Problem.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss ich mich damit schon in dieser Lektion im Detail befassen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Noch nicht im Detail, es reicht, wenn du jetzt weißt, dass es dieses Problem gibt und dass Stripe eine eingebaute Lösung dafür anbietet.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir eine Paketverfolgung vor, bei der jedes Paket eine eigene Sendungsnummer bekommt. Selbst wenn du zweimal dieselbe Nummer eingibst, zeigt die Sendungsverfolgung nur ein Paket an, nicht zwei.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau so funktioniert der Schutz vor Doppelzahlungen bei Stripe. Dein Server gibt jeder Anfrage zum Anlegen einer Checkout-Session eine eigene, einmalige Kennung mit, einen sogenannten Idempotenz-Schlüssel.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Diese Technik, bei der dieselbe Anfrage mehrmals dasselbe Ergebnis liefert, ohne etwas doppelt auszuführen, heißt Idempotenz.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Schickt der Browser aus Versehen zweimal dieselbe Anfrage mit derselben Kennung, etwa weil das Netz kurz stockte, erkennt Stripe das und führt die Zahlung nur einmal aus. Die zweite Anfrage bekommt einfach dieselbe Antwort wie die erste, ohne eine zweite Session anzulegen.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss ich mir diese Kennung selbst ausdenken, oder macht Stripe das automatisch?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Du musst sie selbst vergeben, meist nimmst du dafür eine zufällige Zeichenkette oder eine Bestellnummer aus deinem eigenen System. Wichtig ist nur, dass dieselbe Kennung nicht versehentlich für zwei verschiedene, echte Kaufversuche benutzt wird.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Ohne diesen Schutz könnte ein kurzer Internet-Aussetzer oder ein ungeduldiger Doppelklick zu einer doppelten Abbuchung beim Kunden führen, was nicht nur ärgerlich wäre, sondern auch rechtliche Probleme nach sich ziehen könnte.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Denk an den Kassenbon, den du nach jedem Einkauf automatisch bekommst, ohne extra danach fragen zu müssen.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Auch bei einer Stripe-Zahlung kannst du festlegen, dass der Kunde automatisch eine Rechnung oder eine Zahlungsbestätigung per E-Mail bekommt.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Diese Einstellung machst du entweder direkt am Preis oder an der Checkout-Session, meist mit einem einzigen zusätzlichen Feld.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Ohne diese Einstellung bekommt der Kunde zwar trotzdem eine Bestätigung von Stripe, aber unter Umständen keine formale Rechnung, die er zum Beispiel bei einer Firma steuerlich einreichen könnte.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Ist das wichtig, auch wenn ich nur an Privatpersonen verkaufe?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Für Privatpersonen ist es weniger entscheidend, für Firmenkunden aber fast immer Pflicht, weil sie die Rechnung für ihre eigene Buchhaltung brauchen.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir einen Marktstand vor, der sowohl Bargeld als auch Karte akzeptiert, ohne dass der Kunde vorher fragen muss, was erlaubt ist.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau diese Flexibilität kannst du auch in einer einzigen Checkout-Session einstellen, statt für jede Zahlungsart eine eigene Lösung zu bauen.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Du legst einfach fest, welche Zahlungsarten erlaubt sind, zum Beispiel Karte und zusätzlich eine Lastschrift, und Stripe zeigt dem Kunden automatisch die passende Auswahl auf der Bezahlseite an.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein Kunde in Deutschland sieht dadurch vielleicht zusätzlich eine Lastschrift-Option, während ein Kunde in einem anderen Land automatisch eine dort übliche Zahlungsart angeboten bekommt.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss ich für jedes Land eine eigene Checkout-Seite bauen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, genau das übernimmt Stripe für dich im Hintergrund, du wählst nur einmal aus, welche Zahlungsarten grundsätzlich erlaubt sein sollen.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Das erspart dir sehr viel eigene Arbeit, wenn du später Kunden aus mehreren Ländern gewinnen möchtest.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Also noch einmal kurz zusammengefasst: du legst bei Stripe ein Produkt mit Preis an, dein Server erzeugt daraus bei jedem Kaufversuch eine eigene Checkout-Session mit Erfolgs- und Abbruchseite, und Stripe liefert eine fertige, sichere Bezahlseite. Der Publishable Key darf öffentlich sein, der Secret Key gehört ausschließlich in eine Umgebungsvariable auf dem Server. Damit baust du eine echte, vom Server geprüfte Bezahlseite, statt nur einen selbst ausgedachten Schlüssel wie in SubGuard.",
+      "isKeySentence": true,
+      "role": "key"
+    },
+    {
+      "speaker": "A",
+      "text": "Zum Abschluss noch einmal alle neuen Begriffe dieser Lektion, kurz erklärt.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Checkout-Session: ein einmaliger Kaufvorgang bei Stripe, den dein Server für genau diesen einen Kaufversuch anlegt.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Erfolgsseite: die Seite, auf die Stripe den Kunden nach einer erfolgreichen Zahlung schickt.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Abbruchseite: die Seite, auf die Stripe den Kunden schickt, wenn er den Kauf abbricht.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Publishable Key: der öffentliche Zugangsschlüssel, der auch im Browser-Code stehen darf.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Secret Key: der geheime Zugangsschlüssel, der ausschließlich auf dem Server bleibt.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann ich Stripe Checkout benutzen, ohne selbst einen Server zu betreiben?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, du brauchst mindestens eine kleine serverseitige Funktion, die die Checkout-Session mit deinem Secret Key anlegt. Viele Hosting-Anbieter bieten dafür kleine, einzelne Funktionen an, die keinen vollständigen eigenen Server im klassischen Sinn brauchen, technisch aber trotzdem serverseitig laufen.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Was passiert, wenn ein Kunde die Bezahlseite einfach schließt, ohne zu bezahlen?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Dann läuft die Checkout-Session nach einer gewissen Zeit automatisch ab, meist nach 24 Stunden, ohne dass Geld bewegt wurde. Der Kunde kann jederzeit einen neuen Kaufversuch starten, wodurch dein Server einfach eine neue Checkout-Session anlegt.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Darf ich denselben Preis für mehrere verschiedene Produkte verwenden?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, ein Preis gehört bei Stripe immer zu genau einem Produkt, auch wenn zwei Produkte zufällig denselben Betrag kosten. Für jedes Produkt legst du also einen eigenen Preis an, selbst wenn die Zahlen identisch sind.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Reicht die Weiterleitung auf die Erfolgsseite als Beweis, dass wirklich bezahlt wurde?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, ein technisch findiger Nutzer könnte theoretisch versuchen, die Erfolgsseite direkt aufzurufen, ohne wirklich zu bezahlen. Der zuverlässige Beweis kommt über den Webhook, den du in der nächsten Lektion baust, der direkt von Stripe an deinen Server geschickt wird.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Warum benutzt SubGuard aus dem Repository microsaas keinen echten Zahlungsdienstleister?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "SubGuard ist laut der eigenen Vault-Notiz als reines Lehrbeispiel für Lizenzformate gedacht, nicht als fertiges Verkaufswerkzeug. Es zeigt deshalb bewusst nur die Erzeugung und das Aussehen eines Lizenzschlüssels, ohne die Serverprüfung, die eine echte Bezahllösung wie Stripe Checkout mitbringt.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann ich mit Stripe Checkout auch einmalige Käufe statt Abos verkaufen?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, ein Preis kann entweder einmalig sein, etwa für ein einzelnes E-Book, oder wiederkehrend, etwa für ein Monatsabo. Die Checkout-Session selbst funktioniert in beiden Fällen nach demselben Muster, nur der hinterlegte Preis unterscheidet sich.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss ich für jeden einzelnen Kunden ein eigenes Produkt bei Stripe anlegen?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, ein Produkt legst du normalerweise nur einmal an, zum Beispiel \"Testabo\", und danach kaufen beliebig viele verschiedene Kunden genau dieses eine Produkt. Nur die Checkout-Session ist für jeden Kaufversuch neu, nicht das Produkt selbst.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Was passiert, wenn ich versehentlich den Testschlüssel im Echtbetrieb benutze?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Dann würde die Zahlung im Testmodus laufen, obwohl der Kunde denkt, er zahlt wirklich, und am Ende fließt kein echtes Geld auf dein Konto. Deshalb solltest du vor jeder Veröffentlichung noch einmal ausdrücklich prüfen, dass wirklich die Schlüssel für den Echtbetrieb eingetragen sind.",
+      "isKeySentence": false,
+      "role": "faq"
+    }
+  ],
+  "practiceExample": {
+    "text": "Das Werkzeug SubGuard aus dem Repository microsaas erzeugt in generiereLizenz einen zufälligen Lizenzschlüssel und prüft ihn in validiereLizenz nur auf sein Aussehen, ganz ohne Server oder echte Zahlung. Eine Stripe-Checkout-Session macht genau diesen fehlenden Schritt: dein eigener Server legt sie mit dem echten Preis an, und Stripe selbst bestätigt später, ob wirklich bezahlt wurde. Der Unterschied zwischen einem selbst ausgedachten Schlüssel und einer von einem Zahlungsdienstleister bestätigten Zahlung ist genau die Lehre aus diesem Vergleich.",
+    "repoNote": "repo-microsaas",
+    "location": "subguard.mjs, Zeilen 11 bis 19 (generiereLizenz und validiereLizenz)"
+  },
+  "quiz": [
+    {
+      "question": "Warum baut man heute kaum noch eine eigene Kartenverarbeitung, sondern bindet ein fertiges Formular ein?",
+      "area": "Stripe Checkout",
+      "options": [
+        {
+          "text": "Weil eigene Formulare grundsätzlich verboten sind.",
+          "isCorrect": false,
+          "explanation": "Es gibt kein grundsätzliches Verbot, nur einen sehr hohen Aufwand und viele Sicherheitsregeln zu erfüllen."
+        },
+        {
+          "text": "Weil das fertige Formular Sicherheit, PCI-Konformität und Zeitersparnis in einem liefert.",
+          "isCorrect": true,
+          "explanation": "Genau das ist der praktische Vorteil eines fertigen, geprüften Zahlungsformulars."
+        },
+        {
+          "text": "Weil fertige Formulare grundsätzlich schneller laden als eigene.",
+          "isCorrect": false,
+          "explanation": "Die Ladezeit ist nicht der Hauptgrund, entscheidend sind Sicherheit und Aufwand."
+        },
+        {
+          "text": "Weil ein eigenes Formular keine Kreditkarten unterstützen könnte.",
+          "isCorrect": false,
+          "explanation": "Technisch könnte ein eigenes Formular Kartendaten entgegennehmen, das wäre nur enorm aufwendig und riskant."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der Unterschied zwischen einem Produkt und einem Preis bei Stripe?",
+      "area": "Stripe Checkout",
+      "options": [
+        {
+          "text": "Ein Produkt ist die verkaufte Sache, ein Preis ist ein Betrag mit Währung, der zu einem Produkt gehört.",
+          "isCorrect": true,
+          "explanation": "Genau diese Trennung erlaubt mehrere Preise für dasselbe Produkt."
+        },
+        {
+          "text": "Ein Produkt und ein Preis sind bei Stripe genau dasselbe Objekt.",
+          "isCorrect": false,
+          "explanation": "Es sind zwei getrennte Objekte, die miteinander verknüpft werden."
+        },
+        {
+          "text": "Ein Preis kann bei Stripe mehreren verschiedenen Produkten gleichzeitig gehören.",
+          "isCorrect": false,
+          "explanation": "Ein Preis gehört immer zu genau einem Produkt, nicht zu mehreren."
+        },
+        {
+          "text": "Ein Produkt legt fest, in welchem Land der Kunde wohnt.",
+          "isCorrect": false,
+          "explanation": "Das Herkunftsland des Kunden hat mit dem Produkt-Objekt nichts zu tun."
+        }
+      ]
+    },
+    {
+      "question": "Was ist eine Checkout-Session?",
+      "area": "Stripe Checkout",
+      "options": [
+        {
+          "text": "Ein einmaliger Kaufvorgang, den der Server für einen konkreten Kaufversuch anlegt.",
+          "isCorrect": true,
+          "explanation": "Das ist die Definition der Checkout-Session in dieser Lektion."
+        },
+        {
+          "text": "Ein dauerhaftes Nutzerkonto bei Stripe.",
+          "isCorrect": false,
+          "explanation": "Ein Nutzerkonto ist etwas anderes als ein einzelner Kaufvorgang."
+        },
+        {
+          "text": "Eine feste Liste aller jemals getätigten Zahlungen.",
+          "isCorrect": false,
+          "explanation": "Eine solche Liste wäre ein Bericht, keine einzelne Checkout-Session."
+        },
+        {
+          "text": "Der offizielle Name des physischen Kartenlesegeräts, das an jeder einzelnen Ladenkasse fest verbaut ist.",
+          "isCorrect": false,
+          "explanation": "Checkout-Session ist ein Begriff aus der Online-Zahlung, kein physisches Gerät."
+        }
+      ]
+    },
+    {
+      "question": "Warum erzeugt der Server die Checkout-Session, statt sie direkt im Browser zu bauen?",
+      "area": "Stripe Checkout",
+      "options": [
+        {
+          "text": "Damit der Preis nicht durch eine Veränderung im Browser manipuliert werden kann.",
+          "isCorrect": true,
+          "explanation": "Genau das ist der Sicherheitsgrund für den Umweg über den Server."
+        },
+        {
+          "text": "Damit die Webseite optisch schöner aussieht.",
+          "isCorrect": false,
+          "explanation": "Das Aussehen der Webseite hat mit dieser Entscheidung nichts zu tun."
+        },
+        {
+          "text": "Weil Browser grundsätzlich keine Webadressen öffnen können.",
+          "isCorrect": false,
+          "explanation": "Browser können Webadressen problemlos öffnen, das ist nicht der Grund."
+        },
+        {
+          "text": "Damit die Seite gleichzeitig und automatisch in mehreren verschiedenen Sprachen für unterschiedliche Länder angezeigt werden kann.",
+          "isCorrect": false,
+          "explanation": "Mehrsprachigkeit ist ein ganz anderes Thema und kein Grund für diese Architektur."
+        }
+      ]
+    },
+    {
+      "question": "Wohin schickt Stripe einen Kunden nach einer erfolgreichen Zahlung?",
+      "area": "Stripe Checkout",
+      "options": [
+        {
+          "text": "Auf die vorher festgelegte Erfolgsseite.",
+          "isCorrect": true,
+          "explanation": "Genau dafür wird die Erfolgsseite bei der Checkout-Session hinterlegt."
+        },
+        {
+          "text": "Immer zurück auf die Startseite von Stripe selbst.",
+          "isCorrect": false,
+          "explanation": "Stripe leitet zur Erfolgsseite des jeweiligen Ladens weiter, nicht zur eigenen Startseite."
+        },
+        {
+          "text": "Auf eine zufällig ausgewählte Webseite.",
+          "isCorrect": false,
+          "explanation": "Die Weiterleitung ist fest eingestellt, nicht zufällig."
+        },
+        {
+          "text": "Auf die Abbruchseite, weil jede Zahlung zunächst als Abbruch gilt.",
+          "isCorrect": false,
+          "explanation": "Die Abbruchseite gilt nur bei einem tatsächlichen Abbruch, nicht bei Erfolg."
+        }
+      ]
+    },
+    {
+      "question": "Beweist die Weiterleitung auf die Erfolgsseite allein, dass wirklich bezahlt wurde?",
+      "area": "Stripe Checkout",
+      "options": [
+        {
+          "text": "Nein, ein zuverlässigerer Beweis kommt erst über den Webhook aus der nächsten Lektion.",
+          "isCorrect": true,
+          "explanation": "Die Erfolgsseite allein reicht laut dieser Lektion nicht als sicherer Beweis."
+        },
+        {
+          "text": "Ja, die Erfolgsseite ist in jedem einzelnen Fall ein vollständig und hundertprozentig sicherer Beweis für eine erfolgreiche Zahlung.",
+          "isCorrect": false,
+          "explanation": "Genau das wird in dieser Lektion ausdrücklich verneint."
+        },
+        {
+          "text": "Nein, weil Stripe niemals eine Erfolgsseite anzeigt.",
+          "isCorrect": false,
+          "explanation": "Stripe zeigt durchaus eine Erfolgsseite an, sie ist nur allein kein zuverlässiger Beweis."
+        },
+        {
+          "text": "Ja, weil der Browser die Zahlung selbst bestätigt.",
+          "isCorrect": false,
+          "explanation": "Der Browser kann eine echte Zahlung nicht selbst bestätigen, das braucht eine unabhängige Prüfung."
+        }
+      ]
+    },
+    {
+      "question": "Wo darf der Publishable Key stehen?",
+      "area": "Schlüssel und Sicherheit",
+      "options": [
+        {
+          "text": "Auch im Code, der zum Browser des Kunden geschickt wird.",
+          "isCorrect": true,
+          "explanation": "Der Publishable Key ist genau dafür gemacht, öffentlich sichtbar zu sein."
+        },
+        {
+          "text": "Nur auf einem Zettel im Aktenschrank des Ladens.",
+          "isCorrect": false,
+          "explanation": "Der Publishable Key darf sogar öffentlich im Code stehen, ein Zettel wäre unnötig umständlich."
+        },
+        {
+          "text": "Ausschließlich verschlüsselt in einer Datenbank ohne jeden Zugriff.",
+          "isCorrect": false,
+          "explanation": "So eine strenge Geheimhaltung ist beim Publishable Key nicht nötig."
+        },
+        {
+          "text": "Er darf grundsätzlich nirgendwo gespeichert werden.",
+          "isCorrect": false,
+          "explanation": "Er muss irgendwo im Code stehen, damit das Kartenfeld überhaupt angezeigt werden kann."
+        }
+      ]
+    },
+    {
+      "question": "Wo gehört der Secret Key hin?",
+      "area": "Schlüssel und Sicherheit",
+      "options": [
+        {
+          "text": "Ausschließlich in eine Umgebungsvariable auf dem Server.",
+          "isCorrect": true,
+          "explanation": "Genau das ist die in dieser Lektion beschriebene, sichere Ablage für den Secret Key."
+        },
+        {
+          "text": "In den sichtbaren HTML-Quelltext der Webseite.",
+          "isCorrect": false,
+          "explanation": "Das wäre genau der gefährliche Fehler, den diese Lektion ausdrücklich vermeiden will."
+        },
+        {
+          "text": "In eine öffentlich einsehbare Textdatei im Repository.",
+          "isCorrect": false,
+          "explanation": "Ein öffentliches Repository wäre für einen Secret Key völlig ungeeignet."
+        },
+        {
+          "text": "In einen Kommentar direkt im JavaScript-Code des Browsers.",
+          "isCorrect": false,
+          "explanation": "Auch ein Kommentar im Browser-Code bleibt für jeden sichtbar, das ist unsicher."
+        }
+      ]
+    },
+    {
+      "question": "Was könnte passieren, wenn der Secret Key versehentlich im Browser-Code landet?",
+      "area": "Schlüssel und Sicherheit",
+      "options": [
+        {
+          "text": "Fremde könnten damit Checkout-Sessions anlegen oder sogar Geld zurückerstatten.",
+          "isCorrect": true,
+          "explanation": "Genau das ist die reale Gefahr, die die strikte Trennung der Schlüssel verhindern soll."
+        },
+        {
+          "text": "Die Webseite würde dadurch automatisch schneller laden.",
+          "isCorrect": false,
+          "explanation": "Ladezeit und Schlüsselverwaltung haben nichts miteinander zu tun."
+        },
+        {
+          "text": "Der Kunde könnte damit seine eigene Bestellung stornieren, sonst nichts.",
+          "isCorrect": false,
+          "explanation": "Der Secret Key erlaubt sehr viel weitreichendere Aktionen als nur eine eigene Stornierung."
+        },
+        {
+          "text": "Gar nichts, weil Stripe solche Fehler in jedem einzelnen Fall automatisch zuverlässig erkennt und von selbst vollständig blockiert.",
+          "isCorrect": false,
+          "explanation": "Stripe kann kompromittierte Schlüssel zwar melden, verhindert den Schaden aber nicht automatisch im Voraus."
+        }
+      ]
+    },
+    {
+      "question": "Warum ist SubGuard aus dem Repository microsaas kein geeigneter Ersatz für Stripe Checkout?",
+      "area": "Praxisbeispiel SubGuard",
+      "options": [
+        {
+          "text": "Weil SubGuard Lizenzschlüssel nur lokal erzeugt und prüft, ohne echte Zahlung oder Serverprüfung.",
+          "isCorrect": true,
+          "explanation": "Genau diese Schwäche nennt die zugehörige Vault-Notiz zu SubGuard selbst."
+        },
+        {
+          "text": "Weil SubGuard als Node-Modul auf dem eigenen Rechner des Entwicklers technisch überhaupt nicht lauffähig ist.",
+          "isCorrect": false,
+          "explanation": "SubGuard läuft technisch einwandfrei, das Problem liegt in der fehlenden Zahlungsprüfung, nicht in der Technik."
+        },
+        {
+          "text": "Weil SubGuard ausschließlich für Android-Apps gedacht ist.",
+          "isCorrect": false,
+          "explanation": "SubGuard ist ein reines Node-Modul ohne Bezug zu einer bestimmten App-Plattform."
+        },
+        {
+          "text": "Weil SubGuard doppelt so teuer ist wie Stripe.",
+          "isCorrect": false,
+          "explanation": "SubGuard verlangt gar keine Gebühr, weil es keine echte Zahlungsabwicklung durchführt."
+        }
+      ]
+    },
+    {
+      "question": "Was prüft die Funktion validiereLizenz in SubGuard tatsächlich?",
+      "area": "Praxisbeispiel SubGuard",
+      "options": [
+        {
+          "text": "Nur, ob ein Text dem erwarteten Muster aus Buchstaben, Ziffern und Bindestrichen entspricht.",
+          "isCorrect": true,
+          "explanation": "Das ist genau, was der reguläre Ausdruck in validiereLizenz tut, ganz ohne Serverabfrage."
+        },
+        {
+          "text": "Ob der Kunde diesen Schlüssel wirklich bezahlt hat.",
+          "isCorrect": false,
+          "explanation": "Genau diese Prüfung fehlt in SubGuard, das ist die beschriebene Schwäche."
+        },
+        {
+          "text": "Ob der Schlüssel schon einmal an anderer Stelle verwendet wurde.",
+          "isCorrect": false,
+          "explanation": "SubGuard hat keine gemeinsame Liste bereits genutzter Schlüssel, es prüft nur das Aussehen."
+        },
+        {
+          "text": "Ob genug Geld auf dem Konto des Kunden ist.",
+          "isCorrect": false,
+          "explanation": "Diese Prüfung würde eine Bank oder ein Zahlungsdienstleister übernehmen, nicht SubGuard."
+        }
+      ]
+    },
+    {
+      "question": "Was ändert sich am Code typischerweise, wenn du von Testmodus zu Echtbetrieb wechselst?",
+      "area": "Stripe Checkout",
+      "options": [
+        {
+          "text": "Meist nur die Werte der beiden Umgebungsvariablen für Publishable Key und Secret Key.",
+          "isCorrect": true,
+          "explanation": "Der restliche Code bleibt gleich, weil beide Modi dieselbe Schnittstelle verwenden."
+        },
+        {
+          "text": "Der komplette Checkout-Code muss neu geschrieben werden.",
+          "isCorrect": false,
+          "explanation": "Ein kompletter Neuschrieb wäre unnötig, meist reicht der Schlüsselaustausch."
+        },
+        {
+          "text": "Die Programmiersprache der Webseite muss gewechselt werden.",
+          "isCorrect": false,
+          "explanation": "Die Programmiersprache hat mit Testmodus oder Echtbetrieb nichts zu tun."
+        },
+        {
+          "text": "Der Kunde muss ein neues Nutzerkonto bei Stripe anlegen.",
+          "isCorrect": false,
+          "explanation": "Der Kunde benötigt gar kein eigenes Stripe-Konto, nur der Laden hat eines."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Lege in einem kostenlosen Stripe-Testkonto im Testmodus ein Produkt mit einem Preis an, zum Beispiel \"Testabo\" für fünf Euro im Monat. Erzeuge danach über die Stripe-Dokumentation (stripe.com/docs/checkout/quickstart) mit einem kleinen Beispielprojekt eine Checkout-Session für diesen Preis und öffne den Link, den Stripe dir zurückgibt, im Browser. Bezahle mit einer Testkartennummer aus der vorherigen Lektion und beobachte die Weiterleitung auf deine Erfolgsseite.",
+    "expectation": "Ein angelegtes Produkt mit Preis im Stripe-Testkonto, eine erfolgreich geöffnete Checkout-Seite und eine sichtbare Weiterleitung auf eine Erfolgsseite nach der Testzahlung.",
+    "checklist": [
+      "Produkt mit Preis im Testmodus angelegt",
+      "Checkout-Session erzeugt und Bezahlseite geöffnet",
+      "mit einer Testkartennummer bezahlt",
+      "Weiterleitung auf die Erfolgsseite beobachtet",
+      "Secret Key ausschließlich in einer Umgebungsvariable verwendet, nie im Browser-Code"
+    ]
+  },
+  "audio": {
+    "file": "M03-06-02.mp3",
+    "durationSeconds": 956,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Kann ich Stripe Checkout benutzen, ohne selbst einen Server zu betreiben?",
+      "answer": "Nein, du brauchst mindestens eine kleine serverseitige Funktion, die die Checkout-Session mit deinem Secret Key anlegt. Viele Hosting-Anbieter bieten dafür kleine, einzelne Funktionen an, die keinen vollständigen eigenen Server im klassischen Sinn brauchen, technisch aber trotzdem serverseitig laufen."
+    },
+    {
+      "question": "Was passiert, wenn ein Kunde die Bezahlseite einfach schließt, ohne zu bezahlen?",
+      "answer": "Dann läuft die Checkout-Session nach einer gewissen Zeit automatisch ab, meist nach 24 Stunden, ohne dass Geld bewegt wurde. Der Kunde kann jederzeit einen neuen Kaufversuch starten, wodurch dein Server einfach eine neue Checkout-Session anlegt."
+    },
+    {
+      "question": "Darf ich denselben Preis für mehrere verschiedene Produkte verwenden?",
+      "answer": "Nein, ein Preis gehört bei Stripe immer zu genau einem Produkt, auch wenn zwei Produkte zufällig denselben Betrag kosten. Für jedes Produkt legst du also einen eigenen Preis an, selbst wenn die Zahlen identisch sind."
+    },
+    {
+      "question": "Reicht die Weiterleitung auf die Erfolgsseite als Beweis, dass wirklich bezahlt wurde?",
+      "answer": "Nein, ein technisch findiger Nutzer könnte theoretisch versuchen, die Erfolgsseite direkt aufzurufen, ohne wirklich zu bezahlen. Der zuverlässige Beweis kommt über den Webhook, den du in der nächsten Lektion baust, der direkt von Stripe an deinen Server geschickt wird."
+    },
+    {
+      "question": "Warum benutzt SubGuard aus dem Repository microsaas keinen echten Zahlungsdienstleister?",
+      "answer": "SubGuard ist laut der eigenen Vault-Notiz als reines Lehrbeispiel für Lizenzformate gedacht, nicht als fertiges Verkaufswerkzeug. Es zeigt deshalb bewusst nur die Erzeugung und das Aussehen eines Lizenzschlüssels, ohne die Serverprüfung, die eine echte Bezahllösung wie Stripe Checkout mitbringt."
+    },
+    {
+      "question": "Kann ich mit Stripe Checkout auch einmalige Käufe statt Abos verkaufen?",
+      "answer": "Ja, ein Preis kann entweder einmalig sein, etwa für ein einzelnes E-Book, oder wiederkehrend, etwa für ein Monatsabo. Die Checkout-Session selbst funktioniert in beiden Fällen nach demselben Muster, nur der hinterlegte Preis unterscheidet sich."
+    },
+    {
+      "question": "Muss ich für jeden einzelnen Kunden ein eigenes Produkt bei Stripe anlegen?",
+      "answer": "Nein, ein Produkt legst du normalerweise nur einmal an, zum Beispiel \"Testabo\", und danach kaufen beliebig viele verschiedene Kunden genau dieses eine Produkt. Nur die Checkout-Session ist für jeden Kaufversuch neu, nicht das Produkt selbst."
+    },
+    {
+      "question": "Was passiert, wenn ich versehentlich den Testschlüssel im Echtbetrieb benutze?",
+      "answer": "Dann würde die Zahlung im Testmodus laufen, obwohl der Kunde denkt, er zahlt wirklich, und am Ende fließt kein echtes Geld auf dein Konto. Deshalb solltest du vor jeder Veröffentlichung noch einmal ausdrücklich prüfen, dass wirklich die Schlüssel für den Echtbetrieb eingetragen sind."
+    }
+  ]
+}

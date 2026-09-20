@@ -1,0 +1,867 @@
+{
+  "id": "M03-01-02",
+  "title": "Hooks und State: was sich merkt und neu zeichnet",
+  "durationMinutes": 23,
+  "prerequisites": [
+    "M03-01-01"
+  ],
+  "terms": [
+    {
+      "term": "State",
+      "definition": "Das eigene, veränderliche Gedächtnis einer Komponente, unabhängig von ihren Props."
+    },
+    {
+      "term": "Hook",
+      "definition": "Eine anhängbare Zusatzfähigkeit für eine Komponentenfunktion, immer am Namen mit \"use\" davor erkennbar."
+    },
+    {
+      "term": "useState",
+      "definition": "Der Hook, der einen einzelnen State-Wert samt Änderungsfunktion zur Verfügung stellt."
+    },
+    {
+      "term": "useEffect",
+      "definition": "Der Hook, mit dem eine Komponente nach dem Rendern auf eine Änderung reagiert."
+    },
+    {
+      "term": "useContext",
+      "definition": "Der Hook, der einen Wert für einen ganzen Teil des Komponentenbaums auf einmal verfügbar macht, ohne ihn als Prop durch jede Zwischenkomponente zu reichen."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine Tür in einem Geschäft vor, an der ein kleiner Zähler klickt, jedes Mal, wenn jemand hindurchgeht. Der Zähler merkt sich die Zahl, auch wenn gerade niemand hinschaut.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was hat ein Türzähler mit einer Webseite zu tun?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "In der letzten Lektion war eine Komponente wie ein Kellner, der immer dasselbe Gericht bringt, solange die Bestellung, also die Props, gleich bleibt. Manchmal muss sich eine Komponente aber selbst etwas merken, ganz ohne dass jemand von außen eine neue Bestellung schickt. Genau wie der Türzähler seine eigene Zahl im Kopf behält.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Ohne so ein eigenes Gedächtnis könnte eine Komponente keinen Zähler anzeigen, kein Menü auf- und zuklappen und sich nicht merken, was jemand in ein Formularfeld eingetippt hat. Sie wäre immer nur ein Spiegel dessen, was von außen hereinkommt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir ein Klemmbrett vor, auf dem ein Verkäufer den aktuellen Kassenstand notiert, und das Klemmbrett wird nach jedem Verkauf sofort aktualisiert.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Dieses Klemmbrett gehört fest zur Kasse, niemand von außen muss den Stand hineinreichen. Genau so ein eigenes, veränderliches Gedächtnis kann auch eine React-Komponente haben, unabhängig von ihren Props.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Dieses eigene, veränderliche Gedächtnis einer Komponente heißt in React State.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Ein Zähler, der bei jedem Klick auf einen Knopf um eins hochzählt, braucht genau so einen State. Es ist eine Zahl, die die Komponente selbst verwaltet und die sich über die Zeit verändert, ganz ohne neue Props von außen. Im Repo repo-portfolio benutzt die Navigationsleiste in der Datei src/components/Nav.tsx zwei solcher State-Werte: scrolled, ob die Seite schon ein Stück heruntergescrollt wurde, und menuOpen, ob das mobile Menü gerade geöffnet ist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Ist State also einfach eine Variable innerhalb der Komponente?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Fast, mit einem wichtigen Unterschied. Eine gewöhnliche Variable würde React nicht auffallen, wenn sie sich ändert, die Anzeige auf dem Bildschirm bliebe stur beim alten Wert. State ist deshalb wichtig, weil eine Änderung daran React aktiv mitteilt: zeig die Komponente jetzt bitte neu an, mit dem neuen Wert.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen Kleiderhaken an der Wand vor: er selbst ist nur ein kleines Metallstück, aber er hängt eine ganze Jacke daran, ohne die Wand dafür aufzureißen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "React-Komponenten sind, wie in der letzten Lektion gelernt, ganz normale Funktionen. Damit eine solche Funktion trotzdem State bekommen kann, ohne sich in eine komplizierte, andere Art Code zu verwandeln, braucht sie eine Möglichkeit, sich zusätzliche Fähigkeiten quasi anzuhängen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Genau so eine anhängbare Zusatzfähigkeit nennt man in React einen Hook.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Ein Hook ist an seinem Namen leicht zu erkennen: er beginnt immer mit den drei Buchstaben \"use\", etwa useState oder useEffect, die gleich vorkommen. Ein Hook wird direkt am Anfang der Komponentenfunktion aufgerufen, so wie ein Haken direkt an der Wand sitzt, nicht irgendwo mittendrin versteckt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Warum heißen Hooks eigentlich alle mit \"use\" am Anfang?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Damit React und auch andere Programmiererinnen und Programmierer auf den ersten Blick erkennen, welche Funktionen besondere Regeln befolgen müssen. Das ist wichtig, weil es für Hooks eine feste Regel gibt, dazu gleich mehr, und der Name \"use\" ist die sichtbare Erinnerung an diese Regel.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine kleine Anzeigetafel an einer Wursttheke vor: \"Jetzt dran: Nummer 42\", und daneben einen Knopf, der die Zahl um eins weiterschaltet.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Um so eine Zahl in einer Komponente zu verwalten, holt man sich den passenden Hook. Er gibt zwei Dinge zurück: den aktuellen Wert, etwa die Zahl 42, und eine Funktion, mit der man genau diesen Wert ändern kann.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Dieser Hook für einfachen State heißt useState.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Ein Aufruf könnte so aussehen: const [zahl, setZahl] = useState(0). Am Anfang steht die Zahl 0, und ein Klick auf einen Knopf ruft setZahl(zahl + 1) auf, um eins draufzuzählen. Genau dieses Muster steht im Repo repo-portfolio in Nav.tsx, Zeile 46, für scrolled: const [scrolled, setScrolled] = useState(false), am Anfang also \"noch nicht gescrollt\".",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Muss ich setZahl aufrufen, damit sich die Anzeige wirklich ändert, oder reicht es, die Variable zahl selbst zu überschreiben?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Nur der Aufruf von setZahl sagt React Bescheid, dass sich etwas geändert hat und neu gerendert werden muss, das war der Fachausdruck aus der letzten Lektion. Ein einfaches Überschreiben der Variable ohne diesen Aufruf würde React schlicht nicht bemerken, die Anzeige bliebe beim alten Wert stehen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine Türklingel vor, die von selbst losgeht, sobald jemand die Tür öffnet, ganz ohne dass jemand extra danach schaut.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Manchmal soll eine Komponente auf eine Änderung reagieren, mit einer Aktion, die nicht direkt die Anzeige betrifft, etwa den Fokus auf ein bestimmtes Element setzen oder einen Eintrag in der Konsole schreiben. Dafür gibt es einen eigenen Hook, der nach dem Rendern automatisch losläuft, ähnlich der Türklingel.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Dieser Hook für solche Reaktionen nach dem Rendern heißt useEffect.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-portfolio, in derselben Datei Nav.tsx, sorgt ein useEffect dafür, dass der Fokus auf den Schließen-Knopf springt, sobald das mobile Menü geöffnet wird, also sobald sich menuOpen ändert. Solange menuOpen \"geschlossen\" bedeutet, tut dieser useEffect nichts, genau wie die Klingel nur bei der geöffneten Tür losgeht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Woher weiß React, wann genau so ein useEffect erneut losläuft?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Das steuert eine kleine Liste am Ende des useEffect-Aufrufs, die sogenannten Abhängigkeiten. React vergleicht diese Liste bei jedem Rendern, und läuft der useEffect nur dann erneut, wenn sich mindestens einer der Werte darin geändert hat. Das ist wichtig, weil ein useEffect ohne diese Kontrolle bei jedem winzigen Rendern erneut losliefe, auch wenn sich gar nichts Wichtiges geändert hat.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine Aufzugsknopf-Reihenfolge vor: die Knöpfe für Stockwerk eins, zwei, drei hängen immer an fester Position, jedes Mal an derselben Stelle, egal wie oft der Aufzug fährt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Hooks haben eine ganz ähnliche feste Ordnung. React merkt sich Hooks in der Reihenfolge, in der sie beim Rendern aufgerufen werden, nicht anhand eines Namens. Deshalb dürfen Hooks niemals innerhalb einer Bedingung oder einer Schleife aufgerufen werden, nur ganz am Anfang der Komponentenfunktion, immer in derselben Reihenfolge.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was würde denn passieren, wenn ich einen Hook trotzdem in eine Bedingung packe?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Bei einem Rendern würde der Hook aufgerufen, beim nächsten Mal vielleicht nicht, und React würde bei den folgenden Hooks durcheinanderkommen, welcher Wert zu welchem Hook gehört, so als würden plötzlich die Aufzugsknöpfe ihre Plätze tauschen. Das ist wichtig zu wissen, weil dieser Fehler in der Praxis sehr häufig vorkommt und React dafür eine deutliche Fehlermeldung anzeigt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine Bauanleitung mit genau drei Schritten vor: Werkzeug bereitlegen, Teil einsetzen, festschrauben.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Genau so wenige Schritte braucht eine eigene Zähler-Komponente mit useState. Schritt eins: den Hook useState aufrufen und den Startwert 0 hineingeben, das Ergebnis in zwei Namen aufteilen, etwa zahl und setZahl. Schritt zwei: in der zurückgegebenen JSX-Beschreibung den aktuellen Wert von zahl anzeigen, in geschweiften Klammern mitten im Text. Schritt drei: einen Knopf einbauen, der beim Klick setZahl aufruft, mit dem um eins erhöhten Wert.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Kann ich mit demselben Muster auch einen Knopf zum Runterzählen bauen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Ja, genau das macht Hooks so nützlich: dasselbe Muster, nur mit setZahl(zahl - 1) statt plus eins, reicht für einen zweiten Knopf. Wer dieses kleine Muster einmal verstanden hat, kann es auf ganz viele andere Fälle übertragen, etwa ein Lautstärkeregler oder eine Bewertung mit Sternen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine Werkbank mit mehreren beschrifteten Schubladen vor: eine für Schrauben, eine für Nägel, eine für Dübel, jede unabhängig von den anderen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Genau so darf eine Komponente mehrere, voneinander getrennte State-Werte gleichzeitig verwalten. Jeder eigene Wert bekommt seinen eigenen useState-Aufruf, mit eigenem Namen und eigener Änderungsfunktion, unabhängig von den übrigen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Muss ich mir bei mehreren State-Werten Sorgen machen, dass sie sich gegenseitig durcheinanderbringen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Nein, das ist gerade der Vorteil dieser Aufteilung: eine Änderung an einem Wert lässt die anderen unberührt, genau wie das Öffnen der Schraubenschublade die Nägel in der Nachbarschublade nicht durcheinanderwirbelt. Das macht den Code außerdem leichter zu lesen, weil jeder Name genau einen einzigen Zweck trägt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir ein Diktiergerät vor, das jedes gesprochene Wort sofort mitschreibt, während jemand noch redet, statt erst am Ende alles auf einmal aufzuschreiben.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein Eingabefeld auf einer Webseite kann ganz ähnlich arbeiten: bei jedem einzelnen Tastenanschlag meldet es den bisher eingegebenen Text an die Komponente, und ein useState-Wert hält diesen Text fest, sofort nach jedem Buchstaben.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Wozu braucht man das, reicht es nicht, den Text erst beim Absenden des Formulars auszulesen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Manchmal reicht das, aber oft nicht. Soll die Seite zum Beispiel sofort anzeigen, wie viele Zeichen noch übrig sind, oder ein Suchergebnis schon während des Tippens aktualisieren, braucht die Komponente den aktuellen Text sofort und nicht erst am Ende. Genau dafür ist State gemacht: ein Wert, der sich laufend verändert und bei jeder Änderung sofort sichtbar wird.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine Werkstatt vor, in der ein bestimmtes Spezialwerkzeug nur an der eigens dafür eingerichteten Werkbank benutzt werden darf, nicht irgendwo draußen auf dem Hof.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Genauso gilt für Hooks eine zweite feste Regel, neben der Reihenfolge: ein Hook darf nur innerhalb einer Komponentenfunktion aufgerufen werden, oder innerhalb einer weiteren, selbst gebauten Funktion, die selbst wieder wie ein Hook benutzt wird. In einer gewöhnlichen JavaScript-Funktion, die keine Komponente ist, darf kein Hook aufgerufen werden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Warum sperrt React Hooks so streng auf Komponenten und andere Hooks?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Weil React nur innerhalb einer Komponentenfunktion mitverfolgen kann, welcher Hook zu welchem Rendern gehört, ähnlich wie sich das Spezialwerkzeug nur an der dafür vorbereiteten Werkbank sinnvoll benutzen lässt. Außerhalb dieses Rahmens fehlt React die nötige Umgebung, um Hooks korrekt zuzuordnen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine Lautsprecherdurchsage in einem Kaufhaus vor: Eine Stimme sagt \"Achtung, in 15 Minuten schließen wir\", und jeder im ganzen Haus hört es gleichzeitig, egal in welchem Stockwerk er sich gerade befindet.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Manchmal soll ein Wert nicht nur in einer Komponente bekannt sein, sondern in vielen gleichzeitig, ohne ihn durch jede einzelne als Prop durchreichen zu müssen, wie eine Kette von Kellnern, die eine Bestellung weitergeben.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Der Hook, der einen solchen Wert für einen ganzen Teil des Komponentenbaums auf einmal verfügbar macht, heißt useContext.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Ein typisches Beispiel ist die aktuelle Sprache der App: Statt die Sprache als Prop durch 20 Zwischenkomponenten bis zum kleinsten Knopf durchzureichen, holt sich jeder Knopf die Sprache direkt per useContext.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Ist useContext dann so etwas wie eine Abkürzung, damit ich mir das viele Props-Weitergeben sparen kann?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Genau, aber mit einer wichtigen Ergänzung: useContext ist nicht nur eine Abkürzung, sondern ein eigener, zentraler Ort für Werte, die wirklich viele Komponenten gleichzeitig brauchen. Ohne useContext würde eine Änderung ganz oben, etwa ein Sprachwechsel, bedeuten, dass du jede einzelne Komponente auf dem Weg anfassen und den neuen Wert als Prop weitergeben müsstest.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir ein Schwarzes Brett am Marktplatz vor: Jeder kann den Aushang lesen, aber nicht jeder sollte einfach etwas Neues daran heften dürfen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Genau wie ein Schwarzes Brett macht useContext einen Wert für viele lesbar. Meist wird der Wert aber nur an einer einzigen, zentralen Stelle gesetzt, ganz oben im Komponentenbaum, und alle tieferen Komponenten lesen ihn nur.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Ein zweites, sehr häufiges Beispiel ist das Farbschema der App, also ob sie gerade hell oder dunkel angezeigt wird. Eine einzige Komponente ganz oben entscheidet über hell oder dunkel, und jede noch so tiefe Überschrift oder Schaltfläche fragt diesen Wert per useContext ab, ohne dass er als Prop durchgereicht werden muss.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Sollte ich dann jeden Wert, den mehrere Komponenten brauchen, einfach in einen useContext packen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Nein, das wäre ein typischer Anfängerfehler. useContext ist für Werte gedacht, die wirklich global für einen großen Teil der Anwendung gelten, wie die Sprache oder das Farbschema. Ein Wert, den nur zwei benachbarte Komponenten brauchen, gehört dagegen viel besser als State in die gemeinsame Elternkomponente und als Prop an die Kinder. Zu viele Werte im useContext machen den Code schwer durchschaubar, weil man nicht mehr sieht, welche Komponente welchen Wert tatsächlich benutzt. Im Zweifel gilt: erst mit Props versuchen, useContext nur, wenn Props zu umständlich werden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du baust dir aus mehreren einzelnen Werkzeugen ein eigenes, praktisches Kombiwerkzeug, das du danach immer wieder benutzt, statt jedes Mal einzeln zu den Originalwerkzeugen zu greifen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Genauso lässt sich aus mehreren vorhandenen Hooks, etwa useState und useEffect zusammen, eine eigene kleine Funktion bauen, die selbst wie ein Hook benutzt wird, mit \"use\" am Namen davor. So eine selbst gebaute Kombination nennt man einen eigenen Hook, auf Englisch custom Hook.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Muss ich das schon können, um mit dieser Lektion weiterzukommen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Nein, ein eigener Hook ist erst später wichtig, sobald sich dasselbe Muster aus useState und useEffect in mehreren Komponenten wiederholt und es sich lohnt, das einmal zusammenzufassen. Für den Anfang reicht es vollständig, useState und useEffect einzeln sicher zu benutzen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "text": "Also noch einmal ganz kurz: State ist das eigene Gedächtnis einer Komponente, das sich über die Zeit verändern darf. Ein Hook ist eine anhängbare Zusatzfähigkeit für eine Komponentenfunktion, immer erkennbar am Namen mit \"use\" davor. useState gibt einer Komponente einen einzelnen, veränderlichen Wert samt einer Funktion, um ihn zu ändern. useEffect lässt eine Komponente auf eine Änderung reagieren, mit einer Aktion nach dem Rendern. Und useContext macht einen Wert für viele Komponenten gleichzeitig verfügbar, ohne ihn als Prop durch jede einzelne durchreichen zu müssen.",
+      "isKeySentence": true
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "State ist das eigene, veränderliche Gedächtnis einer Komponente, unabhängig von ihren Props.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Ein Hook ist eine anhängbare Zusatzfähigkeit für eine Komponentenfunktion, immer am Namen mit \"use\" davor erkennbar.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "useState ist der Hook, der einen einzelnen State-Wert samt Änderungsfunktion zur Verfügung stellt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "useEffect ist der Hook, mit dem eine Komponente nach dem Rendern auf eine Änderung reagiert.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "useContext ist der Hook, der einen Wert für einen ganzen Teil des Komponentenbaums auf einmal verfügbar macht, ohne ihn als Prop durch jede Zwischenkomponente zu reichen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Kann eine Komponente mehr als einen State-Wert gleichzeitig haben?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ja, ohne Weiteres: eine Komponente darf useState so oft aufrufen, wie sie eigene, voneinander unabhängige Werte braucht. Im Beispiel aus Nav.tsx gibt es sogar zwei solcher Werte gleichzeitig, scrolled und menuOpen, jeder mit einem eigenen useState-Aufruf. Mehr eigene Namen bedeuten dabei nicht automatisch mehr Kompliziertheit, solange jeder Name nur genau eine Sache beschreibt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Merkt sich der State einer Komponente auch, wenn ich die ganze Seite im Browser neu lade?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Nein, ein Neuladen der Seite setzt jeden State wieder auf seinen Startwert zurück, weil die gesamte Anwendung dabei neu gestartet wird. Ein dauerhaftes Merken über ein Neuladen hinweg bräuchte einen zusätzlichen Speicherort, etwa im Browser selbst oder auf einem Server, das ist Thema späterer Lektionen. Bis dahin gilt: State lebt nur, solange die Seite im Browser tatsächlich geöffnet bleibt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was passiert, wenn ich setZahl mit demselben Wert aufrufe, den zahl schon hat?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "React erkennt das und rendert die Komponente in diesem Fall gar nicht erst neu, weil sich nichts wirklich geändert hat. Das spart unnötige Arbeit und ist ein bewusster Teil davon, wie React State im Hintergrund verwaltet. Für die Praxis bedeutet das: ein Klick, der am Ergebnis nichts ändert, kostet keine unnötige Neuzeichnung des Bildschirms.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Darf ich einen Hook nur aufrufen, wenn eine bestimmte Bedingung erfüllt ist?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Nein, das verstößt gegen die feste Reihenfolge der Hooks und führt zu einer Fehlermeldung oder zu verwirrtem Verhalten. Ein Hook steht immer ganz am Anfang der Komponentenfunktion, außerhalb jeder Bedingung und jeder Schleife, egal wie die Logik danach verzweigt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Braucht jede Komponente zwingend einen State, um überhaupt zu funktionieren?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Nein, viele Komponenten kommen völlig ohne eigenen State aus und zeigen einfach nur ihre Props an, etwa eine schlichte Überschrift oder ein einzelnes Bild. Erst wenn sich innerhalb der Komponente selbst etwas über die Zeit verändern soll, ohne dass neue Props hereinkommen, lohnt sich ein eigener State.",
+      "isKeySentence": false
+    }
+  ],
+  "practiceExample": {
+    "text": "Im Repo repo-portfolio verwaltet die Komponente Nav in der Datei src/components/Nav.tsx zwei eigene State-Werte mit useState: scrolled und menuOpen. Ein weiterer Codeabschnitt in derselben Datei benutzt useEffect, um zu reagieren, sobald sich menuOpen ändert: öffnet sich das mobile Menü, springt der Fokus automatisch auf den Schließen-Knopf. Ein Lernender sieht daran, wie useState und useEffect in einer echten, produktiv betriebenen Komponente zusammenarbeiten.",
+    "repoNote": "repo-portfolio",
+    "location": "src/components/Nav.tsx, Zeilen 46 bis 47 (useState für scrolled und menuOpen) und ab Zeile 81 (useEffect, reagiert auf Änderungen von menuOpen)"
+  },
+  "quiz": [
+    {
+      "question": "Welches Alltagsbild passt am besten zu State in einer React-Komponente?",
+      "area": "React-Grundlagen: State",
+      "options": [
+        {
+          "text": "Ein Türzähler, der sich seine eigene Zahl merkt.",
+          "isCorrect": true,
+          "explanation": "Richtig: State ist das eigene, sich merkende Gedächtnis der Komponente, genau wie der Türzähler seine Zahl behält."
+        },
+        {
+          "text": "Ein Bestellzettel, den ein Gast dem Kellner reicht.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Bestellzettel von außen entspricht eher Props, nicht dem eigenen Gedächtnis einer Komponente."
+        },
+        {
+          "text": "Eine gedruckte Speisekarte, die sich nie mehr verändert.",
+          "isCorrect": false,
+          "explanation": "Falsch: State verändert sich gerade über die Zeit, eine unveränderliche gedruckte Karte passt nicht zum Bild."
+        },
+        {
+          "text": "Ein Schild an der Tür, das niemand jemals wieder austauscht.",
+          "isCorrect": false,
+          "explanation": "Falsch: State ist veränderlich, ein für immer unveränderliches Schild passt nicht zum Konzept."
+        }
+      ]
+    },
+    {
+      "question": "Was unterscheidet State von einer gewöhnlichen JavaScript-Variable innerhalb einer Komponente?",
+      "area": "React-Grundlagen: State",
+      "options": [
+        {
+          "text": "Eine Änderung am State löst automatisch ein erneutes Rendern der Komponente aus.",
+          "isCorrect": true,
+          "explanation": "Richtig: genau das automatische Neu-Rendern bei einer Änderung ist der entscheidende Unterschied zu einer gewöhnlichen Variable."
+        },
+        {
+          "text": "State-Werte dürfen ausschließlich Zahlen sein, niemals Text.",
+          "isCorrect": false,
+          "explanation": "Falsch: State kann jeden JavaScript-Wert enthalten, auch Text, Wahrheitswerte oder Listen."
+        },
+        {
+          "text": "State wird nur einmal beim Start der ganzen Anwendung gesetzt.",
+          "isCorrect": false,
+          "explanation": "Falsch: State darf sich beliebig oft über die Zeit ändern, das ist gerade sein Zweck."
+        },
+        {
+          "text": "State-Werte lassen sich ausschließlich von außen über Props ändern.",
+          "isCorrect": false,
+          "explanation": "Falsch: State wird innerhalb der Komponente selbst verwaltet, unabhängig von Props."
+        }
+      ]
+    },
+    {
+      "question": "Woran erkennt man einen Hook meistens sofort am Namen?",
+      "area": "React-Grundlagen: Hooks",
+      "options": [
+        {
+          "text": "Der Name beginnt mit \"use\".",
+          "isCorrect": true,
+          "explanation": "Richtig: Hooks tragen als feste Namenskonvention immer ein \"use\" am Anfang, etwa useState oder useEffect."
+        },
+        {
+          "text": "Der Name endet immer auf \"Component\".",
+          "isCorrect": false,
+          "explanation": "Falsch: diese Endung ist kein Hook-Merkmal, sie kommt eher bei Komponentennamen selbst gar nicht vor."
+        },
+        {
+          "text": "Der Name besteht ausschließlich aus Großbuchstaben.",
+          "isCorrect": false,
+          "explanation": "Falsch: Hook-Namen wie useState sind klein geschrieben, nur der erste Buchstabe eines Wortteils ist groß."
+        },
+        {
+          "text": "Der Name enthält immer eine Zahl.",
+          "isCorrect": false,
+          "explanation": "Falsch: Hook-Namen wie useEffect enthalten keine Zahl."
+        }
+      ]
+    },
+    {
+      "question": "Wo innerhalb einer Komponentenfunktion dürfen Hooks aufgerufen werden?",
+      "area": "React-Grundlagen: Hooks",
+      "options": [
+        {
+          "text": "Immer ganz am Anfang, außerhalb jeder Bedingung und jeder Schleife.",
+          "isCorrect": true,
+          "explanation": "Richtig: diese feste Regel sorgt dafür, dass React Hooks anhand ihrer Reihenfolge korrekt zuordnen kann."
+        },
+        {
+          "text": "Überall, solange der Hook-Name mit \"use\" beginnt.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Name allein reicht nicht, die Position innerhalb der Funktion ist entscheidend."
+        },
+        {
+          "text": "Nur innerhalb einer if-Bedingung, niemals außerhalb.",
+          "isCorrect": false,
+          "explanation": "Falsch: genau das Gegenteil ist richtig, innerhalb einer Bedingung sind Hooks verboten."
+        },
+        {
+          "text": "Nur in der allerletzten Zeile vor dem return-Ausdruck.",
+          "isCorrect": false,
+          "explanation": "Falsch: Hooks stehen am Anfang der Funktion, nicht kurz vor dem Ende."
+        }
+      ]
+    },
+    {
+      "question": "Was gibt der Hook useState zurück?",
+      "area": "React-Grundlagen: useState",
+      "options": [
+        {
+          "text": "Den aktuellen Wert und eine Funktion, um ihn zu ändern.",
+          "isCorrect": true,
+          "explanation": "Richtig: useState liefert genau dieses Paar aus Wert und Änderungsfunktion zurück."
+        },
+        {
+          "text": "Nur den aktuellen Wert, ohne jede Möglichkeit, ihn zu ändern.",
+          "isCorrect": false,
+          "explanation": "Falsch: ohne eine Änderungsfunktion wäre der Wert dauerhaft eingefroren, das widerspräche dem Sinn von State."
+        },
+        {
+          "text": "Eine Liste aller jemals gesetzten früheren Werte.",
+          "isCorrect": false,
+          "explanation": "Falsch: useState merkt sich keine Historie, nur den aktuell gültigen Wert."
+        },
+        {
+          "text": "Eine fertige JSX-Beschreibung für einen Zähler.",
+          "isCorrect": false,
+          "explanation": "Falsch: useState liefert Wert und Änderungsfunktion, keine fertige Benutzeroberfläche."
+        }
+      ]
+    },
+    {
+      "question": "Im Repo repo-portfolio steht in Nav.tsx die Zeile const [scrolled, setScrolled] = useState(false). Was bedeutet der Startwert false hier?",
+      "area": "Praxisbeispiel repo-portfolio",
+      "options": [
+        {
+          "text": "Beim ersten Rendern gilt die Seite als noch nicht gescrollt.",
+          "isCorrect": true,
+          "explanation": "Richtig: false als Startwert bedeutet, dass scrolled anfangs \"noch nicht gescrollt\" bedeutet."
+        },
+        {
+          "text": "Die Navigationsleiste ist beim Start unsichtbar.",
+          "isCorrect": false,
+          "explanation": "Falsch: scrolled steuert laut Beispiel den Scroll-Zustand, nicht die Sichtbarkeit der ganzen Navigationsleiste."
+        },
+        {
+          "text": "Das mobile Menü ist beim Start bereits geöffnet.",
+          "isCorrect": false,
+          "explanation": "Falsch: dafür ist im Beispiel der eigene State-Wert menuOpen zuständig, nicht scrolled."
+        },
+        {
+          "text": "Der Sprachwechsel-Link ist beim Start deaktiviert.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Sprachwechsel hängt laut vorheriger Lektion am Prop otherHref, nicht am State scrolled."
+        }
+      ]
+    },
+    {
+      "question": "Wann läuft ein useEffect laut Lektion typischerweise erneut?",
+      "area": "React-Grundlagen: useEffect",
+      "options": [
+        {
+          "text": "Wenn sich mindestens einer seiner angegebenen Abhängigkeitswerte ändert.",
+          "isCorrect": true,
+          "explanation": "Richtig: die Abhängigkeitsliste steuert genau, bei welcher Änderung ein useEffect erneut läuft."
+        },
+        {
+          "text": "Nur ein einziges Mal während der gesamten Lebenszeit der kompletten Anwendung, egal was sich später noch ändert.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein useEffect kann je nach Abhängigkeiten mehrfach erneut laufen, nicht zwingend nur einmal."
+        },
+        {
+          "text": "Bei jedem einzelnen Tastendruck irgendwo auf der ganzen Seite.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein useEffect reagiert nur auf seine eigenen, angegebenen Abhängigkeiten, nicht auf beliebige Tastendrücke."
+        },
+        {
+          "text": "Nie automatisch, ein useEffect muss immer von Hand aufgerufen werden.",
+          "isCorrect": false,
+          "explanation": "Falsch: useEffect läuft automatisch nach dem Rendern, ganz ohne manuellen Aufruf."
+        }
+      ]
+    },
+    {
+      "question": "Warum sorgt im Beispiel aus Nav.tsx ein useEffect dafür, dass sich der Fokus auf den Schließen-Knopf bewegt, sobald das Menü öffnet?",
+      "area": "Praxisbeispiel repo-portfolio",
+      "options": [
+        {
+          "text": "Weil useEffect genau auf die Änderung von menuOpen reagieren kann.",
+          "isCorrect": true,
+          "explanation": "Richtig: laut Beispiel reagiert der useEffect auf die Änderung von menuOpen und setzt dann den Fokus."
+        },
+        {
+          "text": "Weil useState den Fokus automatisch für jede Komponente mitverwaltet.",
+          "isCorrect": false,
+          "explanation": "Falsch: für Fokus-Reaktionen ist im Beispiel useEffect zuständig, nicht useState."
+        },
+        {
+          "text": "Weil JSX von sich aus jedes Mal automatisch fokussiert.",
+          "isCorrect": false,
+          "explanation": "Falsch: JSX beschreibt nur Benutzeroberfläche, es steuert keinen Fokus von selbst."
+        },
+        {
+          "text": "Weil Props sich bei jedem Klick automatisch neu setzen.",
+          "isCorrect": false,
+          "explanation": "Falsch: im Beispiel ändert sich hier ein State-Wert, nicht ein Prop."
+        }
+      ]
+    },
+    {
+      "question": "Was passiert, wenn setZahl mit genau demselben Wert aufgerufen wird, den zahl schon besitzt?",
+      "area": "React-Grundlagen: State",
+      "options": [
+        {
+          "text": "React rendert die Komponente in diesem Fall nicht erneut.",
+          "isCorrect": true,
+          "explanation": "Richtig: React erkennt den unveränderten Wert und spart sich das unnötige erneute Rendern."
+        },
+        {
+          "text": "React löst dafür eine deutliche Fehlermeldung aus.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein gleichbleibender Wert führt zu keiner Fehlermeldung, React reagiert einfach gar nicht sichtbar."
+        },
+        {
+          "text": "Der State-Wert wird dadurch dauerhaft auf 0 zurückgesetzt.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Wert bleibt einfach unverändert bestehen, ein Zurücksetzen auf 0 passiert dabei nicht."
+        },
+        {
+          "text": "Die Komponente verliert dadurch ihren State vollständig.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein gleichbleibender Aufruf verändert am vorhandenen State gar nichts."
+        }
+      ]
+    },
+    {
+      "question": "Warum braucht nicht jede Komponente zwingend eigenen State?",
+      "area": "React-Grundlagen: Zusammenhang",
+      "options": [
+        {
+          "text": "Manche Komponenten zeigen nur ihre Props an, ohne sich selbst etwas zu merken.",
+          "isCorrect": true,
+          "explanation": "Richtig: eine reine Anzeige-Komponente kommt oft vollständig ohne eigenen State aus."
+        },
+        {
+          "text": "State ist in React inzwischen technisch vollständig abgeschafft.",
+          "isCorrect": false,
+          "explanation": "Falsch: State ist weiterhin ein zentraler Bestandteil von React, keineswegs abgeschafft."
+        },
+        {
+          "text": "Jede einzelne Komponente bekommt beim ersten Rendern automatisch und ohne jeden eigenen Aufruf einen eigenen State geschenkt.",
+          "isCorrect": false,
+          "explanation": "Falsch: State entsteht nur durch einen bewussten useState-Aufruf, nicht automatisch."
+        },
+        {
+          "text": "Ohne State würde React eine Komponente technisch gar nicht rendern.",
+          "isCorrect": false,
+          "explanation": "Falsch: React rendert auch Komponenten völlig ohne State ganz normal."
+        }
+      ]
+    },
+    {
+      "question": "Was würde am ehesten passieren, wenn ein Hook versehentlich innerhalb einer if-Bedingung aufgerufen wird?",
+      "area": "React-Grundlagen: Hooks",
+      "options": [
+        {
+          "text": "React kann die Reihenfolge der Hooks zwischen zwei Renderdurchläufen durcheinanderbringen.",
+          "isCorrect": true,
+          "explanation": "Richtig: React verlässt sich auf eine feste Reihenfolge, eine Bedingung kann diese Reihenfolge zwischen zwei Renderdurchläufen verändern."
+        },
+        {
+          "text": "Der Browser stürzt dabei dauerhaft und vollständig ab, ganz unabhängig von React selbst.",
+          "isCorrect": false,
+          "explanation": "Falsch: es kommt zu einem React-spezifischen Fehler, nicht zu einem Absturz des ganzen Browsers."
+        },
+        {
+          "text": "JSX wird dadurch automatisch in reines HTML umgewandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Übersetzung von JSX hat mit dieser Regel nichts zu tun."
+        },
+        {
+          "text": "Die betroffene Komponente bekommt dadurch automatisch neue Props.",
+          "isCorrect": false,
+          "explanation": "Falsch: Props kommen von außen, eine falsche Hook-Position ändert daran nichts."
+        }
+      ]
+    },
+    {
+      "question": "Merkt sich der State einer Komponente einen Wert auch nach einem vollständigen Neuladen der Browserseite?",
+      "area": "React-Grundlagen: State",
+      "options": [
+        {
+          "text": "Nein, ein Neuladen setzt jeden State wieder auf seinen Startwert zurück.",
+          "isCorrect": true,
+          "explanation": "Richtig: ein Neuladen startet die gesamte Anwendung neu, jeder State beginnt wieder bei seinem Startwert."
+        },
+        {
+          "text": "Ja, State bleibt über jedes Neuladen hinweg automatisch vollständig erhalten.",
+          "isCorrect": false,
+          "explanation": "Falsch: ohne einen zusätzlichen Speicherort geht State bei einem Neuladen verloren."
+        },
+        {
+          "text": "Ja, aber ausschließlich bei Komponenten mit useEffect statt useState.",
+          "isCorrect": false,
+          "explanation": "Falsch: weder useState noch useEffect überleben allein ein Neuladen der Seite."
+        },
+        {
+          "text": "Das hängt allein davon ab, welche Programmiersprache verwendet wurde.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Programmiersprache ist hier nicht die entscheidende Ursache, das Neuladen selbst startet alles neu."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Öffne wieder eine kostenlose Online-Umgebung für React im Browser, etwa StackBlitz oder CodeSandbox. Baue eine Komponente namens Zaehler, die mit useState eine Zahl verwaltet, beginnend bei 0. Füge zwei Knöpfe hinzu: einen, der die Zahl mit setZahl um eins erhöht, und einen, der sie um eins verringert.",
+    "expectation": "In der Vorschau steht die aktuelle Zahl sichtbar auf dem Bildschirm und ändert sich sofort bei jedem Klick auf einen der beiden Knöpfe, ganz ohne dass die Seite neu lädt.",
+    "checklist": [
+      "Eine Komponente Zaehler mit useState und Startwert 0 angelegt.",
+      "Der aktuelle Wert wird in der JSX-Beschreibung angezeigt.",
+      "Ein Knopf zum Erhöhen und ein Knopf zum Verringern sind eingebaut.",
+      "Ein Klick auf beide Knöpfe ändert die angezeigte Zahl sofort sichtbar."
+    ],
+    "portfolioItem": "P01"
+  },
+  "audio": {
+    "file": "M03-01-02.mp3",
+    "durationSeconds": 830,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Kann eine Komponente mehr als einen State-Wert gleichzeitig haben?",
+      "answer": "Ja, ohne Weiteres: eine Komponente darf useState so oft aufrufen, wie sie eigene, voneinander unabhängige Werte braucht. Im Beispiel aus Nav.tsx gibt es sogar zwei solcher Werte gleichzeitig, scrolled und menuOpen, jeder mit einem eigenen useState-Aufruf. Mehr eigene Namen bedeuten dabei nicht automatisch mehr Kompliziertheit, solange jeder Name nur genau eine Sache beschreibt."
+    },
+    {
+      "question": "Merkt sich der State einer Komponente auch, wenn ich die ganze Seite im Browser neu lade?",
+      "answer": "Nein, ein Neuladen der Seite setzt jeden State wieder auf seinen Startwert zurück, weil die gesamte Anwendung dabei neu gestartet wird. Ein dauerhaftes Merken über ein Neuladen hinweg bräuchte einen zusätzlichen Speicherort, etwa im Browser selbst oder auf einem Server, das ist Thema späterer Lektionen. Bis dahin gilt: State lebt nur, solange die Seite im Browser tatsächlich geöffnet bleibt."
+    },
+    {
+      "question": "Was passiert, wenn ich setZahl mit demselben Wert aufrufe, den zahl schon hat?",
+      "answer": "React erkennt das und rendert die Komponente in diesem Fall gar nicht erst neu, weil sich nichts wirklich geändert hat. Das spart unnötige Arbeit und ist ein bewusster Teil davon, wie React State im Hintergrund verwaltet. Für die Praxis bedeutet das: ein Klick, der am Ergebnis nichts ändert, kostet keine unnötige Neuzeichnung des Bildschirms."
+    },
+    {
+      "question": "Darf ich einen Hook nur aufrufen, wenn eine bestimmte Bedingung erfüllt ist?",
+      "answer": "Nein, das verstößt gegen die feste Reihenfolge der Hooks und führt zu einer Fehlermeldung oder zu verwirrtem Verhalten. Ein Hook steht immer ganz am Anfang der Komponentenfunktion, außerhalb jeder Bedingung und jeder Schleife, egal wie die Logik danach verzweigt."
+    },
+    {
+      "question": "Braucht jede Komponente zwingend einen State, um überhaupt zu funktionieren?",
+      "answer": "Nein, viele Komponenten kommen völlig ohne eigenen State aus und zeigen einfach nur ihre Props an, etwa eine schlichte Überschrift oder ein einzelnes Bild. Erst wenn sich innerhalb der Komponente selbst etwas über die Zeit verändern soll, ohne dass neue Props hereinkommen, lohnt sich ein eigener State."
+    }
+  ]
+}

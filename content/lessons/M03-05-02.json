@@ -1,0 +1,1085 @@
+{
+  "id": "M03-05-02",
+  "title": "Was ein JWT ist",
+  "durationMinutes": 11,
+  "prerequisites": [
+    "M03-05-01",
+    "M02-03-05"
+  ],
+  "terms": [
+    {
+      "term": "JWT",
+      "definition": "Ein digital versiegelter Ausweis aus drei Teilen (Kopfzeile, Payload, Signatur), den ein Server ausstellt und prüft."
+    },
+    {
+      "term": "Payload",
+      "definition": "Der mittlere, lesbare Teil eines JWT mit dem eigentlichen Inhalt, etwa einer Rolle oder einem Ablaufdatum."
+    },
+    {
+      "term": "Signatur",
+      "definition": "Das digitale Siegel eines JWT, das jede heimliche Änderung an Kopfzeile oder Payload erkennbar macht."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "text": "Stell dir einen alten Brief vor, den ein König verschickt hat.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Am Ende des Briefs klebt ein rundes Wachssiegel mit dem Wappen des Königs eingedrückt.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Jeder, der den Brief liest, kann sofort das Wappen sehen und erkennen: Dieser Brief ist echt, er kommt wirklich vom König, weil nur der König dieses Siegel besitzt.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Und was, wenn jemand den Text im Brief heimlich ändert, nachdem das Siegel schon drauf ist?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau das würde aber auffallen, weil das Siegel nur zum ursprünglichen Text passt. Ändert sich der Text, passt das Siegel nicht mehr dazu, und der Betrug fliegt auf.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau so ein digitaler, versiegelter Ausweis heißt in der Computerwelt JWT.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "JWT. J, W, T.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "JWT steht für JSON Web Token, ein weltweit gebräuchliches Format für einen digital versiegelten Ausweis, den ein Server ausstellt.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Ohne so ein versiegeltes Format müsste jeder Server bei jeder einzelnen Anfrage erneut in einer Datenbank nachschauen, wer du bist, was viel langsamer wäre.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Wo begegnet mir sowas im Alltag als Nutzer, ohne dass ich es merke?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Meistens gar nicht direkt. Ein JWT reist meist unsichtbar im Hintergrund mit, versteckt im Cookie oder in einer technischen Kopfzeile deiner Anfrage.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Du merkst nur die Wirkung: Eine Webseite erinnert sich an dich, ohne dass du dich ständig neu anmelden musst.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Ist ein JWT dasselbe wie das Cookie aus der letzten Lektion?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Nicht ganz. Ein Cookie ist der Ort, an dem etwas aufbewahrt wird, wie eine Jackentasche. Ein JWT ist eher das, was in dieser Tasche liegen kann, ein bestimmtes Format für einen versiegelten Ausweis.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein Server kann also einen JWT in einem Cookie verstecken, muss das aber nicht: Manchmal reist ein JWT auch auf anderem Weg mit, etwa in einer eigenen technischen Kopfzeile.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Wichtig ist nur, dass diese beiden Dinge unterschiedliche Aufgaben lösen: Das Cookie transportiert etwas, der JWT ist das versiegelte Etwas selbst.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Jetzt schauen wir uns an, woraus so ein JWT tatsächlich besteht.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir einen Brief mit genau drei Abschnitten vor: eine kurze Kopfzeile oben, ein Haupttext in der Mitte, und ganz unten das Siegel.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein JWT besteht wirklich aus genau drei solchen Teilen, aneinandergereiht und durch einen Punkt getrennt.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Der erste Teil ist die Kopfzeile: Sie sagt nur, mit welchem Verfahren das Siegel später geprüft werden muss.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Der zweite, mittlere Teil enthält die eigentliche Nachricht, also das, was drinsteht.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Diesen mittleren Teil nennt man Payload.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Payload.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Im Payload eines Supabase-Schlüssels steht zum Beispiel die Rolle, etwa 'anon' für einen anonymen, nicht angemeldeten Zugriff.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Steht da auch mein Name oder meine E-Mail-Adresse drin, wenn ich eingeloggt bin?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Kann sein, je nachdem, was der Server hineinschreiben möchte. Das entscheidet immer der Server, der den JWT ausstellt, nicht der Nutzer selbst.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Wichtig dabei: Der Payload ist zwar versiegelt, aber nicht geheim. Jeder, der den JWT in die Hände bekommt, kann den Payload einfach lesen, so wie jeder einen offenen Brief lesen kann, auch mit Siegel dran.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Wie genau wird der Payload denn technisch in diese lange Zeichenkette verwandelt?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Über ein einfaches, weltweit bekanntes Verfahren namens Base64, das jeden Text in eine Folge aus Buchstaben und Ziffern umwandelt, ohne ihn dabei zu verschlüsseln.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Base64 ist wie eine Schreibmaschine mit einem besonderen Alphabet: Sie schreibt denselben Inhalt nur in anderen Zeichen, verändert aber nicht, was drinsteht.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Deshalb kann jedes Programm der Welt, das dieses Verfahren kennt, den Payload sofort zurückübersetzen und lesen, ganz ohne geheimen Schlüssel.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Jetzt zum dritten und letzten Teil, dem eigentlichen Siegel.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir vor, der König drückt sein Siegelring in warmes Wachs, das über der Verschlusslasche des Briefumschlags liegt.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Nur der König besitzt diesen Ring, deshalb kann niemand sonst ein echtes Siegel dieser Form herstellen.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Diesen dritten Teil eines JWT nennt man Signatur.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Signatur.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Die Signatur entsteht, indem der Server die ersten beiden Teile, Kopfzeile und Payload, zusammen mit einem geheimen Schlüssel durch eine mathematische Formel schickt.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Und was passiert, wenn ich den Payload einfach selbst ändere, bevor ich den JWT an einen Server zurückschicke?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Dann passt die Signatur nicht mehr zum geänderten Payload, genau wie ein Siegel nicht mehr zu einem heimlich veränderten Brieftext passt.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Der Server prüft bei jeder Anfrage neu, ob Signatur und Inhalt noch zusammenpassen, und lehnt den JWT sofort ab, wenn das nicht der Fall ist.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Braucht der Server dafür bei jeder Anfrage eine Verbindung zu einer Datenbank?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, das ist gerade der große Vorteil. Die Signatur lässt sich rein rechnerisch prüfen, allein mit dem geheimen Schlüssel, ganz ohne Nachschauen in einer Datenbank.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Das macht die Prüfung sehr schnell, weil kein zusätzlicher Umweg über einen weiteren Server nötig ist.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau deshalb setzen viele moderne Systeme auf JWTs, wenn Geschwindigkeit bei sehr vielen gleichzeitigen Anfragen wichtig ist.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein guter JWT trägt außerdem fast immer ein Ablaufdatum im Payload.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir eine Eintrittskarte für ein Konzert vor, auf der ein Datum und eine Uhrzeit aufgedruckt sind.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Nach dem Konzertabend nützt dir die alte Karte nichts mehr, obwohl sie äußerlich noch völlig unbeschädigt aussieht.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genauso prüft ein Server bei jedem JWT zuerst das Ablaufdatum, bevor er überhaupt die Signatur weiter beachtet.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Ist die Zeit abgelaufen, wird der JWT abgelehnt, egal wie echt die Signatur noch aussieht.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein kurzes Ablaufdatum begrenzt den Schaden, falls ein JWT trotzdem einmal in falsche Hände gerät, weil er dann bald ohnehin nutzlos wird.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Warum stellt man dann nicht einfach jeden JWT für ein ganzes Jahr aus, damit man nie mehr etwas erneuern muss?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Das würde den Nutzen des kurzen Ablaufdatums wieder zunichtemachen: Ein gestohlener, ein Jahr lang gültiger JWT wäre für einen Angreifer fast so wertvoll wie ein echtes Passwort.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Deshalb wählen die meisten Systeme lieber kurze Gültigkeit, oft nur wenige Minuten bis Stunden, und stellen im Hintergrund automatisch einen neuen JWT aus, solange sich der Nutzer weiter angemeldet hält.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "So bleibt der Alltag für dich bequem, während das Risiko eines gestohlenen JWT trotzdem klein bleibt.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Jetzt der wichtigste Sicherheitshinweis dieser Lektion.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Erinnere dich: Der Payload ist versiegelt, aber nicht geheim, so wie ein offener Brief mit Siegel.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir vor, jemand würde sein Bankkonto-Passwort offen auf die Rückseite eines Briefumschlags schreiben, nur weil vorne ein Siegel klebt.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Das Siegel schützt nur davor, dass jemand den Text unbemerkt ändert. Es verhindert nicht, dass jemand den Text einfach liest.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Deshalb dürfen niemals Passwörter, Kreditkartennummern oder andere echte Geheimnisse in den Payload eines JWT geschrieben werden.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Was gehört denn dann normalerweise hinein, wenn keine echten Geheimnisse erlaubt sind?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Meist nur Dinge, die ohnehin nicht geheim sein müssen: eine Rolle wie 'anon', eine Kennnummer, ein Ablaufdatum.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Diese Angaben dürfen ruhig lesbar sein, solange niemand sie unbemerkt verändern kann, und genau dafür sorgt die Signatur.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Jetzt siehst du das an einem echten Beispiel aus diesem Kurs selbst.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Im Repository futuredev liegt eine Datei namens .env.example, eine Art Vorlage für Geheimnisse, die dort absichtlich leer bleiben.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Zwei ihrer Zeilen heißen EXPO_PUBLIC_SUPABASE_URL und EXPO_PUBLIC_SUPABASE_ANON_KEY.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Was für ein Schlüssel ist dieser anon key genau?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau ein JWT, wie du ihn gerade kennengelernt hast, ausgestellt von Supabase, mit dem Payload-Eintrag Rolle gleich 'anon'.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Er wird bewusst 'öffentlich' genannt, weil er direkt in der App eingebaut wird und damit für jeden, der die App genau untersucht, lesbar ist.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Das ist kein Fehler, sondern Absicht: Weil der Payload keine echten Geheimnisse enthält, nur die Rolle 'anon', ist es unbedenklich, wenn jeder ihn lesen kann.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Die eigentliche Sicherheit kommt an dieser Stelle nicht vom Geheimhalten des JWT, sondern von den Datenbankregeln, die du in einer späteren Lektion über Zugriffsregeln als Standardsperre kennenlernst.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Also ist es kein Problem, wenn jemand diesen anon key aus einer veröffentlichten App herausliest?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Richtig, solange die Datenbank selbst genau festlegt, was die Rolle 'anon' überhaupt darf. Der JWT allein öffnet keine Tür, die nicht ohnehin für diese Rolle vorgesehen ist.",
+      "isKeySentence": true,
+      "role": "key"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir einen Werkzeugkoffer vor, auf dessen Deckel innen eine kurze Anleitung klebt, welches Werkzeug für welche Schraube passt.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau so eine kurze Anleitung steht im ersten Teil jedes JWT, der Kopfzeile. Sie enthält normalerweise nur ein einziges wichtiges Feld: alg, die Abkürzung für Algorithmus.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Das Feld alg in der Kopfzeile sagt dem prüfenden Server, mit welchem mathematischen Verfahren die Signatur berechnet wurde, zum Beispiel HS256 oder RS256.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "HS256 benutzt denselben geheimen Schlüssel zum Erstellen und Prüfen der Signatur, wie ein einzelner Schlüssel, der sowohl schließt als auch öffnet. RS256 benutzt dagegen ein Schlüsselpaar: einen privaten Schlüssel zum Erstellen und einen öffentlichen zum Prüfen.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann ein Angreifer das alg-Feld einfach auf einen schwächeren Algorithmus ändern?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Theoretisch ja, genau das nennt man einen Algorithmus-Angriff. Gute Server ignorieren das alg-Feld im JWT deshalb nicht blind, sondern prüfen ausdrücklich, ob der angegebene Algorithmus auch wirklich erlaubt ist. Manche gehen sogar noch weiter und bestehen auf einem ganz bestimmten Algorithmus, unabhängig davon, was im JWT steht.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir einen standardisierten Personalausweis vor, auf dem bestimmte Felder immer an derselben Stelle stehen: Name, Geburtsdatum, Ablaufdatum, egal von welchem Amt er ausgestellt wurde.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau wie ein Personalausweis hat auch der Payload eines JWT bestimmte, weltweit genormte Felder, die immer dasselbe bedeuten, egal welcher Server den JWT ausgestellt hat.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Diese genormten Felder heißen Claims, zu Deutsch etwa Anspruch oder Behauptung. Die wichtigsten drei sind iss für den Aussteller, sub für den Betreff, meist eine Nutzerkennung, und exp für das Ablaufdatum.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein JWT von Supabase enthält im Payload unter anderem den Claim sub mit deiner Nutzerkennung und den Claim exp mit dem Ablaufdatum als Zahl. Ein fremder Server, der diesen JWT bekommt, weiß sofort, für wen er gilt und ob er noch gültig ist, ganz ohne Rückfrage bei Supabase.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss ich mir diese drei Claims merken, um mit JWTs arbeiten zu können?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Es reicht, wenn du weißt, dass es sie gibt und wofür sie stehen. In der Praxis wirst du sie meist nicht selbst eintragen, sondern der Server oder ein Dienst wie Supabase setzt sie automatisch. Wichtig ist nur, dass du sie lesen und verstehen kannst, wenn du sie in einem fremden JWT siehst.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir einen Briefumschlag vor, auf dem außen \"Vertraulich\" steht, damit der Briefträger weiß, wie er damit umgehen soll, ohne den Inhalt zu kennen.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genauso braucht ein JWT eine feste Verpackung, wenn er über das Internet reist. Der Browser oder die App muss dem Server mitteilen, dass in der Anfrage ein JWT steckt, und zwar auf eine weltweit einheitliche Art.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Diese Verpackung heißt Bearer-Token, erkennbar an dem Wort \"Bearer\" vor dem eigentlichen JWT in der Authorization-Kopfzeile einer HTTP-Anfrage.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Eine typische Zeile sieht so aus: Authorization: Bearer eyJ..., wobei der lange Teil dahinter der JWT selbst ist. Das Wort Bearer bedeutet so viel wie \"Überbringer\" – wer immer diesen JWT vorzeigt, gilt als berechtigt, genau wie die Garderobenmarke aus der letzten Lektion.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Warum reicht es nicht, den JWT einfach so in die Anfrage zu packen, ohne das Wort Bearer davor?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Weil es neben Bearer noch andere Arten von Zugangsnachweisen gibt, etwa Basic für einfache Passwörter. Ohne dieses einheitliche Format müsste jeder Server selbst raten, ob eine lange Zeichenkette ein JWT, ein Passwort oder etwas ganz anderes ist. Der Bearer-Vermerk macht es für alle Beteiligten sofort eindeutig.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir zwei Aufbewahrungsorte für einen wichtigen Schlüssel vor: eine Hosentasche, die jeder sehen kann, wenn er nah genug herankommt, und einen verschlossenen Spind, der nur für dich zugänglich ist.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau diese Wahl hast du als Entwicklerin, wenn du entscheidest, wo der Browser einen JWT aufbewahren soll. Es gibt zwei typische Orte: localStorage und Cookies, die du schon aus der letzten Lektion kennst.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "localStorage ist ein einfacher, dauerhafter Speicher im Browser, den JavaScript-Code jederzeit lesen und schreiben kann. Ein Cookie kann dagegen so eingestellt werden, dass JavaScript ihn gar nicht erst anfassen darf, das nennt man HttpOnly.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Legst du einen JWT in localStorage ab, kann jedes Script auf der Seite ihn auslesen, auch ein schädliches, das sich eingeschlichen hat. Ein HttpOnly-Cookie dagegen wird automatisch bei jeder Anfrage an den Server mitgeschickt, ohne dass JavaScript ihn je zu Gesicht bekommt.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Also ist ein Cookie immer sicherer als localStorage für einen JWT?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Nicht in jeder Hinsicht. Ein Cookie kann bei einer CSRF-Attacke von einer fremden Seite aus mitgeschickt werden, ohne dass du es willst. localStorage ist dagegen an genau eine Herkunftsseite gebunden und kann nicht von einer fremden Seite ausgelesen werden. Beide Orte haben also eigene Risiken, und die Wahl hängt vom genauen Einsatz ab.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Diese Entscheidung ist wichtig für die Sicherheit: Ein JWT in localStorage kann bei einer erfolgreichen XSS-Attacke gestohlen werden, ein HttpOnly-Cookie nicht. Dafür ist ein Cookie etwas umständlicher einzurichten, weil der Server es setzen muss und du es nicht einfach per JavaScript auslesen kannst.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir einen Dauerkarteninhaber im Schwimmbad vor: Statt jeden Tag eine neue Karte zu kaufen, zeigt er seine Dauerkarte einmal am Schalter und bekommt dafür ein frisches Tagesbändchen.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau dieses Muster aus einem langlebigen Haupt-Token und einem kurzlebigen Arbeits-Token gibt es auch bei JWTs. Der langlebige heißt Refresh-Token, der kurzlebige Access-Token.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein Refresh-Token ist ein spezieller, langlebiger JWT, der nur dazu dient, einen neuen, kurzlebigen Access-Token anzufordern, ohne dass der Nutzer sein Passwort erneut eingeben muss.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Dein Access-Token läuft nach 15 Minuten ab. Statt dich jetzt neu anzumelden, schickt deine App automatisch den Refresh-Token an den Server, der daraufhin einen frischen Access-Token ausstellt. Du als Nutzerin merkst davon gar nichts.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Warum nimmt man nicht einfach einen Access-Token, der nie abläuft, dann bräuchte man den Refresh-Token gar nicht?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Weil ein nie ablaufender Access-Token bei einem Diebstahl dauerhaft gültig wäre, ohne jede Möglichkeit, ihn für ungültig zu erklären. Die Trennung in kurzlebigen Access-Token und langlebigen Refresh-Token begrenzt dieses Risiko: Selbst wenn ein Access-Token gestohlen wird, ist er nur kurz nutzbar. Der Refresh-Token kann zusätzlich sicherer aufbewahrt werden, etwa nur in einem HttpOnly-Cookie.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Kurz zusammengefasst, alle Begriffe dieser Lektion: Ein JWT ist ein digital versiegelter Ausweis aus drei Teilen, Kopfzeile, Payload und Signatur. Der Payload ist der lesbare Inhalt in der Mitte, zum Beispiel die Rolle eines Zugriffs. Die Signatur ist das digitale Siegel, das jede heimliche Veränderung des Inhalts sofort erkennbar macht.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann ich einen JWT einfach selbst öffnen und lesen?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, der Payload eines JWT ist nur mit einer einfachen, öffentlich bekannten Methode kodiert, keine echte Geheimhaltung. Jeder, der die Zeichenkette hat, kann den Inhalt mit einem kostenlosen Werkzeug im Internet, etwa auf jwt.io, sofort lesbar machen.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Was passiert, wenn ich versuche, die Signatur eines JWT selbst zu fälschen?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Ohne den geheimen Schlüssel des ausstellenden Servers ist das praktisch nicht machbar, weil die passende Signatur nur mit genau diesem Schlüssel berechnet werden kann. Der Server würde eine falsche Signatur sofort erkennen und die Anfrage ablehnen.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Woran erkenne ich einen JWT, wenn ich eine Zeichenkette sehe?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein JWT besteht aus drei Teilen, getrennt durch zwei Punkte, und beginnt fast immer mit den Buchstaben 'eyJ', weil das die kodierte Form der Kopfzeile ist. Diese drei durch Punkte getrennten Abschnitte sind das sicherste Erkennungsmerkmal.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss ich einen JWT selbst von Hand bauen, wenn ich Supabase benutze?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, Supabase stellt fertige JWTs für dich aus und prüft sie auch selbst, du musst sie nur in den passenden Feldern deiner App eintragen. Das eigenhändige Erzeugen eines JWT ist nur für Entwicklerinnen nötig, die einen eigenen Server ohne fertigen Anbieter bauen.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Ist ein abgelaufener JWT komplett nutzlos, oder kann man ihn erneuern?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein abgelaufener JWT selbst wird nicht mehr akzeptiert, aber viele Systeme stellen automatisch einen frischen, neuen JWT aus, wenn du weiterhin angemeldet bleiben willst. Diese Erneuerung läuft meist unbemerkt im Hintergrund ab, ohne dass du dich erneut manuell anmelden musst.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Warum heißt der Payload ausgerechnet Payload und nicht einfach Inhalt?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Payload ist einfach der englische Fachbegriff, der sich international durchgesetzt hat, wörtlich übersetzt etwa Nutzlast. Er wird in der Technik oft für den eigentlichen Inhalt einer Nachricht benutzt, im Unterschied zu den technischen Begleitangaben drumherum.",
+      "isKeySentence": false,
+      "role": "faq"
+    }
+  ],
+  "practiceExample": {
+    "text": "In repo-futuredev enthält die Datei .env.example zwei leere Zeilen namens EXPO_PUBLIC_SUPABASE_URL und EXPO_PUBLIC_SUPABASE_ANON_KEY. Sobald diese Datei ausgefüllt wird, steht in der zweiten Zeile ein echter JWT von Supabase, dessen Payload unter anderem die Rolle 'anon' enthält. Weil das Präfix EXPO_PUBLIC_ zur Bauzeit fest in die App eingebettet wird, ist dieser JWT für jeden lesbar, der die veröffentlichte App genau untersucht. Das ist bewusst so gestaltet: Der Payload enthält keine echten Geheimnisse, die eigentliche Absicherung liegt in den Datenbankregeln.",
+    "repoNote": "repo-futuredev",
+    "location": ".env.example, Zeilen EXPO_PUBLIC_SUPABASE_URL und EXPO_PUBLIC_SUPABASE_ANON_KEY (Werte bewusst leer)"
+  },
+  "quiz": [
+    {
+      "question": "Was ist die Hauptaufgabe der Signatur in einem JWT?",
+      "area": "M03-05",
+      "options": [
+        {
+          "text": "Sie zeigt an, ob Kopfzeile und Payload seit dem Ausstellen verändert wurden.",
+          "isCorrect": true,
+          "explanation": "Genau das ist ihre Aufgabe: jede heimliche Änderung erkennbar zu machen, wie ein Siegel am Brief."
+        },
+        {
+          "text": "Sie versteckt den Inhalt des Payload vor jedem Leser.",
+          "isCorrect": false,
+          "explanation": "Der Payload bleibt lesbar, die Signatur verhindert nur unbemerkte Änderungen, keine Geheimhaltung."
+        },
+        {
+          "text": "Sie verlängert automatisch das Ablaufdatum eines JWT.",
+          "isCorrect": false,
+          "explanation": "Das Ablaufdatum steht im Payload und wird von der Signatur nicht verändert."
+        },
+        {
+          "text": "Sie ersetzt die Notwendigkeit einer Autorisierungsprüfung durch die Datenbank.",
+          "isCorrect": false,
+          "explanation": "Die Signatur prüft nur die Echtheit, ersetzt aber keine eigene Autorisierungsprüfung im System."
+        }
+      ]
+    },
+    {
+      "question": "Warum dürfen echte Geheimnisse wie Passwörter nicht in den Payload eines JWT?",
+      "area": "M03-05",
+      "options": [
+        {
+          "text": "Weil der Payload zwar versiegelt, aber für jeden lesbar ist.",
+          "isCorrect": true,
+          "explanation": "Genau das ist der Grund: Versiegelt heißt nur geschützt gegen Veränderung, nicht gegen Lesen."
+        },
+        {
+          "text": "Weil ein JWT technisch keine Buchstaben speichern kann, nur Zahlen.",
+          "isCorrect": false,
+          "explanation": "Ein JWT kann beliebigen Text speichern, das Problem ist die fehlende Geheimhaltung, nicht die Technik."
+        },
+        {
+          "text": "Weil Passwörter das Ablaufdatum eines JWT ungültig machen würden.",
+          "isCorrect": false,
+          "explanation": "Das Ablaufdatum hat nichts mit dem Inhalt der übrigen Felder zu tun."
+        },
+        {
+          "text": "Weil die Signatur bei Passwörtern im Payload nicht mehr berechnet werden kann.",
+          "isCorrect": false,
+          "explanation": "Die Signatur lässt sich über jeden beliebigen Text berechnen, das ist nicht das eigentliche Problem."
+        }
+      ]
+    },
+    {
+      "question": "Woraus besteht ein JWT?",
+      "area": "M03-05",
+      "options": [
+        {
+          "text": "Aus drei durch Punkte getrennten Teilen: Kopfzeile, Payload und Signatur.",
+          "isCorrect": true,
+          "explanation": "Genau diese drei Teile bilden zusammen einen vollständigen JWT."
+        },
+        {
+          "text": "Nur aus einem einzigen, langen, verschlüsselten Block ohne erkennbare Teile.",
+          "isCorrect": false,
+          "explanation": "Ein JWT hat klar erkennbare, durch Punkte getrennte Abschnitte."
+        },
+        {
+          "text": "Aus einem Benutzernamen und einem Passwort im Klartext.",
+          "isCorrect": false,
+          "explanation": "Ein JWT enthält normalerweise keine Zugangsdaten wie Benutzername und Passwort."
+        },
+        {
+          "text": "Aus einer Liste aller Cookies, die der Browser gerade gespeichert hat.",
+          "isCorrect": false,
+          "explanation": "Ein JWT ist unabhängig von der Liste der im Browser gespeicherten Cookies."
+        }
+      ]
+    },
+    {
+      "question": "Welches Alltagsbild passt am besten zum Ablaufdatum eines JWT?",
+      "area": "M03-05",
+      "options": [
+        {
+          "text": "Eine Eintrittskarte für ein Konzert, die nach dem Abend nutzlos wird.",
+          "isCorrect": true,
+          "explanation": "Genau dieses Bild aus der Lektion zeigt, warum ein JWT nach Ablauf abgelehnt wird."
+        },
+        {
+          "text": "Ein Wachssiegel, das ein König auf einen Brief drückt.",
+          "isCorrect": false,
+          "explanation": "Das Siegel steht für die Signatur, nicht für das Ablaufdatum."
+        },
+        {
+          "text": "Ein Schlüsselbund, mit dem eine Werkstatt-Mitarbeiterin bestimmte Türen öffnen darf und andere nicht.",
+          "isCorrect": false,
+          "explanation": "Der Schlüsselbund ist das Bild für Autorisierung aus der vorherigen Lektion."
+        },
+        {
+          "text": "Eine Garderobenmarke aus dem Theater.",
+          "isCorrect": false,
+          "explanation": "Die Garderobenmarke steht für eine Sitzung, nicht speziell für das Ablaufdatum eines JWT."
+        }
+      ]
+    },
+    {
+      "question": "Was steht typischerweise im Payload eines Supabase-Anon-Keys?",
+      "area": "M03-05",
+      "options": [
+        {
+          "text": "Unter anderem die Rolle 'anon' für einen anonymen Zugriff.",
+          "isCorrect": true,
+          "explanation": "Genau das nennt die Lektion als typischen Payload-Inhalt eines solchen Schlüssels."
+        },
+        {
+          "text": "Das echte Passwort jeder Nutzerin und jedes Nutzers der App.",
+          "isCorrect": false,
+          "explanation": "Echte Passwörter gehören wegen der fehlenden Geheimhaltung niemals in einen JWT-Payload."
+        },
+        {
+          "text": "Die vollständige Kreditkartennummer der zahlenden Kundschaft.",
+          "isCorrect": false,
+          "explanation": "Kreditkartendaten dürfen aus denselben Gründen niemals in einem JWT-Payload stehen."
+        },
+        {
+          "text": "Der komplette Quellcode der gesamten App, gespeichert als eine lange Textdatei.",
+          "isCorrect": false,
+          "explanation": "Ein JWT-Payload enthält kurze, strukturierte Angaben, keinen kompletten Programmcode."
+        }
+      ]
+    },
+    {
+      "question": "Warum ist es unproblematisch, dass der Supabase-Anon-Key fest in der App eingebaut wird?",
+      "area": "M03-05",
+      "options": [
+        {
+          "text": "Weil sein Payload keine echten Geheimnisse enthält und die Datenbankregeln den Zugriff begrenzen.",
+          "isCorrect": true,
+          "explanation": "Genau diese doppelte Absicherung erklärt die Lektion: kein Geheimnis im Payload, echte Sperre in der Datenbank."
+        },
+        {
+          "text": "Weil dieser Schlüssel niemand außerhalb des Entwicklerteams jemals sehen kann.",
+          "isCorrect": false,
+          "explanation": "Der Schlüssel ist ausdrücklich öffentlich lesbar, sobald jemand die App genauer untersucht."
+        },
+        {
+          "text": "Weil ein JWT sich nach dem Einbauen in eine App automatisch selbst löscht.",
+          "isCorrect": false,
+          "explanation": "Ein eingebauter JWT löscht sich nicht von selbst, er bleibt fest in der App."
+        },
+        {
+          "text": "Weil Supabase diesen Schlüssel jede Sekunde automatisch neu ausstellt.",
+          "isCorrect": false,
+          "explanation": "Der Anon-Key wird nicht sekündlich neu ausgestellt, er bleibt über einen längeren Zeitraum gültig."
+        }
+      ]
+    },
+    {
+      "question": "Was passiert, wenn jemand den Payload eines JWT heimlich verändert, ohne den geheimen Schlüssel des Servers zu kennen?",
+      "area": "M03-05",
+      "options": [
+        {
+          "text": "Die Signatur passt danach nicht mehr zum Inhalt, und der Server lehnt den JWT ab.",
+          "isCorrect": true,
+          "explanation": "Genau das ist der Schutzmechanismus: eine Änderung ohne den Schlüssel zerstört die Übereinstimmung mit der Signatur."
+        },
+        {
+          "text": "Der JWT wird dadurch automatisch noch sicherer als vorher.",
+          "isCorrect": false,
+          "explanation": "Eine unbefugte Änderung macht den JWT ungültig, nicht sicherer."
+        },
+        {
+          "text": "Der Server merkt gar nichts davon und akzeptiert den veränderten JWT ganz normal wie gewohnt weiter.",
+          "isCorrect": false,
+          "explanation": "Genau das soll die Signaturprüfung verhindern: unbemerkte Änderungen werden erkannt."
+        },
+        {
+          "text": "Das Ablaufdatum des JWT verlängert sich automatisch um einen Tag.",
+          "isCorrect": false,
+          "explanation": "Eine Manipulation des Payloads verlängert kein Ablaufdatum, sie macht den JWT ungültig."
+        }
+      ]
+    },
+    {
+      "question": "Woran erkennst du eine JWT-Zeichenkette meistens auf den ersten Blick?",
+      "area": "M03-05",
+      "options": [
+        {
+          "text": "An zwei Punkten, die die Zeichenkette in drei Abschnitte teilen.",
+          "isCorrect": true,
+          "explanation": "Diese Struktur aus drei durch Punkte getrennten Teilen ist das typische Erkennungsmerkmal eines JWT."
+        },
+        {
+          "text": "An einem @-Zeichen in der Mitte der Zeichenkette.",
+          "isCorrect": false,
+          "explanation": "Ein @-Zeichen ist typisch für E-Mail-Adressen, nicht für einen JWT."
+        },
+        {
+          "text": "Daran, dass sie immer genau acht Zeichen lang ist.",
+          "isCorrect": false,
+          "explanation": "Ein JWT hat keine feste Länge von acht Zeichen, er ist meist deutlich länger."
+        },
+        {
+          "text": "Daran, dass sie ausschließlich aus Ziffern besteht.",
+          "isCorrect": false,
+          "explanation": "Ein JWT besteht aus Buchstaben, Ziffern und einigen Sonderzeichen, nicht nur aus Ziffern."
+        }
+      ]
+    },
+    {
+      "question": "Ein System stellt bei einem gültigen Login sofort einen frischen JWT aus. Wozu dient das kurze Ablaufdatum darin am meisten?",
+      "area": "M03-05",
+      "options": [
+        {
+          "text": "Es begrenzt den möglichen Schaden, falls der JWT trotzdem in falsche Hände gerät.",
+          "isCorrect": true,
+          "explanation": "Genau das ist der Zweck: Ein kurzlebiger, gestohlener JWT wird bald von selbst nutzlos."
+        },
+        {
+          "text": "Es macht die Signatur des JWT vollständig überflüssig.",
+          "isCorrect": false,
+          "explanation": "Die Signatur bleibt trotzdem nötig, das Ablaufdatum ersetzt sie nicht."
+        },
+        {
+          "text": "Es sorgt dafür, dass der Payload nicht mehr lesbar ist.",
+          "isCorrect": false,
+          "explanation": "Der Payload bleibt unabhängig vom Ablaufdatum lesbar, solange der JWT noch gültig ist."
+        },
+        {
+          "text": "Es verhindert dauerhaft, dass der Server jemals irgendeine Anfrage noch ablehnen muss.",
+          "isCorrect": false,
+          "explanation": "Ein abgelaufener JWT führt gerade dazu, dass der Server die Anfrage ablehnt."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der Unterschied zwischen der Kopfzeile und dem Payload eines JWT?",
+      "area": "M03-05",
+      "options": [
+        {
+          "text": "Die Kopfzeile beschreibt nur das Prüfverfahren, der Payload enthält den eigentlichen Inhalt.",
+          "isCorrect": true,
+          "explanation": "Genau diese Aufgabenteilung beschreibt die Lektion zwischen den ersten beiden Teilen eines JWT."
+        },
+        {
+          "text": "Beide enthalten exakt dieselben Informationen, nur in unterschiedlicher Reihenfolge.",
+          "isCorrect": false,
+          "explanation": "Kopfzeile und Payload haben unterschiedliche Aufgaben und unterschiedlichen Inhalt."
+        },
+        {
+          "text": "Die Kopfzeile enthält das Passwort, der Payload das Ablaufdatum.",
+          "isCorrect": false,
+          "explanation": "Ein Passwort gehört in keinen der beiden Teile eines JWT."
+        },
+        {
+          "text": "Der Payload existiert nur bei besonders langen JWTs, sonst nicht.",
+          "isCorrect": false,
+          "explanation": "Jeder JWT hat immer alle drei Teile, unabhängig von seiner Länge."
+        }
+      ]
+    },
+    {
+      "question": "Warum reicht die Signatur allein nicht aus, um zu entscheiden, was ein Nutzer mit einem gültigen JWT tun darf?",
+      "area": "M03-05",
+      "options": [
+        {
+          "text": "Weil die Signatur nur die Echtheit bestätigt, die eigentliche Erlaubnis aber eine eigene Autorisierungsprüfung braucht.",
+          "isCorrect": true,
+          "explanation": "Das entspricht der Trennung von Authentifizierung und Autorisierung aus der vorherigen Lektion."
+        },
+        {
+          "text": "Weil eine gültige Signatur automatisch alle Datenbankzugriffe erlaubt.",
+          "isCorrect": false,
+          "explanation": "Eine gültige Signatur bestätigt nur die Echtheit, sie öffnet keine automatischen Zugriffsrechte."
+        },
+        {
+          "text": "Weil eine Signatur nach einer Sekunde immer automatisch ungültig wird.",
+          "isCorrect": false,
+          "explanation": "Die Gültigkeitsdauer einer Signatur hängt vom Ablaufdatum im Payload ab, nicht von einer festen Sekunde."
+        },
+        {
+          "text": "Weil Signaturen nur bei kostenpflichtigen Diensten überhaupt geprüft werden.",
+          "isCorrect": false,
+          "explanation": "Die Signaturprüfung ist unabhängig davon, ob ein Dienst kostenpflichtig ist."
+        }
+      ]
+    },
+    {
+      "question": "Ein Entwickler möchte prüfen, ob ein JWT während der Übertragung verändert wurde. Was muss er dafür vergleichen?",
+      "area": "M03-05",
+      "options": [
+        {
+          "text": "Ob die mitgelieferte Signatur noch zu Kopfzeile und Payload passt.",
+          "isCorrect": true,
+          "explanation": "Genau dieser Abgleich zeigt, ob der JWT seit dem Ausstellen unverändert geblieben ist."
+        },
+        {
+          "text": "Ob der Payload genau 500 Zeichen lang ist.",
+          "isCorrect": false,
+          "explanation": "Die Länge des Payloads sagt nichts darüber aus, ob er verändert wurde."
+        },
+        {
+          "text": "Ob der JWT mit dem Buchstaben Z beginnt.",
+          "isCorrect": false,
+          "explanation": "Der erste Buchstabe eines JWT ist kein Prüfkriterium für Manipulation."
+        },
+        {
+          "text": "Ob der Nutzer sein Cookie in den letzten fünf Minuten gelöscht hat.",
+          "isCorrect": false,
+          "explanation": "Das Löschen eines Cookies ist unabhängig davon, ob ein bestimmter JWT verändert wurde."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Öffne in deinem Browser die Seite jwt.io. Kopiere den Beispiel-JWT, der dort bereits im linken Feld eingetragen ist, und schau dir auf der rechten Seite die drei farbig markierten Teile an: Kopfzeile, Payload und Signatur. Ändere anschließend probeweise ein einzelnes Zeichen im Payload-Text auf der rechten Seite.",
+    "expectation": "Du siehst, wie sich die kodierte Zeichenkette links komplett verändert, sobald du im Payload etwas anpasst, und die Seite zeigt dir an, dass die Signatur jetzt nicht mehr zum Inhalt passt.",
+    "checklist": [
+      "Seite jwt.io geöffnet",
+      "Die drei farbigen Teile (Kopfzeile, Payload, Signatur) im Beispiel-Token gefunden",
+      "Ein Zeichen im Payload probeweise verändert",
+      "Beobachtet, dass die Signaturprüfung danach fehlschlägt"
+    ]
+  },
+  "audio": {
+    "file": "M03-05-02.mp3",
+    "durationSeconds": 641,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Kann ich einen JWT einfach selbst öffnen und lesen?",
+      "answer": "Ja, der Payload eines JWT ist nur mit einer einfachen, öffentlich bekannten Methode kodiert, keine echte Geheimhaltung. Jeder, der die Zeichenkette hat, kann den Inhalt mit einem kostenlosen Werkzeug im Internet, etwa auf jwt.io, sofort lesbar machen."
+    },
+    {
+      "question": "Was passiert, wenn ich versuche, die Signatur eines JWT selbst zu fälschen?",
+      "answer": "Ohne den geheimen Schlüssel des ausstellenden Servers ist das praktisch nicht machbar, weil die passende Signatur nur mit genau diesem Schlüssel berechnet werden kann. Der Server würde eine falsche Signatur sofort erkennen und die Anfrage ablehnen."
+    },
+    {
+      "question": "Woran erkenne ich einen JWT, wenn ich eine Zeichenkette sehe?",
+      "answer": "Ein JWT besteht aus drei Teilen, getrennt durch zwei Punkte, und beginnt fast immer mit den Buchstaben 'eyJ', weil das die kodierte Form der Kopfzeile ist. Diese drei durch Punkte getrennten Abschnitte sind das sicherste Erkennungsmerkmal."
+    },
+    {
+      "question": "Muss ich einen JWT selbst von Hand bauen, wenn ich Supabase benutze?",
+      "answer": "Nein, Supabase stellt fertige JWTs für dich aus und prüft sie auch selbst, du musst sie nur in den passenden Feldern deiner App eintragen. Das eigenhändige Erzeugen eines JWT ist nur für Entwicklerinnen nötig, die einen eigenen Server ohne fertigen Anbieter bauen."
+    },
+    {
+      "question": "Ist ein abgelaufener JWT komplett nutzlos, oder kann man ihn erneuern?",
+      "answer": "Ein abgelaufener JWT selbst wird nicht mehr akzeptiert, aber viele Systeme stellen automatisch einen frischen, neuen JWT aus, wenn du weiterhin angemeldet bleiben willst. Diese Erneuerung läuft meist unbemerkt im Hintergrund ab, ohne dass du dich erneut manuell anmelden musst."
+    },
+    {
+      "question": "Warum heißt der Payload ausgerechnet Payload und nicht einfach Inhalt?",
+      "answer": "Payload ist einfach der englische Fachbegriff, der sich international durchgesetzt hat, wörtlich übersetzt etwa Nutzlast. Er wird in der Technik oft für den eigentlichen Inhalt einer Nachricht benutzt, im Unterschied zu den technischen Begleitangaben drumherum."
+    }
+  ]
+}
