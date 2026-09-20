@@ -1,0 +1,647 @@
+{
+  "id": "M04-02-04",
+  "title": "Testabdeckung (Praxis: repo-verified-done)",
+  "durationMinutes": 33,
+  "prerequisites": [
+    "M04-02-01",
+    "M04-02-02"
+  ],
+  "terms": [
+    {
+      "term": "Testabdeckung",
+      "definition": "Ein Maß dafür, wie viel des Programmcodes bei der Ausführung der Tests tatsächlich durchlaufen wird. Sie wird meist als Prozentzahl angegeben und zeigt, welche Zeilen, Funktionen oder Verzweigungen von mindestens einem Test berührt wurden und welche nicht."
+    },
+    {
+      "term": "Code-Zweig Coverage",
+      "definition": "Ein spezifisches Maß für Testabdeckung, das prüft, ob jede Verzweigung im Code, also jeder if- und else-Zweig, jede Fallunterscheidung in einem switch und jede Schleifenbedingung, mindestens einmal in einem Test durchlaufen wurde. Code-Zweig Coverage ist strenger als reine Zeilenabdeckung."
+    },
+    {
+      "term": "Coverage-Report",
+      "definition": "Ein maschinenlesbarer und für Menschen aufbereiteter Bericht, der nach einem Testlauf anzeigt, welche Teile des Codes von Tests abgedeckt wurden und welche nicht. Er listet Dateien, Funktionen und einzelne Zeilen auf und markiert sie farblich als abgedeckt oder nicht abgedeckt."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen Maler vor, der eine Hausfassade streicht. Nach getaner Arbeit tritt er zurück, betrachtet die Wand und stellt fest: die Fläche links oben hat er vergessen, und unter dem Fensterbrett schimmert noch die alte Farbe durch. Er hat keine Ahnung, wie viel Prozent der Wand er tatsächlich gestrichen hat, weil er nie systematisch geprüft hat, ob jeder Quadratmeter Farbe abbekommen hat. Er verlaesst sich auf sein Auge und sein Gedaechtnis, aber beides truegt. Er verlaesst sich auf sein Auge und sein Gedaechtnis, aber beides truegt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "In der Softwareentwicklung ist die Testabdeckung das Werkzeug, das dem Maler sagt, welche Quadratmeter er gestrichen hat und welche nicht. Sie misst, wie viel des Programmcodes bei der Ausführung der Tests tatsächlich durchlaufen wird, und zeigt das Ergebnis als Prozentzahl an. Eine Testabdeckung von 80 Prozent bedeutet, dass 80 von 100 Codezeilen während der Tests mindestens einmal ausgeführt wurden. Die restlichen 20 Zeilen wurden von keinem einzigen Test berührt, und wenn dort ein Fehler steckt, wird ihn niemand finden, bis ein Nutzer darüber stolpert.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was genau misst die Testabdeckung, und warum sollte mich das interessieren, wenn meine Tests doch alle grün sind?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Grüne Tests sagen dir nur, dass die getesteten Stellen funktionieren. Sie sagen dir nicht, welche Stellen du zu testen vergessen hast. Die Testabdeckung zeigt dir genau diese blinden Flecken: die Funktion, die du geschrieben, aber nie getestet hast, den else-Zweig, der im Test nie erreicht wurde, die Fehlerbehandlung, die im Normalbetrieb nie ausgelöst wird. Ohne Testabdeckung weißt du nicht, was du nicht weißt, und das ist die gefährlichste Art von Unwissen in der Softwareentwicklung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Dieses Maß, das angibt, wie viel des Programmcodes bei der Testausführung tatsächlich durchlaufen wird, heißt Testabdeckung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-verified-done zeigt die Testabdeckung nach einem Testlauf: die Prüfung von Checklisten ist zu 95 Prozent abgedeckt, die Validierung von Zeitstempeln aber nur zu 40 Prozent. Der Entwickler sieht sofort, wo die Lücke klafft.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Testabdeckung ist wichtig, weil sie die Lücke zwischen dem, was du zu testen glaubst, und dem, was du tatsächlich testest, sichtbar macht. Grüne Tests geben ein falsches Sicherheitsgefühl, wenn sie nur die Hälfte des Codes abdecken. Die Testabdeckung ist der Realitätscheck, der dir sagt, wie gut dein Sicherheitsnetz wirklich ist, nicht wie gut du glaubst, dass es ist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Reicht es nicht, zu wissen, wie viele Zeilen Code von Tests durchlaufen wurden? Warum brauche ich Code-Zweig Coverage?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine Straßenkarte vor, auf der du jede gefahrene Straße grün markierst. Du bist jede Hauptstraße abgefahren und die Karte ist zu 90 Prozent grün. Aber was du nicht siehst: bei jeder Kreuzung bist du immer nur geradeaus gefahren, nie links oder rechts abgebogen. Die Seitenstraßen sind völlig unerforscht, obwohl die Karte fast vollständig grün aussieht. Du denkst, du hast alles gesehen, aber in Wahrheit hast du nur die Hauptstrassen befahren. Du denkst, du hast alles gesehen, aber in Wahrheit hast du nur die Hauptstrassen befahren.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Die reine Zeilenabdeckung, auch Line Coverage genannt, zählt nur, ob eine Codezeile während der Tests ausgeführt wurde. Sie ignoriert aber, ob alle möglichen Wege durch diese Zeile getestet wurden. Eine if-else-Verzweigung zählt als abgedeckt, sobald der if-Zweig einmal durchlaufen wurde, auch wenn der else-Zweig nie getestet wurde. Code-Zweig Coverage ist strenger: sie prüft, ob jede Verzweigung im Code, also jeder if- und jeder else-Zweig, jede Fallunterscheidung in einem switch und jede Schleifenbedingung, mindestens einmal in einem Test durchlaufen wurde. Erst wenn beide Zweige einer Bedingung getestet sind, gilt die Verzweigung als abgedeckt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Dieses strengere Maß, das prüft, ob jede Verzweigung im Code mindestens einmal in einem Test durchlaufen wurde, heißt Code-Zweig Coverage.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-verified-done gibt es eine Funktion, die prüft, ob eine Aufgabe fristgerecht erledigt wurde. Sie enthält eine Verzweigung: if (completedAt <= deadline) gilt die Aufgabe als rechtzeitig, else gilt sie als verspätet. Die Line Coverage zeigt 100 Prozent für diese Funktion, weil beide Zeilen der Verzweigung in irgendeinem Test ausgeführt wurden. Aber die Code-Zweig Coverage zeigt nur 50 Prozent, weil alle Tests nur den rechtzeitigen Fall prüfen und kein einziger Test eine verspätete Aufgabe simuliert. Der else-Zweig ist eine tickende Zeitbombe.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Code-Zweig Coverage ist wichtig, weil die meisten schweren Fehler nicht im Normalfall auftreten, sondern in selten ausgeführten Verzweigungen. Der Fehlerfall bei leerer Eingabe, die Sonderbehandlung für Schaltjahre, der else-Zweig bei nicht erreichbarer API: all das bleibt ohne Code-Zweig Coverage ungetestet.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Wie lese ich so einen Coverage-Report, und was bedeuten die Zahlen und Farben darin?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir ein Schulzeugnis vor, das nicht nur eine Gesamtnote zeigt, sondern für jedes einzelne Fach eine Note, und innerhalb jedes Fachs für jede einzelne Klausur. Du siehst auf einen Blick, dass Mathe insgesamt gut ist, aber die Geometrie-Klausur eine Fünf war, während die Algebra-Klausur eine Eins war. Du siehst auf einen Blick, wo die Schwaechen liegen, und kannst gezielt nachbessern. Du siehst auf einen Blick, wo die Schwaechen liegen, und kannst gezielt nachbessern.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein Coverage-Report ist das Zeugnis für deinen Code. Er zeigt nicht nur eine Gesamtprozentzahl, sondern schlüsselt die Abdeckung für jede Datei, jede Funktion und jede einzelne Zeile auf. Die Zahlen sind meist in vier Kategorien unterteilt: Statements, also ausgeführte Anweisungen, Branches, also durchlaufene Verzweigungen, Functions, also aufgerufene Funktionen, und Lines, also durchlaufene Zeilen. Jede Kategorie hat einen Prozentwert, und der Report markiert ungetestete Zeilen farblich, meist rot oder gelb, sodass du sofort siehst, wo die Lücken sind.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Dieser Bericht, der nach einem Testlauf anzeigt, welche Teile des Codes von Tests abgedeckt wurden und welche nicht, heißt Coverage-Report.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-verified-done wird nach jedem Testlauf ein Coverage-Report generiert. Der Report zeigt für die Datei verifyChecklist.ts eine Statement-Abdeckung von 95 Prozent, eine Code-Zweig-Abdeckung von 88 Prozent und eine Function-Abdeckung von 100 Prozent. Die Code-Zweig-Abdeckung ist niedriger, weil zwei else-Zweige in der Fehlerbehandlung nie getestet wurden. Der Report markiert diese Zeilen rot, und der Entwickler kann direkt zu diesen Zeilen springen und gezielt Tests dafür schreiben, statt blind im Code nach Lücken zu suchen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Der Coverage-Report macht aus der abstrakten Prozentzahl eine konkrete To-do-Liste. Statt zu sagen \"ich muss meine Testabdeckung verbessern\", zeigt der Report genau: in dieser Datei, in dieser Funktion, in dieser Zeile fehlt ein Test.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Auf wie viel Prozent Testabdeckung sollte ich hinarbeiten? Sind hundert Prozent das Ziel?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen Sicherheitsgurt im Auto vor. Ein Gurt, der bei neun von zehn Unfällen hält, ist besser als gar keiner, aber du willst keinen Gurt, der nur bei neun von zehn Unfällen hält. Gleichzeitig würdest du nicht verlangen, dass der Gurt auch bei einem Meteoriteneinschlag hält, weil dieser Fall so unwahrscheinlich ist, dass der Aufwand für den Schutz in keinem Verhältnis zum Risiko steht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Hundert Prozent Testabdeckung klingt nach dem erstrebenswerten Ideal, aber in der Praxis ist es fast immer die falsche Investition. Die letzten zehn Prozent Abdeckung kosten oft mehr Zeit als die ersten neunzig, weil du Tests für triviale Getter, automatisch generierten Code und Fehlerfälle schreiben musst, die in der Realität nie eintreten. Die sinnvolle Zielmarke hängt vom Projekt ab: für eine Bankanwendung, die Geld bewegt, sind 95 Prozent mit strenger Code-Zweig Coverage angemessen. Für ein Hobbyprojekt können 70 Prozent völlig ausreichen. Wichtiger als die absolute Zahl ist, dass die kritischen Pfade vollständig abgedeckt sind. Hundert Prozent sind ein theoretisches Ideal, das in der Praxis fast immer mehr kostet, als der zusätzliche Schutz wert ist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-verified-done liegt die Testabdeckung insgesamt bei 87 Prozent. Die Kernlogik, die prüft, ob eine Aufgabe wirklich erledigt ist, hat 98 Prozent Code-Zweig Coverage. Die Hilfsfunktionen für die Formatierung der Ausgabe haben nur 60 Prozent, weil ein Fehler dort sofort sichtbar und harmlos wäre. Das Team hat bewusst entschieden, die Testzeit in die kritische Prüflogik zu investieren und bei den Formatierungsfunktionen zu sparen. Diese bewusste Entscheidung ist mehr wert als eine gedankenlose Jagd nach hundert Prozent.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die Prozentzahl ist weniger wichtig als die Frage, was genau ungetestet ist. Eine Abdeckung von 95 Prozent, bei der die fehlenden 5 Prozent die Zahlungslogik betreffen, ist gefährlicher als 70 Prozent, bei denen die fehlenden 30 Prozent nur die Log-Ausgabe betreffen. Die Testabdeckung ist kein Selbstzweck und keine Wettbewerbsdisziplin, sondern ein Werkzeug, um Risiken zu finden. Behandle sie wie eine Risikokarte, nicht wie eine Highscore-Tabelle. Die Prozentzahl ist ein Werkzeug zur Risikoeinschätzung, nicht zur Leistungsbewertung deines Teams.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Wie nutze ich die Testabdeckung konkret, um meine Tests zu verbessern, statt nur auf eine Zahl zu starren?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine Wärmebildkamera vor, mit der ein Energieberater ein Haus untersucht. Die Kamera zeigt nicht die Temperatur als einzelne Zahl an, sondern ein farbiges Bild, auf dem jede undichte Stelle rot leuchtet. Der Berater geht nicht mit einem Zielwert von soundsoviel Grad durchs Haus, sondern sucht gezielt nach den roten Flecken und dichtet sie ab, angefangen bei den größten. Die Kamera zeigt nicht die Temperatur als einzelne Zahl an, sondern ein farbiges Bild, auf dem jede undichte Stelle rot leuchtet. Die Kamera zeigt nicht die Temperatur als einzelne Zahl an, sondern ein farbiges Bild, auf dem jede undichte Stelle rot leuchtet.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Die Testabdeckung ist deine Wärmebildkamera für den Code. Du öffnest den Coverage-Report, suchst die Dateien mit der niedrigsten Abdeckung und gehst in diese Dateien hinein. Dort siehst du die rot markierten Zeilen, die kein Test berührt hat. Du fragst dich bei jeder roten Zeile: welcher Testfall würde diese Zeile ausführen? Dann schreibst du genau diesen Testfall. Du wiederholst das, bis die roten Flecken in den kritischen Dateien verschwunden sind. Das ist ein handwerklicher, schrittweiser Prozess, kein abstraktes Zahlenspiel.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-verified-done hat der Entwickler nach dem ersten Coverage-Report festgestellt, dass die Funktion validateDueDate eine Code-Zweig Coverage von nur 40 Prozent hat. Der Report zeigte rot markierte Zeilen für den Fall, dass das Fälligkeitsdatum in der Vergangenheit liegt, und für den Fall, dass das Datum ein Wochenende ist. Der Entwickler schrieb zwei neue Tests: einen mit einem vergangenen Datum und einen mit einem Samstag. Die Code-Zweig Coverage stieg auf 100 Prozent, und zwei potenzielle Fehlerquellen waren entschärft.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Dieser gezielte, reportgesteuerte Ansatz ist wichtig, weil er aus dem abstrakten Ziel bessere Testabdeckung eine konkrete Arbeitsanweisung macht. Du musst nicht raten, welche Tests fehlen. Der Report sagt es dir. Du musst nicht den gesamten Code im Kopf haben. Der Report zeigt dir die Lücken. Und du musst nicht alle Lücken auf einmal schließen. Du fängst mit den gefährlichsten an und arbeitest dich vor, Test für Test, Lücke für Lücke, bis dein Sicherheitsnetz dicht genug ist für das Risiko, das du tragen willst. Jeder neue Test, den du aufgrund einer roten Markierung schreibst, macht dein Sicherheitsnetz enger und dein Vertrauen in den Code größer. Jeder neue Test, den du aufgrund einer roten Markierung schreibst, macht dein Sicherheitsnetz enger und dein Vertrauen in den Code größer. Dieser iterative Prozess aus Messen, Finden und Schließen von Lücken ist die eigentliche Praxis der Testabdeckung, nicht das Starren auf eine Prozentzahl.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "text": "Also noch einmal ganz kurz: Testabdeckung misst, wie viel deines Codes von Tests durchlaufen wird, und zeigt dir die blinden Flecken, die grüne Tests allein nicht zeigen. Code-Zweig Coverage ist das strengere Maß, das prüft, ob jede Verzweigung, also jeder if- und else-Zweig, getestet wurde, und nicht nur jede Zeile. Der Coverage-Report macht diese Messung sichtbar und markiert ungetestete Zeilen rot, sodass du gezielt Tests für die Lücken schreiben kannst. Hundert Prozent Abdeckung sind selten das Ziel; wichtiger ist, dass die kritischen Pfade vollständig abgedeckt sind. Die Testabdeckung ist kein Highscore, sondern eine Risikokarte: nutze sie, um die gefährlichsten Lücken zuerst zu schließen.",
+      "isKeySentence": true
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Testabdeckung ist ein Maß dafür, wie viel des Programmcodes bei der Ausführung der Tests tatsächlich durchlaufen wird. Sie wird meist als Prozentzahl angegeben und zeigt, welche Zeilen, Funktionen oder Verzweigungen von mindestens einem Test berührt wurden und welche nicht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Code-Zweig Coverage ist ein spezifisches Maß für Testabdeckung, das prüft, ob jede Verzweigung im Code, also jeder if- und else-Zweig, jede Fallunterscheidung in einem switch und jede Schleifenbedingung, mindestens einmal in einem Test durchlaufen wurde. Code-Zweig Coverage ist strenger als reine Zeilenabdeckung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Ein Coverage-Report ist ein maschinenlesbarer und für Menschen aufbereiteter Bericht, der nach einem Testlauf anzeigt, welche Teile des Codes von Tests abgedeckt wurden und welche nicht. Er listet Dateien, Funktionen und einzelne Zeilen auf und markiert sie farblich als abgedeckt oder nicht abgedeckt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was ist der Unterschied zwischen Line Coverage und Code-Zweig Coverage?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Line Coverage zählt, ob eine Codezeile während der Tests mindestens einmal ausgeführt wurde. Eine Zeile mit einer if-Bedingung gilt als abgedeckt, sobald der if-Zweig betreten wurde, auch wenn der else-Zweig nie getestet wurde. Code-Zweig Coverage ist strenger: sie prüft, ob beide Zweige der Bedingung durchlaufen wurden. Eine if-else-Verzweigung zählt erst dann als vollständig abgedeckt, wenn sowohl der if- als auch der else-Zweig in mindestens einem Test ausgeführt wurden. In der Praxis solltest du immer auf Code-Zweig Coverage achten, weil Line Coverage ein falsches Sicherheitsgefühl vermittelt und ungetestete Verzweigungen versteckt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Kann ich die Testabdeckung auch in meiner CI-Automatisierungskette automatisch prüfen lassen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ja, und das ist der empfohlene Weg. Du konfigurierst dein Testframework so, dass es nach jedem Lauf einen Coverage-Report im maschinenlesbaren Format, zum Beispiel LCOV oder JUnit-XML, ausgibt. In der CI-Automatisierungskette definierst du Schwellwerte: unterschreitet die Code-Zweig Coverage einen bestimmten Wert, schlägt der CI-Schritt fehl und blockiert den Zusammenführung. Übliche Einstiegswerte sind 80 Prozent für Line Coverage und 70 Prozent für Code-Zweig Coverage. Wichtig ist, dass du die Schwellwerte schrittweise erhöhst und nicht von null auf neunzig springst, weil das Team sonst die CI als Schikane empfindet und die Prüfung deaktiviert.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was mache ich mit Code, den ich sinnvoll nicht testen kann, zum Beispiel automatisch generierte Dateien?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Jedes Testframework und jeder Coverage-Report bietet die Möglichkeit, bestimmte Dateien oder Verzeichnisse von der Messung auszuschließen. Du definierst in der Konfiguration Ausschlussmuster für generierten Code,第三方-Bibliotheken, Typdeklarationsdateien und Konfigurationsdateien, die keinen eigenen Code enthalten. In Vitest und Jest geschieht das über die coverage.exclude-Option, in Istanbul über die exclude-Regel. Die Kunst ist, nicht zu viel auszuschließen, sonst misst du nur noch die einfachen Teile und die schwierigen bleiben ungetestet. Schließe nur das aus, was wirklich nicht dein Code ist oder was nachweislich keinen Fehler enthalten kann.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Wie vermeide ich, dass mein Team nur noch für die Testabdeckung programmiert und sinnlose Tests schreibt?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Diese Gefahr ist real und heißt im Englischen coverage-driven damage: Entwickler schreiben Tests ohne Assertions, nur um die Prozentzahl zu erhöhen, oder sie testen triviale Getter, die keinen Fehler enthalten können. Dagegen helfen drei Maßnahmen. Erstens: Code-Zweig Coverage statt Line Coverage als Messwert verwenden, weil es schwerer ist, Code-Zweig Coverage mit sinnlosen Tests zu erhöhen. Zweitens: in Code-Reviews nicht nur auf die Prozentzahl schauen, sondern auf die Qualität der neuen Tests, also ob sie sinnvolle Assertions enthalten und Randfälle abdecken. Drittens: die Coverage-Schwellwerte als Team vereinbaren und nicht von oben diktieren, damit alle verstehen, warum sie wichtig sind und nicht als Schikane empfunden werden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Brauche ich Testabdeckung auch für ein kleines Projekt mit nur wenigen Dateien?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Gerade für kleine Projekte ist die Testabdeckung schnell eingerichtet und liefert sofort Erkenntnisse. Ein Projekt mit zehn Dateien und hundert Zeilen Code hat denselben Bedarf an einem Sicherheitsnetz wie ein großes, nur dass das Netz viel schneller geknüpft ist. Der Coverage-Report zeigt dir in einem kleinen Projekt innerhalb von Sekunden, welche Zeilen du zu testen vergessen hast, und du kannst die Lücken in wenigen Minuten schließen. Der Aufwand für die Einrichtung der Coverage-Messung beträgt in Vitest oder Jest genau eine Zeile in der Konfiguration: coverage: true. Dafür bekommst du Gewissheit, dass dein Code nicht nur grüne Tests hat, sondern auch vollständig getestet ist.",
+      "isKeySentence": false
+    }
+  ],
+  "practiceExample": {
+    "text": "Im Repo repo-verified-done misst die Testabdeckung, wie vollständig die Prüflogik für Fertigstellungskriterien getestet ist. Der Coverage-Report zeigt für jede Datei die Statement-, Code-Zweig-, Function- und Line-Abdeckung und markiert ungetestete Verzweigungen rot. Die Code-Zweig Coverage deckt auf, dass die Fehlerbehandlung für verspätete Aufgaben und für Wochenendtermine nie getestet wurde, obwohl die Line Coverage über 90 Prozent lag.",
+    "repoNote": "repo-verified-done",
+    "location": "coverage/lcov-report/index.html (Coverage-Report nach Testlauf)"
+  },
+  "quiz": [
+    {
+      "question": "Welches Alltagsbild beschreibt die Testabdeckung am treffendsten?",
+      "area": "Testabdeckung: Grundlagen",
+      "options": [
+        {
+          "text": "Ein Maler, der nach dem Streichen prüft, welche Quadratmeter der Wand er tatsächlich gestrichen hat und welche er vergessen hat.",
+          "isCorrect": true,
+          "explanation": "Richtig: die Testabdeckung zeigt wie der Maler, welche Stellen bearbeitet wurden und welche nicht."
+        },
+        {
+          "text": "Ein Bäcker, der die Temperatur seines Ofens misst, bevor er das Brot einschiebt.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Bäcker misst eine einzelne Bedingung vor der Arbeit, die Testabdeckung misst das Ergebnis nach der Arbeit."
+        },
+        {
+          "text": "Ein Architekt, der den Bauplan zeichnet, bevor das Haus gebaut wird.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Architekt plant vorab, die Testabdeckung misst im Nachhinein, was tatsächlich getestet wurde."
+        },
+        {
+          "text": "Ein Gärtner, der die Erde düngt, bevor er die Pflanzen einsetzt. und erst danach mit der eigentlichen Arbeit beginnt, ohne das Ergebnis zu überprüfen",
+          "isCorrect": false,
+          "explanation": "Falsch: der Gärtner bereitet vor, die Testabdeckung prüft das Ergebnis der Testausführung."
+        }
+      ]
+    },
+    {
+      "question": "Was misst die Testabdeckung konkret?",
+      "area": "Testabdeckung: Grundlagen",
+      "options": [
+        {
+          "text": "Wie viel des Programmcodes bei der Ausführung der Tests tatsächlich durchlaufen wird.",
+          "isCorrect": true,
+          "explanation": "Richtig: die Testabdeckung zählt, welche Zeilen, Funktionen und Verzweigungen von mindestens einem Test berührt wurden."
+        },
+        {
+          "text": "Wie viele Fehler die Tests im Code gefunden haben.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Testabdeckung misst nicht die Anzahl gefundener Fehler, sondern wie viel Code durchlaufen wurde."
+        },
+        {
+          "text": "Wie schnell die Tests im Vergleich zum letzten Testlauf ausgeführt wurden. und diese Messwert wird in der CI-Automatisierungskette als Qualitätskriterium herangezogen",
+          "isCorrect": false,
+          "explanation": "Falsch: die Ausführungsgeschwindigkeit ist eine andere Messwert und hat nichts mit Testabdeckung zu tun."
+        },
+        {
+          "text": "Wie viele Entwickler im Team Tests schreiben im Vergleich zu denen, die nur Produktionscode schreiben.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Testabdeckung misst Code, nicht das Verhalten von Entwicklern."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der entscheidende Unterschied zwischen Line Coverage und Code-Zweig Coverage?",
+      "area": "Testabdeckung: Code-Zweig Coverage",
+      "options": [
+        {
+          "text": "Line Coverage zählt nur ausgeführte Zeilen, Code-Zweig Coverage prüft zusätzlich, ob jede Verzweigung in beide Richtungen durchlaufen wurde.",
+          "isCorrect": true,
+          "explanation": "Richtig: Code-Zweig Coverage ist strenger, weil sie beide Zweige einer Bedingung testet, nicht nur einen."
+        },
+        {
+          "text": "Line Coverage ist für JavaScript, Code-Zweig Coverage ist für TypeScript.",
+          "isCorrect": false,
+          "explanation": "Falsch: beide Metriken funktionieren in beiden Sprachen, der Unterschied liegt in der Messmethode."
+        },
+        {
+          "text": "Line Coverage misst Funktionen, Code-Zweig Coverage misst nur Variablen.",
+          "isCorrect": false,
+          "explanation": "Falsch: beide messen Code, aber auf unterschiedliche Weise, nicht unterschiedliche Code-Arten."
+        },
+        {
+          "text": "Line Coverage ist schneller zu berechnen und daher die bessere Messwert für große Projekte., was sie für große Monorepos mit vielen Testdateien zur bevorzugten Wahl macht",
+          "isCorrect": false,
+          "explanation": "Falsch: die Berechnungsgeschwindigkeit ist nicht der entscheidende Unterschied, sondern die Aussagekraft."
+        }
+      ]
+    },
+    {
+      "question": "Warum kann Line Coverage ein falsches Sicherheitsgefühl vermitteln?",
+      "area": "Testabdeckung: Code-Zweig Coverage",
+      "options": [
+        {
+          "text": "Weil eine if-else-Verzweigung als abgedeckt gilt, sobald nur der if-Zweig durchlaufen wurde, auch wenn der else-Zweig nie getestet wurde.",
+          "isCorrect": true,
+          "explanation": "Richtig: Line Coverage versteckt ungetestete Verzweigungen, Code-Zweig Coverage deckt sie auf."
+        },
+        {
+          "text": "Weil Line Coverage nur ganze Dateien zählt und nicht einzelne Zeilen., sondern fasst mehrere Dateien zu einer gemeinsamen Abdeckungszahl zusammen",
+          "isCorrect": false,
+          "explanation": "Falsch: Line Coverage zählt sehr wohl einzelne Zeilen, das Problem ist, dass sie Verzweigungen nicht unterscheidet."
+        },
+        {
+          "text": "Weil Line Coverage die Testergebnisse fälscht und grüne Tests als rot anzeigt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Line Coverage fälscht keine Testergebnisse, sie zeigt nur ein unvollständiges Bild der Abdeckung."
+        },
+        {
+          "text": "Weil Line Coverage nur mit Jest funktioniert und in Vitest immer null Prozent anzeigt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Line Coverage funktioniert in beiden Frameworks korrekt, das Problem ist die Aussagekraft, nicht die Technik."
+        }
+      ]
+    },
+    {
+      "question": "Welche Aussage über das Repo repo-verified-done ist richtig?",
+      "area": "Praxisbeispiel repo-verified-done",
+      "options": [
+        {
+          "text": "Die Code-Zweig Coverage deckt auf, dass die Fehlerbehandlung für verspätete Aufgaben nie getestet wurde, obwohl die Line Coverage hoch war.",
+          "isCorrect": true,
+          "explanation": "Richtig: der else-Zweig für verspätete Aufgaben war ungetestet, und nur Code-Zweig Coverage hat das sichtbar gemacht."
+        },
+        {
+          "text": "Das Repo hat keine Tests, weil die Prüflogik zu einfach für automatisierte Tests ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: das Repo hat Tests und nutzt Coverage-Reports, um Lücken zu finden."
+        },
+        {
+          "text": "Die Testabdeckung liegt bei hundert Prozent, weil das Team jeden einzelnen Codepfad getestet hat., weil das Team nach dem Prinzip Hundert-Prozent-Coverage arbeitet und jede Zeile einzeln prüft",
+          "isCorrect": false,
+          "explanation": "Falsch: die Abdeckung liegt bei 87 Prozent, mit bewussten Lücken bei unkritischen Hilfsfunktionen."
+        },
+        {
+          "text": "Der Coverage-Report wird nur einmal im Monat manuell erstellt und dann archiviert.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Report wird nach jedem Testlauf automatisch generiert und ist Teil der CI-Automatisierungskette."
+        }
+      ]
+    },
+    {
+      "question": "Was zeigt ein Coverage-Report typischerweise an?",
+      "area": "Testabdeckung: Coverage-Report",
+      "options": [
+        {
+          "text": "Für jede Datei die Prozentwerte für Statements, Branches, Functions und Lines, mit farblicher Markierung ungetesteter Zeilen.",
+          "isCorrect": true,
+          "explanation": "Richtig: der Report schlüsselt die Abdeckung nach diesen vier Kategorien auf und markiert Lücken visuell."
+        },
+        {
+          "text": "Nur eine einzige Prozentzahl für das gesamte Projekt, ohne Aufschlüsselung nach Dateien.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Coverage-Report zeigt immer eine detaillierte Aufschlüsselung, nicht nur eine Gesamtzahl."
+        },
+        {
+          "text": "Eine Liste aller Entwickler mit ihren individuellen Testabdeckungs-Prozentwerten.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Report misst Code, nicht die Leistung einzelner Entwickler."
+        },
+        {
+          "text": "Die geschätzten Kosten für das Schreiben zusätzlicher Tests, basierend auf der aktuellen Abdeckung., und die Ergebnisse werden einmal pro Sprint in einer PDF-Datei an den Projektleiter geschickt",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Coverage-Report enthält keine Kostenschätzungen, nur Abdeckungsdaten."
+        }
+      ]
+    },
+    {
+      "question": "Warum sind hundert Prozent Testabdeckung in der Praxis selten das richtige Ziel?",
+      "area": "Testabdeckung: Zielwerte",
+      "options": [
+        {
+          "text": "Weil die letzten Prozent oft Tests für triviale Getter und unrealistische Fehlerfälle erfordern, deren Aufwand den Nutzen übersteigt.",
+          "isCorrect": true,
+          "explanation": "Richtig: der Grenznutzen zusätzlicher Tests sinkt, und die Zeit ist besser in kritische Tests investiert."
+        },
+        {
+          "text": "Weil die Testframeworks bei hundert Prozent technisch versagen und nicht mehr korrekt arbeiten., weil die Frameworks bei diesem Wert einen internen Überlauf haben und negative Prozentzahlen anzeigen",
+          "isCorrect": false,
+          "explanation": "Falsch: die Frameworks funktionieren auch bei hundert Prozent, das Problem ist der Aufwand, nicht die Technik."
+        },
+        {
+          "text": "Weil hundert Prozent Testabdeckung gesetzlich nur für Banken und Versicherungen erlaubt ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: es gibt kein Gesetz, das hundert Prozent Testabdeckung vorschreibt oder verbietet."
+        },
+        {
+          "text": "Weil der Coverage-Report bei Werten über 95 Prozent automatisch auf null zurückspringt.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Report zeigt korrekt Werte bis hundert Prozent an, es gibt keinen technischen Rückfall."
+        }
+      ]
+    },
+    {
+      "question": "Wie nutzt man den Coverage-Report am effektivsten zur Verbesserung der Tests?",
+      "area": "Testabdeckung: Praxis",
+      "options": [
+        {
+          "text": "Man sucht die Dateien mit der niedrigsten Abdeckung, geht die rot markierten Zeilen durch und schreibt gezielt Tests für diese Lücken.",
+          "isCorrect": true,
+          "explanation": "Richtig: der Report ist eine konkrete To-do-Liste, die zeigt, wo Tests fehlen."
+        },
+        {
+          "text": "Man druckt den Report aus und hängt ihn an die Bürowand, damit alle die Prozentzahl sehen.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Report ist ein Arbeitswerkzeug, kein Wandschmuck, er soll zu konkreten Testverbesserungen führen."
+        },
+        {
+          "text": "Man löscht alle Dateien mit niedriger Abdeckung, weil sie offenbar unwichtig sind., damit bei der nächsten Teambesprechung alle sehen, wer die beste Abdeckung hat",
+          "isCorrect": false,
+          "explanation": "Falsch: niedrige Abdeckung bedeutet nicht, dass der Code unwichtig ist, sondern dass er nicht getestet wurde."
+        },
+        {
+          "text": "Man schreibt einen Test, der einmal alle Funktionen aufruft, ohne die Ergebnisse zu prüfen, um die Prozentzahl zu erhöhen.",
+          "isCorrect": false,
+          "explanation": "Falsch: Tests ohne Assertions erhöhen die Prozentzahl, aber nicht die Qualität, das ist coverage-driven damage."
+        }
+      ]
+    },
+    {
+      "question": "Was bedeutet es, wenn eine Datei eine Code-Zweig Coverage von 50 Prozent hat?",
+      "area": "Testabdeckung: Code-Zweig Coverage",
+      "options": [
+        {
+          "text": "Die Hälfte aller Verzweigungen in dieser Datei wurde nie in einem Test durchlaufen.",
+          "isCorrect": true,
+          "explanation": "Richtig: bei 50 Prozent Code-Zweig Coverage wurde nur eine Richtung jeder Verzweigung getestet, die andere ist ungetestet."
+        },
+        {
+          "text": "Die Datei wurde nur zur Hälfte geschrieben und ist noch nicht fertig., weil der zuständige Entwickler die Datei nur unvollständig implementiert hat und noch nicht zum Testen gekommen ist",
+          "isCorrect": false,
+          "explanation": "Falsch: Code-Zweig Coverage misst die Testabdeckung, nicht den Fertigstellungsgrad des Codes."
+        },
+        {
+          "text": "Genau die Hälfte der Tests für diese Datei schlägt fehl.",
+          "isCorrect": false,
+          "explanation": "Falsch: Code-Zweig Coverage sagt nichts über fehlschlagende Tests, sondern über ungetestete Verzweigungen."
+        },
+        {
+          "text": "Die Datei enthält nur halb so viele Verzweigungen wie eine durchschnittliche Datei im Projekt.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Prozentzahl bezieht sich auf die Abdeckung, nicht auf die Anzahl der Verzweigungen."
+        }
+      ]
+    },
+    {
+      "question": "Welche Dateien sollte man von der Coverage-Messung ausschließen?",
+      "area": "Testabdeckung: Konfiguration",
+      "options": [
+        {
+          "text": "Automatisch generierten Code,第三方-Bibliotheken und Typdeklarationsdateien, die keinen eigenen Code enthalten.",
+          "isCorrect": true,
+          "explanation": "Richtig: diese Dateien enthalten keinen selbst geschriebenen Code und verfälschen die Abdeckungsmessung."
+        },
+        {
+          "text": "Alle Dateien, die eine Abdeckung unter 80 Prozent haben, damit der Report besser aussieht., um die Gesamtabdeckung künstlich zu erhöhen und den Coverage-Schwellwert in der CI zu erreichen",
+          "isCorrect": false,
+          "explanation": "Falsch: das wäre Manipulation der Messwert und würde die blinden Flecken verstecken statt sie zu beheben."
+        },
+        {
+          "text": "Nur die Testdateien selbst, alles andere muss gemessen werden.",
+          "isCorrect": false,
+          "explanation": "Falsch: Testdateien sind standardmäßig ausgeschlossen, aber auch generierter Code sollte ausgeschlossen werden."
+        },
+        {
+          "text": "Gar keine, denn jede ausgeschlossene Datei ist ein Sicherheitsrisiko.",
+          "isCorrect": false,
+          "explanation": "Falsch: generierter Code und Bibliotheken enthalten keine eigene Logik und müssen nicht getestet werden."
+        }
+      ]
+    },
+    {
+      "question": "Wie verhindert man, dass das Team sinnlose Tests nur für die Coverage-Messwert schreibt?",
+      "area": "Testabdeckung: Qualität",
+      "options": [
+        {
+          "text": "Code-Zweig Coverage als Messwert verwenden, Testqualität in Code-Reviews prüfen und Schwellwerte im Team vereinbaren.",
+          "isCorrect": true,
+          "explanation": "Richtig: diese drei Maßnahmen zusammen verhindern coverage-driven damage und erhalten die Testqualität."
+        },
+        {
+          "text": "Die Coverage-Messung komplett abschalten und nur noch nach Bauchgefühl testen.",
+          "isCorrect": false,
+          "explanation": "Falsch: das wäre das Kind mit dem Bade ausschütten, die Coverage-Messung ist wertvoll, wenn sie richtig eingesetzt wird."
+        },
+        {
+          "text": "Jeden Entwickler bestrafen, der einen Test ohne Assertion schreibt., und jeder Verstoß wird mit einem automatischen Eintrag in der Personalakte geahndet",
+          "isCorrect": false,
+          "explanation": "Falsch: Bestrafung schafft Angst und führt zu noch mehr sinnlosen Tests, die Strafe zu vermeiden."
+        },
+        {
+          "text": "Die Coverage-Schwellwerte so niedrig setzen, dass sie immer erreicht werden.",
+          "isCorrect": false,
+          "explanation": "Falsch: zu niedrige Schwellwerte machen die Messwert wertlos, sie sollten fordernd, aber erreichbar sein."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der wichtigste Nutzen der Testabdeckung?",
+      "area": "Testabdeckung: Grundlagen",
+      "options": [
+        {
+          "text": "Sie macht die blinden Flecken im Test sichtbar, die grüne Tests allein nicht zeigen können.",
+          "isCorrect": true,
+          "explanation": "Richtig: die Testabdeckung zeigt, was nicht getestet wurde, und das ist ihre wichtigste Funktion."
+        },
+        {
+          "text": "Sie beweist, dass der Code fehlerfrei ist und keine Bugs enthält., denn eine hundertprozentige Abdeckung garantiert, dass der Code unter allen Umständen fehlerfrei läuft",
+          "isCorrect": false,
+          "explanation": "Falsch: auch hundert Prozent Testabdeckung beweisen nicht, dass der Code fehlerfrei ist, sie zeigen nur, dass er durchlaufen wurde."
+        },
+        {
+          "text": "Sie ersetzt Code-Reviews, weil der Coverage-Report alle Probleme automatisch findet.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Coverage-Report findet ungetesteten Code, aber keine Logikfehler oder Designprobleme."
+        },
+        {
+          "text": "Sie beschleunigt die Testausführung, weil das Framework ungetesteten Code überspringen kann.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Coverage-Messung verlangsamt die Testausführung eher, weil sie zusätzliche Daten sammeln muss."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Aktiviere die Coverage-Messung in einem eigenen Projekt mit Vitest oder Jest. Führe die Tests mit Coverage aus und öffne den generierten Coverage-Report. Suche im Report nach der Datei mit der niedrigsten Code-Zweig Coverage. Schreibe gezielt Tests für die rot markierten, ungetesteten Verzweigungen in dieser Datei. Führe die Tests erneut mit Coverage aus und vergleiche die Code-Zweig Coverage vor und nach deinen neuen Tests.",
+    "expectation": "Coverage-Messung ist aktiviert und der Report wurde geöffnet und verstanden. Mindestens zwei neue Tests wurden für vorher ungetestete Verzweigungen geschrieben. Die Code-Zweig Coverage der bearbeiteten Datei ist messbar gestiegen. Der Unterschied zwischen Line Coverage und Code-Zweig Coverage wurde anhand der eigenen Datei nachvollzogen.",
+    "checklist": [
+      "Coverage-Messung in Vitest oder Jest aktiviert.",
+      "Tests mit Coverage ausgeführt und Report generiert.",
+      "Coverage-Report geöffnet und die vier Kategorien (Statements, Branches, Functions, Lines) verstanden.",
+      "Datei mit der niedrigsten Code-Zweig Coverage identifiziert.",
+      "Rot markierte, ungetestete Verzweigungen in dieser Datei gefunden.",
+      "Mindestens zwei neue Tests für vorher ungetestete Verzweigungen geschrieben.",
+      "Tests erneut mit Coverage ausgeführt und Verbesserung der Code-Zweig Coverage nachgewiesen."
+    ],
+    "portfolioItem": "P02"
+  },
+  "audio": {
+    "file": "M04-02-04.mp3",
+    "durationSeconds": 1320,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Was ist der Unterschied zwischen Line Coverage und Code-Zweig Coverage?",
+      "answer": "Line Coverage zählt, ob eine Codezeile während der Tests mindestens einmal ausgeführt wurde. Eine Zeile mit einer if-Bedingung gilt als abgedeckt, sobald der if-Zweig betreten wurde, auch wenn der else-Zweig nie getestet wurde. Code-Zweig Coverage ist strenger: sie prüft, ob beide Zweige der Bedingung durchlaufen wurden. Eine if-else-Verzweigung zählt erst dann als vollständig abgedeckt, wenn sowohl der if- als auch der else-Zweig in mindestens einem Test ausgeführt wurden. In der Praxis solltest du immer auf Code-Zweig Coverage achten, weil Line Coverage ein falsches Sicherheitsgefühl vermittelt und ungetestete Verzweigungen versteckt."
+    },
+    {
+      "question": "Kann ich die Testabdeckung auch in meiner CI-Automatisierungskette automatisch prüfen lassen?",
+      "answer": "Ja, und das ist der empfohlene Weg. Du konfigurierst dein Testframework so, dass es nach jedem Lauf einen Coverage-Report im maschinenlesbaren Format, zum Beispiel LCOV oder JUnit-XML, ausgibt. In der CI-Automatisierungskette definierst du Schwellwerte: unterschreitet die Code-Zweig Coverage einen bestimmten Wert, schlägt der CI-Schritt fehl und blockiert den Zusammenführung. Übliche Einstiegswerte sind 80 Prozent für Line Coverage und 70 Prozent für Code-Zweig Coverage. Wichtig ist, dass du die Schwellwerte schrittweise erhöhst und nicht von null auf neunzig springst, weil das Team sonst die CI als Schikane empfindet und die Prüfung deaktiviert."
+    },
+    {
+      "question": "Was mache ich mit Code, den ich sinnvoll nicht testen kann, zum Beispiel automatisch generierte Dateien?",
+      "answer": "Jedes Testframework und jeder Coverage-Report bietet die Möglichkeit, bestimmte Dateien oder Verzeichnisse von der Messung auszuschließen. Du definierst in der Konfiguration Ausschlussmuster für generierten Code,第三方-Bibliotheken, Typdeklarationsdateien und Konfigurationsdateien, die keinen eigenen Code enthalten. In Vitest und Jest geschieht das über die coverage.exclude-Option, in Istanbul über die exclude-Regel. Die Kunst ist, nicht zu viel auszuschließen, sonst misst du nur noch die einfachen Teile und die schwierigen bleiben ungetestet. Schließe nur das aus, was wirklich nicht dein Code ist oder was nachweislich keinen Fehler enthalten kann."
+    },
+    {
+      "question": "Wie vermeide ich, dass mein Team nur noch für die Testabdeckung programmiert und sinnlose Tests schreibt?",
+      "answer": "Diese Gefahr ist real und heißt im Englischen coverage-driven damage: Entwickler schreiben Tests ohne Assertions, nur um die Prozentzahl zu erhöhen, oder sie testen triviale Getter, die keinen Fehler enthalten können. Dagegen helfen drei Maßnahmen. Erstens: Code-Zweig Coverage statt Line Coverage als Messwert verwenden, weil es schwerer ist, Code-Zweig Coverage mit sinnlosen Tests zu erhöhen. Zweitens: in Code-Reviews nicht nur auf die Prozentzahl schauen, sondern auf die Qualität der neuen Tests, also ob sie sinnvolle Assertions enthalten und Randfälle abdecken. Drittens: die Coverage-Schwellwerte als Team vereinbaren und nicht von oben diktieren, damit alle verstehen, warum sie wichtig sind und nicht als Schikane empfunden werden."
+    },
+    {
+      "question": "Brauche ich Testabdeckung auch für ein kleines Projekt mit nur wenigen Dateien?",
+      "answer": "Gerade für kleine Projekte ist die Testabdeckung schnell eingerichtet und liefert sofort Erkenntnisse. Ein Projekt mit zehn Dateien und hundert Zeilen Code hat denselben Bedarf an einem Sicherheitsnetz wie ein großes, nur dass das Netz viel schneller geknüpft ist. Der Coverage-Report zeigt dir in einem kleinen Projekt innerhalb von Sekunden, welche Zeilen du zu testen vergessen hast, und du kannst die Lücken in wenigen Minuten schließen. Der Aufwand für die Einrichtung der Coverage-Messung beträgt in Vitest oder Jest genau eine Zeile in der Konfiguration: coverage: true. Dafür bekommst du Gewissheit, dass dein Code nicht nur grüne Tests hat, sondern auch vollständig getestet ist."
+    }
+  ]
+}

@@ -1,0 +1,704 @@
+{
+  "id": "M04-02-03",
+  "title": "Integration und Playwright",
+  "durationMinutes": 36,
+  "prerequisites": [
+    "M04-02-01",
+    "M04-02-02",
+    "M02-03-01"
+  ],
+  "terms": [
+    {
+      "term": "Integrationstest",
+      "definition": "Ein Test, der das Zusammenspiel mehrerer Komponenten prüft, zum Beispiel ob eine Funktion korrekt mit einer echten Datenbank kommuniziert oder ob die API die richtige Antwort zurückgibt. Im Gegensatz zum Unit-Test werden Abhängigkeiten nicht durch Mocks ersetzt."
+    },
+    {
+      "term": "Playwright",
+      "definition": "Ein Werkzeug von Microsoft, das einen echten Browser automatisch steuert, um Webanwendungen aus Sicht des Nutzers zu testen. Es kann Seiten öffnen, auf Knöpfe klicken, Text eingeben, Screenshots machen und prüfen, ob die richtigen Elemente sichtbar sind."
+    },
+    {
+      "term": "Playwright-Selektor",
+      "definition": "Ein Ausdruck, der ein bestimmtes Element auf einer Webseite identifiziert, zum Beispiel eine Überschrift, einen Knopf oder ein Eingabefeld. Playwright verwendet Playwright-Selektoren, um zu wissen, auf welches Element es klicken oder welchen Text es auslesen soll."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine Autowerkstatt vor, die einen Motor prüft. Der Unit-Test wäre, jedes einzelne Teil auf dem Prüfstand zu vermessen: Kolben, Ventile, Zündkerzen, jedes für sich. Der Integrationstest wäre, den zusammengebauten Motor auf dem Prüfstand laufen zu lassen und zu messen, ob er die versprochene Leistung bringt. Der Playwright-Test wäre, das ganze Auto auf die Straße zu schicken und zu sehen, ob es von null auf hundert beschleunigt, bremst und die Kurve kriegt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Unit-Tests prüfen die Einzelteile isoliert, das hast du in den vorigen Lektionen gelernt. Integrationstests gehen einen Schritt weiter und prüfen das Zusammenspiel: funktioniert die Datenbankabfrage mit der echten Datenbank? Liefert die API das richtige JSON? Playwright geht noch einen Schritt weiter und prüft die ganze Anwendung aus Sicht des Nutzers: kann sich jemand anmelden, eine Bestellung aufgeben und eine Bestätigung sehen? Jede dieser Ebenen findet Fehler, die die anderen nicht finden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Warum brauche ich Integrationstests, wenn ich doch schon Unit-Tests habe?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Unit-Tests ersetzen alle Abhängigkeiten durch Mocks. Das ist gut für die Geschwindigkeit, aber es bedeutet auch, dass du nie mit der echten Datenbank, der echten API oder dem echten Dateisystem testest. Ein Integrationstest prüft genau diese Lücke: er verwendet die echten Abhängigkeiten und stellt sicher, dass deine Annahmen über deren Verhalten auch in der Realität stimmen. Der Mock hat vielleicht ein anderes Datenformat angenommen als die echte Datenbank liefert, und nur der Integrationstest findet diesen Fehler.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Ein Test, der das Zusammenspiel mehrerer Komponenten mit ihren echten Abhängigkeiten prüft, heißt Integrationstest.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-portfolio, einer persönlichen Portfolio-Website, gibt es Integrationstests, die prüfen, ob die Seite nach dem Bauen die richtigen HTML-Elemente enthält. Diese Tests starten keinen Browser, aber sie lesen die generierte HTML-Datei und prüfen, ob bestimmte Überschriften, Links und Meta-Tags vorhanden sind. Das ist ein Integrationstest, weil er das Zusammenspiel von Build-Werkzeug, Template-Engine und Inhalt prüft, nicht nur eine isolierte Funktion.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Integrationstests sind wichtig, weil die meisten schwerwiegenden Fehler nicht in den isolierten Einzelteilen liegen, sondern an den Nahtstellen dazwischen. Die Funktion ist korrekt, die Datenbank ist korrekt, aber das Format, in dem die Funktion die Datenbank anspricht, ist falsch. Diesen Fehler findet kein Unit-Test, weil der Mock dasselbe falsche Format erwartet wie die Funktion. Nur der Integrationstest mit der echten Datenbank deckt ihn auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was genau ist Playwright, und warum sollte ich einen echten Browser für Tests steuern?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen Roboter vor, der in einem leeren Büro sitzt, eine Maus in der einen und eine Kamera in der anderen Hand. Du gibst ihm ein Drehbuch: Öffne die Website, klicke auf Anmelden, gib diese E-Mail ein, klicke auf Absenden, und mach ein Foto vom Ergebnis. Der Roboter führt jeden Schritt exakt aus und vergleicht jedes Foto mit einem Referenzfoto, das zeigt, wie die Seite aussehen soll.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Playwright ist genau dieser Roboter. Es öffnet einen echten Chrome-, Firefox- oder Safari-Browser, aber unsichtbar im Hintergrund, und führt dein Drehbuch aus. Es kann auf jeden Knopf klicken, in jedes Feld tippen, auf jede URL navigieren und nach jedem Schritt prüfen, ob die richtigen Elemente sichtbar sind, den richtigen Text enthalten oder die richtige Farbe haben. Anders als ein Unit-Test, der nur JavaScript-Funktionen aufruft, testet Playwright die Seite so, wie ein echter Nutzer sie erleben würde.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Playwright ist ein Werkzeug von Microsoft, das einen echten Browser automatisch steuert, um Webanwendungen aus Sicht des Nutzers zu testen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-portfolio könnte ein Playwright-Test folgendes Drehbuch abfahren: Startseite öffnen, Namen im Titel prüfen, zu den Projekten navigieren, mindestens drei Projektkarten prüfen, erste Karte anklicken, Detailseite mit Beschreibung prüfen. Jeder dieser Schritte ist eine Assertion, und wenn ein Schritt fehlschlägt, macht Playwright automatisch einen Screenshot, damit du siehst, was der Browser in diesem Moment angezeigt hat.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Playwright-Tests sind wichtig, weil sie Fehler finden, die kein anderer Test findet: Layout-Fehler, bei denen ein Knopf hinter einem Bild verschwindet, JavaScript-Fehler, die erst im Browser auftreten, oder CSS-Probleme mit falscher Textfarbe. Diese Fehler sind für den Nutzer sofort sichtbar und besonders peinlich, aber sie sind für Unit-Tests und Integrationstests völlig unsichtbar, weil diese keinen Browser haben, der die Seite tatsächlich darstellt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Wie findet Playwright das richtige Element auf der Seite, also den Knopf oder das Eingabefeld?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen Postboten vor, der einen Brief zustellen soll. Er hat mehrere Möglichkeiten, das richtige Haus zu finden: die genaue Adresse mit Straße und Hausnummer, den Namen am Klingelschild, die Farbe der Haustür oder die Beschreibung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Playwright hat ähnliche Möglichkeiten, ein Element zu finden, und diese Ausdrücke heißen Playwright-Selektoren. Der zuverlässigste Playwright-Selektor ist die Rolle des Elements, zum Beispiel button für einen Knopf oder heading für eine Überschrift, kombiniert mit dem sichtbaren Namen. Playwright kann auch nach dem Textinhalt suchen, nach einem bestimmten CSS-Selektor oder nach einem Test-ID-Attribut, das du extra für Tests in dein HTML schreibst. Die Test-ID ist der sicherste Weg, weil sie sich nicht ändert, wenn du das Design änderst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Ein Playwright-Selektor ist ein Ausdruck, der ein bestimmtes Element auf einer Webseite identifiziert, zum Beispiel eine Überschrift, einen Knopf oder ein Eingabefeld.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-portfolio könnte ein Playwright-Test den Playwright-Selektor page.getByRole('heading', { name: 'Projekte' }) verwenden, um die Projekte-Überschrift zu finden, oder page.getByTestId('project-card') für eine Projektkarte mit einem data-testid-Attribut. Der Rollen-Playwright-Selektor ist robuster als ein CSS-Selektor wie .project-card, weil er auch dann noch funktioniert, wenn die CSS-Klasse umbenannt wird.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die Wahl des richtigen Playwright-Selektors ist entscheidend für die Stabilität der Tests. Ein Test, der auf eine CSS-Klasse wie .col-md-4 zugreift, zerbricht bei jedem Bootstrap-Update. Ein Test, der auf die Rolle button mit dem Namen Absenden zugreift, überlebt jedes Redesign, solange der Knopf ein Knopf bleibt und Absenden heißt. Playwright empfiehlt eindeutig: verwende Rollen-Playwright-Selektoren, wo immer es geht, und Test-IDs nur als letzten Ausweg für Elemente ohne klare Rolle.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was mache ich, wenn meine Seite Daten aus einer Datenbank lädt und die im Test nicht verfügbar ist?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen Theaterregisseur vor, der eine Szene probt, in der ein Schauspieler einen Brief öffnet. Statt jeden Tag einen neuen echten Brief zu schreiben, verwendet er einen Requisitenbrief, der immer gleich aussieht und denselben Text enthält.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "In Playwright-Tests verwendest du statt der echten Datenbank vorbereitete Testdaten, sogenannte Fixtures. Du kannst Playwright anweisen, bestimmte API-Antworten abzufangen und durch eigene Daten zu ersetzen, oder du startest eine Testdatenbank, die nur für die Dauer der Tests existiert und vorher mit bekannten Daten befüllt wird. So weißt du immer genau, welche Daten die Seite anzeigen wird, und deine Tests sind wiederholbar und unabhängig von der Produktionsdatenbank.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-portfolio sind die Daten für die Projekte in einer JSON-Datei gespeichert, nicht in einer Datenbank. Das macht die Tests einfach: der Test startet die Seite, und die Projektdaten sind immer dieselben. Ein Playwright-Test kann also hartkodiert prüfen, ob das dritte Projekt den erwarteten Titel hat, weil sich dieser Titel in der JSON-Datei nie ändert, ohne dass der Test angepasst wird.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Deterministische Testdaten sind für Ende-zu-Ende-Tests genauso wichtig wie für Unit-Tests. Ein Test, der heute grün ist und morgen rot, ohne dass sich der Code geändert hat, ist wertlos. Die Investition in eine saubere Testdaten-Strategie zahlt sich in stabilen Tests aus, denen das Team vertraut.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Kann Playwright auch prüfen, ob die Seite gut aussieht, also ob das Layout stimmt?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen Qualitätsprüfer in einer Uhrenfabrik vor, der jede fertige Uhr mit einer Schablone vergleicht. Die Schablone zeigt, wo die Zeiger sein müssen, wo das Datum stehen muss und wie groß das Zifferblatt sein darf. Weicht die Uhr von der Schablone ab, wird sie aussortiert.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Playwright kann Screenshots von ganzen Seiten oder einzelnen Elementen machen und diese pixelgenau mit einem Referenz-Screenshot vergleichen. Dieses Verfahren heißt Visual Regression Testing. Du machst einmal einen Screenshot, der als Referenz gespeichert wird, und bei jedem zukünftigen Testlauf vergleicht Playwright den aktuellen Screenshot mit der Referenz. Weicht auch nur ein Pixel ab, schlägt der Test fehl und zeigt dir eine Überlagerung der beiden Bilder, in der die Unterschiede farbig markiert sind.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-portfolio könnte ein visueller Regressionstest die Startseite bei drei verschiedenen Bildschirmbreiten fotografieren: Smartphone, Tablet und Desktop. Bei jedem Testlauf werden diese Screenshots mit den Referenzen verglichen. Ändert jemand versehentlich eine CSS-Regel, die das Layout auf dem Smartphone zerschießt, schlägt der mobile Screenshot-Test fehl, und der Entwickler sieht sofort, welches Element verschoben ist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Visuelle Regressionstests sind die einzige Testart, die Layout-Fehler zuverlässig findet. Kein Unit-Test und kein textbasierter Integrationstest kann prüfen, ob ein Knopf außerhalb des Bildschirms gelandet ist oder ob sich zwei Elemente überlappen. Allerdings sind visuelle Tests empfindlich: schon eine andere Schriftart oder ein anderes Betriebssystem kann zu minimalen Pixel-Unterschieden führen. Deshalb sollten visuelle Tests auf derselben Umgebung laufen, idealerweise in einem Docker-Container mit festgelegten Schriftarten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Wie viele Playwright-Tests sollte ich schreiben, und welche Nutzerabläufe sind die wichtigsten?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine Burg mit mehreren Zugbrücken vor. Du kannst nicht jede Brücke rund um die Uhr bewachen, also stellst du Wachen nur an den Haupttoren auf und verlässt dich darauf, dass die Nebeneingänge sicher genug sind.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Playwright-Tests sind die Wachen an den Haupttoren deiner Anwendung. Du testest nicht jeden einzelnen Link und jeden einzelnen Knopf, sondern die wenigen kritischen Pfade, die ein Nutzer durch deine Anwendung geht. Für einen Onlineshop sind das: Produkt suchen, in den Warenkorb legen, bestellen, bezahlen. Für eine Portfolio-Seite sind das: Startseite aufrufen, Projekte durchstöbern, Kontaktformular ausfüllen. Das sind vielleicht fünf bis fünfzehn Tests, nicht hunderte.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-portfolio wären die kritischen Pfade: Startseite lädt und zeigt den Namen, Projektseite listet alle Projekte, Detailseite enthält eine Beschreibung, Impressum ist erreichbar, Seite funktioniert auf dem Smartphone. Das sind fünf Tests, die zusammen vielleicht zwei Minuten laufen, aber die wichtigsten Funktionen der Seite abdecken.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Diese Beschränkung auf wenige kritische Tests ist wichtig, weil Playwright-Tests langsam sind. Ein einzelner Test kann mehrere Sekunden dauern, und hundert Tests würden viele Minuten brauchen. In der CI möchte niemand zwanzig Minuten auf Testergebnisse warten. Die Kunst ist, die fünf bis fünfzehn Tests zu finden, die den größten Teil des Risikos abdecken, und den Rest durch schnellere Unit- und Integrationstests abzusichern.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was passiert, wenn ein Playwright-Test fehlschlägt? Wie finde ich heraus, was schiefgelaufen ist?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine Überwachungskamera vor, die bei einem Alarm nicht nur den Alarm auslöst, sondern auch die letzten dreißig Sekunden als Video speichert. Der Sicherheitsdienst kann sich das Video ansehen und genau nachvollziehen, was vor dem Alarm passiert ist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Playwright speichert bei jedem fehlgeschlagenen Test automatisch einen Screenshot vom Moment des Fehlschlags, ein Video der gesamten Testausführung und einen Trace, der jeden einzelnen Schritt des Tests mit Zeitstempel und Netzwerkaufrufen aufzeichnet. Du kannst den Trace im Playwright Trace Viewer öffnen und siehst eine Zeitleiste, in der du vor- und zurückspringen, die DOM-Struktur zu jedem Zeitpunkt inspizieren und die Netzwerkaufrufe untersuchen kannst. Das ist, als würdest du dem Test über die Schulter schauen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-portfolio würde ein fehlschlagender Test, der die Projektüberschrift nicht findet, einen Screenshot der gesamten Seite im Moment des Fehlschlags speichern. Der Entwickler öffnet den Screenshot und sieht sofort, ob die Überschrift fehlt, ob sie anders heißt oder ob die ganze Seite nicht geladen hat. Ohne diesen Screenshot müsste er raten, was der Browser in diesem Moment angezeigt hat.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Diese automatische Beweissicherung ist einer der größten Vorteile von Playwright gegenüber älteren Testwerkzeugen. Früher musste man bei jedem fehlgeschlagenen Test raten, was schiefgelaufen ist, oder den Test lokal nachstellen, was oft nicht klappte, weil die CI-Umgebung anders war. Playwrights Traces und Screenshots machen die Fehlersuche von einer Detektivarbeit zu einem kurzen Blick auf ein Bild.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "text": "Also noch einmal ganz kurz: Ein Integrationstest prüft das Zusammenspiel mehrerer Komponenten mit echten Abhängigkeiten und findet Fehler an den Nahtstellen, die Unit-Tests übersehen. Playwright steuert einen echten Browser und testet die Anwendung aus Sicht des Nutzers, indem es Seiten öffnet, auf Elemente klickt und Text eingibt. Playwright-Selektoren identifizieren die Elemente auf der Seite, am besten über ihre Rolle oder eine Test-ID. Visuelle Regressionstests vergleichen Screenshots pixelgenau mit Referenzbildern und finden Layout-Fehler. Playwright-Tests sind langsam, deshalb testet man nur die fünf bis fünfzehn kritischsten Nutzerpfade und sichert den Rest mit schnelleren Tests ab.",
+      "isKeySentence": true
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Ein Integrationstest prüft das Zusammenspiel mehrerer Komponenten mit ihren echten Abhängigkeiten, zum Beispiel ob eine Funktion korrekt mit einer echten Datenbank kommuniziert oder ob die API die richtige Antwort zurückgibt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Playwright ist ein Werkzeug von Microsoft, das einen echten Browser automatisch steuert, um Webanwendungen aus Sicht des Nutzers zu testen. Es kann Seiten öffnen, auf Knöpfe klicken, Text eingeben, Screenshots machen und prüfen, ob die richtigen Elemente sichtbar sind.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Ein Playwright-Selektor ist ein Ausdruck, der ein bestimmtes Element auf einer Webseite identifiziert, zum Beispiel eine Überschrift, einen Knopf oder ein Eingabefeld. Playwright verwendet Playwright-Selektoren, um zu wissen, auf welches Element es klicken oder welchen Text es auslesen soll.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Was ist der Unterschied zwischen Playwright und Cypress?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Beide steuern einen Browser für Tests, aber sie tun es auf unterschiedliche Weise. Cypress läuft innerhalb des Browsers und hat dadurch Einschränkungen, zum Beispiel kann es nicht mehrere Tabs gleichzeitig testen oder native Browser-Dialoge wie die Datei-Auswahl steuern. Playwright läuft außerhalb des Browsers und steuert ihn über ein standardisiertes Protokoll, das alle modernen Browser unterstützen. Dadurch kann Playwright mehrere Tabs, mehrere Browser und sogar mehrere Geräte gleichzeitig testen. Für neue Projekte ist Playwright heute meist die bessere Wahl, aber beide sind gute Werkzeuge."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Kann ich Playwright auch für mobile Apps oder nur für Webseiten verwenden?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Playwright testet Webanwendungen, aber es kann den Browser so einstellen, dass er sich wie ein mobiles Gerät verhält. Du kannst die Bildschirmgröße auf iPhone- oder Android-Maße setzen, den User-Agent auf den eines mobilen Browsers ändern und Touch-Ereignisse simulieren. Für echte native mobile Apps, also Apps aus dem App Store, brauchst du andere Werkzeuge wie Appium oder Detox. Aber für eine responsive Website, die auf dem Smartphone gut aussehen soll, ist Playwright mit mobilen Einstellungen das richtige Werkzeug."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Wie gehe ich mit Tests um, die eine Anmeldung erfordern?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Playwright bietet dafür mehrere Wege. Der einfachste ist, den Authentifizierungszustand einmal manuell herzustellen, zum Beispiel indem du dich in einem Test anmeldest, und dann den Sitzungsdaten- oder Token-Speicher zu exportieren. Alle folgenden Tests laden diesen gespeicherten Zustand und sind sofort angemeldet, ohne den Anmeldevorgang jedes Mal zu wiederholen. Das spart Zeit und macht die Tests unabhängig vom Anmeldesystem. Für OAuth und ähnliche Verfahren gibt es fertige Hilfsfunktionen, die den gesamten Anmeldefluss simulieren."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Soll ich Playwright-Tests in der CI ausführen oder nur lokal?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Playwright-Tests gehören in die CI, denn genau dort entfalten sie ihren größten Nutzen: sie fangen Fehler, bevor Code in Produktion geht. Playwright ist so gebaut, dass es in CI-Umgebungen zuverlässig läuft, mit Headless-Browsern, die keinen Bildschirm brauchen. Du solltest die Tests aber auch lokal ausführen können, damit du Fehler nachstellen und beheben kannst, ohne auf die CI zu warten. Die goldene Regel ist: jeder Test, der in der CI läuft, muss auch auf deinem Entwicklungsrechner laufen."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Wie vermeide ich, dass Playwright-Tests ständig wegen kleiner Timing-Unterschiede fehlschlagen?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Playwright hat eingebaute Wartemechanismen, die automatisch auf Elemente warten, bevor sie mit ihnen interagieren. Wenn du auf einen Knopf klickst, wartet Playwright standardmäßig bis zu dreißig Sekunden, bis der Knopf sichtbar, aktiv und nicht von anderen Elementen verdeckt ist. Du musst also keine festen Wartezeiten wie setTimeout in deine Tests einbauen. Die häufigste Ursache für Timing-Probleme sind dynamische Inhalte, die per JavaScript nachgeladen werden. Dafür bietet Playwright spezielle Wartefunktionen wie waitForResponse, die auf eine bestimmte API-Antwort warten, bevor der Test fortfährt."
+    }
+  ],
+  "practiceExample": {
+    "text": "Im Repo repo-portfolio prüfen Integrationstests die generierte HTML-Struktur auf wichtige Elemente wie Überschriften, Links und Meta-Tags. Playwright-Tests könnten zusätzlich die Seite im Browser öffnen, die Navigation durchklicken und Screenshots für visuelle Regressionstests erstellen.",
+    "repoNote": "repo-portfolio",
+    "location": "tests/ (Integrationstests für HTML-Struktur und Playwright-Tests für Browser-Interaktion)"
+  },
+  "quiz": [
+    {
+      "question": "Welches Alltagsbild beschreibt einen Integrationstest am treffendsten?",
+      "area": "Testarten: Integrationstest",
+      "options": [
+        {
+          "text": "Ein Motor auf dem Prüfstand, dessen Leistung gemessen wird.",
+          "isCorrect": true,
+          "explanation": "Richtig: der Integrationstest prüft das Zusammenspiel der Teile, nicht die Einzelteile isoliert."
+        },
+        {
+          "text": "Ein einzelner Kolben, der auf einem Messtisch auf seine Maße geprüft wird.",
+          "isCorrect": false,
+          "explanation": "Falsch: das ist ein Unit-Test, der ein einzelnes Teil isoliert prüft."
+        },
+        {
+          "text": "Ein Auto, das auf einer Teststrecke von null auf hundert beschleunigt.",
+          "isCorrect": false,
+          "explanation": "Falsch: das ist ein Ende-zu-Ende-Test, der das ganze System aus Nutzersicht prüft."
+        },
+        {
+          "text": "Ein Mechaniker, der das Öl prüft und bei Bedarf nachfüllt.",
+          "isCorrect": false,
+          "explanation": "Falsch: das ist Wartung, kein Test des Zusammenspiels der Komponenten."
+        }
+      ]
+    },
+    {
+      "question": "Was ist Playwright?",
+      "area": "Testwerkzeuge: Playwright",
+      "options": [
+        {
+          "text": "Ein Werkzeug von Microsoft, das einen echten Browser automatisch steuert, um Webanwendungen zu testen.",
+          "isCorrect": true,
+          "explanation": "Richtig: Playwright steuert Chrome, Firefox und Safari für automatisierte Browser-Tests."
+        },
+        {
+          "text": "Ein Plugin für Visual Studio Code, das beim Schreiben von Tests hilft.",
+          "isCorrect": false,
+          "explanation": "Falsch: Playwright ist kein VS-Code-Plugin, sondern ein eigenständiges Testwerkzeug."
+        },
+        {
+          "text": "Eine Programmiersprache, die speziell für das Schreiben von Browser-Tests entwickelt wurde.",
+          "isCorrect": false,
+          "explanation": "Falsch: Playwright ist keine Programmiersprache, sondern eine Bibliothek für mehrere Sprachen."
+        },
+        {
+          "text": "Ein Cloud-Dienst, der Websites auf verschiedenen Geräten testet und die Ergebnisse per E-Mail verschickt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Playwright läuft lokal oder in der CI, es ist kein Cloud-Dienst."
+        }
+      ]
+    },
+    {
+      "question": "Was ist ein Playwright-Selektor?",
+      "area": "Testwerkzeuge: Playwright",
+      "options": [
+        {
+          "text": "Ein Ausdruck, der ein bestimmtes Element auf einer Webseite identifiziert.",
+          "isCorrect": true,
+          "explanation": "Richtig: Playwright-Selektoren sind die Adressen, mit denen Playwright Elemente auf der Seite findet."
+        },
+        {
+          "text": "Ein Filter, der aus vielen Testergebnissen die relevanten herausfiltert.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Playwright-Selektor filtert keine Testergebnisse, sondern identifiziert DOM-Elemente."
+        },
+        {
+          "text": "Ein Programm, das automatisch die besten Testfälle für eine Anwendung auswählt.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Playwright-Selektor wählt keine Testfälle aus, sondern Elemente auf einer Webseite."
+        },
+        {
+          "text": "Eine Einstellung, die festlegt, welcher Browser für die Tests verwendet wird.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Browser-Wahl ist eine Konfiguration, kein Selektor."
+        }
+      ]
+    },
+    {
+      "question": "Warum sind Integrationstests notwendig, obwohl man Unit-Tests hat?",
+      "area": "Testarten: Integrationstest",
+      "options": [
+        {
+          "text": "Weil Unit-Tests Abhängigkeiten durch Mocks ersetzen und Nahtstellen-Fehler übersehen.",
+          "isCorrect": true,
+          "explanation": "Richtig: nur der Integrationstest prüft, ob die Annahmen über die echten Abhängigkeiten stimmen."
+        },
+        {
+          "text": "Weil Integrationstests schneller sind als Unit-Tests und daher öfter ausgeführt werden können.",
+          "isCorrect": false,
+          "explanation": "Falsch: Integrationstests sind langsamer als Unit-Tests, nicht schneller."
+        },
+        {
+          "text": "Weil Unit-Tests nur in JavaScript funktionieren, Integrationstests aber in allen Sprachen.",
+          "isCorrect": false,
+          "explanation": "Falsch: Unit-Tests gibt es in praktisch allen Programmiersprachen."
+        },
+        {
+          "text": "Weil Integrationstests gesetzlich für alle kommerziellen Anwendungen vorgeschrieben sind.",
+          "isCorrect": false,
+          "explanation": "Falsch: es gibt kein Gesetz, das Integrationstests vorschreibt."
+        }
+      ]
+    },
+    {
+      "question": "Welche Aussage über das Repo repo-portfolio ist richtig?",
+      "area": "Praxisbeispiel repo-portfolio",
+      "options": [
+        {
+          "text": "Integrationstests prüfen die generierte HTML-Struktur auf wichtige Elemente wie Überschriften und Meta-Tags.",
+          "isCorrect": true,
+          "explanation": "Richtig: die Tests lesen die gebaute HTML-Datei und prüfen auf bestimmte Elemente."
+        },
+        {
+          "text": "Das Repo verwendet eine echte Datenbank, die für jeden Testlauf neu befüllt wird.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Projektdaten sind in einer JSON-Datei gespeichert, nicht in einer Datenbank."
+        },
+        {
+          "text": "Playwright-Tests ersetzen alle Unit-Tests, weil sie die Seite aus Nutzersicht prüfen.",
+          "isCorrect": false,
+          "explanation": "Falsch: Playwright-Tests ergänzen Unit-Tests, ersetzen sie aber nicht."
+        },
+        {
+          "text": "Die Seite hat keine Tests, weil eine Portfolio-Seite zu einfach für automatisierte Tests ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: das Repo enthält Integrationstests für die HTML-Struktur."
+        }
+      ]
+    },
+    {
+      "question": "Welcher Playwright-Selektor-Typ ist laut Playwright am robustesten?",
+      "area": "Testwerkzeuge: Playwright",
+      "options": [
+        {
+          "text": "Rollen-Selektoren wie getByRole('button', { name: 'Absenden' }).",
+          "isCorrect": true,
+          "explanation": "Richtig: Rollen-Playwright-Selektoren überleben Redesigns, weil sie auf der Semantik basieren, nicht auf CSS-Klassen."
+        },
+        {
+          "text": "CSS-Selektoren wie .btn-primary oder #submit-button.",
+          "isCorrect": false,
+          "explanation": "Falsch: CSS-Selektoren zerbrechen bei jedem Redesign, das Klassen oder IDs ändert."
+        },
+        {
+          "text": "XPath-Selektoren wie //button[@type='submit'].",
+          "isCorrect": false,
+          "explanation": "Falsch: XPath ist fehleranfällig und wird von Playwright nicht empfohlen."
+        },
+        {
+          "text": "Text-Selektoren, die nach dem sichtbaren Text eines Elements suchen.",
+          "isCorrect": false,
+          "explanation": "Falsch: Text-Selektoren zerbrechen bei jeder Textänderung, Rollen sind stabiler."
+        }
+      ]
+    },
+    {
+      "question": "Was ist Visual Regression Testing?",
+      "area": "Testarten: Visuelle Regression",
+      "options": [
+        {
+          "text": "Der pixelgenaue Vergleich eines aktuellen Screenshots mit einem Referenz-Screenshot.",
+          "isCorrect": true,
+          "explanation": "Richtig: visuelle Regressionstests finden Layout-Fehler, die kein textbasierter Test entdeckt."
+        },
+        {
+          "text": "Ein Verfahren, bei dem ein Mensch die Seite betrachtet und beurteilt, ob sie gut aussieht.",
+          "isCorrect": false,
+          "explanation": "Falsch: visuelle Regressionstests sind automatisiert und vergleichen Pixel, nicht subjektive Eindrücke."
+        },
+        {
+          "text": "Die Analyse der CSS-Dateien auf ungültige Regeln und Syntaxfehler.",
+          "isCorrect": false,
+          "explanation": "Falsch: das ist CSS-Validierung, kein visueller Regressionstest."
+        },
+        {
+          "text": "Ein Test, der prüft, ob die Seite auf allen Browsern gleich schnell lädt.",
+          "isCorrect": false,
+          "explanation": "Falsch: das ist ein Performance-Test, kein visueller Regressionstest."
+        }
+      ]
+    },
+    {
+      "question": "Warum sollte man nur wenige Playwright-Tests schreiben?",
+      "area": "Testarten: Playwright",
+      "options": [
+        {
+          "text": "Weil Playwright-Tests langsam sind und viele Tests die CI minutenlang blockieren würden.",
+          "isCorrect": true,
+          "explanation": "Richtig: Playwright-Tests dauern Sekunden pro Test, deshalb beschränkt man sich auf kritische Pfade."
+        },
+        {
+          "text": "Weil Playwright nur maximal fünfzehn Tests pro Projekt erlaubt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Playwright hat kein Limit, die Beschränkung ist eine Frage der Laufzeit."
+        },
+        {
+          "text": "Weil zusätzliche Tests die Testabdeckung verfälschen und zu falschen Prozentzahlen führen.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Testabdeckung misst ausgeführten Code, nicht die Anzahl der Tests."
+        },
+        {
+          "text": "Weil Playwright-Tests nur auf Windows-Rechnern ausgeführt werden können.",
+          "isCorrect": false,
+          "explanation": "Falsch: Playwright läuft auf Windows, macOS und Linux."
+        }
+      ]
+    },
+    {
+      "question": "Was speichert Playwright bei einem fehlgeschlagenen Test automatisch?",
+      "area": "Testwerkzeuge: Playwright",
+      "options": [
+        {
+          "text": "Einen Screenshot, ein Video und einen Trace mit allen Schritten und Netzwerkaufrufen.",
+          "isCorrect": true,
+          "explanation": "Richtig: diese automatische Beweissicherung macht die Fehlersuche bei Playwright besonders einfach."
+        },
+        {
+          "text": "Nur die Fehlermeldung als Text, ohne weitere Anhänge.",
+          "isCorrect": false,
+          "explanation": "Falsch: Playwright speichert deutlich mehr als nur die Fehlermeldung."
+        },
+        {
+          "text": "Eine E-Mail an den Entwickler mit einer Zusammenfassung des Fehlers.",
+          "isCorrect": false,
+          "explanation": "Falsch: Playwright verschickt keine E-Mails, es speichert die Beweise lokal oder im CI-Artefakt."
+        },
+        {
+          "text": "Einen automatischen Bug-Report im GitHub-Repository des Projekts.",
+          "isCorrect": false,
+          "explanation": "Falsch: Playwright erstellt keine GitHub-Issues, es speichert nur die Testartefakte."
+        }
+      ]
+    },
+    {
+      "question": "Wie geht Playwright mit Tests um, die eine Anmeldung erfordern?",
+      "area": "Testwerkzeuge: Playwright",
+      "options": [
+        {
+          "text": "Der Authentifizierungszustand kann einmal gespeichert und in allen folgenden Tests wiederverwendet werden.",
+          "isCorrect": true,
+          "explanation": "Richtig: das spart Zeit und macht die Tests unabhängig vom Anmeldesystem."
+        },
+        {
+          "text": "Playwright kann keine Tests mit Anmeldung ausführen, das ist eine bekannte Einschränkung.",
+          "isCorrect": false,
+          "explanation": "Falsch: Playwright kann sehr wohl mit Anmeldung umgehen, es bietet sogar spezielle Hilfsfunktionen dafür."
+        },
+        {
+          "text": "Jeder Test muss sich einzeln mit echtem Benutzernamen und Passwort anmelden.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Zustand kann gespeichert werden, sodass nicht jeder Test den Anmeldevorgang wiederholen muss."
+        },
+        {
+          "text": "Die Anmeldung wird im Test durch einen Mock ersetzt, der immer Zugriff gewährt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Playwright kann den echten Anmeldefluss durchlaufen oder den Zustand speichern, aber nicht die Anmeldung mocken."
+        }
+      ]
+    },
+    {
+      "question": "Was sind Fixtures in Playwright-Tests?",
+      "area": "Testwerkzeuge: Playwright",
+      "options": [
+        {
+          "text": "Vorbereitete Testdaten, die immer gleich sind und die echten Daten ersetzen.",
+          "isCorrect": true,
+          "explanation": "Richtig: Fixtures machen Tests deterministisch und unabhängig von der Produktionsdatenbank."
+        },
+        {
+          "text": "Die Browser-Installationen, die Playwright für Chrome, Firefox und Safari benötigt.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Browser-Installationen heißen nicht Fixtures, sondern Browser-Binaries."
+        },
+        {
+          "text": "Die Konfigurationsdatei, die festlegt, welche Tests in welcher Reihenfolge ausgeführt werden.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Konfiguration heißt playwright.config.ts, nicht Fixtures."
+        },
+        {
+          "text": "Spezielle Hardware-Geräte, die für mobile Tests an den Computer angeschlossen werden.",
+          "isCorrect": false,
+          "explanation": "Falsch: Playwright braucht keine spezielle Hardware, es simuliert mobile Geräte."
+        }
+      ]
+    },
+    {
+      "question": "Warum wartet Playwright automatisch auf Elemente, bevor es mit ihnen interagiert?",
+      "area": "Testwerkzeuge: Playwright",
+      "options": [
+        {
+          "text": "Damit Tests nicht wegen Timing-Unterschieden fehlschlagen und keine festen Wartezeiten brauchen.",
+          "isCorrect": true,
+          "explanation": "Richtig: die automatischen Wartemechanismen machen Tests stabiler und den Code sauberer."
+        },
+        {
+          "text": "Weil der Browser sonst abstürzt, wenn er zu schnell aufeinanderfolgende Befehle erhält.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Browser stürzt nicht ab, aber die Elemente sind vielleicht noch nicht geladen."
+        },
+        {
+          "text": "Weil es eine gesetzliche Vorschrift für barrierefreie Tests ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: es gibt kein Gesetz, das Wartezeiten in Tests vorschreibt."
+        },
+        {
+          "text": "Damit der Entwickler Zeit hat, den Test manuell zu unterbrechen, falls etwas schiefgeht.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Wartezeit ist nicht für manuelle Eingriffe gedacht, sondern für das Laden der Seite."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Installiere Playwright in einem eigenen Webprojekt. Schreibe drei Tests: einen, der prüft, ob die Startseite eine bestimmte Überschrift enthält, einen, der die Navigation zu einer Unterseite testet, und einen, der einen Screenshot der Seite macht und als visuelle Referenz speichert. Führe die Tests aus, lass einen bewusst fehlschlagen und untersuche den automatisch gespeicherten Screenshot und Trace.",
+    "expectation": "Drei Playwright-Tests sind geschrieben und laufen grün. Ein bewusster Fehlschlag wurde provoziert und der Trace im Trace Viewer untersucht. Die Tests verwenden Rollen-Playwright-Selektoren und sind unabhängig voneinander.",
+    "checklist": [
+      "Playwright im Projekt installiert und konfiguriert.",
+      "Test für die Überschrift der Startseite geschrieben und grün.",
+      "Test für die Navigation zu einer Unterseite geschrieben und grün.",
+      "Screenshot-Test für visuelle Regression geschrieben und grün.",
+      "Einen Test bewusst fehlschlagen lassen.",
+      "Screenshot und Trace des Fehlschlags untersucht."
+    ],
+    "portfolioItem": "P02"
+  },
+  "audio": {
+    "file": "M04-02-03.mp3",
+    "durationSeconds": 1440,
+    "voices": ["A", "B"],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Was ist der Unterschied zwischen Playwright und Cypress?",
+      "answer": "Beide steuern einen Browser für Tests, aber sie tun es auf unterschiedliche Weise. Cypress läuft innerhalb des Browsers und hat dadurch Einschränkungen, zum Beispiel kann es nicht mehrere Tabs gleichzeitig testen oder native Browser-Dialoge wie die Datei-Auswahl steuern. Playwright läuft außerhalb des Browsers und steuert ihn über ein standardisiertes Protokoll, das alle modernen Browser unterstützen. Dadurch kann Playwright mehrere Tabs, mehrere Browser und sogar mehrere Geräte gleichzeitig testen. Für neue Projekte ist Playwright heute meist die bessere Wahl, aber beide sind gute Werkzeuge."
+    },
+    {
+      "question": "Kann ich Playwright auch für mobile Apps oder nur für Webseiten verwenden?",
+      "answer": "Playwright testet Webanwendungen, aber es kann den Browser so einstellen, dass er sich wie ein mobiles Gerät verhält. Du kannst die Bildschirmgröße auf iPhone- oder Android-Maße setzen, den User-Agent auf den eines mobilen Browsers ändern und Touch-Ereignisse simulieren. Für echte native mobile Apps, also Apps aus dem App Store, brauchst du andere Werkzeuge wie Appium oder Detox. Aber für eine responsive Website, die auf dem Smartphone gut aussehen soll, ist Playwright mit mobilen Einstellungen das richtige Werkzeug."
+    },
+    {
+      "question": "Wie gehe ich mit Tests um, die eine Anmeldung erfordern?",
+      "answer": "Playwright bietet dafür mehrere Wege. Der einfachste ist, den Authentifizierungszustand einmal manuell herzustellen, zum Beispiel indem du dich in einem Test anmeldest, und dann den Sitzungsdaten- oder Token-Speicher zu exportieren. Alle folgenden Tests laden diesen gespeicherten Zustand und sind sofort angemeldet, ohne den Anmeldevorgang jedes Mal zu wiederholen. Das spart Zeit und macht die Tests unabhängig vom Anmeldesystem. Für OAuth und ähnliche Verfahren gibt es fertige Hilfsfunktionen, die den gesamten Anmeldefluss simulieren."
+    },
+    {
+      "question": "Soll ich Playwright-Tests in der CI ausführen oder nur lokal?",
+      "answer": "Playwright-Tests gehören in die CI, denn genau dort entfalten sie ihren größten Nutzen: sie fangen Fehler, bevor Code in Produktion geht. Playwright ist so gebaut, dass es in CI-Umgebungen zuverlässig läuft, mit Headless-Browsern, die keinen Bildschirm brauchen. Du solltest die Tests aber auch lokal ausführen können, damit du Fehler nachstellen und beheben kannst, ohne auf die CI zu warten. Die goldene Regel ist: jeder Test, der in der CI läuft, muss auch auf deinem Entwicklungsrechner laufen."
+    },
+    {
+      "question": "Wie vermeide ich, dass Playwright-Tests ständig wegen kleiner Timing-Unterschiede fehlschlagen?",
+      "answer": "Playwright hat eingebaute Wartemechanismen, die automatisch auf Elemente warten, bevor sie mit ihnen interagieren. Wenn du auf einen Knopf klickst, wartet Playwright standardmäßig bis zu dreißig Sekunden, bis der Knopf sichtbar, aktiv und nicht von anderen Elementen verdeckt ist. Du musst also keine festen Wartezeiten wie setTimeout in deine Tests einbauen. Die häufigste Ursache für Timing-Probleme sind dynamische Inhalte, die per JavaScript nachgeladen werden. Dafür bietet Playwright spezielle Wartefunktionen wie waitForResponse, die auf eine bestimmte API-Antwort warten, bevor der Test fortfährt."
+    }
+  ]
+}

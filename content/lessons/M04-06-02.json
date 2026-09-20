@@ -1,0 +1,623 @@
+{
+  "id": "M04-06-02",
+  "title": "Datadog (Vertiefung)",
+  "durationMinutes": 35,
+  "prerequisites": [
+    "M04-06-01"
+  ],
+  "terms": [
+    {
+      "term": "APM",
+      "definition": "Application Performance Monitoring – die Echtzeit-Überwachung der Leistung und des Verhaltens einer Anwendung, die Antwortzeiten, Durchsatz, Fehlerraten und Abhängigkeiten zwischen Services erfasst und in Traces visualisiert."
+    },
+    {
+      "term": "Metrik",
+      "definition": "Ein quantitativer Messwert, der einen bestimmten Aspekt eines Systems über die Zeit verfolgt, wie CPU-Auslastung, Speicherverbrauch oder Anfragen pro Sekunde, und als Zahlenreihe gespeichert wird, aus der Trends und Alarme abgeleitet werden können."
+    },
+    {
+      "term": "Dashboard",
+      "definition": "Eine visuelle Sammlung von Diagrammen, Tabellen und Indikatoren, die Metriken und Überwachungsdaten auf einer einzigen Bildschirmseite zusammenfasst, sodass der Zustand eines Systems auf einen Blick erfassbar ist, ohne einzelne Datenquellen durchsuchen zu müssen."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Sentry zeigt mir Fehler, aber woher weiß ich, ob meine Anwendung nur langsam statt komplett kaputt ist?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen Arzt vor, der nur Knochenbrüche behandelt. Ein Patient mit hohem Blutdruck, Fieber oder Herzrhythmusstörungen geht bei ihm unerkannt wieder nach Hause, weil der Arzt nur auf offensichtliche Verletzungen achtet. Der Patient fühlt sich schlecht, aber der Arzt sagt: Sie haben doch keinen Bruch, also sind Sie gesund. Diesen Arzt würdest du sofort wechseln. Du willst einen Arzt, der deinen ganzen Körper checkt, nicht nur deine Knochen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Sentry ist wie dieser Arzt: Es erkennt Abstürze und Ausnahmen, aber nicht, ob deine Anwendung langsam ist, ob die Datenbank überlastet ist oder ob ein externer Service träge antwortet. Datadog APM schließt diese Lücke. APM steht für Application Performance Monitoring. Es verfolgt jede Anfrage durch dein gesamtes System, misst die Antwortzeit jedes einzelnen Schritts und zeigt dir genau, wo die Zeit verloren geht. Du siehst nicht nur, dass die Seite langsam ist, sondern dass die Datenbankabfrage in Zeile 47 dreimal länger braucht als gestern. Datadog APM zeichnet verteilte Traces auf: eine Anfrage des Nutzers wird durch Frontend, Backend, Datenbank und externe APIs verfolgt, und jeder Schritt bekommt einen Zeitstempel. Diese Traces sind wie ein Röntgenbild deiner Anwendung: Du siehst jeden einzelnen Knochen und jede Verbindung, nicht nur die äußere Haut.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Diese Echtzeit-Überwachung der Anwendungsleistung, die Antwortzeiten, Durchsatz und Abhängigkeiten zwischen Services erfasst, heißt APM – Application Performance Monitoring.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In einer Node.js-Anwendung bindest du den Datadog APM-Agenten mit wenigen Zeilen ein. Sobald ein Nutzer eine Seite aufruft, startet ein Trace. Der Trace durchläuft den HTTP-Router, einen Redis-Cache-Lookup und eine PostgreSQL-Abfrage. Im Datadog-Dashboard siehst du eine Flammengrafik: Jeder Balken ist ein Schritt, die Breite zeigt die Dauer. Ein breiter Balken bei der Datenbankabfrage verrät dir sofort, wo die Zeit bleibt. Du siehst auch, ob die Verzögerung nur bei bestimmten Nutzern oder zu bestimmten Uhrzeiten auftritt. Ohne APM müsstest du raten, welcher Teil deines Systems die Bremse ist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Das ist wichtig, weil langsame Software genauso schädlich ist wie kaputte Software. Ein Nutzer, der zehn Sekunden auf eine Seite wartet, springt ab. Ein Checkout, der stockt, kostet dich echtes Geld. Studien zeigen, dass jede zusätzliche Sekunde Ladezeit die Conversion-Rate um bis zu sieben Prozent senken kann. Sentry sagt dir, ob etwas kaputt ist. Datadog APM sagt dir, ob etwas krank ist. Beide zusammen geben dir das vollständige Bild. Die Frage ist nicht, ob du dir APM leisten kannst, sondern ob du es dir leisten kannst, blind für die Performance deiner Anwendung zu sein.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was genau misst Datadog, und woher kommen diese Messwerte?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir das Armaturenbrett eines Autos vor. Der Tacho zeigt die Geschwindigkeit, die Drehzahlanzeige die Motorbelastung, die Temperaturanzeige die Kühlmitteltemperatur. Jede dieser Anzeigen zeigt einen einzelnen Messwert, der sich ständig ändert. Du schaust nicht einmal pro Tag auf den Tacho, sondern kontinuierlich während der Fahrt. Jede Anzeige für sich ist einfach, aber zusammen ergeben sie ein vollständiges Bild des Fahrzeugzustands. Fehlt eine Anzeige, fehlt dir ein wichtiger Teil des Bildes.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Jede dieser Anzeigen ist eine Metrik. Eine Metrik ist ein einzelner Messwert, der über die Zeit verfolgt wird. Datadog sammelt tausende solcher Metriken aus deiner gesamten Infrastruktur: CPU-Auslastung jedes Servers, Speicherverbrauch jedes Containers, Anfragen pro Sekunde jeder API-Route, Fehlerrate jeder Datenbank, Latenz jedes externen Dienst-Aufrufs. Diese Metriken werden als Zahlenreihen gespeichert, typischerweise ein Wert alle zehn oder fünfzehn Sekunden. Aus diesen Zahlenreihen kann Datadog Trends berechnen, Schwellwerte überwachen und Alarme auslösen. Du kannst zum Beispiel einen Alarm definieren, der auslöst, wenn die CPU-Auslastung länger als fünf Minuten über 90 Prozent liegt. Der Datadog-Agent läuft auf jedem deiner Server und sammelt diese Metriken automatisch, ohne dass du jede einzelne konfigurieren musst. Er erkennt von selbst, welche Dienste laufen, und beginnt sofort mit der Erfassung der wichtigsten Werte.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Ein solcher quantitativer Messwert, der einen Aspekt eines Systems über die Zeit verfolgt, heißt Metrik.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In einer typischen Webanwendung misst Datadog zum Beispiel die Metrik http.request.latency für jede API-Route. Du siehst, dass die Login-Route im Median 120 Millisekunden braucht, aber das 99. Perzentil bei 800 Millisekunden liegt. Das bedeutet: Die meisten Nutzer loggen sich schnell ein, aber einer von hundert wartet fast eine Sekunde. Mit dieser Information kannst du gezielt nach der Ursache suchen. Eine andere Metrik ist system.cpu.user: Sie zeigt dir, dass der Anwendungsserver um 14 Uhr plötzlich auf 95 Prozent CPU springt, genau dann, wenn der tägliche Report-Job läuft. Du erkennst Muster, die du ohne Metriken nie sehen würdest.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Metriken sind die Rohdaten jeder Überwachung. Ohne Metriken fliegst du blind. Mit Metriken siehst du nicht nur, dass etwas nicht stimmt, sondern auch, was genau nicht stimmt und seit wann. Der Sprung von ich glaube, die Seite ist langsam zu die CPU war um 14:03 Uhr für sieben Minuten bei 95 Prozent ist der Sprung von Bauchgefühl zu Gewissheit. Metriken machen Probleme messbar, und nur was messbar ist, kann gezielt verbessert werden. Sie sind auch die Grundlage für jede sinnvolle Alarmierung: Erst wenn du den Normalzustand als Metrik kennst, kannst du eine Abweichung als Alarm definieren.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Ich habe hunderte Metriken – wie behalte ich da den Überblick, ohne in Daten zu ertrinken?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir das Cockpit eines modernen Flugzeugs vor. Hunderte Instrumente zeigen Geschwindigkeit, Höhe, Kurs, Triebwerksparameter, Treibstoff, Hydraulikdruck und vieles mehr. Ein Pilot könnte unmöglich jedes einzelne Instrument ständig im Blick behalten. Deshalb sind die wichtigsten sechs Instrumente direkt vor ihm im Primary Flight Display zusammengefasst. Alles, was er für den Normalflug braucht, sieht er auf einen Blick. Die übrigen Instrumente sind weiter unten, für den Check vor dem Start oder für den Notfall. Gute Piloten scannen dieses Display alle paar Sekunden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein Dashboard in Datadog ist genau dieses Primary Flight Display für deine Software. Du ziehst die wichtigsten Metriken auf eine einzige Seite: ein Liniendiagramm für die Antwortzeit, ein Balkendiagramm für die Fehlerrate, eine Zahl für die aktuelle Nutzerzahl, eine Heatmap für die CPU-Auslastung aller Server. Du kannst Dashboards für verschiedene Zwecke bauen: ein Übersichts-Dashboard für den Projektleiter, ein technisches Dashboard für die Entwickler, ein Business-Dashboard mit Umsatz und Conversion-Rate. Jedes Widget auf dem Dashboard ist interaktiv: Klickst du auf einen Ausschlag im Liniendiagramm, zoomt Datadog in den Zeitraum und zeigt dir die Details. Datadog speichert diese Dashboards, sodass du sie einmal baust und dann immer wieder aufrufst. Du kannst sie auch mit deinem Team teilen oder auf einem großen Bildschirm im Büro anzeigen lassen. So wird aus einer versteckten Metrik eine sichtbare Information, die das ganze Team im Blick hat.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Diese visuelle Sammlung von Diagrammen und Indikatoren, die Metriken auf einer Seite zusammenfasst, heißt Dashboard.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Für eine E-Commerce-Anwendung baust du ein Dashboard mit drei Zeilen. Oben: die Anzahl der Bestellungen pro Minute als große Zahl, daneben die aktuelle Fehlerrate. Mitte: ein Liniendiagramm der Antwortzeit des Checkout-Prozesses über die letzten vier Stunden. Unten: eine Heatmap der CPU-Auslastung aller zwölf Server, wobei jeder Server eine Zeile ist und die Farbe von grün nach rot wechselt. Mit einem Blick siehst du: Die Bestellungen laufen normal, die Fehlerrate ist niedrig, die Antwortzeit stabil, die Server sind gleichmäßig ausgelastet. Alles in Ordnung – in zwei Sekunden erfasst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Dashboards verwandeln rohe Daten in Entscheidungen. Tausend Metriken in einer Liste sind wertlos, weil niemand sie liest. Dieselben tausend Metriken in einem gut gestalteten Dashboard zeigen dir in zwei Sekunden, ob du eingreifen musst oder weitermachen kannst. Ein gutes Dashboard beantwortet die Frage Alles okay? auf einen Blick. Erst wenn die Antwort Nein ist, tauchst du tiefer in die einzelnen Metriken ein. Dashboards sind der Filter, der aus dem Rauschen der Daten das Signal extrahiert. Sie sind auch das Erste, was du morgens öffnest, und das Letzte, was du abends schließt – dein täglicher Gesundheitscheck für die Software, die du gebaut hast.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Wie integriere ich Datadog praktisch in mein Projekt, und wie unterscheidet es sich von Sentry?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir ein Haus vor, das sowohl eine Alarmanlage als auch ein Smart-Home-System hat. Die Alarmanlage schlägt Alarm, wenn ein Fenster eingeschlagen wird. Das Smart-Home-System zeigt dir den Stromverbrauch jedes Geräts, die Temperatur in jedem Raum und ob die Heizung effizient läuft. Beide Systeme haben völlig verschiedene Aufgaben, aber zusammen geben sie dir Sicherheit und Kontrolle. Du würdest nicht das eine durch das andere ersetzen wollen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Sentry und Datadog ergänzen sich auf dieselbe Weise. Sentry ist die Alarmanlage: Es meldet Abstürze und Ausnahmen. Datadog ist das Smart-Home-System: Es überwacht Performance, Infrastruktur und Trends. Die Integration von Datadog dauert etwa eine Stunde. Du installierst den Datadog-Agenten auf deinen Servern, bindest das APM-SDK in deine Anwendung ein und konfigurierst die ersten Dashboards. Der Agent sammelt automatisch Systemmetriken, das SDK instrumentiert deine Anwendung für verteilte Traces. Danach läuft alles von selbst. Du musst keine einzelnen Metriken manuell definieren, der Agent erkennt die wichtigsten Werte automatisch. Er erkennt auch, wenn neue Services hinzukommen, und beginnt sofort mit der Überwachung. Datadog hat kein kostenloses Kontingent wie Sentry, bietet aber eine kostenlose Testphase von vierzehn Tagen. In dieser Zeit kannst du prüfen, ob sich die Investition für dein Projekt lohnt. Die Kosten richten sich nach der Anzahl der überwachten Hosts und der Menge der gesammelten Metriken. Für die meisten Teams mit zwei bis fünf Servern liegen die monatlichen Kosten im niedrigen dreistelligen Bereich.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im FutureDev-Repo ist Datadog parallel zu Sentry im Einsatz. Sentry fängt die Fehler, Datadog überwacht die Performance. Wenn ein Nutzer eine langsame Seite meldet, öffnet das Team das Datadog-APM-Dashboard und sieht sofort, welcher Service die Verzögerung verursacht. Wenn die CPU auf dem Produktionsserver plötzlich ansteigt, löst Datadog einen Alarm aus, noch bevor die Nutzer etwas merken. Sentry und Datadog teilen sich keine Daten, aber sie teilen sich dieselbe Philosophie: Probleme erkennen, bevor der Nutzer sie bemerkt. Beide laufen nebeneinander, unabhängig und zuverlässig.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Sentry und Datadog sind keine Konkurrenten, sondern Partner. Sentry beantwortet die Frage: Ist etwas kaputt? Datadog beantwortet die Frage: Ist etwas langsam, überlastet oder auf dem Weg, kaputtzugehen? Zusammen decken sie das gesamte Spektrum der Anwendungsüberwachung ab. Ein Team, das nur Sentry hat, ist blind für Performance-Probleme. Ein Team, das nur Datadog hat, übersieht vielleicht den einen kritischen Absturz. Erst beide zusammen geben dir das vollständige Bild deiner Anwendung in Produktion. Denk daran: Ein Nutzer, der eine langsame Seite erlebt, ist genauso unzufrieden wie einer, der einen Fehler sieht. Beide kommen nicht wieder. Deshalb brauchst du beide Werkzeuge.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "text": "Also noch einmal ganz kurz: Datadog APM überwacht die Leistung deiner Anwendung in Echtzeit und zeigt dir für jede Anfrage, welcher Schritt wie lange dauert – vom Frontend über das Backend bis zur Datenbank. Eine Metrik ist ein einzelner Messwert wie CPU-Auslastung oder Antwortzeit, der über die Zeit verfolgt wird und aus dem Datadog Trends und Alarme ableitet. Ein Dashboard fasst die wichtigsten Metriken auf einer Seite zusammen, sodass du den Zustand deines gesamten Systems in zwei Sekunden erfassen kannst. Zusammen mit Sentry, das Fehler und Abstürze meldet, hast du ein vollständiges Überwachungssystem: Sentry für die Frage Ist etwas kaputt?, Datadog für die Frage Ist etwas langsam oder überlastet? Beide zusammen sind das Cockpit, aus dem du deine Anwendung sicher durch den Produktionsbetrieb steuerst.",
+      "isKeySentence": true
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "APM steht für Application Performance Monitoring. Es ist die Echtzeit-Überwachung der Leistung und des Verhaltens einer Anwendung, die Antwortzeiten, Durchsatz, Fehlerraten und Abhängigkeiten zwischen Services erfasst und in verteilten Traces visualisiert. APM zeigt dir nicht nur, dass eine Seite langsam ist, sondern welcher einzelne Schritt die Verzögerung verursacht – und ob das Problem in deinem Code, der Datenbank oder einem externen Dienst liegt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Eine Metrik ist ein quantitativer Messwert, der einen bestimmten Aspekt eines Systems über die Zeit verfolgt, wie CPU-Auslastung, Speicherverbrauch oder Anfragen pro Sekunde. Metriken werden als Zahlenreihen gespeichert und sind die Rohdaten, aus denen Dashboards, Trends und Alarme entstehen. Jede Metrik für sich ist einfach, aber tausende Metriken zusammen ergeben ein präzises Bild des Systemzustands.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Ein Dashboard ist eine visuelle Sammlung von Diagrammen, Tabellen und Indikatoren, die Metriken und Überwachungsdaten auf einer einzigen Bildschirmseite zusammenfasst. Es macht den Zustand eines komplexen Systems auf einen Blick erfassbar und verwandelt tausend Datenpunkte in eine klare Antwort auf die Frage: Alles okay? Ein gutes Dashboard zeigt nicht alles, was du messen kannst, sondern nur das, was du wissen musst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Brauche ich Datadog, wenn ich schon Sentry habe, oder ist das doppelt gemoppelt?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Sentry und Datadog haben völlig verschiedene Aufgaben. Sentry überwacht Fehler und Abstürze, Datadog überwacht Performance und Infrastruktur. Ein Server, der langsam wird, weil die CPU an ihre Grenzen kommt, produziert keine Fehler, die Sentry melden könnte. Trotzdem leidet die Nutzererfahrung. Datadog erkennt dieses Problem, bevor es kritisch wird. Beide Werkzeuge ergänzen sich, sie ersetzen sich nicht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was ist der Unterschied zwischen einer Metrik und einem Log-Eintrag?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ein Log-Eintrag ist ein einzelnes Ereignis mit einem Zeitstempel und einer Nachricht, zum Beispiel Nutzer 42 hat sich eingeloggt. Eine Metrik ist ein numerischer Messwert, der regelmäßig erfasst wird, zum Beispiel die Anzahl der Logins pro Minute. Logs sind detailreich und einmalig, Metriken sind aggregiert und kontinuierlich. Du nutzt Logs, um ein einzelnes Problem zu untersuchen, und Metriken, um den Gesamtzustand deines Systems zu überwachen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Kann ich Datadog auch für kleine Projekte nutzen, oder lohnt sich das erst ab einer bestimmten Größe?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Datadog hat kein dauerhaft kostenloses Kontingent wie Sentry, sondern eine vierzehntägige Testphase. Für sehr kleine Hobbyprojekte ist der Einstiegspreis von fünfzehn Dollar pro Host und Monat möglicherweise zu hoch. Sobald dein Projekt aber echte Nutzer hat oder Umsatz generiert, sind die Kosten durch den Nutzen mehr als gerechtfertigt. Ein einziger Performance-Einbruch, den du ohne Datadog erst nach Stunden bemerkst, kann mehr Schaden anrichten als ein ganzes Jahr Datadog kostet.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Wie viele Dashboards brauche ich, und wie finde ich die richtige Balance zwischen zu wenig und zu viel?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Starte mit genau einem Dashboard, das die fünf wichtigsten Metriken deines Projekts zeigt. Das zwingt dich, darüber nachzudenken, was wirklich wichtig ist. Wenn du nach einer Woche merkst, dass dir eine Metrik fehlt, füge sie hinzu. Wenn du eine Metrik seit einer Woche nicht angeschaut hast, entferne sie. Die meisten Teams brauchen drei Dashboards: ein Überblicks-Dashboard für den aktuellen Zustand, ein Detail-Dashboard für die Fehlersuche und ein Business-Dashboard für Umsatz und Nutzerzahlen. Alles darüber hinaus ist meist Ablenkung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was passiert, wenn Datadog selbst ausfällt – verliere ich dann meine gesamte Überwachung?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Wenn Datadog ausfällt, werden keine neuen Metriken gesammelt und keine Alarme ausgelöst, bis der Dienst wieder verfügbar ist. Deine Anwendung läuft aber normal weiter, weil der Datadog-Agent nur Daten sammelt und nicht in den Betrieb eingreift. Für besonders kritische Systeme solltest du zusätzlich eine zweite Überwachungsebene haben, zum Beispiel einfache Health-Checks, die unabhängig von Datadog laufen. Datadog selbst hat eine sehr hohe Verfügbarkeit, aber kein externer Dienst kann hundert Prozent garantieren.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Wie unterscheidet sich Datadog APM von anderen APM-Tools wie New Relic oder Grafana?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Alle drei Werkzeuge können APM, Metriken und Dashboards. Datadog zeichnet sich durch die Breite der Integration aus: Es vereint Infrastruktur-Überwachung, APM, Log-Management und Security-Monitoring in einer Plattform. New Relic ist stärker auf APM spezialisiert und hat ein großzügigeres kostenloses Kontingent. Grafana ist Open Source und besonders stark bei Dashboards, braucht aber mehr Einrichtungsaufwand. Die Wahl hängt von deinem Budget, deiner Infrastruktur und deinem Bedarf an Integration ab. Für die meisten Teams, die bereits mehrere Dienste betreiben, ist Datadogs All-in-One-Ansatz der schnellste Weg zu einer vollständigen Überwachung.",
+      "isKeySentence": false
+    }
+  ],
+  "practiceExample": {
+    "text": "Im FutureDev-Repo ist Datadog parallel zu Sentry im Einsatz. Der Datadog-Agent läuft auf den Produktionsservern und sammelt Systemmetriken wie CPU, Speicher und Festplattenplatz. Das APM-SDK ist in die Backend-Services integriert und zeichnet verteilte Traces für jede API-Anfrage auf. Ein zentrales Dashboard zeigt die Antwortzeiten der wichtigsten API-Routen, die Fehlerrate und die Serverauslastung auf einen Blick. Alarme benachrichtigen das Team, wenn die Antwortzeit einen Schwellwert überschreitet oder die CPU-Auslastung kritisch wird.",
+    "repoNote": "repo-futuredev",
+    "location": "apps/backend/src/instrumentation.ts (Datadog APM-Initialisierung für das Backend)"
+  },
+  "quiz": [
+    {
+      "question": "Welches Alltagsbild beschreibt Datadog APM am treffendsten?",
+      "area": "APM: Grundkonzept",
+      "options": [
+        {
+          "text": "Ein Arzt, der nicht nur Knochenbrüche, sondern auch Blutdruck, Fieber und Herzrhythmus prüft.",
+          "isCorrect": true,
+          "explanation": "Richtig: APM prüft die Vitalwerte einer Anwendung, nicht nur die offensichtlichen Abstürze."
+        },
+        {
+          "text": "Ein Feuerlöscher, der automatisch auslöst, sobald er Rauch in der Umgebungsluft erkennt.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Feuerlöscher reagiert nur auf ein akutes Ereignis, APM überwacht kontinuierlich den Zustand."
+        },
+        {
+          "text": "Ein Tagebuch, in das du jeden Abend die Ladezeiten aller Seiten von Hand einträgst.",
+          "isCorrect": false,
+          "explanation": "Falsch: APM arbeitet automatisch und in Echtzeit, nicht manuell und rückblickend."
+        },
+        {
+          "text": "Eine Rechtschreibprüfung, die Tippfehler im Quellcode findet und automatisch korrigiert.",
+          "isCorrect": false,
+          "explanation": "Falsch: APM hat nichts mit Quellcode-Korrektur zu tun, es überwacht die Laufzeit-Performance."
+        }
+      ]
+    },
+    {
+      "question": "Wofür steht die Abkürzung APM?",
+      "area": "APM: Definition",
+      "options": [
+        {
+          "text": "Application Performance Monitoring.",
+          "isCorrect": true,
+          "explanation": "Richtig: APM steht für Application Performance Monitoring, die Echtzeit-Überwachung der Anwendungsleistung."
+        },
+        {
+          "text": "Automated Package Management.",
+          "isCorrect": false,
+          "explanation": "Falsch: Package Management ist etwas völlig anderes und hat nichts mit Performance-Überwachung zu tun."
+        },
+        {
+          "text": "Advanced Protocol Mediation.",
+          "isCorrect": false,
+          "explanation": "Falsch: das wäre ein Netzwerkbegriff, APM bezieht sich auf die Anwendungsüberwachung."
+        },
+        {
+          "text": "Asynchronous Process Monitoring.",
+          "isCorrect": false,
+          "explanation": "Falsch: APM überwacht nicht nur asynchrone Prozesse, sondern die gesamte Anwendungsleistung."
+        }
+      ]
+    },
+    {
+      "question": "Was zeigt ein verteilter Trace in Datadog APM?",
+      "area": "APM: Traces",
+      "options": [
+        {
+          "text": "Jeden Schritt einer Anfrage durch Frontend, Backend, Datenbank und externe APIs mit Zeitstempel.",
+          "isCorrect": true,
+          "explanation": "Richtig: ein Trace verfolgt eine Anfrage durch alle beteiligten Services und misst die Dauer jedes Schritts."
+        },
+        {
+          "text": "Eine Liste aller Nutzer, die in der letzten Stunde auf der Webseite eingeloggt waren.",
+          "isCorrect": false,
+          "explanation": "Falsch: das wäre ein Zugriffslog, kein verteilter Trace."
+        },
+        {
+          "text": "Den geografischen Standort jedes Servers auf einer Weltkarte mit farbigen Markierungen.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Trace zeigt den Weg einer Anfrage durch Services, nicht den Standort von Servern."
+        },
+        {
+          "text": "Eine automatische Reparaturanleitung, die den langsamsten Code findet und selbstständig optimiert.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Trace zeigt nur, wo die Zeit verloren geht, er optimiert keinen Code."
+        }
+      ]
+    },
+    {
+      "question": "Was ist eine Metrik in Datadog?",
+      "area": "Metrik: Definition",
+      "options": [
+        {
+          "text": "Ein quantitativer Messwert, der einen Aspekt eines Systems über die Zeit verfolgt.",
+          "isCorrect": true,
+          "explanation": "Richtig: eine Metrik ist ein numerischer Wert wie CPU-Auslastung oder Antwortzeit, der kontinuierlich erfasst wird."
+        },
+        {
+          "text": "Eine textuelle Beschreibung eines Fehlers, die ein Entwickler manuell in das Dashboard einträgt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Metriken sind automatisch erfasste Zahlenwerte, keine manuellen Textbeschreibungen."
+        },
+        {
+          "text": "Die Gesamtanzahl aller Nutzer, die jemals ein Konto in der Anwendung erstellt haben.",
+          "isCorrect": false,
+          "explanation": "Falsch: das wäre eine einzelne Kennzahl, aber keine Metrik im Sinne einer Zeitreihe."
+        },
+        {
+          "text": "Ein Zertifikat, das bestätigt, dass die Anwendung bestimmte Sicherheitsstandards erfüllt.",
+          "isCorrect": false,
+          "explanation": "Falsch: eine Metrik ist ein Messwert, kein Zertifikat."
+        }
+      ]
+    },
+    {
+      "question": "Welche Aussage über Metriken und Logs ist richtig?",
+      "area": "Metrik: Abgrenzung zu Logs",
+      "options": [
+        {
+          "text": "Logs sind detailreiche Einzelereignisse, Metriken sind aggregierte Zahlenreihen über die Zeit.",
+          "isCorrect": true,
+          "explanation": "Richtig: Logs untersuchen Einzelfälle, Metriken zeigen den Gesamtzustand."
+        },
+        {
+          "text": "Metriken und Logs sind zwei verschiedene Namen für exakt dasselbe Konzept.",
+          "isCorrect": false,
+          "explanation": "Falsch: Metriken und Logs haben unterschiedliche Struktur und unterschiedliche Verwendungszwecke."
+        },
+        {
+          "text": "Logs sind immer wichtiger als Metriken, weil sie mehr Details enthalten.",
+          "isCorrect": false,
+          "explanation": "Falsch: beide sind wichtig, aber für unterschiedliche Fragen – keines ist grundsätzlich wichtiger."
+        },
+        {
+          "text": "Metriken können nur auf Windows-Servern erfasst werden, Logs nur auf Linux.",
+          "isCorrect": false,
+          "explanation": "Falsch: sowohl Metriken als auch Logs sind betriebssystemunabhängig."
+        }
+      ]
+    },
+    {
+      "question": "Was bedeutet es, wenn das 99. Perzentil der Antwortzeit bei 800 Millisekunden liegt?",
+      "area": "Metrik: Perzentile",
+      "options": [
+        {
+          "text": "Ein Prozent aller Anfragen braucht länger als 800 Millisekunden.",
+          "isCorrect": true,
+          "explanation": "Richtig: das 99. Perzentil bedeutet, dass 99 Prozent der Anfragen schneller sind und ein Prozent länger braucht."
+        },
+        {
+          "text": "99 Prozent aller Anfragen schlagen komplett fehl und werden nie beantwortet.",
+          "isCorrect": false,
+          "explanation": "Falsch: das Perzentil beschreibt die Verteilung der Antwortzeiten, nicht die Fehlerrate."
+        },
+        {
+          "text": "Die Anwendung braucht im Durchschnitt 800 Millisekunden für jede einzelne Anfrage.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Durchschnitt wäre der Mittelwert, das 99. Perzentil ist ein anderer statistischer Wert."
+        },
+        {
+          "text": "Nur eine von hundert Anfragen wird überhaupt bearbeitet, der Rest wird ignoriert.",
+          "isCorrect": false,
+          "explanation": "Falsch: das Perzentil sagt nichts darüber aus, ob Anfragen ignoriert werden."
+        }
+      ]
+    },
+    {
+      "question": "Welches Alltagsbild beschreibt ein Dashboard am treffendsten?",
+      "area": "Dashboard: Grundkonzept",
+      "options": [
+        {
+          "text": "Das Primary Flight Display im Cockpit, das die sechs wichtigsten Instrumente auf einen Blick zeigt.",
+          "isCorrect": true,
+          "explanation": "Richtig: ein Dashboard fasst die wichtigsten Metriken so zusammen, dass der Zustand sofort erfassbar ist."
+        },
+        {
+          "text": "Ein dickes Handbuch, in dem jede einzelne Komponente der Anwendung auf hundert Seiten beschrieben wird.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Dashboard ist eine visuelle Zusammenfassung, kein ausführliches Handbuch."
+        },
+        {
+          "text": "Ein automatischer Telefonanruf, der den Entwickler weckt, sobald ein Server ausgefallen ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: das beschreibt einen Alarm, nicht ein Dashboard."
+        },
+        {
+          "text": "Eine Checkliste, die vor jedem Deployment Schritt für Schritt abgehakt werden muss.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Dashboard ist eine Echtzeit-Anzeige, keine Deployment-Checkliste."
+        }
+      ]
+    },
+    {
+      "question": "Welche Frage beantwortet ein gutes Dashboard?",
+      "area": "Dashboard: Zweck",
+      "options": [
+        {
+          "text": "Alles okay? – auf einen Blick, in zwei Sekunden.",
+          "isCorrect": true,
+          "explanation": "Richtig: ein Dashboard soll den Zustand sofort erfassbar machen, Details kommen später."
+        },
+        {
+          "text": "Welcher Entwickler hat den letzten Fehler verursacht? – mit vollständigem Namen.",
+          "isCorrect": false,
+          "explanation": "Falsch: Dashboards zeigen Systemzustände, sie weisen keine Schuld zu."
+        },
+        {
+          "text": "Wie viel Umsatz hat die Konkurrenz im letzten Quartal gemacht? – mit Vergleichsdiagramm.",
+          "isCorrect": false,
+          "explanation": "Falsch: Dashboards zeigen deine eigenen Metriken, nicht die der Konkurrenz."
+        },
+        {
+          "text": "Welche Programmiersprache ist für das nächste Projekt am besten geeignet?",
+          "isCorrect": false,
+          "explanation": "Falsch: Dashboards helfen bei der Überwachung, nicht bei der Technologieauswahl."
+        }
+      ]
+    },
+    {
+      "question": "Wie viele Dashboards brauchen die meisten Teams laut der Lektion?",
+      "area": "Dashboard: Best Practices",
+      "options": [
+        {
+          "text": "Drei: Überblick, Fehlersuche und Business.",
+          "isCorrect": true,
+          "explanation": "Richtig: ein Überblicks-Dashboard, ein Detail-Dashboard und ein Business-Dashboard decken die meisten Bedürfnisse ab."
+        },
+        {
+          "text": "Genau ein Dashboard, das alle Metriken des gesamten Unternehmens auf einer Seite zeigt.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein einziges Dashboard würde entweder überladen sein oder wichtige Details weglassen."
+        },
+        {
+          "text": "Mindestens zwanzig Dashboards, für jeden Server und jede API-Route ein eigenes.",
+          "isCorrect": false,
+          "explanation": "Falsch: zu viele Dashboards führen zu genau dem Daten-Overload, den Dashboards verhindern sollen."
+        },
+        {
+          "text": "Gar keine, weil Dashboards nur unerfahrene Entwickler brauchen, die ihrem Code nicht vertrauen.",
+          "isCorrect": false,
+          "explanation": "Falsch: Dashboards sind ein professionelles Werkzeug für jedes Team, unabhängig von der Erfahrung."
+        }
+      ]
+    },
+    {
+      "question": "Wie unterscheiden sich Sentry und Datadog in ihrer Aufgabe?",
+      "area": "Datadog vs. Sentry",
+      "options": [
+        {
+          "text": "Sentry meldet Abstürze, Datadog überwacht Performance und Infrastruktur.",
+          "isCorrect": true,
+          "explanation": "Richtig: Sentry ist die Alarmanlage, Datadog das Smart-Home-System – verschiedene Aufgaben, die sich ergänzen."
+        },
+        {
+          "text": "Sentry ist für große Firmen, Datadog nur für Hobbyprojekte mit weniger als hundert Nutzern.",
+          "isCorrect": false,
+          "explanation": "Falsch: beide Werkzeuge skalieren von kleinen bis zu großen Projekten."
+        },
+        {
+          "text": "Datadog ersetzt Sentry vollständig, sobald ein Projekt mehr als tausend Nutzer hat.",
+          "isCorrect": false,
+          "explanation": "Falsch: Datadog und Sentry haben unterschiedliche Aufgaben, keines ersetzt das andere."
+        },
+        {
+          "text": "Sentry überwacht das Backend, Datadog ausschließlich das Frontend im Browser.",
+          "isCorrect": false,
+          "explanation": "Falsch: beide Werkzeuge können Frontend und Backend überwachen."
+        }
+      ]
+    },
+    {
+      "question": "Welche Aussage über die Integration von Datadog ist richtig?",
+      "area": "Datadog: Integration",
+      "options": [
+        {
+          "text": "Der Agent wird auf Servern installiert, das SDK instrumentiert die Anwendung für Traces.",
+          "isCorrect": true,
+          "explanation": "Richtig: der Agent sammelt Systemmetriken, das SDK ermöglicht verteilte Traces in der Anwendung."
+        },
+        {
+          "text": "Datadog braucht keine Installation, es analysiert die Anwendung vollständig aus der Ferne.",
+          "isCorrect": false,
+          "explanation": "Falsch: Datadog braucht einen lokalen Agenten und ein SDK in der Anwendung."
+        },
+        {
+          "text": "Die Integration dauert mehrere Wochen, weil der gesamte Code umgeschrieben werden muss.",
+          "isCorrect": false,
+          "explanation": "Falsch: die grundlegende Integration dauert etwa eine Stunde."
+        },
+        {
+          "text": "Datadog funktioniert nur, wenn die gesamte Anwendung in Java geschrieben ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: Datadog unterstützt viele Sprachen wie Node.js, Python, Go und Java."
+        }
+      ]
+    },
+    {
+      "question": "Was passiert, wenn Datadog selbst ausfällt?",
+      "area": "Datadog: Ausfallsicherheit",
+      "options": [
+        {
+          "text": "Die Anwendung läuft normal weiter, aber es werden keine neuen Metriken gesammelt.",
+          "isCorrect": true,
+          "explanation": "Richtig: der Datadog-Agent sammelt nur Daten, er greift nicht in den Betrieb der Anwendung ein."
+        },
+        {
+          "text": "Die gesamte Anwendung stürzt ab, weil der Datadog-Agent ein kritischer Teil der Infrastruktur ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Agent ist nicht kritisch für den Betrieb, die Anwendung läuft auch ohne ihn."
+        },
+        {
+          "text": "Datadog kann nicht ausfallen, weil es auf einer völlig ausfallsicheren Infrastruktur läuft.",
+          "isCorrect": false,
+          "explanation": "Falsch: kein externer Dienst kann hundert Prozent Verfügbarkeit garantieren."
+        },
+        {
+          "text": "Alle gesammelten Metriken der letzten dreißig Tage werden unwiderruflich gelöscht.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Ausfall betrifft nur die Erfassung neuer Daten, nicht die bereits gespeicherten."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Richte Datadog für ein eigenes Projekt ein. Erstelle ein kostenloses Testkonto, installiere den Datadog-Agenten auf deinem Entwicklungsrechner und binde das APM-SDK in deine Anwendung ein. Lass die Anwendung für einige Minuten laufen und prüfe, ob Systemmetriken wie CPU und Speicher im Dashboard erscheinen. Baue anschließend ein Dashboard mit mindestens drei Widgets: einer Latenz-Kurve für eine API-Route, einer Fehlerraten-Anzeige und einer CPU-Auslastungs-Heatmap. Richte zuletzt einen Alarm ein, der dich benachrichtigt, wenn die Antwortzeit einer API-Route eine Sekunde überschreitet.",
+    "expectation": "Datadog ist im Projekt integriert und sammelt Systemmetriken sowie APM-Traces. Ein Dashboard mit drei Widgets zeigt Latenz, Fehlerrate und CPU-Auslastung. Ein Alarm ist konfiguriert und hat eine Testbenachrichtigung ausgelöst. Du kannst im APM-Dashboard den Trace einer einzelnen Anfrage von Anfang bis Ende nachvollziehen.",
+    "checklist": [
+      "Kostenloses Datadog-Testkonto erstellt und API-Schlüssel erhalten.",
+      "Datadog-Agent auf dem Entwicklungsrechner installiert und Verbindung geprüft.",
+      "APM-SDK in die Anwendung eingebunden und Traces werden aufgezeichnet.",
+      "Systemmetriken wie CPU und Speicher erscheinen im Infrastructure-Dashboard.",
+      "Dashboard mit Latenz-Kurve, Fehlerraten-Anzeige und CPU-Heatmap gebaut.",
+      "Alarm für Antwortzeit über einer Sekunde eingerichtet und Testbenachrichtigung erhalten.",
+      "Vollständigen Trace einer Anfrage im APM-Dashboard nachvollzogen."
+    ],
+    "portfolioItem": "P02"
+  },
+  "audio": {
+    "file": "M04-06-02.mp3",
+    "durationSeconds": 1400,
+    "voices": ["A", "B"],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Brauche ich Datadog, wenn ich schon Sentry habe, oder ist das doppelt gemoppelt?",
+      "answer": "Sentry und Datadog haben völlig verschiedene Aufgaben. Sentry überwacht Fehler und Abstürze, Datadog überwacht Performance und Infrastruktur. Ein Server, der langsam wird, weil die CPU an ihre Grenzen kommt, produziert keine Fehler, die Sentry melden könnte. Trotzdem leidet die Nutzererfahrung. Datadog erkennt dieses Problem, bevor es kritisch wird. Beide Werkzeuge ergänzen sich, sie ersetzen sich nicht."
+    },
+    {
+      "question": "Was ist der Unterschied zwischen einer Metrik und einem Log-Eintrag?",
+      "answer": "Ein Log-Eintrag ist ein einzelnes Ereignis mit einem Zeitstempel und einer Nachricht, zum Beispiel Nutzer 42 hat sich eingeloggt. Eine Metrik ist ein numerischer Messwert, der regelmäßig erfasst wird, zum Beispiel die Anzahl der Logins pro Minute. Logs sind detailreich und einmalig, Metriken sind aggregiert und kontinuierlich. Du nutzt Logs, um ein einzelnes Problem zu untersuchen, und Metriken, um den Gesamtzustand deines Systems zu überwachen."
+    },
+    {
+      "question": "Kann ich Datadog auch für kleine Projekte nutzen, oder lohnt sich das erst ab einer bestimmten Größe?",
+      "answer": "Datadog hat kein dauerhaft kostenloses Kontingent wie Sentry, sondern eine vierzehntägige Testphase. Für sehr kleine Hobbyprojekte ist der Einstiegspreis von fünfzehn Dollar pro Host und Monat möglicherweise zu hoch. Sobald dein Projekt aber echte Nutzer hat oder Umsatz generiert, sind die Kosten durch den Nutzen mehr als gerechtfertigt. Ein einziger Performance-Einbruch, den du ohne Datadog erst nach Stunden bemerkst, kann mehr Schaden anrichten als ein ganzes Jahr Datadog kostet."
+    },
+    {
+      "question": "Wie viele Dashboards brauche ich, und wie finde ich die richtige Balance zwischen zu wenig und zu viel?",
+      "answer": "Starte mit genau einem Dashboard, das die fünf wichtigsten Metriken deines Projekts zeigt. Das zwingt dich, darüber nachzudenken, was wirklich wichtig ist. Wenn du nach einer Woche merkst, dass dir eine Metrik fehlt, füge sie hinzu. Wenn du eine Metrik seit einer Woche nicht angeschaut hast, entferne sie. Die meisten Teams brauchen drei Dashboards: ein Überblicks-Dashboard für den aktuellen Zustand, ein Detail-Dashboard für die Fehlersuche und ein Business-Dashboard für Umsatz und Nutzerzahlen. Alles darüber hinaus ist meist Ablenkung."
+    },
+    {
+      "question": "Was passiert, wenn Datadog selbst ausfällt – verliere ich dann meine gesamte Überwachung?",
+      "answer": "Wenn Datadog ausfällt, werden keine neuen Metriken gesammelt und keine Alarme ausgelöst, bis der Dienst wieder verfügbar ist. Deine Anwendung läuft aber normal weiter, weil der Datadog-Agent nur Daten sammelt und nicht in den Betrieb eingreift. Für besonders kritische Systeme solltest du zusätzlich eine zweite Überwachungsebene haben, zum Beispiel einfache Health-Checks, die unabhängig von Datadog laufen. Datadog selbst hat eine sehr hohe Verfügbarkeit, aber kein externer Dienst kann hundert Prozent garantieren."
+    },
+    {
+      "question": "Wie unterscheidet sich Datadog APM von anderen APM-Tools wie New Relic oder Grafana?",
+      "answer": "Alle drei Werkzeuge können APM, Metriken und Dashboards. Datadog zeichnet sich durch die Breite der Integration aus: Es vereint Infrastruktur-Überwachung, APM, Log-Management und Security-Monitoring in einer Plattform. New Relic ist stärker auf APM spezialisiert und hat ein großzügigeres kostenloses Kontingent. Grafana ist Open Source und besonders stark bei Dashboards, braucht aber mehr Einrichtungsaufwand. Die Wahl hängt von deinem Budget, deiner Infrastruktur und deinem Bedarf an Integration ab. Für die meisten Teams, die bereits mehrere Dienste betreiben, ist Datadogs All-in-One-Ansatz der schnellste Weg zu einer vollständigen Überwachung."
+    }
+  ]
+}

@@ -1,0 +1,636 @@
+{
+  "id": "M04-06-01",
+  "title": "Sentry – Fehler live erkennen",
+  "durationMinutes": 34,
+  "prerequisites": [
+    "M04-02-01",
+    "M03-02-01"
+  ],
+  "terms": [
+    {
+      "term": "Sentry",
+      "definition": "Ein Fehlerüberwachungsdienst, der Abstürze und Ausnahmen einer Anwendung in Echtzeit erfasst, mit Kontext wie Stacktrace, Gerät und Nutzeraktion anreichert und proaktiv an das Entwicklungsteam meldet."
+    },
+    {
+      "term": "Source Map",
+      "definition": "Eine Übersetzungsdatei, die minimierten oder kompilierten Produktionscode zurück auf den ursprünglichen, lesbaren Quellcode abbildet, sodass Fehlermeldungen die exakte Zeile in der Originaldatei zeigen statt einer kryptischen Position im Minifier-Ergebnis."
+    },
+    {
+      "term": "Alert-Regel",
+      "definition": "Eine konfigurierbare Bedingung in einem Überwachungssystem, die festlegt, bei welchen Ereignissen, in welcher Häufigkeit und auf welchem Kanal das Team benachrichtigt wird, um aus passiver Protokollierung aktive Alarmierung zu machen."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen Rauchmelder in einem großen Bürogebäude vor. Überall hängen Sensoren, die rund um die Uhr die Luft überwachen. Sobald irgendwo Rauch aufsteigt, schlägt der Melder Alarm und zeigt genau an, in welchem Stockwerk und Raum es brennt. Die Feuerwehr wird benachrichtigt, noch bevor jemand die Flammen sieht. Der Rauchmelder wartet nicht darauf, dass jemand zufällig vorbeigeht und den Rauch bemerkt – er ist immer wachsam.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Genau das macht Sentry für deine Software. Sentry ist ein Fehlerüberwachungsdienst, der in Echtzeit jeden Absturz und jede Exception in deiner Anwendung aufzeichnet. Sobald ein Nutzer auf einen Fehler stößt, bekommst du eine Benachrichtigung mit dem genauen Ort im Code, den Umständen und der Historie des Fehlers. Ohne Sentry erfährst du von Fehlern erst, wenn ein Nutzer sich beschwert. Mit Sentry weißt du davon, bevor der Nutzer die E-Mail tippen kann. Du siehst im Übersichtsseite nicht nur den Fehler selbst, sondern auch, wie oft er schon aufgetreten ist und welche Nutzer betroffen sind. Du kannst jeden Fehler einer Person im Team zuweisen und den Status verfolgen, von neu über in Bearbeitung bis behoben.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Warum reicht es nicht, Fehler einfach in eine Logdatei zu schreiben?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir ein Gästebuch vor, in das jeder Besucher seine Beschwerden eintragen kann, aber niemand liest es jemals durch. Die Beschwerden stapeln sich über Wochen und Monate, und du erfährst erst davon, wenn ein Gast wütend an der Rezeption steht und mit dem Anwalt droht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Logdateien sind wie dieses Gästebuch. Sie sammeln Fehler, aber niemand schaut aktiv hinein. Du musst erst wissen, dass ein Fehler aufgetreten ist, um die Logdatei zu öffnen. Sentry hingegen beobachtet deine Anwendung in Echtzeit und meldet sich proaktiv bei dir. Außerdem reichert Sentry jeden Fehler mit Kontext an: Welcher Nutzer war betroffen? Welche Browser-Version? Was hat der Nutzer unmittelbar vor dem Fehler getan? Diese Informationen fehlen in einer reinen Logdatei. Und selbst wenn du die Logdatei öffnest, findest du dort nur eine Zeile Text ohne jeden Zusammenhang. Stell dir vor, du müsstest aus tausend solcher Zeilen herausfinden, welche davon zusammengehören – das ist der Alltag ohne Sentry.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Diese proaktive Fehlerüberwachung, die jeden Absturz in Echtzeit erfasst und mit Kontext anreichert, heißt Sentry – benannt nach dem englischen Wort für Wache oder Wächter.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In einer React-Anwendung bindest du Sentry mit wenigen Zeilen Code ein. Immer wenn eine Komponente einen Fehler wirft, der nicht durch eine Error Boundary abgefangen wird, fängt Sentry diesen Fehler auf und sendet ihn an dein Übersichtsseite. Dort siehst du den Fehler mit Stacktrace, den betroffenen Nutzer, das Gerät und den genauen Zeitpunkt. Du kannst sogar sehen, ob dieser Fehler zum ersten Mal auftritt oder schon hundertmal passiert ist. Das alles, ohne dass du eine einzige Zeile manuellen Logging-Codes schreiben musst. Sentry fügt automatisch Brotkrümel hinzu, also die Schritte, die der Nutzer vor dem Fehler gegangen ist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Das ist wichtig, weil die Zeit zwischen dem Auftreten eines Fehlers und deiner Kenntnis darüber der gefährlichste Moment in der Softwareentwicklung ist. In dieser Zeit sind Nutzer betroffen, Daten gehen verloren, und der Schaden wächst mit jeder Minute. Sentry verkürzt diese Zeit von Tagen oder Stunden auf Sekunden. Ein Fehler, den du sofort siehst, ist ein Fehler, den du sofort beheben kannst. Ein Fehler, von dem du erst Tage später erfährst, hat in der Zwischenzeit vielleicht schon Dutzende Nutzer verärgert. Stell dir vor, dein Checkout-Prozess ist seit drei Tagen kaputt. Du erfährst es erst durch eine schlechte Bewertung im App Store. Genau das verhindert Sentry, indem es dich alarmiert, sobald der erste Nutzer betroffen ist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Wenn mein Code im Produktionsbetrieb minimiert und gebündelt ist, wie kann Sentry dann die genaue Zeile in meinem ursprünglichen Code anzeigen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine Schatzkarte vor, die in einer fremden Sprache geschrieben ist. Du hast eine Übersetzungstabelle, die jedes Wort der fremden Sprache in deine Muttersprache übersetzt. Mit dieser Tabelle kannst du die Karte lesen, als wäre sie von Anfang an in deiner Sprache geschrieben. Ohne diese Tabelle wäre die Karte wertlos, weil du kein einziges Wort verstehst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Im Produktionsbetrieb wird dein JavaScript-Code minimiert. Variablennamen werden durch einzelne Buchstaben ersetzt, Leerzeichen und Zeilenumbrüche verschwinden, und der gesamte Code wird in eine einzige lange Zeile gepackt. Ein Fehler in Zeile 1, Spalte 45832 sagt dir nichts. Eine Source Map ist die Übersetzungstabelle, die diese kryptische Position zurück in deine ursprüngliche Datei und Zeilennummer übersetzt. Sentry nutzt diese Source Maps, um dir den Fehler so anzuzeigen, als wäre der Code nicht minimiert. Du siehst den vertrauten Dateinamen und die Zeile, die du selbst geschrieben hast. Der gesamte Vorgang läuft automatisch: Beim Build entsteht die Source Map, beim Upload landet sie bei Sentry, und beim ersten Fehler zeigt das Übersichtsseite die lesbare Zeile.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Diese Übersetzungstabelle, die minimierten Produktionscode zurück auf den lesbaren Quellcode abbildet, heißt Source Map.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In einem typischen React-Projekt mit Vite oder Next.js werden Source Maps beim Build automatisch erzeugt. Du lädst sie zusammen mit deinem Code auf den Server oder direkt in Sentry hoch. Wenn dann ein Fehler auftritt, zeigt Sentry nicht Zeile 1, Spalte 45832 an, sondern CheckoutForm.tsx, Zeile 47 – genau die Stelle, an der du den Fehler beheben kannst. Der Unterschied ist wie zwischen einer Adresse ohne Straßennamen und einer mit vollständiger Wegbeschreibung. Der Upload der Source Maps lässt sich in deinen bestehenden Build-Prozess einbauen, sodass du dich nach der einmaligen Einrichtung um nichts mehr kümmern musst und jeder neue Release automatisch die passenden Source Maps mitliefert.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Ohne Source Maps ist ein Fehlerbericht aus der Produktion nahezu wertlos, weil du die Meldung nicht mit deinem Quellcode in Verbindung bringen kannst. Mit Source Maps wird aus einem kryptischen Minifier-Artefakt ein präziser Hinweis, der dich direkt zur fehlerhaften Zeile führt. Das ist der Unterschied zwischen Ich weiß, dass irgendwo ein Fehler ist und Ich weiß genau, wo der Fehler ist. Jede Minute, die du ohne Source Map mit der Suche nach der richtigen Datei verbringst, ist verschwendete Lebenszeit. Deshalb gehören Source Maps zu jeder professionellen Produktionsumgebung dazu, genauso selbstverständlich wie der Build-Schritt selbst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Sentry kann mir zwar Fehler melden, aber ich will nicht rund um die Uhr auf das Übersichtsseite starren. Wie erfahre ich von kritischen Fehlern, ohne ständig auf Sentry zu schauen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen Wachmann vor, der nicht bei jedem Fliegendreck Alarm schlägt, sondern nur dann, wenn jemand nachts die Eingangstür aufbricht. Er hat eine Regel: Nur bei aufgebrochener Tür wird der Chef angerufen, bei allem anderen reicht eine Notiz für den nächsten Morgen. Der Wachmann weiß, dass er seinen Job verliert, wenn er den Chef wegen jeder Kleinigkeit aus dem Bett klingelt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Sentry kann nicht nur Fehler sammeln, sondern auch nach deinen Regeln filtern und eskalieren. Du legst fest: Ein Fehler, der mehr als zehnmal in fünf Minuten auftritt, löst eine Benachrichtigung in Slack aus. Ein Fehler, der einen zahlenden Kunden betrifft, löst eine E-Mail an das gesamte Team aus. Ein Fehler in einer unwichtigen Komponente wird still protokolliert, ohne jemanden zu stören. Diese Regeln verhindern, dass du in unwichtigen Meldungen ertrinkst. Du bestimmst selbst, was wichtig genug ist, um dich aus dem Schlaf zu reißen, und was bis zum nächsten Morgen warten kann. Du kannst sogar festlegen, dass nur Fehler ab einer bestimmten Häufigkeit oder aus einer bestimmten Umgebung eine Benachrichtigung auslösen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Diese konfigurierbare Bedingung, die festlegt, wann und wie Sentry dich über einen Fehler benachrichtigt, heißt Alert-Regel.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In einem E-Commerce-Projekt richtest du eine Alert-Regel ein, die anschlägt, wenn der Checkout-Prozess mehr als fünfmal in zehn Minuten fehlschlägt. Sentry schickt dann automatisch eine Nachricht in den Slack-Kanal incidents, sodass das Team sofort reagieren kann. Gleichzeitig richtest du eine zweite Regel ein, die bei jedem neuen Fehlertyp eine E-Mail an den technischen Leiter schickt, damit der einen Überblick über neue Probleme behält. So hast du für verschiedene Dringlichkeitsstufen verschiedene Kanäle. Eine dritte Regel könnte zum Beispiel nur am Wochenende aktiv sein und dann per SMS an den Bereitschaftsdienst gehen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Alert-Regeln sind der entscheidende Schritt von passiver Überwachung zu aktivem Betrieb. Ohne Regeln ist Sentry ein Archiv, das du durchsuchen musst. Mit Regeln ist Sentry ein Wächter, der dich holt, wenn es brennt. Die Kunst ist, die richtige Schwelle zu finden: zu empfindlich, und du ignorierst die Meldungen irgendwann, weil ständig Fehlalarme kommen. Zu träge, und du erfährst zu spät von echten Problemen, wenn der Schaden schon groß ist. Eine gute Alert-Regel findet die Balance zwischen diesen beiden Extremen. Nimm dir die Zeit, diese Schwelle in den ersten Wochen nach der Einrichtung zu justieren, bis die Benachrichtigungen wirklich nur noch das melden, was dich interessiert.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Wie integriere ich Sentry praktisch in mein Projekt, und was kostet mich das?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du baust einen Feuermelder in dein Haus ein. Der Einbau dauert zehn Minuten: ein paar Löcher bohren, den Melder anschrauben, Batterie rein. Danach arbeitet er jahrelang unsichtbar im Hintergrund, und du vergisst fast, dass er da ist – bis er eines Tages dein Haus rettet. Die zehn Minuten Einbauzeit sind nichts im Vergleich zu dem Schaden, den ein unentdeckter Brand anrichten würde. Genau so verhält es sich mit Sentry und deiner Software.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Die Integration von Sentry in ein bestehendes Projekt dauert buchstäblich Minuten. Du installierst das SDK, initialisierst es mit deinem Projekt-Schlüssel, und ab diesem Moment werden alle unbehandelten Fehler automatisch erfasst. Für React gibt es eine Error-Boundary-Komponente, für Node.js eine Server-Erweiterung, für React Native einen Wrapper um die App. Sentry hat ein großzügiges kostenloses Kontingent für kleine Teams und Hobbyprojekte. Die Kosten wachsen mit der Anzahl der erfassten Fehler, nicht mit der Anzahl deiner Nutzer. Du kannst auch manuell Fehler erfassen, wenn du zum Beispiel in einem catch-Block eine besonders kritische Situation erkennen und für das Team dokumentieren willst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im FutureDev-Repo ist Sentry in die mobile App und das Backend integriert. Sobald ein unbehandelter Fehler auftritt, erscheint er im Sentry-Übersichtsseite mit Stacktrace, Geräteinformationen und dem genauen Zeitpunkt. Das Team sieht auf einen Blick, ob der Fehler neu ist oder schon öfter aufgetreten ist, und kann ihn direkt aus dem Übersichtsseite einer Person zuweisen. Niemand muss mehr raten, ob ein Fehler schon bekannt ist oder wer sich darum kümmern sollte. Auch die Häufigkeit eines Fehlers über die letzten Tage und Wochen wird als Diagramm angezeigt, sodass das Team Trends erkennen und priorisieren kann.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Der geringe Aufwand für die Integration steht in keinem Verhältnis zum Nutzen. Ein einziger Fehler, den du durch Sentry in Minuten findest und behebst, statt tagelang nach ihm zu suchen, rechtfertigt die Einrichtung für das gesamte Projekt. Sentry ist eine dieser Technologien, bei denen die Kosten-Nutzen-Rechnung so eindeutig ist, dass es fast fahrlässig wäre, sie nicht einzusetzen. Die Frage ist nicht, ob du dir Sentry leisten kannst, sondern ob du es dir leisten kannst, kein Sentry zu haben. In jedem ernsthaften Softwareprojekt gehört Sentry zur Grundausstattung, genau wie Versionskontrolle und automatisierte Tests.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "text": "Also noch einmal ganz kurz: Sentry ist ein Fehlerüberwachungsdienst, der jeden Absturz deiner Anwendung in Echtzeit erfasst und dir mit vollem Kontext meldet, noch bevor der Nutzer sich beschwert. Source Maps übersetzen den minimierten Produktionscode zurück in deinen lesbaren Quellcode, sodass du nicht Zeile 1, Spalte 45832, sondern CheckoutForm.tsx, Zeile 47 als Fehlerort siehst. Alert-Regeln filtern den Strom der Fehlermeldungen und benachrichtigen dich nur dann, wenn wirklich etwas Wichtiges passiert, nach deinen eigenen Kriterien und auf dem Kanal deiner Wahl. Zusammen bilden diese drei Werkzeuge ein Frühwarnsystem, das den gefährlichsten Moment der Softwareentwicklung – die Zeit zwischen Fehler und Kenntnis – von Tagen auf Sekunden verkürzt.",
+      "isKeySentence": true
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Sentry ist ein Fehlerüberwachungsdienst, der Abstürze und Ausnahmen einer Anwendung in Echtzeit erfasst, mit Kontext wie Stacktrace, Gerät und Nutzeraktion anreichert und proaktiv an das Entwicklungsteam meldet, noch bevor der Nutzer sich beschwert. Der Name kommt vom englischen Wort für Wache und beschreibt die Aufgabe perfekt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Eine Source Map ist eine Übersetzungsdatei, die minimierten oder kompilierten Produktionscode zurück auf den ursprünglichen, lesbaren Quellcode abbildet, sodass Fehlermeldungen die exakte Zeile in der Originaldatei zeigen statt einer kryptischen Position im Minifier-Ergebnis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Eine Alert-Regel ist eine konfigurierbare Bedingung in einem Überwachungssystem, die festlegt, bei welchen Ereignissen, in welcher Häufigkeit und auf welchem Kanal das Team benachrichtigt wird, um aus passiver Protokollierung aktive Alarmierung zu machen. Sie ist der Filter, der aus tausend Fehlern die drei herauspickt, die wirklich deine Aufmerksamkeit brauchen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Brauche ich Sentry auch für ein kleines Hobbyprojekt, oder ist das nur für große Firmen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Sentry hat ein großzügiges kostenloses Kontingent, das für die meisten Hobbyprojekte völlig ausreicht. Der Nutzen ist unabhängig von der Projektgröße: Auch in einem kleinen Projekt willst du wissen, wenn etwas abstürzt, statt dich auf Nutzerbeschwerden zu verlassen. Gerade als Einzelentwickler hast du niemanden, der für dich testet, und Sentry wird zu deinem stillen Qualitätswächter. Die fünf Minuten für die Einrichtung zahlst du beim ersten gefundenen Fehler doppelt und dreifach zurück.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was ist der Unterschied zwischen Sentry und einem einfachen try-catch mit console.error?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ein try-catch mit console.error schreibt eine Zeile in die Konsole, die niemand sieht, sobald der Code in Produktion läuft. Sentry sammelt diese Fehler zentral, reichert sie mit Kontext an und benachrichtigt dich proaktiv. Außerdem gruppiert Sentry gleiche Fehler, zeigt dir Trends über die Zeit und erlaubt dir, Fehler bestimmten Releases oder Personen zuzuweisen. console.error ist wie ein Zettel, den du in eine Schublade legst, Sentry ist wie ein Assistent, der dir den Zettel sofort auf den Schreibtisch legt und sagt, wer ihn geschrieben hat und warum.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Muss ich Source Maps in die Produktion hochladen, und ist das nicht ein Sicherheitsrisiko?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Source Maps sollten niemals öffentlich im Produktions-Webserver liegen, weil sie deinen gesamten Quellcode lesbar machen. Stattdessen lädst du sie direkt in Sentry hoch, entweder per CLI während des Build-Prozesses oder über ein Webpack-Plugin. Sentry speichert sie verschlüsselt und zeigt sie nur autorisierten Teammitgliedern im Übersichtsseite an. Deine Nutzer im Browser sehen weiterhin nur den minimierten Code, aber du siehst im Sentry-Übersichtsseite die originale Zeile.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Wie verhindere ich, dass Sentry mich mit unwichtigen Fehlermeldungen zuspammt?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Du kannst in Sentry festlegen, welche Fehler dich überhaupt interessieren. Bestimmte Fehlertypen oder Fehler aus bestimmten Dateien kannst du stumm schalten. Über Alert-Regeln bestimmst du, dass nur Fehler ab einer gewissen Häufigkeit oder Schwere eine Benachrichtigung auslösen. Außerdem kannst du festlegen, auf welchem Kanal du benachrichtigt wirst: kritische Fehler per Slack, neue Fehlertypen per E-Mail und alles andere nur im Übersichtsseite. So stellst du sicher, dass jede Benachrichtigung eine echte Handlungsaufforderung ist und nicht nur Hintergrundrauschen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Kann Sentry auch Fehler im Backend erfassen, oder nur im Browser?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Sentry erfasst Fehler überall dort, wo Code läuft: im Browser, auf dem Node.js-Server, in React Native, in Python, Java, Go und Dutzenden weiteren Sprachen und Frameworks. Du kannst dasselbe Übersichtsseite für Frontend- und Backend-Fehler verwenden und sogar sehen, ob ein Fehler im Browser durch eine fehlerhafte API-Antwort des Backends ausgelöst wurde. Diese plattformübergreifende Sicht ist einer der größten Vorteile von Sentry gegenüber sprachspezifischen Logging-Bibliotheken.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was kostet Sentry, und ab wann muss ich bezahlen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Sentry bietet ein kostenloses Developer-Kontingent mit fünftausend Fehlern pro Monat, einem Nutzer und einer Woche Datenhistorie. Für die meisten Hobbyprojekte und kleine Teams reicht das völlig aus. Die kostenpflichtigen Pläne beginnen bei sechsundzwanzig Dollar pro Monat und skalieren mit der Anzahl der erfassten Fehler, nicht mit der Anzahl der Nutzer deiner Anwendung. Du kannst also eine App mit zehntausend Nutzern betreiben und zahlst nur für die Fehler, die tatsächlich auftreten.",
+      "isKeySentence": false
+    }
+  ],
+  "practiceExample": {
+    "text": "Im FutureDev-Repo ist Sentry in die mobile App und das Backend integriert. Jeder unbehandelte Fehler erscheint im Sentry-Übersichtsseite mit Stacktrace, Geräteinformationen und Zeitpunkt. Source Maps sorgen dafür, dass der Stacktrace die originalen Quelldateien zeigt, nicht den minimierten Bündelcode. Alert-Regeln benachrichtigen das Team in Slack, wenn ein neuer Fehlertyp auftritt oder ein bekannter Fehler eine kritische Häufigkeit erreicht.",
+    "repoNote": "repo-futuredev",
+    "location": "apps/mobile/src/lib/sentry.ts (Sentry-Initialisierung für die mobile App)"
+  },
+  "quiz": [
+    {
+      "question": "Welches Alltagsbild beschreibt Sentry am treffendsten?",
+      "area": "Sentry: Grundkonzept",
+      "options": [
+        {
+          "text": "Ein Rauchmelder, der die Luft überwacht und sofort Alarm schlägt, wenn Rauch aufsteigt.",
+          "isCorrect": true,
+          "explanation": "Richtig: Sentry überwacht deine Anwendung in Echtzeit und schlägt Alarm, sobald ein Fehler auftritt – genau wie ein Rauchmelder."
+        },
+        {
+          "text": "Ein Tagebuch, in das du jeden Abend einträgst, was an diesem Tag in deinem Projekt schiefgelaufen ist, um es später in Ruhe durchzulesen.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Tagebuch ist passiv und wird nur auf Anfrage gelesen, Sentry hingegen meldet Fehler proaktiv in Echtzeit."
+        },
+        {
+          "text": "Eine Rechtschreibprüfung, die jeden Buchstaben einzeln mit einem Wörterbuch vergleicht und Tippfehler markiert.",
+          "isCorrect": false,
+          "explanation": "Falsch: eine Rechtschreibprüfung prüft Text auf Tippfehler, Sentry überwacht laufende Software auf Abstürze."
+        },
+        {
+          "text": "Ein Backup-Programm, das jede Nacht eine vollständige Kopie aller Projektdateien auf einem externen Server ablegt.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Backup sichert Daten, Sentry überwacht Fehler – zwei völlig verschiedene Aufgaben."
+        }
+      ]
+    },
+    {
+      "question": "Warum reichen Logdateien allein nicht aus, um Fehler in Produktion zu erkennen?",
+      "area": "Sentry: Abgrenzung zu Logs",
+      "options": [
+        {
+          "text": "Niemand schaut aktiv in Logdateien, und du musst erst vom Fehler wissen, um die Datei zu öffnen.",
+          "isCorrect": true,
+          "explanation": "Richtig: Logdateien sind passiv, Sentry ist proaktiv – es meldet sich bei dir, statt darauf zu warten, dass du nachschaust."
+        },
+        {
+          "text": "Logdateien sind technisch nicht in der Lage, Fehlermeldungen überhaupt zu speichern, weil sie nur Text können.",
+          "isCorrect": false,
+          "explanation": "Falsch: Logdateien können Fehlermeldungen sehr wohl speichern, das Problem ist die fehlende proaktive Benachrichtigung."
+        },
+        {
+          "text": "Logdateien sind nach europäischem Datenschutzrecht grundsätzlich verboten und dürfen nicht eingesetzt werden.",
+          "isCorrect": false,
+          "explanation": "Falsch: Logdateien sind nicht verboten, sie müssen nur datenschutzkonform betrieben werden."
+        },
+        {
+          "text": "Logdateien funktionieren nur auf Windows-Servern, und die meisten Produktionsserver laufen unter Linux.",
+          "isCorrect": false,
+          "explanation": "Falsch: Logdateien funktionieren auf allen Betriebssystemen, das ist nicht das Problem."
+        }
+      ]
+    },
+    {
+      "question": "Was ist eine Source Map?",
+      "area": "Source Map: Definition",
+      "options": [
+        {
+          "text": "Eine Datei, die minimierten Code zurück auf den ursprünglichen Quellcode abbildet.",
+          "isCorrect": true,
+          "explanation": "Richtig: die Source Map übersetzt kryptische Positionen im Minifier-Ergebnis zurück in originale Dateinamen und Zeilennummern."
+        },
+        {
+          "text": "Eine grafische Landkarte, die alle Quelldateien eines Projekts in ihrer verschachtelten Ordnerstruktur als Baumdiagramm darstellt.",
+          "isCorrect": false,
+          "explanation": "Falsch: eine Source Map ist keine Ordnerübersicht, sondern eine technische Übersetzungsdatei für minimierten Code."
+        },
+        {
+          "text": "Ein automatisches Reparaturwerkzeug, das fehlerhaften Quellcode analysiert und selbstständig korrigiert.",
+          "isCorrect": false,
+          "explanation": "Falsch: eine Source Map repariert keinen Code, sie übersetzt nur Positionen im minimierten Code zurück in den Originalcode."
+        },
+        {
+          "text": "Eine Datenbank, in der alle jemals aufgetretenen Fehler eines Projekts dauerhaft gespeichert und durchsuchbar werden.",
+          "isCorrect": false,
+          "explanation": "Falsch: das beschreibt eher die Fehlerdatenbank von Sentry selbst, nicht eine Source Map."
+        }
+      ]
+    },
+    {
+      "question": "Warum sind Source Maps für die Fehlersuche in Produktion unverzichtbar?",
+      "area": "Source Map: Nutzen",
+      "options": [
+        {
+          "text": "Ohne sie zeigt ein Fehler nur eine kryptische Position, mit der du im Originalcode nichts anfangen kannst.",
+          "isCorrect": true,
+          "explanation": "Richtig: Zeile 1, Spalte 45832 im Minifier-Ergebnis sagt dir nichts, CheckoutForm.tsx, Zeile 47 führt dich direkt zum Problem."
+        },
+        {
+          "text": "Der Browser unterdrückt ohne Source Map die Fehlermeldung komplett und zeigt nur eine leere weiße Seite an.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Browser zeigt die Fehlermeldung auch ohne Source Map an, aber die Position ist nutzlos."
+        },
+        {
+          "text": "Source Maps sind gesetzlich für jede kommerzielle Webseite in der Europäischen Union vorgeschrieben.",
+          "isCorrect": false,
+          "explanation": "Falsch: es gibt kein Gesetz, das Source Maps vorschreibt, sie sind ein freiwilliges technisches Hilfsmittel."
+        },
+        {
+          "text": "Source Maps beschleunigen den Code automatisch und halbieren die Ladezeit jeder Webseite im Browser.",
+          "isCorrect": false,
+          "explanation": "Falsch: Source Maps haben keinen Einfluss auf die Ausführungsgeschwindigkeit, sie sind nur für Entwickler gedacht."
+        }
+      ]
+    },
+    {
+      "question": "Was ist eine Alert-Regel in Sentry?",
+      "area": "Alert-Regel: Definition",
+      "options": [
+        {
+          "text": "Eine Bedingung, die festlegt, bei welchen Fehlern und auf welchem Kanal das Team benachrichtigt wird.",
+          "isCorrect": true,
+          "explanation": "Richtig: Alert-Regeln filtern den Fehlerstrom und eskalieren nur die wirklich wichtigen Ereignisse."
+        },
+        {
+          "text": "Eine gesetzliche Vorschrift, die Unternehmen zur sofortigen Meldung von Sicherheitslücken an eine staatliche Behörde verpflichtet.",
+          "isCorrect": false,
+          "explanation": "Falsch: das wäre eine gesetzliche Meldepflicht, keine technische Alert-Regel in Sentry."
+        },
+        {
+          "text": "Ein automatischer Test, der prüft, ob das eingebaute alert()-System des Browsers im Fehlerfall richtig funktioniert.",
+          "isCorrect": false,
+          "explanation": "Falsch: das browser-eigene alert() hat nichts mit Sentrys Alert-Regeln zu tun."
+        },
+        {
+          "text": "Eine wöchentliche Sicherheitskopie aller Fehlermeldungen, die Sentry automatisch per E-Mail an das Team verschickt.",
+          "isCorrect": false,
+          "explanation": "Falsch: eine Alert-Regel ist keine Sicherheitskopie, sondern eine Filter- und Eskalationsbedingung."
+        }
+      ]
+    },
+    {
+      "question": "Welche Aussage über Alert-Regeln ist richtig?",
+      "area": "Alert-Regel: Konfiguration",
+      "options": [
+        {
+          "text": "Sie filtern unwichtige Meldungen heraus, sodass du bei echten Problemen sofort Bescheid weißt.",
+          "isCorrect": true,
+          "explanation": "Richtig: gute Alert-Regeln finden die Balance zwischen zu empfindlich und zu träge."
+        },
+        {
+          "text": "Sie ersetzen das gesamte Entwicklungsteam, weil Sentry Fehler jetzt vollautomatisch selbst beheben kann.",
+          "isCorrect": false,
+          "explanation": "Falsch: Sentry benachrichtigt nur, es behebt keine Fehler automatisch."
+        },
+        {
+          "text": "Sie müssen einmal pro Woche von Hand neu konfiguriert werden, sonst verfallen sie automatisch.",
+          "isCorrect": false,
+          "explanation": "Falsch: Alert-Regeln sind dauerhaft konfiguriert und müssen nicht regelmäßig erneuert werden."
+        },
+        {
+          "text": "Sie funktionieren ausschließlich in Verbindung mit einem Slack-Arbeitsbereich, andere Kanäle sind nicht möglich.",
+          "isCorrect": false,
+          "explanation": "Falsch: Sentry unterstützt viele Kanäle wie E-Mail, Discord, PagerDuty und Webhooks."
+        }
+      ]
+    },
+    {
+      "question": "Wie lange dauert die grundlegende Integration von Sentry in ein bestehendes Projekt?",
+      "area": "Sentry: Integration",
+      "options": [
+        {
+          "text": "Wenige Minuten: SDK installieren und initialisieren, danach werden Fehler automatisch erfasst.",
+          "isCorrect": true,
+          "explanation": "Richtig: die Basis-Integration ist in wenigen Minuten erledigt und erfasst ab dann alle unbehandelten Fehler."
+        },
+        {
+          "text": "Mehrere Tage, weil der gesamte bestehende Code umgeschrieben werden muss, um mit Sentry kompatibel zu sein.",
+          "isCorrect": false,
+          "explanation": "Falsch: Sentry wird als SDK eingebunden und erfordert keine Änderungen am bestehenden Code."
+        },
+        {
+          "text": "Mehrere Wochen, weil Sentry eine eigene Serverinfrastruktur im Unternehmen voraussetzt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Sentry ist ein Cloud-Dienst, du brauchst keine eigene Infrastruktur."
+        },
+        {
+          "text": "Eine nachträgliche Integration ist nicht möglich, Sentry kann nur bei komplett neuen Projekten eingesetzt werden.",
+          "isCorrect": false,
+          "explanation": "Falsch: Sentry kann jederzeit in ein bestehendes Projekt integriert werden, unabhängig vom Alter des Codes."
+        }
+      ]
+    },
+    {
+      "question": "Welche Informationen liefert Sentry zusätzlich zur reinen Fehlermeldung?",
+      "area": "Sentry: Fehlerkontext",
+      "options": [
+        {
+          "text": "Stacktrace, betroffener Nutzer, Gerät, Browser-Version und die Aktionen vor dem Fehler.",
+          "isCorrect": true,
+          "explanation": "Richtig: dieser Kontext ist der entscheidende Vorteil von Sentry gegenüber einer einfachen Logdatei."
+        },
+        {
+          "text": "Die Kreditkartennummer des Nutzers und sein vollständiges Adressprofil für die Rechnungsstellung.",
+          "isCorrect": false,
+          "explanation": "Falsch: Sentry erfasst keine Zahlungsdaten, das wäre ein schwerer Datenschutzverstoß."
+        },
+        {
+          "text": "Eine automatische Übersetzung der Fehlermeldung in zwanzig verschiedene Sprachen.",
+          "isCorrect": false,
+          "explanation": "Falsch: Sentry übersetzt keine Fehlermeldungen, es zeigt sie im Original an."
+        },
+        {
+          "text": "Den Namen und die E-Mail-Adresse des Entwicklers, der den Fehler verursacht hat.",
+          "isCorrect": false,
+          "explanation": "Falsch: Sentry kann Fehler nicht automatisch einer Person zuweisen, das muss manuell geschehen."
+        }
+      ]
+    },
+    {
+      "question": "Wo sollten Source Maps in einer Produktionsumgebung gespeichert werden?",
+      "area": "Source Map: Sicherheit",
+      "options": [
+        {
+          "text": "Direkt in Sentry hochgeladen, nicht öffentlich auf dem Produktions-Webserver.",
+          "isCorrect": true,
+          "explanation": "Richtig: öffentlich zugängliche Source Maps würden deinen gesamten Quellcode für jeden lesbar machen."
+        },
+        {
+          "text": "Im öffentlichen assets-Ordner des Webservers, damit der Browser sie automatisch finden und herunterladen kann.",
+          "isCorrect": false,
+          "explanation": "Falsch: das wäre ein Sicherheitsrisiko, weil dann jeder deinen unminimierten Quellcode lesen könnte."
+        },
+        {
+          "text": "Auf einem USB-Stick, den der Teamleiter einmal im Monat per Post an den Sentry-Support schickt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Source Maps werden automatisch während des Build-Prozesses hochgeladen, nicht manuell per Post."
+        },
+        {
+          "text": "Source Maps müssen gar nicht gespeichert werden, Sentry erzeugt sie automatisch aus dem minimierten Code.",
+          "isCorrect": false,
+          "explanation": "Falsch: Sentry kann Source Maps nicht selbst erzeugen, sie müssen beim Build-Prozess generiert und hochgeladen werden."
+        }
+      ]
+    },
+    {
+      "question": "Welches Problem tritt auf, wenn Alert-Regeln zu empfindlich eingestellt sind?",
+      "area": "Alert-Regel: Konfiguration",
+      "options": [
+        {
+          "text": "Das Team ignoriert die vielen Benachrichtigungen irgendwann – auch die wirklich wichtigen.",
+          "isCorrect": true,
+          "explanation": "Richtig: zu viele Fehlalarme führen zu Alarmmüdigkeit, und dann werden auch echte Alarme übersehen."
+        },
+        {
+          "text": "Sentry löscht automatisch alle Fehler, die älter als eine Stunde sind, um Speicherplatz zu sparen.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Empfindlichkeit der Regeln hat keinen Einfluss auf die Speicherdauer der Fehler."
+        },
+        {
+          "text": "Der Browser der Nutzer wird spürbar langsamer, weil Sentry im Hintergrund zu viele Daten sammelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Alert-Regeln beeinflussen nur die Benachrichtigungen, nicht die Datenerfassung oder Performance."
+        },
+        {
+          "text": "Die monatlichen Kosten von Sentry verdoppeln sich bei jeder zusätzlich eingerichteten Alert-Regel.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Kosten richten sich nach der Anzahl der erfassten Fehler, nicht nach der Anzahl der Alert-Regeln."
+        }
+      ]
+    },
+    {
+      "question": "Welche Aussage über das FutureDev-Repo und Sentry ist richtig?",
+      "area": "Praxisbeispiel FutureDev",
+      "options": [
+        {
+          "text": "Sentry ist in App und Backend integriert und zeigt Fehler mit Stacktrace und Geräteinformationen an.",
+          "isCorrect": true,
+          "explanation": "Richtig: FutureDev nutzt Sentry plattformübergreifend für Frontend und Backend."
+        },
+        {
+          "text": "FutureDev verwendet Sentry nur für das Backend, die mobile App hat keinerlei Fehlerüberwachung.",
+          "isCorrect": false,
+          "explanation": "Falsch: Sentry ist sowohl in der mobilen App als auch im Backend integriert."
+        },
+        {
+          "text": "FutureDev hat Sentry nach einem Monat wieder deinstalliert, weil die Kosten zu hoch waren.",
+          "isCorrect": false,
+          "explanation": "Falsch: FutureDev nutzt Sentry aktiv, das kostenlose Kontingent reicht für die Projektgröße aus."
+        },
+        {
+          "text": "FutureDev verwendet eine selbstgebaute Fehlerüberwachung, Sentry kam erst später als Ergänzung dazu.",
+          "isCorrect": false,
+          "explanation": "Falsch: FutureDev setzt direkt auf Sentry, nicht auf eine Eigenentwicklung."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der entscheidende wirtschaftliche Vorteil von Sentry?",
+      "area": "Sentry: Wirtschaftlichkeit",
+      "options": [
+        {
+          "text": "Es verkürzt die Zeit zwischen Fehlerauftritt und Kenntnis des Teams von Tagen auf Sekunden.",
+          "isCorrect": true,
+          "explanation": "Richtig: in dieser Zeit entsteht der größte Schaden, und Sentry minimiert sie drastisch."
+        },
+        {
+          "text": "Es ersetzt alle Entwickler im Team, weil Fehler jetzt vollautomatisch behoben werden.",
+          "isCorrect": false,
+          "explanation": "Falsch: Sentry behebt keine Fehler, es meldet sie nur – die Entwickler werden nicht überflüssig."
+        },
+        {
+          "text": "Es garantiert vertraglich, dass die Software nie wieder einen Fehler enthalten wird.",
+          "isCorrect": false,
+          "explanation": "Falsch: Sentry verhindert keine Fehler, es erkennt sie nur schneller."
+        },
+        {
+          "text": "Es senkt die Serverkosten, weil fehlerhafter Code weniger Rechenleistung verbraucht.",
+          "isCorrect": false,
+          "explanation": "Falsch: Sentry hat keinen Einfluss auf die Serverkosten oder die Effizienz des Codes."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Integriere Sentry in ein eigenes Projekt. Installiere das passende SDK, initialisiere es mit einem Projekt-Schlüssel aus einem kostenlosen Sentry-Konto und löse einen Testfehler aus, um zu prüfen, dass er im Übersichtsseite erscheint. Richte anschließend eine Alert-Regel ein, die dich per E-Mail benachrichtigt, wenn dieser Fehler mehr als dreimal in einer Stunde auftritt. Lade zuletzt die Source Maps deines Projekts in Sentry hoch und überprüfe, dass der Stacktrace im Übersichtsseite die originalen Dateinamen und Zeilennummern zeigt.",
+    "expectation": "Sentry ist im Projekt integriert und ein Testfehler erscheint mit vollständigem Kontext im Übersichtsseite. Eine Alert-Regel ist eingerichtet und hat eine Testbenachrichtigung ausgelöst. Die Source Maps sind hochgeladen und der Stacktrace zeigt die originalen Quelldateien statt des minimierten Codes.",
+    "checklist": [
+      "Kostenloses Sentry-Konto erstellt und Projekt angelegt.",
+      "SDK im Projekt installiert und mit Projekt-Schlüssel initialisiert.",
+      "Testfehler ausgelöst und im Sentry-Übersichtsseite überprüft.",
+      "Alert-Regel eingerichtet, die bei mehr als drei gleichen Fehlern pro Stunde benachrichtigt.",
+      "Testbenachrichtigung der Alert-Regel erhalten und verstanden.",
+      "Source Maps beim Build-Prozess erzeugt und in Sentry hochgeladen.",
+      "Stacktrace im Übersichtsseite zeigt originale Dateinamen und Zeilennummern."
+    ],
+    "portfolioItem": "P02"
+  },
+  "audio": {
+    "file": "M04-06-01.mp3",
+    "durationSeconds": 1360,
+    "voices": ["A", "B"],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Brauche ich Sentry auch für ein kleines Hobbyprojekt, oder ist das nur für große Firmen?",
+      "answer": "Sentry hat ein großzügiges kostenloses Kontingent, das für die meisten Hobbyprojekte völlig ausreicht. Der Nutzen ist unabhängig von der Projektgröße: Auch in einem kleinen Projekt willst du wissen, wenn etwas abstürzt, statt dich auf Nutzerbeschwerden zu verlassen. Gerade als Einzelentwickler hast du niemanden, der für dich testet, und Sentry wird zu deinem stillen Qualitätswächter. Die fünf Minuten für die Einrichtung zahlst du beim ersten gefundenen Fehler doppelt und dreifach zurück."
+    },
+    {
+      "question": "Was ist der Unterschied zwischen Sentry und einem einfachen try-catch mit console.error?",
+      "answer": "Ein try-catch mit console.error schreibt eine Zeile in die Konsole, die niemand sieht, sobald der Code in Produktion läuft. Sentry sammelt diese Fehler zentral, reichert sie mit Kontext an und benachrichtigt dich proaktiv. Außerdem gruppiert Sentry gleiche Fehler, zeigt dir Trends über die Zeit und erlaubt dir, Fehler bestimmten Releases oder Personen zuzuweisen. console.error ist wie ein Zettel, den du in eine Schublade legst, Sentry ist wie ein Assistent, der dir den Zettel sofort auf den Schreibtisch legt und sagt, wer ihn geschrieben hat und warum."
+    },
+    {
+      "question": "Muss ich Source Maps in die Produktion hochladen, und ist das nicht ein Sicherheitsrisiko?",
+      "answer": "Source Maps sollten niemals öffentlich im Produktions-Webserver liegen, weil sie deinen gesamten Quellcode lesbar machen. Stattdessen lädst du sie direkt in Sentry hoch, entweder per CLI während des Build-Prozesses oder über ein Webpack-Plugin. Sentry speichert sie verschlüsselt und zeigt sie nur autorisierten Teammitgliedern im Übersichtsseite an. Deine Nutzer im Browser sehen weiterhin nur den minimierten Code, aber du siehst im Sentry-Übersichtsseite die originale Zeile."
+    },
+    {
+      "question": "Wie verhindere ich, dass Sentry mich mit unwichtigen Fehlermeldungen zuspammt?",
+      "answer": "Du kannst in Sentry festlegen, welche Fehler dich überhaupt interessieren. Bestimmte Fehlertypen oder Fehler aus bestimmten Dateien kannst du stumm schalten. Über Alert-Regeln bestimmst du, dass nur Fehler ab einer gewissen Häufigkeit oder Schwere eine Benachrichtigung auslösen. Außerdem kannst du festlegen, auf welchem Kanal du benachrichtigt wirst: kritische Fehler per Slack, neue Fehlertypen per E-Mail und alles andere nur im Übersichtsseite. So stellst du sicher, dass jede Benachrichtigung eine echte Handlungsaufforderung ist und nicht nur Hintergrundrauschen."
+    },
+    {
+      "question": "Kann Sentry auch Fehler im Backend erfassen, oder nur im Browser?",
+      "answer": "Sentry erfasst Fehler überall dort, wo Code läuft: im Browser, auf dem Node.js-Server, in React Native, in Python, Java, Go und Dutzenden weiteren Sprachen und Frameworks. Du kannst dasselbe Übersichtsseite für Frontend- und Backend-Fehler verwenden und sogar sehen, ob ein Fehler im Browser durch eine fehlerhafte API-Antwort des Backends ausgelöst wurde. Diese plattformübergreifende Sicht ist einer der größten Vorteile von Sentry gegenüber sprachspezifischen Logging-Bibliotheken."
+    },
+    {
+      "question": "Was kostet Sentry, und ab wann muss ich bezahlen?",
+      "answer": "Sentry bietet ein kostenloses Developer-Kontingent mit fünftausend Fehlern pro Monat, einem Nutzer und einer Woche Datenhistorie. Für die meisten Hobbyprojekte und kleine Teams reicht das völlig aus. Die kostenpflichtigen Pläne beginnen bei sechsundzwanzig Dollar pro Monat und skalieren mit der Anzahl der erfassten Fehler, nicht mit der Anzahl der Nutzer deiner Anwendung. Du kannst also eine App mit zehntausend Nutzern betreiben und zahlst nur für die Fehler, die tatsächlich auftreten."
+    }
+  ]
+}

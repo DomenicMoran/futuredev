@@ -1,0 +1,735 @@
+{
+  "id": "M04-02-01",
+  "title": "Warum Tests",
+  "durationMinutes": 34,
+  "prerequisites": [
+    "M04-01-01",
+    "M04-01-02",
+    "M02-03-01"
+  ],
+  "terms": [
+    {
+      "term": "Automatisierter Test",
+      "definition": "Ein Programm, das ein anderes Programm prüft, ohne dass ein Mensch jeden Schritt einzeln per Hand ausführen muss. Der Test ruft eine Funktion auf, vergleicht das Ergebnis mit dem erwarteten Wert und meldet Erfolg oder Fehlschlag."
+    },
+    {
+      "term": "Regression",
+      "definition": "Ein Fehler, der in einem früher bereits funktionierenden Teil des Programms neu auftritt, nachdem an einer anderen Stelle Code geändert wurde. Automatisierte Tests sollen genau solche Rückschritte sofort erkennen."
+    },
+    {
+      "term": "Testpyramide",
+      "definition": "Ein Modell, das die verschiedenen Testarten nach ihrer Anzahl und Geschwindigkeit ordnet: viele schnelle Unit-Tests unten, weniger Tests für das Zusammenspiel in der Mitte und wenige langsame Ende-zu-Ende-Tests an der Spitze."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine Brücke vor, die jeden Morgen von einem Bauarbeiter mit einem Hammer abgeklopft wird, bevor der Verkehr rollt. Er hört am Klang, ob irgendwo ein Riss ist, der in der Nacht entstanden sein könnte.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Dieser Bauarbeiter macht jeden Morgen denselben Test: er klopft die Brücke ab und vergleicht den Klang mit dem, den er von einer intakten Brücke erwartet. Weicht der Klang ab, schlägt er Alarm, bevor der erste Lastwagen in die Tiefe stürzt. Genau das tun automatisierte Tests in der Softwareentwicklung: sie klopfen das Programm nach jeder Änderung ab und schlagen Alarm, wenn etwas nicht mehr so klingt wie vorher.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Warum reicht es nicht, das Programm einfach einmal von Hand durchzuklicken, bevor ich es live schalte?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Von Hand testen ist wie eine Brücke nur am ersten Tag abzuklopfen und dann nie wieder. Das Programm wächst mit jeder Änderung, und jede Änderung kann eine alte Funktion zerbrechen, die du längst vergessen hast. Ein Mensch müsste nach jeder noch so kleinen Änderung das gesamte Programm von vorne durchklicken, und das tut niemand, weil es Stunden dauern würde. Ein automatisierter Test tut genau das in Sekunden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Ein solcher automatischer Prüfer heißt in der Softwareentwicklung automatisierter Test.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-darts-checkout, einem Programm, das die schnellste Kombination zum Beenden eines Dartspiels berechnet, gibt es eine Datei voller automatisierter Tests. Ein Test ruft die Funktion checkout(170) auf und erwartet als Ergebnis die Wurffolge T20, T20, BULL. Ein anderer Test ruft checkout(2) auf und erwartet D1. Jedes Mal, wenn jemand den Berechnungsalgorithmus ändert, laufen alle diese Tests automatisch durch und melden sofort, ob eine Checkout-Berechnung nicht mehr stimmt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Das ist wichtig, weil die Dart-Checkout-Regeln kompliziert sind: es gibt Dutzende Kombinationen, und eine kleine Änderung an der Optimierungslogik kann eine scheinbar unabhängige Kombination zerstören. Ohne automatisierte Tests müsste ein Mensch nach jeder Änderung alle 162 möglichen Restpunktzahlen von Hand nachrechnen, und das wäre nicht nur langsam, sondern auch fehleranfällig.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was genau passiert, wenn ein Test fehlschlägt?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine Alarmanlage in einem Museum vor. Wenn nachts jemand ein Fenster öffnet, geht die Alarmanlage los und zeigt genau an, welches Fenster geöffnet wurde.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein fehlschlagender Test ist wie diese Alarmanlage. Er sagt nicht nur, dass etwas kaputt ist, sondern auch genau was und wo. Die Testausgabe zeigt, welche Funktion mit welchen Eingaben aufgerufen wurde, welches Ergebnis erwartet wurde und welches tatsächlich herauskam. Mit diesen drei Informationen kannst du den Fehler meist in Minuten finden und beheben, statt stundenlang im Code zu suchen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Dieses Phänomen, dass eine Änderung an einer Stelle eine andere, früher funktionierende Stelle kaputtmacht, heißt Regression.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-darts-checkout schützt eine ganze Sammlung von Tests vor Regression. Wenn jemand zum Beispiel die Regel ändert, dass ein Finish immer auf einem Doppelfeld enden muss, würden sofort alle Tests fehlschlagen, die ein Doppel als letzten Wurf erwarten. Der Entwickler sieht dann auf einen Blick, welche Kombinationen von der Änderung betroffen sind, und kann entweder die Änderung zurücknehmen oder die betroffenen Tests bewusst anpassen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Regressionen sind in der Praxis die häufigste und teuerste Fehlerart, weil sie unbemerkt in Produktion gehen können. Der Nutzer bemerkt den Fehler oft als Erster, und dann ist das Vertrauen in die Software beschädigt. Automatisierte Tests fangen Regressionen ab, bevor sie den Nutzer erreichen, und das ist ihr größter wirtschaftlicher Wert.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Gibt es verschiedene Arten von automatisierten Tests, oder ist das immer dasselbe?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine Qualitätsprüfung in einer Autofabrik vor. Es gibt drei Ebenen: Der Zulieferer prüft jeden einzelnen Airbag, bevor er ihn ausliefert. Am Fließband prüft ein Roboter, ob der Airbag richtig ins Lenkrad eingebaut wurde. Und am Ende fährt ein Testfahrer das fertige Auto auf einer Teststrecke und löst eine Vollbremsung aus, um zu sehen, ob alles zusammen funktioniert.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "In der Software gibt es dieselben drei Ebenen. Die Prüfung des einzelnen Airbags entspricht dem Unit-Test: eine einzelne Funktion oder Klasse wird isoliert getestet. Die Prüfung am Fließband entspricht dem Test für das Zusammenspiel: mehrere Teile werden zusammen getestet, zum Beispiel ob die Datenbank die richtigen Daten zurückgibt. Die Testfahrt entspricht dem Ende-zu-Ende-Test: das gesamte Programm wird aus Sicht des Nutzers durchgetestet, zum Beispiel indem ein Browser automatisch eine Bestellung aufgibt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Dieses Drei-Ebenen-Modell heißt Testpyramide, weil es wie eine Pyramide aufgebaut ist: viele Unit-Tests unten, weniger Tests für das Zusammenspiel in der Mitte und wenige Ende-zu-Ende-Tests an der Spitze.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-darts-checkout siehst du die unterste Ebene der Testpyramide: Unit-Tests für die Berechnungsfunktionen. Jeder Test prüft genau eine Eingabe und eine erwartete Ausgabe, isoliert von allem anderen. Es gibt keine Datenbank, keinen Browser, kein Netzwerk. Die Tests laufen in Millisekunden und können hunderte Male am Tag ausgeführt werden, ohne jemanden zu stören.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die Pyramidenform ist wichtig, weil sie die Kosten und den Nutzen der verschiedenen Testarten widerspiegelt. Unit-Tests sind billig zu schreiben und schnell auszuführen, also schreibt man viele davon. Ende-zu-Ende-Tests sind teuer, langsam und oft instabil, also schreibt man nur wenige, und nur für die wichtigsten Nutzerabläufe. Eine umgekehrte Pyramide mit vielen langsamen Tests und wenigen schnellen wäre ein Albtraum: jeder Testlauf würde Stunden dauern, und niemand würde die Tests noch ausführen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Wenn Unit-Tests so gut sind, warum schreibt man dann überhaupt noch die anderen Testarten?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du hast jeden einzelnen Stein einer Mauer einzeln geprüft und für gut befunden. Das heißt noch lange nicht, dass die fertige Mauer gerade steht und nicht umfällt, wenn der Wind bläst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Unit-Tests prüfen jeden Stein einzeln, aber nicht das Zusammenspiel. Ein Test für das Zusammenspiel prüft, ob die Steine richtig aufeinandergesetzt wurden, also ob deine Funktion auch mit der echten Datenbank funktioniert und nicht nur mit einer Attrappe. Ein Ende-zu-Ende-Test prüft die ganze Mauer im Sturm, also ob der Nutzer eine Bestellung von Anfang bis Ende durchführen kann. Jede Testart findet Fehler, die die anderen nicht finden können.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-darts-checkout gibt es neben den Unit-Tests auch einen Test, der die gesamte Kommandozeilenausgabe prüft. Dieser Test ruft nicht nur eine einzelne Funktion auf, sondern das ganze Programm mit einer Eingabe wie 170 und vergleicht die komplette Ausgabe mit der erwarteten Zeichenkette. Das ist ein kleiner Test für das Zusammenspiel, der sicherstellt, dass die Einzelteile auch im Zusammenspiel das richtige Ergebnis liefern.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Diese Kombination der Testarten ist wichtig, weil sie verschiedene Fehlerklassen abdeckt. Ein Unit-Test findet Logikfehler in der Berechnung. Ein Test für das Zusammenspiel findet Fehler in der Verkabelung zwischen den Teilen. Ein Ende-zu-Ende-Test findet Fehler, die nur unter realistischen Bedingungen auftreten, wie Zeitüberschreitungen oder falsch konfigurierte Umgebungsvariablen. Erst alle drei zusammen geben das Vertrauen, dass die Software wirklich funktioniert.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Kosten Tests nicht mehr Zeit, als sie sparen? Ich will doch nur mein Programm fertigbekommen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen Schreiner vor, der einen Schrank baut und sich die Zeit für eine Wasserwaage spart, weil er schneller fertig werden will. Der Schrank steht am Ende schief, die Türen klemmen, und der Kunde schickt ihn zurück. Der Schreiner braucht jetzt doppelt so lange, um den Schrank auseinanderzunehmen und neu zusammenzubauen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Tests sind die Wasserwaage des Programmierers. Sie kosten am Anfang ein paar Minuten extra, aber sie verhindern, dass du am Ende Stunden damit verbringst, einen Fehler zu suchen, den du vor zwei Wochen eingebaut hast und den inzwischen niemand mehr versteht. Die Zeit, die du in Tests investierst, holst du bei der ersten Regression wieder herein, und bei jedem weiteren Mal machst du Gewinn.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-darts-checkout siehst du diesen Effekt in Reinform. Die Checkout-Logik hat viele Randfälle: Was passiert bei 169, einer Punktzahl, die nicht in drei Darts beendet werden kann? Was passiert bei 1, wo nur ein bestimmtes Doppelfeld möglich ist? Jeder dieser Randfälle ist als Test festgehalten. Wenn jemand den Algorithmus optimiert, laufen alle Randfälle automatisch durch, und der Entwickler muss keinen einzigen davon im Kopf behalten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Das ist der entscheidende wirtschaftliche Punkt: Tests sparen nicht Zeit beim ersten Schreiben, sondern bei jeder zukünftigen Änderung. Ein Projekt wird nicht einmal geschrieben und dann nie wieder angefasst. Es wird über Monate und Jahre immer wieder geändert, erweitert und verbessert. Bei der ersten Änderung ohne Tests zahlst du die gesparte Zeit mit Zinsen zurück. Bei der zehnten Änderung ohne Tests bist du bankrott.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Muss ich die Tests vor dem Code schreiben oder danach?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen Architekten vor, der zuerst das Haus zeichnet und dann prüft, ob es auf das Grundstück passt, statt vorher das Grundstück auszumessen und den Plan danach auszurichten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Die Reihenfolge Test-vor-Code heißt Test-Driven Development, kurz TDD, und hat einen handfesten Vorteil: du musst dir vorher überlegen, was die Funktion tun soll, bevor du sie baust. Das zwingt dich, die Verbindungsstelle sauber zu definieren und Randfälle zu bedenken, bevor du dich in der Umsetzung verlierst. Aber auch Tests, die nach dem Code geschrieben werden, sind wertvoll, denn sie schützen vor zukünftigen Regressionen. Die Hauptsache ist, dass überhaupt Tests existieren.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-darts-checkout wurden die Tests vermutlich nach dem Code geschrieben, aber sie erfüllen trotzdem ihren Zweck: sie dokumentieren das erwartete Verhalten und schlagen Alarm, wenn eine Änderung es bricht. Ob sie vor oder nach dem Code geschrieben wurden, sieht man dem Test nicht an, und für den Schutz vor Regressionen ist es egal.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Diese Unterscheidung ist wichtig, weil viele Anfänger denken, sie müssten TDD perfekt beherrschen, bevor sie überhaupt Tests schreiben dürfen. Das ist falsch. Ein nachträglich geschriebener Test ist unendlich viel besser als gar kein Test. Fang mit Tests an, egal in welcher Reihenfolge, und wenn du sicherer wirst, kannst du TDD ausprobieren und sehen, ob es dir hilft.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was genau macht einen guten Test aus?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir ein Rezept vor, das so geschrieben ist: Man nehme etwas Mehl, ein paar Eier und backe es, bis es fertig ist. Mit diesem Rezept kann niemand etwas anfangen, weil die Mengen und die Backzeit fehlen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein guter Test ist wie ein gutes Rezept: er nennt die genauen Zutaten, also die Eingabewerte, die genaue Zubereitung, also den Aufruf der Funktion, und das genaue erwartete Ergebnis. Ein schlechter Test prüft nur, ob die Funktion nicht abstürzt, oder vergleicht das Ergebnis mit einem Wert, der sich bei jedem Durchlauf ändert. Ein guter Test ist außerdem unabhängig von anderen Tests, schnell und leicht verständlich.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-darts-checkout findest du gute Tests. Ein Test für checkout(170) sagt genau: Eingabe ist 170, erwartete Ausgabe ist die Zeichenkette T20, T20, BULL. Nichts ist unklar, nichts ist zufällig, nichts hängt von der Tageszeit oder der Reihenfolge ab, in der die Tests ausgeführt werden. Jeder Test steht für sich allein und kann einzeln ausgeführt werden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Diese Klarheit ist wichtig, weil ein Test, der manchmal fehlschlägt und manchmal nicht, schlimmer ist als gar kein Test. Er untergräbt das Vertrauen in die gesamte Testsuite, und irgendwann ignoriert das Team die Fehlschläge, weil ja doch wieder nur der wackelige Test gemeckert hat. Ein guter Test schlägt nur dann fehl, wenn wirklich etwas kaputt ist, und dann zeigt er präzise, was kaputt ist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Wie viele Tests brauche ich für mein Projekt?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine Versicherung vor. Du kannst dich gegen jeden erdenklichen Schaden versichern, aber die Prämien fressen irgendwann dein ganzes Einkommen auf. Die Kunst ist, die richtigen Risiken zu versichern und bei den unwahrscheinlichen zu sparen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Tests sind eine Versicherung gegen Fehler, und wie bei jeder Versicherung gibt es einen Punkt, an dem die Prämie den Nutzen übersteigt. Du musst nicht jede Zeile testen, aber du solltest die Stellen testen, an denen ein Fehler teuer wäre: die Kernlogik, sicherheitskritische Berechnungen und die Verbindungsstellen zwischen den Teilen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-darts-checkout ist die Kernlogik die Berechnung der Checkout-Kombinationen, und genau diese ist getestet. Die Ausgabeformatierung, die nur ein paar Zeichenketten zusammensetzt, hat weniger Tests, weil ein Fehler dort sofort sichtbar und leicht zu beheben wäre. Das ist eine vernünftige Abwägung: teste das, was wehtut, wenn es kaputtgeht, und spare dir die Tests für triviale Einzeiler.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Diese Abwägung ist wichtig, weil Testcode auch Code ist, der geschrieben, gelesen und gewartet werden muss. Jede Testzeile, die du schreibst, ist eine Zeile, die bei einer Änderung angepasst werden muss. Hundert Tests für eine triviale Funktion sind keine Qualität, sondern Ballast. Zwanzig Tests für eine kritische Berechnung sind eine kluge Investition.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "text": "Also noch einmal ganz kurz: Ein automatisierter Test ist ein Programm, das ein anderes Programm prüft und sofort Alarm schlägt, wenn eine Änderung etwas kaputtmacht. Dieses Kaputtgehen einer früher funktionierenden Stelle heißt Regression, und automatisierte Tests sind die wirksamste Waffe dagegen. Die Testpyramide ordnet Tests in drei Ebenen: viele schnelle Unit-Tests für einzelne Funktionen, weniger Tests für das Zusammenspiel und wenige Ende-zu-Ende-Tests für ganze Nutzerabläufe. Tests sind eine Investition, die sich bei jeder zukünftigen Änderung auszahlt, und ein guter Test ist klar, unabhängig, schnell und wiederholbar.",
+      "isKeySentence": true
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Ein automatisierter Test ist ein Programm, das ein anderes Programm prüft, ohne dass ein Mensch jeden Schritt einzeln per Hand ausführen muss. Der Test ruft eine Funktion auf, vergleicht das Ergebnis mit dem erwarteten Wert und meldet Erfolg oder Fehlschlag.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Eine Regression ist ein Fehler, der in einem früher bereits funktionierenden Teil des Programms neu auftritt, nachdem an einer anderen Stelle Code geändert wurde. Automatisierte Tests sollen genau solche Rückschritte sofort erkennen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Die Testpyramide ist ein Modell, das die verschiedenen Testarten nach ihrer Anzahl und Geschwindigkeit ordnet: viele schnelle Unit-Tests unten, weniger Tests für das Zusammenspiel in der Mitte und wenige langsame Ende-zu-Ende-Tests an der Spitze.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was ist der Unterschied zwischen einem Test und einer Typ-Prüfung durch TypeScript?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "TypeScript prüft die Form der Daten, also ob eine Variable eine Zahl oder eine Zeichenkette ist, aber es prüft nicht den Wert. Ein Test prüft beides: dass die Funktion checkout(170) eine Zeichenkette zurückgibt, prüft TypeScript auch, aber dass diese Zeichenkette genau T20, T20, BULL lautet, kann nur ein Test prüfen. TypeScript verhindert eine ganze Klasse von Fehlern, aber es ersetzt keine Tests. Beide ergänzen sich: TypeScript fängt die groben Formfehler ab, Tests fangen die feinen Wertfehler ab.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Kann ich Tests auch nachträglich zu einem bestehenden Projekt hinzufügen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ja, und das ist ein völlig normaler Vorgang. Fang mit der kritischsten Funktion an, also der, bei der ein Fehler den größten Schaden anrichten würde. Schreibe einen Test, der das aktuelle Verhalten dieser Funktion festhält, auch wenn du nicht sicher bist, ob das Verhalten korrekt ist. Dieser Test schützt dich ab sofort vor unbeabsichtigten Änderungen an dieser Funktion. Danach nimmst du die nächste Funktion vor, und so arbeitest du dich Stück für Stück durch das Projekt. Nach ein paar Wochen hast du ein Sicherheitsnetz, das die wichtigsten Teile abdeckt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was mache ich, wenn ein Test fehlschlägt, aber das neue Verhalten tatsächlich richtig ist?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Dann musst du den Test aktualisieren, und das ist ein ganz normaler Vorgang. Ein Test dokumentiert das erwartete Verhalten, und wenn sich das erwartete Verhalten bewusst ändert, muss der Test mitgeändert werden. Wichtig ist, dass du dir vorher sicher bist, dass die Änderung beabsichtigt ist und nicht versehentlich passiert. Ein fehlschlagender Test zwingt dich zu dieser bewussten Entscheidung: war das Absicht oder ein Unfall? Genau das ist sein Zweck.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Brauche ich für ein kleines Hobbyprojekt wirklich Tests?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Für ein Hobbyprojekt, das nur du selbst benutzt und das du nächste Woche wieder löschst, brauchst du keine Tests. Aber sobald andere Menschen dein Programm benutzen oder du es länger als ein paar Wochen pflegen willst, lohnen sich Tests. Die Schwelle ist nicht die Projektgröße, sondern die Lebensdauer. Ein kleines Programm, das zwei Jahre läuft und immer wieder angepasst wird, profitiert genauso von Tests wie ein großes. Der Schmerz, einen Fehler in einem kleinen Programm zu suchen, den du vor sechs Monaten eingebaut hast, ist derselbe.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Wie fange ich ganz praktisch mit dem Testen an, wenn ich noch nie einen Test geschrieben habe?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Nimm eine Funktion, die du gerade geschrieben hast und von der du genau weißt, was sie tun soll. Schreibe einen Test, der diese Funktion mit einer einfachen Eingabe aufruft und das Ergebnis mit console.log ausgibt. Das ist noch kein richtiger Test, aber du siehst sofort, ob das Ergebnis deiner Erwartung entspricht. Dann ersetze das console.log durch eine richtige Prüfung mit assert oder expect, wie es die Testbibliothek deiner Wahl verlangt. Dieser erste Test wird vielleicht nur drei Zeilen lang sein, aber du hast die Hürde genommen. Jeder weitere Test wird leichter.",
+      "isKeySentence": false
+    }
+  ],
+  "practiceExample": {
+    "text": "Im Repo repo-darts-checkout schützen automatisierte Tests die komplexe Berechnungslogik für Dart-Checkouts. Jeder Test prüft eine bestimmte Restpunktzahl und die erwartete Wurffolge. Die Tests laufen in Millisekunden und fangen Rechenfehler sofort ab, bevor sie in Produktion gehen können.",
+    "repoNote": "repo-darts-checkout",
+    "location": "test/checkout.test.ts (Unit-Tests für die Checkout-Berechnung)"
+  },
+  "quiz": [
+    {
+      "question": "Welches Alltagsbild beschreibt einen automatisierten Test am treffendsten?",
+      "area": "Testgrundlagen: Automatisierter Test",
+      "options": [
+        {
+          "text": "Ein Bauarbeiter, der morgens eine Brücke abklopft und am Klang Risse erkennt.",
+          "isCorrect": true,
+          "explanation": "Richtig: der Bauarbeiter wiederholt jeden Morgen denselben Test und vergleicht das Ergebnis mit dem erwarteten Klang einer intakten Brücke."
+        },
+        {
+          "text": "Ein Maler, der eine Wand streicht und dabei prüft, ob die Farbe gleichmäßig deckt.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Maler prüft während der Arbeit, aber ein automatisierter Test prüft nach jeder Änderung das gesamte Programm."
+        },
+        {
+          "text": "Ein Bäcker, der das Brot in den Ofen schiebt und auf den Timer wartet.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Bäcker wartet nur auf ein Zeitereignis, ein Test vergleicht aktiv ein Ergebnis mit einer Erwartung."
+        },
+        {
+          "text": "Ein Gärtner, der jeden Tag die Pflanzen gießt und dabei das Unkraut zupft.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Gärtner pflegt, aber ein Test prüft gezielt auf Fehler und schlägt Alarm."
+        }
+      ]
+    },
+    {
+      "question": "Was ist eine Regression in der Softwareentwicklung?",
+      "area": "Testgrundlagen: Regression",
+      "options": [
+        {
+          "text": "Ein Fehler in einem funktionierenden Programmteil, der nach einer Codeänderung woanders auftritt.",
+          "isCorrect": true,
+          "explanation": "Richtig: eine Regression ist ein Rückschritt, bei dem eine alte Funktion durch eine neue Änderung kaputtgeht."
+        },
+        {
+          "text": "Ein statistisches Verfahren, um Trends in den Verkaufszahlen der letzten Quartale vorherzusagen.",
+          "isCorrect": false,
+          "explanation": "Falsch: das ist die statistische Regression, ein völlig anderes Konzept aus der Mathematik."
+        },
+        {
+          "text": "Die automatische Korrektur von Tippfehlern im Code durch die Entwicklungsumgebung.",
+          "isCorrect": false,
+          "explanation": "Falsch: Tippfehlerkorrektur hat nichts mit dem Begriff Regression zu tun."
+        },
+        {
+          "text": "Ein Werkzeug, das alte Versionen des Codes aus der Git-Historie wiederherstellt.",
+          "isCorrect": false,
+          "explanation": "Falsch: das Zurückholen alter Versionen heißt nicht Regression, sondern einfach Wiederherstellen."
+        }
+      ]
+    },
+    {
+      "question": "Wie ist die Testpyramide aufgebaut?",
+      "area": "Testgrundlagen: Testpyramide",
+      "options": [
+        {
+          "text": "Viele Unit-Tests unten, weniger Tests für das Zusammenspiel in der Mitte, wenige Ende-zu-Ende-Tests oben.",
+          "isCorrect": true,
+          "explanation": "Richtig: die Pyramide spiegelt Kosten und Geschwindigkeit wider: Unit-Tests sind billig und schnell, E2E-Tests teuer und langsam."
+        },
+        {
+          "text": "Viele Ende-zu-Ende-Tests unten, weniger Tests für das Zusammenspiel in der Mitte, wenige Unit-Tests oben.",
+          "isCorrect": false,
+          "explanation": "Falsch: das wäre eine umgekehrte Pyramide, die in der Praxis nicht funktioniert, weil E2E-Tests zu langsam sind."
+        },
+        {
+          "text": "Alle drei Testarten kommen in gleicher Anzahl vor, weil jede gleich wichtig für die Qualitätssicherung ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Pyramide ist bewusst ungleich verteilt, weil die Testarten unterschiedlich teuer und schnell sind."
+        },
+        {
+          "text": "Nur Unit-Tests und Ende-zu-Ende-Tests, Tests für das Zusammenspiel sind ein veraltetes Konzept aus den Neunzigerjahren.",
+          "isCorrect": false,
+          "explanation": "Falsch: Tests für das Zusammenspiel sind ein wesentlicher Teil der Pyramide und prüfen das Zusammenspiel der Teile."
+        }
+      ]
+    },
+    {
+      "question": "Warum sind automatisierte Tests wirtschaftlich wertvoll?",
+      "area": "Testgrundlagen: Wirtschaftlichkeit",
+      "options": [
+        {
+          "text": "Sie sparen Zeit bei jeder zukünftigen Änderung, indem sie Regressionen sofort erkennen.",
+          "isCorrect": true,
+          "explanation": "Richtig: die Investition in Tests zahlt sich bei der ersten Regression aus und macht bei jeder weiteren Gewinn."
+        },
+        {
+          "text": "Sie ersetzen die gesamte Qualitätssicherungsabteilung, sodass Unternehmen keine Tester mehr einstellen müssen.",
+          "isCorrect": false,
+          "explanation": "Falsch: automatisierte Tests ersetzen keine manuellen Tester, sie ergänzen sie und nehmen ihnen repetitive Arbeit ab."
+        },
+        {
+          "text": "Sie machen den Code automatisch schneller, weil getesteter Code vom Compiler besser optimiert werden kann.",
+          "isCorrect": false,
+          "explanation": "Falsch: Tests haben keinen Einfluss auf die Compiler-Optimierung oder die Ausführungsgeschwindigkeit."
+        },
+        {
+          "text": "Sie sind gesetzlich vorgeschrieben für alle Software, die in der Europäischen Union verkauft wird.",
+          "isCorrect": false,
+          "explanation": "Falsch: es gibt kein Gesetz, das automatisierte Tests vorschreibt, sie sind eine freiwillige Qualitätsmaßnahme."
+        }
+      ]
+    },
+    {
+      "question": "Welche Aussage über das Repo repo-darts-checkout ist richtig?",
+      "area": "Praxisbeispiel repo-darts-checkout",
+      "options": [
+        {
+          "text": "Die Tests prüfen für verschiedene Punktzahlen, ob checkout die korrekte Wurffolge zurückgibt.",
+          "isCorrect": true,
+          "explanation": "Richtig: jeder Test ruft checkout mit einer Punktzahl auf und vergleicht das Ergebnis mit der erwarteten Wurffolge."
+        },
+        {
+          "text": "Das Repo enthält keine Tests, weil Dart-Checkouts zu einfach sind, um Fehler zu machen.",
+          "isCorrect": false,
+          "explanation": "Falsch: das Repo enthält sehr wohl Tests, gerade weil die Checkout-Regeln viele Randfälle haben."
+        },
+        {
+          "text": "Die Tests verwenden einen echten Dartautomaten, der physisch mit dem Computer verbunden ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Tests sind reine Unit-Tests ohne externe Hardware, sie rufen nur Funktionen auf."
+        },
+        {
+          "text": "Jeder Test dauert mehrere Sekunden, weil er eine komplette Partie simuliert.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Unit-Tests laufen in Millisekunden, weil sie nur die Berechnungsfunktion isoliert aufrufen."
+        }
+      ]
+    },
+    {
+      "question": "Was prüft ein Unit-Test im Gegensatz zu einem Test für das Zusammenspiel?",
+      "area": "Testgrundlagen: Testpyramide",
+      "options": [
+        {
+          "text": "Eine einzelne Funktion oder Klasse isoliert von Datenbank, Netzwerk und anderen externen Abhängigkeiten.",
+          "isCorrect": true,
+          "explanation": "Richtig: Unit-Tests prüfen die kleinste testbare Einheit in völliger Isolation von der Außenwelt."
+        },
+        {
+          "text": "Das gesamte Programm aus Sicht des Nutzers, indem ein Browser automatisch gesteuert wird.",
+          "isCorrect": false,
+          "explanation": "Falsch: das ist ein Ende-zu-Ende-Test, kein Unit-Test."
+        },
+        {
+          "text": "Die Benutzeroberfläche auf verschiedenen Bildschirmgrößen und mit verschiedenen Betriebssystemen.",
+          "isCorrect": false,
+          "explanation": "Falsch: das wäre ein visueller Regressionstest oder ein Kompatibilitätstest, kein Unit-Test."
+        },
+        {
+          "text": "Die Sicherheit der Anwendung gegen Angriffe wie SQL-Injection und Cross-Site-Scripting.",
+          "isCorrect": false,
+          "explanation": "Falsch: das sind Sicherheitstests, eine eigene Testkategorie, keine Unit-Tests."
+        }
+      ]
+    },
+    {
+      "question": "Was macht einen guten Test aus?",
+      "area": "Testgrundlagen: Testqualität",
+      "options": [
+        {
+          "text": "Er ist klar, unabhängig, schnell, wiederholbar und prüft ein konkretes erwartetes Ergebnis.",
+          "isCorrect": true,
+          "explanation": "Richtig: ein guter Test hat eindeutige Eingaben und Erwartungen, läuft isoliert und liefert immer dasselbe Ergebnis."
+        },
+        {
+          "text": "Er prüft möglichst viele verschiedene Dinge auf einmal, um Zeit beim Testen zu sparen.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Test sollte genau eine Sache prüfen, sonst weiß man bei einem Fehlschlag nicht, was kaputt ist."
+        },
+        {
+          "text": "Er verwendet zufällige Eingabewerte, um möglichst viele verschiedene Fälle abzudecken.",
+          "isCorrect": false,
+          "explanation": "Falsch: Zufallswerte machen Tests unvorhersehbar und nicht wiederholbar, das ist das Gegenteil von gut."
+        },
+        {
+          "text": "Er ist mindestens hundert Zeilen lang, damit er auch wirklich alle Eventualitäten abdeckt.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Länge sagt nichts über die Qualität aus, ein guter Test kann auch drei Zeilen lang sein."
+        }
+      ]
+    },
+    {
+      "question": "Warum reicht manuelles Testen nicht aus?",
+      "area": "Testgrundlagen: Automatisierung",
+      "options": [
+        {
+          "text": "Weil niemand nach jeder Codeänderung das gesamte Programm von Hand durchtesten kann.",
+          "isCorrect": true,
+          "explanation": "Richtig: manuelles Testen ist zu langsam, um es nach jeder Änderung vollständig zu wiederholen."
+        },
+        {
+          "text": "Weil manuelles Testen grundsätzlich unzuverlässig ist und Menschen nie Fehler in Software finden können.",
+          "isCorrect": false,
+          "explanation": "Falsch: manuelles Testen ist wertvoll für exploratives Testen, aber es ist zu langsam für vollständige Wiederholung."
+        },
+        {
+          "text": "Weil manuelles Testen in allen größeren Unternehmen gesetzlich verboten ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: es gibt kein Verbot für manuelles Testen, es ist nur nicht effizient genug für Regressionstests."
+        },
+        {
+          "text": "Weil Computer Programme besser verstehen als Menschen und daher die besseren Tester sind.",
+          "isCorrect": false,
+          "explanation": "Falsch: Computer verstehen Programme nicht, sie führen nur Anweisungen aus. Menschen sind die besseren explorativen Tester."
+        }
+      ]
+    },
+    {
+      "question": "Was ist Test-Driven Development?",
+      "area": "Testgrundlagen: TDD",
+      "options": [
+        {
+          "text": "Eine Arbeitsweise, bei der der Test vor dem Code geschrieben wird.",
+          "isCorrect": true,
+          "explanation": "Richtig: bei TDD schreibt man zuerst den Test, dann den Code, der den Test bestehen lässt."
+        },
+        {
+          "text": "Ein Werkzeug, das automatisch Tests aus dem Produktionscode generiert.",
+          "isCorrect": false,
+          "explanation": "Falsch: TDD ist eine Arbeitsweise, kein Werkzeug, und die Tests werden von Hand geschrieben."
+        },
+        {
+          "text": "Eine Programmiersprache, die speziell für das Schreiben von Tests entwickelt wurde.",
+          "isCorrect": false,
+          "explanation": "Falsch: TDD ist keine Programmiersprache, sondern eine Methode, bei der Tests vor dem Code geschrieben werden."
+        },
+        {
+          "text": "Ein Zertifikat, das Entwickler nach einer Prüfung erhalten und in ihrem Lebenslauf angeben können.",
+          "isCorrect": false,
+          "explanation": "Falsch: TDD ist kein Zertifikat, sondern eine freiwillige Arbeitsweise."
+        }
+      ]
+    },
+    {
+      "question": "Welche Fehlerart finden Unit-Tests typischerweise nicht?",
+      "area": "Testgrundlagen: Testpyramide",
+      "options": [
+        {
+          "text": "Fehler im Zusammenspiel mehrerer Komponenten, etwa bei falschem Datenbankformat.",
+          "isCorrect": true,
+          "explanation": "Richtig: Unit-Tests isolieren jede Komponente und ersetzen Abhängigkeiten durch Attrappen, daher sehen sie keine Integrationsfehler."
+        },
+        {
+          "text": "Rechenfehler in einer einzelnen Funktion, die für bestimmte Eingaben ein falsches Ergebnis liefert.",
+          "isCorrect": false,
+          "explanation": "Falsch: genau das finden Unit-Tests sehr gut, weil sie isolierte Funktionen mit bekannten Eingaben prüfen."
+        },
+        {
+          "text": "Tippfehler in Variablennamen, die der Compiler nicht als Fehler erkennt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Unit-Tests können Tippfehler finden, wenn sie die betroffene Funktion aufrufen und das Ergebnis prüfen."
+        },
+        {
+          "text": "Falsche Verzweigungen in einer if-else-Logik, die für bestimmte Bedingungen den falschen Zweig nehmen.",
+          "isCorrect": false,
+          "explanation": "Falsch: Unit-Tests sind ideal, um Verzweigungslogik mit verschiedenen Eingaben durchzutesten."
+        }
+      ]
+    },
+    {
+      "question": "Was bedeutet es, dass ein Test unabhängig von anderen Tests sein soll?",
+      "area": "Testgrundlagen: Testqualität",
+      "options": [
+        {
+          "text": "Der Test muss allein laufen und keine Ergebnisse anderer Tests voraussetzen.",
+          "isCorrect": true,
+          "explanation": "Richtig: unabhängige Tests können in beliebiger Reihenfolge ausgeführt werden und beeinflussen sich nicht gegenseitig."
+        },
+        {
+          "text": "Der Test muss in einer eigenen Datei stehen, getrennt von allen anderen Tests.",
+          "isCorrect": false,
+          "explanation": "Falsch: mehrere unabhängige Tests dürfen in derselben Datei stehen, solange sie sich nicht gegenseitig beeinflussen."
+        },
+        {
+          "text": "Der Test darf keine externen Bibliotheken verwenden und muss alles selbst implementieren.",
+          "isCorrect": false,
+          "explanation": "Falsch: Tests dürfen und sollen Testbibliotheken verwenden, Unabhängigkeit bezieht sich auf andere Tests."
+        },
+        {
+          "text": "Der Test muss von einem anderen Entwickler geschrieben sein als der getestete Code.",
+          "isCorrect": false,
+          "explanation": "Falsch: Unabhängigkeit bezieht sich auf die Ausführungsreihenfolge, nicht auf die Person, die den Test schreibt."
+        }
+      ]
+    },
+    {
+      "question": "Warum ist eine umgekehrte Testpyramide mit vielen E2E-Tests problematisch?",
+      "area": "Testgrundlagen: Testpyramide",
+      "options": [
+        {
+          "text": "E2E-Tests sind langsam und oft instabil, das Team würde die Tests ignorieren.",
+          "isCorrect": true,
+          "explanation": "Richtig: zu viele langsame Tests führen dazu, dass niemand mehr auf die Testergebnisse wartet oder sie ernst nimmt."
+        },
+        {
+          "text": "E2E-Tests können nur auf Windows-Rechnern ausgeführt werden und schließen alle anderen Betriebssysteme aus.",
+          "isCorrect": false,
+          "explanation": "Falsch: E2E-Tests mit Werkzeugen wie Playwright laufen auf allen gängigen Betriebssystemen."
+        },
+        {
+          "text": "E2E-Tests verbrauchen so viel Strom, dass der Betrieb eines Testservers unbezahlbar wird.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Stromverbrauch ist nicht das Problem, sondern die Ausführungszeit und die Instabilität."
+        },
+        {
+          "text": "E2E-Tests sind in den meisten Programmiersprachen technisch nicht möglich.",
+          "isCorrect": false,
+          "explanation": "Falsch: E2E-Tests sind in praktisch allen Sprachen möglich, sie sind nur teurer und langsamer als Unit-Tests."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Nimm eine selbst geschriebene Funktion aus einem eigenen Projekt, die eine Berechnung durchführt oder eine Entscheidung trifft. Schreibe mindestens fünf automatisierte Tests für diese Funktion: einen für den Normalfall, einen für einen Randfall, einen für eine fehlerhafte Eingabe, einen für die leere Eingabe und einen für die maximal mögliche Eingabe. Führe die Tests aus und lass mindestens einen Test bewusst fehlschlagen, um zu sehen, wie die Fehlermeldung aussieht.",
+    "expectation": "Fünf Tests sind geschrieben und laufen grün. Ein bewusster Fehlschlag wurde provoziert und die Fehlermeldung wurde gelesen und verstanden. Die Tests prüfen konkrete erwartete Ergebnisse, nicht nur ob die Funktion nicht abstürzt.",
+    "checklist": [
+      "Eine Funktion mit Berechnungs- oder Entscheidungslogik ausgewählt.",
+      "Test für den Normalfall geschrieben und grün.",
+      "Test für einen Randfall geschrieben und grün.",
+      "Test für fehlerhafte Eingabe geschrieben und grün.",
+      "Test für leere Eingabe geschrieben und grün.",
+      "Test für maximale Eingabe geschrieben und grün.",
+      "Einen Test bewusst fehlschlagen lassen und die Fehlermeldung verstanden."
+    ],
+    "portfolioItem": "P02"
+  },
+  "audio": {
+    "file": "M04-02-01.mp3",
+    "durationSeconds": 1360,
+    "voices": ["A", "B"],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Was ist der Unterschied zwischen einem Test und einer Typ-Prüfung durch TypeScript?",
+      "answer": "TypeScript prüft die Form der Daten, also ob eine Variable eine Zahl oder eine Zeichenkette ist, aber es prüft nicht den Wert. Ein Test prüft beides: dass die Funktion checkout(170) eine Zeichenkette zurückgibt, prüft TypeScript auch, aber dass diese Zeichenkette genau T20, T20, BULL lautet, kann nur ein Test prüfen. TypeScript verhindert eine ganze Klasse von Fehlern, aber es ersetzt keine Tests. Beide ergänzen sich: TypeScript fängt die groben Formfehler ab, Tests fangen die feinen Wertfehler ab."
+    },
+    {
+      "question": "Kann ich Tests auch nachträglich zu einem bestehenden Projekt hinzufügen?",
+      "answer": "Ja, und das ist ein völlig normaler Vorgang. Fang mit der kritischsten Funktion an, also der, bei der ein Fehler den größten Schaden anrichten würde. Schreibe einen Test, der das aktuelle Verhalten dieser Funktion festhält, auch wenn du nicht sicher bist, ob das Verhalten korrekt ist. Dieser Test schützt dich ab sofort vor unbeabsichtigten Änderungen an dieser Funktion. Danach nimmst du die nächste Funktion vor, und so arbeitest du dich Stück für Stück durch das Projekt. Nach ein paar Wochen hast du ein Sicherheitsnetz, das die wichtigsten Teile abdeckt."
+    },
+    {
+      "question": "Was mache ich, wenn ein Test fehlschlägt, aber das neue Verhalten tatsächlich richtig ist?",
+      "answer": "Dann musst du den Test aktualisieren, und das ist ein ganz normaler Vorgang. Ein Test dokumentiert das erwartete Verhalten, und wenn sich das erwartete Verhalten bewusst ändert, muss der Test mitgeändert werden. Wichtig ist, dass du dir vorher sicher bist, dass die Änderung beabsichtigt ist und nicht versehentlich passiert. Ein fehlschlagender Test zwingt dich zu dieser bewussten Entscheidung: war das Absicht oder ein Unfall? Genau das ist sein Zweck."
+    },
+    {
+      "question": "Brauche ich für ein kleines Hobbyprojekt wirklich Tests?",
+      "answer": "Für ein Hobbyprojekt, das nur du selbst benutzt und das du nächste Woche wieder löschst, brauchst du keine Tests. Aber sobald andere Menschen dein Programm benutzen oder du es länger als ein paar Wochen pflegen willst, lohnen sich Tests. Die Schwelle ist nicht die Projektgröße, sondern die Lebensdauer. Ein kleines Programm, das zwei Jahre läuft und immer wieder angepasst wird, profitiert genauso von Tests wie ein großes. Der Schmerz, einen Fehler in einem kleinen Programm zu suchen, den du vor sechs Monaten eingebaut hast, ist derselbe."
+    },
+    {
+      "question": "Wie fange ich ganz praktisch mit dem Testen an, wenn ich noch nie einen Test geschrieben habe?",
+      "answer": "Nimm eine Funktion, die du gerade geschrieben hast und von der du genau weißt, was sie tun soll. Schreibe einen Test, der diese Funktion mit einer einfachen Eingabe aufruft und das Ergebnis mit console.log ausgibt. Das ist noch kein richtiger Test, aber du siehst sofort, ob das Ergebnis deiner Erwartung entspricht. Dann ersetze das console.log durch eine richtige Prüfung mit assert oder expect, wie es die Testbibliothek deiner Wahl verlangt. Dieser erste Test wird vielleicht nur drei Zeilen lang sein, aber du hast die Hürde genommen. Jeder weitere Test wird leichter."
+    }
+  ]
+}

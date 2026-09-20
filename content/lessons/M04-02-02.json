@@ -1,0 +1,706 @@
+{
+  "id": "M04-02-02",
+  "title": "Jest, Vitest und JUnit",
+  "durationMinutes": 35,
+  "prerequisites": [
+    "M04-02-01",
+    "M02-03-01"
+  ],
+  "terms": [
+    {
+      "term": "Testframework",
+      "definition": "Eine Bibliothek, die das Schreiben, Ausführen und Auswerten von Tests vereinfacht. Sie stellt Funktionen zum Formulieren von Erwartungen bereit, sammelt Testergebnisse und zeigt an, welche Tests bestanden haben und welche fehlgeschlagen sind."
+    },
+    {
+      "term": "Assertion",
+      "definition": "Eine einzelne Prüfung innerhalb eines Tests, die einen tatsächlichen Wert mit einem erwarteten Wert vergleicht. Schlägt die Assertion fehl, bricht der Test ab und meldet den Unterschied zwischen erwartetem und tatsächlichem Wert."
+    },
+    {
+      "term": "JUnit-XML",
+      "definition": "Ein standardisiertes XML-Format für Testergebnisse, das von praktisch allen CI-Systemen verstanden wird. Jedes Testframework kann seine Ergebnisse in dieses Format umwandeln, sodass die CI sie einheitlich anzeigen kann."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen Schiedsrichter beim Fußball vor. Er hat eine Trillerpfeife, eine rote Karte, eine gelbe Karte und ein Notizbuch. Mit diesen vier Werkzeugen kann er jedes Spiel leiten, egal ob Kreisliga oder Champions League.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein Testframework ist der Schiedsrichter für deinen Code. Es gibt dir die Werkzeuge, um Erwartungen zu formulieren, also zu sagen, was eine Funktion liefern soll. Es pfeift, wenn eine Erwartung nicht erfüllt wird, also wenn ein Test fehlschlägt. Es zeigt dir die rote Karte, wenn ein Test abstürzt. Und es führt Buch darüber, welche Tests gelaufen sind und wie lange sie gebraucht haben. Ohne ein Testframework müsstest du all das selbst programmieren, und das wäre, als würde der Schiedsrichter seine Pfeife selbst schnitzen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Warum gibt es mehrere Testframeworks wie Jest und Vitest? Reicht nicht eins?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Jest und Vitest tun im Kern dasselbe: sie führen Tests aus und zeigen die Ergebnisse an. Der Unterschied liegt in der Geschwindigkeit und der Integration mit dem Rest des Projekts. Jest ist der etablierte Platzhirsch, der seit Jahren in unzähligen Projekten läuft und mit praktisch jedem Build-Werkzeug zusammenarbeitet. Vitest ist der schnellere Herausforderer, der besonders gut mit Vite zusammenarbeitet, einem modernen Build-Werkzeug, das viele neue Projekte verwenden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "So eine Bibliothek, die das Schreiben, Ausführen und Auswerten von Tests vereinfacht, heißt Testframework.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-cron-last-due, einem Programm, das den nächsten Fälligkeitstermin für wiederkehrende Aufgaben nach einem Cron-Ausdruck berechnet, wird Vitest als Testframework verwendet. Die Konfigurationsdatei vitest.config.ts legt fest, wo die Tests liegen und wie sie ausgeführt werden. Die Tests selbst nutzen Vitests expect-Funktion, um zu prüfen, ob die Berechnung des nächsten Termins für einen gegebenen Cron-Ausdruck das richtige Datum liefert.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die Wahl zwischen Jest und Vitest ist wichtig, weil sie beeinflusst, wie schnell deine Tests laufen und wie gut sie sich in dein Projekt einfügen. Vitest startet in Projekten mit Vite oft doppelt so schnell wie Jest, weil es dieselbe Konfiguration und dasselbe Modulsystem nutzt. Jest dagegen hat das größere Ökosystem an Erweiterungen und mehr Beispiele im Internet. Für den Einstieg sind beide gleich gut geeignet, und was du in einem lernst, kannst du im anderen sofort anwenden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Wie schreibt man so eine Prüfung, also eine Assertion, konkret im Code?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine Waage im Supermarkt vor. Du legst dein Obst auf die eine Schale und ein geeichtes Gewicht auf die andere. Die Waage zeigt dir, ob beide Seiten gleich schwer sind oder welche Seite schwerer ist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Eine Assertion ist wie diese Waage. Auf die eine Seite legst du den tatsächlichen Wert, den deine Funktion zurückgegeben hat. Auf die andere Seite legst du den erwarteten Wert, von dem du weißt, dass er richtig ist. Die Assertion vergleicht beide und meldet, ob sie übereinstimmen oder nicht. In Jest und Vitest schreibt man das mit expect(tatsächlicherWert).toBe(erwarteterWert).",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Diese einzelne Prüfung innerhalb eines Tests, die einen tatsächlichen mit einem erwarteten Wert vergleicht, heißt Assertion.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-cron-last-due findest du Assertions wie expect(result).toEqual(expectedDate). Die Funktion toEqual prüft, ob zwei Werte inhaltlich gleich sind, auch wenn es unterschiedliche Objekte im Speicher sind. Andere Assertions im selben Projekt prüfen mit toThrow, ob eine Funktion bei falscher Eingabe einen Fehler wirft, oder mit toBeGreaterThan, ob ein berechneter Zeitstempel in der Zukunft liegt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die verschiedenen Assertion-Typen sind wichtig, weil nicht jede Prüfung ein einfacher Vergleich ist. Manchmal willst du prüfen, ob ein Wert in einer bestimmten Liste enthalten ist, ob eine Funktion einen Fehler wirft oder ob ein Wert ungefähr stimmt, also bis auf eine bestimmte Toleranz. Ein gutes Testframework bietet für jeden dieser Fälle die passende Assertion, und die Kunst ist, die spezifischste Assertion zu wählen, die den Test klar und lesbar macht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was passiert mit den Testergebnissen, wenn ich sie nicht selbst am Bildschirm ablesen will, sondern von einem CI-System auswerten lassen will?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine Arztpraxis vor, die Laborproben an verschiedene Labore schickt. Jedes Labor hat sein eigenes Analysegerät, aber alle liefern ihre Ergebnisse im selben standardisierten Formular zurück, das die Arzthelferin sofort versteht, egal von welchem Labor es kommt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "In der Softwareentwicklung ist dieses standardisierte Formular das JUnit-XML-Format. JUnit war ursprünglich ein Testframework für Java, aber sein XML-Format für Testergebnisse hat sich als universeller Standard durchgesetzt. Jest, Vitest, Pytest für Python, PHPUnit für PHP und Dutzende andere Frameworks können ihre Ergebnisse alle in dasselbe JUnit-XML-Format exportieren. Das CI-System, zum Beispiel eine Code-Plattform Actions, liest diese XML-Datei ein und zeigt die Ergebnisse einheitlich an, egal mit welchem Framework die Tests geschrieben wurden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Dieses standardisierte XML-Format für Testergebnisse, das von praktisch allen CI-Systemen verstanden wird, heißt JUnit-XML.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-cron-last-due ist die Vitest-Konfiguration so eingerichtet, dass sie die Testergebnisse im JUnit-XML-Format ausgibt. In der CI-Konfiguration, zum Beispiel einer eine Code-Plattform-Actions-Datei, wird dann ein Schritt definiert, der diese XML-Datei einliest und die Ergebnisse im Änderungsvorschlag anzeigt. Der Entwickler sieht auf einen Blick, welche Tests fehlgeschlagen sind, ohne die rohe Konsolenausgabe durchsuchen zu müssen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Dieses einheitliche Format ist wichtig, weil in einem typischen Projekt verschiedene Testarten mit verschiedenen Frameworks laufen können: Unit-Tests mit Vitest, Ende-zu-Ende-Tests mit einem Browser-Testwerkzeug, vielleicht noch Sicherheitstests mit einem dritten Werkzeug. Ohne ein gemeinsames Austauschformat müsste das CI-System jedes Framework einzeln kennen. Mit JUnit-XML sprechen alle dieselbe Sprache, und das CI-System muss nur dieses eine Format verstehen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Wie strukturiere ich meine Tests, wenn ich nicht nur eine, sondern viele Funktionen testen will?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir ein Kochbuch vor, das nach Gängen gegliedert ist: Vorspeisen, Suppen, Hauptgerichte, Desserts. Innerhalb jedes Kapitels findest du die einzelnen Rezepte, und jedes Rezept hat eine Zutatenliste und eine Schritt-für-Schritt-Anleitung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Tests werden mit zwei Bausteinen strukturiert: describe und it oder test. describe gruppiert zusammengehörige Tests, zum Beispiel alle Tests für eine bestimmte Funktion. it oder test definiert einen einzelnen Testfall, zum Beispiel was passiert, wenn die Funktion mit einer leeren Eingabe aufgerufen wird. Diese Verschachtelung macht die Testausgabe lesbar: describe gibt das Kapitel an, it den einzelnen Test, und bei einem Fehlschlag siehst du sofort, in welchem Kapitel und bei welchem Test das Problem liegt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-cron-last-due sind die Tests mit describe-Blöcken nach der getesteten Funktion gruppiert. Ein describe('getNextDue') enthält mehrere it-Blöcke: it('returns tomorrow for daily cron'), it('returns next Monday for weekly cron'), it('throws for invalid cron expression'). Jeder it-Block enthält eine oder mehrere Assertions, die zusammen den beschriebenen Fall prüfen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Diese Struktur ist wichtig, weil sie die Tests als lebendige Beschreibung lesbar macht. Ein neuer Entwickler kann die describe-Blöcke wie ein Inhaltsverzeichnis lesen und sofort verstehen, was die Funktion alles können soll und welche Randfälle bedacht wurden. Die it-Blöcke beschreiben das erwartete Verhalten in ganzen Sätzen, und die Assertions belegen es mit konkreten Werten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was mache ich, wenn meine Funktion von einer externen API oder einer Datenbank abhängt, die ich im Test nicht wirklich aufrufen will?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen Piloten vor, der im Flugsimulator trainiert. Der Simulator hat dasselbe Cockpit wie ein echtes Flugzeug, aber statt wirklich zu fliegen, berechnet ein Computer, wie sich das Flugzeug verhalten würde. Der Pilot kann starten, landen und Notfälle üben, ohne dass ein echtes Flugzeug vom Boden abhebt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "In Tests ersetzen Mock-Objekte die echten Abhängigkeiten, genau wie der Simulator das echte Flugzeug ersetzt. Ein Mock ist ein Objekt, das so tut, als wäre es die echte API oder Datenbank, aber in Wirklichkeit nur vorprogrammierte Antworten zurückgibt. Du sagst dem Mock: wenn jemand die Funktion fetchUser mit der ID 42 aufruft, gib dieses Test-Objekt zurück. Im Test ruft deine Funktion dann den Mock auf, ohne es zu merken, und du kannst prüfen, ob sie mit der Mock-Antwort richtig umgeht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-cron-last-due werden Mocks verwendet, um die Systemzeit zu kontrollieren. Die Funktion getNextDue braucht das aktuelle Datum, aber das ändert sich jeden Tag. Der Test mockt die Uhr und sagt: tu so, als wäre heute der 1. Januar 2026. Dann ruft er getNextDue auf und prüft, ob der nächste Termin relativ zu diesem festen Datum korrekt berechnet wird. Ohne diesen Mock würde der Test jeden Tag ein anderes Ergebnis liefern und wäre wertlos.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Mocks sind wichtig, weil sie Tests von der Außenwelt entkoppeln. Ein Test, der eine echte API aufruft, schlägt fehl, wenn die API gerade nicht erreichbar ist, auch wenn dein Code völlig in Ordnung ist. Ein Test mit Mock läuft immer gleich, ist immer gleich schnell und kostet kein Geld für API-Aufrufe. Aber Vorsicht: ein Mock testet nicht, ob die echte API noch dasselbe Format liefert wie zum Zeitpunkt der Mock-Erstellung. Dafür brauchst du zusätzlich einen Test für das Zusammenspiel, der die echte API aufruft.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Wie führe ich meine Tests eigentlich aus, und was bedeutet der Watch-Mode?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen Sicherheitsdienst vor, der nachts durch ein Gebäude geht und jede Tür prüft. Es gibt zwei Arten von Rundgängen: den einmaligen, bei dem alle Türen geprüft werden, und die Dauerüberwachung, bei der der Wachmann ständig seine Runden dreht und sofort merkt, wenn eine Tür aufgeht, die zu war.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Tests kannst du auf zwei Arten ausführen: einmalig mit vitest run oder jest, wobei alle Tests einmal durchlaufen und das Ergebnis ausgegeben wird. Oder im Watch-Mode mit vitest oder jest --watch, wobei das Testframework nach dem ersten Durchlauf weiterläuft und bei jeder gespeicherten Dateiänderung automatisch die betroffenen Tests erneut ausführt. Der Watch-Mode ist wie die Dauerüberwachung: du änderst Code, speicherst, und innerhalb von Sekunden siehst du, ob deine Änderung etwas kaputtgemacht hat.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-cron-last-due ist der Watch-Mode der Standard während der Entwicklung. Der Entwickler startet einmal pnpm test --watch, und ab da läuft Vitest im Hintergrund und führt bei jedem Speichern die betroffenen Tests aus. Ändert der Entwickler die Berechnungslogik für wöchentliche Termine, laufen sofort alle Tests für wöchentliche Cron-Ausdrücke, und der Entwickler sieht in Sekunden, ob die Änderung korrekt war.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Der Watch-Mode ist einer der größten Produktivitätsgewinne, die ein Testframework bietet. Ohne ihn müsstest du nach jeder Änderung manuell die Tests starten, was du irgendwann nicht mehr tust, weil es zu umständlich ist. Mit Watch-Mode sind die Tests immer da, immer aktuell, und du bekommst Rückmeldung in Sekunden statt in Minuten. Das senkt die Hemmschwelle, Tests zu schreiben und zu nutzen, auf nahezu null.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist der Unterschied zwischen toBe und toEqual in Jest und Vitest?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir zwei Schlüssel vor, die äußerlich gleich aussehen. Der eine öffnet deine Haustür, der andere ist ein Nachschlüssel, der nach derselben Vorlage gefertigt wurde. Beide sehen gleich aus und tun dasselbe, aber es sind zwei verschiedene Metallstücke.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "toBe prüft, ob zwei Werte dasselbe Objekt im Speicher sind, also ob es sich um exakt denselben Schlüssel handelt. toEqual prüft, ob zwei Werte inhaltlich gleich sind, also ob sie gleich aussehen und dasselbe tun, auch wenn es zwei verschiedene Objekte sind. Für Zahlen und Zeichenketten sind beide gleich, weil diese Werte immer direkt verglichen werden. Für Objekte und Arrays ist der Unterschied entscheidend: toBe schlägt bei zwei inhaltlich gleichen, aber verschiedenen Objekten fehl, toEqual nicht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-cron-last-due wird toEqual verwendet, um das berechnete Datum mit dem erwarteten Datum zu vergleichen. Ein Datum ist ein Objekt, und jedes Mal, wenn die Funktion ein Datum berechnet, erzeugt sie ein neues Objekt. toBe würde fehlschlagen, weil das berechnete und das erwartete Datum verschiedene Objekte sind, auch wenn sie denselben Tag beschreiben. toEqual prüft den Inhalt und besteht den Test korrekt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Diese Unterscheidung ist wichtig, weil die falsche Wahl zu Tests führt, die fehlschlagen, obwohl der Code korrekt ist. Das untergräbt das Vertrauen in die Testsuite. Als Faustregel gilt: für primitive Werte wie Zahlen und Zeichenketten nimm toBe, für Objekte und Arrays nimm toEqual. Und wenn du unsicher bist, probiere beide aus und nimm das, was das richtige Verhalten prüft.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "text": "Also noch einmal ganz kurz: Ein Testframework wie Jest oder Vitest gibt dir die Werkzeuge, um Tests zu schreiben, auszuführen und auszuwerten. Eine Assertion ist die einzelne Prüfung, die einen tatsächlichen mit einem erwarteten Wert vergleicht, zum Beispiel mit expect(wert).toBe(erwartet). Tests werden mit describe in Gruppen und mit it in einzelne Testfälle strukturiert. Mocks ersetzen echte Abhängigkeiten durch kontrollierte Attrappen, damit Tests schnell und unabhängig bleiben. Die Ergebnisse lassen sich im JUnit-XML-Format exportieren, das jedes CI-System versteht, und der Watch-Mode führt Tests bei jeder Codeänderung automatisch neu aus.",
+      "isKeySentence": true
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Ein Testframework ist eine Bibliothek, die das Schreiben, Ausführen und Auswerten von Tests vereinfacht. Sie stellt Funktionen zum Formulieren von Erwartungen bereit, sammelt Testergebnisse und zeigt an, welche Tests bestanden haben und welche fehlgeschlagen sind.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Eine Assertion ist eine einzelne Prüfung innerhalb eines Tests, die einen tatsächlichen Wert mit einem erwarteten Wert vergleicht. Schlägt die Assertion fehl, bricht der Test ab und meldet den Unterschied zwischen erwartetem und tatsächlichem Wert.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "JUnit-XML ist ein standardisiertes XML-Format für Testergebnisse, das von praktisch allen CI-Systemen verstanden wird. Jedes Testframework kann seine Ergebnisse in dieses Format umwandeln, sodass die CI sie einheitlich anzeigen kann.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Soll ich für ein neues Projekt Jest oder Vitest nehmen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Wenn dein Projekt Vite als Build-Werkzeug verwendet, nimm Vitest, weil es dieselbe Konfiguration nutzt und deutlich schneller startet. Wenn dein Projekt ein älteres Build-Werkzeug wie Webpack verwendet oder du viele bestehende Jest-Beispiele als Vorlage nutzen willst, nimm Jest. Für den Einstieg sind beide praktisch gleich, weil sie dieselbe API haben: describe, it, expect funktionieren in beiden identisch. Du kannst später immer noch wechseln, der Aufwand ist gering, weil die Tests selbst kaum geändert werden müssen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Wie viele Assertions sollte ein einzelner Test enthalten?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ein Test sollte idealerweise genau eine Assertion enthalten, weil du dann bei einem Fehlschlag sofort weißt, welche Prüfung fehlgeschlagen ist. In der Praxis sind zwei oder drei Assertions oft sinnvoll, wenn sie dasselbe Konzept aus verschiedenen Blickwinkeln prüfen, zum Beispiel ob eine Funktion sowohl das richtige Ergebnis liefert als auch keine Seiteneffekte hatte. Mehr als fünf Assertions in einem Test sind ein Warnsignal, dass der Test zu viel auf einmal prüft und in mehrere kleinere Tests aufgeteilt werden sollte.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Kann ich Tests auch ohne Testframework schreiben?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ja, Node.js hat ein eingebautes Testmodul, das ohne zusätzliche Bibliothek funktioniert. Du schreibst deine Tests mit import test from 'node:test' und nutzt assert von 'node:assert'. Das reicht für einfache Projekte völlig aus und hat den Vorteil, dass du keine Abhängigkeiten installieren musst. Allerdings fehlen die komfortablen Helfer von Jest und Vitest wie der Watch-Mode, die Mock-Funktionen und die übersichtliche Ausgabe. Für ein kleines Projekt ist das eingebaute Testmodul ein guter Start, für ein wachsendes Projekt wirst du früher oder später zu einem vollwertigen Framework wechseln wollen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was bedeutet es, wenn ein Test flaky ist?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ein flaky Test ist ein Test, der manchmal besteht und manchmal fehlschlägt, ohne dass der getestete Code geändert wurde. Die häufigsten Ursachen sind Abhängigkeiten von der Systemzeit, von der Reihenfolge der Testausführung, von externen Diensten oder von Zufallswerten. Ein flaky Test ist schlimmer als gar kein Test, weil er das Vertrauen in die gesamte Testsuite zerstört. Wenn ein Test einmal fehlschlägt und beim nächsten Mal ohne Änderung besteht, ignorieren die Entwickler irgendwann alle Fehlschläge, und dann übersehen sie auch die echten. Flaky Tests müssen entweder repariert oder gelöscht werden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Wie teste ich asynchrone Funktionen, die ein Promise zurückgeben?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Jest und Vitest bieten dafür zwei Wege. Der einfachste ist async/await: du schreibst async vor die Testfunktion und await vor den Aufruf der asynchronen Funktion, dann verhält sich der Test wie ein synchroner. Der zweite Weg ist die Rückgabe des Promises aus dem Test: wenn der Test ein Promise zurückgibt, wartet das Framework automatisch, bis es aufgelöst oder abgelehnt wird. Beide Wege sind gleichwertig, aber async/await ist lesbarer, besonders wenn du mehrere asynchrone Aufrufe hintereinander machst.",
+      "isKeySentence": false
+    }
+  ],
+  "practiceExample": {
+    "text": "Im Repo repo-cron-last-due wird Vitest als Testframework verwendet. Die Tests sind mit describe und it strukturiert, nutzen expect mit toEqual für Datumsvergleiche und mocken die Systemzeit, um deterministische Ergebnisse zu erhalten. Die CI-Konfiguration exportiert die Ergebnisse im JUnit-XML-Format.",
+    "repoNote": "repo-cron-last-due",
+    "location": "test/getNextDue.test.ts (Teststruktur, Assertions und Mocks)"
+  },
+  "quiz": [
+    {
+      "question": "Welches Alltagsbild beschreibt ein Testframework am treffendsten?",
+      "area": "Testwerkzeuge: Testframework",
+      "options": [
+        {
+          "text": "Ein Schiedsrichter mit Pfeife, Karten und Notizbuch, der jedes Spiel nach denselben Regeln leitet.",
+          "isCorrect": true,
+          "explanation": "Richtig: das Testframework stellt die Werkzeuge bereit und wendet sie einheitlich auf alle Tests an."
+        },
+        {
+          "text": "Ein Trainer, der der Mannschaft vor dem Spiel die Taktik erklärt und sie motiviert.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Testframework erklärt nichts und motiviert nicht, es führt nur Tests aus und meldet Ergebnisse."
+        },
+        {
+          "text": "Ein Platzwart, der den Rasen mäht und die Linien kreidet, damit das Spiel stattfinden kann.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Platzwart bereitet nur vor, das Testframework ist während des gesamten Tests aktiv."
+        },
+        {
+          "text": "Ein Fan, der das Spiel von der Tribüne aus beobachtet und am Ende sagt, ob es gut war.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Testframework beobachtet nicht nur, es greift aktiv ein und meldet Fehlschläge."
+        }
+      ]
+    },
+    {
+      "question": "Was ist eine Assertion in einem Test?",
+      "area": "Testwerkzeuge: Assertion",
+      "options": [
+        {
+          "text": "Eine einzelne Prüfung, die einen tatsächlichen Wert mit einem erwarteten Wert vergleicht.",
+          "isCorrect": true,
+          "explanation": "Richtig: eine Assertion ist der Kern jedes Tests, der Vergleich zwischen Ist und Soll."
+        },
+        {
+          "text": "Die Beschreibung des Tests, die erklärt, was der Test prüfen soll.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Beschreibung ist der it-Block, die Assertion ist die Prüfung darin."
+        },
+        {
+          "text": "Die Konfigurationsdatei, die festlegt, welche Tests ausgeführt werden sollen.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Konfiguration legt fest, welche Tests laufen, aber die Assertion ist die einzelne Prüfung."
+        },
+        {
+          "text": "Ein spezieller Kommentar, der dem Testframework sagt, dass ein Test absichtlich fehlschlagen soll.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein absichtlich fehlschlagender Test ist ein todo-Test, keine Assertion."
+        }
+      ]
+    },
+    {
+      "question": "Wofür steht das JUnit-XML-Format?",
+      "area": "Testwerkzeuge: JUnit-XML",
+      "options": [
+        {
+          "text": "Ein standardisiertes Format für Testergebnisse, das von praktisch allen CI-Systemen verstanden wird.",
+          "isCorrect": true,
+          "explanation": "Richtig: JUnit-XML ist der gemeinsame Nenner, über den Testframeworks und CI-Systeme kommunizieren."
+        },
+        {
+          "text": "Ein Dateiformat zum Speichern von Testdaten, das nur von Java-Programmen gelesen werden kann.",
+          "isCorrect": false,
+          "explanation": "Falsch: JUnit-XML kann von jedem CI-System gelesen werden, unabhängig von der Programmiersprache."
+        },
+        {
+          "text": "Eine spezielle Programmiersprache, in der man Tests schreibt, die dann in Java übersetzt werden.",
+          "isCorrect": false,
+          "explanation": "Falsch: JUnit-XML ist ein Datenformat, keine Programmiersprache."
+        },
+        {
+          "text": "Ein veraltetes Format aus den Neunzigerjahren, das heute nur noch in Legacy-Projekten verwendet wird.",
+          "isCorrect": false,
+          "explanation": "Falsch: JUnit-XML ist nach wie vor der Standard für den Austausch von Testergebnissen mit CI-Systemen."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der Unterschied zwischen toBe und toEqual in Jest und Vitest?",
+      "area": "Testwerkzeuge: Assertion",
+      "options": [
+        {
+          "text": "toBe prüft auf dasselbe Objekt im Speicher, toEqual prüft auf inhaltliche Gleichheit.",
+          "isCorrect": true,
+          "explanation": "Richtig: toBe ist strikter und verlangt dasselbe Objekt, toEqual vergleicht nur die Inhalte."
+        },
+        {
+          "text": "toBe ist für Zahlen und primitive Werte, toEqual ist für Zeichenketten und Objekte.",
+          "isCorrect": false,
+          "explanation": "Falsch: beide funktionieren mit allen Typen, der Unterschied liegt in der Vergleichsart."
+        },
+        {
+          "text": "toBe ist schneller als toEqual und sollte immer bevorzugt werden.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Geschwindigkeit ist nicht der entscheidende Faktor, sondern was du prüfen willst."
+        },
+        {
+          "text": "toBe gibt es nur in Jest, toEqual nur in Vitest.",
+          "isCorrect": false,
+          "explanation": "Falsch: beide Funktionen gibt es in beiden Frameworks mit derselben Bedeutung."
+        }
+      ]
+    },
+    {
+      "question": "Welche Aussage über das Repo repo-cron-last-due ist richtig?",
+      "area": "Praxisbeispiel repo-cron-last-due",
+      "options": [
+        {
+          "text": "Die Tests mocken die Systemzeit, um unabhängig vom tatsächlichen Datum immer dasselbe Ergebnis zu erhalten.",
+          "isCorrect": true,
+          "explanation": "Richtig: ohne den Mock würde der Test jeden Tag ein anderes Ergebnis liefern und wäre wertlos."
+        },
+        {
+          "text": "Das Repo verwendet Jest, weil Vitest für Cron-Berechnungen nicht geeignet ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: das Repo verwendet Vitest, und die Wahl des Frameworks hat nichts mit Cron-Berechnungen zu tun."
+        },
+        {
+          "text": "Die Tests rufen einen echten Cron-Daemon auf, um die Terminberechnung unter möglichst realistischen Bedingungen zu prüfen.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Tests sind Unit-Tests ohne externe Abhängigkeiten, sie mocken sogar die Systemzeit."
+        },
+        {
+          "text": "Das Repo enthält keine Tests, weil Cron-Ausdrücke zu einfach sind, um Fehler zu machen.",
+          "isCorrect": false,
+          "explanation": "Falsch: das Repo enthält Tests, gerade weil Cron-Ausdrücke viele Randfälle und Sonderregeln haben."
+        }
+      ]
+    },
+    {
+      "question": "Wozu dienen describe und it in einem Testframework?",
+      "area": "Testwerkzeuge: Teststruktur",
+      "options": [
+        {
+          "text": "describe gruppiert zusammengehörige Tests, it definiert einen einzelnen Testfall.",
+          "isCorrect": true,
+          "explanation": "Richtig: describe ist das Kapitel, it der einzelne Test darin."
+        },
+        {
+          "text": "describe beschreibt die erwartete Ausgabe, it führt die eigentliche Prüfung durch.",
+          "isCorrect": false,
+          "explanation": "Falsch: describe beschreibt nicht die Ausgabe, sondern gruppiert Tests thematisch."
+        },
+        {
+          "text": "describe ist für langsame Tests, it für schnelle Tests.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Geschwindigkeit hat nichts mit der Wahl zwischen describe und it zu tun."
+        },
+        {
+          "text": "describe gibt es nur in Jest, it nur in Vitest.",
+          "isCorrect": false,
+          "explanation": "Falsch: beide Funktionen gibt es in beiden Frameworks mit derselben Bedeutung."
+        }
+      ]
+    },
+    {
+      "question": "Was ist ein Mock in der Testwelt?",
+      "area": "Testwerkzeuge: Mocks",
+      "options": [
+        {
+          "text": "Ein Objekt, das eine echte Abhängigkeit ersetzt und vorprogrammierte Antworten zurückgibt.",
+          "isCorrect": true,
+          "explanation": "Richtig: ein Mock simuliert eine externe Abhängigkeit, damit der Test schnell und unabhängig bleibt."
+        },
+        {
+          "text": "Ein Test, der absichtlich fehlschlägt, um zu prüfen, ob das CI-System Fehler erkennt.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein absichtlich fehlschlagender Test ist kein Mock, sondern ein Test der CI-Pipeline."
+        },
+        {
+          "text": "Eine Kopie des gesamten Produktionscodes, die für Tests verwendet wird.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Mock ersetzt nur die Abhängigkeiten, nicht den gesamten Code."
+        },
+        {
+          "text": "Ein Werkzeug, das automatisch Testdaten aus der Produktionsdatenbank extrahiert.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Mock extrahiert nichts, er gibt nur vorprogrammierte Antworten zurück."
+        }
+      ]
+    },
+    {
+      "question": "Was bewirkt der Watch-Mode in Jest und Vitest?",
+      "area": "Testwerkzeuge: Watch-Mode",
+      "options": [
+        {
+          "text": "Er führt bei jeder gespeicherten Dateiänderung automatisch die betroffenen Tests erneut aus.",
+          "isCorrect": true,
+          "explanation": "Richtig: der Watch-Mode überwacht das Dateisystem und startet Tests bei Änderungen neu."
+        },
+        {
+          "text": "Er zeichnet die Testausführung als Video auf, damit man sie später ansehen kann.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Watch-Mode hat nichts mit Videoaufzeichnung zu tun, er überwacht Dateiänderungen."
+        },
+        {
+          "text": "Er verbindet sich mit dem Internet und lädt automatisch die neueste Version des Testframeworks herunter.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Watch-Mode aktualisiert keine Software, er führt nur Tests bei Codeänderungen aus."
+        },
+        {
+          "text": "Er sendet die Testergebnisse in Echtzeit an einen externen Überwachungsdienst.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Watch-Mode sendet nichts nach außen, er läuft vollständig lokal."
+        }
+      ]
+    },
+    {
+      "question": "Warum ist JUnit-XML für CI-Systeme wichtig?",
+      "area": "Testwerkzeuge: JUnit-XML",
+      "options": [
+        {
+          "text": "Weil verschiedene Testframeworks ihre Ergebnisse in dasselbe Format exportieren und die CI sie einheitlich anzeigen kann.",
+          "isCorrect": true,
+          "explanation": "Richtig: JUnit-XML ist der gemeinsame Nenner zwischen beliebigen Testframeworks und beliebigen CI-Systemen."
+        },
+        {
+          "text": "Weil es das einzige Format ist, das eine Code-Plattform Actions lesen kann.",
+          "isCorrect": false,
+          "explanation": "Falsch: GitHub Actions kann viele Formate lesen, JUnit-XML ist nur das am weitesten verbreitete."
+        },
+        {
+          "text": "Weil es gesetzlich vorgeschrieben ist, Testergebnisse in diesem Format zu archivieren.",
+          "isCorrect": false,
+          "explanation": "Falsch: es gibt kein Gesetz, das JUnit-XML vorschreibt, es ist ein freiwilliger Industriestandard."
+        },
+        {
+          "text": "Weil es die Testergebnisse komprimiert und dadurch wertvollen Speicherplatz auf dem CI-Server spart sowie die Netzwerkübertragung beschleunigt.",
+          "isCorrect": false,
+          "explanation": "Falsch: JUnit-XML komprimiert nichts, es ist ein textbasiertes Format ohne besondere Platzeffizienz."
+        }
+      ]
+    },
+    {
+      "question": "Was ist ein flaky Test?",
+      "area": "Testwerkzeuge: Testqualität",
+      "options": [
+        {
+          "text": "Ein Test, der manchmal besteht und manchmal fehlschlägt, ohne dass der getestete Code geändert wurde.",
+          "isCorrect": true,
+          "explanation": "Richtig: ein flaky Test ist unzuverlässig und zerstört das Vertrauen in die Testsuite."
+        },
+        {
+          "text": "Ein Test, der besonders schnell läuft und daher als erstes Ergebnis vorliegt und sofort angezeigt wird.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Geschwindigkeit hat nichts mit dem Begriff flaky zu tun."
+        },
+        {
+          "text": "Ein Test, der nur auf bestimmten Betriebssystemen ausgeführt werden kann.",
+          "isCorrect": false,
+          "explanation": "Falsch: Plattformabhängigkeit ist ein anderes Problem, nicht flaky."
+        },
+        {
+          "text": "Ein Test, der absichtlich mit zufälligen Eingabewerten arbeitet, um mehr Fälle abzudecken.",
+          "isCorrect": false,
+          "explanation": "Falsch: das ist ein randomisierter Test, kein flaky Test."
+        }
+      ]
+    },
+    {
+      "question": "Wie testet man asynchrone Funktionen in Jest und Vitest?",
+      "area": "Testwerkzeuge: Asynchrone Tests",
+      "options": [
+        {
+          "text": "Mit async/await vor der Testfunktion und dem Funktionsaufruf oder durch Rückgabe des Promises.",
+          "isCorrect": true,
+          "explanation": "Richtig: beide Wege sagen dem Framework, dass es auf die Auflösung des Promises warten soll."
+        },
+        {
+          "text": "Indem man die asynchrone Funktion in eine synchrone umschreibt, weil Tests keine Asynchronität unterstützen.",
+          "isCorrect": false,
+          "explanation": "Falsch: Tests unterstützen Asynchronität sehr wohl, man muss sie nur korrekt kennzeichnen."
+        },
+        {
+          "text": "Indem man setTimeout mit einer festen Wartezeit verwendet und hofft, dass das Ergebnis bis dahin da ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: setTimeout ist unzuverlässig und macht Tests langsam und flaky."
+        },
+        {
+          "text": "Asynchrone Funktionen können nicht getestet werden, sie müssen immer zuerst synchron gemacht werden.",
+          "isCorrect": false,
+          "explanation": "Falsch: asynchrone Funktionen können direkt getestet werden, das Framework unterstützt das."
+        }
+      ]
+    },
+    {
+      "question": "Warum sollte ein Test idealerweise nur eine Assertion enthalten?",
+      "area": "Testwerkzeuge: Testqualität",
+      "options": [
+        {
+          "text": "Weil man bei einem Fehlschlag sofort weiß, welche Prüfung fehlgeschlagen ist, ohne raten zu müssen.",
+          "isCorrect": true,
+          "explanation": "Richtig: eine Assertion pro Test macht die Fehlersuche eindeutig und schnell."
+        },
+        {
+          "text": "Weil das Testframework bei mehr als einer Assertion pro Test sofort abstürzt und einen Fehler wirft.",
+          "isCorrect": false,
+          "explanation": "Falsch: das Framework erlaubt beliebig viele Assertions, es ist nur eine Frage der Lesbarkeit."
+        },
+        {
+          "text": "Weil zusätzliche Assertions die Testabdeckung verfälschen und zu falschen Prozentzahlen führen.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Testabdeckung misst ausgeführten Code, nicht die Anzahl der Assertions."
+        },
+        {
+          "text": "Weil es eine gesetzliche Vorschrift für sicherheitskritische Software ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: es gibt kein Gesetz, das die Anzahl der Assertions pro Test vorschreibt."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Installiere Vitest oder Jest in einem eigenen Projekt. Schreibe Tests für eine Funktion, die ein Datum berechnet oder eine Zeichenkette verarbeitet. Strukturiere die Tests mit describe und it. Verwende mindestens drei verschiedene Assertion-Typen, zum Beispiel toBe, toEqual und toThrow. Mocke eine Abhängigkeit, zum Beispiel die aktuelle Uhrzeit mit vi.useFakeTimers() oder jest.useFakeTimers(). Führe die Tests im Watch-Mode aus und ändere dann den Code, um zu sehen, wie der Watch-Mode reagiert.",
+    "expectation": "Tests sind mit describe/it strukturiert, verwenden verschiedene Assertion-Typen und mocken eine Abhängigkeit. Der Watch-Mode wurde ausprobiert und das Verhalten bei Codeänderungen beobachtet. Alle Tests laufen grün.",
+    "checklist": [
+      "Vitest oder Jest im Projekt installiert und konfiguriert.",
+      "Tests mit describe und it strukturiert.",
+      "Mindestens drei verschiedene Assertion-Typen verwendet.",
+      "Eine Abhängigkeit gemockt, zum Beispiel die Systemzeit.",
+      "Watch-Mode gestartet und Verhalten bei Codeänderung beobachtet.",
+      "Alle Tests laufen grün."
+    ],
+    "portfolioItem": "P02"
+  },
+  "audio": {
+    "file": "M04-02-02.mp3",
+    "durationSeconds": 1400,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Soll ich für ein neues Projekt Jest oder Vitest nehmen?",
+      "answer": "Wenn dein Projekt Vite als Build-Werkzeug verwendet, nimm Vitest, weil es dieselbe Konfiguration nutzt und deutlich schneller startet. Wenn dein Projekt ein älteres Build-Werkzeug wie Webpack verwendet oder du viele bestehende Jest-Beispiele als Vorlage nutzen willst, nimm Jest. Für den Einstieg sind beide praktisch gleich, weil sie dieselbe API haben: describe, it, expect funktionieren in beiden identisch. Du kannst später immer noch wechseln, der Aufwand ist gering, weil die Tests selbst kaum geändert werden müssen."
+    },
+    {
+      "question": "Wie viele Assertions sollte ein einzelner Test enthalten?",
+      "answer": "Ein Test sollte idealerweise genau eine Assertion enthalten, weil du dann bei einem Fehlschlag sofort weißt, welche Prüfung fehlgeschlagen ist. In der Praxis sind zwei oder drei Assertions oft sinnvoll, wenn sie dasselbe Konzept aus verschiedenen Blickwinkeln prüfen, zum Beispiel ob eine Funktion sowohl das richtige Ergebnis liefert als auch keine Seiteneffekte hatte. Mehr als fünf Assertions in einem Test sind ein Warnsignal, dass der Test zu viel auf einmal prüft und in mehrere kleinere Tests aufgeteilt werden sollte."
+    },
+    {
+      "question": "Kann ich Tests auch ohne Testframework schreiben?",
+      "answer": "Ja, Node.js hat ein eingebautes Testmodul, das ohne zusätzliche Bibliothek funktioniert. Du schreibst deine Tests mit import test from 'node:test' und nutzt assert von 'node:assert'. Das reicht für einfache Projekte völlig aus und hat den Vorteil, dass du keine Abhängigkeiten installieren musst. Allerdings fehlen die komfortablen Helfer von Jest und Vitest wie der Watch-Mode, die Mock-Funktionen und die übersichtliche Ausgabe. Für ein kleines Projekt ist das eingebaute Testmodul ein guter Start, für ein wachsendes Projekt wirst du früher oder später zu einem vollwertigen Framework wechseln wollen."
+    },
+    {
+      "question": "Was bedeutet es, wenn ein Test flaky ist?",
+      "answer": "Ein flaky Test ist ein Test, der manchmal besteht und manchmal fehlschlägt, ohne dass der getestete Code geändert wurde. Die häufigsten Ursachen sind Abhängigkeiten von der Systemzeit, von der Reihenfolge der Testausführung, von externen Diensten oder von Zufallswerten. Ein flaky Test ist schlimmer als gar kein Test, weil er das Vertrauen in die gesamte Testsuite zerstört. Wenn ein Test einmal fehlschlägt und beim nächsten Mal ohne Änderung besteht, ignorieren die Entwickler irgendwann alle Fehlschläge, und dann übersehen sie auch die echten. Flaky Tests müssen entweder repariert oder gelöscht werden."
+    },
+    {
+      "question": "Wie teste ich asynchrone Funktionen, die ein Promise zurückgeben?",
+      "answer": "Jest und Vitest bieten dafür zwei Wege. Der einfachste ist async/await: du schreibst async vor die Testfunktion und await vor den Aufruf der asynchronen Funktion, dann verhält sich der Test wie ein synchroner. Der zweite Weg ist die Rückgabe des Promises aus dem Test: wenn der Test ein Promise zurückgibt, wartet das Framework automatisch, bis es aufgelöst oder abgelehnt wird. Beide Wege sind gleichwertig, aber async/await ist lesbarer, besonders wenn du mehrere asynchrone Aufrufe hintereinander machst."
+    }
+  ]
+}
