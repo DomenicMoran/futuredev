@@ -1,0 +1,1143 @@
+{
+  "id": "M03-06-01",
+  "title": "Wie eine Kartenzahlung technisch abläuft",
+  "durationMinutes": 21,
+  "prerequisites": [
+    "M01-05-02",
+    "M03-05-01"
+  ],
+  "terms": [
+    {
+      "term": "Zahlungsdienstleister",
+      "definition": "Eine Firma, die im Auftrag eines Ladens prüft, ob eine Zahlung gültig ist, und das Geld weiterleitet, zum Beispiel Stripe oder PayPal."
+    },
+    {
+      "term": "PCI",
+      "definition": "Die Sicherheitsregeln der Zahlungskarten-Branche (Payment Card Industry) für jeden, der Kartendaten speichert oder verarbeitet."
+    },
+    {
+      "term": "Testmodus",
+      "definition": "Der Übungsbereich eines Zahlungsdienstleisters, in dem alles wie echt wirkt, aber nie echtes Geld fließt."
+    },
+    {
+      "term": "Echtbetrieb",
+      "definition": "Der echte Bereich eines Zahlungsdienstleisters, in dem eine echte Karte wirklich belastet wird."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "text": "Stell dir vor, du stehst an der Kasse im Supermarkt und hältst deine Karte an das Gerät.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "In der Sekunde, in der es piept, passiert im Hintergrund sehr viel mehr, als du siehst.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Was passiert denn in dieser einen Sekunde wirklich?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau darum geht es in dieser Lektion: den ganzen Weg einer Kartenzahlung, Schritt für Schritt.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Denk an eine Werkstatt, die ein Ersatzteil braucht, aber es nicht selbst herstellt.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Sie ruft einen Zulieferer an, der das Teil hat und liefert. Die Werkstatt selbst muss die Fabrik nicht kennen.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Bei einer Kartenzahlung ist das ganz ähnlich. Der Laden nimmt die Karte, aber er prüft sie nicht selbst.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Dafür gibt es eine eigene Firma, die zwischen Laden und Bank vermittelt: den Zahlungsdienstleister.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein Zahlungsdienstleister ist eine Firma, die im Auftrag eines Ladens prüft, ob eine Zahlung gültig ist, und das Geld weiterleitet. Stripe ist so ein Zahlungsdienstleister, genau wie PayPal oder Adyen.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Das heißt, der Laden selbst hat gar keine direkte Leitung zu meiner Bank?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Richtig. Der Laden spricht nur mit dem Zahlungsdienstleister. Der Zahlungsdienstleister spricht mit den Banken.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Das ist wichtig, weil der Laden dadurch keine Bankverbindung zu jeder einzelnen Bank der Welt aufbauen muss.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir jetzt einen Brief vor, der von der Post durch mehrere Stationen geschickt wird, bevor eine Antwort zurückkommt.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Bei einer Kartenzahlung ist der Ablauf genauso ein Weg mit mehreren Stationen, nur in Bruchteilen einer Sekunde.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Erste Station: das Kassenterminal oder die Webseite schickt die Kartendaten und den Betrag an den Zahlungsdienstleister.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Zweite Station: der Zahlungsdienstleister leitet die Anfrage an das Kartennetz weiter, zum Beispiel Visa oder Mastercard.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Dritte Station: das Kartennetz fragt bei deiner eigenen Bank nach, ob genug Geld auf dem Konto ist und die Karte gültig ist.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Diese Rückfrage bei deiner Bank, ob die Zahlung erlaubt ist, kennst du unter dem Namen Autorisierung schon aus der Lektion zur Anmeldung, dort ging es um Erlaubnis für einen Zugriff. Bei einer Kartenzahlung ist es dieselbe Idee: die Bank erlaubt oder verweigert die Zahlung.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Bei der Autorisierung prüft deine Bank drei Dinge: ist die Karte echt, ist genug Geld da, und ist die Zahlung nicht verdächtig. Danach schickt sie ein Ja oder ein Nein zurück, denselben Weg wieder zurück bis zur Kasse.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Und wenn meine Bank Nein sagt, merkt der Laden das sofort?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, sofort. Das ganze Hin und Her dauert meist unter zwei Sekunden, deshalb piept die Kasse so schnell.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Ohne diese Autorisierung könnte jeder mit einer gestohlenen oder leeren Karte einfach bezahlen, ohne dass es auffällt.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Denk an eine Bibliothek, die ein Buch nicht nur am Tresen, sondern auch per Brief verleihen kann. Der Vorgang bleibt derselbe, nur der Weg ist anders.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Bei einer Onlinezahlung läuft genau derselbe Ablauf wie im Laden, nur ohne Kassenterminal.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Statt die Karte an ein Gerät zu halten, tippst du die Kartennummer in ein Formular auf einer Webseite ein.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Dieses Formular schickt die Daten an einen Zahlungsdienstleister, der Zahlungsdienstleister fragt beim Kartennetz an, das Kartennetz fragt bei deiner Bank an. Der Weg ist identisch mit dem im Laden.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Warum sieht das Formular auf so vielen Webseiten fast gleich aus, mit demselben Kartenfeld?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Weil viele Läden genau denselben Zahlungsdienstleister benutzen und dessen fertiges Formular einbauen, statt ein eigenes zu bauen.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Das spart nicht nur Arbeit, es macht die Zahlung für dich als Kunde auch vertrauter und sicherer wiedererkennbar.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir einen Tresor in einer Bank vor. Nicht jeder Angestellte darf ihn öffnen, nur wenige, mit besonderer Ausbildung und Kontrolle.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Kartendaten sind wie der Inhalt dieses Tresors. Wer sie speichert, trägt eine riesige Verantwortung, falls sie gestohlen werden.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Deshalb gibt es eine strenge Regel für jeden, der Kartendaten speichert oder verarbeitet: die Regel heißt PCI. P, C, I.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "PCI steht für Payment Card Industry, auf Deutsch etwa Zahlungskarten-Branche. Die PCI-Regeln verlangen zum Beispiel eigene, besonders geschützte Server nur für Kartendaten, regelmäßige Sicherheitsprüfungen durch externe Firmen und ein genaues Protokoll, wer wann auf die Daten zugreift.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss dann jeder kleine Onlineshop diese ganzen Regeln selbst erfüllen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau das ist die eigentliche Pointe: Nein, muss er nicht, wenn er die Kartendaten nie selbst sieht.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Denk an ein Verteilzentrum, das Pakete nur durchreicht, aber nie öffnet. Es trägt keine Verantwortung für den Inhalt, weil es ihn nie sieht.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Wenn ein Laden das Kartenformular seines Zahlungsdienstleisters einbaut, läuft die Kartennummer direkt vom Formular zum Zahlungsdienstleister.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Der eigene Server des Ladens bekommt die Kartennummer dabei nie zu Gesicht, sie fließt daran vorbei.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Damit muss der Laden selbst die strengen PCI-Regeln nicht erfüllen, denn er speichert und verarbeitet gar keine Kartendaten. Das übernimmt der Zahlungsdienstleister, der genau dafür gebaut und geprüft ist.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Also ist es nicht nur bequemer, sondern auch eine Art Schutz für den Laden selbst?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, doppelt. Weniger Aufwand für den Laden, und viel kleineres Risiko, falls doch einmal etwas schiefgeht.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau deshalb baut fast niemand heute eine eigene Kartenverarbeitung, sondern mietet sich ein fertiges, geprüftes System.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir eine Fahrschule vor, die auf einem abgesperrten Übungsplatz übt, bevor es auf die echte Straße geht.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Beim Programmieren einer Zahlung willst du genauso erst üben, ohne dass echtes Geld fließt oder eine echte Karte belastet wird.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Dafür bieten Zahlungsdienstleister zwei getrennte Bereiche an: einen Übungsbereich und einen echten Bereich.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Der Übungsbereich heißt Testmodus. Im Testmodus verhält sich alles wie echt, nur dass kein echtes Geld bewegt wird.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Im Testmodus von Stripe gibt es sogar spezielle Testkartennummern, mit denen du eine erfolgreiche Zahlung, eine abgelehnte Zahlung oder sogar einen Betrugsverdacht nachstellen kannst, ohne jedes Risiko.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Und wenn ich fertig geübt habe, schalte ich dann einfach um?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau. Der Gegenpart zum Testmodus heißt Echtbetrieb: dort fließt wirklich Geld, mit einer echten Karte einer echten Person.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Im Echtbetrieb bekommst du von deinem Zahlungsdienstleister andere Zugangsschlüssel als im Testmodus, damit ein Test niemals aus Versehen eine echte Zahlung auslöst.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Diese Trennung ist enorm wichtig, denn ein Fehler im Testmodus darf niemals einem echten Kunden Geld abbuchen.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Denk an den Unterschied zwischen einer Überweisung, die du selbst am Automaten tippst, und einer Kartenzahlung an der Kasse.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Eine Überweisung läuft direkt zwischen zwei Banken, ganz ohne Kartennetz und ohne Autorisierung in Echtzeit.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Eine Kartenzahlung dagegen braucht genau die Kette, die wir gerade besprochen haben: Laden, Zahlungsdienstleister, Kartennetz, Bank.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein Zahlungsdienstleister wie Stripe bietet deshalb oft mehrere Zahlungsarten gleichzeitig an, Karte, Lastschrift und noch weitere, über dieselbe Schnittstelle.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Heißt das, ich müsste als Entwickler jede Zahlungsart einzeln von Grund auf selbst programmieren?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, genau das ist der Vorteil. Der Zahlungsdienstleister kümmert sich um die Unterschiede, du sprichst nur mit einer einzigen Schnittstelle.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Das nimmt dir sehr viel Arbeit und Fehlerquellen ab, die du sonst für jede Bank und jedes Land einzeln lösen müsstest.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir einen Türsteher vor, der nicht nur den Ausweis prüft, sondern auch merkt, wenn sich jemand seltsam verhält.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau so ein zusätzlicher Blick passiert bei jeder Kartenzahlung im Hintergrund, ganz automatisch.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Banken und Zahlungsdienstleister beobachten Muster: eine Karte, die sonst nur in einer Stadt benutzt wird, zahlt plötzlich in einem fremden Land. Oder es werden in wenigen Minuten viele kleine Beträge nacheinander abgebucht.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Solche ungewöhnlichen Muster können die Autorisierung stoppen, selbst wenn die Karte an sich echt und gedeckt ist.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Ist es dann nicht ärgerlich, wenn eine völlig normale Zahlung fälschlich abgelehnt wird?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, das passiert gelegentlich, und es ist der Preis für mehr Sicherheit. Die meisten Kunden merken einen Betrugsversuch aber nie, weil er längst automatisch gestoppt wurde.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Denk an einen Kauf im Laden, bei dem du später merkst, dass die Ware kaputt war, und dein Geld zurückverlangst.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Bei einer Kartenzahlung gibt es dafür einen festen, geregelten Weg, falls sich Kunde und Laden nicht einig werden.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Der Kunde meldet sich bei seiner eigenen Bank und bestreitet die Zahlung, zum Beispiel weil die Ware nie ankam.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Diese erzwungene Rückbuchung einer bereits bezahlten Kartenzahlung heißt Chargeback, auf Deutsch etwa Rückbelastung.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Für den Laden ist ein Chargeback ärgerlich, weil er das Geld verliert und oft zusätzlich eine Gebühr zahlt, selbst wenn er im Recht war.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann sich der Laden gegen einen ungerechtfertigten Chargeback wehren?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, er kann Belege einreichen, etwa einen Lieferschein. Der Zahlungsdienstleister leitet das an die Bank des Kunden weiter, die dann endgültig entscheidet.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir einen Paketdienst vor, der für jede Lieferung eine kleine Gebühr verlangt, egal wie günstig das Paket selbst ist.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genauso verlangt jede Station in der Zahlungskette eine kleine Gebühr für ihre Arbeit, meist als Prozentsatz vom Kaufpreis plus ein fester Cent-Betrag.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Diese Gebühr teilen sich Kartennetz, ausgebende Bank und Zahlungsdienstleister, meist unsichtbar für den Kunden im Hintergrund.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Der Laden sieht am Ende nur eine einzige Gesamtgebühr auf seiner Abrechnung beim Zahlungsdienstleister, oft zwischen einem und drei Prozent des Kaufpreises.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Diese Gebühr ist der Preis dafür, dass der Laden sich um keine der komplizierten Schritte selbst kümmern muss, die wir in dieser Lektion besprochen haben.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Denk an eine Tür, die zusätzlich zum Schlüssel noch einen Zahlencode am Display verlangt, bevor sie aufgeht.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Bei manchen Onlinezahlungen reicht die Kartennummer allein der Bank nicht, sie will einen zweiten Beweis, dass wirklich du zahlst.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Dieser zweite Schritt heißt starke Kundenauthentifizierung, oft als 3D Secure umgesetzt: ein Code per SMS, eine Bestätigung in der Banking-App oder ein Fingerabdruck.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Zum Beispiel schickt deine Bank dir bei einem größeren Einkauf eine Bestätigungsanfrage in ihre App, die du erst antippen musst, bevor die Autorisierung überhaupt weiterläuft.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Warum passiert das nicht bei jeder einzelnen Zahlung?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Bei sehr kleinen Beträgen oder bei einem Laden, den du schon oft benutzt hast, verzichten Banken manchmal darauf, um den Vorgang schneller zu machen. Das Risiko wird dabei laufend neu abgewogen.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Diese zusätzliche Prüfung schützt dich davor, dass jemand mit nur deiner Kartennummer allein online in deinem Namen einkauft.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir vor, du legst deine Karte nicht mehr in die Geldbörse, sondern in eine Art digitales Schließfach auf deinem Handy.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau das machen digitale Wallets wie Apple Pay oder Google Pay: sie speichern eine geschützte Version deiner Kartendaten direkt auf dem Gerät.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Beim Bezahlen schickt das Handy nicht deine echte Kartennummer, sondern eine einmalige, nur für diese Zahlung gültige Ersatznummer an das Terminal.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Diese Ersatznummer nennt man Tokenisierung; selbst wenn sie abgefangen würde, könnte niemand damit ein zweites Mal bezahlen.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Der restliche Weg dahinter, über Zahlungsdienstleister, Kartennetz und Autorisierung bei der Bank, bleibt trotzdem genau derselbe, den wir in dieser Lektion besprochen haben.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Denk an einen Urlaub im Ausland, bei dem du an der Kasse mit deiner Karte in einer fremden Währung zahlst.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Auch das läuft über genau dieselbe Kette wie bisher besprochen, nur kommt ein zusätzlicher Schritt dazu: die Währungsumrechnung.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Das Kartennetz oder deine Bank rechnet den Betrag zum aktuellen Wechselkurs in deine Heimatwährung um, meist mit einem kleinen Aufschlag als zusätzlicher Gebühr.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Zahlst du zum Beispiel in einem Laden in den USA mit einer Karte in Euro, siehst du auf deiner Abrechnung später den Betrag in Euro, nicht in Dollar.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Ohne diesen automatischen Umrechnungsschritt könntest du im Ausland überhaupt nicht mit deiner gewohnten Karte bezahlen.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Merke ich als Kunde überhaupt, welchen Wechselkurs die Bank dabei genau verwendet hat?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Meist steht der genaue Kurs erst auf der Kontoabrechnung, nicht schon an der Kasse im Moment der Zahlung. Manche Terminals bieten zusätzlich eine sofortige Umrechnung direkt an der Kasse an, die aber oft einen schlechteren Kurs verwendet als die eigene Bank.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir eine Werkstatt vor, die weiß, wie ein Motor grundsätzlich funktioniert, bevor sie zum ersten Mal selbst einen einbaut.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau in dieser Reihenfolge gehen wir jetzt weiter vor: erst das Prinzip verstehen, wie wir es in dieser Lektion gemacht haben, dann selbst bauen.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "In der nächsten Lektion baust du zum ersten Mal eine echte Bezahlseite ein, mit einem fertigen Formular eines Zahlungsdienstleisters, im Testmodus, ganz ohne Risiko.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Das lohnt sich, weil du dann sofort einordnen kannst, was im Hintergrund passiert, statt nur eine fertige Anleitung abzutippen.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Also noch einmal ganz kurz zusammengefasst: der Laden schickt die Kartendaten nie direkt an die Bank, sondern an einen Zahlungsdienstleister. Der Zahlungsdienstleister fragt über das Kartennetz bei der Bank an, das nennt sich Autorisierung. Weil der Laden die Kartendaten nie selbst sieht, muss er die strengen PCI-Regeln nicht selbst erfüllen. Und bevor irgendetwas davon echtes Geld bewegt, übt man das alles im Testmodus, getrennt vom Echtbetrieb.",
+      "isKeySentence": true,
+      "role": "key"
+    },
+    {
+      "speaker": "A",
+      "text": "Zum Abschluss noch einmal alle neuen Begriffe dieser Lektion, kurz erklärt.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Zahlungsdienstleister: eine Firma, die im Auftrag eines Ladens prüft, ob eine Zahlung gültig ist, und das Geld weiterleitet.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "PCI: die Sicherheitsregeln der Zahlungskarten-Branche für jeden, der Kartendaten speichert oder verarbeitet.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Testmodus: der Übungsbereich eines Zahlungsdienstleisters, in dem nie echtes Geld fließt.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Echtbetrieb: der echte Bereich, in dem eine echte Karte wirklich belastet wird.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "B",
+      "text": "Warum sehe ich beim Bezahlen manchmal ein Fenster von einer ganz anderen Firma als dem Laden, in dem ich einkaufe?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Das ist das Formular des Zahlungsdienstleisters, den der Laden benutzt, zum Beispiel Stripe oder PayPal. Der Laden bindet dieses fertige Formular ein, damit die Kartendaten direkt beim Zahlungsdienstleister landen und nicht über die eigenen Server des Ladens laufen.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Kostet es den Laden etwas, einen Zahlungsdienstleister zu nutzen?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, üblich ist eine kleine Gebühr pro Zahlung, oft ein fester Cent-Betrag plus ein kleiner Prozentsatz vom Kaufpreis. Das ist der Preis dafür, dass der Laden sich nicht selbst um Bankverbindungen, Sicherheit und PCI-Regeln kümmern muss.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Was passiert, wenn meine Bank die Autorisierung ablehnt?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Dann bekommt der Laden sofort ein Nein zurück und die Zahlung wird nicht durchgeführt, meist ohne genaue Angabe des Grundes an den Laden. Häufige Gründe sind zu wenig Geld auf dem Konto, eine gesperrte Karte oder ein Betrugsverdacht der Bank.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Sieht ein Entwickler beim Programmieren jemals die echte Kartennummer eines Kunden?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Im Normalfall nicht, wenn er das fertige Formular des Zahlungsdienstleisters nutzt, wie in der nächsten Lektion gezeigt wird. Die Kartennummer läuft direkt vom Formular zum Zahlungsdienstleister, ohne den eigenen Server des Entwicklers zu berühren.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Ist eine Testzahlung im Testmodus in irgendeiner Form riskant?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, im Testmodus wird nie echtes Geld bewegt und keine echte Karte belastet, selbst wenn du eine echt aussehende Testkartennummer eingibst. Testmodus und Echtbetrieb sind bei den meisten Zahlungsdienstleistern durch komplett getrennte Zugangsschlüssel technisch strikt getrennt.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Warum dauert eine Kartenzahlung trotz der vielen Stationen fast nie länger als ein paar Sekunden?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Die gesamte Kette aus Laden, Zahlungsdienstleister, Kartennetz und Bank läuft über sehr schnelle, dauerhaft bestehende Datenleitungen, ähnlich einem gut eingespielten Postweg mit festen Verbindungen. Jede Station ist zudem auf genau diese eine Aufgabe spezialisiert und deshalb sehr schnell darin.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Ist eine Zahlung mit Apple Pay oder Google Pay sicherer als eine normale Kartenzahlung?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "In der Regel ja, weil dabei nicht die echte Kartennummer übertragen wird, sondern eine einmalige Ersatznummer, die Tokenisierung genannt wird. Selbst wenn jemand diese Ersatznummer abfangen würde, könnte er damit keine zweite Zahlung mehr auslösen.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Ist ein Chargeback dasselbe wie eine normale Rückerstattung durch den Laden?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, bei einer normalen Rückerstattung gibt der Laden das Geld freiwillig zurück, etwa weil der Kunde die Ware zurückschickt. Ein Chargeback dagegen wird von der Bank des Kunden erzwungen, oft gegen den Willen des Ladens, und ist für den Laden deutlich aufwendiger und teurer.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Warum sollte ein Entwickler den Unterschied zwischen Testmodus und Echtbetrieb genau kennen, bevor er eine Zahlung programmiert?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Weil eine Verwechslung dazu führen könnte, dass ein Test versehentlich im Echtbetrieb landet und eine echte Person tatsächlich Geld verliert. Zahlungsdienstleister trennen deshalb beide Bereiche technisch strikt, aber ein Entwickler muss trotzdem selbst genau wissen, in welchem Modus sein Code gerade läuft.",
+      "isKeySentence": false,
+      "role": "faq"
+    }
+  ],
+  "practiceExample": {
+    "text": "Die Vault-Notiz zu repo-futuredev plant, geheime Zugangsschlüssel wie den eines Zahlungsdienstleisters niemals im Client oder auf der Website liegen zu lassen, sondern nur serverseitig bzw. hinter der Server-Grenze. Genau dieselbe Grundidee steckt hinter PCI: sensible Zahlungsdaten laufen nur dort, wo sie unter strenger Kontrolle stehen, nie ungeschützt beim Endgerät oder im sichtbaren Code.",
+    "repoNote": "repo-futuredev",
+    "location": "Tabelle, Zeile M06 \"Keine geheimen Schlüssel im Client oder in der App\", mit Verweis auf prompt_FutureDev.md:73"
+  },
+  "quiz": [
+    {
+      "question": "Was macht ein Zahlungsdienstleister bei einer Kartenzahlung?",
+      "area": "Kartenzahlung technisch",
+      "options": [
+        {
+          "text": "Er druckt die Kassenbons für den Laden.",
+          "isCorrect": false,
+          "explanation": "Bons drucken ist Aufgabe der Kasse, nicht des Zahlungsdienstleisters."
+        },
+        {
+          "text": "Er prüft im Auftrag des Ladens, ob die Zahlung gültig ist, und leitet das Geld weiter.",
+          "isCorrect": true,
+          "explanation": "Das ist genau seine Rolle zwischen Laden und Bank."
+        },
+        {
+          "text": "Er stellt dem Kunden seine Kreditkarte aus.",
+          "isCorrect": false,
+          "explanation": "Karten stellt die eigene Bank des Kunden aus, nicht der Zahlungsdienstleister eines Ladens."
+        },
+        {
+          "text": "Er entscheidet allein, ohne Bank, ob genug Geld auf dem Konto ist.",
+          "isCorrect": false,
+          "explanation": "Diese Prüfung macht immer die Bank des Kunden, der Zahlungsdienstleister nur die Vermittlung."
+        }
+      ]
+    },
+    {
+      "question": "Warum muss der Laden selbst keine direkte Verbindung zu jeder Bank der Welt haben?",
+      "area": "Kartenzahlung technisch",
+      "options": [
+        {
+          "text": "Weil Banken grundsätzlich keine Verbindungen zu Läden erlauben.",
+          "isCorrect": false,
+          "explanation": "Banken verbinden sich durchaus mit Zahlungsdienstleistern, nur nicht direkt mit jedem einzelnen Laden."
+        },
+        {
+          "text": "Weil der Zahlungsdienstleister diese Verbindung für den Laden übernimmt.",
+          "isCorrect": true,
+          "explanation": "Genau das ist der Sinn des Zahlungsdienstleisters als Vermittler."
+        },
+        {
+          "text": "Weil Kartenzahlungen ohne Banken auskommen.",
+          "isCorrect": false,
+          "explanation": "Ohne die Bank des Kunden gibt es keine Autorisierung und keine Kartenzahlung."
+        },
+        {
+          "text": "Weil jede Kasse automatisch und ohne jede weitere Prüfung direkt mit den Servern aller Banken weltweit verbunden ist.",
+          "isCorrect": false,
+          "explanation": "Eine Kasse ist nur mit dem eigenen Zahlungsdienstleister verbunden, nicht mit allen Banken."
+        }
+      ]
+    },
+    {
+      "question": "Was genau prüft die Bank bei der Autorisierung?",
+      "area": "Kartenzahlung technisch",
+      "options": [
+        {
+          "text": "Nur, ob die Karte optisch echt aussieht.",
+          "isCorrect": false,
+          "explanation": "Ein optischer Eindruck reicht nicht, die Prüfung läuft rein digital über die Kartendaten."
+        },
+        {
+          "text": "Ob die Karte echt ist, genug Geld da ist und die Zahlung nicht verdächtig wirkt.",
+          "isCorrect": true,
+          "explanation": "Diese drei Punkte prüft die Bank in der Autorisierung."
+        },
+        {
+          "text": "Ob der Laden schon lange genug existiert.",
+          "isCorrect": false,
+          "explanation": "Das Alter des Ladens ist für die Autorisierung einer einzelnen Zahlung unwichtig."
+        },
+        {
+          "text": "Ob der Kunde in der Vergangenheit schon einmal in genau diesem selben Laden mit derselben Karte eingekauft hat.",
+          "isCorrect": false,
+          "explanation": "Frühere Einkäufe im selben Laden sind für die Autorisierung nicht die Prüfgrundlage."
+        }
+      ]
+    },
+    {
+      "question": "Wie lange dauert eine typische Autorisierung ungefähr?",
+      "area": "Kartenzahlung technisch",
+      "options": [
+        {
+          "text": "Meist unter zwei Sekunden.",
+          "isCorrect": true,
+          "explanation": "Genau deshalb piept die Kasse fast sofort nach dem Halten der Karte."
+        },
+        {
+          "text": "Etwa eine halbe Stunde.",
+          "isCorrect": false,
+          "explanation": "So lange würde niemand an der Kasse warten, die Realität ist viel schneller."
+        },
+        {
+          "text": "Meist ein bis zwei Werktage.",
+          "isCorrect": false,
+          "explanation": "So lange dauert höchstens die spätere Verrechnung im Hintergrund, nicht die Autorisierung selbst."
+        },
+        {
+          "text": "Genau eine Woche.",
+          "isCorrect": false,
+          "explanation": "Eine Woche wäre für eine Kassenzahlung völlig unpraktikabel."
+        }
+      ]
+    },
+    {
+      "question": "Läuft eine Onlinezahlung technisch anders ab als eine Zahlung an der Ladenkasse?",
+      "area": "Kartenzahlung technisch",
+      "options": [
+        {
+          "text": "Ja, online gibt es überhaupt keine Autorisierung durch die Bank, weil die Karte dabei physisch nicht anwesend ist.",
+          "isCorrect": false,
+          "explanation": "Auch online braucht jede Kartenzahlung eine Autorisierung durch die Bank."
+        },
+        {
+          "text": "Nein, der grundsätzliche Weg über Zahlungsdienstleister und Kartennetz ist derselbe, nur ohne Kassenterminal.",
+          "isCorrect": true,
+          "explanation": "Genau das war der Kern des Vergleichs mit der Bibliothek und dem Brief."
+        },
+        {
+          "text": "Ja, online braucht man keine Bank mehr.",
+          "isCorrect": false,
+          "explanation": "Auch online prüft am Ende immer die Bank des Kunden die Zahlung."
+        },
+        {
+          "text": "Nein, online läuft alles ausschließlich über die Bank des Ladens.",
+          "isCorrect": false,
+          "explanation": "Beteiligt sind weiterhin beide Banken sowie Zahlungsdienstleister und Kartennetz."
+        }
+      ]
+    },
+    {
+      "question": "Wofür steht die Abkürzung PCI?",
+      "area": "PCI und Sicherheit",
+      "options": [
+        {
+          "text": "Payment Card Industry, die Sicherheitsregeln der Zahlungskarten-Branche.",
+          "isCorrect": true,
+          "explanation": "Das ist die korrekte Auflösung und Bedeutung der Abkürzung."
+        },
+        {
+          "text": "Personal Card Information, eine private Merkliste für Kartennummern.",
+          "isCorrect": false,
+          "explanation": "Das ist keine echte Bedeutung von PCI, sondern klingt nur ähnlich."
+        },
+        {
+          "text": "Price Comparison Interface, ein Werkzeug zum Preisvergleich.",
+          "isCorrect": false,
+          "explanation": "Preisvergleiche haben mit den PCI-Sicherheitsregeln nichts zu tun."
+        },
+        {
+          "text": "Public Cloud Infrastructure, ein Begriff aus dem Cloud-Hosting.",
+          "isCorrect": false,
+          "explanation": "Cloud-Infrastruktur ist ein anderes Thema und nicht die Bedeutung von PCI."
+        }
+      ]
+    },
+    {
+      "question": "Warum muss ein kleiner Onlineshop meist keine eigenen PCI-Audits durchführen?",
+      "area": "PCI und Sicherheit",
+      "options": [
+        {
+          "text": "Weil PCI-Regeln nur für sehr große Firmen gelten.",
+          "isCorrect": false,
+          "explanation": "Die Größe der Firma ist nicht der Grund, sondern ob sie Kartendaten selbst verarbeitet."
+        },
+        {
+          "text": "Weil er die Kartendaten nie selbst sieht, wenn er das Formular des Zahlungsdienstleisters nutzt.",
+          "isCorrect": true,
+          "explanation": "Ohne eigenen Kontakt mit den Kartendaten entfällt die eigene PCI-Pflicht weitgehend."
+        },
+        {
+          "text": "Weil PCI nur für Zahlungen über 1000 Euro gilt.",
+          "isCorrect": false,
+          "explanation": "Der Betrag der Zahlung spielt für die PCI-Pflicht keine Rolle."
+        },
+        {
+          "text": "Weil Onlineshops unabhängig von ihrer Größe und ihrem Umsatz grundsätzlich von sämtlichen Sicherheitsregeln vollständig befreit sind.",
+          "isCorrect": false,
+          "explanation": "Onlineshops sind nicht generell befreit, sie tragen die Verantwortung nur an den Zahlungsdienstleister weiter."
+        }
+      ]
+    },
+    {
+      "question": "Was wäre ein Risiko, wenn ein Laden Kartennummern selbst auf seinem eigenen Server speichern würde?",
+      "area": "PCI und Sicherheit",
+      "options": [
+        {
+          "text": "Gar keins, Kartennummern gelten grundsätzlich als öffentlich zugängliche und völlig unbedenkliche Informationen für jedermann.",
+          "isCorrect": false,
+          "explanation": "Kartennummern sind sensible Daten, keine öffentlichen Informationen."
+        },
+        {
+          "text": "Bei einem Einbruch in den Server könnten viele echte Kartendaten gestohlen werden.",
+          "isCorrect": true,
+          "explanation": "Genau dieses Risiko sollen die PCI-Regeln und die Auslagerung an den Zahlungsdienstleister verhindern."
+        },
+        {
+          "text": "Der Laden müsste dann höhere Steuern zahlen.",
+          "isCorrect": false,
+          "explanation": "Steuern hängen nicht davon ab, wo Kartendaten gespeichert werden."
+        },
+        {
+          "text": "Die Zahlungen würden dadurch automatisch schneller ablaufen.",
+          "isCorrect": false,
+          "explanation": "Eigene Speicherung macht eine Zahlung nicht schneller, nur riskanter."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der Testmodus eines Zahlungsdienstleisters?",
+      "area": "Testmodus und Echtbetrieb",
+      "options": [
+        {
+          "text": "Ein Bereich, in dem sich alles wie echt verhält, aber kein echtes Geld bewegt wird.",
+          "isCorrect": true,
+          "explanation": "Genau das ist der Sinn des Testmodus, sicheres Üben ohne Risiko."
+        },
+        {
+          "text": "Ein Bereich, der nur am Wochenende erreichbar ist.",
+          "isCorrect": false,
+          "explanation": "Der Testmodus ist jederzeit erreichbar, das hat nichts mit Wochentagen zu tun."
+        },
+        {
+          "text": "Ein Bereich, in dem echtes Geld mit einem Rabatt bewegt wird.",
+          "isCorrect": false,
+          "explanation": "Im Testmodus fließt überhaupt kein echtes Geld, auch nicht mit Rabatt."
+        },
+        {
+          "text": "Ein Bereich, den nur Bankangestellte nutzen dürfen.",
+          "isCorrect": false,
+          "explanation": "Den Testmodus nutzen vor allem Entwickler beim Bauen und Prüfen ihrer Zahlung."
+        }
+      ]
+    },
+    {
+      "question": "Warum verwenden Testmodus und Echtbetrieb unterschiedliche Zugangsschlüssel?",
+      "area": "Testmodus und Echtbetrieb",
+      "options": [
+        {
+          "text": "Damit ein Test aus Versehen nie eine echte Zahlung auslösen kann.",
+          "isCorrect": true,
+          "explanation": "Das ist genau der Sicherheitsgedanke hinter der strikten Trennung."
+        },
+        {
+          "text": "Damit der Testmodus schneller läuft als der Echtbetrieb.",
+          "isCorrect": false,
+          "explanation": "Die Geschwindigkeit unterscheidet sich dadurch nicht, es geht um Sicherheit."
+        },
+        {
+          "text": "Weil der Echtbetrieb technisch ein anderes Kartennetz benutzt.",
+          "isCorrect": false,
+          "explanation": "Das Kartennetz ist dasselbe, nur die Umgebung und die Schlüssel sind getrennt."
+        },
+        {
+          "text": "Weil im Testmodus keine Schlüssel nötig sind.",
+          "isCorrect": false,
+          "explanation": "Auch der Testmodus braucht eigene Schlüssel, nur eben andere als der Echtbetrieb."
+        }
+      ]
+    },
+    {
+      "question": "Was ist eine sinnvolle Nutzung von Testkartennummern im Testmodus?",
+      "area": "Testmodus und Echtbetrieb",
+      "options": [
+        {
+          "text": "Damit im späteren Echtbetrieb dauerhaft und regelmäßig echtes Geld bei jeder einzelnen Zahlung sparen.",
+          "isCorrect": false,
+          "explanation": "Testkartennummern funktionieren nur im Testmodus, nicht im Echtbetrieb."
+        },
+        {
+          "text": "Eine erfolgreiche und eine abgelehnte Zahlung nachstellen, um beide Fälle zu prüfen.",
+          "isCorrect": true,
+          "explanation": "Genau dafür stellen Zahlungsdienstleister im Testmodus solche Testkarten bereit."
+        },
+        {
+          "text": "Die echte Kartennummer eines Kunden herausfinden.",
+          "isCorrect": false,
+          "explanation": "Testkartennummern sind erfundene Nummern, sie enthalten keine echten Kundendaten."
+        },
+        {
+          "text": "Die PCI-Regeln im Echtbetrieb umgehen.",
+          "isCorrect": false,
+          "explanation": "Testkartennummern haben mit den PCI-Regeln des Echtbetriebs nichts zu tun."
+        }
+      ]
+    },
+    {
+      "question": "Was passiert grundsätzlich zuerst, wenn du im Laden deine Karte ans Terminal hältst?",
+      "area": "Kartenzahlung technisch",
+      "options": [
+        {
+          "text": "Die Bank überweist das Geld sofort und vollständig, ganz ohne jede vorherige Prüfung oder Rückfrage.",
+          "isCorrect": false,
+          "explanation": "Ohne vorherige Prüfung, also Autorisierung, würde nichts überwiesen."
+        },
+        {
+          "text": "Das Terminal schickt Kartendaten und Betrag an den Zahlungsdienstleister.",
+          "isCorrect": true,
+          "explanation": "Das ist der erste Schritt der Kette, die danach zur Autorisierung führt."
+        },
+        {
+          "text": "Der Kassierer ruft persönlich bei deiner Bank an.",
+          "isCorrect": false,
+          "explanation": "Diese Anfrage läuft vollautomatisch über technische Systeme, nicht per Telefonanruf."
+        },
+        {
+          "text": "Das Terminal druckt zuerst den Kassenbon aus.",
+          "isCorrect": false,
+          "explanation": "Der Bon kommt normalerweise erst nach erfolgreicher Zahlung, nicht davor."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Öffne die Stripe-Dokumentation zu Testkarten (stripe.com/docs/testing) und suche dir zwei Testkartennummern heraus: eine, die immer erfolgreich ist, und eine, die immer abgelehnt wird. Notiere dir beide Nummern und wofür sie stehen, ohne irgendwo ein echtes Konto oder eine echte Zahlung anzulegen.",
+    "expectation": "Eine kurze Notiz mit zwei Testkartennummern und je einem Satz, was mit jeder passiert (erfolgreich oder abgelehnt).",
+    "checklist": [
+      "Stripe-Testkarten-Seite geöffnet",
+      "eine erfolgreiche Testkartennummer notiert",
+      "eine abgelehnte Testkartennummer notiert",
+      "kein echtes Konto und keine echte Zahlung angelegt"
+    ]
+  },
+  "audio": {
+    "file": "M03-06-01.mp3",
+    "durationSeconds": 1007,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Warum sehe ich beim Bezahlen manchmal ein Fenster von einer ganz anderen Firma als dem Laden, in dem ich einkaufe?",
+      "answer": "Das ist das Formular des Zahlungsdienstleisters, den der Laden benutzt, zum Beispiel Stripe oder PayPal. Der Laden bindet dieses fertige Formular ein, damit die Kartendaten direkt beim Zahlungsdienstleister landen und nicht über die eigenen Server des Ladens laufen."
+    },
+    {
+      "question": "Kostet es den Laden etwas, einen Zahlungsdienstleister zu nutzen?",
+      "answer": "Ja, üblich ist eine kleine Gebühr pro Zahlung, oft ein fester Cent-Betrag plus ein kleiner Prozentsatz vom Kaufpreis. Das ist der Preis dafür, dass der Laden sich nicht selbst um Bankverbindungen, Sicherheit und PCI-Regeln kümmern muss."
+    },
+    {
+      "question": "Was passiert, wenn meine Bank die Autorisierung ablehnt?",
+      "answer": "Dann bekommt der Laden sofort ein Nein zurück und die Zahlung wird nicht durchgeführt, meist ohne genaue Angabe des Grundes an den Laden. Häufige Gründe sind zu wenig Geld auf dem Konto, eine gesperrte Karte oder ein Betrugsverdacht der Bank."
+    },
+    {
+      "question": "Sieht ein Entwickler beim Programmieren jemals die echte Kartennummer eines Kunden?",
+      "answer": "Im Normalfall nicht, wenn er das fertige Formular des Zahlungsdienstleisters nutzt, wie in der nächsten Lektion gezeigt wird. Die Kartennummer läuft direkt vom Formular zum Zahlungsdienstleister, ohne den eigenen Server des Entwicklers zu berühren."
+    },
+    {
+      "question": "Ist eine Testzahlung im Testmodus in irgendeiner Form riskant?",
+      "answer": "Nein, im Testmodus wird nie echtes Geld bewegt und keine echte Karte belastet, selbst wenn du eine echt aussehende Testkartennummer eingibst. Testmodus und Echtbetrieb sind bei den meisten Zahlungsdienstleistern durch komplett getrennte Zugangsschlüssel technisch strikt getrennt."
+    },
+    {
+      "question": "Warum dauert eine Kartenzahlung trotz der vielen Stationen fast nie länger als ein paar Sekunden?",
+      "answer": "Die gesamte Kette aus Laden, Zahlungsdienstleister, Kartennetz und Bank läuft über sehr schnelle, dauerhaft bestehende Datenleitungen, ähnlich einem gut eingespielten Postweg mit festen Verbindungen. Jede Station ist zudem auf genau diese eine Aufgabe spezialisiert und deshalb sehr schnell darin."
+    },
+    {
+      "question": "Ist eine Zahlung mit Apple Pay oder Google Pay sicherer als eine normale Kartenzahlung?",
+      "answer": "In der Regel ja, weil dabei nicht die echte Kartennummer übertragen wird, sondern eine einmalige Ersatznummer, die Tokenisierung genannt wird. Selbst wenn jemand diese Ersatznummer abfangen würde, könnte er damit keine zweite Zahlung mehr auslösen."
+    },
+    {
+      "question": "Ist ein Chargeback dasselbe wie eine normale Rückerstattung durch den Laden?",
+      "answer": "Nein, bei einer normalen Rückerstattung gibt der Laden das Geld freiwillig zurück, etwa weil der Kunde die Ware zurückschickt. Ein Chargeback dagegen wird von der Bank des Kunden erzwungen, oft gegen den Willen des Ladens, und ist für den Laden deutlich aufwendiger und teurer."
+    },
+    {
+      "question": "Warum sollte ein Entwickler den Unterschied zwischen Testmodus und Echtbetrieb genau kennen, bevor er eine Zahlung programmiert?",
+      "answer": "Weil eine Verwechslung dazu führen könnte, dass ein Test versehentlich im Echtbetrieb landet und eine echte Person tatsächlich Geld verliert. Zahlungsdienstleister trennen deshalb beide Bereiche technisch strikt, aber ein Entwickler muss trotzdem selbst genau wissen, in welchem Modus sein Code gerade läuft."
+    }
+  ]
+}
