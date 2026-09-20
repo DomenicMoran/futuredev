@@ -1,0 +1,823 @@
+{
+  "id": "M03-01-01",
+  "title": "Komponenten als Bausteine",
+  "durationMinutes": 24,
+  "prerequisites": [
+    "M02-03-01",
+    "M02-03-02",
+    "M02-03-03",
+    "M02-03-04",
+    "M02-03-05",
+    "M02-04-01"
+  ],
+  "terms": [
+    {
+      "term": "JSX",
+      "definition": "Eine Schreibweise, HTML-ähnliche Schnipsel direkt im JavaScript-Code zu schreiben, die vor der Auslieferung übersetzt wird."
+    },
+    {
+      "term": "Prop",
+      "definition": "Eine Information, die eine Komponente von außen mitbekommt und selbst nicht verändern darf."
+    },
+    {
+      "term": "Rendern",
+      "definition": "Der Schritt, aus einer Komponenten-Beschreibung tatsächlich sichtbare Bildschirminhalte zu machen."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine Kiste Legosteine vor. Du baust daraus ein Haus, ein Auto oder ein ganzes Schloss. Jeder Stein ist klein und für sich allein nichts Besonderes. Erst zusammengesteckt ergeben die vielen einzelnen Steine am Ende ein großes, ganzes Bild.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Und was hat das mit einer Webseite zu tun?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Eine Webseite besteht aus vielen kleinen Teilen. Ein Kopfbereich mit Logo und Menü. Eine Suchleiste. Eine Liste von Artikeln. Ein Fußbereich mit Adresse und Links. Jedes dieser Teile kann man als eigenen Baustein bauen, genau wie einen Legostein.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Genau so einen Baustein nennt man in React eine Komponente.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Eine Komponente ist ein eigenständiges Stück Benutzeroberfläche mit eigenem Aussehen und eigenem Verhalten, das man einzeln baut und dann an vielen Stellen wieder einsetzt. Im Repo repo-portfolio, der Webseite von domenicmoran.de, liegt zum Beispiel die Navigationsleiste als eigene Komponente in der Datei src/components/Nav.tsx. Eine weitere Komponente in derselben Datei-Sammlung ist der Fußbereich in src/components/Footer.tsx. Beide Dateien werden unabhängig voneinander gebaut und geändert, ohne dass die andere Komponente etwas davon merkt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Das ist wichtig, weil eine Webseite mit tausend Codezeilen in einer einzigen Datei kaum noch zu überblicken ist. Ein Fehler in der Suchleiste dürfte dann versehentlich auch das Menü kaputt machen. Komponenten trennen die Verantwortung: wer an der Suchleiste arbeitet, muss die Navigationsleiste nicht verstehen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Heißt das, jede Webseite besteht am Ende aus ganz vielen kleinen Dateien statt aus einer großen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Genau. Eine typische Next.js-Anwendung hat oft hundert oder mehr Komponenten-Dateien. Kleine Komponenten wie ein einzelner Knopf. Größere Komponenten wie eine ganze Seite, die wieder aus kleineren Komponenten zusammengesetzt ist. Eine Komponente kann also andere Komponenten enthalten, genau wie ein Legoauto aus kleineren Lego-Baugruppen besteht, etwa vier Rädern und einer Karosserie.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen Kellner in einem Restaurant vor, der nach einer festen Bestellung immer denselben Teller mit demselben Gericht bringt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Eine Komponente arbeitet ganz ähnlich. Sie bekommt eine Bestellung, tut etwas Arbeit dazwischen, und liefert am Ende ein fertiges Ergebnis ab. In der Programmierung nennt man so ein Stück Code, das eine Aufgabe erledigt und ein Ergebnis zurückgibt, eine Funktion.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Eine Komponente ist also einfach eine Funktion?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Fast genau das. Technisch ist eine React-Komponente eine ganz normale JavaScript-Funktion mit nur einer Besonderheit. Sie liefert am Ende kein Wort und keine Zahl zurück, sondern eine Beschreibung von Benutzeroberfläche, also von dem, was am Bildschirm zu sehen sein soll. Diese Beschreibung sieht auf den ersten Blick aus wie HTML, mitten im JavaScript-Code.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Ein winziges Beispiel: eine Funktion namens Begruessung, die als Ergebnis eine Überschrift mit dem Text \"Hallo, Welt!\" zurückgibt. Aufgerufen wird diese Funktion nicht mit runden Klammern wie eine gewöhnliche Funktion, sondern wie ein eigenes HTML-Element, mit spitzen Klammern: Begruessung. Genau dieses Muster, eine Funktion als HTML-Element zu benutzen, ist der Kern jeder React-Anwendung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Das ist wichtig, weil man dadurch mit ganz normalem JavaScript-Wissen, das schon aus früheren Lektionen bekannt ist, eine ganze Benutzeroberfläche bauen kann. Man muss keine komplett neue Sprache lernen, nur eine neue Art, Funktionen zu benutzen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine Werkstatt vor mit einem Werkzeugkasten voller nützlicher Spezialwerkzeuge: ein Akkuschrauber, eine Wasserwaage, ein Zollstock.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Diesen Werkzeugkasten hat sich niemand selbst zusammengebaut, er wurde fertig gekauft und einfach mitgenommen. Genau so einen fertigen Werkzeugkasten für den Bau von Benutzeroberflächen gibt es auch in der Programmierung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Dieser fertige Werkzeugkasten heißt React.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "React ist eine Sammlung von fertigem JavaScript-Code, die andere Programmiererinnen und Programmierer geschrieben und veröffentlicht haben, damit niemand das Rad neu erfinden muss. React kümmert sich vor allem um eine Aufgabe: aus dem, was eine Komponente zurückgibt, tatsächlich sichtbare Elemente auf dem Bildschirm zu machen, und diese Elemente automatisch zu aktualisieren, sobald sich etwas ändert. Im Repo repo-portfolio steht in der Datei package.json die genaue React-Version, die dort benutzt wird, React 19.2.4.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Muss ich React erst irgendwo herunterladen und installieren, bevor ich damit arbeiten kann?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "In einem echten Projekt wird React über einen Paketmanager wie npm eingebunden, das war Thema einer früheren Lektion. Wichtig ist hier nur: React selbst kann man sich nicht anschauen und anfassen wie ein fertiges Programm. Es ist eine Zutat, die man in ein eigenes Projekt einbaut, so wie Mehl eine Zutat in einem Rezept ist, kein fertiger Kuchen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du hast den Werkzeugkasten aus der Werkstatt, aber dazu noch eine ganze eingerichtete Werkstatt mit Werkbank, Stromanschluss und einem Regal für fertige Stücke.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "React allein liefert nur den Werkzeugkasten für Komponenten. Für eine vollständige Webseite braucht man aber mehr: mehrere Seiten, die man per Adresse aufrufen kann, eine sinnvolle Ordnerstruktur, eine fertige Art, die Seite auf einem Server vorzubereiten, bevor sie beim Besucher ankommt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Genau diese komplette Werkstatt rund um React nennt man Next.js.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Next.js ist selbst mit React gebaut und fügt eine feste Ordnerstruktur, ein System für mehrere Seiten und mehrere fertige Wege hinzu, eine Seite auszuliefern. Das Repo repo-portfolio ist ein Next.js-Projekt in der Version 16.2.12, siehe wieder package.json. Jede Datei unter dem Ordner src/app wird bei Next.js automatisch zu einer eigenen Seite der Webseite, dazu kommt die nächste Lektion.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Warum benutzt man dann nicht immer gleich Next.js statt React allein?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Manche kleinen Projekte brauchen die zusätzliche Werkstatt gar nicht und kommen mit dem reinen Werkzeugkasten aus. Für eine Bewerbungsseite mit mehreren Unterseiten, wie domenicmoran.de, lohnt sich die fertige Werkstatt aber sehr, weil sie viel Handarbeit abnimmt, etwa das Anlegen von Seiten und das Vorbereiten für Suchmaschinen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine Speisekarte vor, auf der Text und Bild eines Gerichts nebeneinanderstehen, statt dass man erst eine Beschreibung lesen und sich das Bild separat dazudenken muss.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "In normalem JavaScript müsste man ein HTML-Element umständlich Schritt für Schritt zusammenbauen, mit vielen einzelnen Befehlen. React erlaubt stattdessen, HTML-ähnliche Schnipsel direkt mitten im JavaScript-Code zu schreiben, so wie auf der Speisekarte Bild und Text zusammen an einer Stelle stehen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Diese Schreibweise, HTML-Schnipsel direkt im JavaScript-Code, heißt JSX. J, S, X.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Ein Beispiel für JSX: eine Überschrift mit dem Text \"Hallo, Welt!\" mittendrin im JavaScript-Code einer Komponente, ganz ohne Anführungszeichen drumherum. JSX sieht aus wie HTML, ist aber eigentlich eine Abkürzung, die ein Werkzeug beim Bauen der Webseite in normale JavaScript-Befehle übersetzt, bevor der Browser den Code jemals sieht. Im Repo repo-portfolio benutzt fast jede Datei unter src/components diese Schreibweise, zum Beispiel gleich am Anfang der zurückgegebenen Beschreibung in Nav.tsx.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Muss der Browser also selbst gar kein JSX verstehen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Genau, und das ist wichtig, weil kein Browser der Welt JSX von sich aus lesen kann. Ein eigenes Übersetzungswerkzeug macht aus JSX vorher ganz normales JavaScript, in einem eigenen Arbeitsschritt vor der Auslieferung. Ohne dieses Wissen würde JSX wie Magie wirken, dabei ist es nur eine bequeme Abkürzung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir ein Bestellformular in einem Restaurant vor: du schreibst auf einen Zettel, welches Gericht du willst, ob mit oder ohne Zwiebeln, und gibst den Zettel dem Kellner.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der Kellner bringt jedem Tisch etwas anderes, je nachdem, was auf dem Zettel steht, obwohl in der Küche immer dasselbe Grundrezept benutzt wird. Eine Komponente kann genauso von außen Informationen mitbekommen, die bestimmen, was am Ende gezeigt wird.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Diese von außen mitgegebenen Informationen heißen in React Props, kurz für das englische Wort properties, auf Deutsch Eigenschaften.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Ein Beispiel für Props steht im Repo repo-portfolio in der Datei src/components/Nav.tsx, Codeabschnitt 20 bis 36. Die Komponente Nav bekommt dort drei Props mitgegeben: onOpenPalette (eine Funktion, die beim Klick auf einen Knopf ausgeführt wird), otherHref (die Adresse für den Sprachwechsel) und hashBase (ein Textstück für Sprungmarken auf der Seite). Ohne diese Props wüsste die Navigationsleiste nicht, wohin der Sprachumschalter führen soll, genau wie der Kellner ohne Bestellzettel nicht wüsste, was auf den Teller soll.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Kann eine Komponente ihre Props später selbst ändern, so wie ich meine Bestellung nachträglich ändern kann?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Nein, das ist ein wichtiger Unterschied: Props kommen immer von außen und die Komponente selbst darf sie nicht verändern, nur lesen. Das ist wichtig, weil eine Komponente dadurch berechenbar bleibt: wer sie mit denselben Props aufruft, bekommt immer dasselbe Ergebnis, so wie dieselbe Bestellung immer zum selben Gericht führt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine Druckerpresse vor, die aus einer Text- und Bilddatei auf dem Rechner ein fertiges, gedrucktes Blatt Papier macht, das man in der Hand halten kann.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Eine Komponente allein ist nur eine Beschreibung, ähnlich wie die Textdatei vor dem Drucken. Damit aus dieser Beschreibung tatsächlich etwas auf dem Bildschirm erscheint, muss ein weiterer Schritt passieren, so wie das Papier erst durch die Druckerpresse laufen muss.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Diesen Schritt, aus einer Komponenten-Beschreibung sichtbare Bildschirminhalte zu machen, nennt man Rendern.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Ein Rendern von Begruessung mit dem Prop Name gleich \"Anna\" zeigt am Ende wirklich den Text \"Hallo, Anna!\" auf dem Bildschirm, sichtbar für die Besucherin der Seite. Ändert sich später der Prop auf \"Ben\", löst das ein erneutes Rendern aus, und aus dem Text wird \"Hallo, Ben!\", ganz ohne dass jemand die Seite von Hand neu laden muss.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Passiert dieses Rendern im Browser der Besucherin oder vorher schon auf einem Server?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Beides ist möglich, und genau das ist Thema einer eigenen späteren Lektion dieses Untermoduls, dem serverseitigen Rendern und den statischen Seiten. Für jetzt reicht das Bild von der Druckerpresse: irgendwo, im Browser oder auf einem Server, wird aus der Beschreibung ein fertiges Ergebnis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir noch einmal die Legokiste vor, jetzt aber mit einer wichtigen Regel: jeder Legostein hat eine eigene, klar erkennbare Form.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Beim Bau einer eigenen Komponente in der Praxis gilt dieselbe klare Regel. Eine Komponente in React ist immer eine Funktion mit großem Anfangsbuchstaben, deren Name beschreibt, was sie zeigt, etwa Begruessung oder Navigationsleiste. Die Funktion steht in einem eigenen Codeabschnitt, öffnet und schließt mit geschweiften Klammern, und zwischen diesen Klammern steht das Wort return, gefolgt von der JSX-Beschreibung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Kannst du das noch einmal ganz genau Schritt für Schritt durchgehen, an einem kleinen Beispiel?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Gerne. Schritt eins: function Begruessung, geöffnete runde Klammer, geschweifte Klammer, Name, geschlossene geschweifte Klammer, geschlossene runde Klammer, geöffnete geschweifte Klammer. Das ist der Funktionskopf: er sagt, wie die Komponente heißt und dass sie ein Prop namens Name entgegennimmt. Schritt zwei: das Wort return, gefolgt von einer öffnenden runden Klammer. Schritt drei: der JSX-Teil selbst, etwa eine Überschrift mit dem Inhalt \"Hallo, \" und direkt dahinter, in geschweiften Klammern, der Wert von Name. Schritt vier: die schließende runde Klammer hinter dem return. Schritt fünf: die schließende geschweifte Klammer der ganzen Funktion.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Diese feste Reihenfolge lohnt sich unbedingt zu kennen, weil sie in praktisch jeder React-Komponente wiederkehrt. Das gilt für winzige Beispiele genauso wie für die ganze Navigationsleiste aus repo-portfolio, in der viele solcher Funktionen zusammenspielen. Wer das Muster einmal erkannt hat, kann fremden React-Code viel leichter lesen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine russische Matroschka-Puppe vor: in der großen Puppe steckt eine kleinere, und in der kleineren wieder eine noch kleinere.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Komponenten lassen sich genauso ineinander verschachteln. Eine große Komponente für eine ganze Seite kann in ihrer eigenen JSX-Beschreibung wieder andere, kleinere Komponenten aufrufen, jede mit eigenen Props. So entsteht ein Baum aus Komponenten: oben eine große Seite, darunter mehrere Abschnitte, darin wieder einzelne Knöpfe und Texte.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Muss ich mir diesen ganzen Baum von Hand merken, wenn ich an einer einzelnen kleinen Komponente arbeite?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Nein, und genau das ist der Vorteil dieser Verschachtelung. Wer an einem einzelnen Knopf arbeitet, muss weder die ganze Seite noch alle anderen Knöpfe im Kopf behalten. Es reicht, die eigenen Props der einen Komponente zu kennen, der Rest bleibt außen vor, genau wie man eine einzelne, kleine Matroschka-Puppe in der Hand halten kann, ohne die ganze Reihe daneben anzufassen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine Gießform für Waffeln vor: dieselbe Form backt Waffel um Waffel, jede in derselben Grundform, aber mit anderem Belag.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Eine einmal gebaute Komponente lässt sich beliebig oft wiederverwenden, an ganz verschiedenen Stellen einer Anwendung, jedes Mal mit anderen Props. Das spart Arbeit und sorgt gleichzeitig dafür, dass gleichartige Dinge auf der Seite auch wirklich gleich aussehen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Hast du dafür noch ein Beispiel aus einem echten Projekt?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-portfolio wird die Navigationsleiste, die Komponente Nav, sowohl im deutschen Wurzel-Layout als auch im englischen Wurzel-Layout eingebunden, in den Dateien src/app/(de)/layout.tsx und src/app/(en)/layout.tsx. Beide Sprachversionen der Webseite benutzen also dieselbe gebaute Komponente, nur mit anderen Props für Sprache und Zielseite des Sprachwechsels. Niemand musste die Navigationsleiste zweimal von Grund auf neu bauen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Das ist wichtig, weil sich eine spätere Änderung, etwa ein neuer Menüpunkt, dadurch nur an einer einzigen Stelle im Code eintragen lässt und trotzdem überall gleichzeitig wirkt. Ohne Wiederverwendung müsste man dieselbe Änderung mühsam an vielen Stellen einzeln nachtragen und würde leicht eine Stelle vergessen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "text": "Also noch einmal ganz kurz: eine Komponente ist eine JavaScript-Funktion, die mit JSX beschreibt, was auf dem Bildschirm erscheinen soll. React ist der Werkzeugkasten, der aus dieser Beschreibung wirklich sichtbare Inhalte macht, das nennt man Rendern. Next.js baut auf React auf und ergänzt eine fertige Werkstatt für mehrere Seiten. Und Props sind die Informationen, die eine Komponente von außen mitbekommt, um jedes Mal etwas anderes anzuzeigen. Einmal gebaut, lässt sich eine Komponente beliebig oft an verschiedenen Stellen einer Anwendung wiederverwenden.",
+      "isKeySentence": true
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "JSX ist die Schreibweise, HTML-ähnliche Schnipsel direkt im JavaScript-Code zu schreiben.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Ein Prop ist eine Information, die eine Komponente von außen mitbekommt und selbst nicht verändern darf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Rendern ist der Schritt, aus einer Komponenten-Beschreibung tatsächlich sichtbare Bildschirminhalte zu machen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Muss ich JSX auswendig lernen, bevor ich JavaScript wirklich kann?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Nein, JSX baut vollständig auf JavaScript auf und kommt erst danach dazu. Wer die Grundlagen aus den JavaScript-Lektionen sitzen hat, also Funktionen, Variablen und Werte, erkennt in JSX vor allem eine neue Schreibweise für HTML-ähnliche Rückgabewerte, keine neue Programmiersprache. Wer JavaScript noch unsicher findet, sollte lieber vorher die früheren Lektionen dazu noch einmal anhören, statt JSX und JavaScript gleichzeitig neu zu lernen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Warum heißt eine Komponente immer mit großem Anfangsbuchstaben?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "React unterscheidet daran, ob in einem JSX-Ausdruck ein gewöhnliches HTML-Element gemeint ist oder eine selbst gebaute Komponente. Ein kleiner Anfangsbuchstabe wie bei div oder button bedeutet ein normales HTML-Element, ein großer Anfangsbuchstabe wie bei Begruessung bedeutet eine eigene Komponente.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Kann eine Komponente mehrere HTML-Elemente gleichzeitig zurückgeben?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ja, das ist völlig normal, solange am Ende alle diese Elemente in einem einzigen umschließenden Element zusammengefasst sind, etwa einem div oder einem eigens dafür vorgesehenen leeren Rahmen. React erwartet immer genau ein einziges zurückgegebenes Wurzelelement pro Komponente, auch wenn darin beliebig viele weitere Elemente stecken dürfen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was passiert, wenn ich einer Komponente ein Prop mitgebe, das sie gar nicht benutzt?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Nichts Schlimmes passiert dabei: React ignoriert Props, die die Komponente in ihrer eigenen Funktion nicht abholt, es gibt dafür keine Fehlermeldung. In der Praxis lohnt es sich trotzdem, nur wirklich benötigte Props zu übergeben, weil ungenutzte Props später beim Lesen des Codes verwirren. Ein aufgeräumter Satz an Props macht es außerdem leichter, eine Komponente Monate später wieder zu verstehen, ohne den gesamten alten Code neu durchzugehen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Brauche ich für jede noch so kleine Sache in einer Webseite eine eigene Komponente?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Nicht zwingend, das bleibt eine Abwägung. Ein einzelner Text oder ein einzelnes Bild lohnt selten eine eigene Komponente. Ein wiederkehrendes Element wie ein Knopf mit immer gleichem Aussehen dagegen schon, weil sich eine spätere Änderung dann nur an einer Stelle im Code auswirkt. Eine gute Faustregel ist: taucht dasselbe Stück Benutzeroberfläche an mehr als einer Stelle auf, lohnt sich eine eigene Komponente dafür. Dasselbe gilt, wenn ein Abschnitt der Seite so groß wird, dass er allein kaum noch zu überblicken ist.",
+      "isKeySentence": false
+    }
+  ],
+  "practiceExample": {
+    "text": "Im Repo repo-portfolio, dem Quellcode von domenicmoran.de, bekommt die Komponente Nav in der Datei src/components/Nav.tsx drei Props mitgegeben: onOpenPalette, otherHref und hashBase. Die Funktion nimmt diese Props über ihre Parameterliste entgegen und benutzt sie später, um zu entscheiden, wohin der Sprachwechsel-Link führt und welche Sprungmarke gesetzt wird. Ein Lernender kann daran genau erkennen, wie eine reale, produktiv eingesetzte Komponente Props definiert, ganz ohne selbst eine Bibliothek installieren zu müssen.",
+    "repoNote": "repo-portfolio",
+    "location": "src/components/Nav.tsx, Zeilen 20 bis 36 (Funktionskopf mit Props onOpenPalette, otherHref, hashBase)"
+  },
+  "quiz": [
+    {
+      "question": "Welches Alltagsbild passt am besten zu einer React-Komponente?",
+      "area": "React-Grundlagen: Komponenten",
+      "options": [
+        {
+          "text": "Ein einzelner Legostein.",
+          "isCorrect": true,
+          "explanation": "Richtig: eine Komponente ist ein eigenständiger, wiederverwendbarer Baustein, genau wie ein einzelner Legostein."
+        },
+        {
+          "text": "Ein fertig gebautes Legoschloss, das man nie wieder verändern kann.",
+          "isCorrect": false,
+          "explanation": "Falsch: eine Komponente ist eher der einzelne Baustein als das fertige, unveränderliche Endergebnis."
+        },
+        {
+          "text": "Eine Bauanleitung, die nur einmal gelesen und danach weggeworfen wird.",
+          "isCorrect": false,
+          "explanation": "Falsch: eine Komponente wird nicht weggeworfen, sie bleibt bestehen und wird immer wieder verwendet."
+        },
+        {
+          "text": "Eine lose Kiste ohne jede Ordnung, in der alle Legosteine gemeinsam liegen.",
+          "isCorrect": false,
+          "explanation": "Falsch: das Bild einer ungeordneten Kiste passt eher zu einer einzigen großen Datei ohne Komponenten."
+        }
+      ]
+    },
+    {
+      "question": "Was gibt eine React-Komponente als Ergebnis zurück?",
+      "area": "React-Grundlagen: Komponenten",
+      "options": [
+        {
+          "text": "Eine Beschreibung von Benutzeroberfläche, geschrieben in JSX.",
+          "isCorrect": true,
+          "explanation": "Richtig: eine Komponente ist eine Funktion, die eine JSX-Beschreibung von Benutzeroberfläche zurückgibt."
+        },
+        {
+          "text": "Eine fertige, bereits gerenderte Bilddatei des kompletten Bildschirms.",
+          "isCorrect": false,
+          "explanation": "Falsch: eine Komponente liefert keine fertige Bilddatei, das Rendern übernimmt React erst danach."
+        },
+        {
+          "text": "Eine einzelne Erfolgszahl.",
+          "isCorrect": false,
+          "explanation": "Falsch: eine einzelne Erfolgszahl wäre eine gewöhnliche Funktion, keine React-Komponente."
+        },
+        {
+          "text": "Eine Liste aller an sie übergebenen Props, unverändert weitergereicht.",
+          "isCorrect": false,
+          "explanation": "Falsch: Props nimmt eine Komponente entgegen, sie gibt aber JSX zurück, keine Liste von Props."
+        }
+      ]
+    },
+    {
+      "question": "Warum teilt man eine Webseite in mehrere Komponenten statt alles in eine Datei zu schreiben?",
+      "area": "React-Grundlagen: Komponenten",
+      "options": [
+        {
+          "text": "Damit ein Fehler in einem Teil nicht automatisch andere Teile mitreißt.",
+          "isCorrect": true,
+          "explanation": "Richtig: getrennte Komponenten trennen auch die Verantwortung und begrenzen, wo ein Fehler wirkt."
+        },
+        {
+          "text": "Weil eine einzige Datei technisch niemals mehr als zehn Zeilen enthalten darf.",
+          "isCorrect": false,
+          "explanation": "Falsch: es gibt keine feste Zeilengrenze für Dateien, das Argument für Komponenten ist Übersichtlichkeit, keine technische Grenze."
+        },
+        {
+          "text": "Weil React ohne Aufteilung in Komponenten überhaupt keinen Code ausführen würde.",
+          "isCorrect": false,
+          "explanation": "Falsch: React würde auch eine einzige riesige Komponente ausführen, nur wäre sie schwer zu warten."
+        },
+        {
+          "text": "Weil JSX nur innerhalb einzelner, sehr kleiner Dateien überhaupt funktioniert.",
+          "isCorrect": false,
+          "explanation": "Falsch: JSX funktioniert unabhängig von der Dateigröße, das ist keine technische Voraussetzung."
+        }
+      ]
+    },
+    {
+      "question": "Was ist JSX am ehesten?",
+      "area": "React-Grundlagen: JSX",
+      "options": [
+        {
+          "text": "Eine HTML-ähnliche Schreibweise im JavaScript-Code, die vor der Auslieferung übersetzt wird.",
+          "isCorrect": true,
+          "explanation": "Richtig: JSX ist eine Schreibweise, die ein Übersetzungswerkzeug vorher in gewöhnliches JavaScript umwandelt."
+        },
+        {
+          "text": "Eine eigene Programmiersprache, die mit JavaScript nichts zu tun hat.",
+          "isCorrect": false,
+          "explanation": "Falsch: JSX ist keine eigenständige Sprache, sondern eine Erweiterung der Schreibweise innerhalb von JavaScript."
+        },
+        {
+          "text": "Ein Bildformat für Screenshots von Webseiten.",
+          "isCorrect": false,
+          "explanation": "Falsch: JSX hat mit Bildformaten nichts zu tun, es beschreibt Benutzeroberfläche als Code."
+        },
+        {
+          "text": "Ein Befehl, mit dem man eine Webseite im Browser neu lädt.",
+          "isCorrect": false,
+          "explanation": "Falsch: JSX beschreibt, was angezeigt werden soll, es lädt keine Seite neu."
+        }
+      ]
+    },
+    {
+      "question": "Kann der Browser JSX direkt lesen, ohne weiteren Schritt?",
+      "area": "React-Grundlagen: JSX",
+      "options": [
+        {
+          "text": "Nein, ein eigenes Werkzeug übersetzt JSX vorher in normales JavaScript.",
+          "isCorrect": true,
+          "explanation": "Richtig: kein Browser versteht JSX von sich aus, es wird vorher übersetzt."
+        },
+        {
+          "text": "Ja, jeder moderne Browser versteht JSX genauso wie gewöhnliches HTML.",
+          "isCorrect": false,
+          "explanation": "Falsch: kein Browser liest JSX direkt, sonst bräuchte es kein Übersetzungswerkzeug."
+        },
+        {
+          "text": "Nur ein einziger, ganz bestimmter Browser kann JSX ohne Übersetzung darstellen.",
+          "isCorrect": false,
+          "explanation": "Falsch: kein einzelner Browser kann JSX ohne Übersetzung lesen, die Übersetzung passiert unabhängig vom Browser."
+        },
+        {
+          "text": "Ja, aber nur, wenn die Datei die Endung .html trägt.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Dateiendung ändert nichts daran, dass JSX vor der Auslieferung übersetzt werden muss."
+        }
+      ]
+    },
+    {
+      "question": "Was passiert, wenn eine Komponente ein Prop bekommt, es aber in ihrer Funktion gar nicht benutzt?",
+      "area": "React-Grundlagen: Props",
+      "options": [
+        {
+          "text": "React meldet keinen Fehler, das ungenutzte Prop wird einfach ignoriert.",
+          "isCorrect": true,
+          "explanation": "Richtig: React löst dafür keine Fehlermeldung aus, das Prop bleibt nur ungenutzt."
+        },
+        {
+          "text": "React stoppt die gesamte Anwendung sofort mit einer deutlichen Fehlermeldung.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein ungenutztes Prop führt zu keinem Absturz und keiner Fehlermeldung."
+        },
+        {
+          "text": "React entfernt die Komponente automatisch und dauerhaft aus dem Projekt.",
+          "isCorrect": false,
+          "explanation": "Falsch: React verändert dadurch keine Dateien und löscht nichts."
+        },
+        {
+          "text": "Die Komponente bekommt automatisch einen neuen Namen.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Name einer Komponente ändert sich niemals durch ein ungenutztes Prop."
+        }
+      ]
+    },
+    {
+      "question": "Darf eine Komponente ein Prop, das sie von außen bekommt, selbst verändern?",
+      "area": "React-Grundlagen: Props",
+      "options": [
+        {
+          "text": "Nein, Props dürfen nur gelesen werden.",
+          "isCorrect": true,
+          "explanation": "Richtig: Props sind nur lesbar, das macht eine Komponente berechenbar."
+        },
+        {
+          "text": "Ja, jede Komponente darf ihre eigenen Props beliebig überschreiben.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Überschreiben der eigenen Props ist in React nicht vorgesehen."
+        },
+        {
+          "text": "Nur die erste Komponente einer Datei darf ihre Props verändern.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Reihenfolge in der Datei hat keinen Einfluss auf diese Regel."
+        },
+        {
+          "text": "Props dürfen verändert werden, aber ausschließlich an geraden Wochentagen.",
+          "isCorrect": false,
+          "explanation": "Falsch: es gibt keine zeitliche Bedingung für den Umgang mit Props, das ist eine offensichtlich falsche Antwort."
+        }
+      ]
+    },
+    {
+      "question": "In der Datei src/components/Nav.tsx im Repo repo-portfolio bekommt die Komponente Nav unter anderem das Prop otherHref. Wozu dient es laut Beschreibung im Code?",
+      "area": "Praxisbeispiel repo-portfolio",
+      "options": [
+        {
+          "text": "Es gibt an, wohin der Sprachwechsel-Link führen soll.",
+          "isCorrect": true,
+          "explanation": "Richtig: laut Kommentar im Code steuert otherHref das Ziel des Sprachwechsels."
+        },
+        {
+          "text": "Es speichert dauerhaft, ob der Besucher die Seite schon einmal besucht hat.",
+          "isCorrect": false,
+          "explanation": "Falsch: dafür ist otherHref laut Code nicht zuständig."
+        },
+        {
+          "text": "Es legt die Hintergrundfarbe der Navigationsleiste fest.",
+          "isCorrect": false,
+          "explanation": "Falsch: für Farben ist in React typischerweise CSS zuständig, nicht dieses Prop."
+        },
+        {
+          "text": "Es zählt, wie oft der Nutzer auf das Menü geklickt hat.",
+          "isCorrect": false,
+          "explanation": "Falsch: eine Klickzählung ist nicht die Aufgabe dieses Props laut Code."
+        }
+      ]
+    },
+    {
+      "question": "Was macht React, wenn sich ein Prop einer bereits gerenderten Komponente ändert, etwa von \"Anna\" zu \"Ben\"?",
+      "area": "React-Grundlagen: Rendern",
+      "options": [
+        {
+          "text": "React rendert die Komponente automatisch neu.",
+          "isCorrect": true,
+          "explanation": "Richtig: eine Änderung am Prop löst ein erneutes Rendern aus, ohne dass jemand die Seite neu laden muss."
+        },
+        {
+          "text": "React zeigt weiterhin den alten Wert an, bis die Seite manuell neu geladen wird.",
+          "isCorrect": false,
+          "explanation": "Falsch: genau das automatische Update ohne Neuladen ist der Sinn des Renderns in React."
+        },
+        {
+          "text": "React entfernt die betroffene Komponente vollständig aus der Seite.",
+          "isCorrect": false,
+          "explanation": "Falsch: eine geänderte Prop-Angabe entfernt die Komponente nicht, sie aktualisiert nur die Anzeige."
+        },
+        {
+          "text": "React fragt die Besucherin vorher ausdrücklich um Erlaubnis für die Änderung.",
+          "isCorrect": false,
+          "explanation": "Falsch: React fragt bei einem Prop-Wechsel niemanden um Erlaubnis, das Rendern läuft automatisch."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der Hauptunterschied zwischen React und Next.js?",
+      "area": "React-Grundlagen: React und Next.js",
+      "options": [
+        {
+          "text": "React ist der Werkzeugkasten für Komponenten, Next.js baut darauf auf und ergänzt Seiten, Ordnerstruktur und Auslieferung.",
+          "isCorrect": true,
+          "explanation": "Richtig: Next.js benutzt React und fügt eine vollständige Werkstatt für ganze Anwendungen hinzu."
+        },
+        {
+          "text": "React und Next.js sind zwei völlig unabhängige Werkzeuge ohne jede Verbindung.",
+          "isCorrect": false,
+          "explanation": "Falsch: Next.js ist selbst mit React gebaut, beide hängen eng zusammen."
+        },
+        {
+          "text": "Next.js ist älter, React baut darauf auf.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Reihenfolge ist umgekehrt, Next.js baut auf React auf, nicht andersherum."
+        },
+        {
+          "text": "React ist nur für mobile Apps gedacht, Next.js nur für Webseiten.",
+          "isCorrect": false,
+          "explanation": "Falsch: React wird vor allem im Web eingesetzt, die Aussage zur mobilen Nutzung stimmt so nicht."
+        }
+      ]
+    },
+    {
+      "question": "Woran erkennt React in einem JSX-Ausdruck den Unterschied zwischen einem gewöhnlichen HTML-Element und einer eigenen Komponente?",
+      "area": "React-Grundlagen: Komponenten",
+      "options": [
+        {
+          "text": "Am Anfangsbuchstaben: klein für HTML-Elemente, groß für eigene Komponenten.",
+          "isCorrect": true,
+          "explanation": "Richtig: React unterscheidet genau anhand von Groß- und Kleinschreibung des ersten Buchstabens."
+        },
+        {
+          "text": "Am Vorhandensein von Props, denn nur Komponenten dürfen überhaupt welche bekommen.",
+          "isCorrect": false,
+          "explanation": "Falsch: auch gewöhnliche HTML-Elemente können in JSX Attribute bekommen, das ist kein Unterscheidungsmerkmal."
+        },
+        {
+          "text": "An der Dateiendung der Datei, in der die Zeile steht.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Dateiendung sagt React nichts über einzelne Zeilen innerhalb der Datei."
+        },
+        {
+          "text": "An der Uhrzeit, zu der die Seite aufgerufen wird.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Uhrzeit hat auf diese Unterscheidung keinerlei Einfluss."
+        }
+      ]
+    },
+    {
+      "question": "Warum reicht das reine Wissen über HTML und CSS aus früheren Lektionen nicht aus, um React sofort vollständig zu verstehen?",
+      "area": "React-Grundlagen: Zusammenhang",
+      "options": [
+        {
+          "text": "Weil React zusätzlich JavaScript-Funktionen, Props und das Rendern braucht.",
+          "isCorrect": true,
+          "explanation": "Richtig: React kombiniert HTML-ähnliche Beschreibung mit JavaScript-Logik, Props und Rendern, das geht über reines HTML/CSS hinaus."
+        },
+        {
+          "text": "Weil HTML und CSS in React überhaupt keine Rolle mehr spielen.",
+          "isCorrect": false,
+          "explanation": "Falsch: HTML-Wissen hilft direkt beim Lesen von JSX, CSS bleibt weiterhin für das Aussehen zuständig."
+        },
+        {
+          "text": "Weil React eine komplett andere Auszeichnungssprache statt HTML verwendet.",
+          "isCorrect": false,
+          "explanation": "Falsch: JSX orientiert sich stark an HTML, es ist keine komplett andere Auszeichnungssprache."
+        },
+        {
+          "text": "Weil man für React zuerst eine eigene, neue Art von Tastatur bräuchte.",
+          "isCorrect": false,
+          "explanation": "Falsch: das ist offensichtlich falsch, React braucht keine besondere Hardware."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Öffne eine kostenlose Online-Umgebung für React, zum Beispiel StackBlitz oder CodeSandbox, im Browser, ohne etwas zu installieren. Lege dort eine neue Komponente namens Begruessung an, die ein Prop namens name entgegennimmt und eine Überschrift mit dem Text \"Hallo, \" gefolgt vom Wert des Props zurückgibt. Rufe die Komponente danach zweimal mit unterschiedlichen Namen auf.",
+    "expectation": "Auf der Vorschauseite der Online-Umgebung stehen zwei unterschiedliche Begrüßungen mit den zwei gewählten Namen untereinander.",
+    "checklist": [
+      "Eine kostenlose Online-Umgebung für React geöffnet, ohne lokale Installation.",
+      "Eine eigene Komponente mit großem Anfangsbuchstaben angelegt.",
+      "Ein Prop namens name definiert und in der JSX-Zeile benutzt.",
+      "Die Komponente zweimal mit unterschiedlichem Wert für name aufgerufen.",
+      "Beide Begrüßungen sind in der Vorschau sichtbar und unterscheiden sich."
+    ],
+    "portfolioItem": "P01"
+  },
+  "audio": {
+    "file": "M03-01-01.mp3",
+    "durationSeconds": 1001,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Muss ich JSX auswendig lernen, bevor ich JavaScript wirklich kann?",
+      "answer": "Nein, JSX baut vollständig auf JavaScript auf und kommt erst danach dazu. Wer die Grundlagen aus den JavaScript-Lektionen sitzen hat, also Funktionen, Variablen und Werte, erkennt in JSX vor allem eine neue Schreibweise für HTML-ähnliche Rückgabewerte, keine neue Programmiersprache. Wer JavaScript noch unsicher findet, sollte lieber vorher die früheren Lektionen dazu noch einmal anhören, statt JSX und JavaScript gleichzeitig neu zu lernen."
+    },
+    {
+      "question": "Warum heißt eine Komponente immer mit großem Anfangsbuchstaben?",
+      "answer": "React unterscheidet daran, ob in einem JSX-Ausdruck ein gewöhnliches HTML-Element gemeint ist oder eine selbst gebaute Komponente. Ein kleiner Anfangsbuchstabe wie bei div oder button bedeutet ein normales HTML-Element, ein großer Anfangsbuchstabe wie bei Begruessung bedeutet eine eigene Komponente."
+    },
+    {
+      "question": "Kann eine Komponente mehrere HTML-Elemente gleichzeitig zurückgeben?",
+      "answer": "Ja, das ist völlig normal, solange am Ende alle diese Elemente in einem einzigen umschließenden Element zusammengefasst sind, etwa einem div oder einem eigens dafür vorgesehenen leeren Rahmen. React erwartet immer genau ein einziges zurückgegebenes Wurzelelement pro Komponente, auch wenn darin beliebig viele weitere Elemente stecken dürfen."
+    },
+    {
+      "question": "Was passiert, wenn ich einer Komponente ein Prop mitgebe, das sie gar nicht benutzt?",
+      "answer": "Nichts Schlimmes passiert dabei: React ignoriert Props, die die Komponente in ihrer eigenen Funktion nicht abholt, es gibt dafür keine Fehlermeldung. In der Praxis lohnt es sich trotzdem, nur wirklich benötigte Props zu übergeben, weil ungenutzte Props später beim Lesen des Codes verwirren. Ein aufgeräumter Satz an Props macht es außerdem leichter, eine Komponente Monate später wieder zu verstehen, ohne den gesamten alten Code neu durchzugehen."
+    },
+    {
+      "question": "Brauche ich für jede noch so kleine Sache in einer Webseite eine eigene Komponente?",
+      "answer": "Nicht zwingend, das bleibt eine Abwägung. Ein einzelner Text oder ein einzelnes Bild lohnt selten eine eigene Komponente. Ein wiederkehrendes Element wie ein Knopf mit immer gleichem Aussehen dagegen schon, weil sich eine spätere Änderung dann nur an einer Stelle im Code auswirkt. Eine gute Faustregel ist: taucht dasselbe Stück Benutzeroberfläche an mehr als einer Stelle auf, lohnt sich eine eigene Komponente dafür. Dasselbe gilt, wenn ein Abschnitt der Seite so groß wird, dass er allein kaum noch zu überblicken ist."
+    }
+  ]
+}

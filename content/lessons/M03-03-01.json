@@ -1,0 +1,270 @@
+{
+  "id": "M03-03-01",
+  "title": "Tabellen, Zeilen und Spalten",
+  "durationMinutes": 17,
+  "prerequisites": ["M01-06-05", "M01-05-02", "M01-00-04", "M02-03-03"],
+  "terms": [
+    { "term": "Primärschlüssel", "definition": "Der Wert in einer Spalte, der jede Zeile einer Tabelle eindeutig unterscheidbar macht, kein zweiter Eintrag darf denselben haben." }
+  ],
+  "speechBlocks": [
+    { "speaker": "A", "text": "Stell dir eine Werkstatt vor, in der jedes Werkzeug seinen eigenen Haken an der Wand hat. Der Hammer hängt immer am selben Platz, der Schraubenzieher auch.", "isKeySentence": false, "role": "image" },
+    { "speaker": "A", "text": "Genau darum geht es in dieser Lektion: wie ein Programm Daten so ablegt, dass es sie später sofort wiederfindet, statt lange suchen zu müssen.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "B", "text": "Wir reden hier also nicht mehr über einzelne Dateien in einem Ordner, sondern über etwas Neues?", "isKeySentence": false, "role": "question" },
+    { "speaker": "A", "text": "Genau. Eine Datei kann viele Dinge enthalten, aber sie ordnet sie nicht automatisch. Ein Programm, das viele zusammengehörige Daten geordnet speichert und wiederfindbar macht, heißt Datenbank.", "isKeySentence": false, "role": "term" },
+    { "speaker": "A", "text": "Stell dir dazu einen Karteikasten in einer alten Bücherei vor. Jede Karte darin beschreibt genau ein Buch, und alle Karten haben dieselbe Form.", "isKeySentence": false, "role": "image" },
+    { "speaker": "A", "text": "Eine Datenbank ist wie dieser Karteikasten, nur dass ein Computer ihn führt und in Sekundenbruchteilen durchsucht, statt dass ein Mensch blättert.", "isKeySentence": false, "role": "example" },
+    { "speaker": "A", "text": "Wichtig ist das, weil fast jedes größere Programm irgendwo Daten dauerhaft ablegen muss: Nutzer, Bestellungen, Nachrichten, Ereignisse.", "isKeySentence": false, "role": "why" },
+    { "speaker": "B", "text": "Und wie sieht so ein Karteikasten im Computer dann konkret aus? Ich stelle mir das noch komplett leer vor.", "isKeySentence": false, "role": "question" },
+    { "speaker": "A", "text": "Am einfachsten stellst du dir eine Excel-Datei vor, die du vielleicht schon kennst: ein Blatt mit Linien, die ein Raster aus Kästchen bilden.", "isKeySentence": false, "role": "image" },
+    { "speaker": "A", "text": "Genau so ein Blatt heißt in einer Datenbank Tabelle: eine Liste, in der alle Einträge derselben Art nach demselben Muster aufgeschrieben werden.", "isKeySentence": false, "role": "term" },
+    { "speaker": "A", "text": "Ein Beispiel: eine Tabelle mit dem Namen app_events sammelt jedes Mal einen Eintrag, wenn jemand in der App etwas tut, etwa eine Lektion öffnet.", "isKeySentence": false, "role": "example" },
+    { "speaker": "A", "text": "Ohne diese feste Form müsste jedes Programm für jeden Eintrag neu raten, wo welche Angabe steht. Die Tabelle macht das Nachschlagen vorhersagbar.", "isKeySentence": false, "role": "why" },
+    { "speaker": "B", "text": "Also ist eine Tabelle wie ein leeres Excel-Blatt, bevor überhaupt etwas eingetragen wurde?", "isKeySentence": false, "role": "question" },
+    { "speaker": "A", "text": "Fast. Die Tabelle legt zuerst die Form fest, also welche Angaben ein Eintrag hat, und danach füllt sie sich mit einzelnen Einträgen.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Stell dir wieder die Karteikarte im Kasten vor. Eine einzelne Karte beschreibt genau ein Buch: seinen Titel, seinen Autor, sein Erscheinungsjahr.", "isKeySentence": false, "role": "image" },
+    { "speaker": "A", "text": "Ein einzelner vollständiger Eintrag in einer Tabelle heißt Zeile, buchstabiert Z, E, I, L, E. Jede Zeile ist ein eigener, abgeschlossener Fall.", "isKeySentence": false, "role": "term" },
+    { "speaker": "A", "text": "In der Tabelle app_events ist eine Zeile also ein einziges Ereignis: zum Beispiel, dass eine bestimmte Person um 14 Uhr eine Lektion gestartet hat.", "isKeySentence": false, "role": "example" },
+    { "speaker": "A", "text": "Ohne diese Trennung in Zeilen würde alles zu einem einzigen, unlesbaren Textblock verschmelzen. Die Zeile hält jeden Fall sauber vom nächsten getrennt.", "isKeySentence": false, "role": "why" },
+    { "speaker": "B", "text": "Und wenn jede Zeile ein anderes Ereignis ist, woher weiß das Programm dann, welche Angabe an welcher Stelle in der Zeile steht?", "isKeySentence": false, "role": "question" },
+    { "speaker": "A", "text": "Guter Punkt, das ist der letzte fehlende Teil. Schau dir die Karteikarte noch einmal an: oben links steht immer der Titel, darunter immer der Autor.", "isKeySentence": false, "role": "image" },
+    { "speaker": "A", "text": "Eine Eigenschaft, die jede Zeile derselben Tabelle besitzt und die immer an derselben Stelle steht, heißt Spalte, buchstabiert S, P, A, L, T, E.", "isKeySentence": false, "role": "term" },
+    { "speaker": "A", "text": "In app_events gibt es zum Beispiel eine Spalte mit dem Namen event_name, in der bei jeder Zeile steht, was passiert ist, etwa lesson_started.", "isKeySentence": false, "role": "example" },
+    { "speaker": "A", "text": "Die Spalte macht Zeilen vergleichbar. Weil jede Zeile dieselben Spalten hat, kann das Programm gezielt nach einer einzigen Eigenschaft fragen, ohne alles zu lesen.", "isKeySentence": false, "role": "why" },
+    { "speaker": "B", "text": "Heißt das, eine Tabelle ist also einfach: mehrere Zeilen untereinander, und jede Zeile hat dieselben Spalten nebeneinander?", "isKeySentence": false, "role": "question" },
+    { "speaker": "A", "text": "Genau das ist eine Tabelle: ein Raster aus Zeilen und Spalten, in dem jede Zeile ein Eintrag und jede Spalte eine feste Eigenschaft aller Einträge ist.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Jetzt kommt eine Frage, die in jeder Bücherei wichtig ist: Was, wenn zwei Bücher zufällig denselben Titel haben? Wie unterscheidet man die Karten dann?", "isKeySentence": false, "role": "image" },
+    { "speaker": "A", "text": "Dafür bekommt jede Karteikarte eine eigene, fortlaufende Nummer, die kein zweites Mal vergeben wird, egal wie ähnlich der Inhalt sonst ist.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Der Wert in einer Spalte, der jede Zeile einer Tabelle eindeutig unterscheidbar macht, heißt Primärschlüssel. Kein zweiter Eintrag darf denselben Wert tragen.", "isKeySentence": false, "role": "term" },
+    { "speaker": "A", "text": "In app_events übernimmt die Spalte id diese Aufgabe: eine lange, zufällige Zeichenkette, die für jede einzelne Zeile neu und garantiert einmalig erzeugt wird.", "isKeySentence": false, "role": "example" },
+    { "speaker": "A", "text": "Ohne Primärschlüssel könnte eine Datenbank zwei fast gleiche Zeilen nicht mehr sicher auseinanderhalten, sobald später eine davon geändert oder gelöscht werden soll.", "isKeySentence": false, "role": "why" },
+    { "speaker": "B", "text": "Warum ist die id in app_events so eine lange, zufällige Zeichenfolge und nicht einfach eine fortlaufende Zahl wie eins, zwei, drei?", "isKeySentence": false, "role": "question" },
+    { "speaker": "A", "text": "Stell dir zwei Poststellen vor, die beide unabhängig voneinander Pakete nummerieren. Wenn beide bei eins anfangen, gibt es irgendwann in jeder Poststelle ein Paket mit derselben Nummer.", "isKeySentence": false, "role": "image" },
+    { "speaker": "A", "text": "Eine fortlaufende Zahl funktioniert nur sicher, wenn genau eine Stelle sie vergibt. Eine zufällige, sehr lange Zeichenfolge dagegen ist praktisch nie doppelt, ganz ohne eine solche zentrale Zählstelle.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Deshalb setzt die Tabelle app_events auf eine zufällig erzeugte Kennung: sie bleibt eindeutig, selbst wenn irgendwann mehrere unabhängige Programme gleichzeitig neue Zeilen einfügen.", "isKeySentence": false, "role": "example" },
+    { "speaker": "A", "text": "Eine fortlaufende Zahl würde außerdem verraten, wie viele Zeilen insgesamt schon existieren. Eine zufällige Kennung verrät das nicht, was bei App-Nutzungsdaten ein zusätzlicher Vorteil ist.", "isKeySentence": false, "role": "why" },
+    { "speaker": "B", "text": "Und was steht eigentlich konkret in so einer Spalte drin? Nur Text, oder auch Zahlen?", "isKeySentence": false, "role": "question" },
+    { "speaker": "A", "text": "Beides, und noch mehr. Erinnere dich an den Datentyp aus der Programmierlogik: dort war ein Datentyp die Sorte eines Werts, etwa eine Zahl oder ein Wahrheitswert.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "In der Datenbank legt jede Spalte einen festen Datentyp fest, den jede Zeile in dieser Spalte einhalten muss, keine Ausnahme, keine Mischung.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "In app_events hat die Spalte created_at den Datentyp Zeitpunkt, die Spalte event_name den Datentyp Text, und id den Datentyp einer eindeutigen Kennung.", "isKeySentence": false, "role": "example" },
+    { "speaker": "A", "text": "Der feste Datentyp verhindert, dass in einer Zeitpunkt-Spalte aus Versehen ein Wort statt eines Datums landet, was spätere Auswertungen unbrauchbar machen würde.", "isKeySentence": false, "role": "why" },
+    { "speaker": "B", "text": "Welche Datentypen tauchen denn in so einer Datenbank sonst noch häufig auf, außer Text und Zeitpunkt?", "isKeySentence": false, "role": "question" },
+    { "speaker": "A", "text": "Stell dir ein Formular in Papierform vor: manche Felder erwarten eine Zahl, manche ein Kreuz bei Ja oder Nein, manche eine kurze eindeutige Kennnummer.", "isKeySentence": false, "role": "image" },
+    { "speaker": "A", "text": "In einer Datenbank heißt das Kreuz bei Ja oder Nein ein Wahrheitswert, den du schon aus der Programmierlogik als Boolean kennst: entweder wahr oder falsch, nie etwas dazwischen.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "In der Tabelle app_events gibt es diesen Fall zwar nicht direkt, aber in der Tabelle progress auf dem Gerät hält eine Spalte namens quiz_passed genau so einen Wahrheitswert fest: bestanden oder nicht bestanden.", "isKeySentence": false, "role": "example" },
+    { "speaker": "A", "text": "Ohne einen eigenen Wahrheitswert-Datentyp müsste ein Programm jedes Mal raten, ob der Text ja, wahr, 1 oder true tatsächlich dasselbe meint wie nein, falsch, 0 oder false.", "isKeySentence": false, "role": "why" },
+    { "speaker": "B", "text": "Und die Kennnummer, die du gerade erwähnt hast, ist das derselbe Datentyp wie bei der Spalte id in app_events?", "isKeySentence": false, "role": "question" },
+    { "speaker": "A", "text": "Genau, dieser besondere Datentyp für zufällige, eindeutige Kennungen trägt in der Datenbank hinter FutureDev den Namen uuid, eine feste Länge aus Ziffern und Buchstaben, die praktisch nie doppelt vorkommt.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Damit hat jede Spalte in app_events einen klaren Datentyp: id und install_id sind uuid, event_name und lesson_id sind Text, created_at ist ein Zeitpunkt.", "isKeySentence": false, "role": "example" },
+    { "speaker": "A", "text": "Diese Genauigkeit beim Datentyp ist kein Selbstzweck: sie erlaubt es später, gezielt nach Zeitspannen zu suchen oder nach einem bestimmten Ereignisnamen zu filtern, ohne jeden Wert erst mühsam zu prüfen.", "isKeySentence": false, "role": "why" },
+    { "speaker": "B", "text": "Jetzt würde ich gern eine echte Tabelle Zeile für Zeile sehen, nicht nur die Idee dahinter.", "isKeySentence": false, "role": "question" },
+    { "speaker": "A", "text": "Das können wir direkt am Projekt zeigen, an dem diese App selbst gebaut wird. Die Datei liegt unter supabase/migrations/0001_init.sql im Repository futuredev.", "isKeySentence": false, "role": "example" },
+    { "speaker": "A", "text": "Dort steht der Bauplan für die Tabelle app_events. Sie hat fünf Spalten: id, install_id, event_name, lesson_id und created_at.", "isKeySentence": false, "role": "example" },
+    { "speaker": "A", "text": "Die Spalte id ist der Primärschlüssel, eine zufällig erzeugte, eindeutige Kennung. Sie unterscheidet jede Zeile von jeder anderen, komplett unabhängig vom Inhalt.", "isKeySentence": false, "role": "example" },
+    { "speaker": "A", "text": "Die Spalte install_id ist ebenfalls eine zufällige Kennung, aber sie steht nicht für die Zeile selbst, sondern für die Installation der App, von der das Ereignis kam.", "isKeySentence": false, "role": "example" },
+    { "speaker": "A", "text": "Die Spalte event_name ist reiner Text, aber kein beliebiger: der Bauplan erlaubt nur wenige feste Wörter, etwa lesson_started oder quiz_passed, nichts anderes.", "isKeySentence": false, "role": "example" },
+    { "speaker": "A", "text": "Die Spalte lesson_id ist ebenfalls Text, darf aber leer bleiben, wenn ein Ereignis keine bestimmte Lektion betrifft, etwa wenn nur die App geöffnet wurde.", "isKeySentence": false, "role": "example" },
+    { "speaker": "A", "text": "Die Spalte created_at hält den Zeitpunkt fest, an dem die Zeile entstanden ist, automatisch gesetzt, ohne dass jemand das Datum von Hand eintippen muss.", "isKeySentence": false, "role": "example" },
+    { "speaker": "A", "text": "Eine einzelne Zeile in dieser Tabelle könnte also so aussehen: eine eindeutige id, eine bestimmte install_id, der Text lesson_started, die Lektion M01-01-01 und ein Zeitstempel.", "isKeySentence": false, "role": "example" },
+    { "speaker": "B", "text": "Also beschreibt jede Zeile in app_events immer nur ein einziges, kurzes Ereignis, nie mehrere auf einmal?", "isKeySentence": false, "role": "question" },
+    { "speaker": "A", "text": "Genau, und das ist kein Zufall: eine saubere Tabelle bündelt nie zwei verschiedene Ereignisse in einer Zeile, sonst würde jede spätere Auswertung falsch zählen.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "B", "text": "Warum überhaupt eine eigene Datenbank benutzen? Ein einfacher Ordner mit einzelnen Dateien speichert doch auch schon Daten.", "isKeySentence": false, "role": "question" },
+    { "speaker": "A", "text": "Stell dir vor, du legst für jedes einzelne Ereignis der App eine eigene kleine Datei in einem Ordner ab, jede mit einem eigenen Namen.", "isKeySentence": false, "role": "image" },
+    { "speaker": "A", "text": "Bei zehn Dateien geht das noch. Bei einer Million Dateien müsste jedes Programm den ganzen Ordner durchsuchen, um eine einzige Frage zu beantworten, etwa wie oft eine bestimmte Lektion gestartet wurde.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Eine Datenbank hält dagegen alle Zeilen einer Tabelle zusammen und kann gezielt nach einer einzelnen Spalte suchen, ohne jede Zeile einzeln von Hand zu öffnen.", "isKeySentence": false, "role": "example" },
+    { "speaker": "A", "text": "Deshalb lohnt sich eine Datenbank besonders dann, wenn viele gleichartige Einträge entstehen und später schnell und gezielt danach gefragt werden soll.", "isKeySentence": false, "role": "why" },
+    { "speaker": "B", "text": "Gibt es im selben Projekt noch mehr solcher Tabellen, oder bleibt es bei app_events als einzigem Beispiel?", "isKeySentence": false, "role": "question" },
+    { "speaker": "A", "text": "Es gibt noch zwei weitere, kleinere Tabellen im selben Bauplan, und sie zeigen gut, wie unterschiedlich Spalten je nach Zweck ausfallen können.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Die Tabelle content_releases hält fest, welche Version des Lehrinhalts veröffentlicht wurde: eine Zeile je Veröffentlichung, mit den Spalten id, version, manifest_url, checksum und published_at.", "isKeySentence": false, "role": "example" },
+    { "speaker": "A", "text": "Hier ist die Spalte version zum Beispiel immer eine Versionsnummer wie 0.3.0, während checksum eine lange Zeichenfolge ist, die prüft, ob die Datei unterwegs verändert wurde.", "isKeySentence": false, "role": "example" },
+    { "speaker": "A", "text": "Die Tabelle feedback speichert freiwillige Rückmeldungen zu einer Lektion: eine Zeile je Rückmeldung, mit den Spalten id, lesson_id, message und created_at.", "isKeySentence": false, "role": "example" },
+    { "speaker": "A", "text": "Auch hier gilt dieselbe Regel wie bei app_events: jede Zeile ist ein einzelner, abgeschlossener Fall, die Spalten sind bei jeder Zeile dieselben, nur die Werte darin unterscheiden sich.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Drei verschiedene Tabellen für drei verschiedene Zwecke, aber überall dasselbe Muster: eine feste Form aus Spalten, viele einzelne Zeilen, und ein Primärschlüssel je Zeile.", "isKeySentence": false, "role": "why" },
+    { "speaker": "B", "text": "Und wie hängen id in app_events und id in feedback zusammen? Sind das nicht dieselben Werte?", "isKeySentence": false, "role": "question" },
+    { "speaker": "A", "text": "Nein, jede Tabelle vergibt ihre eigenen id-Werte, unabhängig von jeder anderen Tabelle. Eine id aus app_events sagt nichts über eine gleich lautende Zufallszahl in feedback aus.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Der Primärschlüssel muss also nur innerhalb seiner eigenen Tabelle einmalig sein, nicht über alle Tabellen einer ganzen Datenbank hinweg.", "isKeySentence": false, "role": "why" },
+    { "speaker": "B", "text": "Kann eine Tabelle auch nachträglich um eine weitere Spalte ergänzt werden, oder muss sie von Anfang an vollständig feststehen?", "isKeySentence": false, "role": "question" },
+    { "speaker": "A", "text": "Eine Tabelle kann sich später ändern: eine neue Spalte kann ergänzt werden, wenn ein neuer Bedarf entsteht, etwa welches Gerät ein Ereignis ausgelöst hat.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Wichtig ist nur: sobald eine Spalte existiert, gilt ihr Datentyp für jede Zeile der Tabelle, egal ob die Zeile schon vorher da war oder gerade erst neu entsteht.", "isKeySentence": false, "role": "why" },
+    { "speaker": "B", "text": "Bisher haben wir nur über die fertige Form gesprochen. Wie kommt eigentlich eine neue Zeile überhaupt zum ersten Mal in eine Tabelle hinein?", "isKeySentence": false, "role": "question" },
+    { "speaker": "A", "text": "Das ist eine berechtigte Frage, und genau darum geht es in der nächsten Lektion: mit welchen kurzen Befehlen ein Programm eine Zeile einfügt, ändert, löscht oder gezielt danach sucht.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "In dieser Lektion ging es erst einmal nur um die Form: welche Tabelle es gibt, welche Spalten sie festlegt, und welcher Wert jede Zeile eindeutig macht.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Diese Form ist die Grundlage für alles Weitere. Ohne eine klare Vorstellung von Tabelle, Zeile, Spalte und Primärschlüssel ergeben die nächsten Befehle keinen Sinn.", "isKeySentence": false, "role": "why" },
+    { "speaker": "B", "text": "Also lohnt es sich wirklich, bei Unsicherheit noch einmal ganz kurz zurückzublättern, bevor es mit den Befehlen weitergeht?", "isKeySentence": false, "role": "question" },
+    { "speaker": "A", "text": "Ja, unbedingt. Am besten stellst du dir noch einmal den Karteikasten vor: der Kasten ist die Tabelle, jede Karte darin ist eine Zeile. Jedes Feld auf der Karte ist eine Spalte, und die Nummer oben auf jeder Karte ist der Primärschlüssel.", "isKeySentence": false, "role": "explain" },
+    { "speaker": "A", "text": "Wer dieses einfache Bild aus Kasten, Karte, Feld und laufender Nummer einmal fest im Kopf behält, versteht jeden weiteren Schritt in dieser ganzen Lektionsreihe deutlich leichter. Jeder neue Befehl wirkt am Ende nämlich nur auf genau dieses vertraute Grundmuster.", "isKeySentence": false, "role": "why" },
+    { "speaker": "B", "text": "Wenn ich das zusammenfasse: Eine Datenbank speichert Daten geordnet, eine Tabelle ist ein Raster für eine Art von Eintrag, eine Zeile ist ein einzelner Eintrag darin. Eine Spalte ist eine feste Eigenschaft aller Einträge, und der Primärschlüssel unterscheidet jede Zeile eindeutig von jeder anderen.", "isKeySentence": true, "role": "key" },
+    { "speaker": "A", "text": "Bevor wir weitermachen, hier noch einmal alle neuen Begriffe dieser Lektion im Überblick, kurz erklärt zum Nachschlagen.", "isKeySentence": false, "role": "terms_list" },
+    { "speaker": "A", "text": "Datenbank: ein Programm, das viele zusammengehörige Daten geordnet speichert und wiederfindbar macht, statt sie lose in einzelnen Dateien abzulegen.", "isKeySentence": false, "role": "terms_list" },
+    { "speaker": "A", "text": "Tabelle: eine Liste in der Datenbank, in der alle Einträge derselben Art nach demselben Muster aufgeschrieben werden, wie ein Blatt in einer Excel-Datei.", "isKeySentence": false, "role": "terms_list" },
+    { "speaker": "A", "text": "Zeile: ein einzelner vollständiger Eintrag in einer Tabelle, zum Beispiel ein Ereignis oder eine Person.", "isKeySentence": false, "role": "terms_list" },
+    { "speaker": "A", "text": "Spalte: eine Eigenschaft, die jede Zeile derselben Tabelle besitzt, zum Beispiel der Name oder das Datum.", "isKeySentence": false, "role": "terms_list" },
+    { "speaker": "A", "text": "Primärschlüssel: der Wert in einer Spalte, der jede Zeile einer Tabelle eindeutig unterscheidbar macht, kein zweiter Eintrag darf denselben haben.", "isKeySentence": false, "role": "terms_list" },
+    { "speaker": "B", "text": "Muss jede Tabelle einen Primärschlüssel haben, oder ist das nur eine gute Idee?", "isKeySentence": false, "role": "faq" },
+    { "speaker": "A", "text": "In der Praxis fast immer ja, weil eine Datenbank ohne Primärschlüssel keine sichere Möglichkeit hätte, eine bestimmte Zeile später erneut zu treffen. Selbst wenn zwei Zeilen komplett gleich aussehen, unterscheidet der Primärschlüssel sie trotzdem, etwa bei zwei Bestellungen mit identischem Inhalt zur selben Sekunde.", "isKeySentence": false, "role": "faq" },
+    { "speaker": "B", "text": "Kann eine Spalte auch leer bleiben?", "isKeySentence": false, "role": "faq" },
+    { "speaker": "A", "text": "Ja, das nennt man in der Datenbank oft nullbar, wie bei der Spalte lesson_id in app_events. Der Bauplan legt für jede Spalte einzeln fest, ob ein leerer Wert erlaubt ist oder ob jede Zeile dort zwingend etwas eintragen muss.", "isKeySentence": false, "role": "faq" },
+    { "speaker": "B", "text": "Wie unterscheidet sich eine Tabelle in einer Datenbank von einer Excel-Tabelle, die ich selbst am Computer öffnen kann?", "isKeySentence": false, "role": "faq" },
+    { "speaker": "A", "text": "Optisch ähneln sie sich stark, aber eine Datenbank-Tabelle erzwingt die Regeln viel strenger: falsche Datentypen werden abgelehnt, tausende Zeilen bleiben trotzdem schnell durchsuchbar, und mehrere Programme können gleichzeitig sicher darauf zugreifen. Eine Excel-Datei erlaubt dagegen fast jede Eingabe, auch fehlerhafte, ohne Widerspruch.", "isKeySentence": false, "role": "faq" },
+    { "speaker": "B", "text": "Warum bekommt install_id eine eigene Spalte und ist nicht einfach Teil von event_name?", "isKeySentence": false, "role": "faq" },
+    { "speaker": "A", "text": "Weil beide Angaben unterschiedliche Fragen beantworten, die getrennt bleiben müssen. event_name beantwortet, was passiert ist, install_id beantwortet, von welcher Installation es kam. Stünden beide zusammen in einem Text, müsste jede Auswertung diesen Text erst wieder mühsam zerlegen.", "isKeySentence": false, "role": "faq" },
+    { "speaker": "B", "text": "Was passiert, wenn ich versuche, eine Zeile mit einer id einzufügen, die es schon gibt?", "isKeySentence": false, "role": "faq" },
+    { "speaker": "A", "text": "Die Datenbank verweigert diesen Eintrag und meldet einen Fehler, weil der Primärschlüssel genau das verhindern soll: doppelte Kennungen. In der Praxis erzeugt fast immer die Datenbank selbst eine neue, zufällige id, sodass diese Kollision kaum je von Hand entsteht.", "isKeySentence": false, "role": "faq" },
+    { "speaker": "B", "text": "Ist eine Datenbank dasselbe wie eine einzelne, sehr große Tabelle?", "isKeySentence": false, "role": "faq" },
+    { "speaker": "A", "text": "Nein, eine Datenbank ist der Rahmen, der mehrere Tabellen zusammenhält, wie in diesem Beispiel app_events, content_releases und feedback nebeneinander in derselben Datenbank liegen. Jede dieser Tabellen hat ihre eigenen Spalten und ihren eigenen Primärschlüssel, unabhängig von den anderen Tabellen im selben Rahmen.", "isKeySentence": false, "role": "faq" },
+    { "speaker": "B", "text": "Reicht eine Tabellenkalkulation wie Excel nicht für alles, was in dieser Lektion beschrieben wurde?", "isKeySentence": false, "role": "faq" },
+    { "speaker": "A", "text": "Für sehr wenige, einfache Daten kann eine Tabellenkalkulation genügen, deshalb dient sie hier auch als erstes Bild. Sobald aber viele tausend Zeilen gleichzeitig von einem Programm gelesen und geschrieben werden müssen, stößt eine Tabellenkalkulation an ihre Grenzen, während eine Datenbank genau dafür gebaut ist.", "isKeySentence": false, "role": "faq" }
+  ],
+  "practiceExample": {
+    "text": "Die Tabelle app_events aus der Migration 0001_init.sql zeigt alle vier Begriffe an einem echten Beispiel. Die Tabelle selbst ist der Bauplan. Jede tatsächliche Nutzung der App erzeugt später eine Zeile darin. Die fünf Spalten id, install_id, event_name, lesson_id und created_at legen fest, welche Angaben jede Zeile trägt und in welchem Datentyp. Die Spalte id ist der Primärschlüssel: eine zufällige, garantiert eindeutige Kennung je Zeile, die kein zweites Mal vergeben wird.",
+    "repoNote": "repo-futuredev",
+    "location": "supabase/migrations/0001_init.sql, Abschnitt \"create table if not exists public.app_events\""
+  },
+  "quiz": [
+    {
+      "question": "Was ist der Unterschied zwischen einer Tabelle und einer Zeile?",
+      "area": "Grundbegriffe der Datenbank",
+      "options": [
+        { "text": "Eine Tabelle ist ein einzelner Eintrag, eine Zeile ist die ganze Liste.", "isCorrect": false, "explanation": "Das ist genau vertauscht: die Tabelle ist die ganze Liste, die Zeile ist ein einzelner Eintrag darin." },
+        { "text": "Eine Tabelle ist die ganze Liste mit fester Form, eine Zeile ist ein einzelner Eintrag darin.", "isCorrect": true, "explanation": "Richtig: die Tabelle legt die Form fest, die Zeile ist ein konkreter, einzelner Fall dieser Form." },
+        { "text": "Beide Begriffe meinen dasselbe und werden nur in unterschiedlichen Programmen unterschiedlich genannt.", "isCorrect": false, "explanation": "Nein, beide Begriffe bezeichnen unterschiedliche Ebenen: die Liste und der einzelne Eintrag darin." },
+        { "text": "Eine Tabelle enthält nur Zahlen, eine Zeile kann auch Text enthalten.", "isCorrect": false, "explanation": "Der Datentyp hängt von der Spalte ab, nicht davon, ob es sich um eine Tabelle oder eine Zeile handelt." }
+      ]
+    },
+    {
+      "question": "Welche Aufgabe hat eine Spalte in einer Tabelle?",
+      "area": "Grundbegriffe der Datenbank",
+      "options": [
+        { "text": "Sie beschreibt eine feste Eigenschaft, die jede Zeile derselben Tabelle besitzt.", "isCorrect": true, "explanation": "Richtig: jede Zeile hat dieselben Spalten, nur mit unterschiedlichen Werten darin." },
+        { "text": "Sie speichert genau einen kompletten Eintrag der Tabelle.", "isCorrect": false, "explanation": "Das beschreibt eine Zeile, nicht eine Spalte." },
+        { "text": "Sie verhindert, dass die Datenbank gelöscht werden kann.", "isCorrect": false, "explanation": "Löschschutz ist kein Zweck einer Spalte und wird an anderer Stelle geregelt." },
+        { "text": "Sie ersetzt den Primärschlüssel einer Tabelle.", "isCorrect": false, "explanation": "Der Primärschlüssel ist selbst nur eine besondere Spalte, keine Ersatzfunktion einer beliebigen Spalte." }
+      ]
+    },
+    {
+      "question": "Warum braucht eine Tabelle wie app_events einen Primärschlüssel?",
+      "area": "Grundbegriffe der Datenbank",
+      "options": [
+        { "text": "Damit die Tabelle insgesamt schneller geöffnet werden kann als eine vergleichbar große Excel-Datei mit denselben Einträgen.", "isCorrect": false, "explanation": "Öffnungsgeschwindigkeit hängt nicht am Primärschlüssel, sondern an der gesamten Datenbanktechnik." },
+        { "text": "Damit jede Zeile eindeutig unterscheidbar bleibt, auch wenn andere Spalten zufällig gleich sind.", "isCorrect": true, "explanation": "Richtig: genau das ist die Aufgabe des Primärschlüssels, unabhängig vom sonstigen Inhalt der Zeile." },
+        { "text": "Damit die Spalte event_name automatisch ausgefüllt wird.", "isCorrect": false, "explanation": "Der Primärschlüssel füllt keine andere Spalte, jede Spalte wird einzeln befüllt." },
+        { "text": "Damit die Datenbank weiß, welchen Datentyp eine Spalte hat.", "isCorrect": false, "explanation": "Der Datentyp einer Spalte wird beim Bauplan der Tabelle festgelegt, nicht durch den Primärschlüssel." }
+      ]
+    },
+    {
+      "question": "Die Spalte lesson_id in app_events darf leer bleiben. Was bedeutet das?",
+      "area": "Grundbegriffe der Datenbank",
+      "options": [
+        { "text": "Die Tabelle ist fehlerhaft, weil jede Spalte immer einen Wert braucht.", "isCorrect": false, "explanation": "Der Bauplan einer Tabelle kann pro Spalte einzeln erlauben, dass sie leer bleibt, das ist kein Fehler." },
+        { "text": "Manche Ereignisse betreffen keine bestimmte Lektion, deshalb bleibt die Spalte in diesen Zeilen leer.", "isCorrect": true, "explanation": "Richtig: etwa das Öffnen der App betrifft keine einzelne Lektion, dort bleibt lesson_id ohne Wert." },
+        { "text": "Die Spalte lesson_id wird nur ein einziges Mal bei der allerersten jemals gespeicherten Zeile der ganzen Tabelle ausgefüllt.", "isCorrect": false, "explanation": "Jede Zeile entscheidet für sich, ob die Spalte gefüllt wird, unabhängig von früheren Zeilen." },
+        { "text": "Ohne Wert in lesson_id kann die ganze Zeile nicht gespeichert werden.", "isCorrect": false, "explanation": "Das Gegenteil ist der Fall: gerade weil die Spalte leer bleiben darf, wird die Zeile trotzdem gespeichert." }
+      ]
+    },
+    {
+      "question": "Welches Bild passt am besten zu einer Datenbank-Tabelle mit vielen Zeilen?",
+      "area": "Grundbegriffe der Datenbank",
+      "options": [
+        { "text": "Ein einzelner Zettel mit einer einzigen Notiz darauf.", "isCorrect": false, "explanation": "Ein einzelner Zettel entspricht höchstens einer einzelnen Zeile, nicht einer ganzen Tabelle." },
+        { "text": "Ein Karteikasten mit vielen Karten, die alle dasselbe Muster haben.", "isCorrect": true, "explanation": "Richtig: viele Karten mit gleichem Muster entsprechen genau vielen Zeilen mit denselben Spalten." },
+        { "text": "Ein leerer Ordner ohne jeden Inhalt.", "isCorrect": false, "explanation": "Ein leerer Ordner enthält weder Zeilen noch ein festes Muster für Einträge." },
+        { "text": "Ein einzelnes Foto ohne weitere Angaben.", "isCorrect": false, "explanation": "Ein einzelnes Foto zeigt keine Struktur aus Zeilen und Spalten." }
+      ]
+    },
+    {
+      "question": "Was passiert, wenn zwei Zeilen versuchen, denselben Primärschlüssel-Wert zu benutzen?",
+      "area": "Grundbegriffe der Datenbank",
+      "options": [
+        { "text": "Die Datenbank speichert beide Zeilen normal, der Primärschlüssel hat darauf keinen Einfluss.", "isCorrect": false, "explanation": "Genau das soll der Primärschlüssel verhindern, ein doppelter Wert wird abgelehnt." },
+        { "text": "Die neuere der beiden Zeilen wird abgelehnt, weil der Wert schon vergeben ist.", "isCorrect": true, "explanation": "Richtig: die Datenbank verweigert den zweiten Eintrag, weil Primärschlüssel-Werte eindeutig bleiben müssen." },
+        { "text": "Beide Zeilen werden automatisch zu einer einzigen Zeile zusammengeführt.", "isCorrect": false, "explanation": "Eine automatische Zusammenführung findet hier nicht statt, der zweite Eintrag wird schlicht abgelehnt." },
+        { "text": "Die gesamte Tabelle wird daraufhin gelöscht.", "isCorrect": false, "explanation": "Ein doppelter Primärschlüssel-Wert löscht nichts, er verhindert lediglich das Einfügen der zweiten Zeile." }
+      ]
+    },
+    {
+      "question": "Warum steht in der Spalte created_at ein Zeitpunkt statt reinem Text?",
+      "area": "Grundbegriffe der Datenbank",
+      "options": [
+        { "text": "Weil der Datentyp Zeitpunkt Vergleiche und Sortierung nach Datum zuverlässig ermöglicht.", "isCorrect": true, "explanation": "Richtig: ein fester Zeitpunkt-Datentyp lässt sich sicher vergleichen und sortieren, freier Text nicht zuverlässig." },
+        { "text": "Weil Text in Datenbanken grundsätzlich verboten ist.", "isCorrect": false, "explanation": "Text ist ein völlig normaler Datentyp, etwa in der Spalte event_name." },
+        { "text": "Weil der Datentyp Zeitpunkt auf dem Bildschirm grundsätzlich schneller angezeigt werden kann als jeder andere Datentyp.", "isCorrect": false, "explanation": "Anzeigegeschwindigkeit ist kein Grund für die Wahl des Datentyps." },
+        { "text": "Weil sonst die Spalte id nicht funktionieren würde.", "isCorrect": false, "explanation": "Die Spalte id ist unabhängig vom Datentyp der Spalte created_at." }
+      ]
+    },
+    {
+      "question": "Ein Programm soll wissen, was in der App passiert ist, ohne bekannte Personen zu speichern. Welche Spalte übernimmt in app_events diese Rolle statt einer echten Person?",
+      "area": "Grundbegriffe der Datenbank",
+      "options": [
+        { "text": "event_name, weil sie den Namen der Person enthält.", "isCorrect": false, "explanation": "event_name beschreibt das Ereignis, nicht eine Person." },
+        { "text": "install_id, eine zufällige Kennung der Installation statt einer echten Person.", "isCorrect": true, "explanation": "Richtig: install_id identifiziert nur eine Installation der App, nicht eine bestimmte Person." },
+        { "text": "created_at, weil dort für jede einzelne Person genau festgehalten wird, wann sie geboren wurde.", "isCorrect": false, "explanation": "created_at hält den Zeitpunkt des Ereignisses fest, kein Geburtsdatum." },
+        { "text": "id, weil sie den echten Namen jeder Zeile enthält.", "isCorrect": false, "explanation": "id ist eine zufällige Kennung der Zeile, kein Name irgendeiner Person." }
+      ]
+    },
+    {
+      "question": "Welche Aussage über Datentypen in Tabellenspalten stimmt?",
+      "area": "Grundbegriffe der Datenbank",
+      "options": [
+        { "text": "Jede Spalte legt einen festen Datentyp fest, den jede Zeile darin einhalten muss.", "isCorrect": true, "explanation": "Richtig: der Datentyp gilt für die ganze Spalte, keine Zeile darf davon abweichen." },
+        { "text": "Der Datentyp einer Spalte darf sich von Zeile zu Zeile beliebig ändern.", "isCorrect": false, "explanation": "Genau das verhindert der feste Datentyp einer Spalte." },
+        { "text": "Nur die Spalte id besitzt überhaupt einen Datentyp.", "isCorrect": false, "explanation": "Jede Spalte einer Tabelle hat einen eigenen, festen Datentyp, nicht nur id." },
+        { "text": "Der Datentyp bestimmt, wie viele Zeilen eine Tabelle maximal haben darf.", "isCorrect": false, "explanation": "Der Datentyp einer Spalte hat keinen Einfluss auf die maximale Zeilenzahl der Tabelle." }
+      ]
+    },
+    {
+      "question": "Warum reicht eine einzelne große Textdatei nicht aus, um viele Ereignisse einer App auszuwerten?",
+      "area": "Grundbegriffe der Datenbank",
+      "options": [
+        { "text": "Weil eine gewöhnliche Textdatei aus rein technischen Gründen niemals mehr als eine einzige Zeile speichern kann.", "isCorrect": false, "explanation": "Eine Textdatei kann durchaus mehrere Zeilen enthalten, das ist nicht das Problem." },
+        { "text": "Weil ohne feste Spalten jede Auswertung den Text erst mühsam nach Eigenschaften durchsuchen müsste.", "isCorrect": true, "explanation": "Richtig: eine Tabelle mit festen Spalten macht gezieltes Nachfragen sofort möglich, freier Text nicht." },
+        { "text": "Weil Textdateien niemals einen Zeitpunkt enthalten dürfen.", "isCorrect": false, "explanation": "Eine Textdatei kann durchaus Datumsangaben enthalten, das ist keine technische Grenze." },
+        { "text": "Weil eine Textdatei automatisch nach einem Tag gelöscht wird.", "isCorrect": false, "explanation": "Textdateien werden nicht automatisch gelöscht, das hat nichts mit dem Fehlen von Spalten zu tun." }
+      ]
+    },
+    {
+      "question": "Angenommen, eine neue Spalte namens device_type soll ergänzt werden. Was ändert sich dadurch für bereits vorhandene Zeilen?",
+      "area": "Grundbegriffe der Datenbank",
+      "options": [
+        { "text": "Alle vorhandenen Zeilen der gesamten Tabelle werden durch das Hinzufügen der neuen Spalte automatisch endgültig gelöscht.", "isCorrect": false, "explanation": "Das Hinzufügen einer Spalte löscht keine vorhandenen Zeilen." },
+        { "text": "Jede vorhandene Zeile bekommt für die neue Spalte zunächst einen leeren oder festgelegten Startwert.", "isCorrect": true, "explanation": "Richtig: bestehende Zeilen erhalten für eine neue Spalte einen leeren oder vorher festgelegten Wert, nichts geht verloren." },
+        { "text": "Die Tabelle bekommt dadurch automatisch einen neuen Primärschlüssel.", "isCorrect": false, "explanation": "Eine zusätzliche Spalte ändert nichts am bereits festgelegten Primärschlüssel der Tabelle." },
+        { "text": "Vorhandene Zeilen werden in eine völlig neue Tabelle verschoben.", "isCorrect": false, "explanation": "Eine neue Spalte bleibt in derselben Tabelle, es entsteht keine zweite Tabelle." }
+      ]
+    },
+    {
+      "question": "Welche der folgenden Beschreibungen passt am besten zu einer Zeile in einer Tabelle?",
+      "area": "Grundbegriffe der Datenbank",
+      "options": [
+        { "text": "Sie ist eine Sammlung aus mehreren völlig unabhängigen Tabellen.", "isCorrect": false, "explanation": "Eine Zeile gehört immer zu genau einer Tabelle, sie ist keine Sammlung mehrerer Tabellen." },
+        { "text": "Sie ist ein einzelner, vollständiger Eintrag mit einem Wert je Spalte der Tabelle.", "isCorrect": true, "explanation": "Richtig: eine Zeile füllt jede Spalte der Tabelle mit genau einem Wert, das ist ihre Definition." },
+        { "text": "Sie legt fest, welche Spalten die Tabelle überhaupt besitzen darf.", "isCorrect": false, "explanation": "Das legt der Bauplan der Tabelle fest, nicht eine einzelne Zeile." },
+        { "text": "Sie ersetzt den Primärschlüssel, sobald die Tabelle größer wird.", "isCorrect": false, "explanation": "Eine Zeile ersetzt nichts an der Struktur, sie ist selbst nur ein Eintrag darin." }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Öffne eine Tabellenkalkulation (zum Beispiel Excel, Google Tabellen oder LibreOffice Calc) und lege selbst eine kleine Tabelle mit fünf Spalten an, die der Tabelle app_events nachempfunden ist: id, install_id, event_name, lesson_id, created_at. Trage von Hand drei erfundene Zeilen ein, jede mit einem anderen Ereignis.",
+    "expectation": "Am Ende siehst du eine Tabelle mit einer Kopfzeile aus fünf Spaltennamen und drei Zeilen darunter, in denen jede Spalte konsequent denselben Datentyp trägt (id immer eine eindeutige Kennung, created_at immer ein Datum, keine Zeile weicht vom Muster ab).",
+    "checklist": [
+      "Tabellenkalkulation geöffnet und eine neue Tabelle angelegt",
+      "fünf Spaltennamen in der Kopfzeile eingetragen: id, install_id, event_name, lesson_id, created_at",
+      "drei Zeilen mit unterschiedlichen erfundenen Ereignissen ausgefüllt",
+      "jede id-Spalte enthält einen anderen Wert, kein doppelter Primärschlüssel",
+      "geprüft, dass jede Zeile in jeder Spalte zum selben Datentyp passt wie die anderen Zeilen"
+    ]
+  },
+  "audio": {
+    "file": "M03-03-01.mp3",
+    "durationSeconds": 1001,
+    "voices": ["A", "B"],
+    "aiGenerated": true
+  },
+  "faq": [
+    { "question": "Muss jede Tabelle einen Primärschlüssel haben, oder ist das nur eine gute Idee?", "answer": "In der Praxis fast immer ja, weil eine Datenbank ohne Primärschlüssel keine sichere Möglichkeit hätte, eine bestimmte Zeile später erneut zu treffen. Selbst wenn zwei Zeilen komplett gleich aussehen, unterscheidet der Primärschlüssel sie trotzdem, etwa bei zwei Bestellungen mit identischem Inhalt zur selben Sekunde." },
+    { "question": "Kann eine Spalte auch leer bleiben?", "answer": "Ja, das nennt man in der Datenbank oft nullbar, wie bei der Spalte lesson_id in app_events. Der Bauplan legt für jede Spalte einzeln fest, ob ein leerer Wert erlaubt ist oder ob jede Zeile dort zwingend etwas eintragen muss." },
+    { "question": "Wie unterscheidet sich eine Tabelle in einer Datenbank von einer Excel-Tabelle, die ich selbst am Computer öffnen kann?", "answer": "Optisch ähneln sie sich stark, aber eine Datenbank-Tabelle erzwingt die Regeln viel strenger: falsche Datentypen werden abgelehnt, tausende Zeilen bleiben trotzdem schnell durchsuchbar, und mehrere Programme können gleichzeitig sicher darauf zugreifen. Eine Excel-Datei erlaubt dagegen fast jede Eingabe, auch fehlerhafte, ohne Widerspruch." },
+    { "question": "Warum bekommt install_id eine eigene Spalte und ist nicht einfach Teil von event_name?", "answer": "Weil beide Angaben unterschiedliche Fragen beantworten, die getrennt bleiben müssen. event_name beantwortet, was passiert ist, install_id beantwortet, von welcher Installation es kam. Stünden beide zusammen in einem Text, müsste jede Auswertung diesen Text erst wieder mühsam zerlegen." },
+    { "question": "Was passiert, wenn ich versuche, eine Zeile mit einer id einzufügen, die es schon gibt?", "answer": "Die Datenbank verweigert diesen Eintrag und meldet einen Fehler, weil der Primärschlüssel genau das verhindern soll: doppelte Kennungen. In der Praxis erzeugt fast immer die Datenbank selbst eine neue, zufällige id, sodass diese Kollision kaum je von Hand entsteht." },
+    { "question": "Ist eine Datenbank dasselbe wie eine einzelne, sehr große Tabelle?", "answer": "Nein, eine Datenbank ist der Rahmen, der mehrere Tabellen zusammenhält, wie in diesem Beispiel app_events, content_releases und feedback nebeneinander in derselben Datenbank liegen. Jede dieser Tabellen hat ihre eigenen Spalten und ihren eigenen Primärschlüssel, unabhängig von den anderen Tabellen im selben Rahmen." },
+    { "question": "Reicht eine Tabellenkalkulation wie Excel nicht für alles, was in dieser Lektion beschrieben wurde?", "answer": "Für sehr wenige, einfache Daten kann eine Tabellenkalkulation genügen, deshalb dient sie hier auch als erstes Bild. Sobald aber viele tausend Zeilen gleichzeitig von einem Programm gelesen und geschrieben werden müssen, stößt eine Tabellenkalkulation an ihre Grenzen, während eine Datenbank genau dafür gebaut ist." }
+  ]
+}
