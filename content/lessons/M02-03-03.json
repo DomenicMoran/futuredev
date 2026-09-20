@@ -1,0 +1,916 @@
+{
+  "id": "M02-03-03",
+  "title": "Events: auf Klick und Eingabe reagieren",
+  "durationMinutes": 22,
+  "prerequisites": [
+    "M02-03-02",
+    "M02-01-03"
+  ],
+  "terms": [
+    {
+      "term": "Event",
+      "definition": "etwas, das auf einer Webseite passiert und worauf JavaScript reagieren kann, zum Beispiel ein Klick, ein Tastendruck oder das Absenden eines Formulars."
+    },
+    {
+      "term": "addEventListener",
+      "definition": "eine Funktion, mit der ein Element registriert, welche eigene Funktion aufgerufen werden soll, sobald ein bestimmtes Event an ihm passiert."
+    },
+    {
+      "term": "preventDefault",
+      "definition": "eine Funktion, mit der JavaScript die übliche Standardreaktion eines Events verhindert, zum Beispiel das Neuladen der Seite beim Absenden eines Formulars."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir eine Türklingel vor. Sie klingelt nicht von selbst. Jemand muss vorher den Knopf drücken, und jemand muss im Haus bereit sein, das Klingeln zu hören und zur Tür zu gehen."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Bisher hast du JavaScript-Code geschrieben, der einmal läuft, wenn die Seite lädt, und dann fertig ist. Jetzt geht es darum, wie Code auf etwas wartet, das später passiert, während die Person schon auf der Seite ist."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Also wie das Warten auf das Klingeln an der Tür?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Genau. Ein Klick, ein Tastendruck, das Absenden eines Formulars: All das nennt man ein Event. Ein Event ist etwas, das auf der Seite passiert und worauf JavaScript reagieren kann."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Ein Klick auf einen Knopf ist ein Event. Ein Tastendruck in einem Textfeld ist ein Event. Sogar das fertige Laden der ganzen Seite ist ein Event, genau das, worauf die ConsoleGreeting aus der ersten Lektion dieses Kapitels reagiert hat."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Und wie sagt man JavaScript, dass es auf ein bestimmtes Event warten soll?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Genau dafür gibt es ein eigenes Werkzeug, das im nächsten Schritt kommt. Ohne es müsste JavaScript ständig nachschauen, ob gerade etwas passiert ist, was sehr umständlich wäre."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir vor, du verlegst selbst ein Kabel von der Türklingel zu einer Glocke in der Küche. Ab jetzt hörst du jeden Klingelknopf-Druck, egal wo im Haus du gerade bist."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Dieses Kabel-Verlegen entspricht in JavaScript einer einzigen Funktion. Sie verbindet ein Element, wie einen Knopf, mit einer eigenen Funktion, die ausgeführt wird, sobald ein bestimmtes Event an diesem Element passiert."
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Diese Funktion heißt addEventListener. Man ruft sie an einem gefundenen Element auf, mit zwei Angaben: dem Namen des Events, etwa click, und der eigenen Funktion, die dabei laufen soll."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Ein Beispiel aus dem Portfolio-Repository von Domenic: window Punkt addEventListener Klammer auf Anführungszeichen keydown Anführungszeichen Komma beiTaste Klammer zu richtet eine eigene Funktion namens beiTaste ein. Sie läuft bei jedem Tastendruck und prüft, ob die Taste Escape gedrückt wurde, um dann ein geöffnetes Menü zu schließen."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Woher weiß die Funktion, welche Taste genau gedrückt wurde?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Die Funktion bekommt beim Aufruf automatisch eine Angabe über das Event selbst übergeben, mit Feldern wie key für die gedrückte Taste. Im Beispiel prüft der Code genau dieses Feld, um nur bei Escape zu reagieren, bei jeder anderen Taste passiert nichts."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir einen Briefkastenschlitz vor, durch den bei jedem einzelnen Blatt Papier ein leises Klappern zu hören ist, noch bevor der ganze Stapel Post durch ist."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Genauso kann JavaScript schon bei jedem einzelnen Tastendruck in einem Textfeld reagieren, nicht erst, wenn der ganze Text fertig eingegeben ist. Dafür registriert man addEventListener am Eingabefeld mit dem Event-Namen input."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Ein Beispiel: eingabefeld Punkt addEventListener Klammer auf Anführungszeichen input Anführungszeichen Komma Funktion mit geschweiften Klammern Klammer zu, in der die Funktion bei jedem Tastendruck sofort etwas anzeigen kann, etwa wie viele Zeichen bereits eingegeben wurden."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Reagiert das input-Event auch, wenn ich mit der Maus Text hineinziehe, statt ihn zu tippen?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Ja, das input-Event reagiert auf jede Änderung am Inhalt des Feldes, egal ob durch Tippen, Einfügen oder Ziehen. Genau deshalb eignet es sich so gut für sofortiges Feedback, ohne dass man extra an jede einzelne Art der Eingabe denken muss."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir ein Postamt vor. Früher hat der Schalter bei jedem Formular sofort geschlossen und erst wieder neu geöffnet, um das nächste Anliegen zu bearbeiten. Der ganze Raum musste dafür kurz leer und neu betreten werden."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Genau das macht ein normales HTML-Formular ohne JavaScript: Beim Absenden lädt der Browser die ganze Seite neu, wie ein Schalter, der schließt und neu öffnet. Alles auf der Seite, was gerade eingegeben oder verändert wurde, geht dabei verloren."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Ein Formular ist ein Abschnitt einer Webseite mit Eingabefeldern und einem Knopf zum Absenden, mit dem Nutzer Angaben an eine Seite übermitteln, etwa Name und Nachricht in einem Kontaktformular."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Ein Login-Formular mit einem Feld für den Namen und einem für das Passwort ist ein typisches Formular. Ohne weiteres Zutun sendet ein Klick auf seinen Absenden-Knopf die Seite komplett neu an den Server und lädt sie danach neu."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Kann man dieses Neuladen verhindern, so wie moderne Webseiten es tun?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Ja, mit einer Funktion namens preventDefault. Man ruft sie am Event des Formulars auf, direkt in der eigenen Funktion, die auf das Absenden-Event reagiert, und verhindert damit genau das automatische Neuladen."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Ein Beispiel: formular Punkt addEventListener Klammer auf Anführungszeichen submit Anführungszeichen Komma Funktion mit einer Angabe namens event Klammer zu, und als erste Anweisung darin event Punkt preventDefault Klammer auf Klammer zu. Danach kann der eigene Code die eingegebenen Werte in Ruhe verarbeiten, ohne dass die Seite währenddessen neu lädt."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Was passiert mit den eingegebenen Werten, wenn preventDefault das Neuladen verhindert?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Sie bleiben genau da, wo sie waren, weil die Seite ja nicht neu lädt. Der eigene Code kann sie jetzt selbst auslesen, prüfen und zum Beispiel per Fetch-Aufruf an einen Server schicken, ganz ohne das harte Neuladen, das Nutzer als Ruckeln wahrnehmen."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Fassen wir die drei Events dieser Lektion noch einmal zusammen: click für einen Klick, input für jede Eingabeänderung in einem Feld, submit für das Absenden eines Formulars. Für alle drei gilt dasselbe Muster: addEventListener registriert eine eigene Funktion, die beim Event läuft."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Gibt es noch mehr solche Events, oder sind das schon alle?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Es gibt noch deutlich mehr, etwa für das Bewegen der Maus oder das Scrollen der Seite. Das Muster mit addEventListener bleibt dabei immer gleich, nur der Name des Events und das, was man in der eigenen Funktion damit macht, ändert sich."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir einen mechanischen Zähler vor, wie er früher an manchen Werkstatt-Toren hing und bei jedem Öffnen eine Zahl weiterschaltete, um zu zeigen, wie oft das Tor an diesem Tag benutzt wurde."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Genau so ein Zähler lässt sich mit einem Klick-Event bauen. Eine Variable hält die aktuelle Zahl, ein Klick-Event erhöht sie um eins, und textContent zeigt die neue Zahl sofort auf der Seite an."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Ist das genau die Praxisaufgabe dieser Lektion?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Ja, genau das baust du gleich selbst: einen Knopf, der bei jedem Klick eine Zahl auf der Seite um eins erhöht. Sie verbindet alles aus dieser Lektion, addEventListener, das click-Event und aus der vorigen Lektion textContent, in einer einzigen kleinen Übung."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir eine Werkstatt vor, in der ein Lehrling versehentlich zwei Kabel von derselben Klingel zu zwei verschiedenen Glocken verlegt, ohne es zu merken. Beide Glocken läuten jetzt bei jedem Klingeln gleichzeitig."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Genau das kann auch mit addEventListener passieren, wenn man aus Versehen dieselbe Funktion zweimal am selben Element registriert. Beim nächsten Klick läuft die Funktion dann tatsächlich zweimal hintereinander, statt nur einmal."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Wie erkenne ich einen solchen Fehler, wenn eine Zahl beim Klicken plötzlich um zwei statt um eins steigt?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Ein guter erster Verdacht ist immer, im eigenen Code nachzuschauen, ob addEventListener für dasselbe Event vielleicht zweimal aufgerufen wird, etwa weil ein Script-Element versehentlich zweimal eingebunden wurde. Die Konsole hilft dabei kaum direkt, aber ein Blick auf den eigenen Code deckt diesen Fehler meist schnell auf."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Noch ein Punkt zum input-Event, der in der Praxis oft überrascht. Es reagiert bei jedem einzelnen Tastendruck, auch mitten im Wort, nicht erst, wenn das Eingabefeld durch einen Klick daneben verlassen wird."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Gibt es auch ein Event, das erst reagiert, wenn ich das Feld wieder verlasse?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Ja, das heißt change und reagiert erst, wenn der Wert eines Feldes sich geändert hat und die Person danach das Feld verlässt, etwa durch einen Klick woanders hin. Für sofortiges Feedback bei jedem Tastendruck bleibt input trotzdem die richtige Wahl, für seltenere Prüfungen reicht oft change."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Auch zum Formular selbst noch ein wichtiger Zusatz. Ein Formular kann mehrere Eingabefelder gleichzeitig enthalten, und das submit-Event feuert genau einmal, wenn der ganze Abschnitt gemeinsam abgesendet wird, nicht einzeln für jedes Feld."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Registriert man das submit-Event dann am Formular selbst oder am Absenden-Knopf?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Am Formular selbst, nicht am Knopf. Das submit-Event wird nämlich nicht nur durch einen Klick auf den Absenden-Knopf ausgelöst, sondern auch durch das Drücken der Eingabetaste in einem der Felder, und beide Wege sollen dieselbe Reaktion auslösen."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Ein letzter Blick auf preventDefault, bevor die Lektion zusammenfasst. preventDefault verhindert nur das übliche Standardverhalten eines Events, es stoppt aber nicht das Event selbst und auch keine anderen Funktionen, die vielleicht ebenfalls auf dasselbe Event reagieren."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Kann ich preventDefault also auch bei einem Klick-Event benutzen, nicht nur beim Absenden eines Formulars?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Ja, preventDefault funktioniert bei jedem Event, das ein eigenes Standardverhalten hat. Ein Klick auf einen Link lädt normalerweise eine neue Adresse, und preventDefault kann auch das verhindern, wenn der eigene Code stattdessen selbst entscheiden soll, was als Nächstes passiert."
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "isKeySentence": true,
+      "text": "Halten wir fest: Ein Event ist etwas, das auf einer Seite passiert, wie ein Klick, eine Eingabe oder das Absenden eines Formulars. Mit addEventListener registriert ein Element eine eigene Funktion, die genau bei diesem Event läuft, statt dass JavaScript ständig selbst nachschauen muss. Bei einem Formular verhindert preventDefault das automatische Neuladen der Seite, damit der eigene Code die eingegebenen Werte in Ruhe verarbeiten kann. Genau dieses Zusammenspiel macht aus einer starren Seite eine, die auf jede Handlung sofort reagiert."
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "isKeySentence": false,
+      "text": "Noch einmal die Begriffe dieser Lektion. Event: etwas, das auf einer Webseite passiert und worauf JavaScript reagieren kann, zum Beispiel ein Klick, ein Tastendruck oder das Absenden eines Formulars. addEventListener: eine Funktion, mit der ein Element registriert, welche eigene Funktion aufgerufen werden soll, sobald ein bestimmtes Event an ihm passiert. Formular: ein Abschnitt einer Webseite mit Eingabefeldern und einem Knopf zum Absenden, mit dem Nutzer Angaben an eine Seite übermitteln. preventDefault: eine Funktion, mit der JavaScript die übliche Standardreaktion eines Events verhindert, zum Beispiel das Neuladen der Seite beim Absenden eines Formulars."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Kann ich mehrere addEventListener an demselben Element registrieren?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Ja, ein Element kann beliebig viele Funktionen für dasselbe oder verschiedene Events registrieren. Bei einem click-Event laufen dann einfach alle registrierten Funktionen nacheinander, in der Reihenfolge, in der sie registriert wurden."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Was passiert, wenn ich preventDefault vergesse, bei einem Formular aufzurufen?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Dann lädt der Browser die Seite nach dem Absenden ganz normal neu, wie bei einem Formular ohne jedes JavaScript. Der eigene Code in der Funktion läuft zwar trotzdem, aber die Seite verschwindet gleich danach durch das Neuladen."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Muss ich für jeden einzelnen Knopf auf einer Seite ein eigenes addEventListener schreiben?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Für den Einstieg reicht dieses Vorgehen völlig aus, und für wenige Knöpfe ist es auch in echten Projekten normal. Bei sehr vielen gleichartigen Elementen gibt es fortgeschrittenere Muster, die an dieser Stelle aber noch nicht nötig sind."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Reagiert das click-Event auch, wenn ich mit der Tastatur statt mit der Maus bestätige?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Bei einem echten Knopf-Element ja, ein Bestätigen mit der Eingabetaste oder der Leertaste löst dort ebenfalls ein click-Event aus. Das ist einer der Gründe, warum man für klickbare Elemente wirklich das Knopf-Element benutzen sollte, statt es nur optisch nachzubauen."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Kann ich ein einmal registriertes addEventListener wieder entfernen?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Ja, mit einer eigenen Funktion namens removeEventListener, der man denselben Event-Namen und dieselbe Funktion wie beim Registrieren übergibt. Genau das macht auch das Portfolio-Beispiel dieser Lektion, sobald das Menü wieder geschlossen wird."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Was ist der Unterschied zwischen dem input-Event und dem change-Event bei einem Eingabefeld?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "input reagiert bei jedem einzelnen Tastendruck, sofort und fortlaufend. change reagiert erst, wenn der Wert sich geändert hat und die Person das Feld danach verlässt, etwa durch einen Klick woanders hin. Für sofortiges Feedback bei jedem Zeichen ist input richtig, für seltenere Prüfungen reicht oft change."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Wo registriert man das submit-Event richtig: am Formular selbst oder am Absenden-Knopf?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Am Formular selbst, nicht am Knopf. Das submit-Event entsteht auch durch das Drücken der Eingabetaste in einem Feld, nicht nur durch einen Klick auf den Knopf, und beide Wege sollen dieselbe Reaktion auslösen, die nur am Formular selbst beide Fälle abdeckt."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Funktioniert preventDefault auch bei anderen Events als dem Absenden eines Formulars?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Ja, preventDefault funktioniert bei jedem Event mit einem eigenen Standardverhalten. Ein Klick auf einen Link lädt normalerweise eine neue Adresse, und preventDefault kann auch das verhindern, wenn der eigene Code stattdessen selbst entscheiden soll, was als Nächstes geschieht."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Was passiert, wenn ich versehentlich dieselbe Funktion zweimal mit addEventListener am selben Element registriere?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Dann läuft diese Funktion bei jedem Event tatsächlich zweimal hintereinander, was oft an unerwartet doppelten Effekten erkennbar ist, etwa einer Zahl, die bei jedem Klick um zwei statt um eins steigt. Ein Blick in den eigenen Code, ob addEventListener versehentlich zweimal aufgerufen wird, klärt solche Fälle meist schnell."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Kann ich addEventListener auch für Events benutzen, die nichts mit Klicks oder Formularen zu tun haben, etwa Mausbewegungen?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Ja, das Muster bleibt für jedes Event gleich: Element finden, addEventListener aufrufen, Event-Name und eigene Funktion übergeben. Für Mausbewegungen heißt das Event zum Beispiel mousemove, für das Scrollen der Seite scroll, jeweils mit eigenen Angaben in der übergebenen Funktion."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Warum sollte ich für einen klickbaren Bereich wirklich ein Knopf-Element benutzen, statt zum Beispiel ein einfaches Textelement mit einem Klick-Event zu versehen?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Ein echtes Knopf-Element bringt von sich aus Verhalten mit, das ein einfaches Textelement nicht hat: Es reagiert automatisch auch auf Tastatur-Bestätigung, wird von Screenreadern als Knopf angesagt, und kann mit der Tab-Taste erreicht werden. Ein nachgebautes Textelement müsste all das erst mühsam selbst nachbilden, mit hoher Fehleranfälligkeit."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Kann eine Webseite auf ein Event reagieren, das an einem Element passiert, das noch gar nicht existiert, als das Script-Element ausgeführt wurde?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Mit dem einfachen addEventListener aus dieser Lektion nicht direkt, das Element muss zum Zeitpunkt der Registrierung schon im DOM stehen, sonst findet querySelector es gar nicht erst. Für Elemente, die erst später mit createElement entstehen, registriert man addEventListener deshalb direkt nach ihrem Erzeugen, bevor sie angehängt werden oder unmittelbar danach."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Kann die eigene Funktion, die bei einem Event läuft, auch selbst wieder ein neues Event auslösen?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Ja, das kommt in der Praxis häufig vor, zum Beispiel wenn ein Klick eine Änderung an einem Eingabefeld vornimmt, die wiederum ein eigenes input-Event auslöst. Jedes registrierte addEventListener reagiert dabei unabhängig auf sein eigenes Event, ohne dass man das eigens verknüpfen muss."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Warum reagiert der Zähler aus der Praxisaufgabe nicht auch, wenn ich die Seite einfach neu lade?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Weil die Variable, die die Zahl hält, nur im Speicher des Browsers existiert, solange die Seite geöffnet ist. Ein Neuladen baut die ganze Seite samt aller Variablen von Grund auf neu auf, die Zahl beginnt danach wieder bei ihrem ursprünglichen Startwert, meist bei null."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Reagiert ein Event-Listener auch, wenn ein Element gerade unsichtbar ist, weil es zum Beispiel per CSS ausgeblendet wurde?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Ein vollständig unsichtbar gemachtes Element kann von der Person gar nicht angeklickt werden, ein click-Event bleibt dann schlicht aus, weil niemand darauf klicken kann. Der addEventListener selbst bleibt aber weiterhin registriert und reagiert wieder ganz normal, sobald das Element erneut sichtbar und anklickbar wird, ohne dass man ihn dafür ein zweites Mal registrieren müsste."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Lohnt es sich, alle Events dieser Lektion schon jetzt auswendig zu kennen?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Nein, wichtiger als Auswendiglernen ist das Muster: ein Element finden, addEventListener mit dem passenden Event-Namen aufrufen, eine eigene Funktion übergeben. Den genauen Namen eines selteneren Events kannst du jederzeit nachschlagen, sobald du ihn wirklich brauchst, das Muster dahinter bleibt immer dasselbe, egal wie viele verschiedene Event-Namen es insgesamt gibt. Genau dieses wiederkehrende Muster macht Events insgesamt leichter zu lernen und zu behalten, als es auf den allerersten Blick zunächst wirkt, selbst wenn die Liste möglicher Event-Namen zunächst lang und unübersichtlich aussieht."
+    }
+  ],
+  "practiceExample": {
+    "text": "Im Repository repo-portfolio richtet die Navigation beim Öffnen des mobilen Menüs zwei addEventListener ein: einen für focusin am document, damit der Tastaturfokus in der geöffneten Schublade bleibt, und einen für keydown am window mit einer Funktion namens beiTaste, die bei gedrückter Escape-Taste das Menü schließt. Sobald das Menü wieder schließt, entfernt eine Aufräumfunktion beide Listener wieder mit removeEventListener, damit sie nicht dauerhaft im Hintergrund weiterlaufen, obwohl das Menü längst zu ist.",
+    "repoNote": "repo-portfolio",
+    "location": "src/components/Nav.tsx, Zeilen 101 bis 110 (Funktion beiTaste, document.addEventListener und window.addEventListener)"
+  },
+  "quiz": [
+    {
+      "question": "Welches Bild passt am besten zum Prinzip von addEventListener?",
+      "area": "Event",
+      "options": [
+        {
+          "text": "Eine Türklingel, bei der jemand zuerst ein Kabel zu einer Glocke verlegen muss, damit ein Klingeln überhaupt bemerkt wird.",
+          "isCorrect": true,
+          "explanation": "Genau dieses Bild nutzt die Lektion, um das Registrieren einer Reaktion auf ein Event zu erklären."
+        },
+        {
+          "text": "Ein Buch, das von der ersten bis zur letzten Seite in einem Rutsch gelesen wird, eine Vorstellung, die zwar plausibel klingt, aber nicht zum tatsächlichen Ablauf eines Events passt.",
+          "isCorrect": false,
+          "explanation": "Dieses Bild passt eher zu Code, der einmal von oben nach unten läuft, nicht zum Warten auf ein Event."
+        },
+        {
+          "text": "Eine Uhr, die unabhängig von jedem Ereignis immer gleich tickt.",
+          "isCorrect": false,
+          "explanation": "Ein Event-Listener reagiert gerade nicht unabhängig, sondern genau auf ein bestimmtes Ereignis."
+        },
+        {
+          "text": "Ein Foto, das eine einzelne, unveränderliche Situation zeigt.",
+          "isCorrect": false,
+          "explanation": "Ein Event beschreibt gerade eine Veränderung im Zeitverlauf, kein unveränderliches Bild."
+        }
+      ]
+    },
+    {
+      "question": "Was ist ein Event im Sinne dieser Lektion?",
+      "area": "Event",
+      "options": [
+        {
+          "text": "Etwas, das auf einer Webseite passiert und worauf JavaScript reagieren kann, wie ein Klick oder eine Eingabe.",
+          "isCorrect": true,
+          "explanation": "Genau das ist die Definition, die die Lektion für Event einführt."
+        },
+        {
+          "text": "Eine feste Datei, die JavaScript-Code enthält.",
+          "isCorrect": false,
+          "explanation": "Eine Datei mit Code ist eher eine externe Skriptdatei aus einer früheren Lektion, kein Event."
+        },
+        {
+          "text": "Ein Element im DOM, das querySelector findet.",
+          "isCorrect": false,
+          "explanation": "Ein gefundenes Element ist kein Event, ein Event ist ein Vorgang, keine feste Sache."
+        },
+        {
+          "text": "Ein CSS-Wert, der über classList gesetzt wird.",
+          "isCorrect": false,
+          "explanation": "CSS-Werte betreffen Aussehen, nicht das Reagieren auf einen Vorgang wie in dieser Lektion."
+        }
+      ]
+    },
+    {
+      "question": "Wozu dient die Funktion addEventListener?",
+      "area": "addEventListener",
+      "options": [
+        {
+          "text": "Sie registriert an einem Element eine eigene Funktion, die bei einem bestimmten Event ausgeführt wird.",
+          "isCorrect": true,
+          "explanation": "Genau das leistet addEventListener, wie das Kabel-Bild der Lektion zeigt."
+        },
+        {
+          "text": "Sie erzeugt ein völlig neues Element auf der Seite, eine Aufgabe, die tatsächlich createElement aus der vorigen Lektion übernimmt, nicht addEventListener.",
+          "isCorrect": false,
+          "explanation": "Das Erzeugen eines Elements ist Aufgabe von createElement aus der vorigen Lektion, nicht von addEventListener."
+        },
+        {
+          "text": "Sie sendet automatisch Daten an einen Server.",
+          "isCorrect": false,
+          "explanation": "addEventListener registriert nur eine Reaktion, das Senden von Daten müsste der eigene Code selbst übernehmen."
+        },
+        {
+          "text": "Sie ändert automatisch den Text eines Elements.",
+          "isCorrect": false,
+          "explanation": "addEventListener ändert nichts von sich aus, es registriert nur, was bei einem Event passieren soll."
+        }
+      ]
+    },
+    {
+      "question": "Welche zwei Angaben braucht addEventListener mindestens?",
+      "area": "addEventListener",
+      "options": [
+        {
+          "text": "Den Namen des Events und die Funktion, die dabei laufen soll.",
+          "isCorrect": true,
+          "explanation": "Genau diese beiden Angaben zeigt das keydown-Beispiel aus dem Portfolio-Repository."
+        },
+        {
+          "text": "Den Namen der HTML-Datei und den Namen des Servers.",
+          "isCorrect": false,
+          "explanation": "Dateiname und Server haben mit dem Registrieren eines Events nichts zu tun."
+        },
+        {
+          "text": "Die CSS-Klasse des Elements und ihren neuen Zustand.",
+          "isCorrect": false,
+          "explanation": "CSS-Klassen werden mit classList verändert, nicht mit addEventListener."
+        },
+        {
+          "text": "Den Selektor des Elements und seinen aktuellen Text.",
+          "isCorrect": false,
+          "explanation": "Ein Selektor gehört zu querySelector, addEventListener braucht Event-Name und Funktion."
+        }
+      ]
+    },
+    {
+      "question": "Was zeigt das Beispiel aus dem Portfolio-Repository mit beiTaste?",
+      "area": "Praxisbeispiel",
+      "options": [
+        {
+          "text": "Eine Funktion, die bei jedem Tastendruck prüft, ob die Escape-Taste gedrückt wurde, um ein Menü zu schließen.",
+          "isCorrect": true,
+          "explanation": "Genau das leistet die Funktion beiTaste im gezeigten Praxisbeispiel."
+        },
+        {
+          "text": "Eine Funktion, die bei jedem Klick automatisch die Seite neu lädt, eine naheliegende Verwechslung, weil beide Angaben ähnlich klingen wie Selektor und Text bei querySelector.",
+          "isCorrect": false,
+          "explanation": "Das Beispiel reagiert auf Tastendrücke, nicht auf Klicks, und lädt die Seite nicht neu."
+        },
+        {
+          "text": "Eine Funktion, die ein neues HTML-Element erzeugt.",
+          "isCorrect": false,
+          "explanation": "beiTaste erzeugt kein Element, sie prüft nur, welche Taste gedrückt wurde."
+        },
+        {
+          "text": "Eine Funktion, die eine externe Skriptdatei nachlädt.",
+          "isCorrect": false,
+          "explanation": "Das Nachladen einer Datei ist nicht Aufgabe von beiTaste."
+        }
+      ]
+    },
+    {
+      "question": "Wodurch unterscheidet sich das input-Event von einem click-Event?",
+      "area": "Eingabe",
+      "options": [
+        {
+          "text": "Das input-Event reagiert auf jede Änderung des Inhalts eines Feldes, das click-Event auf einen Klick.",
+          "isCorrect": true,
+          "explanation": "Genau diese Abgrenzung erklärt der Briefkastenschlitz-Vergleich der Lektion."
+        },
+        {
+          "text": "Beide reagieren auf exakt dasselbe, nur mit unterschiedlichem Namen.",
+          "isCorrect": false,
+          "explanation": "Beide Events reagieren auf unterschiedliche Dinge, ein Klick ist kein Ändern eines Feldinhalts."
+        },
+        {
+          "text": "Das input-Event gibt es nur bei Knöpfen, das click-Event nur bei Textfeldern, eine Vermutung, die zwar naheliegt, aber nicht zutrifft, weil beide Events auf unterschiedliche Vorgänge reagieren.",
+          "isCorrect": false,
+          "explanation": "Es ist eher umgekehrt: input passt zu Feldern, click passt unter anderem zu Knöpfen."
+        },
+        {
+          "text": "Das input-Event reagiert nur einmal pro Seite, das click-Event beliebig oft.",
+          "isCorrect": false,
+          "explanation": "Beide Events können beliebig oft auftreten, keines ist auf einen einzigen Aufruf beschränkt."
+        }
+      ]
+    },
+    {
+      "question": "Was passiert beim Absenden eines Formulars ohne jedes JavaScript?",
+      "area": "Formular",
+      "options": [
+        {
+          "text": "Der Browser lädt die Seite komplett neu und sendet die eingegebenen Werte dabei mit.",
+          "isCorrect": true,
+          "explanation": "Genau das beschreibt das Postamt-Bild der Lektion für ein Formular ohne JavaScript."
+        },
+        {
+          "text": "Nichts passiert, ein Formular kann ohne JavaScript grundsätzlich nicht abgesendet werden.",
+          "isCorrect": false,
+          "explanation": "Ein Formular funktioniert auch ganz ohne JavaScript, nur eben mit einem vollständigen Neuladen der Seite."
+        },
+        {
+          "text": "Die Werte werden dauerhaft im Browser gespeichert, ohne die Seite zu verlassen.",
+          "isCorrect": false,
+          "explanation": "Ohne JavaScript verlässt die Seite tatsächlich ihren aktuellen Zustand durch das Neuladen."
+        },
+        {
+          "text": "Der Browser fragt automatisch nach, ob wirklich abgesendet werden soll.",
+          "isCorrect": false,
+          "explanation": "Eine solche automatische Rückfrage gehört nicht zum Standardverhalten eines Formulars."
+        }
+      ]
+    },
+    {
+      "question": "Wozu dient preventDefault beim Absenden eines Formulars?",
+      "area": "preventDefault",
+      "options": [
+        {
+          "text": "Sie verhindert das automatische Neuladen der Seite, das ein Formular sonst auslösen würde.",
+          "isCorrect": true,
+          "explanation": "Genau das leistet preventDefault, wie das Beispiel mit dem submit-Event zeigt."
+        },
+        {
+          "text": "Sie löscht automatisch alle eingegebenen Werte aus dem Formular, ein Effekt, der so nicht eintritt, weil preventDefault ausschließlich das automatische Neuladen verhindert, sonst nichts.",
+          "isCorrect": false,
+          "explanation": "preventDefault löscht keine Werte, sie verhindert nur das Neuladen der Seite."
+        },
+        {
+          "text": "Sie sendet die Formulardaten automatisch per Fetch an einen Server.",
+          "isCorrect": false,
+          "explanation": "Das Senden per Fetch müsste separat programmiert werden, preventDefault erledigt das nicht von selbst."
+        },
+        {
+          "text": "Sie fügt dem Formular ein neues Eingabefeld hinzu.",
+          "isCorrect": false,
+          "explanation": "Neue Felder entstünden über createElement, preventDefault verhindert nur das Standardverhalten des Events."
+        }
+      ]
+    },
+    {
+      "question": "Was passiert mit den eingegebenen Werten eines Formulars, wenn preventDefault aufgerufen wurde?",
+      "area": "preventDefault",
+      "options": [
+        {
+          "text": "Sie bleiben erhalten, weil die Seite nicht neu lädt, und der eigene Code kann sie weiterverarbeiten.",
+          "isCorrect": true,
+          "explanation": "Genau das erklärt die Lektion als Vorteil von preventDefault gegenüber dem normalen Neuladen."
+        },
+        {
+          "text": "Sie werden sofort automatisch gelöscht.",
+          "isCorrect": false,
+          "explanation": "preventDefault löscht nichts, es verhindert lediglich das Neuladen der Seite."
+        },
+        {
+          "text": "Sie werden automatisch an alle Formulare der Seite verteilt.",
+          "isCorrect": false,
+          "explanation": "Es gibt keine automatische Verteilung an andere Formulare, die Werte bleiben schlicht im ursprünglichen Formular erhalten."
+        },
+        {
+          "text": "Sie werden in eine externe Skriptdatei geschrieben.",
+          "isCorrect": false,
+          "explanation": "Werte landen nicht automatisch in einer Datei, das müsste eigener Code erledigen."
+        }
+      ]
+    },
+    {
+      "question": "Ein Knopf soll bei jedem Klick eine angezeigte Zahl um eins erhöhen. Welche Bausteine braucht das mindestens?",
+      "area": "Praxisaufgabe",
+      "options": [
+        {
+          "text": "addEventListener für das click-Event, eine Variable für die Zahl und textContent, um sie anzuzeigen.",
+          "isCorrect": true,
+          "explanation": "Genau diese drei Bausteine kombiniert die Praxisaufgabe dieser Lektion."
+        },
+        {
+          "text": "Nur ein Formular mit einem Absenden-Knopf, ohne weiteren Code.",
+          "isCorrect": false,
+          "explanation": "Ein reines Formular ohne Code kann von sich aus keine Zahl hochzählen."
+        },
+        {
+          "text": "Nur ein Script-Element ohne jedes Event.",
+          "isCorrect": false,
+          "explanation": "Ohne ein Event weiß der Code nicht, wann genau ein Klick stattgefunden hat."
+        },
+        {
+          "text": "Nur eine externe Skriptdatei ohne addEventListener.",
+          "isCorrect": false,
+          "explanation": "Eine externe Datei allein registriert noch keine Reaktion auf einen Klick, dafür braucht es addEventListener."
+        }
+      ]
+    },
+    {
+      "question": "Warum entfernt die Navigation aus dem Portfolio-Beispiel ihre addEventListener wieder, sobald das Menü schließt?",
+      "area": "Praxisbeispiel",
+      "options": [
+        {
+          "text": "Damit die Funktionen nicht dauerhaft im Hintergrund weiterlaufen, obwohl sie nicht mehr gebraucht werden.",
+          "isCorrect": true,
+          "explanation": "Genau diesen Grund nennt die Lektion für removeEventListener beim Schließen des Menüs."
+        },
+        {
+          "text": "Weil addEventListener nach einer festen Zeit automatisch von selbst verschwindet, eine Annahme, die nicht zutrifft, weil ein einmal registriertes addEventListener ohne ausdrückliches Entfernen bestehen bleibt.",
+          "isCorrect": false,
+          "explanation": "Ein registriertes addEventListener bleibt bestehen, bis es ausdrücklich entfernt wird, nicht automatisch nach einer Zeit."
+        },
+        {
+          "text": "Weil der Browser sonst die Seite neu lädt.",
+          "isCorrect": false,
+          "explanation": "Ein bestehender Event-Listener löst kein Neuladen der Seite aus."
+        },
+        {
+          "text": "Weil ein Element sonst keine Klasse mehr umschalten kann.",
+          "isCorrect": false,
+          "explanation": "Das Umschalten von Klassen mit classList hängt nicht von bestehenden Event-Listenern ab."
+        }
+      ]
+    },
+    {
+      "question": "Reagiert ein click-Event an einem echten Knopf-Element auch auf die Eingabetaste?",
+      "area": "Event",
+      "options": [
+        {
+          "text": "Ja, ein echtes Knopf-Element löst ein click-Event auch bei Bestätigung über die Tastatur aus.",
+          "isCorrect": true,
+          "explanation": "Genau das erklärt die FAQ dieser Lektion als Vorteil echter Knopf-Elemente."
+        },
+        {
+          "text": "Nein, click-Events reagieren ausschließlich auf die Maus, eine verbreitete, aber falsche Annahme, denn click-Events reagieren bei einem echten Knopf-Element auch auf die Tastatur.",
+          "isCorrect": false,
+          "explanation": "Bei einem echten Knopf-Element löst auch die Tastatur ein click-Event aus."
+        },
+        {
+          "text": "Nein, dafür bräuchte man ein eigenes Event namens keyclick.",
+          "isCorrect": false,
+          "explanation": "Ein solches Event gibt es nicht, ein echter Knopf deckt beides über click ab."
+        },
+        {
+          "text": "Ja, aber nur, wenn zusätzlich preventDefault aufgerufen wird.",
+          "isCorrect": false,
+          "explanation": "preventDefault hat mit dem Auslösen des click-Events durch die Tastatur nichts zu tun."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Erstelle eine HTML-Datei mit einem Knopf und einem Absatz, der zu Beginn die Zahl 0 zeigt. Schreibe JavaScript-Code, der eine Variable für die Zahl anlegt, mit addEventListener auf das click-Event des Knopfes reagiert, die Variable bei jedem Klick um eins erhöht und den neuen Wert mit textContent im Absatz anzeigt.",
+    "expectation": "Bei jedem Klick auf den Knopf steigt die angezeigte Zahl im Absatz sofort sichtbar um eins, ganz ohne dass die Seite neu lädt.",
+    "checklist": [
+      "HTML-Datei mit Knopf und Absatz erstellt, Absatz zeigt anfangs 0",
+      "eine Variable für die Zahl angelegt",
+      "mit addEventListener auf das click-Event reagiert",
+      "die Variable bei jedem Klick um eins erhöht und mit textContent angezeigt",
+      "mehrfach geklickt und geprüft, dass die Zahl korrekt weiterzählt"
+    ]
+  },
+  "audio": {
+    "file": "M02-03-03.mp3",
+    "durationSeconds": 1002,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Kann ich mehrere addEventListener an demselben Element registrieren?",
+      "answer": "Ja, ein Element kann beliebig viele Funktionen für dasselbe oder verschiedene Events registrieren. Bei einem click-Event laufen dann einfach alle registrierten Funktionen nacheinander, in der Reihenfolge, in der sie registriert wurden."
+    },
+    {
+      "question": "Was passiert, wenn ich preventDefault vergesse, bei einem Formular aufzurufen?",
+      "answer": "Dann lädt der Browser die Seite nach dem Absenden ganz normal neu, wie bei einem Formular ohne jedes JavaScript. Der eigene Code in der Funktion läuft zwar trotzdem, aber die Seite verschwindet gleich danach durch das Neuladen."
+    },
+    {
+      "question": "Muss ich für jeden einzelnen Knopf auf einer Seite ein eigenes addEventListener schreiben?",
+      "answer": "Für den Einstieg reicht dieses Vorgehen völlig aus, und für wenige Knöpfe ist es auch in echten Projekten normal. Bei sehr vielen gleichartigen Elementen gibt es fortgeschrittenere Muster, die an dieser Stelle aber noch nicht nötig sind."
+    },
+    {
+      "question": "Reagiert das click-Event auch, wenn ich mit der Tastatur statt mit der Maus bestätige?",
+      "answer": "Bei einem echten Knopf-Element ja, ein Bestätigen mit der Eingabetaste oder der Leertaste löst dort ebenfalls ein click-Event aus. Das ist einer der Gründe, warum man für klickbare Elemente wirklich das Knopf-Element benutzen sollte, statt es nur optisch nachzubauen."
+    },
+    {
+      "question": "Kann ich ein einmal registriertes addEventListener wieder entfernen?",
+      "answer": "Ja, mit einer eigenen Funktion namens removeEventListener, der man denselben Event-Namen und dieselbe Funktion wie beim Registrieren übergibt. Genau das macht auch das Portfolio-Beispiel dieser Lektion, sobald das Menü wieder geschlossen wird."
+    },
+    {
+      "question": "Was ist der Unterschied zwischen dem input-Event und dem change-Event bei einem Eingabefeld?",
+      "answer": "input reagiert bei jedem einzelnen Tastendruck, sofort und fortlaufend. change reagiert erst, wenn der Wert sich geändert hat und die Person das Feld danach verlässt, etwa durch einen Klick woanders hin. Für sofortiges Feedback bei jedem Zeichen ist input richtig, für seltenere Prüfungen reicht oft change."
+    },
+    {
+      "question": "Wo registriert man das submit-Event richtig: am Formular selbst oder am Absenden-Knopf?",
+      "answer": "Am Formular selbst, nicht am Knopf. Das submit-Event entsteht auch durch das Drücken der Eingabetaste in einem Feld, nicht nur durch einen Klick auf den Knopf, und beide Wege sollen dieselbe Reaktion auslösen, die nur am Formular selbst beide Fälle abdeckt."
+    },
+    {
+      "question": "Funktioniert preventDefault auch bei anderen Events als dem Absenden eines Formulars?",
+      "answer": "Ja, preventDefault funktioniert bei jedem Event mit einem eigenen Standardverhalten. Ein Klick auf einen Link lädt normalerweise eine neue Adresse, und preventDefault kann auch das verhindern, wenn der eigene Code stattdessen selbst entscheiden soll, was als Nächstes geschieht."
+    },
+    {
+      "question": "Was passiert, wenn ich versehentlich dieselbe Funktion zweimal mit addEventListener am selben Element registriere?",
+      "answer": "Dann läuft diese Funktion bei jedem Event tatsächlich zweimal hintereinander, was oft an unerwartet doppelten Effekten erkennbar ist, etwa einer Zahl, die bei jedem Klick um zwei statt um eins steigt. Ein Blick in den eigenen Code, ob addEventListener versehentlich zweimal aufgerufen wird, klärt solche Fälle meist schnell."
+    },
+    {
+      "question": "Kann ich addEventListener auch für Events benutzen, die nichts mit Klicks oder Formularen zu tun haben, etwa Mausbewegungen?",
+      "answer": "Ja, das Muster bleibt für jedes Event gleich: Element finden, addEventListener aufrufen, Event-Name und eigene Funktion übergeben. Für Mausbewegungen heißt das Event zum Beispiel mousemove, für das Scrollen der Seite scroll, jeweils mit eigenen Angaben in der übergebenen Funktion."
+    },
+    {
+      "question": "Warum sollte ich für einen klickbaren Bereich wirklich ein Knopf-Element benutzen, statt zum Beispiel ein einfaches Textelement mit einem Klick-Event zu versehen?",
+      "answer": "Ein echtes Knopf-Element bringt von sich aus Verhalten mit, das ein einfaches Textelement nicht hat: Es reagiert automatisch auch auf Tastatur-Bestätigung, wird von Screenreadern als Knopf angesagt, und kann mit der Tab-Taste erreicht werden. Ein nachgebautes Textelement müsste all das erst mühsam selbst nachbilden, mit hoher Fehleranfälligkeit."
+    },
+    {
+      "question": "Kann eine Webseite auf ein Event reagieren, das an einem Element passiert, das noch gar nicht existiert, als das Script-Element ausgeführt wurde?",
+      "answer": "Mit dem einfachen addEventListener aus dieser Lektion nicht direkt, das Element muss zum Zeitpunkt der Registrierung schon im DOM stehen, sonst findet querySelector es gar nicht erst. Für Elemente, die erst später mit createElement entstehen, registriert man addEventListener deshalb direkt nach ihrem Erzeugen, bevor sie angehängt werden oder unmittelbar danach."
+    },
+    {
+      "question": "Kann die eigene Funktion, die bei einem Event läuft, auch selbst wieder ein neues Event auslösen?",
+      "answer": "Ja, das kommt in der Praxis häufig vor, zum Beispiel wenn ein Klick eine Änderung an einem Eingabefeld vornimmt, die wiederum ein eigenes input-Event auslöst. Jedes registrierte addEventListener reagiert dabei unabhängig auf sein eigenes Event, ohne dass man das eigens verknüpfen muss."
+    },
+    {
+      "question": "Warum reagiert der Zähler aus der Praxisaufgabe nicht auch, wenn ich die Seite einfach neu lade?",
+      "answer": "Weil die Variable, die die Zahl hält, nur im Speicher des Browsers existiert, solange die Seite geöffnet ist. Ein Neuladen baut die ganze Seite samt aller Variablen von Grund auf neu auf, die Zahl beginnt danach wieder bei ihrem ursprünglichen Startwert, meist bei null."
+    },
+    {
+      "question": "Reagiert ein Event-Listener auch, wenn ein Element gerade unsichtbar ist, weil es zum Beispiel per CSS ausgeblendet wurde?",
+      "answer": "Ein vollständig unsichtbar gemachtes Element kann von der Person gar nicht angeklickt werden, ein click-Event bleibt dann schlicht aus, weil niemand darauf klicken kann. Der addEventListener selbst bleibt aber weiterhin registriert und reagiert wieder ganz normal, sobald das Element erneut sichtbar und anklickbar wird, ohne dass man ihn dafür ein zweites Mal registrieren müsste."
+    },
+    {
+      "question": "Lohnt es sich, alle Events dieser Lektion schon jetzt auswendig zu kennen?",
+      "answer": "Nein, wichtiger als Auswendiglernen ist das Muster: ein Element finden, addEventListener mit dem passenden Event-Namen aufrufen, eine eigene Funktion übergeben. Den genauen Namen eines selteneren Events kannst du jederzeit nachschlagen, sobald du ihn wirklich brauchst, das Muster dahinter bleibt immer dasselbe, egal wie viele verschiedene Event-Namen es insgesamt gibt. Genau dieses wiederkehrende Muster macht Events insgesamt leichter zu lernen und zu behalten, als es auf den allerersten Blick zunächst wirkt, selbst wenn die Liste möglicher Event-Namen zunächst lang und unübersichtlich aussieht."
+    }
+  ]
+}

@@ -1,0 +1,929 @@
+{
+  "id": "M02-03-04",
+  "title": "Promises und Async/Await: warten, ohne stehenzubleiben",
+  "durationMinutes": 24,
+  "prerequisites": [
+    "M02-03-03"
+  ],
+  "terms": [
+    {
+      "term": "Promise",
+      "definition": "ein Objekt, das ein Ergebnis vertritt, das noch nicht da ist, aber später entweder erfolgreich fertig wird oder fehlschlägt."
+    },
+    {
+      "term": "then",
+      "definition": "eine Funktion eines Promise, mit der man festlegt, was passieren soll, sobald das Ergebnis fertig und erfolgreich ist."
+    },
+    {
+      "term": "async",
+      "definition": "ein Wort vor der Definition einer Funktion, das sagt, dass diese Funktion selbst ein Promise zurückgibt und intern warten darf, ohne den Rest des Programms aufzuhalten."
+    },
+    {
+      "term": "await",
+      "definition": "ein Wort innerhalb einer async-Funktion, das die Ausführung dieser einen Funktion pausiert, bis ein Promise fertig ist, ohne das restliche Programm zu blockieren."
+    },
+    {
+      "term": "try...catch",
+      "definition": "ein Sprachmittel, mit dem Code einen möglichen Fehler auffängt, statt dass das Programm beim Fehler abbricht."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir eine Pizzeria vor. Du bestellst am Tresen, bekommst eine Nummer auf einem Zettel und setzt dich an einen Tisch. Du stehst nicht die ganze Zeit lang am Tresen und wartest reglos."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Während deine Pizza gebacken wird, kannst du mit anderen am Tisch reden oder auf dein Handy schauen. Erst wenn dein Nummer aufgerufen wird, holst du die fertige Pizza ab."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Was genau hat eine Pizzabestellung mit JavaScript zu tun?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Sehr viel, wirklich sehr viel. Manche Dinge in JavaScript brauchen Zeit, etwa Daten aus dem Internet holen oder auf eine neue Verbindung warten. Der Browser darf dabei nicht wie eine Person am Tresen einfach stehen bleiben und nichts mehr tun."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Ein Browser zeigt während des Wartens weiterhin die Seite an, reagiert auf Klicks und lässt Animationen laufen. Würde er beim Warten komplett stehen bleiben, würde die ganze Seite für die Nutzerin oder den Nutzer einfrieren."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Wie schafft es JavaScript, gleichzeitig zu warten und trotzdem weiterzuarbeiten?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Genau dafür gibt es ein eigenes, wichtiges Werkzeug, das wie der Nummernzettel aus der Pizzeria funktioniert: ein Platzhalter für ein Ergebnis, das erst später fertig wird."
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Dieser Platzhalter aus der Welt von JavaScript heißt Promise. Ein Promise ist ein Objekt, das ein Ergebnis vertritt, das noch nicht da ist, aber später entweder erfolgreich fertig wird oder fehlschlägt."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Der Nummernzettel aus der Pizzeria ist wie ein Promise. Er ist nicht die Pizza selbst, aber ein Versprechen, dass irgendwann entweder eine fertige Pizza kommt oder jemand dir sagt, dass etwas schiefgelaufen ist, etwa weil der Ofen kaputt ist."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Und wie erfährt mein Code, wann das Promise fertig ist?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Dafür gibt es die Funktion then. Man hängt sie direkt an ein Promise an und übergibt ihr eine eigene Funktion, die läuft, sobald das Ergebnis erfolgreich fertig ist."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Ein Beispiel: versprechen Punkt then Klammer auf Funktion mit einer Angabe namens ergebnis Klammer zu sagt: Sobald das Promise namens versprechen fertig ist, führe diese Funktion mit dem Ergebnis aus. Bis dahin läuft der restliche Code der Seite ganz normal weiter."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Was passiert, wenn ich mehrere solcher then hintereinander brauche?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Dann können mehrere then-Aufrufe schnell unübersichtlich werden, tief verschachtelt und schwer zu lesen. Für genau dieses Problem gibt es eine deutlich lesbarere Schreibweise, die sich fast wie normaler, Schritt-für-Schritt-Code liest."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir vor, du bestellst in einer modernen Pizza-App und tippst einfach: warte auf meine Pizza, dann iss sie. Du schreibst die Reihenfolge auf, so wie du sie im Kopf denkst, ohne komplizierte Verschachtelung."
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Genau das leisten die beiden Wörter async und await gemeinsam, Hand in Hand. async steht vor einer Funktion und sagt: diese Funktion selbst gibt ein Promise zurück und darf intern warten. await steht davor, wo auf ein Promise gewartet wird, und pausiert nur diese eine Funktion, bis das Ergebnis da ist."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Ein Beispiel: async Funktion bestellePizza geschweifte Klammer auf, const pizza gleich await bestellePizzaBeimOfen Klammer auf Klammer zu, geschweifte Klammer zu. Diese Zeile liest sich fast wie ganz normaler Code: warte auf die Pizza, dann geht es weiter, obwohl im Hintergrund echtes Warten passiert."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Blockiert await dabei nicht doch die ganze Seite, weil es ja wartet?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Nein, und das ist der entscheidende Punkt. await pausiert nur den Code innerhalb dieser einen async-Funktion, der Rest der Seite, Klicks, Animationen, andere Funktionen, läuft währenddessen ganz normal weiter, genau wie du am Pizzeria-Tisch weiterreden kannst."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir vor, die Pizzeria hat gerade keinen Teig mehr. Statt einfach nichts zu sagen, kommt jemand an deinen Tisch und erklärt, warum deine Bestellung nicht klappt."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Auch ein Promise kann fehlschlagen, nicht nur erfolgreich fertig werden. Ein fehlgeschlagenes Promise braucht eine eigene Reaktion, sonst weiß der Code nicht, was er in diesem Fall tun soll."
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Dafür gibt es try...catch. Man schreibt den Code, der ein Promise mit await abwartet, in einen try-Block, und in einem catch-Block danach steht, was bei einem Fehler passieren soll."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Ein Beispiel für try...catch: try geschweifte Klammer auf, const pizza gleich await bestellePizzaBeimOfen Klammer auf Klammer zu, geschweifte Klammer zu. Danach catch Klammer auf fehler Klammer zu geschweifte Klammer auf, console Punkt log Klammer auf fehler Klammer zu, geschweifte Klammer zu. Schlägt die Bestellung fehl, landet der Code direkt im catch-Block, statt mit einem kaputten Ergebnis weiterzumachen."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Was passiert, wenn ich await benutze, aber kein try...catch drumherum schreibe?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Dann meldet die Konsole bei einem fehlgeschlagenen Promise einen unbehandelten Fehler, und der Code danach in derselben Funktion läuft oft nicht mehr weiter. Genau wie bei einem nicht geprüften Ergebnis von querySelector aus einer früheren Lektion lohnt es sich, mit einem Fehlschlag von Anfang an zu rechnen."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Ein Ort, an dem echtes Warten ohne Stehenbleiben besonders wichtig ist, ist eine Verbindung, die abgebrochen ist und sich selbst wieder verbinden soll. Genau das zeigt ein echtes, öffentliches Softwarepaket namens resilient-ws-client, frei einsehbar und ohne jede Kosten nutzbar."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Dieses Paket berechnet nach einem Verbindungsabbruch eine Wartezeit, die mit jedem erneuten Fehlschlag länger wird, und wartet dann genau diese Zeit, bevor es einen neuen Verbindungsversuch startet. Während dieser Wartezeit bleibt das restliche Programm voll funktionsfähig, ganz ohne Stillstand."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Nutzt dieses Paket dafür Promises und await, so wie in dieser Lektion gezeigt?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Der echte Code dieses Pakets wartet auf eine etwas ältere Art, mit einer eingebauten Zeitfunktion und einer eigenen Funktion, die nach Ablauf der Zeit aufgerufen wird, statt mit await. Das Prinzip dahinter ist aber genau dasselbe: warten, ohne das restliche Programm anzuhalten, und genau dieselbe Wartezeit ließe sich auch als Promise verpacken und mit await abwarten."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Fassen wir zusammen, was ein Promise, verpackt mit await, gegenüber der älteren Art aus reinen Rückruf-Funktionen bringt. Der Code liest sich von oben nach unten, wie eine normale, verständliche Abfolge von Schritten, statt als tief verschachtelte Funktionen ineinander."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Muss ich die ältere Art mit einer eigenen Zeitfunktion trotzdem verstehen?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Es hilft, sie einmal gesehen zu haben, weil viele bestehende Softwarepakete noch damit geschrieben sind, so wie resilient-ws-client. Für eigenen, neuen Code sind Promises mit async und await heute aber fast immer die klarere, kürzere und empfohlene Wahl, gerade für den Anfang."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Ein letzter wichtiger Punkt zu async-Funktionen, bevor es zur Zusammenfassung geht. Ruft man eine async-Funktion auf, ohne await davorzuschreiben, bekommt man sofort ein Promise zurück, nicht das eigentliche Ergebnis, weil die Funktion ja erst noch fertig werden muss."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Kann man await eigentlich überall im Code benutzen, wo man möchte?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Nein, await darf nur innerhalb einer Funktion stehen, die selbst mit async gekennzeichnet ist. Ohne dieses async davor meldet die Konsole beim Ausprobieren einen Fehler, weil await sonst nicht wüsste, welche Funktion es pausieren soll."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir eine Pizzeria mit mehreren Tischen vor. An jedem Tisch wartet eine andere Gruppe auf ihre eigene Bestellung, unabhängig von den anderen Tischen. Niemand muss auf die Pizza der Nachbargruppe warten."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Genauso kann ein Programm mehrere Promises gleichzeitig laufen lassen, jedes für sich, ohne dass eines auf das andere warten muss. Erst wenn der eigene Code ausdrücklich mehrere Ergebnisse gemeinsam braucht, wartet er auf alle zusammen."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Gibt es dafür ein eigenes Werkzeug, wenn ich auf mehrere Promises gleichzeitig warten will?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Ja, dafür gibt es eine eingebaute Funktion namens Promise.all, die mehrere Promises gleichzeitig entgegennimmt und erst fertig wird, wenn wirklich alle einzelnen Promises fertig sind. Für den Einstieg reicht es, diesen Namen einmal gehört zu haben, ohne ihn schon selbst einsetzen zu müssen."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Noch ein Punkt zur Reihenfolge mehrerer await-Anweisungen hintereinander. Stehen zwei await-Zeilen nacheinander in derselben Funktion, wartet die zweite erst, nachdem die erste vollständig fertig ist, nicht parallel dazu."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Ist das nicht langsamer, als wenn beide gleichzeitig laufen würden?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Manchmal schon, deshalb lohnt sich Promise.all genau dann, wenn zwei Wartezeiten nichts miteinander zu tun haben und genauso gut gleichzeitig laufen könnten. Hängt das zweite Ergebnis dagegen vom ersten ab, muss ohnehin nacheinander gewartet werden, ganz gleich welche Schreibweise man wählt."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Ein häufiger Anfängerfehler lohnt sich noch, kurz angesprochen zu werden. Wer await vergisst und stattdessen versucht, direkt mit dem Promise selbst weiterzurechnen, bekommt statt eines Ergebnisses das Promise-Objekt in die Hände, mit dem sich nicht direkt rechnen lässt."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Woran erkenne ich in der Konsole, dass ich versehentlich mit einem Promise statt mit dem eigentlichen Ergebnis arbeite?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Die Konsole zeigt dann meist ausdrücklich das Wort Promise als Typ des Wertes an, statt der erwarteten Zahl oder des erwarteten Textes. Das ist ein zuverlässiges Zeichen dafür, dass an dieser Stelle noch ein await fehlt."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Zum Abschluss noch ein Blick zurück auf resilient-ws-client, um den Zusammenhang mit dieser Lektion ganz greifbar zu machen. Jeder gescheiterte Verbindungsversuch erhöht dort eine Zählvariable, die in die Berechnung der nächsten Wartezeit einfließt, ganz ähnlich wie ein Ergebnis, das man mit await aus einem Promise entgegennimmt."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Wächst diese Wartezeit dann immer weiter, ohne jede Grenze?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Nein, die Berechnung begrenzt die Wartezeit nach oben, damit ein dauerhaft gestörter Server nicht zu einer endlos wachsenden Wartezeit führt. Dieses Prinzip, eine wachsende, aber begrenzte Wartezeit, lässt sich unabhängig von der genauen Schreibweise mit einer eigenen Zeitfunktion oder mit await gleichermaßen umsetzen."
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "isKeySentence": true,
+      "text": "Halten wir fest: Ein Promise ist ein Platzhalter für ein Ergebnis, das noch nicht da ist, aber später erfolgreich fertig wird oder fehlschlägt, wie der Nummernzettel aus der Pizzeria. Mit then reagiert Code auf ein fertiges Promise, mit async und await schreibt man dasselbe deutlich lesbarer, fast wie normalen Schritt-für-Schritt-Code, ohne dabei das restliche Programm zu blockieren. try...catch fängt einen Fehlschlag ab, statt dass der Code einfach abbricht. Genau dieses Zusammenspiel lässt JavaScript auf etwas Langsames warten, ohne stehenzubleiben."
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "isKeySentence": false,
+      "text": "Noch einmal die Begriffe dieser Lektion. Promise: ein Objekt, das ein Ergebnis vertritt, das noch nicht da ist, aber später entweder erfolgreich fertig wird oder fehlschlägt. then: eine Funktion eines Promise, mit der man festlegt, was passieren soll, sobald das Ergebnis fertig und erfolgreich ist. async: ein Wort vor der Definition einer Funktion, das sagt, dass diese Funktion selbst ein Promise zurückgibt und intern warten darf, ohne den Rest des Programms aufzuhalten. await: ein Wort innerhalb einer async-Funktion, das die Ausführung dieser einen Funktion pausiert, bis ein Promise fertig ist, ohne das restliche Programm zu blockieren. try...catch: ein Sprachmittel, mit dem Code einen möglichen Fehler auffängt, statt dass das Programm beim Fehler abbricht."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Kann ich then und await im selben Programm gemeinsam benutzen?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Ja, beide arbeiten mit denselben Promises, nur mit unterschiedlicher Schreibweise. In der Praxis entscheidet man sich meist für eine der beiden Schreibweisen je Funktion, weil ein Mischen innerhalb derselben Funktion den Code oft schwerer lesbar macht."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Was passiert mit dem restlichen Code einer async-Funktion, während sie bei einem await pausiert?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Er wartet einfach an dieser Stelle, bis das Promise fertig ist, und läuft danach genau dort weiter. Andere Funktionen und die restliche Seite sind davon nicht betroffen und laufen währenddessen ganz normal weiter."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Kann ein try-Block auch mehrere await-Anweisungen hintereinander enthalten?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Ja, ein try-Block kann beliebig viele await-Anweisungen enthalten. Schlägt eine davon fehl, springt der Code sofort in den zugehörigen catch-Block, alle weiteren await-Anweisungen danach im selben try-Block laufen dann nicht mehr."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Warum benutzt resilient-ws-client nicht einfach await, wenn das doch die modernere Schreibweise ist?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Der Code dieses Pakets ist bewusst so geschrieben, dass er ganz ohne Laufzeitabhängigkeiten auskommt und auch in sehr alten Umgebungen funktioniert. Die ältere Zeitfunktion mit eigener Rückruf-Funktion ist dafür ausreichend, das grundsätzliche Prinzip, warten ohne Stillstand, bleibt aber identisch zu dem, was diese Lektion mit await zeigt."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Ist ein Promise dasselbe wie das Ergebnis, das es später liefert?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Nein, ein Promise ist nur der Platzhalter, wie der Nummernzettel, nicht die fertige Pizza selbst. Erst then oder await liefern das eigentliche Ergebnis, das hinter dem Promise steckt, sobald es fertig geworden ist."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Woran erkenne ich in der Konsole, dass ich versehentlich mit dem Promise selbst statt mit dem erwarteten Ergebnis arbeite?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Die Konsole zeigt dann ausdrücklich Promise als Typ des Wertes an, statt der erwarteten Zahl, des erwarteten Textes oder des erwarteten Objekts. Das ist ein zuverlässiges Zeichen dafür, dass an dieser Stelle im Code noch ein await fehlt."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Wozu dient eine Funktion namens Promise.all, von der manchmal die Rede ist?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Promise.all nimmt mehrere Promises gleichzeitig entgegen und wird selbst erst fertig, wenn wirklich alle einzelnen Promises fertig sind. Das eignet sich für Wartezeiten, die nichts miteinander zu tun haben und deshalb gleichzeitig statt nacheinander laufen können."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Muss ich Promise.all schon in dieser Lektion selbst benutzen können?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Nein, für den Einstieg reicht es, den Namen einmal gehört zu haben und zu wissen, wofür er gedacht ist. Die Praxisaufgabe dieser Lektion braucht nur ein einzelnes, mit await abgewartetes Promise, keine gleichzeitig laufenden mehreren."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Warten zwei await-Zeilen hintereinander in derselben Funktion automatisch gleichzeitig, oder nacheinander?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Nacheinander. Die zweite await-Zeile beginnt erst zu warten, nachdem die erste vollständig fertig ist. Sollen beide gleichzeitig laufen, braucht es eine eigene Konstruktion wie Promise.all, das automatisch passiert es mit zwei einfachen await-Zeilen hintereinander nicht."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Warum wächst die Wartezeit bei resilient-ws-client mit jedem Fehlschlag, statt immer gleich lang zu bleiben?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Damit viele Geräte, die nach demselben Ausfall gleichzeitig neu verbinden wollen, den Server nicht sofort erneut mit einer Welle gleichzeitiger Versuche überlasten. Eine wachsende, aber nach oben begrenzte Wartezeit verteilt diese Versuche über die Zeit, statt sie alle im selben Moment zu bündeln."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Kann eine async-Funktion auch ganz ohne await sinnvoll sein?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Ja, das kommt vor, zum Beispiel wenn eine Funktion aus anderen Gründen als Promise behandelt werden soll, obwohl sie intern gar nicht wartet. In der Praxis ist das seltener als der übliche Fall mit mindestens einem await darin, aber technisch vollkommen erlaubt."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Was ist der Unterschied zwischen einem Fehler, den try...catch abfängt, und einem echten Absturz der Webseite?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Ein von try...catch abgefangener Fehler bleibt kontrolliert: der catch-Block entscheidet, was als Nächstes passiert, während die restliche Seite normal weiterläuft. Ein echter Absturz der ganzen Seite ist in modernen Browsern sehr selten und entsteht praktisch nie allein durch ein fehlgeschlagenes Promise."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Lohnt es sich, jede einzelne await-Zeile in ein eigenes try...catch zu packen?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Nicht zwingend, oft reicht ein gemeinsamer try-Block um mehrere zusammengehörige await-Zeilen, mit einem einzigen catch-Block danach für alle gemeinsam. Wichtig ist nur, dass jede await-Zeile, bei der ein Fehlschlag ernsthaft möglich ist, überhaupt in einem try-Block steht."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Gibt es einen Unterschied zwischen einem Promise, das erfolgreich fertig wird, und einem, das fehlschlägt, schon an seinem äußeren Erscheinungsbild in der Konsole?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Ja, ein erfolgreiches Promise zeigt in der Konsole meist ein Feld mit dem Ergebnis selbst, ein fehlgeschlagenes Promise zeigt stattdessen ein Feld mit der Fehlermeldung. Diesen Unterschied nutzt man beim Fehlersuchen in der Konsole, um schnell zu erkennen, in welchem der beiden Zustände ein bestimmtes Promise gerade steckt."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Kann eine Praxisaufgabe mit await auch ganz ohne Internetverbindung ausprobiert werden?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Ja, die Praxisaufgabe dieser Lektion braucht kein Internet, weil sie nur mit der eingebauten Zeitfunktion setTimeout wartet, nicht mit einer echten Netzwerkanfrage. Erst die nächste Lektion mit der Fetch-API bringt eine echte Anfrage ins Internet ins Spiel."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Warum lohnt es sich, ein selbst gebautes Promise mit setTimeout zu üben, wenn die nächste Lektion ohnehin ein fertiges Promise von fetch liefert?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Weil man am selbst gebauten, einfachen Beispiel genau sieht, wie ein Promise von innen entsteht, ohne von den Besonderheiten einer echten Netzwerkanfrage abgelenkt zu werden. Wer dieses kleine Muster einmal verstanden hat, erkennt es in jedem fertigen Promise wieder, egal woher es stammt. Das gilt für eine Zeitfunktion genauso wie für eine Netzwerkanfrage oder ein ganz anderes Softwarepaket."
+    }
+  ],
+  "practiceExample": {
+    "text": "Im Repository repo-resilient-ws-client berechnet die Funktion computeBackoffMs, wie lange nach einem Verbindungsabbruch bis zum nächsten Verbindungsversuch gewartet werden soll, mit jedem Fehlschlag länger, damit nicht sofort wieder ein überlasteter Server angesprochen wird. Die Funktion scheduleReconnect nutzt diese Wartezeit mit der eingebauten Zeitfunktion setTimeout, um nach genau dieser Zeit einen neuen Verbindungsversuch zu starten, ohne den Rest des Programms währenddessen anzuhalten. Genau dieses Prinzip, warten ohne Stillstand, ist dasselbe, das async und await mit Promises umsetzen, nur mit einer älteren, abhängigkeitsfreien Schreibweise.",
+    "repoNote": "repo-resilient-ws-client",
+    "location": "src/index.ts, Zeilen 47 bis 53 (Funktion computeBackoffMs) und Zeilen 176 bis 185 (Funktion scheduleReconnect mit setTimeout)"
+  },
+  "quiz": [
+    {
+      "question": "Welches Bild passt am besten zu einem Promise?",
+      "area": "Promise",
+      "options": [
+        {
+          "text": "Ein Nummernzettel aus einer Pizzeria, der ein Versprechen auf ein späteres Ergebnis ist, nicht das Ergebnis selbst.",
+          "isCorrect": true,
+          "explanation": "Genau dieses Bild nutzt die Lektion, um ein Promise verständlich zu machen."
+        },
+        {
+          "text": "Eine fertige Pizza, die schon auf dem Tisch liegt, eine Vorstellung, die naheliegt, aber nicht zum eigentlichen Zweck eines Promise passt.",
+          "isCorrect": false,
+          "explanation": "Ein Promise ist gerade nicht das fertige Ergebnis, sondern ein Platzhalter dafür."
+        },
+        {
+          "text": "Eine Speisekarte, aus der man auswählt.",
+          "isCorrect": false,
+          "explanation": "Eine Speisekarte zeigt Möglichkeiten, kein Promise vertritt aber ein konkretes, künftiges Ergebnis."
+        },
+        {
+          "text": "Ein Ofen, der die Pizza backt.",
+          "isCorrect": false,
+          "explanation": "Der Ofen entspricht eher dem Vorgang selbst, das Promise ist der Zettel, der auf das Ergebnis dieses Vorgangs verweist."
+        }
+      ]
+    },
+    {
+      "question": "Was vertritt ein Promise in JavaScript?",
+      "area": "Promise",
+      "options": [
+        {
+          "text": "Ein Ergebnis, das noch nicht da ist, aber später erfolgreich fertig wird oder fehlschlägt.",
+          "isCorrect": true,
+          "explanation": "Genau das ist die Definition von Promise aus dieser Lektion."
+        },
+        {
+          "text": "Eine feste Zahl, die sich nie mehr verändert, eine Vermutung, die zu starr ist, weil ein Promise sich gerade über die Zeit hinweg verändert.",
+          "isCorrect": false,
+          "explanation": "Ein Promise beschreibt einen zeitlichen Ablauf, keine unveränderliche Zahl."
+        },
+        {
+          "text": "Eine externe Skriptdatei, die noch geladen werden muss.",
+          "isCorrect": false,
+          "explanation": "Eine externe Skriptdatei ist ein anderes Konzept aus einer früheren Lektion, kein Promise."
+        },
+        {
+          "text": "Ein HTML-Element, das später auf der Seite erscheint.",
+          "isCorrect": false,
+          "explanation": "Ein Promise ist kein sichtbares Element, sondern ein Objekt für ein späteres Ergebnis."
+        }
+      ]
+    },
+    {
+      "question": "Wozu dient die Funktion then an einem Promise?",
+      "area": "then",
+      "options": [
+        {
+          "text": "Sie legt fest, welche Funktion laufen soll, sobald das Promise erfolgreich fertig ist.",
+          "isCorrect": true,
+          "explanation": "Genau das leistet then, wie das Beispiel mit dem fertigen Ergebnis zeigt."
+        },
+        {
+          "text": "Sie erzeugt ein völlig neues Promise ohne jeden Bezug zum ursprünglichen.",
+          "isCorrect": false,
+          "explanation": "then arbeitet direkt mit dem Ergebnis desselben Promise, nicht mit einem unabhängigen neuen."
+        },
+        {
+          "text": "Sie bricht das Promise sofort ab.",
+          "isCorrect": false,
+          "explanation": "then reagiert auf ein erfolgreiches Ergebnis, es bricht nichts ab."
+        },
+        {
+          "text": "Sie zeigt automatisch eine Fehlermeldung in der Konsole an.",
+          "isCorrect": false,
+          "explanation": "then reagiert auf Erfolg, für Fehler gibt es andere Mittel wie catch."
+        }
+      ]
+    },
+    {
+      "question": "Was bewirkt das Wort async vor einer Funktion?",
+      "area": "async",
+      "options": [
+        {
+          "text": "Die Funktion gibt selbst ein Promise zurück und darf intern mit await warten.",
+          "isCorrect": true,
+          "explanation": "Genau das erklärt die Lektion zum Wort async."
+        },
+        {
+          "text": "Die Funktion läuft ab sofort schneller als jede andere Funktion.",
+          "isCorrect": false,
+          "explanation": "async ändert nicht die Geschwindigkeit, sondern erlaubt internes Warten mit await."
+        },
+        {
+          "text": "Die Funktion kann nicht mehr mit einer Variable ein Ergebnis zurückgeben, eine Verwechslung, denn eine async-Funktion liefert weiterhin ein Ergebnis, nur eingepackt in ein Promise, nicht schneller oder langsamer als sonst.",
+          "isCorrect": false,
+          "explanation": "Eine async-Funktion kann weiterhin ein Ergebnis liefern, nur eingepackt in ein Promise."
+        },
+        {
+          "text": "Die Funktion wird automatisch beim Laden der Seite aufgerufen.",
+          "isCorrect": false,
+          "explanation": "async allein löst keinen automatischen Aufruf aus, die Funktion muss weiterhin selbst aufgerufen werden."
+        }
+      ]
+    },
+    {
+      "question": "Was passiert bei einem await innerhalb einer async-Funktion?",
+      "area": "await",
+      "options": [
+        {
+          "text": "Nur diese eine Funktion pausiert, bis das Promise fertig ist, der Rest des Programms läuft weiter.",
+          "isCorrect": true,
+          "explanation": "Genau dieser Unterschied zu echtem Stillstand ist der zentrale Punkt der Lektion."
+        },
+        {
+          "text": "Die ganze Webseite friert ein, bis das Promise fertig ist.",
+          "isCorrect": false,
+          "explanation": "Genau das soll await gerade verhindern, nur die eine Funktion pausiert."
+        },
+        {
+          "text": "Das Promise wird sofort abgebrochen.",
+          "isCorrect": false,
+          "explanation": "await wartet auf das Promise, es bricht es nicht ab."
+        },
+        {
+          "text": "Alle anderen Funktionen der Seite werden ebenfalls automatisch pausiert, eine Vermutung, die dem eigentlichen Sinn von await genau entgegensteht, denn andere Funktionen laufen währenddessen unabhängig weiter.",
+          "isCorrect": false,
+          "explanation": "Andere Funktionen laufen unabhängig weiter, nur die eine async-Funktion mit await pausiert."
+        }
+      ]
+    },
+    {
+      "question": "Darf await außerhalb einer async-Funktion stehen?",
+      "area": "await",
+      "options": [
+        {
+          "text": "Nein, await braucht eine umgebende async-Funktion, sonst meldet die Konsole einen Fehler.",
+          "isCorrect": true,
+          "explanation": "Genau das erklärt die Lektion als feste Regel für await."
+        },
+        {
+          "text": "Ja, await funktioniert überall im Code gleich gut.",
+          "isCorrect": false,
+          "explanation": "await ist an eine umgebende async-Funktion gebunden, sonst funktioniert es nicht."
+        },
+        {
+          "text": "Ja, aber nur in der Konsole, nicht in einer Datei.",
+          "isCorrect": false,
+          "explanation": "Der Unterschied liegt nicht zwischen Konsole und Datei, sondern zwischen async- und normaler Funktion."
+        },
+        {
+          "text": "Ja, solange vorher ein Promise erzeugt wurde.",
+          "isCorrect": false,
+          "explanation": "Ein vorhandenes Promise reicht nicht, await bleibt an eine async-Funktion gebunden."
+        }
+      ]
+    },
+    {
+      "question": "Wozu dient try...catch im Zusammenhang mit await?",
+      "area": "try...catch",
+      "options": [
+        {
+          "text": "Es fängt einen Fehlschlag des abgewarteten Promise ab, statt dass der Code einfach abbricht.",
+          "isCorrect": true,
+          "explanation": "Genau das leistet try...catch, wie das Beispiel mit der fehlgeschlagenen Pizzabestellung zeigt."
+        },
+        {
+          "text": "Es beschleunigt das Warten auf ein Promise.",
+          "isCorrect": false,
+          "explanation": "try...catch verändert die Wartezeit nicht, es reagiert nur auf einen möglichen Fehler."
+        },
+        {
+          "text": "Es verwandelt ein fehlgeschlagenes Promise automatisch in ein erfolgreiches, eine Vorstellung, die zu weit geht, denn try...catch reagiert nur auf einen Fehlschlag, es verändert das Ergebnis selbst nicht.",
+          "isCorrect": false,
+          "explanation": "Ein Fehlschlag bleibt ein Fehlschlag, try...catch reagiert nur sinnvoll darauf."
+        },
+        {
+          "text": "Es ersetzt die Funktion then vollständig in jedem Fall.",
+          "isCorrect": false,
+          "explanation": "then bleibt eine eigenständige, gültige Schreibweise, try...catch ist die Ergänzung für await."
+        }
+      ]
+    },
+    {
+      "question": "Was passiert, wenn ein await benutzt wird, aber kein try...catch drumherum steht, und das Promise fehlschlägt?",
+      "area": "try...catch",
+      "options": [
+        {
+          "text": "Die Konsole meldet einen unbehandelten Fehler, und der restliche Code der Funktion läuft oft nicht weiter.",
+          "isCorrect": true,
+          "explanation": "Genau diese Folge beschreibt die Lektion für einen fehlenden Fehlerfang."
+        },
+        {
+          "text": "JavaScript ignoriert den Fehler automatisch und macht normal weiter, eine Annahme, die dem tatsächlichen Verhalten von JavaScript bei einem unbehandelten Fehlschlag widerspricht.",
+          "isCorrect": false,
+          "explanation": "Ohne try...catch bleibt ein Fehlschlag nicht folgenlos, die Konsole meldet ihn."
+        },
+        {
+          "text": "Die Seite lädt automatisch neu.",
+          "isCorrect": false,
+          "explanation": "Ein fehlgeschlagenes Promise löst kein automatisches Neuladen der Seite aus."
+        },
+        {
+          "text": "Das Promise versucht automatisch, sich selbst zu wiederholen.",
+          "isCorrect": false,
+          "explanation": "Ein Promise wiederholt sich nicht von selbst, das müsste eigener Code übernehmen."
+        }
+      ]
+    },
+    {
+      "question": "Was zeigt das Praxisbeispiel aus resilient-ws-client zum Thema Warten?",
+      "area": "Praxisbeispiel",
+      "options": [
+        {
+          "text": "Eine berechnete Wartezeit vor einem neuen Verbindungsversuch, umgesetzt mit einer eingebauten Zeitfunktion statt mit await.",
+          "isCorrect": true,
+          "explanation": "Genau das beschreibt die Lektion zu computeBackoffMs und scheduleReconnect."
+        },
+        {
+          "text": "Eine Funktion, die sofort und ohne jede Wartezeit eine neue Verbindung aufbaut.",
+          "isCorrect": false,
+          "explanation": "Das Paket wartet bewusst eine berechnete Zeit, bevor es erneut verbindet, nicht sofort."
+        },
+        {
+          "text": "Eine Funktion, die ausschließlich mit async und await geschrieben ist.",
+          "isCorrect": false,
+          "explanation": "Der reale Code nutzt eine ältere Zeitfunktion, nicht async und await, auch wenn das Prinzip dasselbe ist."
+        },
+        {
+          "text": "Eine Funktion, die das Programm während der Wartezeit vollständig anhält, ein Verhalten, das dem beschriebenen Zweck des Pakets genau widerspricht, denn genau das soll die berechnete Wartezeit verhindern.",
+          "isCorrect": false,
+          "explanation": "Genau das vermeidet das Paket, das restliche Programm bleibt während der Wartezeit funktionsfähig."
+        }
+      ]
+    },
+    {
+      "question": "Warum nutzt resilient-ws-client laut der Lektion keine await-Schreibweise, obwohl das Prinzip dasselbe ist?",
+      "area": "Praxisbeispiel",
+      "options": [
+        {
+          "text": "Weil das Paket bewusst ohne Laufzeitabhängigkeiten auskommen und auch in sehr alten Umgebungen laufen soll.",
+          "isCorrect": true,
+          "explanation": "Genau diesen Grund nennt die Lektion für die Wahl der älteren Schreibweise."
+        },
+        {
+          "text": "Weil await grundsätzlich fehlerhaft ist und nicht verlässlich funktioniert.",
+          "isCorrect": false,
+          "explanation": "await funktioniert zuverlässig, der Grund liegt an der Zielumgebung des Pakets, nicht an einem Fehler von await."
+        },
+        {
+          "text": "Weil eine Wartezeit mit await technisch gar nicht möglich ist, eine Annahme, die dem im Beispiel gezeigten Code widerspricht, der ausdrücklich die eingebaute Zeitfunktion setTimeout nutzt.",
+          "isCorrect": false,
+          "explanation": "Eine Wartezeit lässt sich auch mit einem Promise und await umsetzen, die Lektion nennt das ausdrücklich."
+        },
+        {
+          "text": "Weil das Paket überhaupt keine Zeitfunktion benutzt.",
+          "isCorrect": false,
+          "explanation": "Das Paket nutzt ausdrücklich die eingebaute Zeitfunktion setTimeout, um zu warten."
+        }
+      ]
+    },
+    {
+      "question": "Welche Aussage über den Unterschied zwischen then-Ketten und async/await stimmt?",
+      "area": "async",
+      "options": [
+        {
+          "text": "async und await lassen denselben Ablauf oft lesbarer wirken, weil er sich wie eine normale Schrittfolge liest.",
+          "isCorrect": true,
+          "explanation": "Genau diesen Vorteil beschreibt die Lektion mit dem Pizza-App-Bild."
+        },
+        {
+          "text": "then-Ketten und async/await arbeiten mit völlig unterschiedlichen, unvereinbaren Objekten.",
+          "isCorrect": false,
+          "explanation": "Beide arbeiten mit denselben Promises, nur mit unterschiedlicher Schreibweise."
+        },
+        {
+          "text": "async/await funktioniert nur bei Promises, die niemals fehlschlagen können.",
+          "isCorrect": false,
+          "explanation": "Auch mit async/await können Promises fehlschlagen, dafür gibt es try...catch."
+        },
+        {
+          "text": "then-Ketten sind seit dieser Lektion vollständig verboten.",
+          "isCorrect": false,
+          "explanation": "then bleibt eine gültige, weiterhin benutzbare Schreibweise, sie ist nicht verboten."
+        }
+      ]
+    },
+    {
+      "question": "Ruft man eine async-Funktion auf, ohne await davorzuschreiben, was bekommt man zurück?",
+      "area": "async",
+      "options": [
+        {
+          "text": "Sofort ein Promise, nicht das eigentliche, fertige Ergebnis.",
+          "isCorrect": true,
+          "explanation": "Genau das erklärt die Lektion als letzten wichtigen Punkt zu async-Funktionen."
+        },
+        {
+          "text": "Sofort das fertige Ergebnis, ganz ohne jede Wartezeit.",
+          "isCorrect": false,
+          "explanation": "Ohne await bekommt man das Promise selbst, nicht schon das fertige Ergebnis dahinter."
+        },
+        {
+          "text": "Einen sofortigen Fehler, weil await zwingend nötig ist.",
+          "isCorrect": false,
+          "explanation": "Der Aufruf selbst erzeugt keinen Fehler, er liefert nur ein Promise statt des fertigen Ergebnisses."
+        },
+        {
+          "text": "Nichts, der Aufruf wird komplett ignoriert.",
+          "isCorrect": false,
+          "explanation": "Der Aufruf läuft und liefert ein Promise zurück, er wird nicht ignoriert."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Schreibe eine async-Funktion namens warteKurz, die mit einem selbst erzeugten Promise und der eingebauten Zeitfunktion setTimeout zwei Sekunden wartet, bevor sie mit console.log eine Nachricht ausgibt. Rufe die Funktion auf und schreibe direkt danach eine weitere console.log-Zeile, die sofort erscheinen soll, um zu prüfen, dass der Rest des Codes nicht blockiert wird.",
+    "expectation": "Die zweite console.log-Zeile erscheint sofort in der Konsole, die Nachricht aus warteKurz erscheint erst zwei Sekunden später, obwohl sie im Code weiter oben steht.",
+    "checklist": [
+      "eine async-Funktion namens warteKurz geschrieben",
+      "darin ein Promise mit setTimeout für zwei Sekunden Wartezeit erzeugt und mit await abgewartet",
+      "nach dem Aufruf der Funktion sofort eine zweite console.log-Zeile geschrieben",
+      "in der Konsole geprüft, dass die zweite Zeile vor der ersten erscheint",
+      "eine try...catch-Umschließung ergänzt, auch wenn hier kein Fehler erwartet wird"
+    ]
+  },
+  "audio": {
+    "file": "M02-03-04.mp3",
+    "durationSeconds": 1000,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Kann ich then und await im selben Programm gemeinsam benutzen?",
+      "answer": "Ja, beide arbeiten mit denselben Promises, nur mit unterschiedlicher Schreibweise. In der Praxis entscheidet man sich meist für eine der beiden Schreibweisen je Funktion, weil ein Mischen innerhalb derselben Funktion den Code oft schwerer lesbar macht."
+    },
+    {
+      "question": "Was passiert mit dem restlichen Code einer async-Funktion, während sie bei einem await pausiert?",
+      "answer": "Er wartet einfach an dieser Stelle, bis das Promise fertig ist, und läuft danach genau dort weiter. Andere Funktionen und die restliche Seite sind davon nicht betroffen und laufen währenddessen ganz normal weiter."
+    },
+    {
+      "question": "Kann ein try-Block auch mehrere await-Anweisungen hintereinander enthalten?",
+      "answer": "Ja, ein try-Block kann beliebig viele await-Anweisungen enthalten. Schlägt eine davon fehl, springt der Code sofort in den zugehörigen catch-Block, alle weiteren await-Anweisungen danach im selben try-Block laufen dann nicht mehr."
+    },
+    {
+      "question": "Warum benutzt resilient-ws-client nicht einfach await, wenn das doch die modernere Schreibweise ist?",
+      "answer": "Der Code dieses Pakets ist bewusst so geschrieben, dass er ganz ohne Laufzeitabhängigkeiten auskommt und auch in sehr alten Umgebungen funktioniert. Die ältere Zeitfunktion mit eigener Rückruf-Funktion ist dafür ausreichend, das grundsätzliche Prinzip, warten ohne Stillstand, bleibt aber identisch zu dem, was diese Lektion mit await zeigt."
+    },
+    {
+      "question": "Ist ein Promise dasselbe wie das Ergebnis, das es später liefert?",
+      "answer": "Nein, ein Promise ist nur der Platzhalter, wie der Nummernzettel, nicht die fertige Pizza selbst. Erst then oder await liefern das eigentliche Ergebnis, das hinter dem Promise steckt, sobald es fertig geworden ist."
+    },
+    {
+      "question": "Woran erkenne ich in der Konsole, dass ich versehentlich mit dem Promise selbst statt mit dem erwarteten Ergebnis arbeite?",
+      "answer": "Die Konsole zeigt dann ausdrücklich Promise als Typ des Wertes an, statt der erwarteten Zahl, des erwarteten Textes oder des erwarteten Objekts. Das ist ein zuverlässiges Zeichen dafür, dass an dieser Stelle im Code noch ein await fehlt."
+    },
+    {
+      "question": "Wozu dient eine Funktion namens Promise.all, von der manchmal die Rede ist?",
+      "answer": "Promise.all nimmt mehrere Promises gleichzeitig entgegen und wird selbst erst fertig, wenn wirklich alle einzelnen Promises fertig sind. Das eignet sich für Wartezeiten, die nichts miteinander zu tun haben und deshalb gleichzeitig statt nacheinander laufen können."
+    },
+    {
+      "question": "Muss ich Promise.all schon in dieser Lektion selbst benutzen können?",
+      "answer": "Nein, für den Einstieg reicht es, den Namen einmal gehört zu haben und zu wissen, wofür er gedacht ist. Die Praxisaufgabe dieser Lektion braucht nur ein einzelnes, mit await abgewartetes Promise, keine gleichzeitig laufenden mehreren."
+    },
+    {
+      "question": "Warten zwei await-Zeilen hintereinander in derselben Funktion automatisch gleichzeitig, oder nacheinander?",
+      "answer": "Nacheinander. Die zweite await-Zeile beginnt erst zu warten, nachdem die erste vollständig fertig ist. Sollen beide gleichzeitig laufen, braucht es eine eigene Konstruktion wie Promise.all, das automatisch passiert es mit zwei einfachen await-Zeilen hintereinander nicht."
+    },
+    {
+      "question": "Warum wächst die Wartezeit bei resilient-ws-client mit jedem Fehlschlag, statt immer gleich lang zu bleiben?",
+      "answer": "Damit viele Geräte, die nach demselben Ausfall gleichzeitig neu verbinden wollen, den Server nicht sofort erneut mit einer Welle gleichzeitiger Versuche überlasten. Eine wachsende, aber nach oben begrenzte Wartezeit verteilt diese Versuche über die Zeit, statt sie alle im selben Moment zu bündeln."
+    },
+    {
+      "question": "Kann eine async-Funktion auch ganz ohne await sinnvoll sein?",
+      "answer": "Ja, das kommt vor, zum Beispiel wenn eine Funktion aus anderen Gründen als Promise behandelt werden soll, obwohl sie intern gar nicht wartet. In der Praxis ist das seltener als der übliche Fall mit mindestens einem await darin, aber technisch vollkommen erlaubt."
+    },
+    {
+      "question": "Was ist der Unterschied zwischen einem Fehler, den try...catch abfängt, und einem echten Absturz der Webseite?",
+      "answer": "Ein von try...catch abgefangener Fehler bleibt kontrolliert: der catch-Block entscheidet, was als Nächstes passiert, während die restliche Seite normal weiterläuft. Ein echter Absturz der ganzen Seite ist in modernen Browsern sehr selten und entsteht praktisch nie allein durch ein fehlgeschlagenes Promise."
+    },
+    {
+      "question": "Lohnt es sich, jede einzelne await-Zeile in ein eigenes try...catch zu packen?",
+      "answer": "Nicht zwingend, oft reicht ein gemeinsamer try-Block um mehrere zusammengehörige await-Zeilen, mit einem einzigen catch-Block danach für alle gemeinsam. Wichtig ist nur, dass jede await-Zeile, bei der ein Fehlschlag ernsthaft möglich ist, überhaupt in einem try-Block steht."
+    },
+    {
+      "question": "Gibt es einen Unterschied zwischen einem Promise, das erfolgreich fertig wird, und einem, das fehlschlägt, schon an seinem äußeren Erscheinungsbild in der Konsole?",
+      "answer": "Ja, ein erfolgreiches Promise zeigt in der Konsole meist ein Feld mit dem Ergebnis selbst, ein fehlgeschlagenes Promise zeigt stattdessen ein Feld mit der Fehlermeldung. Diesen Unterschied nutzt man beim Fehlersuchen in der Konsole, um schnell zu erkennen, in welchem der beiden Zustände ein bestimmtes Promise gerade steckt."
+    },
+    {
+      "question": "Kann eine Praxisaufgabe mit await auch ganz ohne Internetverbindung ausprobiert werden?",
+      "answer": "Ja, die Praxisaufgabe dieser Lektion braucht kein Internet, weil sie nur mit der eingebauten Zeitfunktion setTimeout wartet, nicht mit einer echten Netzwerkanfrage. Erst die nächste Lektion mit der Fetch-API bringt eine echte Anfrage ins Internet ins Spiel."
+    },
+    {
+      "question": "Warum lohnt es sich, ein selbst gebautes Promise mit setTimeout zu üben, wenn die nächste Lektion ohnehin ein fertiges Promise von fetch liefert?",
+      "answer": "Weil man am selbst gebauten, einfachen Beispiel genau sieht, wie ein Promise von innen entsteht, ohne von den Besonderheiten einer echten Netzwerkanfrage abgelenkt zu werden. Wer dieses kleine Muster einmal verstanden hat, erkennt es in jedem fertigen Promise wieder, egal woher es stammt. Das gilt für eine Zeitfunktion genauso wie für eine Netzwerkanfrage oder ein ganz anderes Softwarepaket."
+    }
+  ]
+}

@@ -1,0 +1,919 @@
+{
+  "id": "M02-03-05",
+  "title": "Die Fetch-API: Daten aus dem Internet holen",
+  "durationMinutes": 24,
+  "prerequisites": [
+    "M02-03-04"
+  ],
+  "terms": [
+    {
+      "term": "JSON",
+      "definition": "ein weitverbreitetes Textformat für strukturierte Daten, das fast jede Programmiersprache lesen und schreiben kann."
+    },
+    {
+      "term": "Timeout",
+      "definition": "eine festgelegte Höchstwartezeit, nach der eine Anfrage abgebrochen wird, wenn bis dahin keine Antwort gekommen ist."
+    },
+    {
+      "term": "AbortController",
+      "definition": "ein eingebautes Werkzeug des Browsers, mit dem sich eine laufende fetch-Anfrage von außen abbrechen lässt."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir vor, du bestellst Ersatzteile bei einem entfernten Lieferanten. Du schickst eine Bestellung raus, wartest, und irgendwann kommt entweder das Paket oder eine Nachricht, dass etwas nicht geklappt hat."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Genau das macht eine Webseite, wenn sie Daten aus dem Internet braucht, die nicht schon auf der Seite selbst stehen, etwa aktuelles Wetter, Preise oder Nachrichten. Sie schickt eine Anfrage an einen Server und wartet auf die Antwort."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Ist das genau dasselbe wie das Laden der ganzen Webseite selbst, das wir schon aus M01-05 kennen?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Ähnlich, aber diesmal fragt nicht der Browser die ganze Seite an, sondern JavaScript-Code fragt gezielt einzelne Daten an, während die Seite schon längst da ist. Genau dafür gibt es ein eigenes Werkzeug."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Dieses Werkzeug heißt fetch. fetch ist eine eingebaute Funktion des Browsers, die eine Anfrage an eine Webadresse schickt und ein Promise mit der Antwort zurückgibt, genau das Promise, das du aus der letzten Lektion schon kennst."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Ein Beispiel: const antwort gleich await fetch Klammer auf Anführungszeichen https doppelpunkt Schrägstrich Schrägstrich jsonplaceholder Punkt typicode Punkt com Schrägstrich todos Schrägstrich eins Anführungszeichen Klammer zu. Diese Zeile schickt die Bestellung raus und wartet mit await, bis eine Antwort da ist, ohne die restliche Seite währenddessen anzuhalten."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Was genau steckt eigentlich in dieser ersten Antwort drin?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Die Antwort selbst ist erst einmal nur eine Art Umschlag mit Kopfzeilen und einem Statuscode, wie du ihn schon kennst. Der eigentliche Inhalt, die Daten selbst, muss noch einmal extra ausgepackt werden."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir ein Bestellformular vor, das in einer einzigen, weltweit verstandenen Sprache geschrieben ist, egal aus welchem Land der Lieferant kommt oder welche Sprache er sonst spricht."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Damit Server, die in ganz unterschiedlichen Programmiersprachen geschrieben sind, sich trotzdem verstehen, einigen sie sich meist auf ein gemeinsames Textformat für ihre Daten."
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Dieses Format heißt JSON. J, S, O, N. JSON ist ein weitverbreitetes Textformat für strukturierte Daten, das fast jede Programmiersprache lesen und schreiben kann, egal ob dahinter JavaScript, Python oder etwas ganz anderes steckt."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Ein Beispiel: const daten gleich await antwort Punkt json Klammer auf Klammer zu. Diese Zeile packt den Inhalt der Antwort als JSON aus und liefert dir ein ganz normales JavaScript-Objekt, mit dem du wie gewohnt weiterarbeiten kannst, etwa mit einem Punkt auf einzelne Felder zugreifen."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Warum steht da noch ein zweites await, obwohl ich doch schon auf fetch gewartet habe?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Weil auch das Auspacken der Antwort noch einmal etwas Zeit braucht und deshalb selbst ein eigenes Promise zurückgibt. Zwei await-Zeilen hintereinander sind hier völlig normal: erst warten auf die Antwort selbst, dann warten auf das Auspacken ihres Inhalts."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir eine Postsendung vor, die zwar bei dir ankommt, aber mit einem Zettel darauf: Empfänger unbekannt, zurück an Absender. Die Sendung ist angekommen, aber trotzdem kein Erfolg."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Genau das kann bei fetch passieren. Das Promise wird auch dann erfolgreich fertig, wenn der Server mit einem Fehler-Statuscode wie 404 oder 500 antwortet, aus M01-05 schon bekannt. fetch selbst sieht darin keinen eigenen Fehler."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Muss ich diesen Statuscode dann also selbst noch extra prüfen?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Ja, unbedingt. Ohne diese Prüfung könnte dein Code eine Fehlerseite versehentlich wie echte, gültige Daten behandeln und damit weiterrechnen, was zu verwirrenden Folgefehlern führt."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Ein Beispiel: if Klammer auf Ausrufezeichen antwort Punkt ok Klammer zu geschweifte Klammer auf, throw new Error Klammer auf Anführungszeichen Fehler Anführungszeichen Klammer zu, geschweifte Klammer zu. Das Feld ok ist nur dann wahr, wenn der Statuscode aus der Erfolgsfamilie stammt, bei jedem anderen Statuscode bricht dieser Code bewusst mit einem eigenen Fehler ab."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Fängt dann mein try...catch von der letzten Lektion auch diesen selbst geworfenen Fehler zuverlässig auf?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Ja, genau dafür ist try...catch gedacht. Steht dieser ganze Code in einem try-Block, landet ein selbst geworfener Fehler ebenso im catch-Block wie ein Fehler, der direkt beim Warten mit await entstanden ist."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir ein Telefongespräch vor, bei dem am anderen Ende niemand abnimmt. Irgendwann legst du auf, statt für immer mit dem Hörer am Ohr dazustehen."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Ein fetch-Aufruf kann genauso ewig auf eine Antwort warten, wenn der angefragte Server nie antwortet, etwa weil er überlastet ist oder eine Firewall die Verbindung stillschweigend offen hält. Ohne eigenes Zutun wartet der Code dann unbegrenzt lange."
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Dagegen hilft ein Timeout. Ein Timeout ist eine festgelegte Höchstwartezeit, nach der eine Anfrage abgebrochen wird, wenn bis dahin keine Antwort gekommen ist, so wie das Auflegen nach einer gewissen Zeit ohne Antwort am Telefon."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Ein Timeout von fünf Sekunden bei einer fetch-Anfrage bedeutet zum Beispiel Folgendes. Kommt innerhalb von fünf Sekunden keine Antwort, bricht der Code die Anfrage von selbst ab, statt weiter beliebig lange auf eine Antwort zu warten, die vielleicht niemals kommt."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Bringt fetch so einen Timeout also schon ganz von sich aus mit?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Nein, das ist ein wichtiger und oft übersehener Punkt: fetch allein wartet ohne jede eigene Höchstgrenze. Für einen Timeout braucht es ein eigenes, zusätzliches Werkzeug."
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Dieses Werkzeug heißt AbortController. Ein AbortController ist ein eingebautes Werkzeug des Browsers, mit dem sich eine laufende fetch-Anfrage von außen abbrechen lässt, etwa nachdem eine mit setTimeout gemessene Zeit abgelaufen ist."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Ein Beispiel: const controller gleich new AbortController Klammer auf Klammer zu, dann setTimeout Klammer auf Funktion mit controller Punkt abort Klammer auf Klammer zu Komma fünftausend Klammer zu. Diese beiden Zeilen brechen die Anfrage automatisch nach fünf Sekunden ab, wenn bis dahin keine Antwort da ist."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Wie weiß fetch selbst denn genau, dass es diesen Abbruch überhaupt beachten soll?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Man übergibt fetch als zweite Angabe ein eigenes Objekt mit dem Feld signal, das auf controller Punkt signal zeigt. Genau darüber erfährt fetch vom Abbruch und stoppt die laufende Anfrage vorzeitig, statt weiter auf eine niemals kommende Antwort zu warten."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Ein echter, dokumentierter Vorfall zeigt, warum ein Timeout allein manchmal trotzdem nicht reicht. In der App LexiPulse führte ein fetch-Aufruf ohne jeden Timeout dazu, dass ein hängender Server die ganze Ladeanzeige unbegrenzt blockierte."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Hat ein einfacher Timeout dieses Problem dann vollständig gelöst?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Nur teilweise. Ein Timeout von fünfzehn Sekunden begrenzte zwar die technische Wartezeit, aber ein App-Prüfer sah trotzdem eine Ladeanzeige ohne jede Bedienmöglichkeit, was aus seiner Sicht weiterhin wie ein Aufhängen wirkte. Erst ein sichtbarer Abbrechen-Knopf, der denselben AbortController von Hand auslöst, behob das wirklich."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Das zeigt eine wichtige Lehre für eigenen Code: Ein technischer Timeout allein reicht oft nicht, wenn eine Person während der Wartezeit gar nichts tun kann. Ein sichtbarer Weg zum Abbrechen gehört für echte Nutzerinnen und Nutzer dazu."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Nutzt dieser Abbrechen-Knopf technisch denselben AbortController wie der automatische Timeout?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Ja, genau denselben. Ein Klick auf den Knopf ruft einfach dieselbe abort-Funktion des Controllers auf, die sonst automatisch nach Ablauf der Zeit aufgerufen wird, nur eben von Hand und sofort, statt nach einer festen Wartezeit."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Fassen wir den ganzen Ablauf einer sicheren Fetch-Anfrage noch einmal zusammen. Erst fetch aufrufen und mit await auf die Antwort warten, dann mit response.ok den Statuscode prüfen, dann mit einem zweiten await den Inhalt als JSON auspacken, und das Ganze am besten in einem try-Block mit passendem catch-Block."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Und ein Timeout mit AbortController gehört von Anfang an ebenfalls dazu?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Für alles, was eine echte Person benutzt, ja, sonst bleibt ein hängender Server ein reales Risiko für eine eingefrorene Seite. Genau diese Bausteine zusammen machen aus einer einzelnen fetch-Zeile eine wirklich verlässliche Anfrage."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir eine Bestellung vor, bei der du zwar eine Sendungsnummer bekommst, aber nie eine Benachrichtigung, ob das Paket unterwegs verloren gegangen ist. Du wüsstest nie, ob du weiter warten oder neu bestellen sollst."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Genauso verwirrend wäre eine Webseite, die bei einer fehlgeschlagenen Anfrage einfach schweigt, statt der Person zu zeigen, dass etwas nicht geklappt hat. Ein catch-Block ist deshalb nicht nur für den Code wichtig, sondern auch für das, was die Person am Ende sieht."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Was sollte im catch-Block stehen, damit die Person etwas Sinnvolles sieht?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Meist reicht ein kurzer, verständlicher Text auf der Seite, etwa Daten konnten nicht geladen werden, statt einer rein technischen Fehlermeldung, die nur für Fachleute in der Konsole gedacht ist. Die genaue technische Meldung bleibt trotzdem zusätzlich in der Konsole sichtbar, für die Fehlersuche."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Noch ein Blick auf die öffentliche Testadresse aus der Praxisaufgabe dieser Lektion. Solche kostenlosen, öffentlichen Testschnittstellen ohne eigenes Konto und ohne Kosten eignen sich gut zum Üben, weil man sofort echte Antworten bekommt, ohne vorher irgendetwas einrichten zu müssen."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Funktionieren solche kostenlosen Testschnittstellen genauso wie ein echter, produktiver Server?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Im Grundprinzip ja, sie beantworten Anfragen mit denselben Statuscodes und demselben JSON-Format wie ein echter Server. Der Unterschied liegt eher darin, dass sie für Übungszwecke gedacht sind und keine echten, dauerhaften Daten verändern."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Ein weiterer praktischer Punkt: Was passiert, wenn eine Person auf einer Webseite auf einen Knopf klickt, der eine fetch-Anfrage auslöst, und danach ungeduldig noch einmal klickt, bevor die erste Antwort da ist?"
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Laufen dann einfach zwei fetch-Anfragen gleichzeitig los?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Ohne besondere Vorkehrung ja, genau das passiert, was zu doppelten Anfragen an denselben Server führen kann. In der Praxis sperrt man den Knopf deshalb oft kurz, etwa indem man ihn mit disabled gleich true deaktiviert, solange die erste Anfrage noch läuft."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Ein letzter Blick zurück auf den Unterschied zwischen einem Fehler-Statuscode und einem echten Netzwerkfehler, weil beide in der Praxis leicht verwechselt werden. Ein Fehler-Statuscode wie 404 bedeutet: der Server hat geantwortet, aber mit einer Fehlermeldung."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Und ein echter Netzwerkfehler bedeutet dann, dass gar keine Antwort ankam?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Genau. Ein echter Netzwerkfehler entsteht etwa, wenn die Internetverbindung komplett fehlt oder der Server unter der angefragten Adresse gar nicht erreichbar ist. Beide Fälle landen zwar am Ende oft im selben catch-Block, ihre Ursache ist aber unterschiedlich, was beim Fehlersuchen hilft."
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "isKeySentence": true,
+      "text": "Halten wir fest: fetch schickt eine Anfrage an eine Webadresse und liefert ein Promise mit der Antwort, deren Inhalt man mit einem zweiten await als JSON auspackt. Weil fetch selbst einen Fehler-Statuscode wie 404 nicht als eigenen Fehler behandelt, muss der Code das Feld ok immer selbst prüfen. Ein AbortController zusammen mit einem Timeout verhindert, dass eine Anfrage ohne Antwort ewig wartet, und ein sichtbarer Abbrechen-Knopf ergänzt das für echte Nutzerinnen und Nutzer. Genau dieses Zusammenspiel holt Daten aus dem Internet, ohne die Seite unkontrolliert warten zu lassen."
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "isKeySentence": false,
+      "text": "Noch einmal die Begriffe dieser Lektion. JSON: ein weitverbreitetes Textformat für strukturierte Daten, das fast jede Programmiersprache lesen und schreiben kann. Timeout: eine festgelegte Höchstwartezeit, nach der eine Anfrage abgebrochen wird, wenn bis dahin keine Antwort gekommen ist. AbortController: ein eingebautes Werkzeug des Browsers, mit dem sich eine laufende fetch-Anfrage von außen abbrechen lässt."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Kann ich fetch auch benutzen, um Daten an einen Server zu schicken, statt nur welche abzuholen?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Ja, dafür übergibt man fetch als zweite Angabe ein Objekt mit einer anderen Methode als der üblichen, etwa POST statt GET, wie du sie schon aus M01-05 kennst, zusammen mit den zu sendenden Daten. Für den Einstieg reicht es, fetch erst einmal nur zum Abholen von Daten zu benutzen."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Was passiert, wenn die Internetverbindung während einer fetch-Anfrage komplett abbricht?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Dann schlägt das Promise von fetch selbst fehl, nicht nur mit einem Fehler-Statuscode, sondern mit einem echten Fehler, den try...catch auffängt. Ein Netzwerkabbruch unterscheidet sich damit von einer normalen Serverantwort mit einem Fehler-Statuscode."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Muss jede Webadresse, die ich mit fetch anfrage, JSON zurückgeben?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Nein, manche Server liefern reinen Text, Bilder oder andere Formate. Für reinen Text gibt es statt response.json die Funktion response.text, und für JSON eignet sich response.json, wichtig ist nur, die passende Funktion zum tatsächlichen Format der Antwort zu wählen."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Wie wähle ich eine sinnvolle Timeout-Länge für eigene Anfragen aus?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Das hängt vom erwarteten Vorgang ab. Wenige Sekunden reichen für kleine, schnelle Anfragen, während ein größerer Datenabruf, wie in M02-03 später vielleicht ein hochgeladenes Dokument, eher zehn bis zwanzig Sekunden verträgt, immer mit einem sichtbaren Abbrechen-Weg für die Person, die wartet."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Warum reichte bei LexiPulse ein einfacher Timeout allein nicht aus, wenn er doch die Wartezeit begrenzt hat?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Weil ein Prüfer nicht wusste, dass im Hintergrund ein Timer lief, und eine Ladeanzeige ohne jede Bedienmöglichkeit für ihn wie ein Aufhängen der App aussah, unabhängig von der tatsächlichen technischen Wartezeit. Erst ein sichtbarer Abbrechen-Knopf machte für die Person erkennbar, dass die App reagiert."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Was sollte auf der Seite stehen, wenn eine fetch-Anfrage fehlschlägt, damit die Person nicht ratlos zurückbleibt?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Ein kurzer, verständlicher Hinweis wie Daten konnten nicht geladen werden reicht meist aus, statt die Person mit einer rein technischen Fehlermeldung allein zu lassen. Die genaue technische Meldung bleibt zusätzlich in der Konsole erhalten, für die Fehlersuche durch Entwickler."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Was passiert, wenn eine Person mehrfach hintereinander auf denselben Knopf klickt, der jedes Mal eine fetch-Anfrage auslöst?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Ohne besondere Vorkehrung starten dann mehrere Anfragen gleichzeitig, was zu doppelten Anfragen an denselben Server führen kann. Ein kurzes Deaktivieren des Knopfes, solange die erste Anfrage noch läuft, verhindert das zuverlässig."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Worin unterscheidet sich ein Fehler-Statuscode von einem echten Netzwerkfehler bei fetch?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Ein Fehler-Statuscode wie 404 bedeutet, dass der Server geantwortet hat, nur eben mit einer Fehlermeldung statt der gewünschten Daten. Ein echter Netzwerkfehler bedeutet dagegen, dass gar keine Antwort ankam, etwa weil die Verbindung fehlt oder der Server nicht erreichbar ist."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Kann ich fetch auch mit einer Webadresse benutzen, die kein JSON, sondern reinen Text liefert?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Ja, dafür ruft man statt response.json die Funktion response.text auf, die den Inhalt als einfachen Text statt als JavaScript-Objekt liefert. Welche der beiden Funktionen passt, hängt allein vom tatsächlichen Format der jeweiligen Antwort ab."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Ist eine kostenlose, öffentliche Testschnittstelle wie in der Praxisaufgabe genauso zuverlässig wie ein echter, produktiver Server?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Für reine Übungszwecke reicht eine solche kostenlose Testschnittstelle völlig aus, sie beantwortet Anfragen mit denselben Statuscodes und demselben JSON-Format wie ein echter, produktiver Server. Für ein echtes Projekt mit eigenen, dauerhaften Daten würde man dagegen einen eigenen oder einen dafür vorgesehenen Server verwenden."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Warum sollte man einen Knopf deaktivieren, statt einfach eine zweite fetch-Anfrage einfach nebenherlaufen zu lassen?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Weil zwei gleichzeitige Anfragen an denselben Server unnötige zusätzliche Last erzeugen und außerdem in unklarer Reihenfolge beantwortet werden können, sodass am Ende womöglich die falsche, ältere Antwort auf der Seite landet. Ein kurz deaktivierter Knopf ist meist die einfachste und zuverlässigste Lösung für dieses Problem."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Sollte ich für jede fetch-Anfrage in einem eigenen Projekt immer alle Bausteine dieser Lektion gleichzeitig einbauen?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Für eine erste Übung reicht es, mit fetch, response.ok und try...catch zu beginnen und Timeout samt AbortController danach separat zu ergänzen, sobald das Grundmuster sitzt. Für alles, was eine echte Person am Ende benutzt, gehören am Schluss aber alle Bausteine zusammen dazu."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Merkt sich eine Webseite die zuletzt abgerufenen Daten, oder ruft fetch bei jedem Aufruf wirklich alles neu vom Server ab?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Ohne eigenes Zutun ruft fetch bei jedem einzelnen Aufruf tatsächlich erneut und vollständig beim Server an, auch wenn sich die Daten seit dem letzten Abruf gar nicht geändert haben. Ein bewusstes Zwischenspeichern der zuletzt geholten Daten im eigenen Code ist ein späteres, fortgeschritteneres Thema, für den Einstieg reicht ein einfacher, erneuter Aufruf bei Bedarf."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Was ist der Unterschied zwischen dem Statuscode einer fetch-Antwort und dem Statuscode, der schon in M01-05 beim Laden einer ganzen Webseite vorkam?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Technisch gibt es keinen Unterschied, es sind genau dieselben Statuscodes aus denselben Familien, Erfolg, Weiterleitung, Client-Fehler und Server-Fehler. Der einzige Unterschied liegt darin, wer die Antwort empfängt und darauf reagiert: beim Laden einer Seite der Browser selbst, bei fetch dein eigener JavaScript-Code, der selbst entscheidet, was als Nächstes passiert."
+    }
+  ],
+  "practiceExample": {
+    "text": "Im Repository repo-lexipulse führte ein fetch-Aufruf ohne jeden Timeout dazu, dass ein hängender Server die mobile App unbegrenzt lange auf einer Ladeanzeige stehen ließ, weil das zurückgegebene Promise nie fertig wurde. Die Konstante URL_IMPORT_TIMEOUT_MS setzt seither eine feste Höchstwartezeit von fünfzehn Sekunden, und die Funktion fetchWithTimeout erzeugt dafür einen AbortController, der nach Ablauf dieser Zeit automatisch abbricht. Ein zweiter, von außen übergebener Abbruch-Wert erlaubt zusätzlich einen sichtbaren Abbrechen-Knopf, weil Apples App-Prüfung eine Ladeanzeige ohne jede Bedienmöglichkeit trotz Timeout als hängengeblieben bewertete.",
+    "repoNote": "repo-lexipulse",
+    "location": "apps/mobile/src/lib/import.ts, Zeilen 184 bis 213 (Konstante URL_IMPORT_TIMEOUT_MS und Funktion fetchWithTimeout mit AbortController)"
+  },
+  "quiz": [
+    {
+      "question": "Welches Bild passt am besten zu einer fetch-Anfrage?",
+      "area": "fetch",
+      "options": [
+        {
+          "text": "Eine Bestellung bei einem entfernten Lieferanten, bei der man auf ein Paket oder eine Fehlermeldung wartet.",
+          "isCorrect": true,
+          "explanation": "Genau dieses Bild nutzt die Lektion, um fetch verständlich zu machen."
+        },
+        {
+          "text": "Ein Blick in ein bereits geöffnetes Buch, das direkt vor einem liegt, eine Vorstellung, die nicht zum Zweck einer Netzwerkanfrage passt, wie sie diese Lektion beschreibt.",
+          "isCorrect": false,
+          "explanation": "fetch holt Daten von außerhalb, nicht etwas, das schon direkt vorliegt."
+        },
+        {
+          "text": "Ein Gespräch mit sich selbst ohne jede Gegenstelle.",
+          "isCorrect": false,
+          "explanation": "fetch braucht immer eine Gegenstelle, einen Server, der antwortet."
+        },
+        {
+          "text": "Ein Blick auf die Uhr, ohne dass etwas verschickt wird.",
+          "isCorrect": false,
+          "explanation": "fetch verschickt tatsächlich eine Anfrage, es prüft nicht nur die Zeit."
+        }
+      ]
+    },
+    {
+      "question": "Was gibt die Funktion fetch zurück?",
+      "area": "fetch",
+      "options": [
+        {
+          "text": "Ein Promise, das später mit der Antwort des Servers fertig wird.",
+          "isCorrect": true,
+          "explanation": "Genau das ist die Definition von fetch aus dieser Lektion."
+        },
+        {
+          "text": "Sofort die fertigen Daten als JavaScript-Objekt.",
+          "isCorrect": false,
+          "explanation": "Die fertigen Daten bekommt man erst nach einem zweiten await mit response.json, nicht sofort."
+        },
+        {
+          "text": "Eine externe Skriptdatei.",
+          "isCorrect": false,
+          "explanation": "Eine externe Skriptdatei ist ein Konzept aus einer früheren Lektion, kein Rückgabewert von fetch."
+        },
+        {
+          "text": "Einen Event, auf den man mit addEventListener reagiert.",
+          "isCorrect": false,
+          "explanation": "fetch liefert ein Promise, kein Event im Sinne der vorigen Lektion."
+        }
+      ]
+    },
+    {
+      "question": "Warum braucht man nach fetch oft noch ein zweites await mit response.json?",
+      "area": "JSON",
+      "options": [
+        {
+          "text": "Weil auch das Auspacken des Antwortinhalts als JSON selbst noch etwas Zeit braucht und ein eigenes Promise ist.",
+          "isCorrect": true,
+          "explanation": "Genau das erklärt die Lektion zu den zwei aufeinanderfolgenden await-Zeilen."
+        },
+        {
+          "text": "Weil fetch ohne ein zweites await gar keine Antwort liefert, eine unzutreffende Annahme, denn fetch selbst liefert schon nach dem ersten await eine Antwort, wenn auch noch nicht ausgepackt.",
+          "isCorrect": false,
+          "explanation": "Fetch liefert schon nach dem ersten await eine Antwort, nur eben noch nicht ausgepackt."
+        },
+        {
+          "text": "Weil JSON nur mit einem zweiten Server-Aufruf gelesen werden kann.",
+          "isCorrect": false,
+          "explanation": "response.json arbeitet mit der bereits vorliegenden Antwort, es ruft keinen zweiten Server auf."
+        },
+        {
+          "text": "Weil sonst der Statuscode der Antwort verloren ginge.",
+          "isCorrect": false,
+          "explanation": "Der Statuscode bleibt unabhängig davon am response-Objekt erhalten, response.json betrifft nur den Inhalt."
+        }
+      ]
+    },
+    {
+      "question": "Was ist JSON?",
+      "area": "JSON",
+      "options": [
+        {
+          "text": "Ein weitverbreitetes Textformat für strukturierte Daten, das viele Programmiersprachen lesen können.",
+          "isCorrect": true,
+          "explanation": "Genau das ist die Definition von JSON aus dieser Lektion."
+        },
+        {
+          "text": "Eine eigene Programmiersprache wie JavaScript.",
+          "isCorrect": false,
+          "explanation": "JSON ist ein Datenformat, keine eigenständige Programmiersprache."
+        },
+        {
+          "text": "Ein Statuscode für eine erfolgreiche Anfrage.",
+          "isCorrect": false,
+          "explanation": "Statuscodes wie 200 stammen aus einer früheren Lektion, JSON ist ein Format für den Inhalt selbst."
+        },
+        {
+          "text": "Ein anderer Name für den AbortController.",
+          "isCorrect": false,
+          "explanation": "AbortController und JSON sind zwei unabhängige Konzepte dieser Lektion."
+        }
+      ]
+    },
+    {
+      "question": "Meldet fetch selbst einen Fehler, wenn der Server mit dem Statuscode 404 antwortet?",
+      "area": "Statuscode",
+      "options": [
+        {
+          "text": "Nein, das Promise wird trotzdem erfolgreich fertig, der Statuscode muss selbst geprüft werden.",
+          "isCorrect": true,
+          "explanation": "Genau dieser oft übersehene Punkt wird in der Lektion mit dem Bild der zurückgeschickten Postsendung erklärt."
+        },
+        {
+          "text": "Ja, fetch wirft bei jedem Fehler-Statuscode automatisch einen eigenen Fehler.",
+          "isCorrect": false,
+          "explanation": "Genau das tut fetch gerade nicht, ein Fehler-Statuscode löst keinen eigenen Fehler von fetch aus."
+        },
+        {
+          "text": "Ja, aber nur bei Statuscodes aus der Server-Fehler-Familie.",
+          "isCorrect": false,
+          "explanation": "Auch bei einer Server-Fehler-Familie wie 500 bleibt das Promise von fetch selbst erfolgreich, ohne eigenen Fehler."
+        },
+        {
+          "text": "Nein, fetch bricht die ganze Seite bei einem Fehler-Statuscode sofort ab, eine Annahme, die dem tatsächlichen Verhalten von fetch bei einem Fehler-Statuscode ausdrücklich widerspricht.",
+          "isCorrect": false,
+          "explanation": "fetch bricht bei einem Fehler-Statuscode weder die Anfrage noch die Seite ab, es liefert nur die Antwort wie gewohnt."
+        }
+      ]
+    },
+    {
+      "question": "Wozu dient response.ok in einem fetch-Aufruf?",
+      "area": "Statuscode",
+      "options": [
+        {
+          "text": "Es zeigt an, ob der Statuscode der Antwort aus der Erfolgsfamilie stammt.",
+          "isCorrect": true,
+          "explanation": "Genau das leistet response.ok, wie das Beispiel mit dem geworfenen Fehler zeigt."
+        },
+        {
+          "text": "Es zeigt an, ob die Internetverbindung noch besteht.",
+          "isCorrect": false,
+          "explanation": "response.ok bezieht sich auf den Statuscode der erhaltenen Antwort, nicht auf die Verbindung selbst."
+        },
+        {
+          "text": "Es startet automatisch einen neuen fetch-Aufruf.",
+          "isCorrect": false,
+          "explanation": "response.ok liest nur einen Zustand aus, es löst keinen neuen Aufruf aus."
+        },
+        {
+          "text": "Es wandelt die Antwort automatisch in JSON um.",
+          "isCorrect": false,
+          "explanation": "Das Umwandeln in JSON übernimmt response.json, response.ok prüft nur den Statuscode."
+        }
+      ]
+    },
+    {
+      "question": "Wofür braucht man einen Timeout bei einer fetch-Anfrage?",
+      "area": "Timeout",
+      "options": [
+        {
+          "text": "Um die Anfrage nach einer festgelegten Höchstwartezeit abzubrechen, falls keine Antwort kommt.",
+          "isCorrect": true,
+          "explanation": "Genau das ist die Definition von Timeout aus dieser Lektion."
+        },
+        {
+          "text": "Um die Antwort automatisch schneller zu machen.",
+          "isCorrect": false,
+          "explanation": "Ein Timeout beschleunigt eine Antwort nicht, er begrenzt nur die Wartezeit darauf."
+        },
+        {
+          "text": "Um automatisch mehrere fetch-Aufrufe gleichzeitig zu starten, eine Annahme, die technisch nicht zutrifft, denn fetch bringt gerade keine feste, eingebaute Wartezeit mit.",
+          "isCorrect": false,
+          "explanation": "Ein Timeout betrifft die Wartezeit eines einzelnen Aufrufs, nicht die Anzahl gleichzeitiger Aufrufe."
+        },
+        {
+          "text": "Um den Statuscode der Antwort zu verändern.",
+          "isCorrect": false,
+          "explanation": "Ein Timeout bricht die Anfrage bei Bedarf ab, es verändert keinen Statuscode."
+        }
+      ]
+    },
+    {
+      "question": "Bringt fetch von sich aus einen eingebauten Timeout mit?",
+      "area": "Timeout",
+      "options": [
+        {
+          "text": "Nein, fetch wartet ohne eigene Höchstgrenze, ein Timeout muss selbst mit einem AbortController gebaut werden.",
+          "isCorrect": true,
+          "explanation": "Genau diesen oft übersehenen Punkt hebt die Lektion ausdrücklich hervor."
+        },
+        {
+          "text": "Ja, fetch bricht automatisch nach fünf Sekunden ab, eine Verwechslung, denn das Umwandeln in JSON übernimmt eine andere Funktion als der AbortController.",
+          "isCorrect": false,
+          "explanation": "fetch hat keine eingebaute, automatische Höchstwartezeit von fünf Sekunden oder einer anderen festen Zeit."
+        },
+        {
+          "text": "Ja, aber nur bei Anfragen mit der Methode POST.",
+          "isCorrect": false,
+          "explanation": "Die verwendete Methode ändert nichts daran, dass fetch ohne eigenes Zutun keinen Timeout mitbringt."
+        },
+        {
+          "text": "Nein, fetch kann grundsätzlich nicht abgebrochen werden.",
+          "isCorrect": false,
+          "explanation": "Ein Abbruch ist mit einem AbortController möglich, fetch selbst bringt nur keinen automatischen Timeout mit."
+        }
+      ]
+    },
+    {
+      "question": "Wozu dient ein AbortController im Zusammenhang mit fetch?",
+      "area": "AbortController",
+      "options": [
+        {
+          "text": "Er ermöglicht es, eine laufende fetch-Anfrage von außen abzubrechen, etwa nach Ablauf einer Zeit oder per Knopf.",
+          "isCorrect": true,
+          "explanation": "Genau das leistet ein AbortController, wie das Beispiel mit setTimeout und controller.abort zeigt."
+        },
+        {
+          "text": "Er wandelt die Antwort automatisch in JSON um.",
+          "isCorrect": false,
+          "explanation": "Das Umwandeln in JSON übernimmt response.json, nicht der AbortController."
+        },
+        {
+          "text": "Er erhöht automatisch den Statuscode einer Antwort.",
+          "isCorrect": false,
+          "explanation": "Statuscodes werden vom Server festgelegt, ein AbortController verändert sie nicht."
+        },
+        {
+          "text": "Er startet eine fetch-Anfrage automatisch neu, sobald sie fehlschlägt, eine Vermutung, die dem tatsächlich beschriebenen technischen Ablauf bei LexiPulse widerspricht.",
+          "isCorrect": false,
+          "explanation": "Ein AbortController bricht ab, er wiederholt keine Anfrage automatisch."
+        }
+      ]
+    },
+    {
+      "question": "Warum reichte bei LexiPulse laut dem Praxisbeispiel ein Timeout von fünfzehn Sekunden allein nicht aus?",
+      "area": "Praxisbeispiel",
+      "options": [
+        {
+          "text": "Weil eine Ladeanzeige ohne sichtbare Bedienmöglichkeit für einen App-Prüfer trotzdem wie ein Aufhängen wirkte.",
+          "isCorrect": true,
+          "explanation": "Genau diesen Grund nennt die Lektion für die zweite Apple-Ablehnung."
+        },
+        {
+          "text": "Weil ein Timeout von fünfzehn Sekunden technisch gar nicht funktionierte, eine Vermutung, die nicht zum eigentlich beschriebenen Ursprung des Vorfalls passt.",
+          "isCorrect": false,
+          "explanation": "Der Timeout funktionierte technisch, das Problem lag an der fehlenden sichtbaren Bedienmöglichkeit für die Person."
+        },
+        {
+          "text": "Weil AbortController in mobilen Apps grundsätzlich nicht verfügbar ist.",
+          "isCorrect": false,
+          "explanation": "AbortController stand zur Verfügung und wurde genutzt, das war nicht der Grund der Ablehnung."
+        },
+        {
+          "text": "Weil response.json bei mobilen Apps nicht funktioniert.",
+          "isCorrect": false,
+          "explanation": "response.json betrifft das Auspacken von JSON, nicht den beschriebenen Vorfall um die Ladeanzeige."
+        }
+      ]
+    },
+    {
+      "question": "Was löste laut Praxisbeispiel den ursprünglichen Fehler bei LexiPulse überhaupt aus, bevor irgendein Timeout eingebaut war?",
+      "area": "Praxisbeispiel",
+      "options": [
+        {
+          "text": "Ein fetch-Aufruf ohne jeden Timeout, der bei einem hängenden Server unbegrenzt lange auf eine Antwort wartete.",
+          "isCorrect": true,
+          "explanation": "Genau das beschreibt die Lektion als Ausgangspunkt des Vorfalls."
+        },
+        {
+          "text": "Ein falsch geschriebener Statuscode auf dem Server.",
+          "isCorrect": false,
+          "explanation": "Der Statuscode war nicht die Ursache, sondern das unbegrenzte Warten ohne Timeout."
+        },
+        {
+          "text": "Ein fehlendes JSON-Format der Antwort.",
+          "isCorrect": false,
+          "explanation": "Das Antwortformat war nicht die Ursache des beschriebenen Problems."
+        },
+        {
+          "text": "Ein zu kurz gewählter Timeout von einer Sekunde.",
+          "isCorrect": false,
+          "explanation": "Ursprünglich gab es überhaupt keinen Timeout, nicht nur einen zu kurzen."
+        }
+      ]
+    },
+    {
+      "question": "Welche Reihenfolge beschreibt eine vollständig abgesicherte Fetch-Anfrage laut dieser Lektion am besten?",
+      "area": "fetch",
+      "options": [
+        {
+          "text": "fetch mit await aufrufen, response.ok prüfen, den Inhalt mit einem zweiten await als JSON auspacken, alles in try...catch mit Timeout über AbortController.",
+          "isCorrect": true,
+          "explanation": "Genau diese Reihenfolge fasst die Lektion im Kernsatz zusammen."
+        },
+        {
+          "text": "response.json aufrufen, danach erst fetch starten, eine Reihenfolge, die technisch nicht funktioniert, weil ohne vorherigen Aufruf keine Antwort zum Auspacken vorliegt.",
+          "isCorrect": false,
+          "explanation": "Ohne vorherigen fetch-Aufruf gibt es keine Antwort, die man auspacken könnte."
+        },
+        {
+          "text": "Den AbortController erst nach Erhalt der fertigen Daten erzeugen.",
+          "isCorrect": false,
+          "explanation": "Ein AbortController muss vor dem fetch-Aufruf bereitstehen, um ihn überhaupt abbrechen zu können."
+        },
+        {
+          "text": "response.ok ignorieren, solange response.json ohne Fehler durchläuft.",
+          "isCorrect": false,
+          "explanation": "response.json kann auch bei einer Fehlerseite ohne Fehler durchlaufen, response.ok muss deshalb trotzdem geprüft werden."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Schreibe eine async-Funktion, die mit fetch die Adresse https://jsonplaceholder.typicode.com/todos/1 abfragt, den Statuscode mit response.ok prüft, die Antwort mit response.json ausliest und das Ergebnis mit console.log und zusätzlich mit textContent auf einer einfachen HTML-Seite anzeigt. Baue einen Timeout von fünf Sekunden mit AbortController ein, der die Anfrage bei Bedarf abbricht, und fange alle Fehler mit try...catch ab.",
+    "expectation": "Die Seite zeigt nach kurzer Zeit den Titel der abgefragten Aufgabe aus der öffentlichen Testschnittstelle an, und die Konsole zeigt zusätzlich die vollständigen, ausgepackten Daten als Objekt.",
+    "checklist": [
+      "async-Funktion mit fetch auf die öffentliche Testadresse geschrieben",
+      "response.ok geprüft, bevor mit den Daten weitergearbeitet wird",
+      "die Antwort mit response.json ausgelesen und in der Konsole angezeigt",
+      "das Ergebnis zusätzlich mit textContent auf der Seite angezeigt",
+      "einen Timeout mit AbortController und ein try...catch ergänzt und getestet"
+    ]
+  },
+  "audio": {
+    "file": "M02-03-05.mp3",
+    "durationSeconds": 1000,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Kann ich fetch auch benutzen, um Daten an einen Server zu schicken, statt nur welche abzuholen?",
+      "answer": "Ja, dafür übergibt man fetch als zweite Angabe ein Objekt mit einer anderen Methode als der üblichen, etwa POST statt GET, wie du sie schon aus M01-05 kennst, zusammen mit den zu sendenden Daten. Für den Einstieg reicht es, fetch erst einmal nur zum Abholen von Daten zu benutzen."
+    },
+    {
+      "question": "Was passiert, wenn die Internetverbindung während einer fetch-Anfrage komplett abbricht?",
+      "answer": "Dann schlägt das Promise von fetch selbst fehl, nicht nur mit einem Fehler-Statuscode, sondern mit einem echten Fehler, den try...catch auffängt. Ein Netzwerkabbruch unterscheidet sich damit von einer normalen Serverantwort mit einem Fehler-Statuscode."
+    },
+    {
+      "question": "Muss jede Webadresse, die ich mit fetch anfrage, JSON zurückgeben?",
+      "answer": "Nein, manche Server liefern reinen Text, Bilder oder andere Formate. Für reinen Text gibt es statt response.json die Funktion response.text, und für JSON eignet sich response.json, wichtig ist nur, die passende Funktion zum tatsächlichen Format der Antwort zu wählen."
+    },
+    {
+      "question": "Wie wähle ich eine sinnvolle Timeout-Länge für eigene Anfragen aus?",
+      "answer": "Das hängt vom erwarteten Vorgang ab. Wenige Sekunden reichen für kleine, schnelle Anfragen, während ein größerer Datenabruf, wie in M02-03 später vielleicht ein hochgeladenes Dokument, eher zehn bis zwanzig Sekunden verträgt, immer mit einem sichtbaren Abbrechen-Weg für die Person, die wartet."
+    },
+    {
+      "question": "Warum reichte bei LexiPulse ein einfacher Timeout allein nicht aus, wenn er doch die Wartezeit begrenzt hat?",
+      "answer": "Weil ein Prüfer nicht wusste, dass im Hintergrund ein Timer lief, und eine Ladeanzeige ohne jede Bedienmöglichkeit für ihn wie ein Aufhängen der App aussah, unabhängig von der tatsächlichen technischen Wartezeit. Erst ein sichtbarer Abbrechen-Knopf machte für die Person erkennbar, dass die App reagiert."
+    },
+    {
+      "question": "Was sollte auf der Seite stehen, wenn eine fetch-Anfrage fehlschlägt, damit die Person nicht ratlos zurückbleibt?",
+      "answer": "Ein kurzer, verständlicher Hinweis wie Daten konnten nicht geladen werden reicht meist aus, statt die Person mit einer rein technischen Fehlermeldung allein zu lassen. Die genaue technische Meldung bleibt zusätzlich in der Konsole erhalten, für die Fehlersuche durch Entwickler."
+    },
+    {
+      "question": "Was passiert, wenn eine Person mehrfach hintereinander auf denselben Knopf klickt, der jedes Mal eine fetch-Anfrage auslöst?",
+      "answer": "Ohne besondere Vorkehrung starten dann mehrere Anfragen gleichzeitig, was zu doppelten Anfragen an denselben Server führen kann. Ein kurzes Deaktivieren des Knopfes, solange die erste Anfrage noch läuft, verhindert das zuverlässig."
+    },
+    {
+      "question": "Worin unterscheidet sich ein Fehler-Statuscode von einem echten Netzwerkfehler bei fetch?",
+      "answer": "Ein Fehler-Statuscode wie 404 bedeutet, dass der Server geantwortet hat, nur eben mit einer Fehlermeldung statt der gewünschten Daten. Ein echter Netzwerkfehler bedeutet dagegen, dass gar keine Antwort ankam, etwa weil die Verbindung fehlt oder der Server nicht erreichbar ist."
+    },
+    {
+      "question": "Kann ich fetch auch mit einer Webadresse benutzen, die kein JSON, sondern reinen Text liefert?",
+      "answer": "Ja, dafür ruft man statt response.json die Funktion response.text auf, die den Inhalt als einfachen Text statt als JavaScript-Objekt liefert. Welche der beiden Funktionen passt, hängt allein vom tatsächlichen Format der jeweiligen Antwort ab."
+    },
+    {
+      "question": "Ist eine kostenlose, öffentliche Testschnittstelle wie in der Praxisaufgabe genauso zuverlässig wie ein echter, produktiver Server?",
+      "answer": "Für reine Übungszwecke reicht eine solche kostenlose Testschnittstelle völlig aus, sie beantwortet Anfragen mit denselben Statuscodes und demselben JSON-Format wie ein echter, produktiver Server. Für ein echtes Projekt mit eigenen, dauerhaften Daten würde man dagegen einen eigenen oder einen dafür vorgesehenen Server verwenden."
+    },
+    {
+      "question": "Warum sollte man einen Knopf deaktivieren, statt einfach eine zweite fetch-Anfrage einfach nebenherlaufen zu lassen?",
+      "answer": "Weil zwei gleichzeitige Anfragen an denselben Server unnötige zusätzliche Last erzeugen und außerdem in unklarer Reihenfolge beantwortet werden können, sodass am Ende womöglich die falsche, ältere Antwort auf der Seite landet. Ein kurz deaktivierter Knopf ist meist die einfachste und zuverlässigste Lösung für dieses Problem."
+    },
+    {
+      "question": "Sollte ich für jede fetch-Anfrage in einem eigenen Projekt immer alle Bausteine dieser Lektion gleichzeitig einbauen?",
+      "answer": "Für eine erste Übung reicht es, mit fetch, response.ok und try...catch zu beginnen und Timeout samt AbortController danach separat zu ergänzen, sobald das Grundmuster sitzt. Für alles, was eine echte Person am Ende benutzt, gehören am Schluss aber alle Bausteine zusammen dazu."
+    },
+    {
+      "question": "Merkt sich eine Webseite die zuletzt abgerufenen Daten, oder ruft fetch bei jedem Aufruf wirklich alles neu vom Server ab?",
+      "answer": "Ohne eigenes Zutun ruft fetch bei jedem einzelnen Aufruf tatsächlich erneut und vollständig beim Server an, auch wenn sich die Daten seit dem letzten Abruf gar nicht geändert haben. Ein bewusstes Zwischenspeichern der zuletzt geholten Daten im eigenen Code ist ein späteres, fortgeschritteneres Thema, für den Einstieg reicht ein einfacher, erneuter Aufruf bei Bedarf."
+    },
+    {
+      "question": "Was ist der Unterschied zwischen dem Statuscode einer fetch-Antwort und dem Statuscode, der schon in M01-05 beim Laden einer ganzen Webseite vorkam?",
+      "answer": "Technisch gibt es keinen Unterschied, es sind genau dieselben Statuscodes aus denselben Familien, Erfolg, Weiterleitung, Client-Fehler und Server-Fehler. Der einzige Unterschied liegt darin, wer die Antwort empfängt und darauf reagiert: beim Laden einer Seite der Browser selbst, bei fetch dein eigener JavaScript-Code, der selbst entscheidet, was als Nächstes passiert."
+    }
+  ]
+}

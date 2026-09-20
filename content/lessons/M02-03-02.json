@@ -101,7 +101,7 @@
       "speaker": "A",
       "role": "example",
       "isKeySentence": false,
-      "text": "Ein Beispiel aus dem Portfolio-Repository von Domenic: die Zeile document Punkt querySelector Klammer auf Anführungszeichen Raute zurück Anführungszeichen Klammer zu sucht das Element mit der id zurück. Sie liefert es zurück, oder nichts, wenn die Seite es gerade nicht enthält."
+      "text": "Ein Beispiel aus dem Portfolio-Repository von Domenic: die Anweisung document Punkt querySelector Klammer auf Anführungszeichen Raute zurück Anführungszeichen Klammer zu sucht das Element mit der id zurück. Sie liefert es zurück, oder nichts, wenn die Seite es gerade nicht enthält."
     },
     {
       "speaker": "B",
@@ -137,7 +137,7 @@
       "speaker": "A",
       "role": "example",
       "isKeySentence": false,
-      "text": "Ein Beispiel: die Zeile knopf Punkt textContent gleich Anführungszeichen Geklickt Anführungszeichen ändert sofort den sichtbaren Text des zuvor gefundenen Knopfes in das Wort Geklickt, ohne dass sich sonst irgendetwas an der Seite ändert."
+      "text": "Ein Beispiel: die Anweisung knopf Punkt textContent gleich Anführungszeichen Geklickt Anführungszeichen ändert sofort den sichtbaren Text des zuvor gefundenen Knopfes in das Wort Geklickt, ohne dass sich sonst irgendetwas an der Seite ändert."
     },
     {
       "speaker": "B",
@@ -173,7 +173,7 @@
       "speaker": "A",
       "role": "example",
       "isKeySentence": false,
-      "text": "Im Portfolio-Repository entsteht so ein Download-Link: die Zeile document Punkt createElement Klammer auf Anführungszeichen a Anführungszeichen Klammer zu erzeugt ein neues a-Element. Direkt danach setzt der Code dessen href und weitere Eigenschaften, bevor die Zeile document Punkt body Punkt append das fertige Element tatsächlich an die Seite anhängt und es damit sichtbar macht."
+      "text": "Im Portfolio-Repository entsteht so ein Download-Link: die Anweisung document Punkt createElement Klammer auf Anführungszeichen a Anführungszeichen Klammer zu erzeugt ein neues a-Element. Direkt danach setzt der Code dessen href und weitere Eigenschaften, bevor die Anweisung document Punkt body Punkt append das fertige Element tatsächlich an die Seite anhängt und es damit sichtbar macht."
     },
     {
       "speaker": "B",
@@ -203,7 +203,7 @@
       "speaker": "A",
       "role": "example",
       "isKeySentence": false,
-      "text": "Ein Beispiel: die Zeile knopf Punkt classList Punkt toggle Klammer auf Anführungszeichen aktiv Anführungszeichen Klammer zu schaltet die Klasse aktiv am Knopf an, wenn sie fehlt, oder wieder ab, wenn sie schon da ist. Wie ein Element mit der Klasse aktiv tatsächlich aussieht, entscheidet allein das Stylesheet aus M02-02, nicht diese Zeile Code."
+      "text": "Ein Beispiel: die Anweisung knopf Punkt classList Punkt toggle Klammer auf Anführungszeichen aktiv Anführungszeichen Klammer zu schaltet die Klasse aktiv am Knopf an, wenn sie fehlt, oder wieder ab, wenn sie schon da ist. Wie ein Element mit der Klasse aktiv tatsächlich aussieht, entscheidet allein das Stylesheet aus M02-02, nicht diese Anweisung Code."
     },
     {
       "speaker": "B",
@@ -341,7 +341,7 @@
       "speaker": "A",
       "role": "example",
       "isKeySentence": false,
-      "text": "Ein Beispiel: die Zeile const eintrag gleich document Punkt createElement Klammer auf Anführungszeichen li Anführungszeichen Klammer zu erzeugt einen leeren Listeneintrag. Die Zeile eintrag Punkt textContent gleich Anführungszeichen Milch kaufen Anführungszeichen gibt ihm seinen Text. Erst die dritte Zeile, liste Punkt append Klammer auf eintrag Klammer zu, hängt den fertigen Eintrag sichtbar an die vorhandene Liste an."
+      "text": "Ein Beispiel: die Anweisung const eintrag gleich document Punkt createElement Klammer auf Anführungszeichen li Anführungszeichen Klammer zu erzeugt einen leeren Listeneintrag. Die Anweisung eintrag Punkt textContent gleich Anführungszeichen Milch kaufen Anführungszeichen gibt ihm seinen Text. Erst die dritte Anweisung, liste Punkt append Klammer auf eintrag Klammer zu, hängt den fertigen Eintrag sichtbar an die vorhandene Liste an."
     },
     {
       "speaker": "B",
@@ -491,19 +491,31 @@
       "speaker": "B",
       "role": "faq",
       "isKeySentence": false,
-      "text": "Warum wird bei createElement der Text oft erst in einer eigenen Zeile mit textContent gesetzt, statt gleich beim Erzeugen?"
+      "text": "Warum wird bei createElement der Text oft erst in einer eigenen Anweisung mit textContent gesetzt, statt gleich beim Erzeugen?"
     },
     {
       "speaker": "A",
       "role": "faq",
       "isKeySentence": false,
       "text": "Weil createElement bewusst nur ein leeres Element ohne Inhalt erzeugt. Text, Adresse und andere Eigenschaften werden danach in eigenen, einzelnen Schritten gesetzt, was den Code zwar etwas länger, aber deutlich leichter nachvollziehbar macht."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Kann querySelector auch mehrere Bedingungen gleichzeitig prüfen, etwa eine Klasse innerhalb eines bestimmten Abschnitts?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Ja, ein Selektor darf mehrere Teile miteinander kombinieren, genau wie du es in M02-02 für CSS gelernt hast, etwa ein Abschnitt gefolgt von einem Leerzeichen und dann einer Klasse. querySelector versteht dieselbe Selektor-Sprache vollständig, nicht nur einzelne, einfache Angaben, weil beide, CSS und querySelector, auf denselben Regeln für Selektoren aufbauen und arbeiten."
     }
   ],
   "practiceExample": {
     "text": "Im Repository repo-portfolio findet die Befehlspalette ein Sprungziel mit document.querySelector(hash) und scrollt dorthin, wenn es existiert, sonst lädt sie eine andere Seite. Etwas weiter unten baut sie einen unsichtbaren Download-Link komplett neu: document.createElement(\"a\") erzeugt das Element, drei Zeilen setzen seine Adresse und seine Eigenschaften, document.body.append(verweis) hängt es an die Seite an, verweis.click() löst den Download aus, als hätte die Person selbst geklickt, und verweis.remove() entfernt das kurzlebige Element sofort wieder, weil es nach dem Klick keine Aufgabe mehr hat.",
     "repoNote": "repo-portfolio",
-    "location": "src/components/CommandPalette.tsx, Zeile 72 (document.querySelector) und Zeilen 124 bis 130 (document.createElement, append, click, remove)"
+    "location": "src/components/CommandPalette.tsx, Anweisung 72 (document.querySelector) und Zeilen 124 bis 130 (document.createElement, append, click, remove)"
   },
   "quiz": [
     {
@@ -611,7 +623,7 @@
       ]
     },
     {
-      "question": "Was verändert die Zeile knopf.textContent = \"Geklickt\"?",
+      "question": "Was verändert die Anweisung knopf.textContent = \"Geklickt\"?",
       "area": "textContent",
       "options": [
         {
@@ -820,7 +832,7 @@
     }
   ],
   "practiceTask": {
-    "task": "Erstelle eine kleine HTML-Datei mit einem Knopf und einem Absatz darunter. Schreibe in einem Script-Element JavaScript-Code, der mit querySelector den Knopf und den Absatz findet und mit der Zeile knopf.onclick = function() { absatz.textContent = \"Geklickt\"; } dafür sorgt, dass ein Klick auf den Knopf den Text im Absatz ändert. Wie man Klicks sauberer abfängt, zeigt die nächste Lektion, hier reicht dieses einfache Muster.",
+    "task": "Erstelle eine kleine HTML-Datei mit einem Knopf und einem Absatz darunter. Schreibe in einem Script-Element JavaScript-Code, der mit querySelector den Knopf und den Absatz findet und mit der Anweisung knopf.onclick = function() { absatz.textContent = \"Geklickt\"; } dafür sorgt, dass ein Klick auf den Knopf den Text im Absatz ändert. Wie man Klicks sauberer abfängt, zeigt die nächste Lektion, hier reicht dieses einfache Muster.",
     "expectation": "Klickst du auf den Knopf, ändert sich der Text im Absatz sofort sichtbar, ohne dass die Seite neu lädt.",
     "checklist": [
       "HTML-Datei mit einem Knopf und einem Absatz erstellt",
@@ -832,7 +844,7 @@
   },
   "audio": {
     "file": "M02-03-02.mp3",
-    "durationSeconds": 974,
+    "durationSeconds": 1000,
     "voices": [
       "A",
       "B"
@@ -881,8 +893,12 @@
       "answer": "querySelector findet dann immer nur das erste der beiden Elemente, das zweite bleibt für diesen Aufruf unerreichbar. Eine id sollte deshalb auf einer Seite immer nur einmal vergeben werden, sonst entstehen genau solche schwer zu findenden Fehler."
     },
     {
-      "question": "Warum wird bei createElement der Text oft erst in einer eigenen Zeile mit textContent gesetzt, statt gleich beim Erzeugen?",
+      "question": "Warum wird bei createElement der Text oft erst in einer eigenen Anweisung mit textContent gesetzt, statt gleich beim Erzeugen?",
       "answer": "Weil createElement bewusst nur ein leeres Element ohne Inhalt erzeugt. Text, Adresse und andere Eigenschaften werden danach in eigenen, einzelnen Schritten gesetzt, was den Code zwar etwas länger, aber deutlich leichter nachvollziehbar macht."
+    },
+    {
+      "question": "Kann querySelector auch mehrere Bedingungen gleichzeitig prüfen, etwa eine Klasse innerhalb eines bestimmten Abschnitts?",
+      "answer": "Ja, ein Selektor darf mehrere Teile miteinander kombinieren, genau wie du es in M02-02 für CSS gelernt hast, etwa ein Abschnitt gefolgt von einem Leerzeichen und dann einer Klasse. querySelector versteht dieselbe Selektor-Sprache vollständig, nicht nur einzelne, einfache Angaben, weil beide, CSS und querySelector, auf denselben Regeln für Selektoren aufbauen und arbeiten."
     }
   ]
 }
