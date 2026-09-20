@@ -145,7 +145,20 @@ class ElevenLabsError extends Error {
   }
 }
 
-async function speak(env: EnvValues, text: string, voiceId: string): Promise<Buffer> {
+// Maskiert lange Token-artige Zeichenketten (Schluessel, Signaturen) im
+// Antworttext, bevor er geloggt wird: nie den Schluessel oder Aehnliches im
+// Klartext ausgeben, auch nicht in einer Fehlermeldung.
+function maskSecrets(text: string): string {
+  return text.replace(/[A-Za-z0-9_-]{30,}/g, '<gekuerzt>');
+}
+
+const RETRY_DELAY_MS = 30_000;
+
+async function requestSpeech(
+  env: EnvValues,
+  text: string,
+  voiceId: string,
+): Promise<{ ok: true; audio: Buffer } | { ok: false; status: number; bodyText: string }> {
   const response = await fetch(
     `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}?output_format=${OUTPUT_FORMAT}`,
     {
@@ -161,22 +174,55 @@ async function speak(env: EnvValues, text: string, voiceId: string): Promise<Buf
       }),
     },
   );
-
-  if (response.ok) return Buffer.from(await response.arrayBuffer());
-
+  if (response.ok) return { ok: true, audio: Buffer.from(await response.arrayBuffer()) };
   const bodyText = await response.text().catch(() => '');
-  // 401 beim Sprechen selbst ist ein echter Fehler: der Schluessel darf nur
-  // sprechen, das ist normal fuer /v1/user, aber nicht fuer diesen Aufruf hier.
-  if (response.status === 401) {
+  return { ok: false, status: response.status, bodyText };
+}
+
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+/**
+ * Spricht einen Block. Bei 401, 429 oder 5xx wird der (maskierte) Antworttext
+ * geloggt und genau einmal nach 30 Sekunden wiederholt; scheitert auch der
+ * zweite Versuch, bricht der Lauf ab (kein zweiter Retry, kein stilles
+ * Weitermachen). Andere 4xx-Fehler (z. B. 400 bei ungueltigem Text) werden
+ * sofort und ohne Wiederholung gemeldet, weil ein Retry daran nichts aendert.
+ */
+async function speak(env: EnvValues, text: string, voiceId: string): Promise<Buffer> {
+  const isRetryable = (status: number) => status === 401 || status === 429 || status >= 500;
+
+  let result = await requestSpeech(env, text, voiceId);
+  if (result.ok) return result.audio;
+
+  console.error(
+    `  ElevenLabs meldet ${result.status}: ${maskSecrets(result.bodyText).slice(0, 300)}`,
+  );
+
+  if (isRetryable(result.status)) {
+    console.error(`  Wiederholung in ${RETRY_DELAY_MS / 1000} s (einmalig)...`);
+    await sleep(RETRY_DELAY_MS);
+    result = await requestSpeech(env, text, voiceId);
+    if (result.ok) return result.audio;
+    console.error(
+      `  Wiederholung ebenfalls fehlgeschlagen (${result.status}): ${maskSecrets(result.bodyText).slice(0, 300)}`,
+    );
+  }
+
+  if (result.status === 401) {
     throw new ElevenLabsError(401, 'ElevenLabs meldet 401 beim Sprechen selbst. Schluessel prüfen (nie ausgeben).');
   }
-  if (response.status === 429) {
+  if (result.status === 429) {
     throw new ElevenLabsError(429, 'ElevenLabs meldet 429 (Kontingent oder Rate-Limit). Lauf wird nicht wiederholt.');
   }
-  if (response.status >= 500) {
-    throw new ElevenLabsError(response.status, `ElevenLabs meldet Serverfehler ${response.status}.`);
+  if (result.status >= 500) {
+    throw new ElevenLabsError(result.status, `ElevenLabs meldet Serverfehler ${result.status}.`);
   }
-  throw new ElevenLabsError(response.status, `ElevenLabs meldet ${response.status}: ${bodyText.slice(0, 300)}`);
+  throw new ElevenLabsError(
+    result.status,
+    `ElevenLabs meldet ${result.status}: ${maskSecrets(result.bodyText).slice(0, 300)}`,
+  );
 }
 
 function blockChecksum(block: SpeechBlock): string {
@@ -196,15 +242,25 @@ async function renderBlocks(env: EnvValues, lesson: Lesson, lessonOutDir: string
 
   for (const [index, block] of lesson.speechBlocks.entries()) {
     const checksum = blockChecksum(block);
-    currentChecksums[String(index)] = checksum;
     const path = blockFile(lessonOutDir, lesson.id, index);
-    const changed = previousChecksums[String(index)] !== checksum;
-    if (existsSync(path) && !changed) continue;
+    const recorded = previousChecksums[String(index)];
+    // Ohne fruehere Prüfsumme (etwa nach einem Abbruch mitten im Lauf, bevor
+    // die Checksums-Datei geschrieben wurde) gilt eine vorhandene Blockdatei
+    // als gueltig: kein erneuter API-Aufruf fuer laengst vorhandene Bloecke.
+    // Nur eine abweichende, tatsaechlich frueher aufgezeichnete Pruefsumme
+    // loest eine Neuvertonung aus.
+    const knownChanged = recorded !== undefined && recorded !== checksum;
+    currentChecksums[String(index)] = checksum;
+    if (existsSync(path) && !knownChanged) continue;
 
     const voiceId = VOICE_ID_BY_SPEAKER(env)[block.speaker];
     console.log(`  Block ${index + 1}/${lesson.speechBlocks.length} (Sprecher ${block.speaker})`);
     const audio = await speak(env, block.text, voiceId);
     writeFileSync(path, audio);
+    // Nach jedem einzelnen Block sichern, damit ein Abbruch (401/429/5xx nach
+    // dem einen Retry) den Fortschritt nicht verliert und ein zweiter Lauf
+    // wirklich nur den Rest sendet.
+    writeFileSync(checksumPath, JSON.stringify(currentChecksums, null, 2) + '\n');
   }
 
   writeFileSync(checksumPath, JSON.stringify(currentChecksums, null, 2) + '\n');
