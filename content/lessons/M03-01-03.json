@@ -1,0 +1,816 @@
+{
+  "id": "M03-01-03",
+  "title": "React Routing: mehrere Seiten in einer App",
+  "durationMinutes": 26,
+  "prerequisites": [
+    "M03-01-02"
+  ],
+  "terms": [
+    {
+      "term": "Routing",
+      "definition": "Das System, das in einer Webanwendung anhand der Adresse entscheidet, welche Seite angezeigt wird."
+    },
+    {
+      "term": "App Router",
+      "definition": "Das System in Next.js, das aus der Ordnerstruktur unter src/app automatisch die Adressen einer Anwendung ableitet."
+    },
+    {
+      "term": "page.tsx",
+      "definition": "Die besondere Datei in Next.js, die einen Ordner zu einer eigenen Seite macht, erreichbar unter der Adresse des Ordners."
+    },
+    {
+      "term": "Layout-Datei",
+      "definition": "Die besondere Datei layout.tsx in Next.js, die einen gemeinsamen Rahmen für mehrere Seiten festlegt und beim Wechsel zwischen ihnen erhalten bleibt."
+    },
+    {
+      "term": "Link-Komponente",
+      "definition": "Die Next.js-Komponente für Navigation ohne vollständiges Neuladen der Seite, das Gegenstück zum gewöhnlichen HTML-a-Element."
+    },
+    {
+      "term": "useRouter",
+      "definition": "Der Hook, mit dem eine Komponente aus eigenem Code heraus die Adresse wechseln kann, ohne dass jemand auf einen Link klickt."
+    },
+    {
+      "term": "Dynamische Route",
+      "definition": "Eine Route mit einem veränderlichen Platzhalter im Namen, etwa [id], die für viele ähnliche Seiten mit unterschiedlichem Inhalt steht."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir ein Buch mit mehreren Kapiteln vor. Jedes Kapitel hat eine eigene Seitenzahl, und du kannst das Buch an einer beliebigen Stelle aufschlagen, ohne vorher alle Seiten davor gelesen zu haben.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was hat ein Buch mit Kapiteln und Seitenzahlen mit einer Webanwendung zu tun?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Eine Webanwendung besteht selten aus nur einer einzigen Seite. Es gibt eine Startseite, eine Seite mit Informationen über das Projekt, vielleicht ein Kontaktformular und eine Seite mit den Nutzungsbedingungen. Jede dieser Seiten braucht eine eigene Adresse, unter der sie erreichbar ist, genau wie jedes Kapitel eine eigene Seitenzahl hat.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Das System, das in einer Webanwendung anhand der Adresse entscheidet, welche Seite angezeigt wird, nennt man Routing.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-portfolio, der Webseite von domenicmoran.de, sorgt das Routing dafür, dass unter der Adresse / die Startseite erscheint, unter /impressum die Impressum-Seite und unter /datenschutz die Datenschutz-Seite. Jede dieser Adressen zeigt eine andere Seite mit eigenem Inhalt, obwohl alle zur selben Anwendung gehören. Das Routing ist der unsichtbare Schalter, der anhand der Adresse die richtige Seite auswählt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Ohne Routing müsste der gesamte Inhalt einer Anwendung auf einer einzigen, endlosen Seite stehen. Ein Besucher, der nur das Impressum sucht, müsste sich durch die ganze Seite scrollen. Routing trennt den Inhalt in sinnvolle, einzeln erreichbare Teile, genau wie Kapitel ein Buch in lesbare Abschnitte gliedern.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen Aktenschrank vor, bei dem jede Schublade automatisch zu einem bestimmten Dokument führt, ohne dass jemand eine Liste führen muss, welche Schublade welches Dokument enthält.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Muss ich für jede neue Seite eine Liste führen, welche Adresse zu welcher Datei gehört?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "In vielen älteren Systemen musste man genau so eine Liste von Hand pflegen, eine sogenannte Routen-Tabelle. Next.js geht einen anderen Weg: die Ordnerstruktur selbst ist die Liste. Ein neuer Ordner mit der richtigen Datei darin wird automatisch zu einer neuen Adresse, ganz ohne dass jemand eine Tabelle aktualisieren muss.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Dieses System, das aus der Ordnerstruktur unter src/app automatisch die Adressen einer Anwendung ableitet, heißt App Router.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-portfolio liegt der gesamte App Router unter dem Ordner src/app. Darin gibt es einen Ordner impressum und einen Ordner datenschutz. Allein durch das Anlegen dieser Ordner mit der passenden Datei darin, dazu gleich mehr, entstehen automatisch die Adressen /impressum und /datenschutz, ohne eine einzige Zeile Konfiguration.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Das ist wichtig, weil eine von Hand gepflegte Routen-Tabelle mit jeder neuen Seite wächst und leicht Fehler enthält, etwa eine vergessene oder doppelt vergebene Adresse. Der App Router macht diese Fehlerklasse unmöglich: die Ordnerstruktur ist immer die einzige Wahrheit, ein zweiter Ort zum Pflegen existiert nicht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir ein Namensschild an einer Bürotür vor. Erst durch das Schild wird aus einem gewöhnlichen Raum das Büro einer bestimmten Person, und jeder im Gebäude weiß, wen er dort findet.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Reicht es, einfach einen Ordner anzulegen, damit daraus eine Seite wird?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Nicht ganz. Ein leerer Ordner allein macht noch keine Seite, genauso wie ein Raum ohne Namensschild noch keinem bestimmten Zweck zugeordnet ist. Next.js erwartet in einem Ordner, der eine Route sein soll, eine ganz bestimmte Datei mit einem festen Namen, so wie das Namensschild an der Tür.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Diese besondere Datei, die einen Ordner zu einer eigenen Seite macht, heißt page.tsx.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-portfolio liegt die Startseite in der Datei src/app/(de)/page.tsx. Der Ordner (de) ist eine sogenannte Routengruppe, und die Datei page.tsx darin macht diesen Ordner zur deutschen Startseite unter der Adresse /. Genauso gibt es eine Datei src/app/(de)/impressum/page.tsx, die den Ordner impressum zur Impressum-Seite macht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Dieser feste Dateiname page.tsx ist wichtig, weil Next.js nur so auf den ersten Blick erkennt, welche Ordner tatsächlich Seiten sind und welche nur zur Struktur gehören, etwa für gemeinsame Layouts oder Hilfsdateien. Ohne diese Konvention müsste man jeden Ordner einzeln als Seite oder Nicht-Seite kennzeichnen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen Bilderrahmen vor, der an der Wand hängt, während du das Bild darin austauschst. Der Rahmen bleibt immer derselbe, nur das Bild wechselt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Bedeutet ein Seitenwechsel, dass wirklich die ganze Seite im Browser komplett neu aufgebaut wird?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "In einer gut gebauten Anwendung soll genau das nicht passieren. Die Navigationsleiste, der Footer und andere immer gleiche Teile sollen beim Wechsel zwischen zwei Seiten stehen bleiben, ohne zu flackern oder neu zu laden. Nur der eigentliche Inhalt in der Mitte tauscht sich aus, wie das Bild im Rahmen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Die Datei, die diesen gemeinsamen, bleibenden Rahmen für mehrere Seiten festlegt, heißt layout.tsx, kurz Layout-Datei.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-portfolio gibt es eine Layout-Datei src/app/layout.tsx, das Wurzel-Layout für die gesamte Anwendung. Darin stecken die grundlegende HTML-Struktur, Schriften und Metadaten. Darunter liegt src/app/(de)/layout.tsx, die Layout-Datei für alle deutschen Seiten, mit der Navigationsleiste und dem Footer. Wechselt jemand von der Startseite zum Impressum, bleibt diese Layout-Datei stehen, nur der Inhalt von page.tsx tauscht sich aus.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Ohne Layout-Dateien müsste jede page.tsx die Navigationsleiste und den Footer selbst einbauen, und bei jedem Klick auf einen Link würde die ganze Seite inklusive Navigationsleiste kurz weiß flackern. Layout-Dateien sparen nicht nur doppelten Code, sie machen die Navigation auch spürbar schneller und flüssiger, weil nur der Teil neu gerendert wird, der sich wirklich ändert.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen Teleporter in einem Science-Fiction-Film vor: ein Schritt hinein, und du stehst sofort am Ziel, ohne den Weg dazwischen gehen zu müssen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Kann ich nicht einfach ein gewöhnliches HTML-a-Element für Links zwischen meinen Seiten benutzen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein gewöhnliches a-Element würde funktionieren, aber es würde jedes Mal die gesamte Seite im Browser komplett neu laden, mit einem sichtbaren weißen Flackern und dem Verlust aller State-Werte aus der letzten Lektion. Next.js hat dafür eine eigene, bessere Lösung, die sich anfühlt wie der Teleporter: kein Neuladen, kein Flackern, kein Verlust von State.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Diese Komponente für Navigation ohne vollständiges Neuladen der Seite heißt Link-Komponente, geschrieben mit großem L.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-portfolio benutzt die Navigationsleiste in der Datei src/components/Nav.tsx an mehreren Stellen die Link-Komponente, etwa für den Link zur Startseite und für den Sprachwechsel. Statt href bei einem a-Element heißt das Attribut bei der Link-Komponente ebenfalls href, aber die Navigation dahinter läuft vollständig im Browser ab, ohne den Server um eine komplett neue Seite zu bitten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Das ist wichtig, weil eine Anwendung ohne Link-Komponente bei jedem Klick alle useState-Werte verlieren würde, die der Besucher vielleicht gerade in ein Formular eingetippt hat. Außerdem fühlt sich die Navigation mit der Link-Komponente spürbar schneller an, weil nur der geänderte Teil der Seite neu gerendert wird, nicht die ganze Seite mitsamt aller Bilder und Schriften.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine Fernbedienung vor, mit der du das Programm wechselst, ohne aufzustehen. Du drückst eine Taste, und der Bildschirm zeigt etwas anderes, ganz ohne dass du zum Gerät gehen musst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist, wenn die Navigation nicht durch einen Klick auf einen Link ausgelöst wird, sondern durch etwas anderes, etwa das Absenden eines Formulars?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Genau für diesen Fall gibt es eine Lösung, die nicht an ein sichtbares Element auf der Seite gebunden ist. Nach dem Absenden eines Kontaktformulars soll die Anwendung vielleicht automatisch auf eine Dankeseite weiterleiten, ohne dass der Besucher selbst klicken muss. Dafür braucht man eine Möglichkeit, die Adresse aus dem eigenen Code heraus zu wechseln, wie mit der Fernbedienung vom Sofa aus.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Der Hook, mit dem eine Komponente aus eigenem Code heraus die Adresse wechseln kann, heißt useRouter.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Ein typischer Aufruf sieht so aus: const router = useRouter(), gefolgt von router.push('/danke'), sobald das Formular erfolgreich abgeschickt wurde. Anders als die Link-Komponente erzeugt useRouter kein sichtbares Element auf der Seite. Es ist ein reiner Befehl im Code, ähnlich wie setZahl aus der letzten Lektion, nur dass er keine Zahl ändert, sondern die aktuelle Adresse.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Ohne useRouter wäre jede Navigation zwingend an einen sichtbaren, klickbaren Link gebunden. Viele Abläufe in einer echten Anwendung brauchen aber eine Navigation als Folge einer Aktion, nicht als Folge eines Klicks. Nach dem erfolgreichen Login auf die Startseite, nach dem Absenden eines Formulars auf die Bestätigungsseite, nach einem Fehler auf eine Fehlerseite: all das sind Fälle, in denen useRouter die Navigation aus dem Code heraus anstößt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir ein Hotel mit hundert Zimmern vor. Statt jedem Zimmer einen eigenen, festen Namen zu geben, haben alle Zimmer einfach eine Nummer: Zimmer 101, Zimmer 102, Zimmer 103 und so weiter. Der Grundriss ist immer gleich, nur die Nummer und der Gast darin unterscheiden sich.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist, wenn ich eine Seite für viele ähnliche Dinge brauche, etwa hundert verschiedene Blogartikel? Lege ich dann wirklich hundert einzelne Ordner an?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Nein, das wäre unpraktisch und bei Tausenden von Artikeln völlig unmöglich. Statt für jeden einzelnen Artikel einen eigenen Ordner mit eigener page.tsx anzulegen, gibt es eine Möglichkeit, eine einzige Seite zu bauen, die einen veränderlichen Teil in ihrer Adresse hat, ähnlich der Zimmernummer im Hotel.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Eine Route mit einem veränderlichen Platzhalter im Namen, geschrieben in eckigen Klammern wie [id], heißt dynamische Route.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Eine dynamische Route könnte ein Blog mit einem Ordner blog und einem Unterordner [slug] sein, also src/app/blog/[slug]/page.tsx. Die Adresse /blog/mein-erster-artikel würde dann dieselbe page.tsx aufrufen wie /blog/mein-zweiter-artikel, nur mit einem anderen Wert für slug. Die Komponente liest diesen Wert aus und zeigt den jeweils passenden Artikel an, ganz ohne dass jemand für jeden Artikel eine eigene Datei anlegen muss.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Ohne dynamische Routen wäre jede Anwendung mit nutzergenerierten Inhalten, also jeder Blog, jeder Shop und jedes soziale Netzwerk, technisch nicht sinnvoll umsetzbar. Man kann nicht für jeden neuen Artikel, jedes neue Produkt oder jedes neue Profil eine eigene Datei anlegen und die Anwendung danach neu bauen. Dynamische Routen lösen dieses Problem mit einem einzigen, wiederverwendbaren Seitenbaustein.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine Weggabelung im Wald vor, an der ein Wegweiser mit mehreren Armen steht. Jeder Arm zeigt in eine andere Richtung und trägt ein anderes Ziel, aber der Pfosten, an dem alle Arme befestigt sind, ist derselbe.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "In einer echten Next.js-Anwendung greifen alle diese Konzepte ineinander. Der App Router leitet eine eingehende Adresse an die passende page.tsx weiter, eingebettet in eine Layout-Datei, die die Navigationsleiste mit Link-Komponenten enthält. Ein Formular nutzt useRouter für die Weiterleitung nach dem Absenden, und eine dynamische Route sorgt dafür, dass tausend Blogartikel mit einer einzigen Datei auskommen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Muss ich mir für jede neue Seite alle diese Dateien einzeln merken?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Nein, die festen Dateinamen page.tsx und layout.tsx sind gerade dazu da, dass man sie nicht suchen muss. Jeder Entwickler und jede Entwicklerin weiß ohne Nachschlagen, dass die Seite für /impressum in der Datei src/app/impressum/page.tsx liegt, in jedem Next.js-Projekt auf der Welt. Diese Konvention spart Zeit beim Lesen von fremdem Code und verhindert, dass jedes Projekt seine eigene, eigenwillige Ordnerstruktur erfindet.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine Stadtkarte vor, auf der du nicht nur die Straßen siehst, sondern auch, welche Gebäude an welcher Straße liegen und wie du von einem zum anderen kommst, ohne die Karte zwischendurch wegzulegen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Routing ist mehr als nur das Zuordnen von Adressen zu Seiten. Es umfasst auch die Frage, wie der Besucher zwischen den Seiten navigiert, welche Teile der Seite dabei erhalten bleiben und wie mit Adressen umgegangen wird, die es nicht gibt, etwa einem Tippfehler in der Adresszeile. Eine gute Routing-Strategie denkt all diese Fälle von Anfang an mit.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was passiert eigentlich, wenn jemand eine Adresse eingibt, die es in der Anwendung gar nicht gibt?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Dafür gibt es in Next.js eine eigene, besondere Datei: not-found.tsx. Sie liegt wie page.tsx unter src/app und zeigt eine eigene Seite an, immer dann, wenn eine angefragte Adresse zu keiner vorhandenen Route passt. Ohne diese Datei würde Next.js eine eingebaute, sehr schlichte Fehlerseite zeigen, die nicht zum Rest der Anwendung passt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Eine eigene Not-Found-Seite ist wichtig, weil ein Besucher, der sich nur vertippt hat, sonst den Eindruck bekäme, die ganze Seite sei kaputt. Eine freundliche, zur Anwendung passende Fehlerseite mit einem Link zurück zur Startseite hält den Besucher auf der Seite, statt ihn zu verlieren.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "text": "Also noch einmal ganz kurz: Routing ist das System, das in einer Webanwendung anhand der Adresse entscheidet, welche Seite angezeigt wird. Der App Router von Next.js leitet Routen automatisch aus der Ordnerstruktur unter src/app ab, ohne dass jemand eine Tabelle pflegen muss. Die Datei page.tsx macht einen Ordner zur Seite, die Layout-Datei layout.tsx legt einen gemeinsamen, bleibenden Rahmen für mehrere Seiten fest. Die Link-Komponente sorgt für Navigation ohne vollständiges Neuladen, und der Hook useRouter erlaubt denselben Adresswechsel aus dem eigenen Code heraus. Eine dynamische Route mit eckigen Klammern wie [id] steht für viele ähnliche Seiten mit unterschiedlichem Inhalt, ohne dass für jede eine eigene Datei angelegt werden muss.",
+      "isKeySentence": true
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Routing ist das System, das in einer Webanwendung anhand der Adresse entscheidet, welche Seite angezeigt wird.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Der App Router ist das System in Next.js, das aus der Ordnerstruktur unter src/app automatisch die Adressen einer Anwendung ableitet.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "page.tsx ist die besondere Datei in Next.js, die einen Ordner zu einer eigenen Seite macht, erreichbar unter der Adresse des Ordners.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Die Layout-Datei layout.tsx ist die besondere Datei in Next.js, die einen gemeinsamen Rahmen für mehrere Seiten festlegt und beim Wechsel zwischen ihnen erhalten bleibt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Die Link-Komponente ist die Next.js-Komponente für Navigation ohne vollständiges Neuladen der Seite, das Gegenstück zum gewöhnlichen HTML-a-Element.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "useRouter ist der Hook, mit dem eine Komponente aus eigenem Code heraus die Adresse wechseln kann, ohne dass jemand auf einen Link klickt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Eine dynamische Route ist eine Route mit einem veränderlichen Platzhalter im Namen, etwa [id], die für viele ähnliche Seiten mit unterschiedlichem Inhalt steht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Muss ich für jede neue Seite wirklich nur einen Ordner mit einer page.tsx darin anlegen, ohne irgendwo eine Liste zu aktualisieren?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ja, genau das ist der Kern des App Routers. Ein neuer Ordner unter src/app mit einer page.tsx darin wird beim nächsten Start der Anwendung automatisch als neue Route erkannt. Es gibt keine zentrale Routen-Tabelle, die von Hand gepflegt werden müsste. Die Ordnerstruktur selbst ist die vollständige und einzige Wahrheit über alle vorhandenen Routen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Kann eine Layout-Datei auch selbst eine Navigationsleiste oder einen Footer enthalten?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ja, das ist sogar der häufigste Anwendungsfall für Layout-Dateien. Die Navigationsleiste und der Footer werden einmal im Layout eingebaut und erscheinen dann automatisch auf jeder Seite, die dieses Layout benutzt. Im Repo repo-portfolio enthält die Layout-Datei unter src/app/(de)/layout.tsx genau diese immer gleichen Teile. Eine Änderung an der Navigationsleiste im Layout wirkt sich dadurch sofort auf alle Seiten aus, ohne dass jemand jede einzelne page.tsx anfassen muss.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Worin unterscheidet sich die Link-Komponente von Next.js genau von einem gewöhnlichen a-Element in HTML?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ein gewöhnliches a-Element löst eine vollständige neue Anfrage an den Server aus, woraufhin der Browser die gesamte Seite neu lädt, inklusive aller Schriften, Bilder und Skripte. Die Link-Komponente von Next.js verhindert dieses vollständige Neuladen und tauscht nur den Teil der Seite aus, der sich zwischen den beiden Adressen tatsächlich unterscheidet. Das Ergebnis ist eine spürbar schnellere Navigation ohne weißes Flackern und ohne Verlust von State-Werten, die der Besucher vielleicht gerade in ein Formular eingetippt hat.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Kann ich mit useRouter auch zurück zur vorherigen Seite navigieren, so wie der Zurück-Knopf im Browser?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ja, useRouter bietet neben router.push für die Vorwärtsnavigation auch router.back, das genau den Zurück-Knopf des Browsers auslöst, nur eben aus dem eigenen Code heraus. Es gibt außerdem router.replace, das die aktuelle Adresse überschreibt, ohne einen neuen Eintrag in der Browser-Historie anzulegen. Welche dieser drei Funktionen die richtige ist, hängt vom genauen Ablauf ab: push für normale Navigation, back für Zurück, replace für Weiterleitungen nach einem Login, bei denen der Zurück-Knopf nicht wieder zur Login-Seite führen soll.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Woher weiß eine dynamische Route, welcher Wert gerade in der Adresse steht, etwa welche Artikel-ID?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Next.js übergibt den Wert aus der eckigen Klammer automatisch als Prop an die page.tsx, zusammen mit der gesamten Seite. Die Komponente kann diesen Wert dann wie ein ganz normales Prop auslesen, genau wie in der ersten Lektion dieses Moduls gelernt. Bei einem Ordner namens [slug] heißt das Prop entsprechend slug, bei [id] heißt es id. Die Komponente benutzt diesen Wert dann, um den passenden Inhalt zu laden, etwa den Blogartikel mit der entsprechenden ID aus einer Datenbank.",
+      "isKeySentence": false
+    }
+  ],
+  "practiceExample": {
+    "text": "Im Repo repo-portfolio, dem Quellcode von domenicmoran.de, zeigt die Ordnerstruktur unter src/app den App Router in Aktion. Die Datei src/app/layout.tsx ist das Wurzel-Layout, src/app/(de)/layout.tsx die Layout-Datei für alle deutschen Seiten mit Navigationsleiste und Footer. Die Startseite liegt in src/app/(de)/page.tsx, die Impressum-Seite in src/app/(de)/impressum/page.tsx. Die Navigationsleiste in src/components/Nav.tsx benutzt die Link-Komponente für die Navigation zwischen diesen Seiten. Ein Lernender kann an diesem echten, produktiv betriebenen Projekt studieren, wie page.tsx, Layout-Dateien und die Link-Komponente in der Praxis zusammenspielen.",
+    "repoNote": "repo-portfolio",
+    "location": "src/app/layout.tsx (Wurzel-Layout), src/app/(de)/layout.tsx (deutsches Layout), src/app/(de)/page.tsx (Startseite), src/app/(de)/impressum/page.tsx (Impressum), src/components/Nav.tsx (Link-Komponenten)"
+  },
+  "quiz": [
+    {
+      "question": "Welches Alltagsbild passt am besten zum Routing in einer Webanwendung?",
+      "area": "React Routing: Grundlagen",
+      "options": [
+        {
+          "text": "Ein Buch mit Kapiteln, jedes unter einer eigenen Seitenzahl erreichbar.",
+          "isCorrect": true,
+          "explanation": "Richtig: Routing ordnet jeder Adresse eine eigene Seite zu, genau wie Seitenzahlen Kapitel auffindbar machen."
+        },
+        {
+          "text": "Ein Lesezeichen, das man an einer beliebigen Stelle im Buch verschieben und wiederfinden kann.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Lesezeichen merkt sich eine Position, ist aber selbst keine eigene Adresse für eine bestimmte Seite."
+        },
+        {
+          "text": "Der Buchdeckel, der alle Seiten zusammenhält.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Buchdeckel umschließt alles, Routing ordnet dagegen einzelne Adressen einzelnen Seiten zu."
+        },
+        {
+          "text": "Das Inhaltsverzeichnis, das alle Kapitel auflistet.",
+          "isCorrect": false,
+          "explanation": "Falsch: das Inhaltsverzeichnis listet Routen auf, ist aber selbst kein Routing-System."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der App Router in Next.js?",
+      "area": "React Routing: App Router",
+      "options": [
+        {
+          "text": "Ein System, das aus der Ordnerstruktur automatisch die Adressen ableitet.",
+          "isCorrect": true,
+          "explanation": "Richtig: der App Router macht jeden Ordner mit einer page.tsx automatisch zu einer Route, ohne manuelle Konfiguration."
+        },
+        {
+          "text": "Ein physisches Gerät, das den Internetverkehr einer Next.js-Anwendung steuert.",
+          "isCorrect": false,
+          "explanation": "Falsch: der App Router ist kein physisches Gerät, sondern ein Software-System innerhalb von Next.js."
+        },
+        {
+          "text": "Eine handschriftliche Liste aller Seiten einer Anwendung, die bei jedem Start neu abgeglichen wird.",
+          "isCorrect": false,
+          "explanation": "Falsch: genau diese Liste soll der App Router überflüssig machen, die Ordnerstruktur selbst ist die Liste."
+        },
+        {
+          "text": "Ein Programm, das nur auf dem Smartphone läuft und nichts mit dem Web zu tun hat.",
+          "isCorrect": false,
+          "explanation": "Falsch: der App Router ist ein Teil von Next.js und läuft sowohl beim Bauen der Anwendung als auch auf dem Server."
+        }
+      ]
+    },
+    {
+      "question": "Welche Datei macht einen Ordner unter src/app zu einer eigenen Seite?",
+      "area": "React Routing: page.tsx",
+      "options": [
+        {
+          "text": "page.tsx",
+          "isCorrect": true,
+          "explanation": "Richtig: die Datei page.tsx ist die Konvention, mit der Next.js einen Ordner als Route erkennt."
+        },
+        {
+          "text": "index.html",
+          "isCorrect": false,
+          "explanation": "Falsch: index.html ist die klassische Startdatei für gewöhnliche Webseiten ohne Framework, nicht für Next.js."
+        },
+        {
+          "text": "route.config.json",
+          "isCorrect": false,
+          "explanation": "Falsch: eine solche Konfigurationsdatei gibt es im App Router nicht, die Ordnerstruktur ersetzt sie."
+        },
+        {
+          "text": "main.ts",
+          "isCorrect": false,
+          "explanation": "Falsch: main.ts ist kein fester Dateiname im App Router von Next.js."
+        }
+      ]
+    },
+    {
+      "question": "Was bleibt bei einem Seitenwechsel mit einer Layout-Datei erhalten?",
+      "area": "React Routing: Layout-Datei",
+      "options": [
+        {
+          "text": "Die Navigationsleiste und der Footer, die im Layout definiert sind.",
+          "isCorrect": true,
+          "explanation": "Richtig: das Layout bleibt beim Seitenwechsel stehen, nur der Inhalt der page.tsx tauscht sich aus."
+        },
+        {
+          "text": "Ausschließlich die Hintergrundfarbe der Seite, sonst nichts anderes von der Darstellung.",
+          "isCorrect": false,
+          "explanation": "Falsch: das Layout kann viel mehr als nur die Hintergrundfarbe erhalten, etwa die gesamte Navigationsleiste."
+        },
+        {
+          "text": "Nur die Schriftgröße, alle anderen Elemente werden neu geladen.",
+          "isCorrect": false,
+          "explanation": "Falsch: das Layout erhält alle darin definierten Elemente, nicht nur die Schriftgröße."
+        },
+        {
+          "text": "Gar nichts, eine Layout-Datei verhält sich wie ein gewöhnliches a-Element.",
+          "isCorrect": false,
+          "explanation": "Falsch: genau der Unterschied zum vollständigen Neuladen ist der Sinn einer Layout-Datei."
+        }
+      ]
+    },
+    {
+      "question": "Worin unterscheidet sich die Link-Komponente von einem gewöhnlichen HTML-a-Element?",
+      "area": "React Routing: Link-Komponente",
+      "options": [
+        {
+          "text": "Sie lädt nicht die gesamte Seite neu, sondern tauscht nur den geänderten Teil aus.",
+          "isCorrect": true,
+          "explanation": "Richtig: die Link-Komponente verhindert das vollständige Neuladen und sorgt für eine schnellere Navigation."
+        },
+        {
+          "text": "Sie funktioniert nur auf Mobilgeräten, nicht auf Desktop-Computern.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Link-Komponente funktioniert auf allen Geräten gleichermaßen."
+        },
+        {
+          "text": "Sie kann ausschließlich zu externen Webseiten führen, nicht zu Seiten derselben Anwendung.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Link-Komponente ist im Gegenteil vor allem für die Navigation innerhalb derselben Anwendung gedacht."
+        },
+        {
+          "text": "Sie benötigt zwingend eine Internetverbindung, ein a-Element nicht.",
+          "isCorrect": false,
+          "explanation": "Falsch: beide benötigen für externe Ziele eine Internetverbindung, für interne Navigation nicht."
+        }
+      ]
+    },
+    {
+      "question": "Wann wird useRouter anstelle der Link-Komponente benutzt?",
+      "area": "React Routing: useRouter",
+      "options": [
+        {
+          "text": "Wenn die Navigation aus dem Code heraus passieren soll, etwa nach dem Absenden eines Formulars.",
+          "isCorrect": true,
+          "explanation": "Richtig: useRouter erlaubt Navigation als Folge einer Aktion, nicht nur als Folge eines Klicks."
+        },
+        {
+          "text": "Wenn die Seite besonders viele Bilder enthält und deshalb langsam lädt.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Anzahl der Bilder hat keinen Einfluss darauf, ob Link-Komponente oder useRouter das richtige Mittel ist."
+        },
+        {
+          "text": "Ausschließlich auf der Startseite einer Anwendung.",
+          "isCorrect": false,
+          "explanation": "Falsch: useRouter kann in jeder Komponente verwendet werden, nicht nur auf der Startseite."
+        },
+        {
+          "text": "Nur dann, wenn die Anwendung weniger als drei Seiten hat.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Anzahl der Seiten spielt für die Wahl zwischen Link-Komponente und useRouter keine Rolle."
+        }
+      ]
+    },
+    {
+      "question": "Was bedeutet die Schreibweise [id] in einem Ordnernamen unter src/app?",
+      "area": "React Routing: Dynamische Routen",
+      "options": [
+        {
+          "text": "Eine dynamische Route mit einem veränderlichen Platzhalter namens id.",
+          "isCorrect": true,
+          "explanation": "Richtig: die eckigen Klammern kennzeichnen einen Platzhalter, der bei jedem Aufruf einen anderen Wert annehmen kann."
+        },
+        {
+          "text": "Der Ordner ist nur ein unfertiger Entwurf und wird von Next.js beim Bauen ignoriert.",
+          "isCorrect": false,
+          "explanation": "Falsch: eckige Klammern bedeuten keinen Entwurf, sondern eine dynamische Route."
+        },
+        {
+          "text": "Die Seite darin ist nur für eingeloggte Benutzer sichtbar.",
+          "isCorrect": false,
+          "explanation": "Falsch: die eckigen Klammern haben nichts mit Zugriffsrechten zu tun."
+        },
+        {
+          "text": "Der Ordnername wird in Großbuchstaben umgewandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: die eckigen Klammern ändern nicht die Schreibweise, sie machen den Namen zu einem Platzhalter."
+        }
+      ]
+    },
+    {
+      "question": "Im Repo repo-portfolio liegt die deutsche Startseite in src/app/(de)/page.tsx. Was bewirkt page.tsx an dieser Stelle?",
+      "area": "Praxisbeispiel repo-portfolio",
+      "options": [
+        {
+          "text": "Sie macht den Ordner (de) zur Startseite unter der Adresse /.",
+          "isCorrect": true,
+          "explanation": "Richtig: die page.tsx im Ordner (de) ist die deutsche Startseite, erreichbar unter der Wurzeladresse."
+        },
+        {
+          "text": "Sie legt die Schriftart und alle weiteren Gestaltungsmerkmale für sämtliche deutschen Seiten fest.",
+          "isCorrect": false,
+          "explanation": "Falsch: für Schriftarten ist in der Regel die Layout-Datei zuständig, nicht die page.tsx."
+        },
+        {
+          "text": "Sie deaktiviert die englische Version der Webseite.",
+          "isCorrect": false,
+          "explanation": "Falsch: die page.tsx einer Sprache hat keinen Einfluss auf die andere Sprachversion."
+        },
+        {
+          "text": "Sie speichert die Anzahl der Besucher der Seite.",
+          "isCorrect": false,
+          "explanation": "Falsch: eine page.tsx speichert keine Besucherzahlen, sie beschreibt nur den Inhalt der Seite."
+        }
+      ]
+    },
+    {
+      "question": "Warum wäre ein Blog mit tausend Artikeln ohne dynamische Routen nicht sinnvoll umsetzbar?",
+      "area": "React Routing: Dynamische Routen",
+      "options": [
+        {
+          "text": "Man kann nicht für jeden neuen Artikel eine eigene Datei anlegen und die Anwendung neu bauen.",
+          "isCorrect": true,
+          "explanation": "Richtig: dynamische Routen lösen dieses Problem mit einer einzigen, wiederverwendbaren page.tsx für alle Artikel."
+        },
+        {
+          "text": "Ein Blog darf gesetzlich maximal zehn Unterseiten haben.",
+          "isCorrect": false,
+          "explanation": "Falsch: es gibt keine gesetzliche Grenze für die Anzahl der Unterseiten eines Blogs."
+        },
+        {
+          "text": "Next.js kann technisch nicht mehr als 20 Routen gleichzeitig verwalten.",
+          "isCorrect": false,
+          "explanation": "Falsch: Next.js kann beliebig viele Routen verwalten, dynamische Routen machen es nur praktikabler."
+        },
+        {
+          "text": "Jeder Artikel bräuchte zwingend eine eigene Navigationsleiste.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Navigationsleiste kommt aus der Layout-Datei und ist für alle Artikel dieselbe."
+        }
+      ]
+    },
+    {
+      "question": "Was würde passieren, wenn man in einer Next.js-Anwendung durchgängig a-Elemente statt der Link-Komponente benutzt?",
+      "area": "React Routing: Link-Komponente",
+      "options": [
+        {
+          "text": "Jede Navigation würde die gesamte Seite neu laden, mit Flackern und Verlust aller State-Werte.",
+          "isCorrect": true,
+          "explanation": "Richtig: ohne die Link-Komponente ginge bei jedem Klick der gesamte aktuelle Zustand der Seite verloren."
+        },
+        {
+          "text": "Die Anwendung würde überhaupt nicht starten.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Anwendung würde starten, nur die Navigation wäre langsamer und verlöre den State."
+        },
+        {
+          "text": "Next.js würde alle a-Elemente automatisch in Link-Komponenten umwandeln.",
+          "isCorrect": false,
+          "explanation": "Falsch: Next.js wandelt a-Elemente nicht automatisch um, der Entwickler muss bewusst die Link-Komponente benutzen."
+        },
+        {
+          "text": "Die Seiten würden in umgekehrter Reihenfolge angezeigt werden.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Reihenfolge der Seiten hat nichts mit der Wahl zwischen a-Element und Link-Komponente zu tun."
+        }
+      ]
+    },
+    {
+      "question": "Welche drei Navigationsfunktionen bietet useRouter laut Lektion?",
+      "area": "React Routing: useRouter",
+      "options": [
+        {
+          "text": "push, back und replace.",
+          "isCorrect": true,
+          "explanation": "Richtig: push für Vorwärtsnavigation, back für Zurück, replace für Überschreiben ohne neuen Historieneintrag."
+        },
+        {
+          "text": "forward, backward und stop.",
+          "isCorrect": false,
+          "explanation": "Falsch: diese Namen gehören nicht zu useRouter, sie klingen eher nach einem Mediaplayer."
+        },
+        {
+          "text": "open, close und reload.",
+          "isCorrect": false,
+          "explanation": "Falsch: diese Funktionen gibt es in useRouter nicht, reload ist eine separate Browser-Funktion."
+        },
+        {
+          "text": "get, post und delete.",
+          "isCorrect": false,
+          "explanation": "Falsch: das sind HTTP-Methoden aus einer früheren Lektion, keine Navigationsfunktionen von useRouter."
+        }
+      ]
+    },
+    {
+      "question": "Warum ist die feste Konvention page.tsx für alle Next.js-Projekte weltweit gleich?",
+      "area": "React Routing: Zusammenhang",
+      "options": [
+        {
+          "text": "Damit jeder Entwickler ohne Nachschlagen weiß, wo die Seite für eine bestimmte Adresse liegt.",
+          "isCorrect": true,
+          "explanation": "Richtig: die Konvention spart Zeit beim Lesen von fremdem Code und verhindert eigenwillige Ordnerstrukturen."
+        },
+        {
+          "text": "Weil der Name page.tsx gesetzlich als Standard für Webseiten vorgeschrieben ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: es gibt kein Gesetz, das diesen Dateinamen vorschreibt, es ist eine freiwillige Konvention des Next.js-Teams."
+        },
+        {
+          "text": "Weil TypeScript nur Dateien mit dem Namen page.tsx kompilieren kann.",
+          "isCorrect": false,
+          "explanation": "Falsch: TypeScript kann Dateien mit beliebigen Namen kompilieren, der Name page.tsx ist eine Next.js-Konvention."
+        },
+        {
+          "text": "Weil der Browser nur Seiten mit dem Namen page.tsx anzeigen kann.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Browser sieht den Dateinamen nie, er bekommt nur fertig gerenderte HTML-Seiten."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Öffne eine kostenlose Online-Umgebung für Next.js im Browser, etwa StackBlitz oder CodeSandbox, mit einer Next.js-Vorlage. Lege unter src/app einen neuen Ordner namens info an und darin eine page.tsx, die eine einfache Überschrift mit dem Text \"Über diese Seite\" zurückgibt. Füge auf der bestehenden Startseite eine Link-Komponente ein, die zur neuen Seite /info führt.",
+    "expectation": "In der Vorschau erscheint auf der Startseite ein klickbarer Link. Ein Klick darauf führt zur Seite /info mit der Überschrift \"Über diese Seite\", ohne dass die gesamte Seite neu lädt.",
+    "checklist": [
+      "Eine Next.js-Online-Umgebung mit App Router geöffnet.",
+      "Einen neuen Ordner info unter src/app angelegt.",
+      "Darin eine page.tsx mit einer Überschrift erstellt.",
+      "Auf der Startseite eine Link-Komponente zur Seite /info eingebaut.",
+      "Die Navigation zwischen den Seiten funktioniert ohne vollständiges Neuladen."
+    ],
+    "portfolioItem": "P01"
+  },
+  "audio": {
+    "file": "M03-01-03.mp3",
+    "durationSeconds": 1180,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Muss ich für jede neue Seite wirklich nur einen Ordner mit einer page.tsx darin anlegen, ohne irgendwo eine Liste zu aktualisieren?",
+      "answer": "Ja, genau das ist der Kern des App Routers. Ein neuer Ordner unter src/app mit einer page.tsx darin wird beim nächsten Start der Anwendung automatisch als neue Route erkannt. Es gibt keine zentrale Routen-Tabelle, die von Hand gepflegt werden müsste. Die Ordnerstruktur selbst ist die vollständige und einzige Wahrheit über alle vorhandenen Routen."
+    },
+    {
+      "question": "Kann eine Layout-Datei auch selbst eine Navigationsleiste oder einen Footer enthalten?",
+      "answer": "Ja, das ist sogar der häufigste Anwendungsfall für Layout-Dateien. Die Navigationsleiste und der Footer werden einmal im Layout eingebaut und erscheinen dann automatisch auf jeder Seite, die dieses Layout benutzt. Im Repo repo-portfolio enthält die Layout-Datei unter src/app/(de)/layout.tsx genau diese immer gleichen Teile. Eine Änderung an der Navigationsleiste im Layout wirkt sich dadurch sofort auf alle Seiten aus, ohne dass jemand jede einzelne page.tsx anfassen muss."
+    },
+    {
+      "question": "Worin unterscheidet sich die Link-Komponente von Next.js genau von einem gewöhnlichen a-Element in HTML?",
+      "answer": "Ein gewöhnliches a-Element löst eine vollständige neue Anfrage an den Server aus, woraufhin der Browser die gesamte Seite neu lädt, inklusive aller Schriften, Bilder und Skripte. Die Link-Komponente von Next.js verhindert dieses vollständige Neuladen und tauscht nur den Teil der Seite aus, der sich zwischen den beiden Adressen tatsächlich unterscheidet. Das Ergebnis ist eine spürbar schnellere Navigation ohne weißes Flackern und ohne Verlust von State-Werten, die der Besucher vielleicht gerade in ein Formular eingetippt hat."
+    },
+    {
+      "question": "Kann ich mit useRouter auch zurück zur vorherigen Seite navigieren, so wie der Zurück-Knopf im Browser?",
+      "answer": "Ja, useRouter bietet neben router.push für die Vorwärtsnavigation auch router.back, das genau den Zurück-Knopf des Browsers auslöst, nur eben aus dem eigenen Code heraus. Es gibt außerdem router.replace, das die aktuelle Adresse überschreibt, ohne einen neuen Eintrag in der Browser-Historie anzulegen. Welche dieser drei Funktionen die richtige ist, hängt vom genauen Ablauf ab: push für normale Navigation, back für Zurück, replace für Weiterleitungen nach einem Login, bei denen der Zurück-Knopf nicht wieder zur Login-Seite führen soll."
+    },
+    {
+      "question": "Woher weiß eine dynamische Route, welcher Wert gerade in der Adresse steht, etwa welche Artikel-ID?",
+      "answer": "Next.js übergibt den Wert aus der eckigen Klammer automatisch als Prop an die page.tsx, zusammen mit der gesamten Seite. Die Komponente kann diesen Wert dann wie ein ganz normales Prop auslesen, genau wie in der ersten Lektion dieses Moduls gelernt. Bei einem Ordner namens [slug] heißt das Prop entsprechend slug, bei [id] heißt es id. Die Komponente benutzt diesen Wert dann, um den passenden Inhalt zu laden, etwa den Blogartikel mit der entsprechenden ID aus einer Datenbank."
+    }
+  ]
+}
