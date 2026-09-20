@@ -3,7 +3,8 @@
   "title": "GitHub und Pull Requests",
   "durationMinutes": 17,
   "prerequisites": [
-    "M02-05-02"
+    "M02-05-02",
+    "M01-06-05"
   ],
   "terms": [
     {
@@ -244,7 +245,7 @@
     },
     {
       "speaker": "A",
-      "text": "Neben der README bietet GitHub für ein Projekt auch eine eigene Liste offener Aufgaben und gemeldeter Probleme, sowie eine kleine Zahl, wie oft andere Menschen das Projekt mit einem Stern markiert haben, ungefähr wie ein öffentliches Lesezeichen.",
+      "text": "Neben der README bietet GitHub für ein Projekt auch eine eigene Liste offener Aufgaben und gemeldeter Probleme. Dazu kommt eine kleine Zahl, wie oft andere Menschen das Projekt mit einem Stern markiert haben, ungefähr wie ein öffentliches Lesezeichen.",
       "isKeySentence": false,
       "role": "why"
     },
@@ -304,7 +305,7 @@
     },
     {
       "speaker": "A",
-      "text": "Eine Pull Request zeigt genau, welche Zeilen sich ändern würden, dazu können andere Menschen Kommentare hinterlassen, Fragen stellen oder um kleine Anpassungen bitten, bevor der Vorschlag angenommen wird.",
+      "text": "Eine Pull Request zeigt genau, welche Stellen im Code sich ändern würden, dazu können andere Menschen Kommentare hinterlassen, Fragen stellen oder um kleine Anpassungen bitten, bevor der Vorschlag angenommen wird.",
       "isKeySentence": false,
       "role": "example"
     },
@@ -550,6 +551,36 @@
     },
     {
       "speaker": "B",
+      "text": "Muss der Name origin genau so heißen, oder könnte ich auch einen anderen Namen wählen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Du könntest theoretisch einen anderen Namen wählen, origin ist aber der weit verbreitete Standardname, den fast alle Entwickler benutzen, deshalb ist es sinnvoll, sich einfach daran zu halten.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein Projekt kann sogar mehrere Remotes gleichzeitig unter unterschiedlichen Namen kennen, das wird aber erst wichtig, sobald du mit mehr als einer Kopie deines Projekts im Internet arbeitest.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Reicht mir für den heutigen Einstieg also erst einmal ein einziges Remote mit dem Namen origin?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, genau das reicht völlig aus, um alles zu üben, was in dieser Lektion gezeigt wurde: eigenes Remote anlegen, verbinden, hochladen, herunterladen, und eine erste Pull Request stellen.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
       "text": "Muss ein Remote bei GitHub immer öffentlich einsehbar sein?",
       "isKeySentence": false,
       "role": "faq"
@@ -604,7 +635,7 @@
     },
     {
       "speaker": "A",
-      "text": "Ja, beide Befehle sprechen mit dem entfernten Remote im Internet, dafür brauchst du in diesem Moment eine funktionierende Verbindung. Committen selbst geht weiterhin offline, nur das Verschicken oder Abholen über das Remote braucht Internet.",
+      "text": "Ja, beide Befehle sprechen mit dem entfernten Remote im Internet, dafür brauchst du in diesem Moment einen funktionierenden Internetzugang. Committen selbst geht weiterhin offline, nur das Verschicken oder Abholen über das Remote braucht Internet.",
       "isKeySentence": false,
       "role": "faq"
     },
@@ -628,7 +659,7 @@
     },
     {
       "speaker": "A",
-      "text": "Dann solltest du dieses Geheimnis sofort als ungültig behandeln und durch ein neues ersetzen, weil es potenziell schon von anderen gesehen worden sein könnte, selbst nach dem Löschen aus dem Projekt. Das bloße Entfernen der Zeile reicht danach nicht mehr aus, weil ältere Schritte der Versionsgeschichte das Geheimnis weiterhin enthalten können.",
+      "text": "Dann solltest du dieses Geheimnis sofort als ungültig behandeln und durch ein neues ersetzen, weil es potenziell schon von anderen gesehen worden sein könnte, selbst nach dem Löschen aus dem Projekt. Das bloße Entfernen dieser Stelle reicht danach nicht mehr aus, weil ältere Schritte der Versionsgeschichte das Geheimnis weiterhin enthalten können.",
       "isKeySentence": false,
       "role": "faq"
     },
@@ -641,6 +672,18 @@
     {
       "speaker": "A",
       "text": "Nötig ist das nicht unbedingt, aber üblich, weil ein nicht mehr gebrauchter Branch die Übersicht auf Dauer unnötig verkleinert. Viele Projekte bieten dafür direkt auf der GitHub-Seite der angenommenen Pull Request einen einzigen Knopf zum Löschen des Branches an.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss ich vor jeder Pull Request unbedingt zuerst git pull ausführen?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Es ist eine gute Gewohnheit, weil du damit sicherstellst, auf dem neuesten gemeinsamen Stand aufzubauen, bevor andere deine Änderungen durchsehen. Fehlt dieser Schritt, kann die spätere Durchsicht schwerer werden, wenn inzwischen viele andere neue Schritte hinzugekommen sind.",
       "isKeySentence": false,
       "role": "faq"
     }
@@ -923,17 +966,17 @@
         {
           "text": "Nein, git push funktioniert genau wie git init vollständig offline.",
           "isCorrect": false,
-          "explanation": "git init arbeitet offline, git push braucht eine Verbindung zum Remote."
+          "explanation": "git init arbeitet offline, git push braucht einen Zugang zum Remote im Internet."
         },
         {
           "text": "Nur bei privaten, aber nicht bei öffentlichen Remotes.",
           "isCorrect": false,
-          "explanation": "Die Internetverbindung wird unabhängig davon gebraucht, ob das Remote öffentlich oder privat ist."
+          "explanation": "Der Internetzugang wird unabhängig davon gebraucht, ob das Remote öffentlich oder privat ist."
         },
         {
           "text": "Nein, solange der eigene Rechner eingeschaltet ist.",
           "isCorrect": false,
-          "explanation": "Das Einschalten des eigenen Rechners ersetzt keine Verbindung zum entfernten Remote."
+          "explanation": "Das Einschalten des eigenen Rechners ersetzt keinen Zugang zum entfernten Remote im Internet."
         }
       ]
     },
@@ -977,7 +1020,7 @@
   },
   "audio": {
     "file": "M02-05-03.mp3",
-    "durationSeconds": 949,
+    "durationSeconds": 1016,
     "voices": [
       "A",
       "B"
@@ -1003,7 +1046,7 @@
     },
     {
       "question": "Brauche ich für git push und git pull jedes Mal eine Internetverbindung?",
-      "answer": "Ja, beide Befehle sprechen mit dem entfernten Remote im Internet, dafür brauchst du in diesem Moment eine funktionierende Verbindung. Committen selbst geht weiterhin offline, nur das Verschicken oder Abholen über das Remote braucht Internet."
+      "answer": "Ja, beide Befehle sprechen mit dem entfernten Remote im Internet, dafür brauchst du in diesem Moment einen funktionierenden Internetzugang. Committen selbst geht weiterhin offline, nur das Verschicken oder Abholen über das Remote braucht Internet."
     },
     {
       "question": "Kostet ein eigenes GitHub-Konto für ein Portfolio-Projekt etwas?",
@@ -1011,11 +1054,15 @@
     },
     {
       "question": "Was, wenn ich versehentlich doch einmal ein Geheimnis mit git push verschickt habe?",
-      "answer": "Dann solltest du dieses Geheimnis sofort als ungültig behandeln und durch ein neues ersetzen, weil es potenziell schon von anderen gesehen worden sein könnte, selbst nach dem Löschen aus dem Projekt. Das bloße Entfernen der Zeile reicht danach nicht mehr aus, weil ältere Schritte der Versionsgeschichte das Geheimnis weiterhin enthalten können."
+      "answer": "Dann solltest du dieses Geheimnis sofort als ungültig behandeln und durch ein neues ersetzen, weil es potenziell schon von anderen gesehen worden sein könnte, selbst nach dem Löschen aus dem Projekt. Das bloße Entfernen dieser Stelle reicht danach nicht mehr aus, weil ältere Schritte der Versionsgeschichte das Geheimnis weiterhin enthalten können."
     },
     {
       "question": "Muss ich meinen Branch löschen, nachdem meine Pull Request angenommen wurde?",
       "answer": "Nötig ist das nicht unbedingt, aber üblich, weil ein nicht mehr gebrauchter Branch die Übersicht auf Dauer unnötig verkleinert. Viele Projekte bieten dafür direkt auf der GitHub-Seite der angenommenen Pull Request einen einzigen Knopf zum Löschen des Branches an."
+    },
+    {
+      "question": "Muss ich vor jeder Pull Request unbedingt zuerst git pull ausführen?",
+      "answer": "Es ist eine gute Gewohnheit, weil du damit sicherstellst, auf dem neuesten gemeinsamen Stand aufzubauen, bevor andere deine Änderungen durchsehen. Fehlt dieser Schritt, kann die spätere Durchsicht schwerer werden, wenn inzwischen viele andere neue Schritte hinzugekommen sind."
     }
   ]
 }

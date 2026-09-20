@@ -1,0 +1,1041 @@
+{
+  "id": "M02-05-04",
+  "title": "Merge-Konflikte lösen",
+  "durationMinutes": 17,
+  "prerequisites": [
+    "M02-05-03"
+  ],
+  "terms": [
+    {
+      "term": "Merge-Konflikt",
+      "definition": "Eine Situation, in der zwei Branches dieselbe Stelle einer Datei unterschiedlich verändert haben, sodass Git beim Zusammenführen nicht allein entscheiden kann, welche Fassung gelten soll."
+    },
+    {
+      "term": "Konfliktmarke",
+      "definition": "Eine spezielle Zeichenfolge, die Git bei einem Merge-Konflikt in die betroffene Datei schreibt, um beide widersprechenden Fassungen sichtbar voneinander zu trennen."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "text": "Stell dir vor, zwei Kollegen bearbeiten dasselbe gedruckte Blatt Papier, jeder mit einem eigenen Bleistift, gleichzeitig an derselben Stelle ganz oben auf dem Blatt.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Der eine radiert das Wort gut aus und schreibt sehr gut, der andere radiert an genau derselben Stelle gut aus und schreibt hervorragend.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "B",
+      "text": "Was passiert, wenn beide Blätter danach wieder zu einem einzigen zusammengelegt werden sollen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau an dieser einen Stelle weiß niemand von außen automatisch, welche der beiden Änderungen gelten soll. Beide sind für sich sinnvoll, aber sie widersprechen sich.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Bei zwei Branches in Git kann genau dasselbe passieren: beide ändern an derselben Stelle einer Datei etwas Unterschiedliches.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "So eine Situation, in der Git nicht allein entscheiden kann, welche von zwei widersprechenden Änderungen gelten soll, nennt man einen Merge-Konflikt.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein Merge-Konflikt entsteht genau dann, wenn zwei Branches dieselbe Stelle einer Datei unterschiedlich verändert haben und du versuchst, beide mit git merge zusammenzuführen.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Ist so ein Merge-Konflikt ein Fehler, den ich als Anfänger unbedingt vermeiden muss?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, ein Merge-Konflikt ist kein Fehler und kein Zeichen von schlechter Arbeit. Er passiert auch erfahrenen Entwicklern regelmäßig, sobald mehrere Menschen an denselben Stellen arbeiten.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Git meldet einen Merge-Konflikt immer deutlich, statt heimlich eine der beiden Änderungen zu verwerfen. Genau das schützt deine Arbeit davor, ungefragt verloren zu gehen.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir vor, ein Lektor markiert in einem strittigen Textabschnitt mit einer auffälligen Linie den Anfang und das Ende der beiden widersprechenden Fassungen, dazwischen eine weitere Trennlinie.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "B",
+      "text": "Macht Git bei einem Merge-Konflikt etwas Ähnliches direkt in der betroffenen Datei?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, genau das. Git schreibt spezielle Zeichenfolgen direkt in die Datei, um dir zu zeigen, wo genau der Widerspruch liegt und wie die beiden Fassungen jeweils aussehen.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Diese speziellen Zeichenfolgen, die Git bei einem Merge-Konflikt in die Datei schreibt, heißen Konfliktmarken.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Eine typische Konfliktmarke beginnt mit sieben kleiner-als-Zeichen hintereinander und dem Wort HEAD, darunter steht deine eigene Fassung. Dann folgen sieben Gleichheitszeichen als Trennlinie, danach die fremde Fassung, und zum Schluss sieben größer-als-Zeichen mit dem Namen des anderen Branches.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Sieht das dann so aus wie zwei übereinandergelegte Textabschnitte mit einer Trennlinie dazwischen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau so. Zwischen der ersten Marke und der mittleren Trennlinie steht deine eigene, lokale Fassung, zwischen der Trennlinie und der letzten Marke die Fassung aus dem anderen Branch.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir vor, der Lektor legt dir jetzt beide Fassungen nebeneinander vor und fragt dich ganz direkt: welche der beiden soll am Ende im fertigen Text stehen, oder soll es eine Mischung aus beidem werden?",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss ich mich bei einem Merge-Konflikt in Git also auch für genau eine der beiden Fassungen entscheiden?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Meistens ja, manchmal ist aber auch eine Mischung aus beiden Fassungen die richtige Lösung, ganz wie bei einem strittigen Satz, den man am Ende neu und gemeinsam formuliert.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Öffnest du die betroffene Datei in deinem gewohnten Schreibprogramm, siehst du die Konfliktmarken direkt als normalen Text, du kannst sie lesen wie jeden anderen Textabschnitt auch.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Wie entferne ich diese Konfliktmarken dann konkret, wenn ich mich entschieden habe?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Du löschst von Hand alle drei Arten von Konfliktmarken aus der Datei. Übrig bleibt genau der Text, den du am Ende wirklich haben willst, egal ob das die eine, die andere oder eine gemischte Fassung ist.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Wichtig ist: die Konfliktmarken selbst dürfen am Ende nirgends mehr in der Datei stehen, sonst bleibt der Konflikt aus Sicht von Git ungelöst.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann ich mir dabei sicher sein, keine der beiden Fassungen komplett zu übersehen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Am Anfang lohnt es sich, beide Fassungen ganz bewusst noch einmal Wort für Wort zu lesen, bevor du löschst. Mit etwas Übung erkennst du das Muster der Marken schnell auf einen Blick.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir vor, der Lektor hat den strittigen Satz jetzt neu formuliert, liest den ganzen Absatz aber noch einmal laut vor, um sicherzugehen, dass er wirklich Sinn ergibt.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "B",
+      "text": "Sollte ich nach dem Entfernen der Konfliktmarken auch noch einmal prüfen, ob alles wieder richtig funktioniert?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, unbedingt. Gerade bei Programmcode kann eine falsch aufgelöste Stelle dazu führen, dass das Programm anschließend gar nicht mehr richtig läuft, auch wenn die Datei selbst wieder sauber aussieht.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Führe nach dem Auflösen eines Merge-Konflikts also am besten die vorhandenen Tests des Projekts aus, oder probiere die betroffene Stelle händisch aus, bevor du fortfährst.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Wie sage ich Git denn, dass ich den Konflikt jetzt wirklich gelöst habe?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau wie bei jeder normalen Änderung: mit git add und dem Namen der Datei. Das legt die jetzt bereinigte Fassung auf die Werkbank, den Stagingbereich, den du schon aus einer früheren Lektion kennst.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Anschließend machst du mit git commit einen neuen, eigenen Schritt, der genau diese Lösung des Konflikts festhält. Git schlägt dafür meist schon eine passende Nachricht vor, du kannst sie aber auch anpassen.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss ich bei diesem abschließenden Commit den Zusatz minus m mit einer eigenen Nachricht wie bei einem gewöhnlichen Commit benutzen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Du darfst das, musst es aber nicht, weil Git schon von sich aus eine Nachricht vorbereitet hat, die erklärt, welche beiden Branches hier zusammengeführt wurden. Willst du zusätzlich eigene Worte ergänzen, kannst du das jederzeit tun.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Ist der Merge damit dann vollständig abgeschlossen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, mit diesem Commit ist der Merge fertig, beide Branches sind jetzt an dieser Stelle wieder vereint, so wie die zwei zusammenfließenden Flüsse aus der vorigen Lektion.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir vor, mitten im Zusammenlegen der beiden Blätter ruft dir jemand kurz zu, an welchen genauen Stellen es überhaupt Widersprüche gibt, bevor du selbst suchen musst.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "B",
+      "text": "Zeigt mir Git auch automatisch an, welche Dateien von einem Merge-Konflikt betroffen sind?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, direkt nach einem gescheiterten Merge zeigt dir git status genau diese Dateien an, meist mit dem Hinweis, dass beide Seiten dieselbe Datei verändert haben.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Das erspart dir, das ganze Projekt selbst nach betroffenen Stellen zu durchsuchen, du bekommst die Liste direkt von Git genannt.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss ich alle betroffenen Dateien auf einmal lösen, oder kann ich das nacheinander tun?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Du kannst die Dateien in aller Ruhe nacheinander bearbeiten. Erst wenn du die letzte betroffene Datei mit git add bestätigt hast, ist der gesamte Merge bereit für den abschließenden Commit.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir vor, eine Maschine würde bei den beiden widersprechenden Textfassungen einfach automatisch die zeitlich neuere behalten, ganz ohne jemanden zu fragen.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "B",
+      "text": "Wäre das nicht eigentlich praktisch, wenn Git das einfach automatisch für mich entscheiden würde?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Auf den ersten Blick vielleicht, aber die zeitlich neuere Änderung ist nicht automatisch auch die inhaltlich bessere oder richtigere Entscheidung.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Deshalb überlässt Git diese eine Entscheidung bewusst dir, statt sie durch eine feste, immer gleiche Regel zu ersetzen, die im Einzelfall auch falsch liegen könnte.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Heißt das, es gibt bei einem Merge-Konflikt nie eine einzige, objektiv immer richtige Lösung?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Richtig, welche Fassung die richtige ist, hängt vom Sinn des Inhalts ab, das kann nur ein Mensch beurteilen, der versteht, was beide Änderungen eigentlich erreichen sollten.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir vor, der Lektor markiert die beiden strittigen Fassungen zusätzlich noch mit zwei verschiedenen Leuchtstiften, damit sie auf den ersten Blick auseinanderzuhalten sind.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss ich die Konfliktmarken in der Praxis wirklich immer als reinen, unformatierten Text lesen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Nicht unbedingt. Viele moderne Programme zum Schreiben von Code erkennen Konfliktmarken automatisch und zeigen beide Fassungen zusätzlich farblich unterschiedlich markiert an, oft sogar mit einem eigenen Knopf, um schnell die eine oder die andere Fassung zu übernehmen.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Das ändert nichts am eigentlichen Ablauf, den du heute gelernt hast, es macht das Lesen und Entscheiden nur bequemer und übersichtlicher.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Sollte ich also am Anfang trotzdem verstehen, wie die reinen Konfliktmarken im Text aussehen, statt mich nur auf so ein Programm zu verlassen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, unbedingt. Verstehst du die reine Textform, kannst du einen Konflikt in jeder Umgebung lösen, auch wenn gerade kein komfortables Programm mit farblicher Anzeige zur Verfügung steht.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Fassen wir also noch einmal ganz kurz zusammen: ein Merge-Konflikt entsteht, wenn zwei Branches dieselbe Stelle unterschiedlich verändert haben. Konfliktmarken zeigen beide Fassungen in der Datei, du entscheidest dich, löschst die Marken, prüfst das Ergebnis und schließt mit git add und git commit ab.",
+      "isKeySentence": true,
+      "role": "key"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir vor, die beiden Kollegen von vorhin sprechen sich vorher kurz ab, wer heute an welchem Abschnitt des Textes arbeitet.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann ich Merge-Konflikte in Git also auch von vornherein seltener machen, statt sie nur hinterher zu lösen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, häufiges git pull, kurze, häufige Commits statt seltener riesiger Commits, und eine grobe Absprache im Team, wer gerade an welcher Datei arbeitet, verringern deutlich, wie oft ein Merge-Konflikt überhaupt entsteht.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Ganz vermeiden lässt sich ein Merge-Konflikt aber nie vollständig, sobald mehrere Menschen an denselben Dateien arbeiten, deshalb lohnt es sich, den Ablauf aus dieser Lektion einmal in Ruhe selbst zu üben.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Eine kurze, regelmäßige Absprache im Team kostet nur wenige Minuten, spart aber später oft deutlich mehr Zeit beim Auflösen unnötiger, vermeidbarer Konflikte.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Lohnt sich das Üben eines Merge-Konflikts auch dann, wenn ich meistens allein an eigenen Projekten arbeite?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, denn auch allein kannst du dir versehentlich selbst einen Konflikt einhandeln, etwa zwischen zwei eigenen Branches. Der Ablauf zum Lösen bleibt in jedem Fall genau derselbe.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Wer diesen Ablauf einmal in Ruhe an einem eigenen, ungefährlichen Übungsprojekt durchgespielt hat, verliert später im echten Team-Alltag die anfängliche Unsicherheit vor einem Merge-Konflikt fast vollständig.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "In der vorigen Lektion hast du gelernt, wie ein Merge zwei Branches ganz ohne Widerspruch zusammenführt, weil beide Seiten an unterschiedlichen Stellen gearbeitet haben.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Ist ein Merge-Konflikt also nur der schwierigere Sonderfall genau desselben Vorgangs?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, genau. Der Befehl git merge bleibt derselbe, nur meldet Git dir diesmal zusätzlich, dass es an einer bestimmten Stelle selbst keine automatische Entscheidung treffen kann.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Alles, was du über Branches und Merges bereits gelernt hast, gilt auch hier weiter, heute kommt lediglich der Umgang mit dem einen strittigen Fall dazu.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Schauen wir uns dazu einen besonderen Trick aus dem Repo futuredev selbst an, mit dem eine ganz bestimmte Art von Merge-Konflikt von vornherein vermieden wird.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "In diesem Projekt gibt es eine einzelne Datei namens manifest.json, die eine Liste aller vorhandenen Lektionen mit ihrer jeweiligen Prüfsumme enthält.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Warum sollte ausgerechnet diese eine Datei besonders anfällig für Merge-Konflikte sein?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Weil mehrere Autoren gleichzeitig an unterschiedlichen Lektionen arbeiten und jede neue Lektion diese eine gemeinsame Liste ergänzen müsste, an derselben Stelle in derselben Datei, genau die Voraussetzung für einen Merge-Konflikt.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "In der Projekt-Beschreibung des Repos steht deshalb ausdrücklich, dass diese Datei nicht von Hand geschrieben, sondern durch einen eigenen Befehl automatisch aus dem gesamten Ordnerinhalt neu erzeugt wird.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Und wie hilft das konkret, einen Merge-Konflikt bei genau dieser Datei zu vermeiden?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Weil bei einem Konflikt in dieser einen Datei niemand die beiden Fassungen von Hand mischen muss. Man löst den Konflikt, indem man die Datei einfach mit dem eigenen Befehl komplett neu erzeugen lässt, statt die Konfliktmarken mühsam von Hand zu bearbeiten.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir vor, du hast auf GitHub bereits eine Pull Request gestellt, und während die Verantwortlichen sie noch durchsehen, ändert jemand anderes am Hauptzweig genau dieselbe Stelle.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann ein Merge-Konflikt also auch erst später bei einer bereits gestellten Pull Request auftauchen, nicht nur bei einem lokalen git merge?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, genau das kann passieren. GitHub zeigt dir dann direkt auf der Seite der Pull Request an, dass ein Konflikt mit dem Hauptzweig entstanden ist.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Die Lösung ist dieselbe wie bei einem lokalen Konflikt: du holst dir den aktuellen Stand des Hauptzweigs, löst den Konflikt in deinem eigenen Branch, und lädst das Ergebnis erneut mit git push hoch.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss ich dafür die Pull Request neu erstellen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, ein erneutes git push zu demselben Branch aktualisiert die bestehende Pull Request automatisch, du musst sie nicht neu anlegen.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir vor, statt eines Textabschnitts widersprechen sich zwei komplett unterschiedliche Fotos, die beide denselben Platz im Album beanspruchen.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "B",
+      "text": "Funktioniert das Lösen mit Konfliktmarken auch bei Bildern oder anderen nicht lesbaren Dateien, nicht nur bei Text?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Bei Bildern und ähnlichen Dateien kann Git keine Konfliktmarken mitten in den Inhalt schreiben, weil sich so eine Datei nicht wie Text zeilenweise lesen lässt.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Stattdessen fragt dich Git in diesem Fall direkt, welche der beiden kompletten Dateifassungen behalten werden soll, ganz ohne Konfliktmarken im Inneren der Datei.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Für den heutigen Einstieg reicht es, das Grundprinzip bei Textdateien sicher zu beherrschen, der Fall mit Bildern folgt genau derselben Grundidee, nur ohne den Blick ins Detail der Datei.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Wähle ich bei so einer nicht lesbaren Datei die eine oder die andere Fassung genauso über git add wie bei Text?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, sobald du dich entschieden hast, welche vollständige Fassung bleiben soll, legst du genau diese Version ganz normal mit git add ab und schließt danach wie gewohnt mit git commit ab.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Der einzige Unterschied zu Textdateien ist also, dass du keine einzelnen Konfliktmarken siehst, sondern dich für eine der beiden kompletten Dateien insgesamt entscheidest, ohne einen einzelnen Absatz daraus herauszupicken.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Fassen wir die Begriffe von heute noch einmal als Liste zusammen.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Merge-Konflikt: Eine Situation, in der zwei Branches dieselbe Stelle einer Datei unterschiedlich verändert haben, sodass Git beim Zusammenführen nicht allein entscheiden kann, welche Fassung gelten soll.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Konfliktmarke: Eine spezielle Zeichenfolge, die Git bei einem Merge-Konflikt in die betroffene Datei schreibt, um beide widersprechenden Fassungen sichtbar voneinander zu trennen.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann ein Merge-Konflikt versehentlich Arbeit für immer zerstören?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, solange du die Datei nicht unüberlegt löschst, bleiben beide widersprechenden Fassungen als Text in den Konfliktmarken vollständig erhalten, bis du dich bewusst entscheidest. Erst dein eigener, bewusster Commit legt fest, welche Fassung am Ende gilt.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss ich mich bei jedem Merge-Konflikt für genau eine der beiden Fassungen entscheiden?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, oft ist eine Mischung aus beiden Fassungen die passende Lösung, gerade wenn beide Seiten unterschiedliche, aber jeweils sinnvolle Ergänzungen vorgenommen haben. Wichtig ist nur, am Ende einen klaren, funktionierenden Text ohne verbliebene Konfliktmarken zu haben.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Was passiert, wenn ich vergesse, eine Konfliktmarke aus der Datei zu entfernen?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Diese Zeichenfolge bleibt dann einfach als ungewollter Text mitten in deiner Datei stehen und kann, gerade bei Programmcode, zu neuen Fehlern führen. Ein Testlauf nach dem Auflösen eines Konflikts deckt so einen übersehenen Rest meist zuverlässig auf.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann ich einen begonnenen Merge auch ganz abbrechen, statt ihn zu lösen?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, Git bietet dafür einen eigenen Befehl, mit dem sich ein begonnener, aber noch nicht abgeschlossener Merge vollständig zurücknehmen lässt, als hätte man ihn nie begonnen. Diesen fortgeschritteneren Befehl lernst du am besten erst, sobald du ihn im echten Alltag brauchst.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Sind Merge-Konflikte ein Zeichen dafür, dass im Team etwas grundsätzlich falsch läuft?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, gerade in aktiven Projekten mit mehreren Beteiligten sind gelegentliche Merge-Konflikte ganz normal und kein Alarmzeichen. Auffällig wären nur sehr häufige Konflikte an denselben Stellen, das kann dann ein Hinweis auf eine sinnvollere Aufteilung der Aufgaben sein.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Betrifft ein Merge-Konflikt immer die ganze Datei, oder nur eine einzelne Stelle?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "In der Regel betrifft er nur die einzelnen Stellen, an denen sich beide Branches wirklich widersprechen, der Rest der Datei bleibt unberührt und wird automatisch richtig zusammengeführt. Nur an den wenigen strittigen Stellen setzt Git die Konfliktmarken.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann ein Merge-Konflikt auch bei einer Pull Request auf GitHub auftreten, nicht nur lokal?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, das kann passieren, wenn sich der Hauptzweig weiterentwickelt, während deine Pull Request noch offen ist. GitHub zeigt diesen Fall direkt auf der Seite der Pull Request an, die Lösung folgt demselben Ablauf wie bei einem lokalen Konflikt.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Wie löse ich einen Merge-Konflikt bei einem Bild oder einer anderen nicht lesbaren Datei?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Bei solchen Dateien kann Git keine Konfliktmarken in den Inhalt schreiben, weil sich der Inhalt nicht zeilenweise lesen lässt. Stattdessen musst du dich für eine der beiden kompletten Dateifassungen entscheiden, ohne ins Detail der Datei selbst hineinzuschauen.",
+      "isKeySentence": false,
+      "role": "faq"
+    }
+  ],
+  "practiceExample": {
+    "text": "Im Repo futuredev entsteht content/manifest.json niemals von Hand, sondern ausschließlich über einen eigenen Befehl, der die Datei komplett aus dem aktuellen Inhalt des Ordners lessons neu zusammensetzt. Trägt ein Merge-Konflikt ausgerechnet diese eine Datei, muss niemand die beiden Fassungen mühsam von Hand mischen: der Befehl erzeugt die Datei einfach neu, sobald alle betroffenen Lektionsdateien selbst schon konfliktfrei sind.",
+    "repoNote": "repo-futuredev",
+    "location": "content/README.md, Abschnitt \"Manifest\""
+  },
+  "quiz": [
+    {
+      "question": "Was ist ein Merge-Konflikt?",
+      "area": "Merge-Konflikt-Grundlagen",
+      "options": [
+        {
+          "text": "Eine Situation, in der zwei Branches dieselbe Stelle unterschiedlich verändert haben.",
+          "isCorrect": true,
+          "explanation": "Genau das Bild der zwei Kollegen, die dieselbe Zeile ändern, zeigt das."
+        },
+        {
+          "text": "Ein Befehl, der zwei Branches automatisch dauerhaft trennt.",
+          "isCorrect": false,
+          "explanation": "Ein Merge-Konflikt trennt keine Branches, er zeigt einen ungelösten Widerspruch."
+        },
+        {
+          "text": "Ein Fehler, der nur bei falsch installiertem Git auftritt.",
+          "isCorrect": false,
+          "explanation": "Ein Merge-Konflikt hat nichts mit einer fehlerhaften Installation zu tun."
+        },
+        {
+          "text": "Eine allgemeine Warnung, dass ein entferntes Remote gerade vorübergehend nicht erreichbar ist.",
+          "isCorrect": false,
+          "explanation": "Das wäre ein Verbindungsproblem, kein Merge-Konflikt."
+        }
+      ]
+    },
+    {
+      "question": "Wann entsteht ein Merge-Konflikt?",
+      "area": "Merge-Konflikt-Grundlagen",
+      "options": [
+        {
+          "text": "Wenn zwei Branches dieselbe Stelle einer Datei unterschiedlich verändert haben und zusammengeführt werden sollen.",
+          "isCorrect": true,
+          "explanation": "Genau diese Bedingung wurde in der Lektion erklärt."
+        },
+        {
+          "text": "Immer schon ganz automatisch direkt beim allerersten Commit eines völlig neuen, gerade eben erst begonnenen Projekts.",
+          "isCorrect": false,
+          "explanation": "Ein erster, einzelner Commit kann keinen Widerspruch zu einem anderen Branch haben."
+        },
+        {
+          "text": "Nur dann, wenn ein Projekt kein Remote besitzt.",
+          "isCorrect": false,
+          "explanation": "Ein Merge-Konflikt kann rein lokal entstehen, unabhängig von einem Remote."
+        },
+        {
+          "text": "Nur bei sehr großen Projekten mit vielen tausend Dateien.",
+          "isCorrect": false,
+          "explanation": "Ein Merge-Konflikt kann auch bei einem winzigen Projekt mit einer einzigen Datei entstehen."
+        }
+      ]
+    },
+    {
+      "question": "Ist ein Merge-Konflikt ein Zeichen für schlechte Arbeit?",
+      "area": "Merge-Konflikt-Grundlagen",
+      "options": [
+        {
+          "text": "Nein, er passiert auch erfahrenen Entwicklern regelmäßig.",
+          "isCorrect": true,
+          "explanation": "Genau das wurde ausdrücklich in der Lektion klargestellt."
+        },
+        {
+          "text": "Ja, ein Merge-Konflikt bedeutet immer einen schweren Programmierfehler.",
+          "isCorrect": false,
+          "explanation": "Ein Merge-Konflikt entsteht durch gleichzeitige Änderungen, nicht durch einen Programmierfehler."
+        },
+        {
+          "text": "Ja, nur Anfänger erleben jemals einen Merge-Konflikt.",
+          "isCorrect": false,
+          "explanation": "Das Gegenteil ist der Fall, auch erfahrene Entwickler erleben regelmäßig Merge-Konflikte."
+        },
+        {
+          "text": "Ja, ein Merge-Konflikt zerstört automatisch das gesamte Projekt.",
+          "isCorrect": false,
+          "explanation": "Ein Merge-Konflikt zerstört nichts, er zeigt nur einen zu lösenden Widerspruch."
+        }
+      ]
+    },
+    {
+      "question": "Was ist eine Konfliktmarke?",
+      "area": "Konfliktmarken",
+      "options": [
+        {
+          "text": "Eine spezielle Zeichenfolge, die Git zur Trennung zweier widersprechender Fassungen in die Datei schreibt.",
+          "isCorrect": true,
+          "explanation": "Genau das Bild der Lektor-Markierung im Text zeigt das."
+        },
+        {
+          "text": "Ein besonderes Symbol, das eine einzelne Datei dauerhaft und ohne jede Ausnahme vor jeder weiteren zukünftigen Änderung sperrt.",
+          "isCorrect": false,
+          "explanation": "Eine Konfliktmarke sperrt nichts, sie zeigt nur den Widerspruch an."
+        },
+        {
+          "text": "Ein Stern, den GitHub für beliebte Projekte automatisch vergibt.",
+          "isCorrect": false,
+          "explanation": "Das beschreibt ein GitHub-Merkmal aus einer früheren Lektion, keine Konfliktmarke."
+        },
+        {
+          "text": "Ein Zusatz im Namen einer Commit-Nachricht.",
+          "isCorrect": false,
+          "explanation": "Eine Konfliktmarke steht im Inhalt der Datei, nicht im Namen einer Commit-Nachricht."
+        }
+      ]
+    },
+    {
+      "question": "Was steht zwischen der ersten Konfliktmarke und der mittleren Trennlinie?",
+      "area": "Konfliktmarken",
+      "options": [
+        {
+          "text": "Die eigene, lokale Fassung der betroffenen Stelle.",
+          "isCorrect": true,
+          "explanation": "Genau das wurde in der Lektion so beschrieben."
+        },
+        {
+          "text": "Eine automatisch von Git erfundene, dritte Fassung.",
+          "isCorrect": false,
+          "explanation": "Git erfindet keine dritte Fassung, es zeigt nur die beiden vorhandenen."
+        },
+        {
+          "text": "Der komplette Inhalt der gesamten Datei.",
+          "isCorrect": false,
+          "explanation": "Nur die strittige Stelle wird so markiert, nicht die ganze Datei."
+        },
+        {
+          "text": "Die Fassung aus dem fremden Branch.",
+          "isCorrect": false,
+          "explanation": "Die fremde Fassung steht hinter der Trennlinie, nicht davor."
+        }
+      ]
+    },
+    {
+      "question": "Was musst du tun, um einen Merge-Konflikt in einer Datei zu lösen?",
+      "area": "Merge-Konflikt-Grundlagen",
+      "options": [
+        {
+          "text": "Entscheiden, welcher Text bleiben soll, und alle Konfliktmarken entfernen.",
+          "isCorrect": true,
+          "explanation": "Genau dieser Ablauf wurde Schritt für Schritt in der Lektion gezeigt."
+        },
+        {
+          "text": "Die betroffene Datei vollständig löschen und nie wieder anlegen.",
+          "isCorrect": false,
+          "explanation": "Löschen der Datei löst keinen Konflikt, es entfernt nur den Inhalt."
+        },
+        {
+          "text": "Einfach abwarten, bis Git den Konflikt irgendwann ganz von selbst und ohne dein Zutun auflöst.",
+          "isCorrect": false,
+          "explanation": "Git löst einen Merge-Konflikt nicht von selbst, er braucht eine bewusste Entscheidung."
+        },
+        {
+          "text": "Den betroffenen Branch sofort und ohne weitere Prüfung löschen.",
+          "isCorrect": false,
+          "explanation": "Das würde eigene, möglicherweise wichtige Arbeit unnötig verwerfen."
+        }
+      ]
+    },
+    {
+      "question": "Was solltest du nach dem Entfernen der Konfliktmarken zusätzlich tun?",
+      "area": "Merge-Konflikt-Grundlagen",
+      "options": [
+        {
+          "text": "Prüfen, ob die betroffene Stelle danach wirklich richtig funktioniert.",
+          "isCorrect": true,
+          "explanation": "Genau das wurde als wichtiger Schritt vor dem Commit empfohlen."
+        },
+        {
+          "text": "Sofort ein völlig neues, leeres Projekt beginnen.",
+          "isCorrect": false,
+          "explanation": "Ein neues Projekt zu beginnen löst keinen bestehenden Merge-Konflikt."
+        },
+        {
+          "text": "Das Remote vollständig löschen, um weitere Konflikte zu vermeiden.",
+          "isCorrect": false,
+          "explanation": "Das Löschen des Remotes ist unnötig und würde die gemeinsame Arbeit zerstören."
+        },
+        {
+          "text": "Den eigenen Branch dauerhaft umbenennen.",
+          "isCorrect": false,
+          "explanation": "Ein Umbenennen des Branches hat mit dem Lösen des Konflikts nichts zu tun."
+        }
+      ]
+    },
+    {
+      "question": "Womit schließt du das Auflösen eines Merge-Konflikts endgültig ab?",
+      "area": "Terminal-Befehle",
+      "options": [
+        {
+          "text": "Mit git add für die bereinigte Datei und anschließend git commit.",
+          "isCorrect": true,
+          "explanation": "Genau dieser Ablauf wurde in der Lektion Schritt für Schritt gezeigt."
+        },
+        {
+          "text": "Mit git init in einem völlig neuen, leeren Ordner.",
+          "isCorrect": false,
+          "explanation": "git init hat mit dem Abschließen eines Merges nichts zu tun."
+        },
+        {
+          "text": "Mit git status allein, ohne weitere Befehle.",
+          "isCorrect": false,
+          "explanation": "git status zeigt nur den Zustand an, es schließt einen Merge nicht ab."
+        },
+        {
+          "text": "Mit dem vollständigen Löschen des eigenen Branches.",
+          "isCorrect": false,
+          "explanation": "Das Löschen des Branches würde die eigene Arbeit unnötig entfernen."
+        }
+      ]
+    },
+    {
+      "question": "Wie lässt sich verhindern, dass die Datei manifest.json im Repo futuredev häufig Merge-Konflikte bekommt?",
+      "area": "Praxis",
+      "options": [
+        {
+          "text": "Sie wird nicht von Hand geschrieben, sondern bei Bedarf automatisch neu erzeugt.",
+          "isCorrect": true,
+          "explanation": "Genau das steht in der Projekt-Beschreibung als Lösung für dieses Problem."
+        },
+        {
+          "text": "Sie darf laut einer strengen Regel des Projekts niemals in der gesamten Versionsgeschichte irgendwo auftauchen.",
+          "isCorrect": false,
+          "explanation": "Die Datei ist Teil der Versionsgeschichte, sie wird nur automatisch statt von Hand erzeugt."
+        },
+        {
+          "text": "Sie wird von jedem Autor einzeln in einer eigenen, privaten Kopie geführt.",
+          "isCorrect": false,
+          "explanation": "Genau das Gegenteil wäre der Fall, die Datei ist gemeinsam und wird zentral neu erzeugt."
+        },
+        {
+          "text": "Sie wird bei jedem Konflikt automatisch vollständig gelöscht.",
+          "isCorrect": false,
+          "explanation": "Die Datei wird bei einem Konflikt neu erzeugt, nicht einfach gelöscht."
+        }
+      ]
+    },
+    {
+      "question": "Was zeigt das Praxisbeispiel aus dem Repo futuredev über parallele Autoren?",
+      "area": "Praxis",
+      "options": [
+        {
+          "text": "Eine gemeinsame Liste lässt sich durch automatisches Neuerzeugen statt Mischen konfliktfrei halten.",
+          "isCorrect": true,
+          "explanation": "Genau das ist der Kern des gezeigten Beispiels."
+        },
+        {
+          "text": "Parallele Autoren dürfen laut dem Beispiel niemals gleichzeitig an einem Projekt arbeiten.",
+          "isCorrect": false,
+          "explanation": "Das Beispiel zeigt gerade eine Lösung für gleichzeitiges Arbeiten, kein Verbot davon."
+        },
+        {
+          "text": "Jeder Autor bekommt laut dem Beispiel ein eigenes, komplett getrenntes Projekt.",
+          "isCorrect": false,
+          "explanation": "Alle Autoren arbeiten am selben Projekt, nur die eine Datei wird automatisch erzeugt."
+        },
+        {
+          "text": "Merge-Konflikte werden im Beispiel grundsätzlich ignoriert und einfach übersprungen.",
+          "isCorrect": false,
+          "explanation": "Konflikte werden nicht ignoriert, sondern durch Neuerzeugen der Datei von vornherein vermieden."
+        }
+      ]
+    },
+    {
+      "question": "Welche Aussage über Merge-Konflikte und verlorene Arbeit stimmt?",
+      "area": "Merge-Konflikt-Grundlagen",
+      "options": [
+        {
+          "text": "Beide widersprechenden Fassungen bleiben als Text erhalten, bis du dich bewusst entscheidest.",
+          "isCorrect": true,
+          "explanation": "Genau das schützt vor versehentlichem Verlust einer der beiden Fassungen."
+        },
+        {
+          "text": "Git löscht bei einem Konflikt automatisch die ältere der beiden Fassungen.",
+          "isCorrect": false,
+          "explanation": "Git löscht bei einem Konflikt nichts automatisch, es zeigt beide Fassungen."
+        },
+        {
+          "text": "Ein Merge-Konflikt führt immer zum sofortigen, endgültigen Verlust einer Fassung.",
+          "isCorrect": false,
+          "explanation": "Genau das verhindern die Konfliktmarken, indem sie beide Fassungen sichtbar erhalten."
+        },
+        {
+          "text": "Nur die neuere der beiden Fassungen wird bei einem Konflikt überhaupt angezeigt.",
+          "isCorrect": false,
+          "explanation": "Beide Fassungen werden angezeigt, unabhängig davon, welche zeitlich neuer ist."
+        }
+      ]
+    },
+    {
+      "question": "Warum sollten Teams häufiger pullen und in kleineren Commits arbeiten?",
+      "area": "Praxis",
+      "options": [
+        {
+          "text": "Weil das die Häufigkeit von Merge-Konflikten deutlich verringert.",
+          "isCorrect": true,
+          "explanation": "Genau das wurde als Vorbeugung gegen häufige Konflikte erklärt."
+        },
+        {
+          "text": "Weil kleinere Commits Merge-Konflikte technisch vollständig unmöglich machen.",
+          "isCorrect": false,
+          "explanation": "Merge-Konflikte werden dadurch nur seltener, nicht vollständig unmöglich."
+        },
+        {
+          "text": "Weil GitHub sonst automatisch das gesamte Konto sperrt.",
+          "isCorrect": false,
+          "explanation": "Das hat mit häufigem Pullen oder kleineren Commits nichts zu tun."
+        },
+        {
+          "text": "Weil Git ohne diese Gewohnheit gar keine Commits mehr annimmt.",
+          "isCorrect": false,
+          "explanation": "Git nimmt Commits unabhängig von dieser Gewohnheit weiterhin an."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Lege in deinem Übungsprojekt zwei Branches an, die beide dieselbe Stelle derselben Datei unterschiedlich ändern und committen. Wechsle zu main und führe git merge mit dem zweiten Branch aus, sodass ein Merge-Konflikt entsteht. Öffne die Datei, lies beide Fassungen zwischen den Konfliktmarken, entscheide dich, entferne die Marken und schließe mit git add sowie git commit ab.",
+    "expectation": "git status zeigt danach keinen offenen Konflikt mehr an, und die Datei enthält keine Konfliktmarken, nur noch deinen bewusst gewählten Text.",
+    "checklist": [
+      "Zwei Branches mit widersprechender Änderung an derselben Stelle angelegt",
+      "Mit git merge einen echten Merge-Konflikt ausgelöst",
+      "Beide Fassungen zwischen den Konfliktmarken gelesen und eine Entscheidung getroffen",
+      "Alle Konfliktmarken entfernt und das Ergebnis geprüft",
+      "Mit git add und git commit den gelösten Konflikt abgeschlossen"
+    ]
+  },
+  "audio": {
+    "file": "M02-05-04.mp3",
+    "durationSeconds": 1010,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Kann ein Merge-Konflikt versehentlich Arbeit für immer zerstören?",
+      "answer": "Nein, solange du die Datei nicht unüberlegt löschst, bleiben beide widersprechenden Fassungen als Text in den Konfliktmarken vollständig erhalten, bis du dich bewusst entscheidest. Erst dein eigener, bewusster Commit legt fest, welche Fassung am Ende gilt."
+    },
+    {
+      "question": "Muss ich mich bei jedem Merge-Konflikt für genau eine der beiden Fassungen entscheiden?",
+      "answer": "Nein, oft ist eine Mischung aus beiden Fassungen die passende Lösung, gerade wenn beide Seiten unterschiedliche, aber jeweils sinnvolle Ergänzungen vorgenommen haben. Wichtig ist nur, am Ende einen klaren, funktionierenden Text ohne verbliebene Konfliktmarken zu haben."
+    },
+    {
+      "question": "Was passiert, wenn ich vergesse, eine Konfliktmarke aus der Datei zu entfernen?",
+      "answer": "Diese Zeichenfolge bleibt dann einfach als ungewollter Text mitten in deiner Datei stehen und kann, gerade bei Programmcode, zu neuen Fehlern führen. Ein Testlauf nach dem Auflösen eines Konflikts deckt so einen übersehenen Rest meist zuverlässig auf."
+    },
+    {
+      "question": "Kann ich einen begonnenen Merge auch ganz abbrechen, statt ihn zu lösen?",
+      "answer": "Ja, Git bietet dafür einen eigenen Befehl, mit dem sich ein begonnener, aber noch nicht abgeschlossener Merge vollständig zurücknehmen lässt, als hätte man ihn nie begonnen. Diesen fortgeschritteneren Befehl lernst du am besten erst, sobald du ihn im echten Alltag brauchst."
+    },
+    {
+      "question": "Sind Merge-Konflikte ein Zeichen dafür, dass im Team etwas grundsätzlich falsch läuft?",
+      "answer": "Nein, gerade in aktiven Projekten mit mehreren Beteiligten sind gelegentliche Merge-Konflikte ganz normal und kein Alarmzeichen. Auffällig wären nur sehr häufige Konflikte an denselben Stellen, das kann dann ein Hinweis auf eine sinnvollere Aufteilung der Aufgaben sein."
+    },
+    {
+      "question": "Betrifft ein Merge-Konflikt immer die ganze Datei, oder nur eine einzelne Stelle?",
+      "answer": "In der Regel betrifft er nur die einzelnen Stellen, an denen sich beide Branches wirklich widersprechen, der Rest der Datei bleibt unberührt und wird automatisch richtig zusammengeführt. Nur an den wenigen strittigen Stellen setzt Git die Konfliktmarken."
+    },
+    {
+      "question": "Kann ein Merge-Konflikt auch bei einer Pull Request auf GitHub auftreten, nicht nur lokal?",
+      "answer": "Ja, das kann passieren, wenn sich der Hauptzweig weiterentwickelt, während deine Pull Request noch offen ist. GitHub zeigt diesen Fall direkt auf der Seite der Pull Request an, die Lösung folgt demselben Ablauf wie bei einem lokalen Konflikt."
+    },
+    {
+      "question": "Wie löse ich einen Merge-Konflikt bei einem Bild oder einer anderen nicht lesbaren Datei?",
+      "answer": "Bei solchen Dateien kann Git keine Konfliktmarken in den Inhalt schreiben, weil sich der Inhalt nicht zeilenweise lesen lässt. Stattdessen musst du dich für eine der beiden kompletten Dateifassungen entscheiden, ohne ins Detail der Datei selbst hineinzuschauen."
+    }
+  ]
+}
