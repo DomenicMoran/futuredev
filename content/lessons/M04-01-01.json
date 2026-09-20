@@ -1,0 +1,734 @@
+{
+  "id": "M04-01-01",
+  "title": "Trennung der Zuständigkeiten",
+  "durationMinutes": 32,
+  "prerequisites": [
+    "M03-01-01",
+    "M03-01-02",
+    "M03-02-01"
+  ],
+  "terms": [
+    {
+      "term": "Trennung der Zuständigkeiten",
+      "definition": "Ein Entwurfsgrundsatz, bei dem jedes Modul genau eine klar umrissene Aufgabe hat und kein Modul die inneren Abläufe eines anderen Moduls kennen muss."
+    },
+    {
+      "term": "Modul",
+      "definition": "Ein abgegrenzter Teil eines Programms mit eigener Aufgabe und eigener Datei oder eigenem Ordner, der über eine festgelegte Schnittstelle mit anderen Modulen zusammenarbeitet."
+    },
+    {
+      "term": "Kopplung",
+      "definition": "Das Maß, wie stark zwei Module voneinander abhängen. Niedrige Kopplung ist gut, hohe Kopplung macht Änderungen riskant und teuer."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir ein Restaurant vor, in dem ein einziger Koch alles allein macht: Bestellungen aufnehmen, Gemüse schneiden, kochen, anrichten, kassieren und am Ende noch den Abwasch.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "In einem gut organisierten Restaurant gibt es stattdessen klare Rollen. Der Kellner nimmt die Bestellung auf und bringt das Essen. Der Koch bereitet die Gerichte zu. Der Kassierer rechnet ab. Der Spüler reinigt das Geschirr. Jede Person hat genau eine Zuständigkeit und muss nicht wissen, wie die andere ihre Arbeit im Detail erledigt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Und was hat diese Arbeitsteilung im Restaurant mit Programmieren zu tun?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Genau dasselbe Prinzip gilt für gut gebauten Code. Ein Programm besteht aus vielen kleinen Teilen, und jedes Teil sollte genau eine klar umrissene Aufgabe haben. Der Teil, der eine E-Mail verschickt, sollte nicht auch noch die Rechnung berechnen. Der Teil, der Daten in der Datenbank speichert, sollte nicht auch noch HTML für den Browser zusammenbauen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Dieser Grundsatz heißt Trennung der Zuständigkeiten, auf Englisch Separation of Concerns.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-microsaas, einer kleinen, aber vollständigen Webanwendung für wiederkehrende Zahlungen, ist die Trennung der Zuständigkeiten deutlich sichtbar. Die Datei src/lib/stripe.ts kümmert sich ausschließlich um die Kommunikation mit dem Bezahldienst Stripe. Die Datei src/lib/db.ts ist nur für Datenbankzugriffe zuständig. Keine der beiden Dateien enthält Code für die Benutzeroberfläche, und keine Benutzeroberflächen-Datei enthält direkte Stripe- oder Datenbankaufrufe.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Das ist wichtig, weil eine Änderung am Zahlungsanbieter dann nur eine einzige Datei betrifft. Würde der Stripe-Code über zwanzig verschiedene Dateien verstreut sein, müsste man bei jedem Wechsel des Zahlungsanbieters alle zwanzig Dateien einzeln anfassen und würde mit hoher Wahrscheinlichkeit eine davon übersehen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Heißt das, ich muss für jede noch so kleine Aufgabe eine eigene Datei anlegen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Nein, es geht nicht um die Anzahl der Dateien, sondern um die Klarheit der Aufgabe. Eine Datei darf durchaus mehrere kleine Helfer enthalten, solange alle derselben übergeordneten Aufgabe dienen. Eine Datei für Benachrichtigungen darf zum Beispiel sowohl das Versenden einer E-Mail als auch einer SMS enthalten, weil beides zur selben Zuständigkeit Benachrichtigung gehört. Sie sollte aber nicht auch noch das Passwort eines Nutzers ändern, denn das gehört in eine andere Zuständigkeit.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen Werkzeugkasten vor, in dem jeder Einsatz seinen festen Platz hat: der Hammer im Hammerfach, der Schraubendreher im Schraubendreherfach, die Zange im Zangenfach.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "In einem Programm sind die einzelnen Fächer dieses Werkzeugkastens die Module. Jedes Modul ist ein abgegrenzter Teil des Programms mit einer eigenen Aufgabe. Es hat einen eigenen Namen, steht in einer eigenen Datei oder einem eigenen Ordner und lässt sich einzeln austauschen oder testen, ohne dass der Rest des Programms davon etwas merkt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "So ein abgegrenzter Teil mit eigener Aufgabe heißt in der Softwareentwicklung Modul.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-microsaas ist jedes Verzeichnis unter src/lib ein eigenes Modul. Das Modul stripe.ts exportiert nur wenige, klar benannte Funktionen wie createCheckoutSession oder handleWebhook. Alles andere bleibt innerhalb der Datei und ist von außen unsichtbar. Ein anderes Modul, das eine Zahlung auslösen will, ruft einfach createCheckoutSession auf und muss nicht wissen, welche API-Endpunkte Stripe dafür im Hintergrund anspricht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Das ist wichtig, weil ein Modul mit einer klar abgegrenzten Aufgabe viel leichter zu testen ist. Man kann das Stripe-Modul mit gefälschten Testdaten aufrufen, ohne eine echte Zahlung auszulösen, und prüfen, ob es die richtige Antwort zurückgibt. Wäre der Stripe-Code mit der Benutzeroberfläche vermischt, könnte man keinen der beiden Teile einzeln testen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Wenn jedes Modul für sich allein arbeitet, wie sprechen die Module dann miteinander?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Module sprechen über festgelegte Schnittstellen miteinander, ähnlich wie der Kellner dem Koch einen Bestellzettel gibt, statt selbst in der Küche zu kochen. Ein Modul ruft eine Funktion eines anderen Moduls auf und bekommt ein Ergebnis zurück. Was das andere Modul intern tut, bleibt dem aufrufenden Modul verborgen. Wichtig ist nur, dass die Schnittstelle eingehalten wird: dieselbe Funktion mit denselben Parametern liefert immer ein Ergebnis im selben Format.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir zwei Zahnräder vor, die ineinandergreifen. Wenn du ein Zahnrad austauschst, muss das neue exakt dieselbe Größe und dieselbe Anzahl Zähne haben wie das alte, sonst klemmt die ganze Maschine.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "In der Software ist es genauso: zwei Module, die zusammenarbeiten, sind über ihre Schnittstelle miteinander verbunden. Ändert sich die Schnittstelle eines Moduls, müssen alle anderen Module, die diese Schnittstelle benutzen, ebenfalls angepasst werden. Je mehr Module von derselben Schnittstelle abhängen, desto mehr Stellen muss man bei einer Änderung anfassen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Dieses Maß, wie stark zwei Module voneinander abhängen, nennt man Kopplung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-microsaas ist die Kopplung zwischen den Modulen bewusst niedrig gehalten. Das Modul für die Benutzeroberfläche ruft die Stripe-Funktionen nur über eine schmale Schnittstelle auf: eine Funktion zum Erzeugen einer Zahlungssitzung, eine zum Abfragen des Status. Würde die Benutzeroberfläche stattdessen direkt die rohen Stripe-API-Antworten verarbeiten, wäre sie eng an die internen Datenstrukturen von Stripe gekoppelt. Jede kleine Änderung an der Stripe-API würde dann die gesamte Benutzeroberfläche zerbrechen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Niedrige Kopplung ist wichtig, weil sie die Kosten von Änderungen drastisch senkt. In einem stark gekoppelten System führt eine kleine Änderung an einer Stelle zu einer Kaskade von Folgeänderungen an vielen anderen Stellen. In einem schwach gekoppelten System bleibt die Änderung auf ein Modul begrenzt. Das ist der Unterschied zwischen einer Stunde Arbeit und einer Woche Arbeit für dieselbe fachliche Änderung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Kann ein Modul auch gar keine Kopplung zu anderen Modulen haben?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein Modul ganz ohne Kopplung wäre völlig isoliert und könnte mit keinem anderen Teil des Programms zusammenarbeiten. Das ist selten sinnvoll, denn die meisten Module müssen irgendwann Daten entgegennehmen oder Ergebnisse zurückgeben. Das Ziel ist nicht null Kopplung, sondern niedrige Kopplung: so wenig Abhängigkeiten wie nötig, aber so viele wie für die Aufgabe erforderlich.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine Stadt mit verschiedenen Gebäuden vor, die durch Straßen verbunden sind. Jedes Gebäude hat seinen eigenen Eingang, aber die Straßen erlauben den Leuten, von einem Gebäude zum anderen zu gehen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "In dieser Stadt sind die Gebäude die Module und die Straßen die Schnittstellen. Ein Gebäude kann umgebaut oder abgerissen und neu gebaut werden, solange der Eingang an derselben Stelle bleibt und dieselbe Adresse hat. Die Straßen bleiben unverändert, und die Leute finden weiterhin den Weg. Genauso kann ein Modul innen komplett neu geschrieben werden, solange seine Schnittstelle nach außen gleich bleibt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Woher weiß ich beim Schreiben von Code, ob ich die Zuständigkeiten richtig getrennt habe?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Es gibt eine einfache Probe: Kannst du die Aufgabe eines Moduls in einem einzigen Satz beschreiben, ohne ein und oder ein oder zu benutzen? Ein Modul, das Benutzerdaten in der Datenbank speichert UND E-Mails verschickt UND das Layout der Startseite berechnet, hat zu viele Zuständigkeiten. Ein Modul, das nur Benutzerdaten in der Datenbank speichert, hat genau eine Zuständigkeit. Diese Ein-Satz-Probe ist kein strenger Beweis, aber ein nützlicher erster Test.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Diese Probe ist wichtig, weil sie zwingt, die Aufgabe eines Moduls in Worte zu fassen. Was man nicht klar beschreiben kann, hat man auch nicht klar genug durchdacht. Ein Modul, dessen Aufgabe man nur mit drei Nebensätzen erklären kann, ist fast immer ein Kandidat für eine Aufteilung in mehrere kleinere Module.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen Kleiderschrank vor, in dem alle Kleidungsstücke wild durcheinander liegen: Socken zwischen den Hemden, Hosen über den Jacken, ein einzelner Schuh ganz unten in der Ecke.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "So ein unordentlicher Schrank ist wie ein Programm ohne Trennung der Zuständigkeiten. Du findest nichts wieder, und wenn du ein Teil herausziehst, fällt alles andere durcheinander. Ein gut organisierter Schrank hat dagegen ein Fach für Socken, ein Fach für Hemden, ein Fach für Hosen. Genauso hat ein gut strukturiertes Programm ein Modul für Datenbankzugriffe, ein Modul für E-Mail-Versand und ein Modul für die Benutzeroberfläche.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Gibt es auch Nachteile, wenn man die Zuständigkeiten zu fein trennt?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ja, eine zu feine Trennung kann schaden. Wenn du für jede winzige Funktion eine eigene Datei anlegst, hast du am Ende hunderte Dateien mit je drei Zeilen Code. Das macht das Projekt unübersichtlich, weil du ständig zwischen Dateien hin- und herspringen musst, um einen einfachen Ablauf zu verstehen. Die Kunst liegt in der Balance: so grob wie möglich, so fein wie nötig. Eine gute Faustregel ist, dass eine Datei zwischen fünfzig und dreihundert Zeilen haben sollte, aber das Wichtigste bleibt die Klarheit der Aufgabe.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Diese Balance ist wichtig, weil beides schadet: zu wenig Trennung macht den Code starr und schwer änderbar, zu viel Trennung macht ihn zersplittert und schwer lesbar. Erfahrene Entwicklerinnen und Entwickler lernen mit der Zeit, dieses Gespür für die richtige Korngröße zu entwickeln. Am Anfang hilft es, sich an bestehenden, gut strukturierten Projekten zu orientieren und deren Aufteilung als Vorbild zu nehmen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine Waschmaschine vor, die nicht nur wäscht, sondern auch bügelt, zusammenlegt und in den Schrank räumt. Klingt praktisch, aber wenn ein Teil kaputtgeht, ist die ganze teure Maschine unbrauchbar.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "In der Software ist es genauso: ein Modul, das zu viele verschiedene Dinge tut, wird bei jedem Fehler in einem Teilbereich komplett unbrauchbar. Wenn die E-Mail-Funktion in deinem All-in-One-Modul einen Fehler hat, kannst du auch keine Rechnungen mehr berechnen, weil beides untrennbar im selben Modul steckt. Getrennte Module bedeuten auch getrennte Fehler: wenn der E-Mail-Versand ausfällt, läuft die Rechnungsberechnung trotzdem weiter.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Diese Fehlerisolierung ist in der Praxis einer der größten Vorteile der Trennung der Zuständigkeiten. In einem gut aufgeteilten System kann ein Teil ausfallen, ohne dass das ganze System stillsteht. Das ist derselbe Grund, warum ein Schiff in wasserdichte Abteilungen unterteilt ist: ein Leck in einem Abteil versenkt nicht das ganze Schiff.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine große Baustelle vor, auf der viele verschiedene Gewerke gleichzeitig arbeiten: Elektriker, Klempner, Maurer, Maler. Jedes Gewerk hat seinen eigenen Bauplan und sein eigenes Materiallager.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Auf der Baustelle würde niemand auf die Idee kommen, dass der Maler auch die Elektroleitungen verlegt oder der Klempner die Wände hochzieht. Jedes Gewerk hat seine klar abgegrenzte Zuständigkeit, und die Übergaben zwischen den Gewerken sind genau festgelegt: der Maurer übergibt eine fertige Wand, der Elektriker setzt die Dosen, der Maler streicht zum Schluss. In der Software ist diese geregelte Übergabe die Schnittstelle zwischen den Modulen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was passiert eigentlich, wenn ich die Trennung der Zuständigkeiten komplett ignoriere und alles in eine Datei schreibe?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Das Programm funktioniert trotzdem, jedenfalls am Anfang. Der Computer führt den Code aus, egal ob er in einer oder in hundert Dateien steht. Die Probleme kommen erst später, wenn du etwas ändern willst. In einer riesigen Datei ohne klare Grenzen weißt du nicht, welche Zeilen zusammengehören und welche sich gegenseitig beeinflussen. Eine kleine Änderung an einer Stelle kann unerwartete Folgen an einer ganz anderen Stelle haben, weil alles miteinander verwoben ist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Das ist wichtig zu verstehen, weil viele Anfänger denken, Trennung der Zuständigkeiten sei nur eine Frage der Ästhetik oder der Ordnungsliebe. In Wirklichkeit geht es um handfeste wirtschaftliche Kosten: je länger ein Projekt läuft, desto mehr Zeit verbringt man mit Änderungen an bestehendem Code, und desto teurer wird jede Änderung in einem unstrukturierten Projekt. Die Trennung der Zuständigkeiten ist eine Investition in die Zukunft, die sich bei der ersten größeren Änderung sofort auszahlt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Gibt es eine einfache Merkregel, wann ich ein neues Modul anlegen sollte und wann nicht?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Eine gute Merkregel ist die Drei-Fragen-Regel. Erstens: Hat dieser Code eine klar beschreibbare Aufgabe, die sich von den Aufgaben anderer Module unterscheidet? Zweitens: Würde eine Änderung an diesem Code auch Änderungen an anderem Code erzwingen, wenn beide in derselben Datei stünden? Drittens: Muss ich diesen Code unabhängig vom Rest testen können? Wenn du mindestens zwei dieser drei Fragen mit Ja beantwortest, lohnt sich ein eigenes Modul. Bei nur einem Ja oder keinem Ja kannst du den Code vorerst dort lassen, wo er ist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Diese Regel ist wichtig, weil sie eine objektive Entscheidungshilfe bietet, statt auf Bauchgefühl zu setzen. Gerade am Anfang fällt die Entscheidung schwer, ob sich ein eigenes Modul lohnt oder nicht. Die drei Fragen zwingen dazu, über Änderbarkeit und Testbarkeit nachzudenken, und genau darum geht es bei der Trennung der Zuständigkeiten im Kern.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "text": "Also noch einmal ganz kurz: Trennung der Zuständigkeiten bedeutet, dass jedes Modul genau eine klar umrissene Aufgabe hat. Ein Modul ist ein abgegrenzter Teil des Programms mit eigener Datei oder eigenem Ordner und einer festen Schnittstelle nach außen. Module arbeiten über diese Schnittstellen zusammen, und das Maß ihrer gegenseitigen Abhängigkeit heißt Kopplung. Gute Software hat niedrige Kopplung: eine Änderung an einem Modul erzwingt keine Änderungen an vielen anderen Modulen.",
+      "isKeySentence": true
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Trennung der Zuständigkeiten ist der Entwurfsgrundsatz, bei dem jedes Modul genau eine klar umrissene Aufgabe hat und kein Modul die inneren Abläufe eines anderen Moduls kennen muss.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Ein Modul ist ein abgegrenzter Teil eines Programms mit eigener Aufgabe und eigener Datei oder eigenem Ordner, der über eine festgelegte Schnittstelle mit anderen Modulen zusammenarbeitet.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Kopplung ist das Maß, wie stark zwei Module voneinander abhängen. Niedrige Kopplung ist gut, hohe Kopplung macht Änderungen riskant und teuer.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Ist Trennung der Zuständigkeiten dasselbe wie das Single-Responsibility-Prinzip?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Die beiden Begriffe sind eng verwandt, aber nicht ganz dasselbe. Das Single-Responsibility-Prinzip, kurz SRP, ist einer von fünf bekannten Grundsätzen für objektorientierte Programmierung und sagt, dass eine Klasse nur einen einzigen Grund haben darf, geändert zu werden. Trennung der Zuständigkeiten ist der übergeordnete, allgemeinere Gedanke dahinter, der nicht nur für Klassen gilt, sondern für jede Ebene eines Programms: Funktionen, Module, Dienste, ganze Systeme. SRP ist sozusagen die Anwendung der Trennung der Zuständigkeiten auf der Ebene einzelner Klassen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Wie viele Module sollte ein typisches Projekt haben?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Es gibt keine feste Zahl, das hängt vollständig von der Größe und Komplexität des Projekts ab. Ein kleines Projekt mit fünfhundert Zeilen Code kommt vielleicht mit fünf Modulen aus. Ein großes Projekt mit hunderttausend Zeilen Code kann mehrere hundert Module haben. Die richtige Frage ist nicht wie viele, sondern ob jedes Modul eine klar beschreibbare, in sich geschlossene Aufgabe hat. Ein Modul mit dreitausend Zeilen, das nur eine Sache tut, ist besser als zehn Module mit je dreihundert Zeilen, deren Aufgaben sich überschneiden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Kann ich die Trennung der Zuständigkeiten auch nachträglich in ein bestehendes Projekt einbauen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ja, das ist sogar ein häufiger und lohnender Vorgang, der in der Fachsprache Refactoring heißt. Man nimmt sich eine große, unübersichtliche Datei vor und zieht eine Zuständigkeit nach der anderen in eigene Module heraus. Wichtig ist, diesen Umbau schrittweise zu machen und nach jedem Schritt zu prüfen, ob das Programm noch genauso funktioniert wie vorher. Ein guter Anfang ist die Frage: welche Teile dieser Datei haben am wenigsten miteinander zu tun? Genau an dieser Trennlinie setzt man den ersten Schnitt an.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was ist der Unterschied zwischen einem Modul und einer Komponente in React?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Eine React-Komponente ist eine bestimmte Art von Modul, nämlich eines, das ein Stück Benutzeroberfläche beschreibt. Der Begriff Modul ist weiter gefasst und meint jeden abgegrenzten Teil eines Programms, egal ob er mit Benutzeroberfläche, Datenbank, Geschäftslogik oder etwas ganz anderem zu tun hat. Eine React-Komponente ist also immer ein Modul, aber nicht jedes Modul ist eine React-Komponente. Ein Modul für Datenbankzugriffe oder für E-Mail-Versand hat mit React nichts zu tun und ist trotzdem ein Modul.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Woher weiß ich, ob zwei Zuständigkeiten wirklich getrennt werden müssen oder zusammen in ein Modul dürfen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ein guter Test ist die Frage nach dem Änderungsgrund. Wenn zwei Dinge aus völlig unterschiedlichen Gründen geändert werden müssen, gehören sie in getrennte Module. Die Art, wie eine E-Mail formatiert wird, ändert sich aus einem anderen Grund als die Art, wie eine Rechnung berechnet wird. Die Berechnung der Mehrwertsteuer ändert sich, wenn der Steuersatz steigt. Die E-Mail-Formatierung ändert sich, wenn das Unternehmen ein neues Logo bekommt. Unterschiedliche Änderungsgründe sind das stärkste Signal für eine notwendige Trennung.",
+      "isKeySentence": false
+    }
+  ],
+  "practiceExample": {
+    "text": "Im Repo repo-microsaas ist die Trennung der Zuständigkeiten auf Dateiebene sichtbar. Die Datei src/lib/stripe.ts enthält ausschließlich Funktionen für die Stripe-API, src/lib/db.ts ausschließlich Datenbankzugriffe. Beide exportieren nur wenige, klar benannte Funktionen und verbergen ihre internen Abläufe vor dem Rest der Anwendung.",
+    "repoNote": "repo-microsaas",
+    "location": "src/lib/stripe.ts und src/lib/db.ts (Modulgrenzen und exportierte Funktionen)"
+  },
+  "quiz": [
+    {
+      "question": "Welches Alltagsbild beschreibt die Trennung der Zuständigkeiten am besten?",
+      "area": "Architektur: Trennung der Zuständigkeiten",
+      "options": [
+        {
+          "text": "Ein Restaurant mit Kellner, Koch, Kassierer und Spüler, jeder mit eigener Rolle.",
+          "isCorrect": true,
+          "explanation": "Richtig: jede Rolle hat genau eine Zuständigkeit, genau wie Module in guter Software."
+        },
+        {
+          "text": "Ein einzelner Koch, der alle Aufgaben im Restaurant gleichzeitig und ohne Hilfe erledigen muss und dabei ständig zwischen Herd, Kasse und Spülbecken hin- und herläuft.",
+          "isCorrect": false,
+          "explanation": "Falsch: das Bild des Einzelkämpfers beschreibt gerade das Gegenteil, nämlich fehlende Trennung."
+        },
+        {
+          "text": "Ein Gast, der sein eigenes Essen mitbringt und nur den Tisch nutzt.",
+          "isCorrect": false,
+          "explanation": "Falsch: dieses Bild hat mit Arbeitsteilung im Programm nichts zu tun."
+        },
+        {
+          "text": "Eine Speisekarte, die alle Gerichte eines Restaurants auflistet.",
+          "isCorrect": false,
+          "explanation": "Falsch: eine Speisekarte ist eine Liste, kein Bild für Arbeitsteilung."
+        }
+      ]
+    },
+    {
+      "question": "Was ist ein Modul in der Softwareentwicklung?",
+      "area": "Architektur: Modul",
+      "options": [
+        {
+          "text": "Ein abgegrenzter Teil eines Programms mit eigener Aufgabe und eigener Datei oder eigenem Ordner.",
+          "isCorrect": true,
+          "explanation": "Richtig: ein Modul hat eine eigene Aufgabe, einen eigenen Namen und eine feste Schnittstelle."
+        },
+        {
+          "text": "Eine beliebige Sammlung von Funktionen ohne gemeinsame Aufgabe oder gemeinsames Ziel, die nur zufällig in derselben Datei gelandet sind.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Modul zeichnet sich gerade durch eine gemeinsame, klar umrissene Aufgabe aus."
+        },
+        {
+          "text": "Ein Hardware-Baustein wie eine Festplatte oder ein Arbeitsspeicher.",
+          "isCorrect": false,
+          "explanation": "Falsch: in der Softwareentwicklung ist ein Modul ein Teil des Programmcodes, keine Hardware."
+        },
+        {
+          "text": "Die gesamte Anwendung in einer einzigen Datei.",
+          "isCorrect": false,
+          "explanation": "Falsch: eine einzige große Datei ist das Gegenteil eines Moduls, sie enthält typischerweise viele vermischte Zuständigkeiten."
+        }
+      ]
+    },
+    {
+      "question": "Was versteht man unter Kopplung in der Softwareentwicklung?",
+      "area": "Architektur: Kopplung",
+      "options": [
+        {
+          "text": "Das Maß, wie stark zwei Module voneinander abhängen.",
+          "isCorrect": true,
+          "explanation": "Richtig: Kopplung beschreibt die Stärke der Abhängigkeit zwischen Modulen."
+        },
+        {
+          "text": "Die Geschwindigkeit, mit der ein Programm auf Benutzereingaben reagiert.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Reaktionsgeschwindigkeit heißt Latenz oder Antwortzeit, nicht Kopplung."
+        },
+        {
+          "text": "Die Anzahl der Dateien in einem Projektordner.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Anzahl der Dateien hat nichts mit dem Begriff Kopplung zu tun."
+        },
+        {
+          "text": "Ein Verfahren, um zwei Computer physisch mit einem Kabel zu verbinden.",
+          "isCorrect": false,
+          "explanation": "Falsch: Kopplung ist ein abstrakter Begriff für Abhängigkeiten im Code, keine physische Verbindung."
+        }
+      ]
+    },
+    {
+      "question": "Warum ist niedrige Kopplung zwischen Modulen erstrebenswert?",
+      "area": "Architektur: Kopplung",
+      "options": [
+        {
+          "text": "Weil eine Änderung an einem Modul dann keine Kaskade von Änderungen an vielen anderen Modulen erzwingt.",
+          "isCorrect": true,
+          "explanation": "Richtig: niedrige Kopplung begrenzt die Auswirkungen einer Änderung auf ein einzelnes Modul."
+        },
+        {
+          "text": "Weil das Programm dann weniger Arbeitsspeicher verbraucht und außerdem schneller auf der Festplatte gespeichert werden kann.",
+          "isCorrect": false,
+          "explanation": "Falsch: Kopplung hat nichts mit dem Speicherverbrauch oder der Speichergeschwindigkeit zu tun."
+        },
+        {
+          "text": "Weil niedrige Kopplung gesetzlich für alle Webanwendungen vorgeschrieben ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: es gibt kein Gesetz, das niedrige Kopplung vorschreibt, es ist ein Qualitätsmerkmal."
+        },
+        {
+          "text": "Weil der Browser dann die Seite schneller laden kann.",
+          "isCorrect": false,
+          "explanation": "Falsch: Kopplung ist eine Eigenschaft des Codes, nicht der Ladezeit im Browser."
+        }
+      ]
+    },
+    {
+      "question": "Welche Aussage über die Trennung der Zuständigkeiten im Repo repo-microsaas ist richtig?",
+      "area": "Praxisbeispiel repo-microsaas",
+      "options": [
+        {
+          "text": "Die Stripe-Logik steht in einer eigenen Datei, getrennt von Datenbank und Benutzeroberfläche.",
+          "isCorrect": true,
+          "explanation": "Richtig: src/lib/stripe.ts enthält nur Stripe-Code, keine Datenbank- oder Oberflächenlogik."
+        },
+        {
+          "text": "Der gesamte Code der Anwendung steht in einer einzigen Datei, um die Übersicht zu behalten.",
+          "isCorrect": false,
+          "explanation": "Falsch: repo-microsaas trennt den Code bewusst in mehrere Dateien nach Zuständigkeiten."
+        },
+        {
+          "text": "Die Benutzeroberfläche enthält direkte Stripe-API-Aufrufe für schnellere Zahlungen.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Benutzeroberfläche ruft nur die Schnittstelle des Stripe-Moduls auf, nicht die Stripe-API direkt."
+        },
+        {
+          "text": "Jede Funktion in repo-microsaas steht in einer eigenen Datei, ohne Ausnahme.",
+          "isCorrect": false,
+          "explanation": "Falsch: mehrere zusammengehörige Funktionen dürfen in derselben Datei stehen, solange sie derselben Zuständigkeit dienen."
+        }
+      ]
+    },
+    {
+      "question": "Was ist die Ein-Satz-Probe für die Trennung der Zuständigkeiten?",
+      "area": "Architektur: Trennung der Zuständigkeiten",
+      "options": [
+        {
+          "text": "Die Aufgabe eines Moduls in einem Satz ohne und oder oder beschreiben können.",
+          "isCorrect": true,
+          "explanation": "Richtig: wer ein und oder oder braucht, hat wahrscheinlich zu viele Zuständigkeiten in einem Modul."
+        },
+        {
+          "text": "Den gesamten Code eines Moduls in einem Satz vorlesen können.",
+          "isCorrect": false,
+          "explanation": "Falsch: es geht um die Beschreibung der Aufgabe, nicht um das Vorlesen des Codes."
+        },
+        {
+          "text": "Die Anzahl der Dateien in einem Satz zusammenfassen können.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Ein-Satz-Probe bezieht sich auf die Aufgabe, nicht auf die Anzahl der Dateien."
+        },
+        {
+          "text": "Den Namen des Moduls in einem Satz buchstabieren können.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Probe prüft die Klarheit der Zuständigkeit, nicht den Namen."
+        }
+      ]
+    },
+    {
+      "question": "Darf ein Modul gar keine Abhängigkeiten zu anderen Modulen haben?",
+      "area": "Architektur: Kopplung",
+      "options": [
+        {
+          "text": "Nein, das Ziel ist niedrige, nicht null Kopplung, denn Module müssen zusammenarbeiten.",
+          "isCorrect": true,
+          "explanation": "Richtig: völlige Isolation würde jede Zusammenarbeit verhindern, das Ziel ist so wenig Kopplung wie nötig."
+        },
+        {
+          "text": "Ja, null Kopplung ist das oberste Ziel jeder Softwarearchitektur und sollte in jedem Projekt angestrebt werden.",
+          "isCorrect": false,
+          "explanation": "Falsch: null Kopplung würde bedeuten, dass kein Modul mit einem anderen kommunizieren kann."
+        },
+        {
+          "text": "Nur das Hauptmodul darf Abhängigkeiten haben, alle anderen nicht.",
+          "isCorrect": false,
+          "explanation": "Falsch: es gibt keine Sonderregel für ein Hauptmodul, alle Module dürfen begrenzte Abhängigkeiten haben."
+        },
+        {
+          "text": "Abhängigkeiten sind nur zwischen Modulen verschiedener Programmiersprachen erlaubt.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Programmiersprache hat nichts mit der Frage der Kopplung zu tun."
+        }
+      ]
+    },
+    {
+      "question": "Was passiert bei hoher Kopplung, wenn sich die Schnittstelle eines Moduls ändert?",
+      "area": "Architektur: Kopplung",
+      "options": [
+        {
+          "text": "Viele andere Module müssen ebenfalls angepasst werden, was viel Arbeit verursacht.",
+          "isCorrect": true,
+          "explanation": "Richtig: hohe Kopplung bedeutet, dass eine Änderung an einer Stelle viele Folgestellen nach sich zieht."
+        },
+        {
+          "text": "Nichts, die anderen Module passen sich automatisch an die neue Schnittstelle an.",
+          "isCorrect": false,
+          "explanation": "Falsch: es gibt keine automatische Anpassung, jede abhängige Stelle muss von Hand geändert werden."
+        },
+        {
+          "text": "Das Programm stürzt sofort ab und kann nicht mehr gestartet werden.",
+          "isCorrect": false,
+          "explanation": "Falsch: das Programm stürzt nicht sofort ab, aber die abhängigen Module werden Fehler werfen."
+        },
+        {
+          "text": "Die Änderung wird vom Compiler automatisch rückgängig gemacht.",
+          "isCorrect": false,
+          "explanation": "Falsch: kein Compiler macht Schnittstellenänderungen automatisch rückgängig."
+        }
+      ]
+    },
+    {
+      "question": "Welcher Test hilft zu entscheiden, ob zwei Zuständigkeiten in getrennte Module gehören?",
+      "area": "Architektur: Trennung der Zuständigkeiten",
+      "options": [
+        {
+          "text": "Der Test nach dem Änderungsgrund: ändern sich beide aus unterschiedlichen Gründen?",
+          "isCorrect": true,
+          "explanation": "Richtig: unterschiedliche Änderungsgründe sind das stärkste Signal für eine Trennung."
+        },
+        {
+          "text": "Der Test nach der Zeilenzahl: hat die Datei mehr als hundert Zeilen?",
+          "isCorrect": false,
+          "explanation": "Falsch: die reine Zeilenzahl ist kein guter Indikator für Zuständigkeiten."
+        },
+        {
+          "text": "Der Test nach dem Dateinamen: enthält der Name einen Unterstrich?",
+          "isCorrect": false,
+          "explanation": "Falsch: der Dateiname sagt nichts über die innere Struktur der Zuständigkeiten aus."
+        },
+        {
+          "text": "Der Test nach der Erstellungszeit: wurde die Datei an einem Wochenende geschrieben?",
+          "isCorrect": false,
+          "explanation": "Falsch: der Zeitpunkt der Erstellung hat keinerlei Aussagekraft über Zuständigkeiten."
+        }
+      ]
+    },
+    {
+      "question": "Wie hängen Trennung der Zuständigkeiten und das Single-Responsibility-Prinzip zusammen?",
+      "area": "Architektur: Trennung der Zuständigkeiten",
+      "options": [
+        {
+          "text": "Trennung der Zuständigkeiten ist der übergeordnete Gedanke, SRP die Anwendung auf Klassenebene.",
+          "isCorrect": true,
+          "explanation": "Richtig: SRP wendet die Trennung der Zuständigkeiten spezifisch auf einzelne Klassen an."
+        },
+        {
+          "text": "Beide Begriffe sind vollkommen identisch und bedeuten exakt dasselbe.",
+          "isCorrect": false,
+          "explanation": "Falsch: sie sind verwandt, aber nicht identisch, SRP ist spezifischer."
+        },
+        {
+          "text": "SRP ist der übergeordnete Gedanke, Trennung der Zuständigkeiten nur ein Spezialfall davon.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Beziehung ist umgekehrt, Trennung der Zuständigkeiten ist der weitere Begriff."
+        },
+        {
+          "text": "Die beiden Konzepte haben überhaupt nichts miteinander zu tun.",
+          "isCorrect": false,
+          "explanation": "Falsch: sie sind eng verwandt, SRP ist eine konkrete Ausprägung der Trennung der Zuständigkeiten."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der Vorteil, wenn ein Modul nur wenige, klar benannte Funktionen exportiert?",
+      "area": "Architektur: Modul",
+      "options": [
+        {
+          "text": "Andere Module können das Modul nutzen, ohne seine inneren Abläufe kennen zu müssen.",
+          "isCorrect": true,
+          "explanation": "Richtig: eine schmale, klare Schnittstelle versteckt die Komplexität im Inneren des Moduls."
+        },
+        {
+          "text": "Das Modul läuft dann garantiert schneller als mit vielen exportierten Funktionen und verbraucht weniger Strom.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Anzahl der exportierten Funktionen hat keinen direkten Einfluss auf die Geschwindigkeit oder den Stromverbrauch."
+        },
+        {
+          "text": "Der Compiler kann das Modul dann vollständig weglassen.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Compiler lässt kein Modul weg, nur weil es wenige Exporte hat."
+        },
+        {
+          "text": "Wenige Exporte sind eine gesetzliche Vorschrift für Open-Source-Projekte.",
+          "isCorrect": false,
+          "explanation": "Falsch: es gibt kein Gesetz, das die Anzahl der Exporte vorschreibt."
+        }
+      ]
+    },
+    {
+      "question": "Was bedeutet es, ein Modul von innen komplett neu zu schreiben, ohne dass andere Module es merken?",
+      "area": "Architektur: Modul",
+      "options": [
+        {
+          "text": "Die Schnittstelle nach außen bleibt gleich, nur die innere Umsetzung ändert sich.",
+          "isCorrect": true,
+          "explanation": "Richtig: solange die Schnittstelle stabil bleibt, ist die innere Umsetzung für andere Module unsichtbar."
+        },
+        {
+          "text": "Man löscht das Modul und hofft, dass niemand den Fehler bemerkt.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein gelöschtes Modul würde sofort Fehler in allen abhängigen Modulen verursachen."
+        },
+        {
+          "text": "Man benennt die Datei um, ohne den Code zu ändern.",
+          "isCorrect": false,
+          "explanation": "Falsch: eine Umbenennung ist keine inhaltliche Änderung der inneren Umsetzung."
+        },
+        {
+          "text": "Man schreibt das Modul in einer anderen Programmiersprache, aber mit demselben Namen.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Wechsel der Programmiersprache würde die Schnittstelle sehr wohl ändern."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Nimm dir eine bestehende Datei aus einem eigenen oder einem öffentlichen Projekt, die mehr als eine Zuständigkeit enthält. Schreibe auf, welche verschiedenen Aufgaben diese Datei erledigt. Erstelle dann für jede Aufgabe eine eigene neue Datei und verschiebe den entsprechenden Code. Achte darauf, dass jede neue Datei nur das Nötigste exportiert und die alten Aufrufer weiterhin funktionieren.",
+    "expectation": "Aus einer Datei mit gemischten Zuständigkeiten sind mehrere Dateien mit je einer klar beschreibbaren Aufgabe geworden. Die ursprünglichen Aufrufer funktionieren unverändert, weil die neuen Module dieselbe Schnittstelle anbieten.",
+    "checklist": [
+      "Eine bestehende Datei mit mehr als einer Zuständigkeit identifiziert.",
+      "Die verschiedenen Aufgaben der Datei schriftlich in je einem Satz beschrieben.",
+      "Für jede Aufgabe eine eigene neue Datei angelegt.",
+      "Den Code aus der Originaldatei in die neuen Dateien verschoben.",
+      "Die neuen Dateien exportieren nur die notwendigen Funktionen.",
+      "Die ursprünglichen Aufrufer funktionieren ohne Änderung."
+    ],
+    "portfolioItem": "P04"
+  },
+  "audio": {
+    "file": "M04-01-01.mp3",
+    "durationSeconds": 1280,
+    "voices": ["A", "B"],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Ist Trennung der Zuständigkeiten dasselbe wie das Single-Responsibility-Prinzip?",
+      "answer": "Die beiden Begriffe sind eng verwandt, aber nicht ganz dasselbe. Das Single-Responsibility-Prinzip, kurz SRP, ist einer von fünf bekannten Grundsätzen für objektorientierte Programmierung und sagt, dass eine Klasse nur einen einzigen Grund haben darf, geändert zu werden. Trennung der Zuständigkeiten ist der übergeordnete, allgemeinere Gedanke dahinter, der nicht nur für Klassen gilt, sondern für jede Ebene eines Programms: Funktionen, Module, Dienste, ganze Systeme. SRP ist sozusagen die Anwendung der Trennung der Zuständigkeiten auf der Ebene einzelner Klassen."
+    },
+    {
+      "question": "Wie viele Module sollte ein typisches Projekt haben?",
+      "answer": "Es gibt keine feste Zahl, das hängt vollständig von der Größe und Komplexität des Projekts ab. Ein kleines Projekt mit fünfhundert Zeilen Code kommt vielleicht mit fünf Modulen aus. Ein großes Projekt mit hunderttausend Zeilen Code kann mehrere hundert Module haben. Die richtige Frage ist nicht wie viele, sondern ob jedes Modul eine klar beschreibbare, in sich geschlossene Aufgabe hat. Ein Modul mit dreitausend Zeilen, das nur eine Sache tut, ist besser als zehn Module mit je dreihundert Zeilen, deren Aufgaben sich überschneiden."
+    },
+    {
+      "question": "Kann ich die Trennung der Zuständigkeiten auch nachträglich in ein bestehendes Projekt einbauen?",
+      "answer": "Ja, das ist sogar ein häufiger und lohnender Vorgang, der in der Fachsprache Refactoring heißt. Man nimmt sich eine große, unübersichtliche Datei vor und zieht eine Zuständigkeit nach der anderen in eigene Module heraus. Wichtig ist, diesen Umbau schrittweise zu machen und nach jedem Schritt zu prüfen, ob das Programm noch genauso funktioniert wie vorher. Ein guter Anfang ist die Frage: welche Teile dieser Datei haben am wenigsten miteinander zu tun? Genau an dieser Trennlinie setzt man den ersten Schnitt an."
+    },
+    {
+      "question": "Was ist der Unterschied zwischen einem Modul und einer Komponente in React?",
+      "answer": "Eine React-Komponente ist eine bestimmte Art von Modul, nämlich eines, das ein Stück Benutzeroberfläche beschreibt. Der Begriff Modul ist weiter gefasst und meint jeden abgegrenzten Teil eines Programms, egal ob er mit Benutzeroberfläche, Datenbank, Geschäftslogik oder etwas ganz anderem zu tun hat. Eine React-Komponente ist also immer ein Modul, aber nicht jedes Modul ist eine React-Komponente. Ein Modul für Datenbankzugriffe oder für E-Mail-Versand hat mit React nichts zu tun und ist trotzdem ein Modul."
+    },
+    {
+      "question": "Woher weiß ich, ob zwei Zuständigkeiten wirklich getrennt werden müssen oder zusammen in ein Modul dürfen?",
+      "answer": "Ein guter Test ist die Frage nach dem Änderungsgrund. Wenn zwei Dinge aus völlig unterschiedlichen Gründen geändert werden müssen, gehören sie in getrennte Module. Die Art, wie eine E-Mail formatiert wird, ändert sich aus einem anderen Grund als die Art, wie eine Rechnung berechnet wird. Die Berechnung der Mehrwertsteuer ändert sich, wenn der Steuersatz steigt. Die E-Mail-Formatierung ändert sich, wenn das Unternehmen ein neues Logo bekommt. Unterschiedliche Änderungsgründe sind das stärkste Signal für eine notwendige Trennung."
+    }
+  ]
+}

@@ -1,0 +1,612 @@
+{
+  "id": "M04-08-02",
+  "title": "README schreiben: Die Visitenkarte deines Projekts",
+  "durationMinutes": 28,
+  "prerequisites": [
+    "M04-01-02",
+    "M02-05-01"
+  ],
+  "terms": [
+    {
+      "term": "README",
+      "definition": "Die erste Datei, die ein Besucher eines Projekts sieht. Sie erklärt in wenigen Minuten, worum es geht, wie man das Projekt startet und wie man mitarbeiten kann."
+    },
+    {
+      "term": "Onboarding",
+      "definition": "Der Prozess, eine neue Person so schnell wie möglich in die Lage zu versetzen, produktiv am Projekt mitzuarbeiten. Ein gutes README ist das wichtigste Werkzeug für schnelles Onboarding."
+    },
+    {
+      "term": "Dokumentation",
+      "definition": "Die Gesamtheit aller schriftlichen Informationen zu einem Projekt: README, Code-Kommentare, Architekturentscheidungen, API-Referenzen und Betriebsanleitungen."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du kommst in eine fremde Stadt und stehst am Bahnhof. Vor dir hängt ein großer Stadtplan mit einem roten Punkt: Sie sind hier. Der Plan zeigt die wichtigsten Sehenswürdigkeiten, die U-Bahn-Linien und wo du ein Taxi findest.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Dieser Stadtplan am Bahnhof ist wie ein gutes README für ein Softwareprojekt. Es ist das Erste, was ein Besucher sieht, und es muss in wenigen Minuten die wichtigsten Fragen beantworten: Worum geht es hier? Wie fange ich an? Wo finde ich mehr Informationen? Ein gutes README macht den Unterschied zwischen einem Projekt, das sofort verständlich ist, und einem, bei dem man ratlos zurückschreckt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Ist ein README nicht einfach eine Textdatei, die sowieso niemand liest?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Im Gegenteil: das README ist die meistgelesene Datei eines jeden Projekts. Auf GitHub ist es das Erste, was unter der Dateiliste angezeigt wird. Bei Open-Source-Projekten entscheidet das README in den ersten dreißig Sekunden, ob jemand das Projekt ausprobiert oder weiterklickt. Bei firmeninternen Projekten entscheidet das README, ob ein neues Teammitglied in einer Stunde oder in einer Woche produktiv mitarbeiten kann.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Diese erste Datei, die den Einstieg in ein Projekt erklärt, heißt README, wörtlich lies mich.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-futuredev, dem Quellcode dieser Lern-App, findest du ein vollständiges README im Wurzelverzeichnis. Es beginnt mit einer kurzen Beschreibung, was FutureDev ist. Dann folgt eine Liste der Technologien, die verwendet werden. Danach kommt eine Schritt-für-Schritt-Anleitung, wie man das Projekt lokal zum Laufen bringt. Und zum Schluss steht, wie man zum Projekt beitragen kann. Ein neues Teammitglied kann mit diesem README in weniger als einer Stunde die gesamte Anwendung lokal starten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Ein gutes README ist wichtig, weil es der Flaschenhals für jede neue Person ist, die mit dem Projekt arbeitet. Ohne README muss jedes neue Teammitglied jemanden finden, der ihm das Projekt erklärt. Diese Person wird aus ihrer eigenen Arbeit gerissen und erklärt zum zwanzigsten Mal dasselbe. Ein gutes README macht diese Erklärung ein für alle Mal und entlastet das gesamte Team.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was genau gehört in ein gutes README?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir die Verpackung eines Möbelstücks vor, das du selbst zusammenbauen musst. Darauf steht, was drin ist, welche Werkzeuge du brauchst, und eine Schritt-für-Schritt-Anleitung mit Bildern.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein gutes README folgt demselben Muster wie eine gute Bauanleitung. Es beginnt mit dem Namen des Projekts und einem einzigen Satz, der beschreibt, was das Projekt tut. Dann folgt die Liste der Voraussetzungen: welche Programmiersprache, welche Version, welche externen Dienste. Danach kommt die Installationsanleitung: welche Befehle muss ich nacheinander ausführen, um das Projekt zum Laufen zu bringen. Und zum Schluss ein kurzer Hinweis, wie man die Tests ausführt und wie man zum Projekt beitragen kann.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Dieser Prozess, eine neue Person schnell arbeitsfähig zu machen, heißt Onboarding.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im README von repo-futuredev findest du ein vorbildliches Onboarding. Der Abschnitt Entwicklung listet die Befehle in der richtigen Reihenfolge: erst pnpm install, dann die Umgebungsvariablen kopieren, dann pnpm dev. Jeder Befehl ist einzeln aufgeführt und kurz erklärt. Ein neues Teammitglied kann diese Befehle einfach der Reihe nach abarbeiten und hat nach wenigen Minuten eine laufende Entwicklungsumgebung. Das ist der Goldstandard für Onboarding.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Gutes Onboarding ist wichtig, weil die ersten Minuten mit einem neuen Projekt entscheidend sind. Wenn jemand nach zehn Minuten immer noch nicht weiß, wie er das Projekt startet, ist die Frustration groß und die Wahrscheinlichkeit hoch, dass er aufgibt. Wenn er nach fünf Minuten eine laufende Anwendung sieht, ist die Motivation hoch und er fängt sofort an, produktiv zu arbeiten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Reicht ein README als einzige Dokumentation für ein Projekt?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir ein mehrbändiges Lexikon vor. Der erste Band ist eine kurze Übersicht über alle Wissensgebiete. Die weiteren Bände gehen bei jedem Stichwort in die Tiefe. Das README ist der erste Band, nicht das ganze Lexikon.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Das README ist der Einstieg, nicht die vollständige Dokumentation. Für ein kleines Projekt mit wenigen hundert Zeilen Code kann das README die gesamte Dokumentation sein. Für ein größeres Projekt verweist das README auf weitere Dokumente: eine Architekturübersicht, eine API-Referenz, eine Betriebsanleitung. Das README ist die Karte, die zeigt, wo welche Information zu finden ist, nicht die Information selbst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Die Gesamtheit aller schriftlichen Informationen zu einem Projekt heißt Dokumentation.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-futuredev besteht die Dokumentation aus mehreren Teilen. Das README ist der Einstieg. Die Datei CONTRIBUTING.md erklärt, wie man Code beiträgt. Die Dateien im Ordner content beschreiben die Struktur der Lerninhalte. Die Code-Kommentare in den TypeScript-Dateien erklären die nicht offensichtlichen Entscheidungen. Zusammen bilden diese Teile die vollständige Dokumentation des Projekts.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Eine gute Dokumentation ist wichtig, weil sie das Gedächtnis des Teams ist. Menschen kommen und gehen, aber die Dokumentation bleibt. Ohne Dokumentation geht mit jeder Person, die das Team verlässt, auch das Wissen darüber verloren, warum bestimmte Entscheidungen getroffen wurden. Mit guter Dokumentation kann jedes neue Teammitglied dieses Wissen innerhalb weniger Stunden nachlesen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was sind die häufigsten Fehler in READMEs?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der häufigste Fehler ist ein README, das nur aus einer halben Zeile besteht: Dieses Projekt macht Sachen mit Daten. Der zweithäufigste Fehler ist ein README, das veraltet ist und Installationsanweisungen enthält, die schon lange nicht mehr funktionieren. Der dritthäufigste Fehler ist ein README, das mit Fachbegriffen und Abkürzungen um sich wirft, die ein Neuling nicht kennen kann. Ein gutes README ist vollständig, aktuell und in einfacher Sprache geschrieben.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Diese Fehler sind wichtig zu kennen, weil sie alle dasselbe bewirken: der Leser gibt auf. Ein unvollständiges README lässt ihn ratlos zurück. Ein veraltetes README führt ihn in die Irre und kostet ihn Zeit. Ein mit Fachjargon überladenes README schüchtert ihn ein. Alle drei Fehler sind vermeidbar, indem man das README nach jedem größeren Update testet: Kann eine Person, die das Projekt nicht kennt, mit den Anweisungen im README das Projekt zum Laufen bringen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine Gastgeberin vor, die einen neuen Gast in ihrem Haus willkommen heißt. Sie nimmt ihm den Mantel ab, zeigt ihm, wo das Bad ist, wo die Küche ist, und bietet ihm etwas zu trinken an. Sie lässt ihn nicht einfach vor der verschlossenen Haustür stehen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein gutes README ist wie eine gute Gastgeberin. Es heißt den Besucher willkommen, nimmt ihn an die Hand und führt ihn durch die ersten Schritte. Es lässt ihn nicht mit kryptischen Fehlermeldungen allein, sondern sagt ihm genau, was er als Nächstes tun soll. Und es gibt ihm das Gefühl, dass er hier richtig ist und willkommen ist, am Projekt mitzuarbeiten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "text": "Also noch einmal ganz kurz: Ein README ist die erste Datei eines Projekts und erklärt in wenigen Minuten, worum es geht und wie man startet. Gutes Onboarding bedeutet, dass eine neue Person die Befehle aus dem README der Reihe nach abarbeiten kann und nach wenigen Minuten eine laufende Entwicklungsumgebung hat. Dokumentation ist die Gesamtheit aller schriftlichen Informationen, von denen das README der Einstieg ist. Ein gutes README ist vollständig, aktuell und in einfacher Sprache geschrieben.",
+      "isKeySentence": true
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Ein README ist die erste Datei, die ein Besucher eines Projekts sieht. Sie erklärt in wenigen Minuten, worum es geht, wie man das Projekt startet und wie man mitarbeiten kann.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Onboarding ist der Prozess, eine neue Person so schnell wie möglich in die Lage zu versetzen, produktiv am Projekt mitzuarbeiten. Ein gutes README ist das wichtigste Werkzeug für schnelles Onboarding.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Dokumentation ist die Gesamtheit aller schriftlichen Informationen zu einem Projekt: README, Code-Kommentare, Architekturentscheidungen, API-Referenzen und Betriebsanleitungen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Muss ein README immer auf Englisch sein?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Für Open-Source-Projekte und internationale Teams ist Englisch der Standard. Für ein rein deutsches Team oder ein Projekt, das nur innerhalb einer deutschen Firma genutzt wird, ist Deutsch völlig in Ordnung. Wichtiger als die Sprache ist die Verständlichkeit: ein klares deutsches README ist besser als ein holpriges englisches. Wenn du unsicher bist, schreib auf Englisch, denn das ist die Verkehrssprache der Softwareentwicklung und erreicht die meisten Leser.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Wie lang sollte ein README sein?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "So lang wie nötig, so kurz wie möglich. Ein gutes README für ein kleines Projekt passt auf eine Bildschirmseite. Für ein größeres Projekt können es auch zwei oder drei Seiten sein. Die wichtigste Regel ist: die Installationsanleitung muss vollständig und korrekt sein. Lieber eine etwas längere Anleitung, die funktioniert, als eine kurze, die Schritte auslässt. Wenn das README zu lang wird, lagere Details in separate Dateien aus und verlinke sie.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was mache ich, wenn mein Projekt noch nicht fertig ist? Soll ich trotzdem ein README schreiben?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ja, und zwar so früh wie möglich. Ein README ist nicht nur für andere da, sondern auch für dich selbst. Wenn du die Installationsschritte aufschreibst, zwingst du dich, sie klar zu durchdenken. Wenn du den Zweck des Projekts in einem Satz formulierst, zwingst du dich, das Ziel zu schärfen. Ein README am Anfang eines Projekts ist wie ein Kompass: es hält dich auf Kurs. Du kannst es später immer noch anpassen, wenn sich das Projekt weiterentwickelt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Wie halte ich mein README aktuell?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Die beste Methode ist, das README bei jeder größeren Änderung am Projekt mit zu aktualisieren, als festen Teil der Arbeit. Wenn du eine neue Abhängigkeit hinzufügst, aktualisiere die Liste der Voraussetzungen. Wenn sich der Startbefehl ändert, aktualisiere die Installationsanleitung. Wenn du eine neue Funktion einbaust, die eine eigene Konfiguration braucht, dokumentiere sie. Diese Disziplin kostet pro Änderung nur eine Minute, verhindert aber, dass das README über Monate veraltet.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Brauche ich ein README, wenn ich das Projekt nur für mich selbst schreibe?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ja, denn dein zukünftiges Ich ist wie eine andere Person. Nach sechs Monaten wirst du dich nicht mehr erinnern, welche Node-Version das Projekt braucht oder welcher Befehl die Tests ausführt. Ein README für dich selbst ist eine Investition von zehn Minuten, die dir in sechs Monaten eine Stunde frustriertes Herumprobieren erspart. Außerdem ist es gute Übung: wenn du die Disziplin entwickelst, auch für Solo-Projekte READMEs zu schreiben, fällt es dir bei Team-Projekten umso leichter.",
+      "isKeySentence": false
+    }
+  ],
+  "practiceExample": {
+    "text": "Im Repo repo-futuredev findest du im Wurzelverzeichnis ein vollständiges README. Es enthält eine Projektbeschreibung, eine Liste der Technologien, eine Schritt-für-Schritt-Installationsanleitung und einen Abschnitt zum Mitmachen.",
+    "repoNote": "repo-futuredev",
+    "location": "README.md (vollständiges README mit Onboarding-Anleitung)"
+  },
+  "quiz": [
+    {
+      "question": "Welches Alltagsbild beschreibt ein gutes README am besten?",
+      "area": "Dokumentation: README",
+      "options": [
+        {
+          "text": "Ein Stadtplan am Bahnhof mit einem roten Punkt Sie sind hier und den wichtigsten Sehenswürdigkeiten.",
+          "isCorrect": true,
+          "explanation": "Richtig: das README ist der Orientierungsplan für den ersten Kontakt mit dem Projekt."
+        },
+        {
+          "text": "Ein Telefonbuch, das alle Nummern einer Stadt alphabetisch auflistet.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Telefonbuch ist eine vollständige Referenz, kein Einstieg."
+        },
+        {
+          "text": "Ein Roman, der die Geschichte des Projekts von Anfang an erzählt.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein README ist eine technische Anleitung, keine Erzählung."
+        },
+        {
+          "text": "Ein Kalender, der alle Termine des Projekts auflistet.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein README listet keine Termine, sondern erklärt den Einstieg."
+        }
+      ]
+    },
+    {
+      "question": "Was ist die wichtigste Funktion eines README?",
+      "area": "Dokumentation: README",
+      "options": [
+        {
+          "text": "Einem neuen Besucher in wenigen Minuten zu erklären, worum es geht und wie er das Projekt startet.",
+          "isCorrect": true,
+          "explanation": "Richtig: das README ist der Einstiegspunkt für jede neue Person."
+        },
+        {
+          "text": "Eine vollständige Liste aller Funktionen des Programms mit Screenshots.",
+          "isCorrect": false,
+          "explanation": "Falsch: eine vollständige Funktionsliste gehört in die Benutzerdokumentation, nicht ins README."
+        },
+        {
+          "text": "Die Namen aller Entwickler aufzulisten, die jemals am Projekt gearbeitet haben.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Liste der Mitwirkenden ist optional und nicht die Hauptfunktion."
+        },
+        {
+          "text": "Den gesamten Quellcode des Projekts zu erklären.",
+          "isCorrect": false,
+          "explanation": "Falsch: das README erklärt den Einstieg, nicht jede Codezeile."
+        }
+      ]
+    },
+    {
+      "question": "Was versteht man unter Onboarding in der Softwareentwicklung?",
+      "area": "Dokumentation: Onboarding",
+      "options": [
+        {
+          "text": "Den Prozess, eine neue Person schnell in die Lage zu versetzen, produktiv mitzuarbeiten.",
+          "isCorrect": true,
+          "explanation": "Richtig: Onboarding ist der Prozess vom ersten Kontakt bis zur produktiven Mitarbeit."
+        },
+        {
+          "text": "Das Hochladen des Codes auf einen Server, damit er in Produktion geht.",
+          "isCorrect": false,
+          "explanation": "Falsch: das Hochladen auf einen Server heißt Deployment, nicht Onboarding."
+        },
+        {
+          "text": "Das Einrichten einer neuen Datenbank für das Projekt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Datenbankeinrichtung ist ein technischer Schritt, nicht der Onboarding-Prozess."
+        },
+        {
+          "text": "Das Schreiben von automatischen Tests für neue Funktionen.",
+          "isCorrect": false,
+          "explanation": "Falsch: Tests schreiben ist Teil der Entwicklung, nicht des Onboardings."
+        }
+      ]
+    },
+    {
+      "question": "Was gehört in die Installationsanleitung eines README?",
+      "area": "Dokumentation: README",
+      "options": [
+        {
+          "text": "Die Befehle in der richtigen Reihenfolge, um das Projekt lokal zum Laufen zu bringen.",
+          "isCorrect": true,
+          "explanation": "Richtig: eine Schritt-für-Schritt-Anleitung ist das Herzstück eines guten README."
+        },
+        {
+          "text": "Eine Liste aller möglichen Fehlermeldungen und ihrer Lösungen.",
+          "isCorrect": false,
+          "explanation": "Falsch: Fehlermeldungen gehören in die Fehlerdokumentation, nicht in die Installationsanleitung."
+        },
+        {
+          "text": "Die Lebensläufe aller Teammitglieder.",
+          "isCorrect": false,
+          "explanation": "Falsch: Lebensläufe haben in einem README nichts zu suchen."
+        },
+        {
+          "text": "Eine Preisliste für die Nutzung des Programms.",
+          "isCorrect": false,
+          "explanation": "Falsch: Preise gehören auf die Projekt-Webseite, nicht ins technische README."
+        }
+      ]
+    },
+    {
+      "question": "Welche Datei im Repo repo-futuredev ist das README?",
+      "area": "Praxisbeispiel repo-futuredev",
+      "options": [
+        {
+          "text": "README.md im Wurzelverzeichnis mit Projektbeschreibung und Installationsanleitung.",
+          "isCorrect": true,
+          "explanation": "Richtig: README.md ist die zentrale Einstiegsdatei des Projekts."
+        },
+        {
+          "text": "package.json mit den Abhängigkeiten und Skripten.",
+          "isCorrect": false,
+          "explanation": "Falsch: package.json ist die Paketkonfiguration, nicht das README."
+        },
+        {
+          "text": "CONTRIBUTING.md mit den Regeln für Beiträge.",
+          "isCorrect": false,
+          "explanation": "Falsch: CONTRIBUTING.md ist ein ergänzendes Dokument, nicht das README."
+        },
+        {
+          "text": "tsconfig.json mit der TypeScript-Konfiguration.",
+          "isCorrect": false,
+          "explanation": "Falsch: tsconfig.json ist die Compiler-Konfiguration, nicht das README."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der häufigste Fehler in READMEs?",
+      "area": "Dokumentation: README",
+      "options": [
+        {
+          "text": "Ein README, das nur aus einer halben Zeile besteht oder veraltete Anweisungen enthält.",
+          "isCorrect": true,
+          "explanation": "Richtig: unvollständige oder veraltete READMEs sind die häufigsten Probleme."
+        },
+        {
+          "text": "Ein README, das zu viele bunte Bilder und Emojis enthält.",
+          "isCorrect": false,
+          "explanation": "Falsch: Bilder sind selten das Problem, fehlende Informationen schon."
+        },
+        {
+          "text": "Ein README, das in einer anderen Programmiersprache geschrieben ist als das Projekt.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Sprache des README ist unabhängig von der Programmiersprache."
+        },
+        {
+          "text": "Ein README, das mehr als tausend Wörter lang ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: Länge allein ist kein Fehler, solange der Inhalt nützlich ist."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der Unterschied zwischen einem README und der vollständigen Dokumentation?",
+      "area": "Dokumentation: Dokumentation",
+      "options": [
+        {
+          "text": "Das README ist der Einstieg, die Dokumentation ist die Gesamtheit aller schriftlichen Informationen.",
+          "isCorrect": true,
+          "explanation": "Richtig: das README ist Teil der Dokumentation, aber nicht die ganze."
+        },
+        {
+          "text": "Es gibt keinen Unterschied, beide Begriffe bedeuten dasselbe.",
+          "isCorrect": false,
+          "explanation": "Falsch: das README ist ein Teil der Dokumentation, nicht die gesamte."
+        },
+        {
+          "text": "Das README ist für Entwickler, die Dokumentation für Nutzer.",
+          "isCorrect": false,
+          "explanation": "Falsch: beide können sowohl für Entwickler als auch für Nutzer sein."
+        },
+        {
+          "text": "Die Dokumentation ist immer kürzer als das README.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Dokumentation ist meist umfangreicher als das README allein."
+        }
+      ]
+    },
+    {
+      "question": "Warum sollte man ein README auch für Solo-Projekte schreiben?",
+      "area": "Dokumentation: README",
+      "options": [
+        {
+          "text": "Weil das zukünftige Ich nach sechs Monaten nicht mehr weiß, wie das Projekt gestartet wird.",
+          "isCorrect": true,
+          "explanation": "Richtig: ein README ist eine Investition in die eigene Zukunft."
+        },
+        {
+          "text": "Weil GitHub sonst das Projekt automatisch löscht.",
+          "isCorrect": false,
+          "explanation": "Falsch: GitHub löscht keine Projekte ohne README."
+        },
+        {
+          "text": "Weil ein README gesetzlich für alle Softwareprojekte vorgeschrieben ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: es gibt kein Gesetz, das ein README vorschreibt."
+        },
+        {
+          "text": "Weil der Compiler ohne README den Code nicht übersetzen kann.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Compiler braucht kein README, um Code zu übersetzen."
+        }
+      ]
+    },
+    {
+      "question": "Wie hält man ein README am besten aktuell?",
+      "area": "Dokumentation: README",
+      "options": [
+        {
+          "text": "Bei jeder größeren Änderung am Projekt das README als festen Teil der Arbeit mit aktualisieren.",
+          "isCorrect": true,
+          "explanation": "Richtig: README-Updates sollten Teil der normalen Arbeitsroutine sein."
+        },
+        {
+          "text": "Einmal im Jahr eine große Überarbeitung aller READMEs im Unternehmen durchführen.",
+          "isCorrect": false,
+          "explanation": "Falsch: jährliche Überarbeitungen sind zu selten, das README veraltet in der Zwischenzeit."
+        },
+        {
+          "text": "Das README nie ändern, weil es sonst seine Funktion als stabile Referenz verliert.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein unverändertes README wird schnell veraltet und damit nutzlos."
+        },
+        {
+          "text": "Ein automatisches Skript schreiben, das das README aus dem Code generiert.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein README enthält viele Informationen, die nicht im Code stehen."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der beste Test für ein gutes README?",
+      "area": "Dokumentation: README",
+      "options": [
+        {
+          "text": "Eine Person, die das Projekt nicht kennt, kann mit den Anweisungen das Projekt zum Laufen bringen.",
+          "isCorrect": true,
+          "explanation": "Richtig: der Praxistest mit einem echten Neuling ist der einzig wahre Test."
+        },
+        {
+          "text": "Das README enthält mindestens fünfzig Emojis und bunte Überschriften.",
+          "isCorrect": false,
+          "explanation": "Falsch: Emojis sind kein Qualitätsmerkmal für ein README."
+        },
+        {
+          "text": "Das README wurde von einer künstlichen Intelligenz geschrieben.",
+          "isCorrect": false,
+          "explanation": "Falsch: KI-generierte Texte sind kein Garant für Qualität."
+        },
+        {
+          "text": "Das README ist in mindestens drei Sprachen verfügbar.",
+          "isCorrect": false,
+          "explanation": "Falsch: Mehrsprachigkeit ist nice-to-have, aber nicht der wichtigste Test."
+        }
+      ]
+    },
+    {
+      "question": "In welcher Sprache sollte ein README idealerweise geschrieben sein?",
+      "area": "Dokumentation: README",
+      "options": [
+        {
+          "text": "Englisch für internationale Projekte, Deutsch für rein deutsche Teams – Hauptsache verständlich.",
+          "isCorrect": true,
+          "explanation": "Richtig: die Verständlichkeit ist wichtiger als die Sprachwahl."
+        },
+        {
+          "text": "Immer auf Japanisch, weil die meisten Entwickler in Japan leben.",
+          "isCorrect": false,
+          "explanation": "Falsch: Japanisch ist nicht die Verkehrssprache der Softwareentwicklung."
+        },
+        {
+          "text": "In der Programmiersprache, in der das Projekt geschrieben ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Programmiersprache und die Dokumentationssprache sind unabhängig."
+        },
+        {
+          "text": "Immer in der Muttersprache des Projektleiters.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Leser des README sind wichtiger als die Vorlieben des Projektleiters."
+        }
+      ]
+    },
+    {
+      "question": "Was sollte man tun, wenn das README zu lang wird?",
+      "area": "Dokumentation: README",
+      "options": [
+        {
+          "text": "Details in separate Dateien auslagern und vom README aus verlinken.",
+          "isCorrect": true,
+          "explanation": "Richtig: ein README soll ein Einstieg sein, keine Enzyklopädie."
+        },
+        {
+          "text": "Das README löschen und durch einen Link auf Wikipedia ersetzen.",
+          "isCorrect": false,
+          "explanation": "Falsch: Wikipedia ist kein Ersatz für ein projektspezifisches README."
+        },
+        {
+          "text": "Alle Informationen in den Code selbst schreiben und das README weglassen.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Code enthält nicht alle Informationen, die ein README bietet."
+        },
+        {
+          "text": "Das README in mehrere kleine READMEs aufteilen, eines pro Ordner.",
+          "isCorrect": false,
+          "explanation": "Falsch: mehrere READMEs verwirren mehr als ein zentrales mit Verweisen."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Schreibe ein README für ein eigenes Projekt, das noch keines hat. Orientiere dich an der Struktur: Projektname und Ein-Satz-Beschreibung, Voraussetzungen, Schritt-für-Schritt-Installation, Tests ausführen. Lass eine Person, die das Projekt nicht kennt, die Anleitung testen.",
+    "expectation": "Ein README, mit dem eine projektfremde Person das Projekt in weniger als fünfzehn Minuten lokal zum Laufen bringt.",
+    "checklist": [
+      "Ein eigenes Projekt ohne README ausgewählt.",
+      "Projektnamen und Ein-Satz-Beschreibung geschrieben.",
+      "Alle Voraussetzungen aufgelistet.",
+      "Schritt-für-Schritt-Installation mit kopierbaren Befehlen geschrieben.",
+      "Eine projektfremde Person hat die Anleitung erfolgreich getestet."
+    ],
+    "portfolioItem": "P04"
+  },
+  "audio": {
+    "file": "M04-08-02.mp3",
+    "durationSeconds": 1120,
+    "voices": ["A", "B"],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Muss ein README immer auf Englisch sein?",
+      "answer": "Für Open-Source-Projekte und internationale Teams ist Englisch der Standard. Für ein rein deutsches Team oder ein Projekt, das nur innerhalb einer deutschen Firma genutzt wird, ist Deutsch völlig in Ordnung. Wichtiger als die Sprache ist die Verständlichkeit: ein klares deutsches README ist besser als ein holpriges englisches. Wenn du unsicher bist, schreib auf Englisch, denn das ist die Verkehrssprache der Softwareentwicklung und erreicht die meisten Leser."
+    },
+    {
+      "question": "Wie lang sollte ein README sein?",
+      "answer": "So lang wie nötig, so kurz wie möglich. Ein gutes README für ein kleines Projekt passt auf eine Bildschirmseite. Für ein größeres Projekt können es auch zwei oder drei Seiten sein. Die wichtigste Regel ist: die Installationsanleitung muss vollständig und korrekt sein. Lieber eine etwas längere Anleitung, die funktioniert, als eine kurze, die Schritte auslässt. Wenn das README zu lang wird, lagere Details in separate Dateien aus und verlinke sie."
+    },
+    {
+      "question": "Was mache ich, wenn mein Projekt noch nicht fertig ist? Soll ich trotzdem ein README schreiben?",
+      "answer": "Ja, und zwar so früh wie möglich. Ein README ist nicht nur für andere da, sondern auch für dich selbst. Wenn du die Installationsschritte aufschreibst, zwingst du dich, sie klar zu durchdenken. Wenn du den Zweck des Projekts in einem Satz formulierst, zwingst du dich, das Ziel zu schärfen. Ein README am Anfang eines Projekts ist wie ein Kompass: es hält dich auf Kurs. Du kannst es später immer noch anpassen, wenn sich das Projekt weiterentwickelt."
+    },
+    {
+      "question": "Wie halte ich mein README aktuell?",
+      "answer": "Die beste Methode ist, das README bei jeder größeren Änderung am Projekt mit zu aktualisieren, als festen Teil der Arbeit. Wenn du eine neue Abhängigkeit hinzufügst, aktualisiere die Liste der Voraussetzungen. Wenn sich der Startbefehl ändert, aktualisiere die Installationsanleitung. Wenn du eine neue Funktion einbaust, die eine eigene Konfiguration braucht, dokumentiere sie. Diese Disziplin kostet pro Änderung nur eine Minute, verhindert aber, dass das README über Monate veraltet."
+    },
+    {
+      "question": "Brauche ich ein README, wenn ich das Projekt nur für mich selbst schreibe?",
+      "answer": "Ja, denn dein zukünftiges Ich ist wie eine andere Person. Nach sechs Monaten wirst du dich nicht mehr erinnern, welche Node-Version das Projekt braucht oder welcher Befehl die Tests ausführt. Ein README für dich selbst ist eine Investition von zehn Minuten, die dir in sechs Monaten eine Stunde frustriertes Herumprobieren erspart. Außerdem ist es gute Übung: wenn du die Disziplin entwickelst, auch für Solo-Projekte READMEs zu schreiben, fällt es dir bei Team-Projekten umso leichter."
+    }
+  ]
+}

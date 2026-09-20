@@ -1,0 +1,612 @@
+{
+  "id": "M04-01-03",
+  "title": "Ein Modul, ein Vertrag",
+  "durationMinutes": 30,
+  "prerequisites": [
+    "M04-01-01",
+    "M03-02-01"
+  ],
+  "terms": [
+    {
+      "term": "Schnittstelle",
+      "definition": "Die festgelegte Menge an Funktionen, Parametern und Rückgabewerten, über die ein Modul mit anderen Modulen kommuniziert. Die Schnittstelle ist der Vertrag zwischen Modulen."
+    },
+    {
+      "term": "Vertrag",
+      "definition": "Eine verbindliche Vereinbarung zwischen zwei Modulen: Solange das aufrufende Modul die vereinbarten Parameter liefert, garantiert das aufgerufene Modul ein Ergebnis im vereinbarten Format."
+    },
+    {
+      "term": "Öffentliche API",
+      "definition": "Die Gesamtheit aller Schnittstellen, die ein Modul, eine Bibliothek oder ein Dienst nach außen anbietet. Alles, was nicht zur öffentlichen API gehört, ist Implementierungsdetail und darf sich jederzeit ändern."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen Mietvertrag für eine Wohnung vor. Darin steht genau, was der Vermieter liefern muss: eine beheizbare Wohnung mit fließend Wasser und einem funktionierenden Schloss. Und was der Mieter dafür tun muss: pünktlich die Miete zahlen und die Wohnung pfleglich behandeln.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Solange sich beide Seiten an diesen Vertrag halten, funktioniert das Mietverhältnis reibungslos. Der Vermieter muss nicht wissen, wie der Mieter seine Möbel stellt. Der Mieter muss nicht wissen, wie die Heizungsanlage im Keller funktioniert. Der Vertrag regelt nur die Schnittstelle zwischen beiden: was muss geliefert werden, was muss gezahlt werden. Alles andere ist Privatsache.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Und was hat ein Mietvertrag mit Software zu tun?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "In der Software gibt es genau dasselbe Konzept zwischen Modulen. Ein Modul bietet eine festgelegte Menge an Funktionen an, die andere Module aufrufen können. Diese Funktionen haben bestimmte Parameter, die das aufrufende Modul liefern muss, und sie geben ein Ergebnis in einem bestimmten Format zurück. Solange sich beide Seiten an diese Vereinbarung halten, können sie unabhängig voneinander weiterentwickelt werden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Diese festgelegte Menge an Funktionen mit ihren Parametern und Rückgabewerten heißt Schnittstelle, auf Englisch Interface.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-microsaas bietet das Modul src/lib/stripe.ts eine Schnittstelle mit Funktionen wie createCheckoutSession an. Diese Funktion erwartet als Parameter eine Preis-ID und eine Erfolgs-URL und gibt eine URL zurück, zu der der Nutzer weitergeleitet wird. Die Schnittstelle ist der Vertrag: das aufrufende Modul liefert Preis-ID und URL, das Stripe-Modul liefert die Weiterleitungs-URL. Was intern in der Stripe-API passiert, bleibt dem aufrufenden Modul verborgen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Eine klare Schnittstelle ist wichtig, weil sie die einzige Stelle ist, an der zwei Module voneinander abhängen. Ändert sich die Schnittstelle, müssen alle aufrufenden Module angepasst werden. Bleibt die Schnittstelle gleich, kann das aufgerufene Modul innen komplett umgebaut werden, ohne dass irgendjemand etwas davon merkt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Heißt das, eine Schnittstelle ist wie ein Vertrag, an den sich beide Seiten halten müssen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen Lieferschein vor, den du unterschreibst, wenn der Paketbote ein Paket bringt. Der Lieferschein listet genau auf, was geliefert wurde. Du prüfst die Liste, unterschreibst, und der Bote geht. Keiner von euch muss wissen, was in der anderen Filiale passiert.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Genau wie der Lieferschein legt ein Vertrag zwischen Modulen fest, was geliefert wird und in welchem Zustand. Das aufrufende Modul bestellt eine Leistung mit bestimmten Parametern. Das aufgerufene Modul liefert ein Ergebnis in einem bestimmten Format. Der Vertrag schützt beide Seiten: das aufrufende Modul kann sich auf das Ergebnis verlassen, das aufgerufene Modul kann seine interne Umsetzung frei ändern.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Diese verbindliche Vereinbarung zwischen zwei Modulen nennt man in der Softwareentwicklung einen Vertrag, auf Englisch Contract.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-microsaas besteht ein Vertrag zwischen dem Stripe-Modul und dem Webhook-Modul. Das Stripe-Modul garantiert, dass die Funktion handleWebhook immer ein Objekt mit den Feldern eventType und customerId zurückgibt. Das Webhook-Modul verlässt sich auf diesen Vertrag und verarbeitet die zurückgegebenen Daten weiter, ohne jemals die Stripe-API direkt anzusprechen. Würde das Stripe-Modul plötzlich die Feldnamen ändern, wäre der Vertrag gebrochen und das Webhook-Modul würde Fehler werfen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Ein expliziter Vertrag ist wichtig, weil er Missverständnisse zwischen Modulen verhindert. Ohne Vertrag weiß das aufrufende Modul nicht, ob es sich auf ein bestimmtes Verhalten verlassen kann. Mit Vertrag ist das Verhalten garantiert, und beide Seiten können unabhängig voneinander entwickelt und getestet werden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was passiert, wenn ein Modul mehr Funktionen hat, als es nach außen zeigen will?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir ein Restaurant vor, in dem die Gäste nur den Gastraum sehen: Tische, Stühle, die Speisekarte. Die Küche, der Kühlraum und das Büro des Chefs sind für Gäste nicht zugänglich. Was hinter der Tür passiert, geht die Gäste nichts an.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "In der Software ist es genauso: ein Modul hat einen öffentlichen Bereich, den andere Module sehen und benutzen dürfen, und einen privaten Bereich, der nur für die interne Umsetzung da ist. Der öffentliche Bereich besteht aus den exportierten Funktionen mit ihren Schnittstellen. Der private Bereich besteht aus Hilfsfunktionen, Konstanten und internen Datenstrukturen, die sich jederzeit ändern dürfen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Die Gesamtheit aller öffentlichen Schnittstellen eines Moduls heißt öffentliche API, kurz für Application Programming Interface.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-microsaas exportiert das Modul src/lib/stripe.ts nur drei Funktionen: createCheckoutSession, handleWebhook und getSubscriptionStatus. Diese drei Funktionen bilden die öffentliche API des Stripe-Moduls. Alle anderen Funktionen in dieser Datei, etwa zum Formatieren von API-Anfragen oder zum Parsen von Antworten, sind privat und werden nicht exportiert. Ein anderes Modul kann und darf diese privaten Funktionen nicht aufrufen. Die öffentliche API ist die einzige Tür zum Modul.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Eine schmale öffentliche API ist wichtig, weil sie die Freiheit gibt, den gesamten privaten Code jederzeit umzubauen. Solange die exportierten Funktionen ihr Verhalten nicht ändern, kann innen alles neu geschrieben werden. Eine breite öffentliche API mit vielen exportierten Funktionen macht das Modul dagegen starr, weil jede Änderung an einer exportierten Funktion alle aufrufenden Module betrifft.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Woher weiß ich, welche Funktionen ich exportieren soll und welche nicht?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Eine gute Faustregel ist: exportiere nur, was ein anderes Modul wirklich braucht, um seine Aufgabe zu erledigen. Alles andere bleibt privat. Wenn du unsicher bist, fang mit null Exporten an und füge nur dann einen Export hinzu, wenn ein anderes Modul die Funktion tatsächlich aufrufen muss. Es ist viel einfacher, einen Export später hinzuzufügen, als einen einmal veröffentlichten Export wieder zurückzunehmen, weil andere Module bereits davon abhängen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine Fernbedienung für einen Fernseher vor. Die Fernbedienung hat ein paar Knöpfe: lauter, leiser, Kanal wechseln, an, aus. Das ist die Schnittstelle. Was im Inneren des Fernsehers passiert, wenn du auf lauter drückst, ist für dich unsichtbar und auch völlig egal.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Die Fernbedienung ist die perfekte Metapher für eine öffentliche API. Wenige, klar beschriftete Knöpfe, die genau das tun, was draufsteht. Kein Knopf für interne Einstellungen wie die Spannung der Bildröhre oder den Kontrast des Vorverstärkers. Diese internen Details gehen den Benutzer nichts an und würden ihn nur verwirren. Genauso sollte eine öffentliche API nur die Funktionen zeigen, die ein anderes Modul wirklich braucht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Diese Metapher ist wichtig, weil sie zeigt, dass eine gute API nicht einfach alle internen Funktionen nach außen kehrt, sondern eine bewusste Auswahl trifft. Die Kunst einer guten API besteht darin, die richtige Abstraktion zu finden: genug Funktionen, um nützlich zu sein, aber wenige genug, um die innere Freiheit zu bewahren.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "text": "Also noch einmal ganz kurz: Jedes Modul hat eine Schnittstelle, also eine festgelegte Menge an Funktionen mit Parametern und Rückgabewerten. Diese Schnittstelle ist ein Vertrag zwischen Modulen: solange das aufrufende Modul die vereinbarten Parameter liefert, garantiert das aufgerufene Modul ein Ergebnis im vereinbarten Format. Die Gesamtheit aller Schnittstellen eines Moduls heißt öffentliche API. Alles, was nicht zur öffentlichen API gehört, ist privates Implementierungsdetail und darf sich jederzeit ändern.",
+      "isKeySentence": true
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Eine Schnittstelle ist die festgelegte Menge an Funktionen, Parametern und Rückgabewerten, über die ein Modul mit anderen Modulen kommuniziert. Die Schnittstelle ist der Vertrag zwischen Modulen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Ein Vertrag ist eine verbindliche Vereinbarung zwischen zwei Modulen: Solange das aufrufende Modul die vereinbarten Parameter liefert, garantiert das aufgerufene Modul ein Ergebnis im vereinbarten Format.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Eine öffentliche API ist die Gesamtheit aller Schnittstellen, die ein Modul, eine Bibliothek oder ein Dienst nach außen anbietet. Alles, was nicht zur öffentlichen API gehört, ist Implementierungsdetail und darf sich jederzeit ändern.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Ist eine Schnittstelle dasselbe wie eine API?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Die Begriffe werden oft austauschbar verwendet, aber es gibt einen feinen Unterschied. Eine Schnittstelle ist die allgemeine Idee: eine festgelegte Art der Kommunikation zwischen zwei Teilen. Eine API ist die konkrete Umsetzung dieser Idee für ein bestimmtes Modul oder einen Dienst. Jede API besteht aus Schnittstellen, aber nicht jede Schnittstelle ist Teil einer API. Die Schnittstelle zwischen zwei internen Modulen eines Programms ist eine Schnittstelle, aber nicht unbedingt das, was man umgangssprachlich als API bezeichnet.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was passiert, wenn ich den Vertrag eines Moduls breche, also die Schnittstelle ändere?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Dann müssen alle Module, die diese Schnittstelle benutzen, ebenfalls angepasst werden. In einer kleinen Codebasis mit wenigen Modulen ist das schnell erledigt. In einer großen Codebasis mit Dutzenden oder Hunderten von Modulen wird das zu einem erheblichen Aufwand. Deshalb ist die wichtigste Regel für öffentliche APIs: ändere eine bestehende Schnittstelle niemals auf eine Weise, die bestehende Aufrufer brechen würde. Füge stattdessen eine neue Funktion hinzu und lasse die alte noch eine Weile bestehen, bis alle Aufrufer umgestellt sind.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Muss ich für jedes Modul einen schriftlichen Vertrag dokumentieren?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "In TypeScript übernimmt das Typsystem einen großen Teil dieser Dokumentation automatisch. Die Typen der Parameter und Rückgabewerte sind der maschinenlesbare Teil des Vertrags. Für den menschenlesbaren Teil reicht oft ein kurzer Kommentar über jeder exportierten Funktion, der in einem Satz erklärt, was die Funktion tut. Eine ausführliche, separate Vertragsdokumentation lohnt sich erst, wenn das Modul von mehreren Teams oder externen Nutzern verwendet wird.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Kann ein Modul mehrere Schnittstellen haben?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ja, das ist sogar der Normalfall. Ein Modul kann verschiedene Funktionen für verschiedene Zwecke exportieren. Das Stripe-Modul in repo-microsaas hat zum Beispiel eine Funktion zum Erzeugen einer Zahlungssitzung und eine andere zum Verarbeiten von Webhooks. Beide gehören zur selben öffentlichen API, sind aber unterschiedliche Schnittstellen für unterschiedliche Anwendungsfälle. Wichtig ist nur, dass jede einzelne Schnittstelle klar definiert ist und sich nicht ständig ändert.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was ist der Unterschied zwischen einem Vertrag und einem Test?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ein Vertrag beschreibt, was ein Modul tun soll. Ein Test prüft, ob das Modul den Vertrag tatsächlich einhält. Der Vertrag ist die Spezifikation, der Test ist die Kontrolle. Beide gehören zusammen: ein Vertrag ohne Test ist nur ein frommer Wunsch, ein Test ohne Vertrag prüft möglicherweise das Falsche. In der Praxis schreibt man zuerst den Vertrag in Form von Typen und Funktionssignaturen, dann den Code, der den Vertrag erfüllt, und dann die Tests, die die Einhaltung des Vertrags sicherstellen.",
+      "isKeySentence": false
+    }
+  ],
+  "practiceExample": {
+    "text": "Im Repo repo-microsaas zeigt das Modul src/lib/stripe.ts eine vorbildliche öffentliche API. Es exportiert nur drei Funktionen: createCheckoutSession, handleWebhook und getSubscriptionStatus. Alle anderen Funktionen in der Datei sind privat. Die Schnittstelle ist der Vertrag: jede exportierte Funktion hat klare Parameter und Rückgabewerte.",
+    "repoNote": "repo-microsaas",
+    "location": "src/lib/stripe.ts (exportierte Funktionen als öffentliche API)"
+  },
+  "quiz": [
+    {
+      "question": "Welches Alltagsbild beschreibt eine Schnittstelle zwischen Modulen am besten?",
+      "area": "Architektur: Schnittstelle",
+      "options": [
+        {
+          "text": "Ein Mietvertrag, der genau festlegt, was der Vermieter liefern und was der Mieter zahlen muss.",
+          "isCorrect": true,
+          "explanation": "Richtig: ein Mietvertrag definiert die Schnittstelle zwischen Vermieter und Mieter."
+        },
+        {
+          "text": "Ein Telefonbuch, das alle Nummern einer Stadt alphabetisch auflistet.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Telefonbuch ist eine Liste, keine zweiseitige Vereinbarung."
+        },
+        {
+          "text": "Ein einzelner Schlüssel, der in ein bestimmtes Schloss passt.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Schlüssel ist ein einzelner Zugang, keine umfassende Vereinbarung."
+        },
+        {
+          "text": "Eine Landkarte, die alle Straßen einer Stadt zeigt.",
+          "isCorrect": false,
+          "explanation": "Falsch: eine Landkarte zeigt Wege, definiert aber keine Vereinbarung zwischen zwei Parteien."
+        }
+      ]
+    },
+    {
+      "question": "Was versteht man unter einem Vertrag zwischen zwei Modulen?",
+      "area": "Architektur: Vertrag",
+      "options": [
+        {
+          "text": "Eine verbindliche Vereinbarung: das aufrufende Modul liefert bestimmte Parameter, das aufgerufene Modul garantiert ein Ergebnis in einem bestimmten Format.",
+          "isCorrect": true,
+          "explanation": "Richtig: der Vertrag definiert die gegenseitigen Verpflichtungen beider Module."
+        },
+        {
+          "text": "Ein juristisches Dokument, das von einem Notar beglaubigt werden muss.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Software-Vertrag ist ein technisches Konzept, kein juristisches Dokument."
+        },
+        {
+          "text": "Eine mündliche Absprache zwischen zwei Entwicklern beim Mittagessen.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Vertrag muss im Code festgehalten sein, nicht nur mündlich existieren."
+        },
+        {
+          "text": "Die Summe aller Zeilen Code, die ein Modul enthält.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Codezeilen sind die Implementierung, nicht der Vertrag."
+        }
+      ]
+    },
+    {
+      "question": "Was ist eine öffentliche API?",
+      "area": "Architektur: Öffentliche API",
+      "options": [
+        {
+          "text": "Die Gesamtheit aller Schnittstellen, die ein Modul nach außen anbietet.",
+          "isCorrect": true,
+          "explanation": "Richtig: die öffentliche API umfasst alle exportierten Funktionen eines Moduls."
+        },
+        {
+          "text": "Eine Liste aller Fehlermeldungen, die ein Modul jemals ausgeben kann.",
+          "isCorrect": false,
+          "explanation": "Falsch: Fehlermeldungen sind Teil der Implementierung, nicht der API."
+        },
+        {
+          "text": "Die Versionsnummer des Moduls, zum Beispiel 1.0.0.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Versionsnummer ist eine Kennzeichnung, nicht die API selbst."
+        },
+        {
+          "text": "Der Name des Entwicklers, der das Modul geschrieben hat.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Autorname hat nichts mit der API zu tun."
+        }
+      ]
+    },
+    {
+      "question": "Warum sollte eine öffentliche API möglichst wenige Funktionen exportieren?",
+      "area": "Architektur: Öffentliche API",
+      "options": [
+        {
+          "text": "Weil jede exportierte Funktion eine Verpflichtung ist, die bei Änderungen alle aufrufenden Module betrifft.",
+          "isCorrect": true,
+          "explanation": "Richtig: je weniger Exporte, desto mehr Freiheit für interne Änderungen."
+        },
+        {
+          "text": "Weil der Compiler bei zu vielen Exporten langsamer wird.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Anzahl der Exporte hat keinen messbaren Einfluss auf die Compiler-Geschwindigkeit."
+        },
+        {
+          "text": "Weil mehr als zehn Exporte in den meisten Programmiersprachen verboten sind.",
+          "isCorrect": false,
+          "explanation": "Falsch: es gibt keine technische Grenze für die Anzahl der Exporte."
+        },
+        {
+          "text": "Weil jede exportierte Funktion Lizenzgebühren kostet.",
+          "isCorrect": false,
+          "explanation": "Falsch: Exporte kosten keine Lizenzgebühren."
+        }
+      ]
+    },
+    {
+      "question": "Welche Funktionen exportiert das Stripe-Modul im Repo repo-microsaas?",
+      "area": "Praxisbeispiel repo-microsaas",
+      "options": [
+        {
+          "text": "createCheckoutSession, handleWebhook und getSubscriptionStatus.",
+          "isCorrect": true,
+          "explanation": "Richtig: diese drei Funktionen bilden die gesamte öffentliche API des Stripe-Moduls."
+        },
+        {
+          "text": "Alle Funktionen, die in der Datei stripe.ts definiert sind.",
+          "isCorrect": false,
+          "explanation": "Falsch: nur ein Teil der Funktionen wird exportiert, der Rest bleibt privat."
+        },
+        {
+          "text": "Nur eine einzige Funktion namens processPayment.",
+          "isCorrect": false,
+          "explanation": "Falsch: das Stripe-Modul exportiert drei Funktionen, nicht nur eine."
+        },
+        {
+          "text": "Gar keine Funktionen, das Modul arbeitet vollständig autark.",
+          "isCorrect": false,
+          "explanation": "Falsch: ohne Exporte könnte kein anderes Modul das Stripe-Modul nutzen."
+        }
+      ]
+    },
+    {
+      "question": "Was passiert, wenn ein Modul seinen Vertrag bricht, indem es die Schnittstelle ändert?",
+      "area": "Architektur: Vertrag",
+      "options": [
+        {
+          "text": "Alle aufrufenden Module müssen angepasst werden, was in großen Projekten viel Arbeit bedeutet.",
+          "isCorrect": true,
+          "explanation": "Richtig: ein Vertragsbruch zwingt alle abhängigen Module zur Anpassung."
+        },
+        {
+          "text": "Nichts, die anderen Module passen sich automatisch an die neue Schnittstelle an.",
+          "isCorrect": false,
+          "explanation": "Falsch: es gibt keine automatische Anpassung an geänderte Schnittstellen."
+        },
+        {
+          "text": "Das Modul wird automatisch aus dem Projekt gelöscht.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Vertragsbruch führt nicht zur automatischen Löschung."
+        },
+        {
+          "text": "Der Compiler verweigert die Ausführung des gesamten Programms.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Compiler prüft Typen, nicht die Einhaltung von Verträgen."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der Unterschied zwischen einer Schnittstelle und einer API?",
+      "area": "Architektur: Schnittstelle",
+      "options": [
+        {
+          "text": "Eine Schnittstelle ist das allgemeine Konzept, eine API ist die konkrete Umsetzung für ein bestimmtes Modul.",
+          "isCorrect": true,
+          "explanation": "Richtig: jede API besteht aus Schnittstellen, aber nicht jede Schnittstelle ist eine API."
+        },
+        {
+          "text": "Beide Begriffe sind vollkommen identisch und bedeuten exakt dasselbe.",
+          "isCorrect": false,
+          "explanation": "Falsch: es gibt einen feinen, aber wichtigen Unterschied zwischen den Begriffen."
+        },
+        {
+          "text": "Eine API ist nur für Webdienste, eine Schnittstelle nur für interne Module.",
+          "isCorrect": false,
+          "explanation": "Falsch: beide Begriffe können sowohl für interne als auch für externe Kommunikation verwendet werden."
+        },
+        {
+          "text": "Eine Schnittstelle ist immer öffentlich, eine API immer privat.",
+          "isCorrect": false,
+          "explanation": "Falsch: es gibt sowohl öffentliche als auch private Schnittstellen und APIs."
+        }
+      ]
+    },
+    {
+      "question": "Welche Faustregel gilt für die Entscheidung, ob eine Funktion exportiert werden soll?",
+      "area": "Architektur: Öffentliche API",
+      "options": [
+        {
+          "text": "Exportiere nur, was ein anderes Modul wirklich braucht, und fang im Zweifel mit null Exporten an.",
+          "isCorrect": true,
+          "explanation": "Richtig: es ist leichter, einen Export hinzuzufügen, als ihn zurückzunehmen."
+        },
+        {
+          "text": "Exportiere immer alle Funktionen, damit andere Module maximale Flexibilität haben.",
+          "isCorrect": false,
+          "explanation": "Falsch: alle Funktionen zu exportieren macht das Modul starr und unübersichtlich."
+        },
+        {
+          "text": "Exportiere nur Funktionen, deren Name mit einem Vokal beginnt.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Anfangsbuchstabe hat nichts mit der Export-Entscheidung zu tun."
+        },
+        {
+          "text": "Exportiere genau die Hälfte aller Funktionen, um eine Balance zu halten.",
+          "isCorrect": false,
+          "explanation": "Falsch: eine feste Quote ist kein sinnvolles Kriterium für Export-Entscheidungen."
+        }
+      ]
+    },
+    {
+      "question": "Welches Alltagsbild beschreibt die öffentliche API eines Moduls am treffendsten?",
+      "area": "Architektur: Öffentliche API",
+      "options": [
+        {
+          "text": "Eine Fernbedienung mit wenigen, klar beschrifteten Knöpfen für die wichtigsten Funktionen.",
+          "isCorrect": true,
+          "explanation": "Richtig: die Fernbedienung zeigt nur, was der Nutzer braucht, und versteckt die interne Technik."
+        },
+        {
+          "text": "Der Bauplan eines ganzen Hauses mit allen Leitungen und Rohren.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Bauplan zeigt alle internen Details, das Gegenteil einer guten API."
+        },
+        {
+          "text": "Ein Preisschild, das nur den Endpreis ohne Mehrwertsteuer zeigt.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Preisschild ist eine einzelne Information, keine Sammlung von Funktionen."
+        },
+        {
+          "text": "Eine Speisekarte, die nur die Preise ohne die Namen der Gerichte zeigt.",
+          "isCorrect": false,
+          "explanation": "Falsch: eine unvollständige Speisekarte ist keine gute Metapher für eine API."
+        }
+      ]
+    },
+    {
+      "question": "Wie dokumentiert TypeScript einen Teil des Vertrags zwischen Modulen automatisch?",
+      "area": "Architektur: Vertrag",
+      "options": [
+        {
+          "text": "Durch das Typsystem, das die Typen von Parametern und Rückgabewerten maschinenlesbar festlegt.",
+          "isCorrect": true,
+          "explanation": "Richtig: TypeScript-Typen sind der maschinenlesbare Teil des Vertrags."
+        },
+        {
+          "text": "Durch automatisch generierte PDF-Dokumente für jedes Modul.",
+          "isCorrect": false,
+          "explanation": "Falsch: TypeScript generiert keine PDF-Dokumente."
+        },
+        {
+          "text": "Durch eine eingebaute Sprachausgabe, die den Code vorliest.",
+          "isCorrect": false,
+          "explanation": "Falsch: TypeScript hat keine Sprachausgabe."
+        },
+        {
+          "text": "Durch farbige Markierungen im Code, die Vertragsverletzungen anzeigen.",
+          "isCorrect": false,
+          "explanation": "Falsch: TypeScript markiert Typfehler, nicht Vertragsverletzungen im abstrakten Sinne."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der Zusammenhang zwischen einem Vertrag und einem Test?",
+      "area": "Architektur: Vertrag",
+      "options": [
+        {
+          "text": "Der Vertrag beschreibt, was das Modul tun soll, der Test prüft, ob es den Vertrag einhält.",
+          "isCorrect": true,
+          "explanation": "Richtig: Vertrag und Test ergänzen sich, der eine definiert, der andere kontrolliert."
+        },
+        {
+          "text": "Ein Vertrag ersetzt alle Tests, weil er bereits alles Notwendige festlegt.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Vertrag ohne Test ist nur eine Behauptung, keine Garantie."
+        },
+        {
+          "text": "Tests und Verträge sind zwei völlig unabhängige Konzepte ohne jeden Zusammenhang.",
+          "isCorrect": false,
+          "explanation": "Falsch: sie sind eng verwandt, der Vertrag gibt vor, was der Test prüft."
+        },
+        {
+          "text": "Ein Test ist immer auch ein Vertrag, die Begriffe sind austauschbar.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Test kann einen Vertrag prüfen, ist aber nicht selbst der Vertrag."
+        }
+      ]
+    },
+    {
+      "question": "Warum ist es leichter, einen Export hinzuzufügen als ihn zurückzunehmen?",
+      "area": "Architektur: Öffentliche API",
+      "options": [
+        {
+          "text": "Weil andere Module nach der Veröffentlichung von dem Export abhängen und bei einer Rücknahme brechen würden.",
+          "isCorrect": true,
+          "explanation": "Richtig: einmal veröffentlichte Exporte erzeugen Abhängigkeiten, die man nicht einfach kappen kann."
+        },
+        {
+          "text": "Weil der Compiler das Hinzufügen von Exporten automatisch erlaubt, das Entfernen aber verbietet.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Compiler verbietet das Entfernen von Exporten nicht."
+        },
+        {
+          "text": "Weil das Hinzufügen weniger Tastenanschläge erfordert als das Löschen.",
+          "isCorrect": false,
+          "explanation": "Falsch: es geht nicht um Tastenanschläge, sondern um Abhängigkeiten."
+        },
+        {
+          "text": "Weil gelöschte Exporte automatisch nach dreißig Tagen wiederhergestellt werden.",
+          "isCorrect": false,
+          "explanation": "Falsch: es gibt keine automatische Wiederherstellung gelöschter Exporte."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Nimm dir ein Modul aus einem eigenen Projekt und schreibe seine öffentliche API auf: welche Funktionen exportiert es, welche Parameter erwarten sie, was geben sie zurück? Streiche dann alle Exporte, die kein anderes Modul wirklich braucht. Dokumentiere für die verbleibenden Exporte den Vertrag in einem Satz pro Funktion.",
+    "expectation": "Das Modul hat eine dokumentierte öffentliche API mit nur den wirklich benötigten Exporten. Jede exportierte Funktion hat einen Ein-Satz-Vertrag, der beschreibt, was sie tut.",
+    "checklist": [
+      "Ein bestehendes Modul ausgewählt.",
+      "Alle exportierten Funktionen aufgelistet.",
+      "Für jede Funktion Parameter und Rückgabewerte notiert.",
+      "Nicht benötigte Exporte gestrichen.",
+      "Für die verbleibenden Exporte je einen Ein-Satz-Vertrag geschrieben."
+    ],
+    "portfolioItem": "P04"
+  },
+  "audio": {
+    "file": "M04-01-03.mp3",
+    "durationSeconds": 1200,
+    "voices": ["A", "B"],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Ist eine Schnittstelle dasselbe wie eine API?",
+      "answer": "Die Begriffe werden oft austauschbar verwendet, aber es gibt einen feinen Unterschied. Eine Schnittstelle ist die allgemeine Idee: eine festgelegte Art der Kommunikation zwischen zwei Teilen. Eine API ist die konkrete Umsetzung dieser Idee für ein bestimmtes Modul oder einen Dienst. Jede API besteht aus Schnittstellen, aber nicht jede Schnittstelle ist Teil einer API. Die Schnittstelle zwischen zwei internen Modulen eines Programms ist eine Schnittstelle, aber nicht unbedingt das, was man umgangssprachlich als API bezeichnet."
+    },
+    {
+      "question": "Was passiert, wenn ich den Vertrag eines Moduls breche, also die Schnittstelle ändere?",
+      "answer": "Dann müssen alle Module, die diese Schnittstelle benutzen, ebenfalls angepasst werden. In einer kleinen Codebasis mit wenigen Modulen ist das schnell erledigt. In einer großen Codebasis mit Dutzenden oder Hunderten von Modulen wird das zu einem erheblichen Aufwand. Deshalb ist die wichtigste Regel für öffentliche APIs: ändere eine bestehende Schnittstelle niemals auf eine Weise, die bestehende Aufrufer brechen würde. Füge stattdessen eine neue Funktion hinzu und lasse die alte noch eine Weile bestehen, bis alle Aufrufer umgestellt sind."
+    },
+    {
+      "question": "Muss ich für jedes Modul einen schriftlichen Vertrag dokumentieren?",
+      "answer": "In TypeScript übernimmt das Typsystem einen großen Teil dieser Dokumentation automatisch. Die Typen der Parameter und Rückgabewerte sind der maschinenlesbare Teil des Vertrags. Für den menschenlesbaren Teil reicht oft ein kurzer Kommentar über jeder exportierten Funktion, der in einem Satz erklärt, was die Funktion tut. Eine ausführliche, separate Vertragsdokumentation lohnt sich erst, wenn das Modul von mehreren Teams oder externen Nutzern verwendet wird."
+    },
+    {
+      "question": "Kann ein Modul mehrere Schnittstellen haben?",
+      "answer": "Ja, das ist sogar der Normalfall. Ein Modul kann verschiedene Funktionen für verschiedene Zwecke exportieren. Das Stripe-Modul in repo-microsaas hat zum Beispiel eine Funktion zum Erzeugen einer Zahlungssitzung und eine andere zum Verarbeiten von Webhooks. Beide gehören zur selben öffentlichen API, sind aber unterschiedliche Schnittstellen für unterschiedliche Anwendungsfälle. Wichtig ist nur, dass jede einzelne Schnittstelle klar definiert ist und sich nicht ständig ändert."
+    },
+    {
+      "question": "Was ist der Unterschied zwischen einem Vertrag und einem Test?",
+      "answer": "Ein Vertrag beschreibt, was ein Modul tun soll. Ein Test prüft, ob das Modul den Vertrag tatsächlich einhält. Der Vertrag ist die Spezifikation, der Test ist die Kontrolle. Beide gehören zusammen: ein Vertrag ohne Test ist nur ein frommer Wunsch, ein Test ohne Vertrag prüft möglicherweise das Falsche. In der Praxis schreibt man zuerst den Vertrag in Form von Typen und Funktionssignaturen, dann den Code, der den Vertrag erfüllt, und dann die Tests, die die Einhaltung des Vertrags sicherstellen."
+    }
+  ]
+}

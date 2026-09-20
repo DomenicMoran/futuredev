@@ -1,0 +1,631 @@
+{
+  "id": "M04-01-04",
+  "title": "Modularer Monolith vs Microservices",
+  "durationMinutes": 32,
+  "prerequisites": [
+    "M04-01-01",
+    "M04-01-03",
+    "M03-02-01"
+  ],
+  "terms": [
+    {
+      "term": "Monolith",
+      "definition": "Eine Anwendung, die als eine einzige, zusammenhängende Einheit entwickelt, gebaut und ausgeliefert wird. Alle Funktionen teilen sich denselben Speicher, dieselbe Codebasis und dieselbe Datenbank."
+    },
+    {
+      "term": "Modularer Monolith",
+      "definition": "Ein Monolith, dessen Inneres nach dem Prinzip der Trennung der Zuständigkeiten in klar abgegrenzte Module aufgeteilt ist, die über Schnittstellen kommunizieren, aber gemeinsam gebaut und gestartet werden."
+    },
+    {
+      "term": "Microservice",
+      "definition": "Ein unabhängig entwickelter, gebauter und betriebener Dienst, der genau eine fachliche Aufgabe erfüllt und mit anderen Diensten über das Netzwerk kommuniziert."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir ein Einfamilienhaus vor, in dem alles unter einem Dach ist: Wohnzimmer, Küche, Bad, Schlafzimmer. Wenn du die Küche renovieren willst, musst du nicht das ganze Haus abreißen. Du machst die Küchentür zu, renovierst in Ruhe, und der Rest des Hauses bleibt bewohnbar.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Dieses Einfamilienhaus ist das Bild für einen gut gebauten Monolithen: eine einzige Anwendung, aber mit klar getrennten Räumen. Die Küche ist ein Modul, das Bad ein anderes, das Wohnzimmer ein drittes. Alle teilen sich dasselbe Fundament und dasselbe Dach, aber innen sind die Zuständigkeiten sauber getrennt. Genau so funktioniert ein modularer Monolith in der Software.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Ich dachte, Monolithen sind schlecht und Microservices sind gut?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Das ist ein weit verbreitetes Missverständnis. Nicht jeder Monolith ist schlecht, und nicht jede Microservice-Architektur ist gut. Ein schlecht gebauter Monolith, in dem alles mit allem verwoben ist, ist tatsächlich ein Problem. Aber ein gut gebauter modularer Monolith mit klaren Schnittstellen zwischen den Modulen ist für viele Projekte die bessere Wahl. Der entscheidende Unterschied ist nicht Monolith oder Microservice, sondern ob die Zuständigkeiten sauber getrennt sind oder nicht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Eine Anwendung, die als eine einzige Einheit entwickelt und ausgeliefert wird, heißt Monolith.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Das Repo repo-microsaas ist ein gutes Beispiel für einen Monolithen. Die gesamte Anwendung wird mit einem einzigen Befehl gebaut und gestartet. Es gibt nur eine Datenbank, nur einen Server, nur eine Codebasis. Aber innen ist der Code in Module aufgeteilt: Stripe, Datenbank, Authentifizierung, Benutzeroberfläche. Jedes Modul hat seine eigene Datei und seine eigene Schnittstelle. Der Monolith ist außen eine Einheit, innen aber sauber strukturiert.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Ein Monolith ist für kleine bis mittlere Projekte oft die richtige Wahl, weil er einfach zu entwickeln, zu testen und zu betreiben ist. Ein einziger Befehl startet die gesamte Anwendung. Ein einziger Debugger kann alle Module gleichzeitig untersuchen. Es gibt keine Netzwerk-Latenz zwischen den Modulen, weil sie im selben Prozess laufen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was genau macht einen Monolithen modular?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir das Einfamilienhaus noch einmal vor, aber diesmal mit dicken Wänden zwischen den Räumen und abschließbaren Türen. Jeder Raum hat seinen eigenen Schlüssel, und die Bewohner klopfen an, bevor sie einen fremden Raum betreten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein modularer Monolith hat genau diese dicken Wände zwischen den Modulen. Jedes Modul hat seine eigene Datei oder seinen eigenen Ordner. Module kommunizieren nur über festgelegte Schnittstellen, nie durch direkten Zugriff auf die internen Daten eines anderen Moduls. Die Regeln der Trennung der Zuständigkeiten gelten innen genauso streng wie bei Microservices, nur dass alle Module im selben Prozess laufen und gemeinsam gestartet werden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Ein Monolith mit klar getrennten Modulen und Schnittstellen heißt modularer Monolith.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-microsaas erkennst du den modularen Monolithen an der Ordnerstruktur. Der Ordner src/lib enthält die Module stripe, db und auth, jedes in einer eigenen Datei. Der Ordner src/app enthält die Benutzeroberfläche. Kein Modul importiert die internen Funktionen eines anderen Moduls direkt. Stattdessen importiert jedes Modul nur die exportierten Schnittstellen. Die Module sind wie Räume mit abschließbaren Türen: du kannst nur durch die Tür, nicht durch die Wand.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Ein modularer Monolith ist wichtig, weil er die Vorteile eines Monolithen mit den Vorteilen sauberer Architektur verbindet. Du hast die einfache Entwicklung und den einfachen Betrieb eines Monolithen, aber die klaren Grenzen und die Austauschbarkeit von Modulen wie bei Microservices. Für die allermeisten Projekte ist das der beste Ausgangspunkt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Und wann brauche ich dann überhaupt Microservices?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir jetzt kein Einfamilienhaus vor, sondern eine ganze Stadt mit vielen einzelnen Gebäuden. Jedes Gebäude hat seinen eigenen Eingang, seine eigene Adresse, seine eigene Strom- und Wasserversorgung. Die Gebäude sind durch Straßen verbunden, aber jedes steht für sich allein.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Microservices sind wie die Gebäude einer Stadt. Jeder Dienst ist ein eigenständiges Programm mit eigener Codebasis, eigener Datenbank und eigenem Server. Die Dienste kommunizieren über das Netzwerk, meist über HTTP oder Nachrichtenwarteschlangen. Ein Dienst kann unabhängig von den anderen gestartet, gestoppt, skaliert und aktualisiert werden. Fällt ein Dienst aus, laufen die anderen weiter.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "So ein unabhängiger Dienst mit eigener Codebasis und eigener Datenbank heißt Microservice.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Stell dir vor, das Repo repo-microsaas würde zu Microservices umgebaut. Der Stripe-Teil würde ein eigener Dienst mit eigener Datenbank, der Authentifizierungs-Teil ein anderer Dienst, die Benutzeroberfläche ein dritter. Jeder Dienst hätte seine eigene package.json, seinen eigenen Build-Prozess und seinen eigenen Server. Die Dienste würden nicht mehr direkt Funktionen aufrufen, sondern HTTP-Anfragen an die API des jeweils anderen Dienstes schicken.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Microservices lohnen sich erst, wenn ein Projekt so groß wird, dass verschiedene Teams unabhängig voneinander arbeiten müssen. Wenn Team A den Zahlungsdienst wartet und Team B den Empfehlungsdienst, dann dürfen sich beide Teams nicht gegenseitig blockieren. Microservices geben jedem Team die Freiheit, seinen eigenen Rhythmus zu haben: eigene Releases, eigene Technologieentscheidungen, eigene Skalierung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was sind die Nachteile von Microservices?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Microservices bringen erhebliche Kosten mit sich. Die Kommunikation über das Netzwerk ist langsam und fehleranfällig. Jeder Dienst braucht seine eigene Infrastruktur: Server, Datenbank, Monitoring, Logging. Das Testen wird kompliziert, weil du nicht mehr einfach die gesamte Anwendung auf deinem Laptop starten kannst. Und das Debuggen wird schwierig, weil ein Fehler sich über mehrere Dienste erstrecken kann und du die Anfrage durch das gesamte System verfolgen musst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Diese Kosten sind der Grund, warum Microservices für kleine Projekte und kleine Teams fast immer die falsche Wahl sind. Der Sprung von einem modularen Monolithen zu Microservices sollte eine bewusste Entscheidung sein, getrieben von echten organisatorischen Problemen, nicht von einem Hype. Die meisten erfolgreichen Microservice-Systeme haben als modulare Monolithen angefangen und sind erst später gewachsen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du ziehst von einem Einfamilienhaus in eine Wohnung in einem Hochhaus um. Im Hochhaus hast du mehr Freiheit: du kannst deine Wohnung renovieren, ohne die Nachbarn zu stören. Aber du hast auch mehr Pflichten: Hausgeld, Hausordnung, Fahrstuhl, der mal kaputt ist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der Umzug vom modularen Monolithen zu Microservices ist wie der Umzug vom Einfamilienhaus ins Hochhaus. Du gewinnst Unabhängigkeit, aber du verlierst Einfachheit. Im Monolithen war ein Funktionsaufruf eine Sache von Mikrosekunden. Im Microservice-System ist es eine Netzwerkanfrage mit Latenz, Timeout und möglichem Fehler. Im Monolithen hast du eine Datenbank, eine Transaktion. Im Microservice-System hast du viele Datenbanken und musst selbst sicherstellen, dass die Daten konsistent bleiben.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Gibt es eine einfache Regel, wann ich bei einem Monolithen bleiben sollte und wann ich zu Microservices wechseln sollte?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Die beste Regel lautet: fang immer mit einem modularen Monolithen an. Solange dein Team klein genug ist, dass alle Entwicklerinnen und Entwickler die gesamte Codebasis verstehen können, bleib beim Monolithen. Wechsle zu Microservices erst, wenn du konkrete Schmerzen spürst: wenn verschiedene Teams sich beim Deployment blockieren, wenn verschiedene Teile der Anwendung völlig unterschiedliche Skalierungsanforderungen haben oder wenn verschiedene Teile in unterschiedlichen Programmiersprachen geschrieben werden müssen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Diese Regel ist wichtig, weil sie vor dem häufigsten Architekturfehler schützt: Microservices einzuführen, bevor sie gebraucht werden. Ein zu früh aufgeteiltes System ist schwerer zu entwickeln, schwerer zu testen und schwerer zu betreiben als ein gut gebauter modularer Monolith. Die Modularität ist das Entscheidende, nicht die Art der Auslieferung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "text": "Also noch einmal ganz kurz: Ein Monolith ist eine Anwendung, die als eine Einheit entwickelt und ausgeliefert wird. Ein modularer Monolith hat innen klar getrennte Module mit Schnittstellen, genau wie Microservices, aber alle Module laufen im selben Prozess. Ein Microservice ist ein unabhängiger Dienst mit eigener Codebasis und Datenbank, der über das Netzwerk kommuniziert. Fang immer mit einem modularen Monolithen an und wechsle zu Microservices erst, wenn du die zusätzlichen Kosten durch echte Vorteile aufwiegen kannst.",
+      "isKeySentence": true
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Ein Monolith ist eine Anwendung, die als eine einzige, zusammenhängende Einheit entwickelt, gebaut und ausgeliefert wird. Alle Funktionen teilen sich denselben Speicher, dieselbe Codebasis und dieselbe Datenbank.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Ein modularer Monolith ist ein Monolith, dessen Inneres nach dem Prinzip der Trennung der Zuständigkeiten in klar abgegrenzte Module aufgeteilt ist, die über Schnittstellen kommunizieren, aber gemeinsam gebaut und gestartet werden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Ein Microservice ist ein unabhängig entwickelter, gebauter und betriebener Dienst, der genau eine fachliche Aufgabe erfüllt und mit anderen Diensten über das Netzwerk kommuniziert.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Kann ich einen bestehenden Monolithen nachträglich in Microservices aufteilen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ja, das ist sogar der empfohlene Weg. Du fängst nicht bei null mit Microservices an, sondern ziehst ein Modul nach dem anderen aus dem Monolithen heraus. Der erste Schritt ist immer, den Monolithen innen zu modularisieren, also klare Schnittstellen zwischen den Modulen zu schaffen. Erst wenn diese Schnittstellen stabil sind, ziehst du ein Modul in einen eigenen Dienst um. Dieser schrittweise Ansatz heißt Strangler-Fig-Pattern und ist der sicherste Weg, das Risiko einer Migration zu minimieren.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Wie viele Microservices braucht ein typisches Projekt?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "So wenige wie möglich. Zwei oder drei Dienste sind für die meisten Projekte völlig ausreichend. Die Vorstellung, dass ein Microservice-System aus Dutzenden oder Hunderten von winzigen Diensten bestehen muss, ist ein Missverständnis. Jeder zusätzliche Dienst erhöht die Komplexität des Gesamtsystems. Ein neuer Dienst lohnt sich nur, wenn er ein klares fachliches Problem löst, das mit dem bestehenden System nicht oder nur mit unverhältnismäßigem Aufwand zu lösen wäre.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was ist der Unterschied zwischen einem modularen Monolithen und einem schlecht gebauten Monolithen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Der Unterschied liegt in den inneren Grenzen. In einem schlecht gebauten Monolithen kann jedes Modul auf die internen Daten und Funktionen jedes anderen Moduls zugreifen. Es gibt keine Schnittstellen, keine Verträge, keine Kapselung. Eine Änderung an einer Stelle kann unerwartete Folgen an einer völlig anderen Stelle haben. In einem modularen Monolithen gelten dagegen dieselben strengen Regeln wie bei Microservices: Module kommunizieren nur über Schnittstellen, interne Daten bleiben privat, und jedes Modul kann einzeln getestet werden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Brauche ich für Microservices immer eine eigene Datenbank pro Dienst?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Im Idealfall ja, denn eine gemeinsam genutzte Datenbank ist die engste Form der Kopplung zwischen Diensten. Wenn zwei Dienste auf dieselben Tabellen schreiben, kann eine Änderung am Datenbankschema eines Dienstes den anderen Dienst lahmlegen. In der Praxis ist eine eigene Datenbank pro Dienst jedoch teuer und aufwändig. Viele Teams beginnen mit einer gemeinsamen Datenbank und trennen sie erst, wenn die Kopplung zu echten Problemen führt. Wichtiger als die physische Trennung ist die logische: kein Dienst sollte auf die Tabellen eines anderen Dienstes direkt zugreifen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Kann ein Microservice auch ein Monolith sein?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ja, und das ist sogar häufig der Fall. Ein einzelner Microservice ist in sich oft ein kleiner Monolith, der eine bestimmte fachliche Aufgabe erfüllt. Innerhalb dieses Dienstes gelten dann wieder die Regeln des modularen Monolithen: klare Module, saubere Schnittstellen, Trennung der Zuständigkeiten. Die Architektur wiederholt sich auf jeder Ebene: ein System aus Microservices, von denen jeder innen ein modularer Monolith ist, dessen Module wiederum aus Funktionen mit klaren Schnittstellen bestehen.",
+      "isKeySentence": false
+    }
+  ],
+  "practiceExample": {
+    "text": "Im Repo repo-microsaas ist die Struktur eines modularen Monolithen sichtbar. Die gesamte Anwendung wird als eine Einheit gebaut und gestartet, aber innen ist der Code in Module wie stripe, db und auth aufgeteilt. Jedes Modul hat seine eigene Datei und exportiert nur eine schmale Schnittstelle.",
+    "repoNote": "repo-microsaas",
+    "location": "src/lib/ (Modulaufteilung: stripe.ts, db.ts, auth.ts)"
+  },
+  "quiz": [
+    {
+      "question": "Welches Alltagsbild beschreibt einen modularen Monolithen am besten?",
+      "area": "Architektur: Monolith vs Microservices",
+      "options": [
+        {
+          "text": "Ein Einfamilienhaus mit klar getrennten Räumen, die durch Türen verbunden sind.",
+          "isCorrect": true,
+          "explanation": "Richtig: ein Haus ist eine Einheit, aber innen sind die Räume klar getrennt."
+        },
+        {
+          "text": "Eine Stadt mit vielen einzelnen Gebäuden, die durch Straßen verbunden sind.",
+          "isCorrect": false,
+          "explanation": "Falsch: das ist das Bild für Microservices, nicht für einen Monolithen."
+        },
+        {
+          "text": "Ein Zelt, das man überall aufbauen und wieder abbauen kann.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Zelt ist kein gutes Bild für Softwarearchitektur."
+        },
+        {
+          "text": "Ein Iglu, das vollständig aus einem einzigen Block Eis besteht.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein einziger Block ohne innere Struktur ist das Bild für einen schlechten Monolithen."
+        }
+      ]
+    },
+    {
+      "question": "Was ist ein modularer Monolith?",
+      "area": "Architektur: Monolith vs Microservices",
+      "options": [
+        {
+          "text": "Ein Monolith, dessen Inneres in klar abgegrenzte Module mit Schnittstellen aufgeteilt ist.",
+          "isCorrect": true,
+          "explanation": "Richtig: die Modularität innen ist der entscheidende Unterschied zum schlecht gebauten Monolithen."
+        },
+        {
+          "text": "Ein System aus vielen unabhängigen Diensten mit eigenen Datenbanken.",
+          "isCorrect": false,
+          "explanation": "Falsch: das ist die Definition von Microservices, nicht eines modularen Monolithen."
+        },
+        {
+          "text": "Eine Anwendung, die vollständig ohne Module auskommt.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein modularer Monolith hat sehr wohl Module, nur laufen sie im selben Prozess."
+        },
+        {
+          "text": "Ein veraltetes System, das durch Microservices ersetzt werden muss.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein modularer Monolith ist eine legitime und oft optimale Architektur."
+        }
+      ]
+    },
+    {
+      "question": "Was ist ein Microservice?",
+      "area": "Architektur: Monolith vs Microservices",
+      "options": [
+        {
+          "text": "Ein unabhängiger Dienst mit eigener Codebasis und Datenbank, der über das Netzwerk kommuniziert.",
+          "isCorrect": true,
+          "explanation": "Richtig: Microservices sind eigenständige Dienste mit loser Kopplung über das Netzwerk."
+        },
+        {
+          "text": "Ein besonders kleines Modul innerhalb eines Monolithen.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Microservice ist ein eigener Dienst, kein Modul innerhalb eines Monolithen."
+        },
+        {
+          "text": "Eine Funktion, die weniger als zehn Zeilen Code enthält.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Größe in Codezeilen definiert keinen Microservice."
+        },
+        {
+          "text": "Ein Werkzeug zur automatischen Formatierung von Code.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Microservice ist ein Architekturkonzept, kein Werkzeug."
+        }
+      ]
+    },
+    {
+      "question": "Warum ist ein modularer Monolith für die meisten Projekte der bessere Startpunkt als Microservices?",
+      "area": "Architektur: Monolith vs Microservices",
+      "options": [
+        {
+          "text": "Weil er einfacher zu entwickeln, zu testen und zu betreiben ist und keine Netzwerk-Latenz zwischen Modulen hat.",
+          "isCorrect": true,
+          "explanation": "Richtig: der modulare Monolith vermeidet die Komplexität von Microservices, solange sie nicht gebraucht wird."
+        },
+        {
+          "text": "Weil Microservices gesetzlich erst ab einer bestimmten Unternehmensgröße erlaubt sind.",
+          "isCorrect": false,
+          "explanation": "Falsch: es gibt keine gesetzliche Regelung für die Wahl der Softwarearchitektur."
+        },
+        {
+          "text": "Weil ein Monolith grundsätzlich weniger Strom verbraucht als Microservices.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Stromverbrauch ist kein relevantes Kriterium für diese Architekturentscheidung."
+        },
+        {
+          "text": "Weil Microservices nur in der Programmiersprache Java geschrieben werden können.",
+          "isCorrect": false,
+          "explanation": "Falsch: Microservices können in jeder Programmiersprache geschrieben werden."
+        }
+      ]
+    },
+    {
+      "question": "Welche Struktur zeigt das Repo repo-microsaas?",
+      "area": "Praxisbeispiel repo-microsaas",
+      "options": [
+        {
+          "text": "Einen modularen Monolithen mit Modulen wie stripe, db und auth in eigenen Dateien.",
+          "isCorrect": true,
+          "explanation": "Richtig: repo-microsaas ist ein Monolith mit klarer innerer Modulstruktur."
+        },
+        {
+          "text": "Ein reines Microservice-System mit getrennten Servern für jede Funktion.",
+          "isCorrect": false,
+          "explanation": "Falsch: repo-microsaas ist ein Monolith, kein Microservice-System."
+        },
+        {
+          "text": "Einen schlecht gebauten Monolithen ohne jede Modulstruktur.",
+          "isCorrect": false,
+          "explanation": "Falsch: repo-microsaas hat eine klare Modulstruktur mit getrennten Dateien."
+        },
+        {
+          "text": "Eine Sammlung von Skripten ohne gemeinsame Architektur.",
+          "isCorrect": false,
+          "explanation": "Falsch: repo-microsaas hat eine durchdachte Architektur mit klaren Modulgrenzen."
+        }
+      ]
+    },
+    {
+      "question": "Was sind die Hauptnachteile von Microservices?",
+      "area": "Architektur: Monolith vs Microservices",
+      "options": [
+        {
+          "text": "Netzwerk-Latenz, komplexeres Testen und Debuggen, höherer Betriebsaufwand.",
+          "isCorrect": true,
+          "explanation": "Richtig: Microservices bringen erhebliche zusätzliche Komplexität mit sich."
+        },
+        {
+          "text": "Microservices haben keine Nachteile, sie sind in jeder Hinsicht überlegen.",
+          "isCorrect": false,
+          "explanation": "Falsch: Microservices haben sehr wohl Nachteile, die gegen die Vorteile abgewogen werden müssen."
+        },
+        {
+          "text": "Microservices können nur auf Windows-Servern betrieben werden.",
+          "isCorrect": false,
+          "explanation": "Falsch: Microservices sind betriebssystemunabhängig."
+        },
+        {
+          "text": "Microservices verbrauchen automatisch mehr Festplattenspeicher als Monolithen.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Speicherverbrauch ist kein inhärenter Nachteil von Microservices."
+        }
+      ]
+    },
+    {
+      "question": "Wann sollte man von einem modularen Monolithen zu Microservices wechseln?",
+      "area": "Architektur: Monolith vs Microservices",
+      "options": [
+        {
+          "text": "Wenn verschiedene Teams sich beim Deployment blockieren oder Teile unterschiedlich skalieren müssen.",
+          "isCorrect": true,
+          "explanation": "Richtig: der Wechsel sollte durch konkrete organisatorische oder technische Schmerzen getrieben sein."
+        },
+        {
+          "text": "Sofort zu Beginn jedes neuen Projekts, noch vor der ersten Codezeile.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein verfrühter Wechsel zu Microservices schadet mehr als er nützt."
+        },
+        {
+          "text": "Wenn das Projekt genau einhundert Tage alt ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: es gibt keinen zeitlichen Schwellenwert für den Wechsel."
+        },
+        {
+          "text": "Nie, Microservices sind eine veraltete Technologie.",
+          "isCorrect": false,
+          "explanation": "Falsch: Microservices sind nicht veraltet, sie sind nur nicht für jedes Projekt die richtige Wahl."
+        }
+      ]
+    },
+    {
+      "question": "Was ist das Strangler-Fig-Pattern?",
+      "area": "Architektur: Monolith vs Microservices",
+      "options": [
+        {
+          "text": "Ein Modul nach dem anderen aus einem Monolithen in eigene Dienste ausziehen.",
+          "isCorrect": true,
+          "explanation": "Richtig: das schrittweise Ausziehen minimiert das Risiko der Migration."
+        },
+        {
+          "text": "Den gesamten Monolithen auf einmal löschen und neu schreiben.",
+          "isCorrect": false,
+          "explanation": "Falsch: das wäre ein Big-Bang-Rewrite, nicht das Strangler-Fig-Pattern."
+        },
+        {
+          "text": "Eine bestimmte Art von Feige, die in der Softwareentwicklung als Glücksbringer gilt.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Name ist eine Metapher, keine echte Pflanze."
+        },
+        {
+          "text": "Ein Werkzeug, das automatisch Monolithen in Microservices umwandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: es gibt kein Werkzeug, das diese Arbeit automatisch erledigt."
+        }
+      ]
+    },
+    {
+      "question": "Warum sollte jeder Microservice idealerweise eine eigene Datenbank haben?",
+      "area": "Architektur: Monolith vs Microservices",
+      "options": [
+        {
+          "text": "Weil eine gemeinsam genutzte Datenbank die engste Form der Kopplung zwischen Diensten ist.",
+          "isCorrect": true,
+          "explanation": "Richtig: eine gemeinsame Datenbank macht unabhängige Deployments praktisch unmöglich."
+        },
+        {
+          "text": "Weil Datenbanken nur eine bestimmte Anzahl von Verbindungen gleichzeitig erlauben.",
+          "isCorrect": false,
+          "explanation": "Falsch: Verbindungslimits sind ein technisches Detail, nicht der architektonische Grund."
+        },
+        {
+          "text": "Weil jeder Dienst gesetzlich verpflichtet ist, seine eigene Datenbank zu betreiben.",
+          "isCorrect": false,
+          "explanation": "Falsch: es gibt kein Gesetz, das eigene Datenbanken pro Dienst vorschreibt."
+        },
+        {
+          "text": "Weil Datenbanken in verschiedenen Programmiersprachen geschrieben sein müssen.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Programmiersprache der Datenbank ist kein Kriterium."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der entscheidende Unterschied zwischen einem guten und einem schlechten Monolithen?",
+      "area": "Architektur: Monolith vs Microservices",
+      "options": [
+        {
+          "text": "Die inneren Grenzen: im guten Monolithen gibt es klare Schnittstellen, im schlechten greift alles auf alles zu.",
+          "isCorrect": true,
+          "explanation": "Richtig: die Modularität innen unterscheidet den guten vom schlechten Monolithen."
+        },
+        {
+          "text": "Die Programmiersprache: gute Monolithen sind in TypeScript, schlechte in JavaScript.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Programmiersprache bestimmt nicht die Qualität der Architektur."
+        },
+        {
+          "text": "Die Anzahl der Codezeilen: unter zehntausend ist gut, darüber schlecht.",
+          "isCorrect": false,
+          "explanation": "Falsch: die reine Zeilenzahl ist kein Qualitätsmerkmal."
+        },
+        {
+          "text": "Das Alter: Monolithen, die älter als zwei Jahre sind, sind automatisch schlecht.",
+          "isCorrect": false,
+          "explanation": "Falsch: das Alter einer Codebasis sagt nichts über ihre architektonische Qualität aus."
+        }
+      ]
+    },
+    {
+      "question": "Kann ein einzelner Microservice innen selbst ein Monolith sein?",
+      "area": "Architektur: Monolith vs Microservices",
+      "options": [
+        {
+          "text": "Ja, und das ist häufig der Fall: jeder Microservice ist innen ein kleiner modularer Monolith.",
+          "isCorrect": true,
+          "explanation": "Richtig: die Architekturprinzipien wiederholen sich auf jeder Ebene."
+        },
+        {
+          "text": "Nein, ein Microservice darf per Definition keine innere Struktur haben.",
+          "isCorrect": false,
+          "explanation": "Falsch: Microservices haben sehr wohl eine innere Struktur, oft nach denselben Prinzipien."
+        },
+        {
+          "text": "Nur wenn der Microservice in einer bestimmten Programmiersprache geschrieben ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: die innere Struktur hängt nicht von der Programmiersprache ab."
+        },
+        {
+          "text": "Nur der erste Microservice eines Systems darf ein Monolith sein.",
+          "isCorrect": false,
+          "explanation": "Falsch: es gibt keine solche Regel für den ersten Dienst."
+        }
+      ]
+    },
+    {
+      "question": "Welche Regel gilt für den Einstieg in die Softwarearchitektur?",
+      "area": "Architektur: Monolith vs Microservices",
+      "options": [
+        {
+          "text": "Fang immer mit einem modularen Monolithen an und wechsle zu Microservices nur bei konkretem Bedarf.",
+          "isCorrect": true,
+          "explanation": "Richtig: der modulare Monolith ist der sicherste und einfachste Ausgangspunkt."
+        },
+        {
+          "text": "Fang immer mit Microservices an, denn sie sind die modernere Architektur.",
+          "isCorrect": false,
+          "explanation": "Falsch: Microservices sind nicht per se besser, nur weil sie neuer sind."
+        },
+        {
+          "text": "Fang immer ohne Architektur an und füge sie später hinzu, wenn Zeit übrig ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: ohne Architektur zu starten führt fast immer zu einem schlecht gebauten Monolithen."
+        },
+        {
+          "text": "Fang immer mit einem Mix aus beidem an, um auf Nummer sicher zu gehen.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Mix aus Monolith und Microservices von Anfang an ist unnötig komplex."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Untersuche die Modulstruktur eines eigenen Projekts. Ist es ein modularer Monolith oder ein schlecht gebauter Monolith? Gibt es klare Schnittstellen zwischen den Modulen oder greifen Module direkt auf die Interna anderer Module zu? Zeichne ein einfaches Diagramm der Module und ihrer Abhängigkeiten.",
+    "expectation": "Ein Diagramm zeigt die Module und ihre Abhängigkeiten. Für jedes Modul ist notiert, ob es eine klare Schnittstelle hat oder ob es direkt auf Interna anderer Module zugreift.",
+    "checklist": [
+      "Ein eigenes Projekt auf Modulstruktur untersucht.",
+      "Alle Module und ihre Abhängigkeiten identifiziert.",
+      "Ein Diagramm der Modulabhängigkeiten gezeichnet.",
+      "Für jedes Modul notiert, ob es eine klare Schnittstelle hat.",
+      "Mindestens eine Stelle gefunden, an der die Modularität verbessert werden kann."
+    ],
+    "portfolioItem": "P04"
+  },
+  "audio": {
+    "file": "M04-01-04.mp3",
+    "durationSeconds": 1280,
+    "voices": ["A", "B"],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Kann ich einen bestehenden Monolithen nachträglich in Microservices aufteilen?",
+      "answer": "Ja, das ist sogar der empfohlene Weg. Du fängst nicht bei null mit Microservices an, sondern ziehst ein Modul nach dem anderen aus dem Monolithen heraus. Der erste Schritt ist immer, den Monolithen innen zu modularisieren, also klare Schnittstellen zwischen den Modulen zu schaffen. Erst wenn diese Schnittstellen stabil sind, ziehst du ein Modul in einen eigenen Dienst um. Dieser schrittweise Ansatz heißt Strangler-Fig-Pattern und ist der sicherste Weg, das Risiko einer Migration zu minimieren."
+    },
+    {
+      "question": "Wie viele Microservices braucht ein typisches Projekt?",
+      "answer": "So wenige wie möglich. Zwei oder drei Dienste sind für die meisten Projekte völlig ausreichend. Die Vorstellung, dass ein Microservice-System aus Dutzenden oder Hunderten von winzigen Diensten bestehen muss, ist ein Missverständnis. Jeder zusätzliche Dienst erhöht die Komplexität des Gesamtsystems. Ein neuer Dienst lohnt sich nur, wenn er ein klares fachliches Problem löst, das mit dem bestehenden System nicht oder nur mit unverhältnismäßigem Aufwand zu lösen wäre."
+    },
+    {
+      "question": "Was ist der Unterschied zwischen einem modularen Monolithen und einem schlecht gebauten Monolithen?",
+      "answer": "Der Unterschied liegt in den inneren Grenzen. In einem schlecht gebauten Monolithen kann jedes Modul auf die internen Daten und Funktionen jedes anderen Moduls zugreifen. Es gibt keine Schnittstellen, keine Verträge, keine Kapselung. Eine Änderung an einer Stelle kann unerwartete Folgen an einer völlig anderen Stelle haben. In einem modularen Monolithen gelten dagegen dieselben strengen Regeln wie bei Microservices: Module kommunizieren nur über Schnittstellen, interne Daten bleiben privat, und jedes Modul kann einzeln getestet werden."
+    },
+    {
+      "question": "Brauche ich für Microservices immer eine eigene Datenbank pro Dienst?",
+      "answer": "Im Idealfall ja, denn eine gemeinsam genutzte Datenbank ist die engste Form der Kopplung zwischen Diensten. Wenn zwei Dienste auf dieselben Tabellen schreiben, kann eine Änderung am Datenbankschema eines Dienstes den anderen Dienst lahmlegen. In der Praxis ist eine eigene Datenbank pro Dienst jedoch teuer und aufwändig. Viele Teams beginnen mit einer gemeinsamen Datenbank und trennen sie erst, wenn die Kopplung zu echten Problemen führt. Wichtiger als die physische Trennung ist die logische: kein Dienst sollte auf die Tabellen eines anderen Dienstes direkt zugreifen."
+    },
+    {
+      "question": "Kann ein Microservice auch ein Monolith sein?",
+      "answer": "Ja, und das ist sogar häufig der Fall. Ein einzelner Microservice ist in sich oft ein kleiner Monolith, der eine bestimmte fachliche Aufgabe erfüllt. Innerhalb dieses Dienstes gelten dann wieder die Regeln des modularen Monolithen: klare Module, saubere Schnittstellen, Trennung der Zuständigkeiten. Die Architektur wiederholt sich auf jeder Ebene: ein System aus Microservices, von denen jeder innen ein modularer Monolith ist, dessen Module wiederum aus Funktionen mit klaren Schnittstellen bestehen."
+    }
+  ]
+}
