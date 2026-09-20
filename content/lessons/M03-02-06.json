@@ -1,0 +1,720 @@
+{
+  "id": "M03-02-06",
+  "title": "HTTP-Statuscodes in der Praxis: was der Server wirklich sagt",
+  "durationMinutes": 27,
+  "prerequisites": [
+    "M01-05-03",
+    "M03-02-04"
+  ],
+  "terms": [
+    {
+      "term": "201",
+      "definition": "der Statuscode für eine erfolgreich angelegte Ressource, meist als Antwort auf eine POST-Anfrage, die etwas Neues erzeugt hat."
+    },
+    {
+      "term": "204",
+      "definition": "der Statuscode für eine erfolgreiche Anfrage, die aber keinen Inhalt zurückgibt, etwa nach einem Löschbefehl, bei dem es nichts mehr zu zeigen gibt."
+    },
+    {
+      "term": "302",
+      "definition": "der Statuscode für eine vorübergehende Weiterleitung, bei der der Client die alte Adresse nicht dauerhaft ersetzen soll, anders als bei 301."
+    },
+    {
+      "term": "405",
+      "definition": "der Statuscode dafür, dass der Endpunkt zwar existiert, aber die benutzte HTTP-Methode an dieser Adresse nicht erlaubt ist."
+    },
+    {
+      "term": "409",
+      "definition": "der Statuscode für einen inhaltlichen Konflikt, etwa wenn zwei Clients gleichzeitig dieselbe Ressource ändern wollen und die zweite Änderung nicht mehr zum aktuellen Stand passt."
+    },
+    {
+      "term": "429",
+      "definition": "der Statuscode dafür, dass der Client in zu kurzer Zeit zu viele Anfragen geschickt hat und nun eine Pause einlegen muss, bevor er weitermachen darf."
+    },
+    {
+      "term": "502",
+      "definition": "der Statuscode dafür, dass ein vorgelagerter Server, etwa ein Reverse-Proxy, von dem dahinterliegenden Server eine ungültige Antwort bekommen hat."
+    },
+    {
+      "term": "503",
+      "definition": "der Statuscode dafür, dass der Server vorübergehend nicht erreichbar ist, meist wegen Wartungsarbeiten oder Überlastung, und es sich lohnt, es später noch einmal zu versuchen."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir eine Ampel vor, die nicht nur rot, gelb und grün kennt, sondern ein ganzes Dutzend verschiedener Signale. Ein grüner Pfeil nach oben bedeutet, dass etwas Neues entstanden ist. Ein grüner Kreis ohne Pfeil bedeutet, dass alles geklappt hat, aber es nichts zu zeigen gibt. Ein blinkendes Gelb heißt, dass du einen Umweg fahren musst, aber nur dieses eine Mal."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "In der Lektion M01-05-03 hast du die fünf wichtigsten Statuscodes kennengelernt: 200, 301, 400, 401, 403, 404 und 500. Aber das sind nur die bekanntesten aus jeder Familie. In der Praxis begegnen dir noch viele weitere, und jeder einzelne erzählt eine eigene Geschichte darüber, was auf dem Server gerade passiert ist."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Reichen die sieben Statuscodes aus der ersten Lektion nicht für die meisten Fälle im Alltag aus?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Für einfache Webseiten reichen sie oft, aber sobald du eine eigene API baust, die Daten anlegt, ändert und löscht, brauchst du feinere Unterscheidungen. Ein Client, der einen neuen Artikel anlegt, will nicht nur wissen, dass es geklappt hat, sondern auch, dass etwas Neues entstanden ist und unter welcher Adresse er es findet."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir eine Poststelle vor, die nicht nur einen einzigen Stempel für alle erfolgreichen Zustellungen hat, sondern verschiedene: einen für neu angelegte Sendungen, einen für gelöschte Aufträge und einen für Sendungen ohne Inhalt."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Die Erfolgsfamilie beginnt nicht nur mit 200, sondern enthält noch weitere wichtige Codes. Zwei davon begegnen dir in jeder API, die mehr kann als nur Daten lesen."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Welcher Statuscode sagt dem Client, dass seine POST-Anfrage nicht nur erfolgreich war, sondern tatsächlich etwas Neues erzeugt hat?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Dieser Statuscode heißt 201. Die 201 ist der Statuscode für eine erfolgreich angelegte Ressource, meist als Antwort auf eine POST-Anfrage, die etwas Neues erzeugt hat."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil der Client an der 201 sofort erkennt, dass seine Anfrage nicht nur irgendwie erfolgreich war, sondern dass ein neuer Eintrag in der Datenbank existiert. Zusätzlich schickt der Server meist die Kopfzeile Location mit, die die Adresse der neuen Ressource enthält, damit der Client sie sofort weiterverwenden kann."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Ein Beispiel aus der Praxis: Ein Client schickt POST Schrägstrich articles mit einem neuen Artikel im JSON-Körper. Der Server legt den Artikel an, vergibt eine neue id, etwa 43, und antwortet mit 201 und der Kopfzeile Location colon Schrägstrich articles Schrägstrich 43. Der Client weiß jetzt nicht nur, dass es geklappt hat, sondern auch, wo der neue Artikel zu finden ist."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir einen Kellner vor, der nach dem Abräumen deines leeren Tellers mit einem leeren Tablett zurückkommt und dir nur kurz zunickt. Es gibt nichts mehr zu servieren, aber das Nicken sagt dir, dass alles in Ordnung ist und der Tisch jetzt frei ist."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Nicht jede erfolgreiche Anfrage liefert Daten zurück. Wenn ein Client eine Ressource löscht, gibt es danach nichts mehr zu zeigen, aber der Client will trotzdem wissen, dass das Löschen geklappt hat."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Welcher Statuscode bedeutet, dass alles geklappt hat, aber es keinen Inhalt gibt, den der Server zurückschicken könnte?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Dieser Statuscode heißt 204. Die 204 ist der Statuscode für eine erfolgreiche Anfrage, die aber keinen Inhalt zurückgibt, etwa nach einem Löschbefehl, bei dem es nichts mehr zu zeigen gibt."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil eine 204 dem Client sagt, dass er keine Zeit damit verschwenden muss, auf einen Antwortkörper zu warten. Der Browser oder die App kann sofort mit dem nächsten Schritt weitermachen, ohne erst einen leeren JSON-Körper auszuwerten."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Ein Beispiel: Der Client schickt einen Löschbefehl an Schrägstrich articles Schrägstrich 42. Der Server löscht den Artikel und antwortet mit 204, ohne jeden Körper. Der Client weiß, dass der Artikel weg ist, und kann ihn aus der Liste entfernen, ohne noch eine Antwort auswerten zu müssen."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir eine Baustelle vor, die eine Straße nur für heute sperrt, mit einem Schild, das einen Umweg ausweist, aber ausdrücklich dazuschreibt, dass die Straße morgen wieder ganz normal befahrbar ist."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "In der ersten Statuscode-Lektion hast du die 301 als dauerhafte Weiterleitung kennengelernt. Aber nicht jede Weiterleitung ist für immer. Manchmal soll der Client nur dieses eine Mal woanders hingehen und sich die alte Adresse trotzdem merken."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Welcher Statuscode ist das Gegenstück zur 301, also eine Weiterleitung, die nur vorübergehend gilt?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Dieser Statuscode heißt 302. Die 302 ist der Statuscode für eine vorübergehende Weiterleitung, bei der der Client die alte Adresse nicht dauerhaft ersetzen soll, anders als bei 301."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil der Browser bei einer 302 die alte Adresse nicht aus seinem Verlauf löscht und beim nächsten Mal wieder die ursprüngliche Adresse anfragt. Bei einer 301 dagegen merkt sich der Browser die neue Adresse und fragt die alte nie wieder an, was problematisch ist, wenn die Weiterleitung nur für eine Wartungsseite gedacht war."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Ein Beispiel: Ein Online-Shop leitet während einer kurzen Wartung alle Besucher mit 302 auf eine Wartungsseite um. Nach der Wartung entfernt der Betreiber die Weiterleitung, und die Besucher kommen wieder auf die normale Seite. Hätte er stattdessen 301 benutzt, hätten die Browser der Besucher die Wartungsseite als neue Adresse gespeichert und wären nie wieder auf die echte Seite zurückgekehrt."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir ein Formular in einer Behörde vor, das du am falschen Schalter abgibst. Der Schalter existiert, aber er nimmt nur Anträge für Personalausweise entgegen, nicht für Reisepässe. Der Beamte schiebt dir das Formular zurück und zeigt auf den richtigen Schalter."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Nicht jeder Fehler bedeutet, dass die Adresse falsch ist. Manchmal existiert der Endpunkt, aber die benutzte HTTP-Methode ist an dieser Adresse nicht vorgesehen."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Welcher Statuscode sagt dem Client, dass er die falsche HTTP-Methode benutzt hat?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Dieser Statuscode heißt 405. Die 405 ist der Statuscode dafür, dass der Endpunkt zwar existiert, aber die benutzte HTTP-Methode an dieser Adresse nicht erlaubt ist."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil eine 405 dem Client nicht nur sagt, dass etwas falsch war, sondern ihm auch hilft, den Fehler zu beheben. Der Server schickt bei einer 405 meist die Kopfzeile Allow mit, die auflistet, welche Methoden an dieser Adresse erlaubt sind, etwa Allow colon GET, POST."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Ein Beispiel: Ein Client schickt einen Löschbefehl an Schrägstrich articles, aber der Endpunkt erlaubt nur GET und POST. Der Server antwortet mit 405 und der Kopfzeile Allow colon GET, POST. Der Client sieht sofort, dass er entweder GET oder POST benutzen muss, und kann seinen Code entsprechend anpassen."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir zwei Personen vor, die gleichzeitig denselben Kalendereintrag ändern wollen. Die eine trägt einen Termin um zehn Uhr ein, die andere löscht genau diesen Termin, weil sie dachte, er sei noch frei. Am Ende weiß keine, welcher Stand jetzt gilt."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Wenn mehrere Clients gleichzeitig auf dieselben Daten zugreifen, kann es zu Konflikten kommen. Ein Client ändert eine Ressource, während ein anderer Client noch mit dem alten Stand arbeitet und seine Änderung darauf aufbaut."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Welcher Statuscode warnt den Client, dass seine Änderung mit dem aktuellen Stand auf dem Server nicht mehr zusammenpasst?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Dieser Statuscode heißt 409. Die 409 ist der Statuscode für einen inhaltlichen Konflikt, etwa wenn zwei Clients gleichzeitig dieselbe Ressource ändern wollen und die zweite Änderung nicht mehr zum aktuellen Stand passt."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil eine 409 den Client vor einem stillen Datenverlust bewahrt. Ohne diesen Statuscode würde die zweite Änderung die erste einfach überschreiben, und die Arbeit des ersten Clients wäre verloren, ohne dass jemand es merkt."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Ein Beispiel: Zwei Redakteure bearbeiten gleichzeitig denselben Artikel. Redakteur A speichert zuerst. Redakteur B versucht danach zu speichern, aber der Server antwortet mit 409, weil der Artikel inzwischen geändert wurde. Redakteur B bekommt die Meldung, dass der Artikel inzwischen von jemand anderem bearbeitet wurde, und kann seine Änderungen mit dem neuen Stand abgleichen."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir einen Club vor, an dessen Tür ein Türsteher steht, der nur eine bestimmte Anzahl Gäste pro Stunde einlässt. Wer zu oft hintereinander anklopft, wird für eine Weile weggeschickt, nicht weil er unerwünscht ist, sondern weil der Club sonst überfüllt würde."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Server haben Grenzen, wie viele Anfragen sie in kurzer Zeit verarbeiten können. Wenn ein Client diese Grenze überschreitet, muss der Server ihn bremsen, ohne ihn dauerhaft zu sperren."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Welcher Statuscode sagt dem Client, dass er zu viele Anfragen geschickt hat und eine Pause einlegen muss?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Dieser Statuscode heißt 429. Die 429 ist der Statuscode dafür, dass der Client in zu kurzer Zeit zu viele Anfragen geschickt hat und nun eine Pause einlegen muss, bevor er weitermachen darf."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil eine 429 den Server vor Überlastung und böswilligen Angriffen schützt, ohne den Client dauerhaft auszusperren. Der Server schickt meist die Kopfzeile Retry-After mit, die dem Client sagt, wie viele Sekunden er warten soll, bevor er es wieder versuchen darf."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Ein Beispiel: Eine Wetter-App fragt die API im Sekundentakt nach neuen Daten, obwohl sich das Wetter nur alle zehn Minuten ändert. Der Server antwortet mit 429 und Retry-After colon 600, was zehn Minuten in Sekunden sind. Die App sollte ihre Abfragerate daraufhin reduzieren, sonst wird sie irgendwann ganz gesperrt."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir ein großes Kaufhaus vor, in dem du nicht direkt an der Kasse bezahlst, sondern an einem zentralen Schalter, der das Geld annimmt und an die richtige Kasse weiterleitet. Wenn dieser zentrale Schalter ausfällt, kannst du nicht bezahlen, obwohl die Kassen selbst noch funktionieren."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "In größeren Systemen steht oft ein vorgelagerter Server, ein sogenannter Reverse-Proxy, zwischen dem Client und dem eigentlichen Anwendungsserver. Wenn dieser Proxy eine ungültige Antwort vom Anwendungsserver bekommt, kann er die Anfrage nicht beantworten."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Welcher Statuscode zeigt an, dass ein vorgelagerter Server eine ungültige Antwort vom dahinterliegenden Server bekommen hat?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Dieser Statuscode heißt 502. Die 502 ist der Statuscode dafür, dass ein vorgelagerter Server, etwa ein Reverse-Proxy, von dem dahinterliegenden Server eine ungültige Antwort bekommen hat."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil eine 502 dem Client sagt, dass der Fehler nicht bei ihm liegt und ein erneuter Versuch sinnvoll sein kann, sobald der Anwendungsserver wieder läuft. Anders als bei einer 500, die einen Fehler im Anwendungsserver selbst meldet, liegt das Problem bei 502 in der Kommunikation zwischen zwei Servern."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Ein Beispiel: Eine Webanwendung läuft hinter einem Nginx-Proxy. Der Anwendungsserver stürzt kurz ab, während der Proxy noch läuft. Der Proxy versucht, die Anfrage weiterzuleiten, bekommt aber keine gültige Antwort und schickt dem Client eine 502. Der Client sieht eine Fehlerseite, aber der Proxy selbst funktioniert noch und kann sofort wieder antworten, sobald der Anwendungsserver neu gestartet ist."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir ein Geschäft vor, an dessen Tür ein Schild hängt: Wegen Inventur heute geschlossen, morgen wieder geöffnet. Das Geschäft ist nicht für immer zu, sondern nur vorübergehend nicht erreichbar, und es lohnt sich, morgen wiederzukommen."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Manchmal ist ein Server nicht dauerhaft kaputt, sondern nur vorübergehend nicht erreichbar, etwa wegen geplanter Wartungsarbeiten oder weil er gerade mehr Anfragen bekommt, als er verarbeiten kann."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Welcher Statuscode sagt dem Client, dass der Server nur vorübergehend nicht erreichbar ist und ein späterer Versuch sinnvoll ist?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Dieser Statuscode heißt 503. Die 503 ist der Statuscode dafür, dass der Server vorübergehend nicht erreichbar ist, meist wegen Wartungsarbeiten oder Überlastung, und es sich lohnt, es später noch einmal zu versuchen."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil eine 503 dem Client eine klare Handlungsanweisung gibt: nicht aufgeben, sondern später noch einmal versuchen. Anders als bei einer 500, die auf einen echten Fehler hindeutet, ist eine 503 oft geplant und nach ein paar Minuten von selbst behoben."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Ein Beispiel: Ein Betreiber kündigt Wartungsarbeiten für zwei Uhr nachts an. In dieser Zeit schaltet er den Anwendungsserver ab und lässt den Proxy allen ankommenden Anfragen mit 503 antworten. Die Clients sehen eine freundliche Wartungsseite mit dem Hinweis, dass der Dienst in einer Stunde wieder verfügbar ist, und versuchen es dann automatisch erneut."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir einen Arzt vor, der nicht nur deine Temperatur misst, sondern dir anhand der genauen Zahl auf dem Thermometer sagt, ob du eine Erkältung, eine Grippe oder etwas ganz anderes hast. Die Zahl allein ist nur der erste Hinweis, aber sie führt den Arzt zur richtigen Diagnose."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Statuscodes sind nicht nur für den Browser da, sondern vor allem für dich als Entwicklerin. Wenn etwas nicht funktioniert, ist der Statuscode der erste Hinweis darauf, wo das Problem liegt, noch bevor du einen Blick in die Serverprotokolle wirfst."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Wie gehe ich beim Debuggen mit Statuscodes vor, wenn eine API nicht das tut, was sie soll?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Der Statuscode grenzt das Problem sofort auf eine der vier Familien ein. Eine 4xx bedeutet, dass du deine Anfrage prüfen musst, eine 5xx bedeutet, dass du in den Serverprotokollen nachsehen musst. Ohne diese erste Einordnung würdest du bei jedem Problem an der falschen Stelle suchen und wertvolle Zeit verlieren."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Ein praktischer Debugging-Ablauf: Du schickst eine POST-Anfrage und bekommst 405 zurück. Du prüfst die Allow-Kopfzeile und siehst, dass der Endpunkt nur GET erlaubt. Du änderst deine Anfrage auf GET und bekommst 200. Wäre der erste Statuscode einfach nur ein allgemeiner Fehler gewesen, hättest du nicht gewusst, dass du nur die Methode ändern musst."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir ein Geschäft vor, das für jeden Anlass ein eigenes, liebevoll gestaltetes Schild an die Tür hängt. Bei Urlaub hängt ein Bild von einem Strand, bei Inventur ein Bild von einem Klemmbrett, bei Umbau ein Bild von einem Bauhelm. Jedes Schild erklärt freundlich, was los ist und wann es weitergeht."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Viele Webseiten zeigen bei Fehlern nicht die nüchterne Standardseite des Servers, sondern eine eigene, gestaltete Seite, die zum Rest der Seite passt und dem Besucher freundlich erklärt, was passiert ist."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Warum gestalten Betreiber eigene Fehlerseiten, statt einfach die Standardseite des Servers zu zeigen?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Weil eine eigene Fehlerseite dem Besucher das Gefühl gibt, dass der Fehler bekannt ist und sich jemand darum kümmert. Die Standardseite des Servers ist oft kahl, technisch und macht den Eindruck, dass die ganze Seite kaputt ist, selbst wenn nur eine einzige Unterseite nicht gefunden wurde."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Ein Beispiel: Eine große Nachrichtenseite zeigt bei einer 404 nicht einfach nur 404 Not Found, sondern eine gestaltete Seite mit Logo, Sucheingabe und einem freundlichen Hinweistext. Der Besucher bleibt auf der Seite, statt sie frustriert zu verlassen."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Bevor wir zum Abschluss kommen, hier noch einmal alle neuen Begriffe dieser Lektion im Überblick, kurz erklärt zum Nachschlagen."
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "isKeySentence": false,
+      "text": "201: der Statuscode für eine erfolgreich angelegte Ressource, meist als Antwort auf eine POST-Anfrage, die etwas Neues erzeugt hat."
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "isKeySentence": false,
+      "text": "204: der Statuscode für eine erfolgreiche Anfrage, die aber keinen Inhalt zurückgibt, etwa nach einem Löschbefehl, bei dem es nichts mehr zu zeigen gibt."
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "isKeySentence": false,
+      "text": "302: der Statuscode für eine vorübergehende Weiterleitung, bei der der Client die alte Adresse nicht dauerhaft ersetzen soll, anders als bei 301."
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "isKeySentence": false,
+      "text": "405: der Statuscode dafür, dass der Endpunkt zwar existiert, aber die benutzte HTTP-Methode an dieser Adresse nicht erlaubt ist."
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "isKeySentence": false,
+      "text": "409: der Statuscode für einen inhaltlichen Konflikt, etwa wenn zwei Clients gleichzeitig dieselbe Ressource ändern wollen und die zweite Änderung nicht mehr zum aktuellen Stand passt."
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "isKeySentence": false,
+      "text": "429: der Statuscode dafür, dass der Client in zu kurzer Zeit zu viele Anfragen geschickt hat und nun eine Pause einlegen muss, bevor er weitermachen darf."
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "isKeySentence": false,
+      "text": "502: der Statuscode dafür, dass ein vorgelagerter Server, etwa ein Reverse-Proxy, von dem dahinterliegenden Server eine ungültige Antwort bekommen hat."
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "isKeySentence": false,
+      "text": "503: der Statuscode dafür, dass der Server vorübergehend nicht erreichbar ist, meist wegen Wartungsarbeiten oder Überlastung, und es sich lohnt, es später noch einmal zu versuchen."
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "isKeySentence": true,
+      "text": "Wenn ich das zusammenfasse: Die Erfolgsfamilie enthält neben 200 auch 201 für neu angelegte und 204 für erfolgreiche Anfragen ohne Inhalt. Die Weiterleitungsfamilie unterscheidet mit 302 die vorübergehende von der dauerhaften 301. Die Client-Fehler-Familie kennt 405 für falsche Methoden, 409 für inhaltliche Konflikte und 429 für zu viele Anfragen. Die Server-Fehler-Familie unterscheidet mit 502 einen Proxy-Fehler von der vorübergehenden 503 und der allgemeinen 500. Jeder dieser Codes ist ein erster Hinweis beim Debuggen und die Grundlage für eigene, freundliche Fehlerseiten."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Wann sollte ich 201 statt 200 nach einer POST-Anfrage zurückschicken?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Immer dann, wenn die POST-Anfrage eine neue Ressource erzeugt hat, also einen neuen Eintrag in der Datenbank. Die 201 signalisiert dem Client, dass etwas Neues entstanden ist, und gibt ihm mit der Location-Kopfzeile die Adresse der neuen Ressource mit. Eine 200 nach einer POST-Anfrage wäre nicht falsch, aber weniger aussagekräftig, weil der Client dann nicht weiß, ob etwas Neues angelegt oder nur eine bestehende Ressource verändert wurde."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Was ist der praktische Unterschied zwischen 502 und 503 für mich als Entwicklerin?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Eine 502 bedeutet, dass ein vorgelagerter Server, meist ein Proxy, keine gültige Antwort vom Anwendungsserver bekommen hat. Der Anwendungsserver ist wahrscheinlich abgestürzt oder antwortet mit beschädigten Daten. Eine 503 bedeutet dagegen, dass der Server bewusst nicht antwortet, etwa wegen Wartung oder Überlastung. Bei einer 502 musst du den Anwendungsserver untersuchen, bei einer 503 reicht es meist, zu warten oder die Serverkonfiguration auf geplante Wartungsfenster zu prüfen."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Wie vermeide ich eine 409 in meiner eigenen API?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Du kannst eine 409 nicht immer vermeiden, aber du kannst sie beherrschbar machen. Ein bewährtes Mittel ist ein Versionsfeld oder ein Zeitstempel an jeder Ressource, den der Client bei einer Änderung mitschicken muss. Der Server prüft, ob der mitgeschickte Stand noch dem aktuellen entspricht, und lehnt die Änderung mit 409 ab, wenn inzwischen jemand anderes die Ressource geändert hat. Der Client kann dann den neuen Stand laden und seine Änderung darauf aufbauen."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Kann ich den Statuscode 429 auch selbst in meiner API einsetzen, oder ist das nur etwas für große Plattformen?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Du kannst und solltest 429 in jeder API einsetzen, die ohne Anmeldung erreichbar ist, auch in kleinen Projekten. Ohne eine Ratenbegrenzung kann ein einzelner Client deine API mit tausenden Anfragen pro Sekunde lahmlegen, sei es aus Versehen durch eine fehlerhafte Schleife oder absichtlich durch einen Angreifer. Eine einfache Ratenbegrenzung mit 429 und Retry-After schützt deinen Server und kostet dich nur wenige Zeilen Code."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Warum sehe ich im Browser manchmal eine 304, obwohl die Seite ganz normal geladen wurde?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Die 304 ist ein besonderer Statuscode aus der Weiterleitungsfamilie, der dem Browser sagt, dass sich die angefragte Ressource seit dem letzten Besuch nicht geändert hat und er seine gespeicherte Kopie verwenden kann. Der Browser schickt bei jeder Anfrage einen Zeitstempel oder eine Versionsnummer mit, und der Server antwortet mit 304, wenn die Ressource unverändert ist. Das spart Bandbreite und beschleunigt die Seite, weil der Browser die Daten nicht erneut herunterladen muss."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Wie gestalte ich eine eigene Fehlerseite, die nicht nach einem kaputten Server aussieht?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Eine gute eigene Fehlerseite erklärt in einfachen Worten, was passiert ist, ohne technische Schuldzuweisungen. Sie enthält das Logo und die Navigation der Hauptseite, damit der Besucher nicht das Gefühl hat, die Seite verlassen zu haben. Sie bietet eine konkrete Handlung an, etwa eine Sucheingabe oder einen Link zur Startseite. Und sie vermeidet rote Warnsymbole, die den Besucher zusätzlich beunruhigen, sondern setzt auf neutrale Farben und eine freundliche, hilfsbereite Sprache."
+    }
+  ],
+  "practiceExample": {
+    "text": "Das Repo repo-ssrf-guarded-fetch prüft nach jeder Anfrage den Statuscode und wirft bei einem Code außerhalb der Erfolgsfamilie eine eigene Fehlermeldung, statt mit der Antwort weiterzuarbeiten. Dieses Muster zeigt, wie eine Anwendung Statuscodes nicht nur empfängt, sondern aktiv auswertet und bei Fehlern gezielt reagiert, statt die Antwort ungeprüft zu verwenden.",
+    "repoNote": "repo-ssrf-guarded-fetch",
+    "location": "src/, Statuscode-Prüfung nach fetch-Aufrufen mit eigener Fehlermeldung außerhalb der Erfolgsfamilie"
+  },
+  "quiz": [
+    {
+      "question": "Was bedeutet der Statuscode 201?",
+      "area": "Erfolgsfamilie",
+      "options": [
+        { "text": "Eine neue Ressource wurde erfolgreich angelegt.", "isCorrect": true, "explanation": "201 Created bestätigt die erfolgreiche Anlage einer neuen Ressource." },
+        { "text": "Die Anfrage war erfolgreich, aber es gibt keinen Inhalt im Antwortkörper.", "isCorrect": false, "explanation": "Das wäre 204 No Content, nicht 201." },
+        { "text": "Die angefragte Ressource wurde an eine neue Adresse verschoben.", "isCorrect": false, "explanation": "Das wäre eine 301 oder 302, nicht 201." },
+        { "text": "Der Server hat die Anfrage empfangen, aber noch nicht verarbeitet.", "isCorrect": false, "explanation": "Das wäre 202 Accepted, nicht 201." }
+      ]
+    },
+    {
+      "question": "Wann schickt ein Server den Statuscode 204?",
+      "area": "Erfolgsfamilie",
+      "options": [
+        { "text": "Nach einem erfolgreichen Löschbefehl, bei dem es nichts mehr zu zeigen gibt.", "isCorrect": true, "explanation": "204 No Content bedeutet Erfolg ohne Antwortkörper." },
+        { "text": "Nach einer POST-Anfrage, die eine neue Ressource angelegt und gespeichert hat.", "isCorrect": false, "explanation": "Das wäre 201 Created, nicht 204." },
+        { "text": "Wenn der Server die Anfrage nicht verstehen konnte.", "isCorrect": false, "explanation": "Das wäre 400 Bad Request, nicht 204." },
+        { "text": "Wenn der Client sich erst anmelden muss.", "isCorrect": false, "explanation": "Das wäre 401 Unauthorized, nicht 204." }
+      ]
+    },
+    {
+      "question": "Was ist der Unterschied zwischen 301 und 302?",
+      "area": "Weiterleitungsfamilie",
+      "options": [
+        { "text": "301 ist dauerhaft, 302 ist vorübergehend.", "isCorrect": true, "explanation": "Genau das ist der Unterschied: dauerhaft versus vorübergehend." },
+        { "text": "301 ist für GET-Anfragen, 302 ist für POST-Anfragen.", "isCorrect": false, "explanation": "Beide können bei jeder Methode auftreten, der Unterschied liegt in der Dauer." },
+        { "text": "301 ist ein Fehler, 302 ist eine Erfolgsmeldung.", "isCorrect": false, "explanation": "Beide sind Weiterleitungen, keine Fehler." },
+        { "text": "301 kommt vom Client, 302 kommt vom Server.", "isCorrect": false, "explanation": "Beide Statuscodes kommen vom Server, nie vom Client." }
+      ]
+    },
+    {
+      "question": "Was bedeutet der Statuscode 405?",
+      "area": "Client-Fehler-Familie",
+      "options": [
+        { "text": "Der Endpunkt existiert, aber die benutzte HTTP-Methode ist nicht erlaubt.", "isCorrect": true, "explanation": "405 Method Not Allowed sagt, dass die Methode nicht passt." },
+        { "text": "Die angefragte Ressource wurde nicht gefunden, weil sie nie existiert hat.", "isCorrect": false, "explanation": "Das wäre 404 Not Found, nicht 405." },
+        { "text": "Der Client hat keine Berechtigung für diese Ressource.", "isCorrect": false, "explanation": "Das wäre 403 Forbidden, nicht 405." },
+        { "text": "Der Server ist vorübergehend nicht erreichbar.", "isCorrect": false, "explanation": "Das wäre 503 Service Unavailable, nicht 405." }
+      ]
+    },
+    {
+      "question": "Wann tritt der Statuscode 409 typischerweise auf?",
+      "area": "Client-Fehler-Familie",
+      "options": [
+        { "text": "Wenn zwei Clients gleichzeitig dieselbe Ressource ändern wollen.", "isCorrect": true, "explanation": "409 Conflict zeigt einen inhaltlichen Konflikt zwischen zwei Änderungen an." },
+        { "text": "Wenn der Client eine falsche Adresse eingegeben hat, die es nicht gibt.", "isCorrect": false, "explanation": "Das wäre 404 Not Found, nicht 409." },
+        { "text": "Wenn der Server gewartet wird.", "isCorrect": false, "explanation": "Das wäre 503 Service Unavailable, nicht 409." },
+        { "text": "Wenn die Anfrage zu groß für den Server ist.", "isCorrect": false, "explanation": "Das wäre 413 Payload Too Large, nicht 409." }
+      ]
+    },
+    {
+      "question": "Was bedeutet der Statuscode 429?",
+      "area": "Client-Fehler-Familie",
+      "options": [
+        { "text": "Der Client hat zu viele Anfragen in zu kurzer Zeit geschickt.", "isCorrect": true, "explanation": "429 Too Many Requests bremst den Client aus." },
+        { "text": "Der Server hat zu viele gleichzeitige Verbindungen von verschiedenen Clients.", "isCorrect": false, "explanation": "Das wäre ein Serverproblem, 429 betrifft das Verhalten des Clients." },
+        { "text": "Die angefragte Ressource ist zu groß für die Antwort.", "isCorrect": false, "explanation": "Das wäre 413 Payload Too Large, nicht 429." },
+        { "text": "Der Client hat eine falsche HTTP-Methode benutzt.", "isCorrect": false, "explanation": "Das wäre 405 Method Not Allowed, nicht 429." }
+      ]
+    },
+    {
+      "question": "Was ist der Unterschied zwischen 502 und 503?",
+      "area": "Server-Fehler-Familie",
+      "options": [
+        { "text": "502 ist ein Proxy-Fehler, 503 ist eine vorübergehende Nichtverfügbarkeit.", "isCorrect": true, "explanation": "502 Bad Gateway betrifft den Proxy, 503 den Server selbst." },
+        { "text": "502 ist ein Client-Fehler, 503 ist ein Server-Fehler, beide sind also verschieden.", "isCorrect": false, "explanation": "Beide beginnen mit 5 und gehören zur Server-Fehler-Familie." },
+        { "text": "502 bedeutet, dass die Seite gelöscht wurde, 503, dass sie umgezogen ist.", "isCorrect": false, "explanation": "Weder 502 noch 503 sagen etwas über Löschen oder Umzug aus." },
+        { "text": "502 ist dauerhaft, 503 ist vorübergehend.", "isCorrect": false, "explanation": "Beide können vorübergehend sein, der Unterschied liegt in der Ursache." }
+      ]
+    },
+    {
+      "question": "Welche Kopfzeile schickt der Server typischerweise mit einer 405?",
+      "area": "Client-Fehler-Familie",
+      "options": [
+        { "text": "Allow, die die erlaubten Methoden auflistet.", "isCorrect": true, "explanation": "Allow sagt dem Client, welche Methoden an diesem Endpunkt erlaubt sind." },
+        { "text": "Location, die eine neue Adresse angibt.", "isCorrect": false, "explanation": "Location kommt bei 201 oder 3xx, nicht bei 405." },
+        { "text": "Retry-After, die eine Wartezeit angibt.", "isCorrect": false, "explanation": "Retry-After kommt bei 429 oder 503, nicht bei 405." },
+        { "text": "Content-Type, die das Format der Antwort angibt.", "isCorrect": false, "explanation": "Content-Type kommt bei fast jeder Antwort, ist aber nicht spezifisch für 405." }
+      ]
+    },
+    {
+      "question": "Warum ist eine eigene Fehlerseite besser als die Standardseite des Servers?",
+      "area": "Fehlerseiten",
+      "options": [
+        { "text": "Sie erklärt den Fehler freundlich und bietet eine Handlung an, statt den Besucher zu verunsichern.", "isCorrect": true, "explanation": "Eine gute Fehlerseite hält den Besucher auf der Seite." },
+        { "text": "Sie verbirgt den Fehler vor dem Besucher, sodass er nie erfährt, dass etwas schiefging.", "isCorrect": false, "explanation": "Die Fehlerseite soll den Fehler erklären, nicht verbergen." },
+        { "text": "Sie lädt schneller als die Standardseite des Servers.", "isCorrect": false, "explanation": "Die Ladegeschwindigkeit ist nicht der Grund für eigene Fehlerseiten." },
+        { "text": "Sie verhindert, dass der Fehler in den Serverprotokollen auftaucht.", "isCorrect": false, "explanation": "Der Fehler wird trotz eigener Fehlerseite in den Protokollen vermerkt." }
+      ]
+    },
+    {
+      "question": "Welcher Statuscode eignet sich am besten für eine geplante Wartungsseite?",
+      "area": "Server-Fehler-Familie",
+      "options": [
+        { "text": "503, weil sie sagt, dass der Server vorübergehend nicht erreichbar ist.", "isCorrect": true, "explanation": "503 ist genau für Wartung und vorübergehende Nichtverfügbarkeit gedacht." },
+        { "text": "500, weil sie einen allgemeinen Serverfehler meldet.", "isCorrect": false, "explanation": "500 deutet auf einen unerwarteten Fehler hin, nicht auf geplante Wartung." },
+        { "text": "404, weil die Seite während der Wartung nicht gefunden wird.", "isCorrect": false, "explanation": "404 würde Suchmaschinen signalisieren, dass die Seite gelöscht wurde." },
+        { "text": "200, weil die Wartungsseite selbst erfolgreich geladen wurde.", "isCorrect": false, "explanation": "200 würde dem Client vorgaukeln, dass die eigentliche Seite erreichbar ist." }
+      ]
+    },
+    {
+      "question": "Wie hilft der Statuscode beim Debuggen einer API?",
+      "area": "Debugging",
+      "options": [
+        { "text": "Er grenzt das Problem sofort auf eine der vier Familien ein und gibt den ersten Hinweis.", "isCorrect": true, "explanation": "Die erste Ziffer sagt, ob das Problem beim Client oder beim Server liegt." },
+        { "text": "Er zeigt den genauen Quelltext der fehlerhaften Zeile im Servercode an.", "isCorrect": false, "explanation": "Der Statuscode zeigt keine Codezeilen, dafür braucht man die Serverprotokolle." },
+        { "text": "Er behebt den Fehler automatisch, ohne dass die Entwicklerin eingreifen muss.", "isCorrect": false, "explanation": "Ein Statuscode behebt nichts, er meldet nur den Zustand." },
+        { "text": "Er startet den Server neu, wenn ein Fehler der 5xx-Familie auftritt.", "isCorrect": false, "explanation": "Ein Statuscode löst keinen Neustart aus, das muss separat eingerichtet werden." }
+      ]
+    },
+    {
+      "question": "Welche Kopfzeile gehört typischerweise zu einer 429-Antwort?",
+      "area": "Client-Fehler-Familie",
+      "options": [
+        { "text": "Retry-After, die dem Client sagt, wie lange er warten soll.", "isCorrect": true, "explanation": "Retry-After gibt die Wartezeit in Sekunden an." },
+        { "text": "Allow, die die erlaubten Methoden auflistet.", "isCorrect": false, "explanation": "Allow gehört zu 405, nicht zu 429." },
+        { "text": "Location, die eine neue Adresse angibt.", "isCorrect": false, "explanation": "Location gehört zu 201 oder 3xx, nicht zu 429." },
+        { "text": "Content-Length, die die Größe der Antwort angibt.", "isCorrect": false, "explanation": "Content-Length ist eine allgemeine Kopfzeile, nicht spezifisch für 429." }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Öffne die Entwicklerwerkzeuge deines Browsers und wechsle zum Netzwerk-Reiter. Rufe nacheinander die folgenden Adressen auf und notiere den Statuscode jeder Antwort: erstens https colon Schrägstrich Schrägstrich httpbin Punkt org Schrägstrich status Schrägstrich 201, zweitens dieselbe Adresse mit 204, drittens mit 405, viertens mit 502. Beobachte, wie der Browser auf die verschiedenen Statuscodes reagiert und ob er eine eigene Fehlerseite oder die Antwort des Servers anzeigt.",
+    "expectation": "Vier verschiedene Statuscodes im Netzwerk-Reiter gesehen: 201, 204, 405 und 502. Der Browser zeigt bei 2xx die Antwort an, bei 4xx und 5xx eine Fehlerseite.",
+    "checklist": [
+      "Entwicklerwerkzeuge geöffnet und zum Netzwerk-Reiter gewechselt",
+      "Adresse mit Schrägstrich 201 aufgerufen und Statuscode 201 notiert",
+      "Adresse mit Schrägstrich 204 aufgerufen und Statuscode 204 notiert",
+      "Adresse mit Schrägstrich 405 aufgerufen und Statuscode 405 notiert",
+      "Adresse mit Schrägstrich 502 aufgerufen und Statuscode 502 notiert",
+      "Beobachtet, wie der Browser unterschiedlich auf 2xx und 4xx/5xx reagiert"
+    ]
+  },
+  "audio": {
+    "file": "M03-02-06.mp3",
+    "durationSeconds": 1620,
+    "voices": ["A", "B"],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Wann sollte ich 201 statt 200 nach einer POST-Anfrage zurückschicken?",
+      "answer": "Immer dann, wenn die POST-Anfrage eine neue Ressource erzeugt hat, also einen neuen Eintrag in der Datenbank. Die 201 signalisiert dem Client, dass etwas Neues entstanden ist, und gibt ihm mit der Location-Kopfzeile die Adresse der neuen Ressource mit. Eine 200 nach einer POST-Anfrage wäre nicht falsch, aber weniger aussagekräftig, weil der Client dann nicht weiß, ob etwas Neues angelegt oder nur eine bestehende Ressource verändert wurde."
+    },
+    {
+      "question": "Was ist der praktische Unterschied zwischen 502 und 503 für mich als Entwicklerin?",
+      "answer": "Eine 502 bedeutet, dass ein vorgelagerter Server, meist ein Proxy, keine gültige Antwort vom Anwendungsserver bekommen hat. Der Anwendungsserver ist wahrscheinlich abgestürzt oder antwortet mit beschädigten Daten. Eine 503 bedeutet dagegen, dass der Server bewusst nicht antwortet, etwa wegen Wartung oder Überlastung. Bei einer 502 musst du den Anwendungsserver untersuchen, bei einer 503 reicht es meist, zu warten oder die Serverkonfiguration auf geplante Wartungsfenster zu prüfen."
+    },
+    {
+      "question": "Wie vermeide ich eine 409 in meiner eigenen API?",
+      "answer": "Du kannst eine 409 nicht immer vermeiden, aber du kannst sie beherrschbar machen. Ein bewährtes Mittel ist ein Versionsfeld oder ein Zeitstempel an jeder Ressource, den der Client bei einer Änderung mitschicken muss. Der Server prüft, ob der mitgeschickte Stand noch dem aktuellen entspricht, und lehnt die Änderung mit 409 ab, wenn inzwischen jemand anderes die Ressource geändert hat. Der Client kann dann den neuen Stand laden und seine Änderung darauf aufbauen."
+    },
+    {
+      "question": "Kann ich den Statuscode 429 auch selbst in meiner API einsetzen, oder ist das nur etwas für große Plattformen?",
+      "answer": "Du kannst und solltest 429 in jeder API einsetzen, die ohne Anmeldung erreichbar ist, auch in kleinen Projekten. Ohne eine Ratenbegrenzung kann ein einzelner Client deine API mit tausenden Anfragen pro Sekunde lahmlegen, sei es aus Versehen durch eine fehlerhafte Schleife oder absichtlich durch einen Angreifer. Eine einfache Ratenbegrenzung mit 429 und Retry-After schützt deinen Server und kostet dich nur wenige Zeilen Code."
+    },
+    {
+      "question": "Warum sehe ich im Browser manchmal eine 304, obwohl die Seite ganz normal geladen wurde?",
+      "answer": "Die 304 ist ein besonderer Statuscode aus der Weiterleitungsfamilie, der dem Browser sagt, dass sich die angefragte Ressource seit dem letzten Besuch nicht geändert hat und er seine gespeicherte Kopie verwenden kann. Der Browser schickt bei jeder Anfrage einen Zeitstempel oder eine Versionsnummer mit, und der Server antwortet mit 304, wenn die Ressource unverändert ist. Das spart Bandbreite und beschleunigt die Seite, weil der Browser die Daten nicht erneut herunterladen muss."
+    },
+    {
+      "question": "Wie gestalte ich eine eigene Fehlerseite, die nicht nach einem kaputten Server aussieht?",
+      "answer": "Eine gute eigene Fehlerseite erklärt in einfachen Worten, was passiert ist, ohne technische Schuldzuweisungen. Sie enthält das Logo und die Navigation der Hauptseite, damit der Besucher nicht das Gefühl hat, die Seite verlassen zu haben. Sie bietet eine konkrete Handlung an, etwa eine Sucheingabe oder einen Link zur Startseite. Und sie vermeidet rote Warnsymbole, die den Besucher zusätzlich beunruhigen, sondern setzt auf neutrale Farben und eine freundliche, hilfsbereite Sprache."
+    }
+  ]
+}

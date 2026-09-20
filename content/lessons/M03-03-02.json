@@ -1,0 +1,659 @@
+{
+  "id": "M03-03-02",
+  "title": "SQL-Grundbefehle: SELECT, INSERT, UPDATE, DELETE",
+  "durationMinutes": 29,
+  "prerequisites": [
+    "M03-03-01"
+  ],
+  "terms": [
+    {
+      "term": "SELECT",
+      "definition": "der SQL-Befehl zum Lesen von Daten aus einer Tabelle, mit dem man Spalten auswählt und Zeilen nach Bedingungen filtert."
+    },
+    {
+      "term": "INSERT",
+      "definition": "der SQL-Befehl zum Einfügen einer neuen Zeile in eine Tabelle, mit Werten für jede Spalte, die nicht automatisch gefüllt wird."
+    },
+    {
+      "term": "UPDATE",
+      "definition": "der SQL-Befehl zum Ändern von Werten in bereits vorhandenen Zeilen einer Tabelle, meist eingeschränkt durch eine WHERE-Bedingung."
+    },
+    {
+      "term": "DELETE",
+      "definition": "der SQL-Befehl zum Löschen von Zeilen aus einer Tabelle, fast immer mit einer WHERE-Bedingung, um nicht versehentlich alle Zeilen zu entfernen."
+    },
+    {
+      "term": "WHERE",
+      "definition": "der Zusatz in einem SQL-Befehl, der eine Bedingung festlegt, welche Zeilen betroffen sind, etwa nur die mit einer bestimmten id oder einem bestimmten Namen."
+    },
+    {
+      "term": "JOIN",
+      "definition": "der SQL-Befehl, der zwei Tabellen anhand einer gemeinsamen Spalte vorübergehend zu einer Ergebnistabelle verbindet, etwa um zu einem Artikel den Namen des Autors aus einer anderen Tabelle zu holen."
+    },
+    {
+      "term": "ORDER BY",
+      "definition": "der Zusatz in einem SQL-Befehl, der die Ergebnismenge nach einer oder mehreren Spalten sortiert, aufsteigend oder absteigend."
+    },
+    {
+      "term": "GROUP BY",
+      "definition": "der Zusatz in einem SQL-Befehl, der Zeilen mit gleichen Werten in einer Spalte zu Gruppen zusammenfasst, um etwa zu zählen, wie viele Zeilen in jede Gruppe fallen."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir eine riesige Bibliothek vor, in der du nicht selbst durch die Regale laufen musst, sondern einen Bibliothekar hast, der deine Fragen in einer kurzen, präzisen Sprache beantwortet. Du sagst ihm: Zeig mir alle Bücher von dieser einen Autorin, aber nur die, die nach 2020 erschienen sind, und sortiere sie nach dem Titel."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "In der letzten Lektion hast du gelernt, was eine Tabelle, eine Zeile und eine Spalte sind. Jetzt lernst du die vier Grundbefehle, mit denen ein Programm Daten in so einer Tabelle liest, einfügt, ändert und löscht. Diese Befehle sind die Handgriffe, die der Bibliothekar ausführt, wenn du ihm eine Frage stellst."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Warum braucht es überhaupt eigene Befehle für diese vier Dinge? Könnte ein Programm nicht einfach die ganze Tabelle lesen und selbst darin herumsuchen?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Weil eine Tabelle Millionen von Zeilen haben kann und es viel zu lange dauern würde, sie alle einzeln durchzugehen. Die Datenbank hat eigene, hochoptimierte Suchverfahren, die eine bestimmte Zeile in Sekundenbruchteilen finden, auch wenn die Tabelle riesig ist. Ein Programm, das jede Zeile einzeln prüft, wäre tausendmal langsamer."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir einen Katalog in der Bibliothek vor, in dem du nicht blätterst, sondern eine Karteikarte ausfüllst, auf der du genau ankreuzt, welche Angaben du sehen willst. Du kreuzt Titel und Autor an, lässt aber Erscheinungsjahr und Verlag frei, weil sie dich gerade nicht interessieren."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Der erste und häufigste Befehl in jeder Datenbank ist das Lesen von Daten. Du sagst der Datenbank, aus welcher Tabelle du lesen willst und welche Spalten dich interessieren, und sie liefert dir genau diese Spalten für alle passenden Zeilen."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Wie heißt der Befehl zum Lesen, und wie sieht er aus?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Der Lesebefehl heißt SELECT. SELECT ist der SQL-Befehl zum Lesen von Daten aus einer Tabelle, mit dem man Spalten auswählt und Zeilen nach Bedingungen filtert."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil SELECT der mit Abstand häufigste Befehl in jeder Datenbank ist. Fast jede Seite im Internet, die du aufrufst, löst Dutzende von SELECT-Befehlen aus, die die Inhalte aus der Datenbank holen, bevor sie zu HTML zusammengebaut werden."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Ein einfaches SELECT auf der Tabelle app_events aus der FutureDev-Datenbank sieht so aus: SELECT event_name, created_at FROM app_events. Dieser Befehl liefert zwei Spalten für alle Zeilen der Tabelle: den Namen des Ereignisses und den Zeitpunkt. Die Spalten id, install_id und lesson_id werden nicht zurückgegeben, weil sie nicht im SELECT stehen."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir vor, du willst aus dem Bibliothekskatalog nicht alle Bücher sehen, sondern nur die, die eine bestimmte Bedingung erfüllen. Du schreibst auf deine Karteikarte nicht nur, welche Angaben du sehen willst, sondern auch eine Filterregel: nur Bücher, die nach 2020 erschienen sind."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Ein SELECT ohne Einschränkung liefert alle Zeilen einer Tabelle. In der Praxis willst du aber fast immer nur einen bestimmten Ausschnitt, etwa alle Ereignisse einer bestimmten Installation oder alle Artikel eines bestimmten Autors."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Wie schränke ich ein SELECT so ein, dass ich nur bestimmte Zeilen bekomme?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Diese Einschränkung heißt WHERE. WHERE ist der Zusatz in einem SQL-Befehl, der eine Bedingung festlegt, welche Zeilen betroffen sind, etwa nur die mit einer bestimmten id oder einem bestimmten Namen."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil ein SELECT ohne WHERE bei einer Tabelle mit Millionen Zeilen viel zu viele Daten auf einmal liefern würde. Die WHERE-Bedingung sorgt dafür, dass die Datenbank nur die Zeilen durchsuchen und zurückschicken muss, die wirklich gebraucht werden."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Ein SELECT mit WHERE auf der Tabelle app_events: SELECT event_name, created_at FROM app_events WHERE event_name gleich Anführungszeichen lesson_started Anführungszeichen. Dieser Befehl liefert nur die Zeilen, in denen das Ereignis der Start einer Lektion war, und ignoriert alle anderen Ereignisse wie quiz_passed oder app_opened."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir ein leeres Formular in einer Behörde vor, das du ausfüllst, um einen neuen Eintrag in ein Register aufnehmen zu lassen. Du trägst in jedes Feld den passenden Wert ein, unterschreibst und gibst das Formular ab. Ein neuer Fall ist erfasst."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Neben dem Lesen von Daten muss eine Datenbank auch neue Daten aufnehmen können. Jedes Mal, wenn in der FutureDev-App eine Lektion gestartet wird, entsteht eine neue Zeile in der Tabelle app_events."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Wie heißt der Befehl, der eine neue Zeile in eine Tabelle einfügt?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Dieser Befehl heißt INSERT. INSERT ist der SQL-Befehl zum Einfügen einer neuen Zeile in eine Tabelle, mit Werten für jede Spalte, die nicht automatisch gefüllt wird."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil INSERT der Befehl ist, der aus einer leeren Tabelle eine gefüllte macht. Ohne INSERT gäbe es nur die Tabellenstruktur aus der letzten Lektion, aber keine einzige Zeile darin, und SELECT würde immer eine leere Liste zurückgeben."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Ein INSERT in die Tabelle app_events nennt die Spalten install_id, event_name und lesson_id, gefolgt von VALUES mit den konkreten Werten. Die Spalten id und created_at fehlen im INSERT, weil die Datenbank sie automatisch füllt, die id mit einer zufälligen Kennung und created_at mit dem aktuellen Zeitpunkt."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir eine Karteikarte im Bibliothekskatalog vor, auf der du mit einem Bleistift eine Angabe änderst. Der Titel bleibt gleich, der Autor bleibt gleich, aber das Erscheinungsjahr wird korrigiert, weil es beim ersten Eintragen falsch war."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Daten in einer Datenbank sind nicht in Stein gemeißelt. Wenn sich etwas ändert, etwa der Name eines Benutzers oder der Titel eines Artikels, muss die Datenbank die vorhandene Zeile anpassen können, ohne sie zu löschen und neu einzufügen."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Wie heißt der Befehl, der Werte in einer bereits vorhandenen Zeile ändert?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Dieser Befehl heißt UPDATE. UPDATE ist der SQL-Befehl zum Ändern von Werten in bereits vorhandenen Zeilen einer Tabelle, meist eingeschränkt durch eine WHERE-Bedingung."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil ein UPDATE ohne WHERE jede einzelne Zeile der Tabelle verändern würde. Ein UPDATE users SET name gleich Anführungszeichen Neuer Name Anführungszeichen ohne WHERE würde jeden Benutzer in Neuer Name umbenennen, und das will niemand. Deshalb gehört zu jedem UPDATE fast immer ein WHERE."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Ein UPDATE mit WHERE auf der Tabelle app_events: UPDATE app_events SET event_name gleich Anführungszeichen quiz_retried Anführungszeichen WHERE id gleich Anführungszeichen def456 Anführungszeichen. Dieser Befehl ändert nur die eine Zeile mit der angegebenen id und lässt alle anderen Zeilen unverändert."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir vor, du nimmst eine einzelne Karteikarte aus dem Bibliothekskatalog und wirfst sie in den Papierkorb. Der Rest des Katalogs bleibt unverändert, nur diese eine Karte ist verschwunden und kann nicht wiederhergestellt werden."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Die letzte der vier Grundoperationen ist das Löschen. Wenn ein Benutzer seinen Account löscht oder ein Artikel nicht mehr angezeigt werden soll, muss die entsprechende Zeile aus der Tabelle entfernt werden."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Wie heißt der Befehl zum Löschen, und warum ist er der gefährlichste der vier?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Der Löschbefehl heißt DELETE. DELETE ist der SQL-Befehl zum Löschen von Zeilen aus einer Tabelle, fast immer mit einer WHERE-Bedingung, um nicht versehentlich alle Zeilen zu entfernen."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil ein DELETE ohne WHERE jede einzelne Zeile der Tabelle löscht, und das unwiderruflich. Anders als bei einem UPDATE, das man mit einem weiteren UPDATE rückgängig machen kann, sind gelöschte Zeilen endgültig weg, es sei denn, die Datenbank hat vorher eine Sicherungskopie angelegt."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Ein DELETE mit WHERE auf der Tabelle app_events: DELETE FROM app_events WHERE id gleich Anführungszeichen def456 Anführungszeichen. Dieser Befehl löscht nur die eine Zeile mit der angegebenen id. Ein DELETE FROM app_events ohne WHERE dagegen würde die gesamte Tabelle leeren, und alle jemals gesammelten Ereignisse wären für immer verloren."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir zwei Karteikästen nebeneinander vor: einer für Bücher, einer für Autoren. Auf jeder Buchkarte steht eine Autorennummer, aber nicht der Name. Um den Namen zu erfahren, musst du die Buchkarte mit der Autorenkarte zusammenbringen, die dieselbe Nummer trägt."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "In der Praxis liegen zusammengehörige Daten oft in verschiedenen Tabellen. Die Tabelle articles enthält nur die id des Autors, nicht seinen Namen. Der Name steht in der Tabelle users. Um einen Artikel mitsamt dem Autornamen anzuzeigen, müssen beide Tabellen vorübergehend verbunden werden."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Wie heißt der Befehl, der zwei Tabellen anhand einer gemeinsamen Spalte verbindet?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Dieser Befehl heißt JOIN. JOIN ist der SQL-Befehl, der zwei Tabellen anhand einer gemeinsamen Spalte vorübergehend zu einer Ergebnistabelle verbindet, etwa um zu einem Artikel den Namen des Autors aus einer anderen Tabelle zu holen."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil JOIN die Stärke einer relationalen Datenbank erst richtig ausspielt. Statt den Autornamen in jeder Artikelzeile zu wiederholen und bei einer Namensänderung tausende Zeilen ändern zu müssen, steht der Name nur einmal in der users-Tabelle, und alle Artikel verweisen nur auf die id."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Ein JOIN zwischen articles und users: SELECT articles Punkt title, users Punkt name FROM articles JOIN users ON articles Punkt author_id gleich users Punkt id. Dieser Befehl liefert für jeden Artikel den Titel und den Namen des Autors, obwohl beide Angaben in verschiedenen Tabellen stehen. Die Bedingung ON articles Punkt author_id gleich users Punkt id sagt der Datenbank, wie die Zeilen zusammengehören."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir eine Liste von Büchern vor, die du nach dem Nachnamen des Autors sortierst, wie in einem Telefonbuch. Oder du sortierst sie nach dem Erscheinungsjahr, das neueste zuerst, wie in einer Buchhandlung, die aktuelle Titel im Schaufenster zeigt."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Die Reihenfolge, in der eine Datenbank die Zeilen zurückgibt, ist ohne ausdrücklichen Befehl nicht festgelegt. Wenn du eine bestimmte Sortierung brauchst, musst du sie der Datenbank mitteilen."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Wie sage ich der Datenbank, in welcher Reihenfolge sie die Zeilen zurückgeben soll?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Diese Sortieranweisung heißt ORDER BY. ORDER BY ist der Zusatz in einem SQL-Befehl, der die Ergebnismenge nach einer oder mehreren Spalten sortiert, aufsteigend oder absteigend."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil die Reihenfolge der Zeilen ohne ORDER BY jedes Mal anders sein kann, selbst bei derselben Tabelle und derselben WHERE-Bedingung. Eine Liste von Artikeln, die mal chronologisch und mal alphabetisch erscheint, verwirrt den Benutzer und macht die Anwendung unbrauchbar."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Ein SELECT mit ORDER BY auf app_events: SELECT event_name, created_at FROM app_events ORDER BY created_at DESC. Das Schlüsselwort DESC steht für descending, also absteigend, und sortiert die neuesten Ereignisse nach oben. Ohne DESC sortiert ORDER BY aufsteigend, also die ältesten zuerst."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir eine Strichliste vor, auf der du für jedes Ereignis einen Strich machst. Am Ende des Tages zählst du die Striche und siehst sofort, welches Ereignis am häufigsten vorkam, ohne jede einzelne Zeile von Hand durchzählen zu müssen."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Oft willst du nicht jede einzelne Zeile sehen, sondern eine Zusammenfassung. Wie oft wurde jede Lektion gestartet? Wie viele Rückmeldungen gingen zu jeder Lektion ein? Diese Fragen beantwortet die Datenbank, indem sie Zeilen zu Gruppen zusammenfasst und für jede Gruppe eine Zahl berechnet."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Wie heißt der Befehl, der Zeilen zu Gruppen zusammenfasst und für jede Gruppe eine Zahl berechnet?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Dieser Befehl heißt GROUP BY. GROUP BY ist der Zusatz in einem SQL-Befehl, der Zeilen mit gleichen Werten in einer Spalte zu Gruppen zusammenfasst, um etwa zu zählen, wie viele Zeilen in jede Gruppe fallen."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil GROUP BY aus vielen einzelnen Zeilen eine überschaubare Zusammenfassung macht. Statt tausender einzelner Ereignisse siehst du auf einen Blick, welche Lektion wie oft gestartet wurde, und kannst daraus ablesen, welche Inhalte besonders gefragt sind."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Ein GROUP BY auf app_events zählt mit COUNT, runde Klammer auf, Stern, runde Klammer zu, wie oft jede Lektion gestartet wurde. Die Gruppierung erfolgt nach lesson_id, und mit ORDER BY COUNT DESC stehen die am häufigsten gestarteten Lektionen oben. So siehst du auf einen Blick die beliebtesten Inhalte."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Bevor wir zum Abschluss kommen, hier noch einmal alle neuen Begriffe dieser Lektion im Überblick, kurz erklärt zum Nachschlagen."
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "isKeySentence": false,
+      "text": "SELECT: der SQL-Befehl zum Lesen von Daten aus einer Tabelle, mit dem man Spalten auswählt und Zeilen nach Bedingungen filtert."
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "isKeySentence": false,
+      "text": "INSERT: der SQL-Befehl zum Einfügen einer neuen Zeile in eine Tabelle, mit Werten für jede Spalte, die nicht automatisch gefüllt wird."
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "isKeySentence": false,
+      "text": "UPDATE: der SQL-Befehl zum Ändern von Werten in bereits vorhandenen Zeilen einer Tabelle, meist eingeschränkt durch eine WHERE-Bedingung."
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "isKeySentence": false,
+      "text": "DELETE: der SQL-Befehl zum Löschen von Zeilen aus einer Tabelle, fast immer mit einer WHERE-Bedingung, um nicht versehentlich alle Zeilen zu entfernen."
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "isKeySentence": false,
+      "text": "WHERE: der Zusatz in einem SQL-Befehl, der eine Bedingung festlegt, welche Zeilen betroffen sind, etwa nur die mit einer bestimmten id oder einem bestimmten Namen."
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "isKeySentence": false,
+      "text": "JOIN: der SQL-Befehl, der zwei Tabellen anhand einer gemeinsamen Spalte vorübergehend zu einer Ergebnistabelle verbindet, etwa um zu einem Artikel den Namen des Autors aus einer anderen Tabelle zu holen."
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "isKeySentence": false,
+      "text": "ORDER BY: der Zusatz in einem SQL-Befehl, der die Ergebnismenge nach einer oder mehreren Spalten sortiert, aufsteigend oder absteigend."
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "isKeySentence": false,
+      "text": "GROUP BY: der Zusatz in einem SQL-Befehl, der Zeilen mit gleichen Werten in einer Spalte zu Gruppen zusammenfasst, um etwa zu zählen, wie viele Zeilen in jede Gruppe fallen."
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "isKeySentence": true,
+      "text": "Wenn ich das zusammenfasse: SELECT liest Daten aus einer Tabelle, INSERT fügt neue Zeilen ein, UPDATE ändert vorhandene Zeilen und DELETE löscht sie. WHERE schränkt jeden dieser Befehle auf bestimmte Zeilen ein und ist bei UPDATE und DELETE lebenswichtig, um nicht versehentlich alle Zeilen zu treffen. JOIN verbindet zwei Tabellen über eine gemeinsame Spalte, ORDER BY sortiert die Ergebnisse und GROUP BY fasst Zeilen zu Gruppen zusammen, um sie zu zählen oder zu summieren."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Was passiert, wenn ich ein UPDATE oder DELETE ohne WHERE ausführe?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Ein UPDATE ohne WHERE ändert jede einzelne Zeile der Tabelle, ein DELETE ohne WHERE löscht jede einzelne Zeile. Beides ist in den allermeisten Fällen ein Fehler und nicht das, was du wolltest. Viele Datenbankwerkzeuge warnen dich, bevor sie einen solchen Befehl ausführen, oder verlangen eine ausdrückliche Bestätigung. In der Praxis schreibt man das WHERE fast immer als Erstes hin und das SET oder DELETE FROM erst danach, um nicht aus Versehen auf Senden zu drücken, bevor die Bedingung steht."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Kann ich mit SELECT auch Daten aus mehreren Tabellen gleichzeitig lesen, ohne JOIN?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Technisch ja, aber das Ergebnis wäre ein sogenanntes Kreuzprodukt, bei dem jede Zeile der ersten Tabelle mit jeder Zeile der zweiten Tabelle kombiniert wird. Aus zwei Tabellen mit je tausend Zeilen würden dann eine Million Zeilen, und die allermeisten davon wären sinnlose Kombinationen. JOIN mit einer ON-Bedingung sorgt dafür, dass nur die Zeilen kombiniert werden, die wirklich zusammengehören, und ist deshalb der richtige Weg."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Warum schreibt man SELECT event_name, created_at und nicht einfach SELECT Stern?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "SELECT Stern holt alle Spalten einer Tabelle auf einmal, was bequem ist, aber zwei Nachteile hat. Erstens werden Daten übertragen, die du vielleicht gar nicht brauchst, ähnlich wie wenn eine API mehr Felder schickt als nötig. Zweitens kann sich die Reihenfolge der Spalten in der Tabelle später ändern, und dein Programm verlässt sich dann auf eine Spalte an einer bestimmten Position, die nicht mehr stimmt. Deshalb ist es besser, die Spalten einzeln aufzulisten, auch wenn es mehr Tipparbeit ist."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Kann ich mit GROUP BY auch andere Dinge als COUNT berechnen?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Ja, GROUP BY kann mit mehreren verschiedenen Sammelfunktionen kombiniert werden. SUM addiert alle Werte einer Spalte innerhalb der Gruppe, AVG berechnet den Durchschnitt, MAX und MIN finden den größten und kleinsten Wert. Ein Beispiel: SELECT event_name, COUNT, runde Klammer auf, Stern, runde Klammer zu, Komma, MAX, runde Klammer auf, created_at, runde Klammer zu, FROM app_events GROUP BY event_name. Das zählt, wie oft jedes Ereignis vorkam, und zeigt den Zeitpunkt des letzten Vorkommens."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Muss ich die SQL-Befehle auswendig lernen, oder gibt es Werkzeuge, die mir helfen?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Die vier Grundbefehle SELECT, INSERT, UPDATE und DELETE sowie WHERE, JOIN, ORDER BY und GROUP BY solltest du auswendig kennen, weil sie in jedem Projekt immer wieder vorkommen. Für komplexere Abfragen gibt es grafische Werkzeuge, die dir die Befehle zusammenklicken, aber die Grundbefehle sind das kleine Einmaleins der Datenbanken, das du immer parat haben solltest. Die gute Nachricht ist, dass diese acht Begriffe in jeder SQL-Datenbank der Welt gleich funktionieren, ob PostgreSQL, MySQL oder SQLite."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Was ist der Unterschied zwischen WHERE und HAVING, das ich manchmal in SQL-Beispielen sehe?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "WHERE filtert einzelne Zeilen, bevor sie zu Gruppen zusammengefasst werden. HAVING filtert die Gruppen selbst, nachdem GROUP BY sie gebildet hat. Ein Beispiel: WHERE event_name gleich Anführungszeichen lesson_started Anführungszeichen filtert zuerst nur die Lektionsstarts. Dann fasst GROUP BY lesson_id sie je Lektion zusammen. HAVING COUNT, runde Klammer auf, Stern, runde Klammer zu, größer als 10 zeigt nur die Lektionen mit mehr als zehn Starts. WHERE kommt also vor GROUP BY, HAVING kommt danach."
+    }
+  ],
+  "practiceExample": {
+    "text": "Die Tabelle app_events aus der Migration 0001_init.sql im Repo repo-futuredev ist ein echtes Beispiel für alle vier Grundbefehle. Ein SELECT mit WHERE filtert die Ereignisse einer bestimmten Installation. Ein INSERT fügt ein neues Ereignis hinzu, wenn eine Lektion gestartet wird. Ein UPDATE könnte den event_name korrigieren, falls ein Ereignis falsch erfasst wurde. Ein DELETE mit WHERE entfernt ein einzelnes, versehentlich doppelt erfasstes Ereignis. Die Spalten id, install_id, event_name, lesson_id und created_at aus der letzten Lektion sind die Felder, auf die sich diese Befehle beziehen.",
+    "repoNote": "repo-futuredev",
+    "location": "supabase/migrations/0001_init.sql, Tabelle app_events als Ziel für SELECT, INSERT, UPDATE und DELETE"
+  },
+  "quiz": [
+    {
+      "question": "Welcher SQL-Befehl liest Daten aus einer Tabelle?",
+      "area": "Grundbefehle",
+      "options": [
+        { "text": "SELECT", "isCorrect": true, "explanation": "SELECT ist der Lesebefehl in SQL." },
+        { "text": "INSERT", "isCorrect": false, "explanation": "INSERT fügt neue Zeilen ein, es liest keine vorhandenen Daten." },
+        { "text": "UPDATE", "isCorrect": false, "explanation": "UPDATE ändert vorhandene Zeilen, es liest keine Daten." },
+        { "text": "DELETE", "isCorrect": false, "explanation": "DELETE löscht Zeilen, es liest keine Daten." }
+      ]
+    },
+    {
+      "question": "Welcher SQL-Befehl fügt eine neue Zeile in eine Tabelle ein?",
+      "area": "Grundbefehle",
+      "options": [
+        { "text": "INSERT", "isCorrect": true, "explanation": "INSERT INTO fügt eine neue Zeile mit Werten ein." },
+        { "text": "SELECT", "isCorrect": false, "explanation": "SELECT liest nur vorhandene Daten, es fügt nichts ein." },
+        { "text": "UPDATE", "isCorrect": false, "explanation": "UPDATE ändert vorhandene Zeilen, es fügt keine neuen ein." },
+        { "text": "DELETE", "isCorrect": false, "explanation": "DELETE löscht Zeilen, es fügt keine neuen ein." }
+      ]
+    },
+    {
+      "question": "Was bewirkt ein UPDATE ohne WHERE?",
+      "area": "Grundbefehle",
+      "options": [
+        { "text": "Es ändert jede einzelne Zeile der Tabelle.", "isCorrect": true, "explanation": "Ohne WHERE betrifft UPDATE alle Zeilen, was fast immer ein Fehler ist." },
+        { "text": "Es ändert gar nichts, weil die Bedingung fehlt und der Befehl ins Leere läuft.", "isCorrect": false, "explanation": "Ohne WHERE wird keine Bedingung geprüft, also sind alle Zeilen betroffen." },
+        { "text": "Es löscht alle Zeilen der Tabelle.", "isCorrect": false, "explanation": "Löschen würde DELETE, nicht UPDATE." },
+        { "text": "Es fügt eine neue Zeile ein.", "isCorrect": false, "explanation": "Einfügen würde INSERT, nicht UPDATE." }
+      ]
+    },
+    {
+      "question": "Wozu dient die WHERE-Bedingung in einem SQL-Befehl?",
+      "area": "WHERE",
+      "options": [
+        { "text": "Sie schränkt den Befehl auf Zeilen ein, die eine Bedingung erfüllen.", "isCorrect": true, "explanation": "WHERE filtert die Zeilen, die der Befehl betrifft." },
+        { "text": "Sie legt fest, in welcher Reihenfolge die Zeilen zurückgegeben werden sollen.", "isCorrect": false, "explanation": "Die Reihenfolge legt ORDER BY fest, nicht WHERE." },
+        { "text": "Sie verbindet zwei Tabellen miteinander.", "isCorrect": false, "explanation": "Das Verbinden übernimmt JOIN, nicht WHERE." },
+        { "text": "Sie fasst Zeilen zu Gruppen zusammen.", "isCorrect": false, "explanation": "Das Zusammenfassen übernimmt GROUP BY, nicht WHERE." }
+      ]
+    },
+    {
+      "question": "Was macht der JOIN-Befehl in SQL?",
+      "area": "JOIN",
+      "options": [
+        { "text": "Er verbindet zwei Tabellen über eine gemeinsame Spalte zu einer Ergebnistabelle.", "isCorrect": true, "explanation": "JOIN kombiniert Zeilen aus zwei Tabellen, die über eine Spalte zusammengehören." },
+        { "text": "Er fügt eine neue Spalte in eine bestehende Tabelle ein und verändert damit das Schema.", "isCorrect": false, "explanation": "Das wäre eine Schema-Änderung, kein JOIN." },
+        { "text": "Er sortiert die Zeilen einer Tabelle nach einer Spalte.", "isCorrect": false, "explanation": "Sortieren übernimmt ORDER BY, nicht JOIN." },
+        { "text": "Er löscht doppelte Zeilen aus einer Tabelle.", "isCorrect": false, "explanation": "Doppelte Zeilen löscht man mit DELETE und WHERE, nicht mit JOIN." }
+      ]
+    },
+    {
+      "question": "Wozu dient ORDER BY in einem SELECT?",
+      "area": "ORDER BY",
+      "options": [
+        { "text": "Es sortiert die Ergebnismenge nach einer oder mehreren Spalten.", "isCorrect": true, "explanation": "ORDER BY legt die Reihenfolge der zurückgegebenen Zeilen fest." },
+        { "text": "Es filtert die Zeilen nach einer Bedingung und entfernt unpassende.", "isCorrect": false, "explanation": "Filtern übernimmt WHERE, nicht ORDER BY." },
+        { "text": "Es fasst Zeilen zu Gruppen zusammen.", "isCorrect": false, "explanation": "Zusammenfassen übernimmt GROUP BY, nicht ORDER BY." },
+        { "text": "Es verbindet zwei Tabellen miteinander.", "isCorrect": false, "explanation": "Verbinden übernimmt JOIN, nicht ORDER BY." }
+      ]
+    },
+    {
+      "question": "Was macht GROUP BY in einem SELECT?",
+      "area": "GROUP BY",
+      "options": [
+        { "text": "Es fasst Zeilen mit gleichen Werten zu Gruppen zusammen.", "isCorrect": true, "explanation": "GROUP BY bildet Gruppen für Sammelfunktionen wie COUNT." },
+        { "text": "Es sortiert die Zeilen nach einer Spalte, aufsteigend oder absteigend.", "isCorrect": false, "explanation": "Sortieren übernimmt ORDER BY, nicht GROUP BY." },
+        { "text": "Es filtert die Zeilen nach einer Bedingung.", "isCorrect": false, "explanation": "Filtern übernimmt WHERE, nicht GROUP BY." },
+        { "text": "Es fügt neue Zeilen in die Tabelle ein.", "isCorrect": false, "explanation": "Einfügen übernimmt INSERT, nicht GROUP BY." }
+      ]
+    },
+    {
+      "question": "Warum ist ein DELETE ohne WHERE gefährlich?",
+      "area": "Grundbefehle",
+      "options": [
+        { "text": "Weil es alle Zeilen der Tabelle löscht, und das unwiderruflich.", "isCorrect": true, "explanation": "DELETE ohne WHERE löscht jede Zeile, ohne Rückfrage." },
+        { "text": "Weil es die gesamte Datenbank mitsamt allen Tabellen und deren Inhalten löscht.", "isCorrect": false, "explanation": "DELETE betrifft nur die genannte Tabelle, nicht die ganze Datenbank." },
+        { "text": "Weil es den Server neu startet.", "isCorrect": false, "explanation": "DELETE hat keinen Einfluss auf den Serverprozess." },
+        { "text": "Weil es die Tabelle selbst, also ihre Struktur, entfernt.", "isCorrect": false, "explanation": "Die Tabellenstruktur entfernt DROP TABLE, nicht DELETE." }
+      ]
+    },
+    {
+      "question": "Welche Spalten fehlen typischerweise in einem INSERT, weil die Datenbank sie automatisch füllt?",
+      "area": "Grundbefehle",
+      "options": [
+        { "text": "id und created_at, weil die Datenbank sie selbst vergibt.", "isCorrect": true, "explanation": "Primärschlüssel und Zeitstempel werden oft automatisch gesetzt." },
+        { "text": "Alle Spalten, weil INSERT immer alle Spalten automatisch füllt und keine Eingabe braucht.", "isCorrect": false, "explanation": "Nur bestimmte Spalten wie id werden automatisch gefüllt." },
+        { "text": "Nur die Spalte event_name, weil sie immer gleich bleibt.", "isCorrect": false, "explanation": "event_name muss im INSERT angegeben werden, sie ist nicht automatisch." },
+        { "text": "Gar keine, INSERT muss immer Werte für alle Spalten enthalten.", "isCorrect": false, "explanation": "Spalten mit automatischen Werten können im INSERT weggelassen werden." }
+      ]
+    },
+    {
+      "question": "Was bedeutet das Schlüsselwort DESC in ORDER BY?",
+      "area": "ORDER BY",
+      "options": [
+        { "text": "Absteigend sortieren, also die größten oder neuesten Werte zuerst.", "isCorrect": true, "explanation": "DESC steht für descending, also absteigend." },
+        { "text": "Aufsteigend sortieren, also die kleinsten oder ältesten Werte zuerst anzeigen, das Gegenteil von DESC.", "isCorrect": false, "explanation": "Aufsteigend ist ASC oder der Standard ohne DESC." },
+        { "text": "Die Sortierung nach der Beschreibung der Spalte vornehmen.", "isCorrect": false, "explanation": "DESC hat nichts mit Beschreibung zu tun." },
+        { "text": "Die Sortierung ganz aufheben und die Zeilen in zufälliger Reihenfolge liefern.", "isCorrect": false, "explanation": "DESC ändert die Richtung, nicht die Tatsache der Sortierung." }
+      ]
+    },
+    {
+      "question": "Warum ist SELECT Stern oft keine gute Idee?",
+      "area": "Grundbefehle",
+      "options": [
+        { "text": "Weil es alle Spalten holt, auch wenn du nur wenige brauchst, und die Reihenfolge sich später ändern kann.", "isCorrect": true, "explanation": "SELECT Stern überträgt unnötige Daten und ist anfällig für Schema-Änderungen." },
+        { "text": "Weil SELECT Stern in den meisten Datenbanken gar nicht erlaubt ist.", "isCorrect": false, "explanation": "SELECT Stern ist in allen SQL-Datenbanken erlaubt." },
+        { "text": "Es löscht die Tabelle dauerhaft und unwiderruflich.", "isCorrect": false, "explanation": "SELECT löscht nichts, es liest nur." },
+        { "text": "Es gibt nur die erste Zeile der Tabelle zurück.", "isCorrect": false, "explanation": "SELECT Stern gibt alle Zeilen zurück, nicht nur die erste." }
+      ]
+    },
+    {
+      "question": "Welcher Befehl eignet sich, um zu zählen, wie oft jede Lektion gestartet wurde?",
+      "area": "GROUP BY",
+      "options": [
+        { "text": "SELECT lesson_id, COUNT, runde Klammer auf, Stern, runde Klammer zu, FROM app_events WHERE event_name gleich Anführungszeichen lesson_started Anführungszeichen GROUP BY lesson_id.", "isCorrect": true, "explanation": "GROUP BY mit COUNT zählt die Zeilen je Gruppe." },
+        { "text": "SELECT Stern FROM app_events ORDER BY lesson_id, das listet nur alle Zeilen sortiert auf.", "isCorrect": false, "explanation": "Das listet nur alle Zeilen sortiert auf, es zählt nichts." },
+        { "text": "INSERT INTO app_events, runde Klammer auf, lesson_id, runde Klammer zu, VALUES, runde Klammer auf, Anführungszeichen M01-01-01 Anführungszeichen, runde Klammer zu.", "isCorrect": false, "explanation": "INSERT fügt eine neue Zeile ein, es zählt nichts." },
+        { "text": "DELETE FROM app_events WHERE lesson_id gleich Anführungszeichen M01-01-01 Anführungszeichen.", "isCorrect": false, "explanation": "DELETE löscht Zeilen, es zählt nichts." }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Öffne einen Online-SQL-Editor wie https colon Schrägstrich Schrägstrich sqliteonline Punkt com. Lege eine neue Tabelle mit dem Namen books an, die die Spalten id, title, author und year hat. Füge mit INSERT drei erfundene Bücher ein. Schreibe dann ein SELECT mit WHERE, das nur Bücher nach dem Jahr 2000 anzeigt, und ein SELECT mit ORDER BY, das die Bücher nach dem Titel sortiert. Führe zum Schluss ein UPDATE aus, das den Titel eines Buches ändert, und ein DELETE, das ein Buch löscht.",
+    "expectation": "Die Tabelle books wurde angelegt und mit drei Büchern gefüllt. SELECT mit WHERE zeigt nur Bücher nach 2000. SELECT mit ORDER BY zeigt die Bücher alphabetisch nach Titel. UPDATE ändert einen Titel, DELETE löscht ein Buch. Alle Befehle wurden ohne Fehler ausgeführt.",
+    "checklist": [
+      "Online-SQL-Editor geöffnet und eine neue Tabelle books mit vier Spalten angelegt",
+      "Drei Bücher mit INSERT eingefügt",
+      "SELECT mit WHERE für Bücher nach 2000 ausgeführt und das Ergebnis gesehen",
+      "SELECT mit ORDER BY für alphabetische Sortierung ausgeführt und das Ergebnis gesehen",
+      "UPDATE für einen Titel ausgeführt und mit SELECT geprüft, dass die Änderung wirksam ist",
+      "DELETE für ein Buch ausgeführt und mit SELECT geprüft, dass es verschwunden ist"
+    ]
+  },
+  "audio": {
+    "file": "M03-03-02.mp3",
+    "durationSeconds": 1740,
+    "voices": ["A", "B"],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Was passiert, wenn ich ein UPDATE oder DELETE ohne WHERE ausführe?",
+      "answer": "Ein UPDATE ohne WHERE ändert jede einzelne Zeile der Tabelle, ein DELETE ohne WHERE löscht jede einzelne Zeile. Beides ist in den allermeisten Fällen ein Fehler und nicht das, was du wolltest. Viele Datenbankwerkzeuge warnen dich, bevor sie einen solchen Befehl ausführen, oder verlangen eine ausdrückliche Bestätigung. In der Praxis schreibt man das WHERE fast immer als Erstes hin und das SET oder DELETE FROM erst danach, um nicht aus Versehen auf Senden zu drücken, bevor die Bedingung steht."
+    },
+    {
+      "question": "Kann ich mit SELECT auch Daten aus mehreren Tabellen gleichzeitig lesen, ohne JOIN?",
+      "answer": "Technisch ja, aber das Ergebnis wäre ein sogenanntes Kreuzprodukt, bei dem jede Zeile der ersten Tabelle mit jeder Zeile der zweiten Tabelle kombiniert wird. Aus zwei Tabellen mit je tausend Zeilen würden dann eine Million Zeilen, und die allermeisten davon wären sinnlose Kombinationen. JOIN mit einer ON-Bedingung sorgt dafür, dass nur die Zeilen kombiniert werden, die wirklich zusammengehören, und ist deshalb der richtige Weg."
+    },
+    {
+      "question": "Warum schreibt man SELECT event_name, created_at und nicht einfach SELECT Stern?",
+      "answer": "SELECT Stern holt alle Spalten einer Tabelle auf einmal, was bequem ist, aber zwei Nachteile hat. Erstens werden Daten übertragen, die du vielleicht gar nicht brauchst, ähnlich wie wenn eine API mehr Felder schickt als nötig. Zweitens kann sich die Reihenfolge der Spalten in der Tabelle später ändern, und dein Programm verlässt sich dann auf eine Spalte an einer bestimmten Position, die nicht mehr stimmt. Deshalb ist es besser, die Spalten einzeln aufzulisten, auch wenn es mehr Tipparbeit ist."
+    },
+    {
+      "question": "Kann ich mit GROUP BY auch andere Dinge als COUNT berechnen?",
+      "answer": "Ja, GROUP BY kann mit mehreren verschiedenen Sammelfunktionen kombiniert werden. SUM addiert alle Werte einer Spalte innerhalb der Gruppe, AVG berechnet den Durchschnitt, MAX und MIN finden den größten und kleinsten Wert. Ein Beispiel: SELECT event_name, COUNT, runde Klammer auf, Stern, runde Klammer zu, Komma, MAX, runde Klammer auf, created_at, runde Klammer zu, FROM app_events GROUP BY event_name. Das zählt, wie oft jedes Ereignis vorkam, und zeigt den Zeitpunkt des letzten Vorkommens."
+    },
+    {
+      "question": "Muss ich die SQL-Befehle auswendig lernen, oder gibt es Werkzeuge, die mir helfen?",
+      "answer": "Die vier Grundbefehle SELECT, INSERT, UPDATE und DELETE sowie WHERE, JOIN, ORDER BY und GROUP BY solltest du auswendig kennen, weil sie in jedem Projekt immer wieder vorkommen. Für komplexere Abfragen gibt es grafische Werkzeuge, die dir die Befehle zusammenklicken, aber die Grundbefehle sind das kleine Einmaleins der Datenbanken, das du immer parat haben solltest. Die gute Nachricht ist, dass diese acht Begriffe in jeder SQL-Datenbank der Welt gleich funktionieren, ob PostgreSQL, MySQL oder SQLite."
+    },
+    {
+      "question": "Was ist der Unterschied zwischen WHERE und HAVING, das ich manchmal in SQL-Beispielen sehe?",
+      "answer": "WHERE filtert einzelne Zeilen, bevor sie zu Gruppen zusammengefasst werden. HAVING filtert die Gruppen selbst, nachdem GROUP BY sie gebildet hat. Ein Beispiel: WHERE event_name gleich Anführungszeichen lesson_started Anführungszeichen filtert zuerst nur die Lektionsstarts. Dann fasst GROUP BY lesson_id sie je Lektion zusammen. HAVING COUNT, runde Klammer auf, Stern, runde Klammer zu, größer als 10 zeigt nur die Lektionen mit mehr als zehn Starts. WHERE kommt also vor GROUP BY, HAVING kommt danach."
+    }
+  ]
+}

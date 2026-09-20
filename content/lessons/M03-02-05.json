@@ -1,0 +1,652 @@
+{
+  "id": "M03-02-05",
+  "title": "GraphQL: wenn der Client bestimmt, was er zurückbekommt",
+  "durationMinutes": 28,
+  "prerequisites": [
+    "M03-02-04"
+  ],
+  "terms": [
+    {
+      "term": "GraphQL",
+      "definition": "eine Abfragesprache für APIs, bei der der Client in einer einzigen Anfrage genau die Felder anfordert, die er braucht, statt alle Felder einer Ressource auf einmal zu erhalten."
+    },
+    {
+      "term": "Query",
+      "definition": "eine Leseabfrage in GraphQL, die Daten vom Server holt, ohne etwas zu verändern, vergleichbar mit GET in REST."
+    },
+    {
+      "term": "Mutation",
+      "definition": "eine Schreibabfrage in GraphQL, die Daten auf dem Server anlegt, ändert oder löscht, vergleichbar mit POST und PUT in REST."
+    },
+    {
+      "term": "GraphQL-Schema",
+      "definition": "die zentrale Beschreibung aller Typen, Felder und Operationen, die eine GraphQL-API anbietet, geschrieben in der Schema Definition Language."
+    },
+    {
+      "term": "Overfetching",
+      "definition": "das Problem in REST, dass ein Endpunkt mehr Daten zurückschickt, als der Client eigentlich braucht, weil die Antwort immer alle Felder einer Ressource enthält."
+    },
+    {
+      "term": "Underfetching",
+      "definition": "das Problem in REST, dass ein Client mehrere Anfragen an verschiedene Endpunkte schicken muss, um alle benötigten Daten für eine einzige Ansicht zusammenzubekommen."
+    },
+    {
+      "term": "GraphQL-Endpunkt",
+      "definition": "die einzige Adresse einer GraphQL-API, meist Schrägstrich graphql, an die alle Queries und Mutations geschickt werden, anders als bei REST mit vielen verschiedenen Endpunkten."
+    },
+    {
+      "term": "GraphQL-Typ",
+      "definition": "die Beschreibung der Form eines Objekts im GraphQL-Schema, mit allen Feldern und deren Datentypen, ähnlich einer Spaltendefinition in einer Datenbanktabelle."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir ein Restaurant vor, in dem du kein fertiges Menü bestellst, sondern dir jeden einzelnen Bestandteil deines Tellers selbst zusammenstellst. Du sagst dem Kellner genau, welche Beilagen du willst, welche Sauce und wie dein Fleisch gebraten sein soll, und nur das kommt auf deinen Teller, nichts, was du nicht bestellt hast."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "In der letzten Lektion hast du REST-APIs kennengelernt, bei denen jeder Endpunkt eine feste Antwort zurückschickt. Diese Lektion zeigt dir eine andere Art von API, bei der nicht der Server, sondern der Client bestimmt, welche Daten er zurückbekommt."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Warum sollte der Client überhaupt selbst bestimmen wollen, welche Daten er bekommt? Reicht es nicht, wenn der Server eine fertige Antwort schickt?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Weil verschiedene Ansichten einer App verschiedene Daten brauchen. Eine Listenansicht braucht nur den Namen und das Bild eines Artikels, die Detailansicht braucht zusätzlich den ganzen Text und die Kommentare. Ein REST-Endpunkt schickt immer alles, und der Client muss aussortieren, was er nicht braucht."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir vor, du bestellst in einem Restaurant ein Menü, aber auf deinem Teller landet immer die volle Portion mit allen Beilagen, auch wenn du nur die Suppe wolltest. Du musst den Rest selbst zurückschicken oder liegen lassen, und das bei jeder einzelnen Bestellung."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Dieses Problem hat einen Namen und ist einer der Hauptgründe, warum Facebook vor über zehn Jahren eine eigene Abfragesprache für APIs entwickelt hat. Die Entwickler dort standen vor genau diesem Problem: ihre mobile App bekam von den REST-Endpunkten Unmengen an Daten, von denen sie nur einen Bruchteil brauchte."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Wie nennt man dieses Problem, und wie heißt die Sprache, die Facebook als Lösung dafür entwickelt hat?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Das Problem heißt Overfetching, und die Sprache heißt GraphQL. Overfetching bedeutet, dass ein Endpunkt mehr Daten zurückschickt, als der Client eigentlich braucht, weil die Antwort immer alle Felder einer Ressource enthält. GraphQL ist die Abfragesprache, die dieses Problem löst, indem der Client in einer einzigen Anfrage genau die Felder anfordert, die er braucht."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil Overfetching auf einem langsamen Mobilfunknetz echte Sekunden kostet. Jedes überflüssige Feld, das der Server mitschickt, verbraucht Datenvolumen und Zeit, ohne dass der Nutzer etwas davon hat. In einer App mit Millionen Nutzern summiert sich das zu spürbaren Kosten und schlechteren Bewertungen im App Store."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Ein Beispiel für Overfetching: Eine REST-API liefert unter Schrägstrich users Schrägstrich 42 ein ganzes Benutzerobjekt mit zwanzig Feldern, aber die App braucht für die Profilübersicht nur den Namen und das Bild. Neunzehn Felder werden umsonst übertragen. Mit GraphQL schickt der Client eine Query, die nur name und avatarUrl anfordert, und der Server schickt genau diese zwei Felder zurück, kein einziges mehr."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir vor, du willst einen Kuchen backen, aber das Rezept steht auf drei verschiedenen Zetteln in drei verschiedenen Schubladen. Du musst dreimal hin- und herlaufen, bis du alle Zutaten beisammen hast, obwohl du nur einen einzigen Kuchen backen willst."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Neben Overfetching gibt es noch ein zweites Problem, das in REST-APIs ständig auftritt. Eine einzige Ansicht im Frontend braucht oft Daten aus mehreren verschiedenen Endpunkten, und der Client muss mehrere Anfragen hintereinander schicken, um alle Daten zusammenzubekommen."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Heißt das, der Client muss für eine einzige Seite mehrmals zum Server laufen, nur weil die Daten auf verschiedene Endpunkte verteilt sind?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Genau, und dieses Problem heißt Underfetching. Underfetching bedeutet, dass ein Client mehrere Anfragen an verschiedene Endpunkte schicken muss, um alle benötigten Daten für eine einzige Ansicht zusammenzubekommen."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil jede zusätzliche Anfrage eine neue Netzwerkumlaufzeit bedeutet. Bei einer langsamen Verbindung kann eine Seite, die fünf REST-Endpunkte anfragen muss, mehrere Sekunden brauchen, bis alle Daten da sind, während eine einzige GraphQL-Query dieselben Daten in einer Antwort liefert."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Ein Beispiel für Underfetching: Eine Blog-Ansicht zeigt einen Artikel, den Autor und die Kommentare. In REST braucht das drei Anfragen an drei verschiedene Endpunkte. In GraphQL schickt der Client eine einzige Query, die alle drei Dinge auf einmal anfordert, und der Server liefert alles in einer Antwort."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir einen Bestellzettel in einem Restaurant vor, auf dem du nicht nur das Gericht ankreuzt, sondern auch jede einzelne Zutat, die du haben willst, und jede, die du weglassen möchtest. Der Kellner liest den Zettel, gibt ihn an die Küche, und du bekommst genau das, was auf dem Zettel steht."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Eine GraphQL-API hat nicht viele verschiedene Endpunkte wie eine REST-API, sondern genau einen einzigen. An diesen einen Endpunkt schickt der Client alle seine Abfragen, egal ob er Daten lesen oder schreiben will."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Nur ein einziger Endpunkt für alles? Wie unterscheidet der Server dann, ob ich Daten lesen oder neue Daten anlegen will?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Der eine Endpunkt heißt GraphQL-Endpunkt und ist meist unter der Adresse Schrägstrich graphql erreichbar. Anders als bei REST mit vielen verschiedenen Endpunkten schickt der Client alle Queries und Mutations an diese eine Adresse, und der Server entscheidet anhand des Inhalts der Anfrage, was zu tun ist."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil der Client sich nicht merken muss, unter welcher Adresse welche Ressource liegt. Er muss nur eine einzige Adresse kennen und kann trotzdem auf alle Daten des gesamten Backends zugreifen, solange das Schema es erlaubt."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Im Repo repo-futuredev wird für die Kommunikation mit der Supabase-Datenbank ein einziger GraphQL-Endpunkt verwendet, an den eine Abfrage mehrere Tabellen gleichzeitig ansprechen kann. Statt drei verschiedener REST-Endpunkte für app_events, content_releases und feedback gibt es eine Abfrage, die alle drei Tabellen in einer Antwort liefert."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir einen Bibliothekskatalog vor, in dem du in einem einzigen Suchfeld gleichzeitig nach Titel, Autor und Erscheinungsjahr fragst und alle Ergebnisse in einer Liste bekommst."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Die Leseabfrage in GraphQL funktioniert ähnlich wie dieser Bibliothekskatalog. Der Client schreibt in einer eigenen Abfragesprache, welche Felder er von welchem Typ haben will, und der Server liefert genau diese Felder zurück."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Wie sieht so eine Leseabfrage in GraphQL aus, und wie heißt sie?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Diese Leseabfrage heißt Query. Eine Query ist eine Leseabfrage in GraphQL, die Daten vom Server holt, ohne etwas zu verändern, vergleichbar mit GET in REST."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil eine Query in GraphQL viel genauer ist als ein GET in REST. Statt pauschal alle Felder einer Ressource zu bekommen, listet die Query jedes einzelne Feld auf, das der Client haben will, und der Server schickt nur diese Felder zurück."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Eine typische GraphQL-Query fordert von einem Benutzer mit der id 42 nur die Felder name und email an. Der Client schreibt dafür das Schlüsselwort user, die id in Klammern und in geschweiften Klammern die gewünschten Felder. Der Server schickt genau diese zwei Felder zurück, nichts anderes."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir ein Formular in einer Behörde vor, mit dem du nicht nur Auskünfte einholen, sondern auch Anträge stellen kannst. Dasselbe Formular, dieselbe Adresse, aber je nachdem, was du in die Felder schreibst, wird entweder nur gelesen oder etwas Neues angelegt."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Neben dem Lesen von Daten muss eine API auch Daten verändern können. In REST gibt es dafür POST und PUT, in GraphQL gibt es dafür einen eigenen Begriff und eine eigene Syntax."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Wie heißt die Schreibabfrage in GraphQL, und worin unterscheidet sie sich von einer Query?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Die Schreibabfrage heißt Mutation. Eine Mutation ist eine Schreibabfrage in GraphQL, die Daten auf dem Server anlegt, ändert oder löscht, vergleichbar mit POST und PUT in REST."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil GraphQL strikt zwischen Lesen und Schreiben trennt. Eine Query darf niemals Daten verändern, eine Mutation darf das sehr wohl. Diese Trennung macht die API vorhersagbarer und verhindert, dass eine vermeintlich harmlose Leseabfrage versehentlich Daten löscht."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Eine typische Mutation zum Anlegen eines neuen Benutzers beginnt mit dem Schlüsselwort mutation, gefolgt von createUser mit den Eingabedaten in Klammern. In geschweiften Klammern stehen die Felder, die der Server als Bestätigung zurückschicken soll, etwa id und name des neuen Benutzers."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir einen Bauplan für ein Haus vor, auf dem jeder Raum, jede Tür und jedes Fenster mit genauen Maßen eingezeichnet ist. Bevor der erste Stein gesetzt wird, steht auf diesem Plan schon fest, welche Räume es geben wird und wie sie miteinander verbunden sind."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Damit der Client weiß, welche Daten er überhaupt anfordern kann, braucht eine GraphQL-API eine zentrale Beschreibung aller möglichen Abfragen und der Form aller Daten. Diese Beschreibung ist der Vertrag zwischen Client und Server."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Wie heißt diese zentrale Beschreibung, und was genau steht darin?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Diese Beschreibung heißt GraphQL-Schema. Ein GraphQL-Schema ist die zentrale Beschreibung aller Typen, Felder und Operationen, die eine GraphQL-API anbietet, geschrieben in der Schema Definition Language, kurz SDL."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil das Schema wie eine automatisch geprüfte Dokumentation wirkt. Der Client kann das Schema vom Server abfragen und sieht sofort, welche Typen es gibt, welche Felder jeder Typ hat und welche Queries und Mutations erlaubt sind. Ein Tippfehler in einer Query fällt sofort auf, weil das Schema das angeforderte Feld nicht kennt."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Ein Ausschnitt aus einem GraphQL-Schema in SDL beschreibt einen Typ User mit den Feldern id, name, email und posts. Jedes Feld hat einen festen Datentyp, etwa ID oder String. Ein Ausrufezeichen hinter dem Typ bedeutet, dass das Feld niemals leer sein darf. Das Feld posts verweist auf einen weiteren Typ Post, der an anderer Stelle im Schema definiert ist."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir einen Steckbrief vor, auf dem für jede Person immer dieselben Felder abgefragt werden: Name, Alter, Wohnort. Jeder Steckbrief hat dieselbe Form, aber die eingetragenen Werte sind bei jeder Person anders."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Die einzelnen Objekte, die eine GraphQL-API zurückgibt, haben eine feste Form, die im Schema beschrieben ist. Diese Form legt fest, welche Felder ein Objekt hat und von welchem Datentyp jedes Feld ist."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Wie heißt diese feste Form eines Objekts im GraphQL-Schema?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Diese Form heißt GraphQL-Typ. Ein GraphQL-Typ ist die Beschreibung der Form eines Objekts im GraphQL-Schema, mit allen Feldern und deren Datentypen, ähnlich einer Spaltendefinition in einer Datenbanktabelle."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil der Client nur Felder anfordern kann, die der Typ auch tatsächlich hat. Fordert der Client ein Feld an, das der Typ nicht besitzt, lehnt der Server die Query schon vor der Ausführung ab und schickt eine verständliche Fehlermeldung zurück, statt einfach ein leeres Feld zu liefern."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Im Schema der FutureDev-App könnte ein GraphQL-Typ Lesson so aussehen: Er hat die Felder id, title, durationMinutes und prerequisites. Jede Lektion hat also immer eine id, einen title, eine Dauer in Minuten und eine Liste von Voraussetzungen, und kein Feld davon darf leer sein. Der Typ legt diese Form für alle Lektionen fest."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir zwei verschiedene Restaurants nebeneinander vor. Im ersten bestellst du ein festes Menü und bekommst immer alles, was dazugehört. Im zweiten stellst du dir deinen Teller aus einer langen Liste von Zutaten selbst zusammen. Beide machen satt, aber auf völlig verschiedene Weise."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "GraphQL und REST sind keine Feinde, sondern zwei verschiedene Werkzeuge für verschiedene Aufgaben. Keines ist grundsätzlich besser als das andere, aber jedes hat Stärken in bestimmten Situationen."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Wann sollte ich GraphQL nehmen und wann bleibe ich besser bei REST?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "GraphQL lohnt sich besonders, wenn das Frontend viele verschiedene, flexible Ansichten hat, die jeweils unterschiedliche Felder brauchen, oder wenn die App auf langsamen Mobilfunknetzen läuft und jedes überflüssige Byte zählt. REST ist einfacher einzurichten und die bessere Wahl, wenn die API nur wenige, feste Endpunkte braucht oder von vielen verschiedenen, unbekannten Clients genutzt wird, die alle dieselben Daten in derselben Form erwarten."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Ein praktischer Vergleich: Eine Wetter-App, die immer nur Temperatur und Wetterlage für einen Ort anzeigt, braucht kein GraphQL, ein einfacher REST-Endpunkt reicht völlig. Eine Social-Media-App dagegen, bei der jeder Beitrag andere angehängte Daten haben kann, Bilder, Umfragen, Links, profitiert stark von GraphQL, weil der Client für jeden Beitrag einzeln entscheiden kann, welche Felder er anfordert."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Bevor wir zum Abschluss kommen, hier noch einmal alle neuen Begriffe dieser Lektion im Überblick, kurz erklärt zum Nachschlagen."
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "isKeySentence": false,
+      "text": "GraphQL: eine Abfragesprache für APIs, bei der der Client in einer einzigen Anfrage genau die Felder anfordert, die er braucht, statt alle Felder einer Ressource auf einmal zu erhalten."
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "isKeySentence": false,
+      "text": "Query: eine Leseabfrage in GraphQL, die Daten vom Server holt, ohne etwas zu verändern, vergleichbar mit GET in REST."
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "isKeySentence": false,
+      "text": "Mutation: eine Schreibabfrage in GraphQL, die Daten auf dem Server anlegt, ändert oder löscht, vergleichbar mit POST und PUT in REST."
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "isKeySentence": false,
+      "text": "GraphQL-Schema: die zentrale Beschreibung aller Typen, Felder und Operationen, die eine GraphQL-API anbietet, geschrieben in der Schema Definition Language."
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "isKeySentence": false,
+      "text": "Overfetching: das Problem in REST, dass ein Endpunkt mehr Daten zurückschickt, als der Client eigentlich braucht, weil die Antwort immer alle Felder einer Ressource enthält."
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "isKeySentence": false,
+      "text": "Underfetching: das Problem in REST, dass ein Client mehrere Anfragen an verschiedene Endpunkte schicken muss, um alle benötigten Daten für eine einzige Ansicht zusammenzubekommen."
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "isKeySentence": false,
+      "text": "GraphQL-Endpunkt: die einzige Adresse einer GraphQL-API, meist Schrägstrich graphql, an die alle Queries und Mutations geschickt werden, anders als bei REST mit vielen verschiedenen Endpunkten."
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "isKeySentence": false,
+      "text": "GraphQL-Typ: die Beschreibung der Form eines Objekts im GraphQL-Schema, mit allen Feldern und deren Datentypen, ähnlich einer Spaltendefinition in einer Datenbanktabelle."
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "isKeySentence": true,
+      "text": "Wenn ich das zusammenfasse: GraphQL ist eine Abfragesprache, bei der der Client in einer einzigen Anfrage an einen einzigen Endpunkt genau die Felder anfordert, die er braucht. Eine Query liest Daten, eine Mutation verändert sie. Das Schema beschreibt alle erlaubten Typen und Felder. Overfetching und Underfetching, die beiden Hauptprobleme von REST, löst GraphQL, indem der Client die Antwort selbst bestimmt und mehrere Ressourcen in einer Abfrage bündelt."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Kann ich GraphQL und REST in derselben Anwendung mischen?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Ja, das ist in der Praxis sogar häufig der Fall. Viele Teams führen GraphQL schrittweise ein und betreiben eine Zeit lang beide APIs parallel, bis alle Clients umgezogen sind. Ein einzelnes Backend kann ohne Weiteres sowohl REST-Endpunkte als auch einen GraphQL-Endpunkt anbieten, weil beide über dasselbe HTTP laufen und sich nicht gegenseitig stören. Wichtig ist nur, dass das Team die zusätzliche Komplexität zweier API-Stile im Blick behält und nicht versehentlich dieselbe Logik doppelt pflegt."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Ist GraphQL nicht viel komplizierter als REST, weil der Server jede erdenkliche Feldkombination unterstützen muss?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Der Server muss nicht jede Kombination einzeln programmieren, sondern nur für jedes Feld eine Funktion bereitstellen, die den Wert dieses Feldes liefert. Die GraphQL-Engine setzt die angeforderte Antwort aus diesen einzelnen Feldfunktionen automatisch zusammen, ähnlich wie ein Baukasten, bei dem du nur die Steine bereitstellst und der Client sich sein Modell selbst zusammenbaut. Der Aufwand für den Server steigt also nicht mit der Anzahl möglicher Kombinationen, sondern nur mit der Anzahl der Felder, die er anbietet."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Was passiert, wenn ich in einer Query ein Feld anfordere, das es im Schema gar nicht gibt?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Der Server lehnt die Query ab, bevor er überhaupt mit der Ausführung beginnt, und schickt eine Fehlermeldung zurück, die genau sagt, welches Feld unbekannt ist. Diese Prüfung findet schon beim Einlesen der Query statt, nicht erst während der Ausführung, sodass keine halb fertige Antwort entsteht. Das ist ein großer Vorteil gegenüber REST, wo ein Tippfehler im Feldnamen oft stillschweigend ignoriert wird und der Client ein leeres Feld zurückbekommt, ohne zu wissen, warum."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Kann eine GraphQL-Mutation auch mehrere Dinge auf einmal ändern, oder immer nur eines?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Eine einzelne Mutation kann mehrere Änderungen auf einmal ausführen, und zwar innerhalb einer Transaktion, das heißt, entweder gelingen alle Änderungen oder keine. Das ist ein weiterer Vorteil gegenüber REST, wo für jede Änderung eine eigene Anfrage nötig wäre und der Client selbst dafür sorgen müsste, dass bei einem Fehler zwischendurch kein halbfertiger Zustand zurückbleibt. In der Praxis fasst man aber meist zusammengehörige Änderungen in einer Mutation zusammen und trennt unabhängige Vorgänge in eigene Mutations."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Brauche ich für GraphQL einen eigenen Server, oder kann ich es in mein bestehendes Express-Backend einbauen?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Du kannst GraphQL in ein bestehendes Express-Backend einbauen, ohne einen eigenen Server dafür zu starten. Die Bibliothek Apollo Server lässt sich als Middleware in eine bestehende Express-App einhängen und übernimmt den gesamten GraphQL-Endpunkt, während die bestehenden REST-Endpunkte unverändert weiterlaufen. Der GraphQL-Endpunkt wird dann einfach eine weitere Route in deiner Express-App, meist unter Schrägstrich graphql, und teilt sich den Port mit allen anderen Routen."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Warum heißt es eigentlich GraphQL und nicht einfach nur Graph Query Language?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Der Name GraphQL kommt daher, dass die Daten in einer GraphQL-API nicht als lose Sammlung von Endpunkten, sondern als ein zusammenhängender Graph aus Typen und ihren Beziehungen modelliert werden. Ein User hat Posts, ein Post hat Comments, ein Comment hat einen Author, und all diese Verbindungen bilden ein Netz, durch das der Client mit einer einzigen Query navigieren kann. Das QL steht trotzdem für Query Language, weil die Abfragesprache selbst der Kern der Idee ist."
+    }
+  ],
+  "practiceExample": {
+    "text": "Das Repo repo-futuredev nutzt Supabase, das unter der Haube eine GraphQL-ähnliche Syntax für Datenbankabfragen verwendet. Statt für jede Tabelle einen eigenen REST-Endpunkt anzulegen, kann eine einzige Abfrage Felder aus mehreren Tabellen gleichzeitig anfordern, genau wie bei GraphQL. Die Tabelle app_events mit ihren Spalten id, install_id, event_name, lesson_id und created_at entspricht einem GraphQL-Typ, bei dem der Client selbst bestimmt, welche Spalten er in der Antwort haben will.",
+    "repoNote": "repo-futuredev",
+    "location": "supabase/migrations/0001_init.sql, Tabelle app_events als Beispiel für einen GraphQL-Typ mit festen Feldern"
+  },
+  "quiz": [
+    {
+      "question": "Was ist der Hauptunterschied zwischen GraphQL und REST bei der Datenabfrage?",
+      "area": "GraphQL-Grundlagen",
+      "options": [
+        { "text": "Bei GraphQL bestimmt der Client die Felder, bei REST der Server.", "isCorrect": true, "explanation": "Genau das ist der Kernunterschied: der Client schickt eine Query mit den gewünschten Feldern." },
+        { "text": "GraphQL kann nur lesen, REST kann auch schreiben und Daten verändern.", "isCorrect": false, "explanation": "GraphQL kann mit Mutations genauso schreiben wie REST mit POST und PUT." },
+        { "text": "GraphQL läuft nur im Browser, REST nur auf dem Server.", "isCorrect": false, "explanation": "Beide laufen auf dem Server und werden vom Client aus angesprochen." },
+        { "text": "GraphQL benutzt XML statt JSON für die Antwort.", "isCorrect": false, "explanation": "GraphQL-Antworten sind JSON, genau wie bei den meisten REST-APIs." }
+      ]
+    },
+    {
+      "question": "Was bedeutet Overfetching?",
+      "area": "Overfetching und Underfetching",
+      "options": [
+        { "text": "Der Server schickt mehr Daten, als der Client braucht, weil die Antwort immer alle Felder enthält.", "isCorrect": true, "explanation": "Genau das ist Overfetching: überflüssige Felder in der Antwort." },
+        { "text": "Der Client schickt mehr Anfragen, als der Server verarbeiten kann, und überlastet ihn dadurch.", "isCorrect": false, "explanation": "Das wäre eine Überlastung des Servers, nicht Overfetching." },
+        { "text": "Der Server lädt mehr Daten aus der Datenbank, als er im Arbeitsspeicher halten kann.", "isCorrect": false, "explanation": "Das wäre ein Speicherproblem des Servers, nicht Overfetching." },
+        { "text": "Der Client fordert mehr Felder an, als das Schema erlaubt.", "isCorrect": false, "explanation": "Das wäre ein Schema-Verstoß, den GraphQL mit einer Fehlermeldung ablehnt." }
+      ]
+    },
+    {
+      "question": "Was bedeutet Underfetching?",
+      "area": "Overfetching und Underfetching",
+      "options": [
+        { "text": "Der Client muss mehrere Anfragen an verschiedene Endpunkte schicken.", "isCorrect": true, "explanation": "Genau das ist Underfetching: eine Ansicht braucht Daten aus mehreren Endpunkten." },
+        { "text": "Der Server hat nicht genug Daten in der Datenbank, um die Anfrage zu beantworten, weil noch nie jemand etwas eingetragen hat.", "isCorrect": false, "explanation": "Das wäre eine leere Datenbank, nicht Underfetching." },
+        { "text": "Der Client empfängt die Antwort, bevor der Server sie vollständig gesendet hat.", "isCorrect": false, "explanation": "Das wäre eine abgebrochene Verbindung, nicht Underfetching." },
+        { "text": "Der Server schickt weniger Felder, als der Client angefordert hat.", "isCorrect": false, "explanation": "Das wäre ein Fehler im Server, nicht das Konzept des Underfetching." }
+      ]
+    },
+    {
+      "question": "Wie viele Endpunkte hat eine typische GraphQL-API?",
+      "area": "GraphQL-Endpunkt",
+      "options": [
+        { "text": "Genau einen, meist unter Schrägstrich graphql.", "isCorrect": true, "explanation": "Alle Queries und Mutations gehen an denselben Endpunkt." },
+        { "text": "Einen für jede Tabelle in der Datenbank.", "isCorrect": false, "explanation": "Das wäre das REST-Modell, GraphQL hat nur einen Endpunkt." },
+        { "text": "Zwei, einen für Queries und einen für Mutations.", "isCorrect": false, "explanation": "Beide gehen an denselben Endpunkt, der Server unterscheidet sie am Inhalt." },
+        { "text": "So viele, wie der Entwickler im Schema definiert.", "isCorrect": false, "explanation": "Das Schema definiert Typen und Felder, nicht die Anzahl der Endpunkte." }
+      ]
+    },
+    {
+      "question": "Was ist eine Query in GraphQL?",
+      "area": "Queries und Mutations",
+      "options": [
+        { "text": "Eine Leseabfrage, die Daten vom Server holt, ohne etwas zu verändern.", "isCorrect": true, "explanation": "Genau das ist eine Query, vergleichbar mit GET in REST." },
+        { "text": "Eine Schreibabfrage, die neue Daten auf dem Server anlegt oder vorhandene Daten verändert.", "isCorrect": false, "explanation": "Das wäre eine Mutation, nicht eine Query." },
+        { "text": "Die Beschreibung aller Typen und Felder der API.", "isCorrect": false, "explanation": "Das ist das Schema, nicht eine Query." },
+        { "text": "Die Adresse, unter der die API erreichbar ist.", "isCorrect": false, "explanation": "Das ist der Endpunkt, nicht eine Query." }
+      ]
+    },
+    {
+      "question": "Was ist eine Mutation in GraphQL?",
+      "area": "Queries und Mutations",
+      "options": [
+        { "text": "Eine Schreibabfrage, die Daten anlegt, ändert oder löscht.", "isCorrect": true, "explanation": "Genau das ist eine Mutation, vergleichbar mit POST und PUT." },
+        { "text": "Eine Leseabfrage, die Daten vom Server holt, ohne etwas zu verändern.", "isCorrect": false, "explanation": "Das wäre eine Query, nicht eine Mutation." },
+        { "text": "Eine Änderung am Schema der API.", "isCorrect": false, "explanation": "Das Schema wird vom Entwickler geschrieben, nicht durch eine Mutation geändert." },
+        { "text": "Eine Fehlermeldung, die der Server bei ungültigen Anfragen schickt.", "isCorrect": false, "explanation": "Fehlermeldungen sind Antworten des Servers, keine Mutations." }
+      ]
+    },
+    {
+      "question": "Wozu dient das GraphQL-Schema?",
+      "area": "GraphQL-Schema",
+      "options": [
+        { "text": "Es beschreibt alle Typen, Felder und Operationen, die die API anbietet.", "isCorrect": true, "explanation": "Das Schema ist der Vertrag zwischen Client und Server." },
+        { "text": "Es speichert die tatsächlichen Daten, die der Client anfordert, in einer internen Liste.", "isCorrect": false, "explanation": "Die Daten liegen in der Datenbank, nicht im Schema." },
+        { "text": "Es legt fest, auf welchem Port der Server läuft.", "isCorrect": false, "explanation": "Der Port ist eine Konfiguration des Servers, nicht Teil des Schemas." },
+        { "text": "Es übersetzt GraphQL-Queries in SQL-Befehle.", "isCorrect": false, "explanation": "Das Übersetzen übernimmt die GraphQL-Engine, nicht das Schema selbst." }
+      ]
+    },
+    {
+      "question": "Was ist ein GraphQL-Typ?",
+      "area": "GraphQL-Schema",
+      "options": [
+        { "text": "Die Beschreibung der Form eines Objekts mit allen Feldern und deren Datentypen.", "isCorrect": true, "explanation": "Ein Typ beschreibt, welche Felder ein Objekt hat und von welchem Typ sie sind." },
+        { "text": "Die Programmiersprache, in der der Server geschrieben ist, etwa JavaScript oder Python.", "isCorrect": false, "explanation": "Der Server kann in jeder Sprache geschrieben sein, der Typ ist davon unabhängig." },
+        { "text": "Die Datenbank, in der die API ihre Daten speichert.", "isCorrect": false, "explanation": "Die Datenbank ist ein separates System, nicht Teil des GraphQL-Typs." },
+        { "text": "Die Fehlermeldung, die bei einer ungültigen Query erscheint.", "isCorrect": false, "explanation": "Fehlermeldungen sind Text, keine Typen." }
+      ]
+    },
+    {
+      "question": "Welches Problem löst GraphQL im Vergleich zu REST?",
+      "area": "GraphQL vs REST",
+      "options": [
+        { "text": "Overfetching und Underfetching, weil der Client die Felder selbst wählt und mehrere Ressourcen in einer Query bündelt.", "isCorrect": true, "explanation": "Genau diese beiden Probleme sind die Hauptgründe für GraphQL." },
+        { "text": "Dass REST keine JSON-Antworten schicken kann, sondern nur XML.", "isCorrect": false, "explanation": "REST kann sehr wohl JSON schicken, das ist das übliche Format." },
+        { "text": "Dass REST zu wenige HTTP-Methoden hat.", "isCorrect": false, "explanation": "REST hat mit GET, POST, PUT und PATCH genug Methoden." },
+        { "text": "Dass REST keine Authentifizierung unterstützt.", "isCorrect": false, "explanation": "REST unterstützt Authentifizierung über HTTP-Header genauso wie GraphQL." }
+      ]
+    },
+    {
+      "question": "Was passiert, wenn eine Query ein Feld anfordert, das der angefragte Typ nicht hat?",
+      "area": "GraphQL-Schema",
+      "options": [
+        { "text": "Der Server lehnt die Query mit einer Fehlermeldung ab, bevor er sie ausführt.", "isCorrect": true, "explanation": "Die Schema-Prüfung findet vor der Ausführung statt." },
+        { "text": "Der Server ignoriert das unbekannte Feld und liefert die restlichen Felder ohne Fehlermeldung.", "isCorrect": false, "explanation": "GraphQL ignoriert keine unbekannten Felder, sondern meldet einen Fehler." },
+        { "text": "Der Server fügt das Feld automatisch zum Schema hinzu.", "isCorrect": false, "explanation": "Das Schema wird nicht automatisch geändert, das wäre ein Sicherheitsrisiko." },
+        { "text": "Der Server stürzt ab und muss neu gestartet werden.", "isCorrect": false, "explanation": "Ein guter GraphQL-Server stürzt bei einer falschen Query nicht ab." }
+      ]
+    },
+    {
+      "question": "Wann ist REST die bessere Wahl als GraphQL?",
+      "area": "GraphQL vs REST",
+      "options": [
+        { "text": "Wenn die API nur wenige, feste Endpunkte braucht und von vielen verschiedenen Clients genutzt wird.", "isCorrect": true, "explanation": "REST ist einfacher und für diesen Fall völlig ausreichend." },
+        { "text": "Wenn das Frontend viele verschiedene, flexible Ansichten hat, die unterschiedliche Daten brauchen.", "isCorrect": false, "explanation": "Das ist genau der Fall, in dem GraphQL seine Stärken ausspielt." },
+        { "text": "Wenn die App auf langsamen Mobilfunknetzen läuft.", "isCorrect": false, "explanation": "Gerade dort hilft GraphQL, weil es Overfetching vermeidet." },
+        { "text": "Wenn der Client die Antwortfelder selbst bestimmen soll und nur das bekommt, was er anfordert.", "isCorrect": false, "explanation": "Das ist die Kernidee von GraphQL, nicht von REST." }
+      ]
+    },
+    {
+      "question": "Warum heißt die Sprache GraphQL und nicht einfach nur Query Language?",
+      "area": "GraphQL-Grundlagen",
+      "options": [
+        { "text": "Weil die Daten als zusammenhängender Graph aus Typen und ihren Beziehungen modelliert werden.", "isCorrect": true, "explanation": "Der Graph aus Typen und Beziehungen gibt der Sprache ihren Namen." },
+        { "text": "Weil die Antworten als Diagramm statt als Text angezeigt werden, wie bei einer Zeichnung.", "isCorrect": false, "explanation": "GraphQL-Antworten sind JSON-Text, keine Diagramme." },
+        { "text": "Weil der Erfinder der Sprache mit Nachnamen Graph hieß.", "isCorrect": false, "explanation": "Der Name kommt vom Datenmodell, nicht von einer Person." },
+        { "text": "Weil die Sprache nur für grafische Anwendungen gedacht ist.", "isCorrect": false, "explanation": "GraphQL wird für alle Arten von Anwendungen genutzt, nicht nur grafische." }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Öffne den GraphQL-Playground unter https colon Schrägstrich Schrägstrich countries Punkt trevorblades Punkt com. Dies ist eine öffentliche GraphQL-API für Länderdaten, die kein eigenes Backend braucht. Schreibe eine Query, die für das Land mit dem Code DE den Namen, die Hauptstadt und die Währung abfragt. Schreibe danach eine zweite Query, die nur den Namen und das Emoji für Deutschland, Frankreich und Italien auf einmal abfragt. Vergleiche die beiden Antworten und notiere, wie viele Felder jeweils zurückkamen.",
+    "expectation": "Die erste Query liefert name, capital und currency für Deutschland. Die zweite Query liefert name und emoji für drei Länder auf einmal. Beide Antworten enthalten nur die angeforderten Felder, kein einziges mehr.",
+    "checklist": [
+      "GraphQL-Playground unter https colon Schrägstrich Schrägstrich countries Punkt trevorblades Punkt com geöffnet",
+      "Erste Query für Deutschland mit name, capital und currency geschrieben und abgeschickt",
+      "Zweite Query für drei Länder mit name und emoji geschrieben und abgeschickt",
+      "Verglichen, dass beide Antworten nur die angeforderten Felder enthalten",
+      "Verstanden, dass der Client die Felder selbst bestimmt"
+    ]
+  },
+  "audio": {
+    "file": "M03-02-05.mp3",
+    "durationSeconds": 1680,
+    "voices": ["A", "B"],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Kann ich GraphQL und REST in derselben Anwendung mischen?",
+      "answer": "Ja, das ist in der Praxis sogar häufig der Fall. Viele Teams führen GraphQL schrittweise ein und betreiben eine Zeit lang beide APIs parallel, bis alle Clients umgezogen sind. Ein einzelnes Backend kann ohne Weiteres sowohl REST-Endpunkte als auch einen GraphQL-Endpunkt anbieten, weil beide über dasselbe HTTP laufen und sich nicht gegenseitig stören. Wichtig ist nur, dass das Team die zusätzliche Komplexität zweier API-Stile im Blick behält und nicht versehentlich dieselbe Logik doppelt pflegt."
+    },
+    {
+      "question": "Ist GraphQL nicht viel komplizierter als REST, weil der Server jede erdenkliche Feldkombination unterstützen muss?",
+      "answer": "Der Server muss nicht jede Kombination einzeln programmieren, sondern nur für jedes Feld eine Funktion bereitstellen, die den Wert dieses Feldes liefert. Die GraphQL-Engine setzt die angeforderte Antwort aus diesen einzelnen Feldfunktionen automatisch zusammen, ähnlich wie ein Baukasten, bei dem du nur die Steine bereitstellst und der Client sich sein Modell selbst zusammenbaut. Der Aufwand für den Server steigt also nicht mit der Anzahl möglicher Kombinationen, sondern nur mit der Anzahl der Felder, die er anbietet."
+    },
+    {
+      "question": "Was passiert, wenn ich in einer Query ein Feld anfordere, das es im Schema gar nicht gibt?",
+      "answer": "Der Server lehnt die Query ab, bevor er überhaupt mit der Ausführung beginnt, und schickt eine Fehlermeldung zurück, die genau sagt, welches Feld unbekannt ist. Diese Prüfung findet schon beim Einlesen der Query statt, nicht erst während der Ausführung, sodass keine halb fertige Antwort entsteht. Das ist ein großer Vorteil gegenüber REST, wo ein Tippfehler im Feldnamen oft stillschweigend ignoriert wird und der Client ein leeres Feld zurückbekommt, ohne zu wissen, warum."
+    },
+    {
+      "question": "Kann eine GraphQL-Mutation auch mehrere Dinge auf einmal ändern, oder immer nur eines?",
+      "answer": "Eine einzelne Mutation kann mehrere Änderungen auf einmal ausführen, und zwar innerhalb einer Transaktion, das heißt, entweder gelingen alle Änderungen oder keine. Das ist ein weiterer Vorteil gegenüber REST, wo für jede Änderung eine eigene Anfrage nötig wäre und der Client selbst dafür sorgen müsste, dass bei einem Fehler zwischendurch kein halbfertiger Zustand zurückbleibt. In der Praxis fasst man aber meist zusammengehörige Änderungen in einer Mutation zusammen und trennt unabhängige Vorgänge in eigene Mutations."
+    },
+    {
+      "question": "Brauche ich für GraphQL einen eigenen Server, oder kann ich es in mein bestehendes Express-Backend einbauen?",
+      "answer": "Du kannst GraphQL in ein bestehendes Express-Backend einbauen, ohne einen eigenen Server dafür zu starten. Die Bibliothek Apollo Server lässt sich als Middleware in eine bestehende Express-App einhängen und übernimmt den gesamten GraphQL-Endpunkt, während die bestehenden REST-Endpunkte unverändert weiterlaufen. Der GraphQL-Endpunkt wird dann einfach eine weitere Route in deiner Express-App, meist unter Schrägstrich graphql, und teilt sich den Port mit allen anderen Routen."
+    },
+    {
+      "question": "Warum heißt es eigentlich GraphQL und nicht einfach nur Graph Query Language?",
+      "answer": "Der Name GraphQL kommt daher, dass die Daten in einer GraphQL-API nicht als lose Sammlung von Endpunkten, sondern als ein zusammenhängender Graph aus Typen und ihren Beziehungen modelliert werden. Ein User hat Posts, ein Post hat Comments, ein Comment hat einen Author, und all diese Verbindungen bilden ein Netz, durch das der Client mit einer einzigen Query navigieren kann. Das QL steht trotzdem für Query Language, weil die Abfragesprache selbst der Kern der Idee ist."
+    }
+  ]
+}
