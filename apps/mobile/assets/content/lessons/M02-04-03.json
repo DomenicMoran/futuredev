@@ -1,0 +1,926 @@
+{
+  "id": "M02-04-03",
+  "title": "Generics: ein Rezept für viele Zutaten",
+  "durationMinutes": 25,
+  "prerequisites": [
+    "M02-04-02",
+    "M01-06-05"
+  ],
+  "terms": [
+    {
+      "term": "Generics",
+      "definition": "ein Bauplan, der für viele verschiedene Sorten von Inhalt gleichzeitig funktioniert, ohne dass man ihn für jede Sorte neu schreiben muss."
+    },
+    {
+      "term": "Platzhaltertyp",
+      "definition": "ein Platzhaltertyp für einen Typ, der beim tatsächlichen Gebrauch durch einen echten Typ ersetzt wird, meist mit dem Buchstaben T geschrieben."
+    },
+    {
+      "term": "Uint8Array",
+      "definition": "eine nummerierte Reihe von Boxen mit rohen Byte-Zahlen, direkt im Speicher des Rechners."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "text": "Stell dir eine Schublade in einer Werkstatt vor, die extra so gebaut wurde, dass sie für jede Sorte Kleinteile passt: heute liegen Schrauben drin, morgen Nägel, übermorgen kleine Muttern.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Die Schublade selbst ändert sich dabei nie. Nur ihr Inhalt wechselt, je nachdem, was gerade hineingelegt wird.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "B",
+      "text": "Und was hat so eine vielseitige Schublade mit TypeScript zu tun?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Aus der Lektion über Listen und Arrays kennst du schon Array, eine Reihe von Dingen hintereinander. Ein Array kann eine Reihe von Zahlen sein, oder genauso gut eine Reihe von Texten, mit demselben Bauplan dahinter.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein Bauplan, der für viele verschiedene Sorten von Inhalt gleichzeitig funktioniert, ohne dass man ihn für jede Sorte neu schreiben muss, heißt in der Programmierung generisch, oder als Fachwort Generics.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Generics. G, E, N, E, R, I, C, S.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Array ist genau so ein generischer Bauplan. Geschrieben wird das mit spitzen Klammern: Array spitze Klammer auf number spitze Klammer zu ist eine Reihe von Zahlen. Array spitze Klammer auf string spitze Klammer zu ist eine Reihe von Texten, mit demselben Array-Bauplan dahinter.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Das heißt, das Wort in den spitzen Klammern sagt nur, was diesmal hineingelegt wird?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau. Ohne Generics müsste TypeScript für Zahlen-Arrays, Text-Arrays und jede weitere Sorte jeweils einen eigenen, doppelten Bauplan haben. Mit Generics reicht ein einziger Bauplan für beliebig viele Sorten von Inhalt.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Woher kommt eigentlich der Buchstabe T, den ich manchmal in solchem Code sehe?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Auf einem Bauplan für ein Möbelstück steht manchmal nicht die genaue Holzsorte, sondern nur ein Platzhaltertyp wie Material X, den die Tischlerin später frei ausfüllt: heute Eiche, morgen Buche.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau so einen Platzhaltertyp benutzt TypeScript auch, nur eben für Typen statt für Holzsorten. Meistens steht dafür einfach der Buchstabe T, kurz für das englische Wort Type.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "So eine Stellvertretung, die beim tatsächlichen Gebrauch durch einen echten Typ ersetzt wird, nennt man einen Platzhaltertyp.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Platzhaltertyp.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "In Array spitze Klammer auf T spitze Klammer zu ist T der Platzhaltertyp. Benutzt du Array spitze Klammer auf number spitze Klammer zu, ersetzt TypeScript T überall gedanklich durch number. Benutzt du stattdessen Array spitze Klammer auf string spitze Klammer zu, wird T stattdessen durch string ersetzt.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss der Platzhaltertyp denn immer genau T heißen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, der Name ist frei wählbar, genau wie bei einem Parameter einer Funktion. T hat sich nur als Gewohnheit unter Programmierern durchgesetzt, weil es kurz ist und an Type erinnert, so wie i sich als Gewohnheit für eine Zählvariable in einer Schleife durchgesetzt hat.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann ich auch selbst eine eigene Funktion mit so einem Platzhaltertyp schreiben, nicht nur bei Array?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir vor, du willst in der Werkstatt eine allgemeine Regel aufschreiben: nimm aus jeder Schublade, egal welcher Sorte, immer das oberste Teil heraus. Diese Regel funktioniert für Schrauben genauso wie für Nägel.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau so eine Funktion lässt sich auch in TypeScript schreiben, für jede Sorte von Array gleichzeitig, ohne sie für jede Sorte einzeln zu wiederholen. Wir bauen sie jetzt gemeinsam, Wort für Wort.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Wir beginnen mit function erstesElement. Direkt danach kommt der Platzhaltertyp in spitzen Klammern: erstesElement spitze Klammer auf T spitze Klammer zu. Das sagt TypeScript: diese Funktion arbeitet mit einem Platzhaltertyp namens T.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Danach folgt die gewohnte runde Klammer mit dem Parameter: Klammer auf liste Doppelpunkt T eckige Klammer auf eckige Klammer zu Klammer zu. T eckige Klammer auf eckige Klammer zu ist eine andere Schreibweise für Array spitze Klammer auf T spitze Klammer zu, ein Array aus Dingen vom Typ T.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Als Rückgabetyp schreiben wir Doppelpunkt T, weil die Funktion am Ende genau ein einzelnes Ding vom selben Platzhaltertyp zurückgibt, aus dem die übergebene Liste bestand.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Im Inneren der Funktion steht nur eine einzige Codezeile: return liste eckige Klammer auf 0 eckige Klammer zu. Das gibt das erste Element der Liste zurück, an Index null, genau wie in der Lektion über Arrays gelernt.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Und wie benutze ich diese fertige Funktion dann für echte Zahlen oder echten Text?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ganz normal, wie jede andere Funktion auch. Rufst du erstesElement auf mit einem Array aus Zahlen, etwa eckige Klammer auf 3, 7, 9 eckige Klammer zu, erkennt TypeScript von selbst, dass T in diesem Aufruf number bedeutet. Das Ergebnis trägt dann automatisch den Typ number.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Rufst du dieselbe Funktion stattdessen mit einem Array aus Texten auf, etwa eckige Klammer auf Anführungszeichen Anna Anführungszeichen, Anführungszeichen Ben Anführungszeichen eckige Klammer zu, erkennt TypeScript in genau diesem Aufruf, dass T diesmal string bedeutet. Dieselbe Funktion, zwei völlig verschiedene Sorten von Inhalt.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss ich TypeScript denn jedes Mal extra sagen, welcher Typ gerade gemeint ist?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Meistens nicht, TypeScript errät den Platzhaltertyp selbst am übergebenen Array, genau wie es in einer früheren Lektion auch schon Typen ohne geschriebenes Etikett erraten konnte. Das erspart dir, bei jedem einzelnen Aufruf erneut ein Etikett hinzuschreiben.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Der große Nutzen dieser einen Funktion: ohne Generics müsstest du für Zahlen-Arrays, Text-Arrays und jede weitere Sorte jeweils eine eigene, fast identische Funktion schreiben. Mit einem einzigen Platzhaltertyp reicht eine einzige Funktion für alle Sorten gleichzeitig.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Zeigst du mir dazu wieder ein Beispiel aus einem echten Programmierpaket?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Gern, diesmal aus einem anderen Paket, whisper-ggml-header. Es löst folgende Aufgabe: bevor eine App eine Spracherkennung lädt, prüft dieses Paket, ob die Modelldatei überhaupt zur Software passt, indem es die ersten 48 Byte dieser Datei liest.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir eine sehr lange Perlenkette vor, bei der jede einzelne Perle für sich genommen entweder schwarz oder weiß ist, nichts dazwischen. Eine Computerdatei besteht im Kern aus genau so einer langen Reihe winziger Einheiten.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Die kleinste Einheit an Rohdaten in einer Datei, eine einzelne Zahl zwischen null und zweihundertfünfundfünfzig, nennt man ein Byte.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Byte.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Eine Modelldatei für Spracherkennung kann mehrere hundert Millionen Byte groß sein. Für unsere Prüfung interessieren uns aber nur die allerersten 48 davon, ganz am Anfang der Datei.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Wie liest man denn genau diese ersten 48 Byte im Code, ohne eine fertige Bibliothek zu benutzen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir eine Reihe nummerierter kleiner Boxen vor, Box null, Box eins, Box zwei, und so weiter, jede Box mit genau einer Zahl darin, direkt nebeneinander aufgereiht.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "So eine nummerierte Reihe von Boxen mit rohen Byte-Zahlen, direkt im Speicher des Rechners, nennt man in JavaScript und TypeScript ein Uint8Array.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Uint8Array.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "In der Hauptdatei des Pakets, in Codezeile 100, beginnt die Funktion parseHeader, geschrieben als export function parseHeader Klammer auf bytes Doppelpunkt Uint8Array Klammer zu Doppelpunkt WhisperGgmlHeader. Der Parameter bytes ist also genau so ein Uint8Array.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "WhisperGgmlHeader ist dabei der Name einer eigenen Vorlage, ähnlich einem interface aus der letzten Lektion, mit zwölf einzelnen Zahlenfeldern für die Werkzeuge der Spracherkennung, etwa wie viele Ebenen ihr eingebautes Netz aus Rechenschritten besitzt.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Direkt am Anfang der Funktion, in Codezeile 101, wird geprüft, ob überhaupt mindestens 48 Byte vorhanden sind. Sind es weniger, wirft die Funktion ausdrücklich einen Fehler, statt später mit unsinnigen Zahlen weiterzurechnen.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Danach, in Codezeile 107, entsteht ein Hilfswerkzeug: const view ist gleich new DataView Klammer auf bytes Punkt buffer, bytes Punkt byteOffset, HEADER_BYTES Klammer zu. DataView liest aus den einzelnen rohen Byte-Boxen echte, größere Zahlen zusammen, vier Boxen auf einmal zu genau einer Zahl.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Ohne so ein Hilfswerkzeug müsste man selbst mühsam vier einzelne Byte-Zahlen von Hand zu einer größeren Zahl zusammenrechnen. DataView übernimmt genau diese Rechnung zuverlässig, direkt eingebaut in JavaScript, ganz ohne fremde Bibliothek.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Ab Codezeile 110 liest die Funktion dann Feld für Feld aus diesem view heraus: magic aus den ersten vier Byte, nVocab aus den nächsten vieren. So geht es weiter, bis alle zwölf Felder der Vorlage WhisperGgmlHeader gefüllt sind.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Und wo genau kommen jetzt die Generics aus dieser Lektion in diesem Beispiel vor?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Uint8Array selbst ist ein eingebauter, ganz gewöhnlicher Typ ohne eigenen Platzhaltertyp. Das Grundprinzip aus dieser Lektion begegnet dir hier trotzdem: derselbe Bauplan DataView funktioniert für jede beliebige Modelldatei, ganz unabhängig von ihrem konkreten Inhalt. Genau so funktionierte unsere Funktion erstesElement für jede beliebige Sorte von Array.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Der eigentliche Grund, warum dieses Beispiel hierher passt: 48 Byte von Hand aus einem Uint8Array zu lesen, ganz ohne fremde Bibliothek, zeigt dir, wie wenig Werkzeug man für so eine Prüfung wirklich braucht. Voraussetzung dafür ist nur, dass man die Bausteine der Sprache selbst genau kennt.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Merkt man den Nutzen von Generics eigentlich schon bei einer einzigen kleinen Funktion, oder erst in einem größeren Projekt?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir eine ganze Werkzeugkiste vor, nicht nur eine einzelne Schublade: Schraubenzieher, Zangen, Maßband, jedes Werkzeug an sich schon vielseitig einsetzbar, für viele verschiedene Materialien gleichzeitig.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "In einem größeren Projekt schreibst du nicht nur eine einzige generische Funktion. Oft entsteht ein ganzes kleines Werkzeugset davon: eine Funktion, die das letzte Element einer Liste holt, eine, die zwei Listen zusammenfügt, eine, die nach einem passenden Eintrag sucht.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Ohne Generics bräuchtest du für jede dieser Funktionen eine eigene Version pro Sorte von Inhalt: eine für Zahlen-Listen, eine für Text-Listen, eine für Nutzer-Objekt-Listen, und so weiter, mit fast identischem Code darin.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Mit Generics reicht dagegen jeweils eine einzige Funktion für alle diese Sorten gleichzeitig. Das spart nicht nur Tipparbeit, sondern auch eine ganze Gruppe von Fehlerquellen. Bleibt eine der doppelten Versionen bei einer späteren Änderung versehentlich zurück, während die anderen längst angepasst wurden, hat man sofort zwei unterschiedliche Wahrheiten im selben Projekt.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss ich als Anfänger jetzt sofort überall selbst Generics benutzen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, am Anfang reicht es völlig, Generics zu erkennen und zu verstehen, wenn du sie in fremdem Code liest, so wie bei Array oder bei den eingebauten Werkzeugen von JavaScript. Eigene generische Funktionen schreibst du dann, sobald du merkst, dass du fast dieselbe Funktion zum zweiten oder dritten Mal für eine andere Sorte von Inhalt brauchst.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Gibt es in diesem Paket noch eine zweite interessante Stelle, an der genaues Lesen von echtem Code wichtig war?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, eine besonders lehrreiche sogar. Eines der zwölf Felder aus WhisperGgmlHeader heißt ftype und beschreibt, wie stark die Zahlen in der Modelldatei zusammengepresst wurden, um Speicherplatz zu sparen.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir eine kleine Nachschlagetabelle in einer Werkstatt vor, auf der neben jeder Nummer ein bestimmtes Material steht. Die Nummern wurden dabei nicht ordentlich der Reihe nach vergeben, sondern hier und da sind welche übersprungen oder vertauscht.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau so eine Tabelle gibt es im Paket auch, für die Zahl hinter ftype: die Zahl 7 bedeutet dort q8_0, und die Zahl 8 bedeutet q5_0. Das ist genau andersherum, als man aus der Reihenfolge der Ziffern vielleicht vermuten würde. Die Zahlen 5 und 6 kommen in dieser Tabelle überhaupt nicht vor.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Warum ist das wichtig genug, um es extra in dieser Lektion zu erwähnen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Weil es genau die Art von Falle zeigt, die beim bloßen Überfliegen von Code leicht übersehen wird. Wer die Reihenfolge einfach nur erraten hätte, statt sie an echten Dateien zu überprüfen, hätte q8_0 und q5_0 in seinem eigenen Code vertauscht, mit einer Modelldatei, die dann als falscher Typ erkannt worden wäre.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Laut der zugehörigen Beschreibung im Paket wurde diese Reihenfolge tatsächlich an echten Dateien nachgeprüft, nicht nur angenommen. Das ist derselbe Grundsatz wie bei den 23 beziehungsweise 17 Testfällen aus früheren Praxisbeispielen: lieber an der Wirklichkeit nachmessen, als sich auf eine vermutete Regel zu verlassen.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Eine zusätzliche Kleinigkeit an dieser Tabelle: eine Datei, die mit q5_0 auf die Stärke zwei zusammengepresst wurde, meldet als Zahl 2008. Die vordere Ziffer gibt dabei die Stärke an, die hinteren drei Ziffern stehen für die Art der Zusammenpressung, hier 008 für q5_0.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss ich mir diese ganze Tabelle mit ihren Sonderfällen jetzt selbst merken?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, überhaupt nicht. Wichtig ist nur der Grundgedanke dahinter: eine Zahl, die auf den ersten Blick einfach aussieht, kann eine eigene, nicht offensichtliche Regel dahinter verstecken. Deshalb lohnt sich ein Blick in die echten Testfälle oder die Beschreibung eines Pakets, bevor man eine solche Zahl im eigenen Code einfach nachbaut.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Also noch einmal ganz kurz: Generics sind ein Bauplan, der für viele verschiedene Sorten von Inhalt gleichzeitig funktioniert. Ein Platzhaltertyp wie T wird erst beim tatsächlichen Gebrauch durch einen echten Typ ersetzt, so wie Array spitze Klammer auf T spitze Klammer zu für Zahlen genauso funktioniert wie für Text.",
+      "isKeySentence": true,
+      "role": "key"
+    },
+    {
+      "speaker": "A",
+      "text": "Zum Schluss noch einmal alle neuen Begriffe von heute in einer kurzen Liste.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Generics: ein Bauplan, der für viele verschiedene Sorten von Inhalt gleichzeitig funktioniert, ohne dass man ihn für jede Sorte neu schreiben muss.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Platzhaltertyp: ein Platzhaltertyp für einen Typ, der beim tatsächlichen Gebrauch durch einen echten Typ ersetzt wird, meist mit dem Buchstaben T geschrieben.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Byte: die kleinste Einheit an Rohdaten in einer Datei, eine einzelne Zahl zwischen null und zweihundertfünfundfünfzig.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Uint8Array: eine nummerierte Reihe von Boxen mit rohen Byte-Zahlen, direkt im Speicher des Rechners.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss ich für jede eigene Funktion sofort Generics benutzen, auch wenn sie nur mit Zahlen arbeitet?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, ganz und gar nicht. Solange eine Funktion wirklich nur für eine einzige, feste Sorte von Inhalt gedacht ist, reicht ein gewöhnliches Etikett wie number völlig aus, Generics lohnen sich erst, sobald dieselbe Funktion für mehrere Sorten gleichzeitig funktionieren soll.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann ein Platzhaltertyp auch mehr als einen Buchstaben gleichzeitig haben, also mehrere Platzhaltertypen in einer Funktion?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, das geht. Man schreibt dann mehrere Platzhaltertypen durch Komma getrennt in dieselben spitzen Klammern, zum Beispiel als T und als U geschrieben. Das lohnt sich, wenn eine Funktion eine Liste von einer Sorte entgegennimmt und ein Ergebnis von einer ganz anderen Sorte zurückgibt.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Was passiert, wenn ich erstesElement mit einem leeren Array aufrufe, also ganz ohne Inhalt?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Dann würde die Codezeile liste eckige Klammer auf 0 eckige Klammer zu ein undefined ergeben, weil an Index null nichts steht. Für ein Übungsbeispiel wie unseres reicht das aus, in echtem Code würde man vor dem Zugriff meist extra prüfen, ob die Liste überhaupt etwas enthält.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Warum benutzt whisper-ggml-header Uint8Array und nicht ein gewöhnliches Array?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Weil ein gewöhnliches Array in JavaScript für jede beliebige Sorte von Inhalt gedacht ist und dabei mehr Speicherplatz pro Zahl braucht. Ein Uint8Array ist eigens dafür gebaut, ausschließlich ganz kleine, positive Ganzzahlen von null bis zweihundertfünfundfünfzig besonders platzsparend zu speichern, genau passend für rohe Bytes aus einer Datei.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss ich DataView und Uint8Array selbst schreiben, oder bringt JavaScript das schon mit?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Beide sind fest in JavaScript eingebaut, du musst dafür keine zusätzliche Bibliothek installieren. Genau das ist auch der Grund, warum das Paket aus dem Beispiel ganz ohne eigene Abhängigkeiten auskommt.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann ich einen Platzhaltertyp auch bei einem interface aus der letzten Lektion benutzen, nicht nur bei einer Funktion?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, ein interface kann genauso einen eigenen Platzhaltertyp haben, wenn ein Feld darin je nach Gebrauch eine andere Sorte von Inhalt tragen soll. Für den Anfang reicht es aber völlig, Generics zuerst bei Funktionen und bei Array zu verstehen, ein interface mit eigenem Platzhaltertyp lernst du bei Bedarf später dazu.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Warum liest das Beispiel gerade Codezeile 100 und nicht den Anfang der ganzen Datei parseHeader.ts?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Codezeile 100 ist genau die Codezeile, an der die Funktion parseHeader beginnt. Alles davor in derselben Datei sind nur die Vorlage WhisperGgmlHeader und ein paar feste Zahlen, die diese Lektion bereits an anderer Stelle erklärt hat. Für das Verständnis von Generics und Byte reicht der Blick auf die Funktion selbst völlig aus.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Warum wird bei diesem Beispiel überhaupt ein eigenes DataView gebraucht, statt einfach nur das Uint8Array direkt zu lesen?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein Uint8Array liefert bei jedem einzelnen Zugriff nur genau ein Byte, also eine Zahl von höchstens zweihundertfünfundfünzig, das reicht für viele der zwölf Felder von WhisperGgmlHeader bei weitem nicht aus. DataView setzt jeweils vier benachbarte Byte zu einer viel größeren Zahl zusammen und übernimmt damit die eigentliche Rechenarbeit, die man sonst mühsam von Hand erledigen müsste.",
+      "isKeySentence": false,
+      "role": "faq"
+    }
+  ],
+  "practiceExample": {
+    "text": "Im Repo whisper-ggml-header liest die Funktion parseHeader in Codezeile 100 bis 124 die ersten 48 Byte einer Modelldatei aus einem Uint8Array. Ein DataView setzt jeweils vier Byte zu einer größeren Zahl zusammen und füllt so Feld für Feld eine eigene Vorlage namens WhisperGgmlHeader, ganz ohne eine fremde Bibliothek.",
+    "repoNote": "repo-whisper-ggml-header",
+    "location": "src/index.ts:100-124, Funktion parseHeader"
+  },
+  "quiz": [
+    {
+      "question": "Welches Alltagsbild benutzt diese Lektion für Generics?",
+      "area": "Generics-Grundlagen",
+      "options": [
+        {
+          "text": "Eine Werkstatt-Schublade, die für jede Sorte Kleinteile gleichermaßen passt.",
+          "isCorrect": true,
+          "explanation": "Genau dieses Bild eröffnet die Lektion, mit Schrauben, Nägeln und Muttern in derselben Schublade."
+        },
+        {
+          "text": "Ein Kühlschrank, der nur an einem einzigen festen Ort in der Küche stehen darf.",
+          "isCorrect": false,
+          "explanation": "Dieses Bild kommt in der Lektion nicht vor."
+        },
+        {
+          "text": "Eine Ampel, die immer nur eine einzige Farbe gleichzeitig zeigen kann.",
+          "isCorrect": false,
+          "explanation": "Auch dieses Bild wird in der Lektion nicht benutzt."
+        },
+        {
+          "text": "Ein Buch mit einer einzigen, fest gedruckten Geschichte ohne Änderungsmöglichkeit.",
+          "isCorrect": false,
+          "explanation": "Das Gegenteil ist mit Generics gemeint, ein Bauplan, der sich gerade nicht auf eine feste Sache beschränkt."
+        }
+      ]
+    },
+    {
+      "question": "Was sind laut Lektion Generics?",
+      "area": "Generics-Grundlagen",
+      "options": [
+        {
+          "text": "Ein Bauplan, der für viele verschiedene Sorten von Inhalt gleichzeitig funktioniert.",
+          "isCorrect": true,
+          "explanation": "Das ist genau die Definition aus der Lektion."
+        },
+        {
+          "text": "Ein fester Inhalt, der sich während der gesamten Laufzeit eines Programms niemals mehr ändern darf.",
+          "isCorrect": false,
+          "explanation": "Das beschreibt eher const aus einer früheren Lektion, nicht Generics."
+        },
+        {
+          "text": "Eine Fehlermeldung, die beim Kompilieren angezeigt wird.",
+          "isCorrect": false,
+          "explanation": "Eine Fehlermeldung ist etwas anderes als ein wiederverwendbarer Bauplan."
+        },
+        {
+          "text": "Ein Werkzeug, mit dem man Dateien vom Rechner löscht.",
+          "isCorrect": false,
+          "explanation": "Generics haben mit dem Löschen von Dateien nichts zu tun."
+        }
+      ]
+    },
+    {
+      "question": "Was bedeutet Array spitze Klammer auf number spitze Klammer zu laut Lektion?",
+      "area": "Array als generischer Bauplan",
+      "options": [
+        {
+          "text": "Ein Array, dessen Inhalt aus Zahlen besteht.",
+          "isCorrect": true,
+          "explanation": "Genau das erklärt die Lektion: number im Platzhaltertyp füllt die Sorte des Inhalts aus."
+        },
+        {
+          "text": "Ein Array, das ausschließlich genau eine einzige Zahl enthalten darf.",
+          "isCorrect": false,
+          "explanation": "Die Anzahl der Einträge legt der Platzhaltertyp nicht fest, nur ihre Sorte."
+        },
+        {
+          "text": "Eine einzelne Zahl ganz ohne umgebendes Array.",
+          "isCorrect": false,
+          "explanation": "Array spitze Klammer auf number spitze Klammer zu bleibt ein Array, keine einzelne Zahl."
+        },
+        {
+          "text": "Ein Array, das niemals mehr verändert werden darf.",
+          "isCorrect": false,
+          "explanation": "Über Unveränderlichkeit sagt diese Schreibweise für sich allein nichts aus."
+        }
+      ]
+    },
+    {
+      "question": "Wofür steht der Buchstabe T laut Lektion meistens?",
+      "area": "Platzhaltertyp",
+      "options": [
+        {
+          "text": "Für einen Platzhaltertyp, der später durch einen echten Typ ersetzt wird.",
+          "isCorrect": true,
+          "explanation": "Genau das erklärt die Lektion mit dem Bild des Materials X auf dem Bauplan."
+        },
+        {
+          "text": "Für den festen Namen einer ganz bestimmten Variable.",
+          "isCorrect": false,
+          "explanation": "T ist kein Variablenname, sondern ein Platzhaltertyp für einen Typ."
+        },
+        {
+          "text": "Für eine feste, im Vorhinein festgelegte Obergrenze, wie viele Einträge ein einzelnes Array insgesamt haben darf.",
+          "isCorrect": false,
+          "explanation": "T legt keine Obergrenze der Anzahl fest, nur die Sorte des Inhalts."
+        },
+        {
+          "text": "Für eine Abkürzung des Wortes Terminal aus einer früheren Lektion.",
+          "isCorrect": false,
+          "explanation": "T steht laut Lektion für Type, nicht für Terminal."
+        }
+      ]
+    },
+    {
+      "question": "Muss der Platzhaltertyp einer eigenen generischen Funktion laut Lektion immer genau T heißen?",
+      "area": "Platzhaltertyp",
+      "options": [
+        {
+          "text": "Nein, der Name ist frei wählbar, T ist nur eine verbreitete Gewohnheit.",
+          "isCorrect": true,
+          "explanation": "Genau das sagt die Lektion ausdrücklich, mit dem Vergleich zur Zählvariable i."
+        },
+        {
+          "text": "Ja, TypeScript akzeptiert für einen Platzhaltertyp ganz ausschließlich und ausnahmslos den einzelnen Buchstaben T.",
+          "isCorrect": false,
+          "explanation": "Die Lektion beschreibt das Gegenteil, der Name ist frei wählbar."
+        },
+        {
+          "text": "Ja, aber nur bei Funktionen, niemals bei Array.",
+          "isCorrect": false,
+          "explanation": "Die Lektion trifft keine solche Unterscheidung zwischen Array und eigenen Funktionen."
+        },
+        {
+          "text": "Nein, stattdessen muss immer eine ganze Zahl anstelle von T stehen.",
+          "isCorrect": false,
+          "explanation": "Der Platzhaltertyp steht für einen Typ, nicht für eine Zahl."
+        }
+      ]
+    },
+    {
+      "question": "Was gibt die im Beispiel gebaute Funktion erstesElement laut Lektion zurück?",
+      "area": "Eigene generische Funktion",
+      "options": [
+        {
+          "text": "Das Element an Index null der übergebenen Liste.",
+          "isCorrect": true,
+          "explanation": "Genau das steht in der einen Codezeile return liste eckige Klammer auf 0 eckige Klammer zu."
+        },
+        {
+          "text": "Die Gesamtzahl aller Einträge der übergebenen Liste.",
+          "isCorrect": false,
+          "explanation": "Das wäre die Eigenschaft length aus der Array-Lektion, nicht das, was diese Funktion tut."
+        },
+        {
+          "text": "Eine komplett neue, leere Liste.",
+          "isCorrect": false,
+          "explanation": "Die Funktion erzeugt keine neue leere Liste, sie liest ein vorhandenes Element aus."
+        },
+        {
+          "text": "Immer die Zahl null, unabhängig vom Inhalt der Liste.",
+          "isCorrect": false,
+          "explanation": "Zurückgegeben wird der Inhalt an Index null, nicht die Zahl null selbst."
+        }
+      ]
+    },
+    {
+      "question": "Was passiert laut Lektion, wenn erstesElement einmal mit Zahlen und einmal mit Texten aufgerufen wird?",
+      "area": "Eigene generische Funktion",
+      "options": [
+        {
+          "text": "TypeScript erkennt den Platzhaltertyp bei jedem Aufruf neu, aus dem übergebenen Array.",
+          "isCorrect": true,
+          "explanation": "Genau das erklärt die Lektion: derselbe Code, zwei verschiedene erkannte Typen."
+        },
+        {
+          "text": "Der zweite Aufruf mit einem Text-Array führt in diesem Fall ganz automatisch zu einem eigenen, unerwarteten Typfehler.",
+          "isCorrect": false,
+          "explanation": "Beide Aufrufe sind laut Lektion gültig, jeweils mit passend erkanntem Platzhaltertyp."
+        },
+        {
+          "text": "Die Funktion muss für Texte komplett neu geschrieben werden.",
+          "isCorrect": false,
+          "explanation": "Genau das soll Generics ja vermeiden, dieselbe Funktion reicht für beide Sorten."
+        },
+        {
+          "text": "TypeScript wandelt die Texte beim Aufruf heimlich in Zahlen um.",
+          "isCorrect": false,
+          "explanation": "TypeScript wandelt hier nichts heimlich um, es erkennt nur den jeweils passenden Typ."
+        }
+      ]
+    },
+    {
+      "question": "Was ist laut Lektion ein Byte?",
+      "area": "Praxisbeispiel whisper-ggml-header",
+      "options": [
+        {
+          "text": "Die kleinste Einheit an Rohdaten.",
+          "isCorrect": true,
+          "explanation": "Das ist genau die Definition aus der Lektion, eine Zahl zwischen null und zweihundertfünfundfünfzig."
+        },
+        {
+          "text": "Ein anderer Name für eine ganze Modelldatei.",
+          "isCorrect": false,
+          "explanation": "Eine Modelldatei besteht laut Lektion aus sehr vielen einzelnen Byte, ist selbst aber kein Byte."
+        },
+        {
+          "text": "Ein Fachwort für einen Typfehler beim Kompilieren.",
+          "isCorrect": false,
+          "explanation": "Ein Byte hat mit einem Typfehler aus einer früheren Lektion nichts zu tun."
+        },
+        {
+          "text": "Eine feste Zeitspanne, wie lange ein Programm läuft.",
+          "isCorrect": false,
+          "explanation": "Ein Byte ist eine Dateneinheit, keine Zeitangabe."
+        }
+      ]
+    },
+    {
+      "question": "Wofür wird ein Uint8Array laut Lektion benutzt?",
+      "area": "Praxisbeispiel whisper-ggml-header",
+      "options": [
+        {
+          "text": "Für eine nummerierte Reihe von Boxen mit rohen Byte-Zahlen im Speicher.",
+          "isCorrect": true,
+          "explanation": "Genau das erklärt die Lektion mit dem Bild der nummerierten Boxen."
+        },
+        {
+          "text": "Ausschließlich für Texte, niemals für Zahlen.",
+          "isCorrect": false,
+          "explanation": "Ein Uint8Array speichert laut Lektion gerade rohe Zahlen, keinen Fließtext."
+        },
+        {
+          "text": "Für die Darstellung von Farben auf einem Bildschirm, ohne jeden Bezug zu Dateien.",
+          "isCorrect": false,
+          "explanation": "Im Beispiel dient es dem Lesen einer Datei, nicht der Bildschirmdarstellung."
+        },
+        {
+          "text": "Für das Speichern von Quizfragen innerhalb dieser Lektion.",
+          "isCorrect": false,
+          "explanation": "Quizfragen haben mit einem Uint8Array aus dem Praxisbeispiel nichts zu tun."
+        }
+      ]
+    },
+    {
+      "question": "Wozu dient laut Lektion das Hilfswerkzeug DataView in parseHeader?",
+      "area": "Praxisbeispiel whisper-ggml-header",
+      "options": [
+        {
+          "text": "Es liest aus mehreren einzelnen Byte eine größere, zusammengesetzte Zahl zusammen.",
+          "isCorrect": true,
+          "explanation": "Genau das beschreibt die Lektion: vier Byte-Boxen werden zu einer Zahl zusammengerechnet."
+        },
+        {
+          "text": "Es löscht die ersten 48 Byte einer Datei unwiderruflich.",
+          "isCorrect": false,
+          "explanation": "DataView liest die Daten nur, es löscht in diesem Beispiel nichts."
+        },
+        {
+          "text": "Es übersetzt den gesamten Dateiinhalt in menschliche Sprache.",
+          "isCorrect": false,
+          "explanation": "DataView liefert Zahlen, keine Übersetzung in gesprochene oder geschriebene Sprache."
+        },
+        {
+          "text": "Es prüft ausschließlich und ganz allein die Rechtschreibung von einzelnen Variablennamen im gesamten Code.",
+          "isCorrect": false,
+          "explanation": "Rechtschreibprüfung von Variablennamen ist nicht die Aufgabe von DataView."
+        }
+      ]
+    },
+    {
+      "question": "Warum prüft parseHeader laut Lektion zuerst, ob mindestens 48 Byte vorhanden sind?",
+      "area": "Praxisbeispiel whisper-ggml-header",
+      "options": [
+        {
+          "text": "Damit die Funktion bei einer zu kurzen Datei ausdrücklich einen Fehler wirft, statt mit unsinnigen Zahlen weiterzurechnen.",
+          "isCorrect": true,
+          "explanation": "Genau das beschreibt die Lektion als Grund für diese frühe Prüfung."
+        },
+        {
+          "text": "Weil TypeScript ohne diese Prüfung überhaupt nicht kompilieren würde.",
+          "isCorrect": false,
+          "explanation": "Es handelt sich um eine bewusste Prüfung im eigenen Code, nicht um eine Voraussetzung des Kompilierens selbst."
+        },
+        {
+          "text": "Damit die Datei danach automatisch auf genau 48 Byte gekürzt wird.",
+          "isCorrect": false,
+          "explanation": "Die Funktion kürzt die Datei nicht, sie liest nur ihre ersten Byte."
+        },
+        {
+          "text": "Weil 48 Byte laut Lektion die größtmögliche Dateigröße überhaupt ist.",
+          "isCorrect": false,
+          "explanation": "48 Byte ist nur die Größe des geprüften Kopfbereichs, nicht die Obergrenze der ganzen Datei."
+        }
+      ]
+    },
+    {
+      "question": "Welche Aussage fasst die Kernidee dieser Lektion am besten zusammen?",
+      "area": "Zusammenfassung",
+      "options": [
+        {
+          "text": "Ein Platzhaltertyp lässt denselben Bauplan für viele verschiedene Sorten von Inhalt gleichzeitig funktionieren.",
+          "isCorrect": true,
+          "explanation": "Das ist genau der Kernsatz der Lektion, in Sprecher B zusammengefasst."
+        },
+        {
+          "text": "Generics ersetzen laut dieser Lektion vollständig das Schreiben eigener Funktionen.",
+          "isCorrect": false,
+          "explanation": "Generics sind eine Ergänzung beim Schreiben von Funktionen, kein Ersatz dafür."
+        },
+        {
+          "text": "Ein Uint8Array darf laut dieser Lektion niemals mehr als 48 Einträge haben.",
+          "isCorrect": false,
+          "explanation": "48 war nur die im Beispiel geprüfte Kopfgröße, keine allgemeine Obergrenze für Uint8Array."
+        },
+        {
+          "text": "Der Platzhaltertyp T muss laut dieser Lektion vor jedem Gebrauch von Hand eingegeben werden.",
+          "isCorrect": false,
+          "explanation": "Die Lektion beschreibt gerade, dass TypeScript den Platzhaltertyp meist selbst errät."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Öffne den TypeScript Playground im Browser (typescriptlang.org, Abschnitt Playground). Schreibe eine eigene generische Funktion namens letztesElement, die eine Liste eines Platzhaltertyps T entgegennimmt und deren letzten Eintrag zurückgibt (Hinweis: der letzte Index einer Liste ist immer length minus eins). Rufe die Funktion einmal mit einem Zahlen-Array und einmal mit einem Text-Array auf.",
+    "expectation": "Beide Aufrufe liefern ohne Fehlermeldung ein Ergebnis, einmal vom Typ number und einmal vom Typ string, sichtbar wenn du mit der Maus über das Ergebnis fährst. Ein Screenshot beider Aufrufe.",
+    "checklist": [
+      "TypeScript Playground geöffnet",
+      "Eigene generische Funktion mit einem Platzhaltertyp geschrieben",
+      "Funktion mit einem Zahlen-Array aufgerufen",
+      "Funktion mit einem Text-Array aufgerufen",
+      "Erkannter Ergebnistyp bei beiden Aufrufen per Screenshot festgehalten"
+    ]
+  },
+  "audio": {
+    "file": "M02-04-03.mp3",
+    "durationSeconds": 1220,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Muss ich für jede eigene Funktion sofort Generics benutzen, auch wenn sie nur mit Zahlen arbeitet?",
+      "answer": "Nein, ganz und gar nicht. Solange eine Funktion wirklich nur für eine einzige, feste Sorte von Inhalt gedacht ist, reicht ein gewöhnliches Etikett wie number völlig aus, Generics lohnen sich erst, sobald dieselbe Funktion für mehrere Sorten gleichzeitig funktionieren soll."
+    },
+    {
+      "question": "Kann ein Platzhaltertyp auch mehr als einen Buchstaben gleichzeitig haben, also mehrere Platzhaltertypen in einer Funktion?",
+      "answer": "Ja, das geht. Man schreibt dann mehrere Platzhaltertypen durch Komma getrennt in dieselben spitzen Klammern, zum Beispiel als T und als U geschrieben. Das lohnt sich, wenn eine Funktion eine Liste von einer Sorte entgegennimmt und ein Ergebnis von einer ganz anderen Sorte zurückgibt."
+    },
+    {
+      "question": "Was passiert, wenn ich erstesElement mit einem leeren Array aufrufe, also ganz ohne Inhalt?",
+      "answer": "Dann würde die Codezeile liste eckige Klammer auf 0 eckige Klammer zu ein undefined ergeben, weil an Index null nichts steht. Für ein Übungsbeispiel wie unseres reicht das aus, in echtem Code würde man vor dem Zugriff meist extra prüfen, ob die Liste überhaupt etwas enthält."
+    },
+    {
+      "question": "Warum benutzt whisper-ggml-header Uint8Array und nicht ein gewöhnliches Array?",
+      "answer": "Weil ein gewöhnliches Array in JavaScript für jede beliebige Sorte von Inhalt gedacht ist und dabei mehr Speicherplatz pro Zahl braucht. Ein Uint8Array ist eigens dafür gebaut, ausschließlich ganz kleine, positive Ganzzahlen von null bis zweihundertfünfundfünfzig besonders platzsparend zu speichern, genau passend für rohe Bytes aus einer Datei."
+    },
+    {
+      "question": "Muss ich DataView und Uint8Array selbst schreiben, oder bringt JavaScript das schon mit?",
+      "answer": "Beide sind fest in JavaScript eingebaut, du musst dafür keine zusätzliche Bibliothek installieren. Genau das ist auch der Grund, warum das Paket aus dem Beispiel ganz ohne eigene Abhängigkeiten auskommt."
+    },
+    {
+      "question": "Kann ich einen Platzhaltertyp auch bei einem interface aus der letzten Lektion benutzen, nicht nur bei einer Funktion?",
+      "answer": "Ja, ein interface kann genauso einen eigenen Platzhaltertyp haben, wenn ein Feld darin je nach Gebrauch eine andere Sorte von Inhalt tragen soll. Für den Anfang reicht es aber völlig, Generics zuerst bei Funktionen und bei Array zu verstehen, ein interface mit eigenem Platzhaltertyp lernst du bei Bedarf später dazu."
+    },
+    {
+      "question": "Warum liest das Beispiel gerade Codezeile 100 und nicht den Anfang der ganzen Datei parseHeader.ts?",
+      "answer": "Codezeile 100 ist genau die Codezeile, an der die Funktion parseHeader beginnt. Alles davor in derselben Datei sind nur die Vorlage WhisperGgmlHeader und ein paar feste Zahlen, die diese Lektion bereits an anderer Stelle erklärt hat. Für das Verständnis von Generics und Byte reicht der Blick auf die Funktion selbst völlig aus."
+    },
+    {
+      "question": "Warum wird bei diesem Beispiel überhaupt ein eigenes DataView gebraucht, statt einfach nur das Uint8Array direkt zu lesen?",
+      "answer": "Ein Uint8Array liefert bei jedem einzelnen Zugriff nur genau ein Byte, also eine Zahl von höchstens zweihundertfünfundfünzig, das reicht für viele der zwölf Felder von WhisperGgmlHeader bei weitem nicht aus. DataView setzt jeweils vier benachbarte Byte zu einer viel größeren Zahl zusammen und übernimmt damit die eigentliche Rechenarbeit, die man sonst mühsam von Hand erledigen müsste."
+    }
+  ]
+}

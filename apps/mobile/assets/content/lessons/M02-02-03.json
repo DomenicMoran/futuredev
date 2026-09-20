@@ -1,0 +1,998 @@
+{
+  "id": "M02-02-03",
+  "title": "CSS Grid für Layouts",
+  "durationMinutes": 22,
+  "prerequisites": [
+    "M02-02-01",
+    "M02-02-02"
+  ],
+  "terms": [
+    {
+      "term": "Grid",
+      "definition": "Ein Layout-System in CSS, mit dem eine Box in ein Raster aus Spalten und Zeilen aufgeteilt wird, wie ein Schachbrett."
+    },
+    {
+      "term": "Grid-Container",
+      "definition": "Die Box, die mit display: grid zum Schachbrett wird, in dem sich andere Boxen einordnen."
+    },
+    {
+      "term": "Grid-Spalte",
+      "definition": "Ein senkrechter Streifen im Grid, wie ein senkrechtes Feld auf einem Schachbrett."
+    },
+    {
+      "term": "Grid-Zeile",
+      "definition": "Ein waagerechter Streifen im Grid, wie ein waagerechtes Feld auf einem Schachbrett."
+    },
+    {
+      "term": "grid-template-columns",
+      "definition": "Die CSS-Eigenschaft, die festlegt, wie viele Spalten das Grid hat und wie breit jede davon ist."
+    },
+    {
+      "term": "grid-template-rows",
+      "definition": "Die CSS-Eigenschaft, die festlegt, wie viele Zeilen das Grid hat und wie hoch jede davon ist."
+    },
+    {
+      "term": "grid-template-areas",
+      "definition": "Die CSS-Eigenschaft, mit der du dem Grid benannte Bereiche gibst, gezeichnet als kleine Wortkarte aus Namen."
+    },
+    {
+      "term": "Grid-Bereich",
+      "definition": "Ein benannter Platz im Grid, der aus einer oder mehreren Feldern zusammengesetzt sein kann, etwa 'kopf' oder 'seitenleiste'."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "text": "Stell dir ein Schachbrett vor, mit gleich großen Feldern in Reihen und Spalten. Jedes Feld hat seinen festen Platz, erkennbar an seiner Zeile und Spalte, egal wie viele Figuren gerade auf dem Brett stehen. Genau dieses Prinzip nimmst du gleich mit in CSS.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "In den letzten beiden Lektionen hast du das Box-Modell und Flexbox kennengelernt. Flexbox ordnet Boxen in genau einer Richtung, entweder als Reihe oder als Spalte.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Reicht das nicht für jedes Layout? Eine Reihe, dann darunter noch eine Reihe?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Für eine ganze Webseite mit Kopfbereich, Inhalt, Seitenleiste und Fußbereich gleichzeitig wird das schnell unübersichtlich, weil Flexbox immer nur eine Richtung auf einmal im Blick hat.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Für genau so ein Layout mit mehreren Reihen und Spalten gleichzeitig gibt es ein zweites Layout-System in CSS. Es heißt Grid.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Grid. G, R, I, D.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Auf einem Schachbrett kannst du jedes Feld über seine Zeile und Spalte genau benennen, etwa das Feld in der zweiten Zeile und dritten Spalte. Mit Grid teilst du eine Webseite genauso in ein Raster ein und platzierst jede Box gezielt in einem oder mehreren dieser Felder.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Ohne Grid müsstest du ein Layout mit Kopfbereich, Seitenleiste, Inhalt und Fußbereich mühsam aus mehreren verschachtelten Flexbox-Regalen zusammenbauen, mit Grid beschreibst du das ganze Raster auf einen Blick.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Hast du noch ein Beispiel, an dem ich das gut auseinanderhalten kann?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Eine Reihe von Profilbildern nebeneinander in einer Kommentarspalte ist ein typischer Flexbox-Fall, weil nur eine Richtung zählt. Eine ganze Produktseite mit Bildergalerie, Beschreibung, Preis-Kasten und Bewertungen in mehreren Bereichen gleichzeitig ist eher ein typischer Grid-Fall. Genau deshalb siehst du in der Praxis auf fast jeder größeren Webseite beide Systeme gleichzeitig im Einsatz, nicht als Konkurrenten, sondern als Werkzeuge für unterschiedliche Teile derselben Seite.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Heißt das, ich sollte Flexbox jetzt komplett vergessen und nur noch Grid benutzen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, beide Systeme lösen unterschiedliche Probleme gut. Grid ist stark, wenn du an zwei Richtungen gleichzeitig denken musst, Flexbox bleibt einfacher, wenn dich nur eine einzige Reihe oder Spalte interessiert.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein Werkzeugkasten mit nur einem Werkzeug wäre unpraktisch. Genauso ist es praktisch, sowohl Grid als auch Flexbox zu kennen und je nach Aufgabe das passendere von beiden auszuwählen. Mit der Zeit entwickelst du für viele Situationen ein Gefühl, welches der beiden Systeme schneller zum gewünschten Ergebnis führt.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Wie mache ich eine Box zu so einem Schachbrett?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Genauso wie bei Flexbox, nur mit einem anderen Wert: display: grid statt display: flex.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir ein leeres Schachbrett vor, das noch gar keine Linien hat, nur eine viereckige Fläche. Erst wenn du Linien einzeichnest, entstehen daraus einzelne Felder.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Die Box, auf der du display: grid einträgst, nennt man Grid-Container.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Schreibst du .seite { display: grid; }, wird diese Box zum Grid-Container. Ohne weitere Angaben hat dieses Grid aber noch keine sichtbaren Linien, so wie das leere Schachbrett.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Erst der Grid-Container macht aus einer gewöhnlichen Box überhaupt die Grundlage für ein Raster, ohne ihn funktioniert keine der folgenden Eigenschaften. Ein Absatz oder eine Überschrift innerhalb eines Grid-Containers, ohne selbst display: grid zu tragen, verhält sich dabei ganz normal nach dem Box-Modell aus der ersten Lektion.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Was sehe ich denn, wenn ich display: grid setze, aber sonst noch gar nichts weiter angebe?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ohne weitere Angaben bleibt es meist bei einer einzigen breiten Spalte, in der die Kind-Boxen einfach untereinanderstehen, ganz ähnlich wie vor jeder Layout-Angabe. Grid entfaltet seine Stärke erst, sobald du grid-template-columns oder grid-template-rows dazuschreibst.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Jetzt brauchst du die Linien für dieses Schachbrett. Zuerst die senkrechten Linien, die Spalten bilden.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Spalten wie bei einer Zeitung, mehrere Textstreifen nebeneinander?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir ein Blatt Papier vor, das du senkrecht in drei gleich breite Streifen faltest. Jeder Streifen ist eine Spalte.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein senkrechter Streifen im Grid heißt Grid-Spalte.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Auf einem Schachbrett gibt es acht Grid-Spalten nebeneinander, alle gleich breit. Ein Grid für eine Webseite hat oft weniger Grid-Spalten, dafür manchmal unterschiedlich breite.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Ohne eine klare Vorstellung von Spalten könntest du nie genau sagen, wie viele nebeneinanderliegende Bereiche deine Seite überhaupt haben soll.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss ich für zehn gleich breite Spalten wirklich zehnmal denselben Wert hintereinander aufschreiben?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Es gibt dafür eine Abkürzung namens repeat, mit der du zum Beispiel repeat(3, 1fr) schreibst, statt 1fr 1fr 1fr dreimal auszuschreiben. Für den Einstieg heute reicht es, die einzelnen Werte auszuschreiben, damit klar bleibt, was jede Grid-Spalte einzeln bekommt. repeat lernst du in einer der folgenden Lektionen im Detail kennen, sobald du mit den Grundbausteinen sicher umgehen kannst.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Wie viele Spalten dein Grid hat und wie breit jede einzelne ist, legst du mit einer eigenen CSS-Eigenschaft fest.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau diese Eigenschaft heißt grid-template-columns.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Schreibst du grid-template-columns: 200px 1fr 200px, entstehen drei Spalten: die erste und dritte sind genau 200 Pixel breit, die mittlere füllt automatisch den restlichen Platz aus. Genau so ein Muster braucht eine Seite mit fester Seitenleiste links und rechts und breitem Inhalt in der Mitte.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Was bedeutet dieses 'fr' bei der mittleren Spalte genau?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "fr steht für einen freien Anteil vom übrigen Platz, kurz für 'fraction'. Ohne grid-template-columns wüsste der Browser gar nicht, wie viele Spalten dein Grid haben soll oder wie breit jede einzelne wird.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Genauso wie bei den Spalten brauchst du auch für die Zeilen eine Vorgabe, wie hoch jede davon sein soll.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Falte dasselbe Blatt Papier jetzt zusätzlich waagerecht in zwei Streifen. Jeder waagerechte Streifen ist eine Zeile.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein waagerechter Streifen im Grid heißt Grid-Zeile.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Eine Webseite mit Kopfbereich oben, Inhalt in der Mitte und Fußbereich unten hat mindestens drei Grid-Zeilen übereinander, jede mit einer eigenen Höhe.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Ohne festgelegte Zeilen wüsste der Browser nicht, wie hoch der Kopfbereich sein soll und wo genau der Inhalt darunter beginnt.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Geschrieben sieht das zum Beispiel so aus: .seite { display: grid; grid-template-rows: 80px 1fr 60px; }. Diese eine Zeile reicht aus, damit der Browser die Höhe von Kopf-, Inhalts- und Fußbereich kennt.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Wie viele Zeilen dein Grid hat und wie hoch jede ist, legst du mit einer eigenen CSS-Eigenschaft fest, ganz ähnlich wie bei den Spalten.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Diese Eigenschaft heißt grid-template-rows.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Schreibst du grid-template-rows: 80px 1fr 60px, wird die erste Zeile 80 Pixel hoch, die letzte 60 Pixel, und die mittlere Zeile füllt automatisch den restlichen Platz zwischen Kopf- und Fußbereich aus.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Und wie sage ich jetzt, welche Box in welches Feld gehört?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau hier zeigt Grid seine größte Stärke, mit einer sehr anschaulichen Möglichkeit, die wie eine kleine Landkarte funktioniert.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir eine Wohnungsskizze vor, in der jeder Raum mit seinem Namen beschriftet ist: Küche, Wohnzimmer, Bad. Ohne Grundriss müsstest du jede Wand einzeln vermessen, mit beschrifteten Räumen siehst du sofort, was wohin gehört.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau so eine Skizze kannst du auch für dein Grid schreiben, mit der CSS-Eigenschaft grid-template-areas.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Du schreibst dafür in grid-template-areas Zeile für Zeile in Anführungszeichen, welcher Name in welchem Feld stehen soll, etwa \"kopf kopf\" in der ersten Zeile und \"seitenleiste inhalt\" in der zweiten. Der Browser liest daraus automatisch heraus, wie groß und wo jeder benannte Grid-Bereich liegt.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Mit grid-template-areas siehst du die Form deiner ganzen Seite auf einen Blick im CSS selbst, fast wie eine kleine Zeichnung aus Wörtern, ohne dass du jede Zahl einzeln ausrechnen musst. Kommt später noch ein fünfter Bereich dazu, etwa eine Werbeanzeige, passt du einfach die Wortkarte an und siehst sofort, wie sich das Gesamtbild verändert, ohne jede einzelne Zahl neu durchzurechnen.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Und diese Namen wie 'kopf' oder 'inhalt', wie verbinde ich die mit den tatsächlichen Boxen in HTML?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Jeder Name aus grid-template-areas beschreibt einen bestimmten Platz im Raster, der aus einem oder mehreren Feldern besteht. Genau so ein benannter Platz heißt Grid-Bereich.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Auf deiner Wohnungsskizze ist 'Küche' ein Grid-Bereich, der vielleicht aus mehreren kleinen Kacheln des Grundrisses zusammengesetzt ist, aber als Ganzes einen Namen trägt. Genauso gibst du in CSS jeder Box mit grid-area: kopf; den Grid-Bereich, in dem sie liegen soll.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Ohne diese Zuordnung wüsste eine Box im HTML nie, in welchem der vielen Felder deines Grids sie tatsächlich erscheinen soll.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein vollständiges Beispiel für unsere Seite von vorhin könnte so aussehen: .seite { display: grid; grid-template-columns: 200px 1fr; grid-template-rows: 80px 1fr 60px; grid-template-areas: \"kopf kopf\" \"seitenleiste inhalt\" \"fuss fuss\"; }.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Und jede der vier Boxen im HTML bekommt dann einfach eine passende grid-area-Zeile?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau. Die Kopfbereich-Box bekommt grid-area: kopf;, die Seitenleiste grid-area: seitenleiste;, der Inhalt grid-area: inhalt;, und der Fußbereich grid-area: fuss;. Der Browser setzt daraufhin jede Box automatisch an die richtige Stelle im Raster.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Jetzt bin ich verwirrt: Wann benutze ich Flexbox aus der letzten Lektion, und wann Grid?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir Flexbox als ein einzelnes Regal für eine Reihe von Gegenständen vor, und Grid als den ganzen Raum mit mehreren Regalen, Fenstern und Türen gleichzeitig.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Flexbox eignet sich besonders gut für einzelne Reihen, etwa eine Menüleiste oder drei Karten nebeneinander. Grid eignet sich besonders gut für das große Ganze einer Seite, mit Kopfbereich, Seitenleiste, Inhalt und Fußbereich gleichzeitig.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "In der Praxis benutzt du oft beides zusammen: Grid für das große Gerüst der ganzen Seite, Flexbox für die Anordnung innerhalb einzelner Bereiche wie der Menüleiste im Kopfbereich.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Kannst du das noch einmal zusammenfassen, wie ich so eine Seite mit Kopf, Inhalt, Seitenleiste und Fuß baue? Nach der Zusammenfassung kommt gleich noch das echte Praxisbeispiel.",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "B",
+      "text": "Also noch einmal ganz kurz zusammengefasst: display: grid macht eine Box zum Grid-Container. grid-template-columns und grid-template-rows legen Breite und Höhe von Grid-Spalten und Grid-Zeilen fest. grid-template-areas zeichnet eine Skizze aus benannten Grid-Bereichen, und jede Box bekommt mit grid-area ihren Platz in genau einem davon.",
+      "isKeySentence": true,
+      "role": "key"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau so ein Grid mit mehreren Spalten findest du auch im echten Portfolio-Projekt von Domenic.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Im Repo portfolio, in der Datei src/components/Footer.tsx, Zeile 72, steht die Klasse 'grid gap-10 sm:grid-cols-2 lg:grid-cols-4'. Das macht die Box zu einem Grid-Container mit zwei Spalten auf mittleren Bildschirmen und vier Spalten auf breiten Bildschirmen, mit festem Abstand zwischen den Feldern.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "So passen sich die Spalten im Fußbereich automatisch an die verfügbare Bildschirmbreite an, ohne dass für jede Bildschirmgröße ein komplett neues Layout geschrieben werden muss.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Verschwindet die Seitenleiste eigentlich automatisch, wenn der Bildschirm sehr schmal wird, oder muss ich dafür extra etwas schreiben?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Von selbst bleibt dein Grid erst einmal genau so, wie du es festgelegt hast, auch auf einem schmalen Handybildschirm, selbst wenn dadurch eine Spalte unangenehm eng wird. Wie du ein Grid gezielt für schmale Bildschirme umbaust, zeigt dir die nächste Lektion über responsives Design. Bis dahin reicht es, dieses Verhalten zu kennen, damit dich eine zu enge Spalte auf dem Handy nicht überrascht.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Jetzt bist du dran. Lege eine HTML-Datei mit vier Boxen an: einer für den Kopfbereich, einer für die Seitenleiste, einer für den Inhalt und einer für den Fußbereich.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Mache den umgebenden Kasten zu einem Grid-Container mit display: grid und lege mit grid-template-columns sowie grid-template-rows eine sinnvolle Aufteilung fest. Ordne die vier Boxen entweder über grid-template-areas und grid-area zu, oder probiere zuerst nur die Spalten- und Zeilenzahl aus.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Was, wenn meine Seitenleiste und mein Inhalt am Ende nicht die Höhe haben, die ich erwartet hätte?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Schau dann zuerst in deinem Stylesheet nach, ob grid-template-rows wirklich die Werte enthält, die du erwartest, und ob jede Box tatsächlich den richtigen Namen in grid-area trägt. Ein vertauschter Name ist der häufigste Grund, warum eine Box im falschen Feld landet. Ein kurzer Blick in die Entwickler-Werkzeuge zeigt dir meist sofort, welcher Name gerade wo tatsächlich gelandet ist.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Am Ende solltest du im Browser eine Seite mit klar erkennbarem Kopfbereich oben, Seitenleiste und Inhalt nebeneinander in der Mitte, und einem Fußbereich unten sehen.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann ich im Browser eigentlich sehen, wo genau die Linien meines Grids gerade verlaufen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir wieder die Werkstatt-Lupe aus der letzten Lektion vor, nur jetzt für ein ganzes Schachbrett statt für eine einzelne Box.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Die Entwickler-Werkzeuge moderner Browser zeigen dir auf Wunsch eine farbige Überlagerung genau über deinem Grid, mit durchnummerierten Linien für jede Spalte und Zeile.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Klickst du in den Entwickler-Werkzeugen neben der CSS-Eigenschaft display: grid auf ein kleines Raster-Symbol, zeichnet der Browser jede Spalten- und Zeilenlinie direkt über deiner Seite ein, in echten Pixelmaßen.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Ohne diese Überlagerung müsstest du bei einem schiefen Layout raten, welche Zahl in grid-template-columns oder grid-template-rows nicht stimmt. Mit der Überlagerung siehst du die tatsächliche Aufteilung sofort. Viele erfahrene Entwickler öffnen diese Überlagerung als ersten Schritt, sobald ein Grid-Layout nicht so aussieht wie erwartet, noch bevor sie überhaupt eine Zeile Code verändern.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Fassen wir die Begriffe von heute noch einmal als Liste zusammen.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Grid: ein Layout-System in CSS, mit dem eine Box in ein Raster aus Spalten und Zeilen aufgeteilt wird.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Grid-Container: die Box, die mit display: grid zum Schachbrett wird.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Grid-Spalte: ein senkrechter Streifen im Grid.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Grid-Zeile: ein waagerechter Streifen im Grid.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "grid-template-columns: die CSS-Eigenschaft, die Anzahl und Breite der Spalten festlegt.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "grid-template-rows: die CSS-Eigenschaft, die Anzahl und Höhe der Zeilen festlegt.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "grid-template-areas: die CSS-Eigenschaft, mit der du benannte Bereiche als kleine Wortkarte zeichnest.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Grid-Bereich: ein benannter Platz im Grid, zusammengesetzt aus einem oder mehreren Feldern.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann ich Grid und Flexbox in derselben Webseite gleichzeitig benutzen, oder muss ich mich für eines von beiden entscheiden?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Du kannst beide problemlos gleichzeitig benutzen, sogar ineinander verschachtelt. Häufig legt Grid das große Gerüst der ganzen Seite fest, während Flexbox innerhalb einzelner Grid-Bereiche, etwa in der Menüleiste, für die Feinanordnung sorgt.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Was passiert, wenn ich in grid-template-areas einen Namen benutze, der in HTML mit keiner Box über grid-area verbunden ist?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Dann bleibt genau dieses Feld im Grid einfach leer, es entsteht kein Fehler und keine Fehlermeldung. Der Browser reserviert trotzdem den Platz für diesen Bereich, du siehst also eine leere Fläche an genau der Stelle im Layout.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss jede Zeile in grid-template-areas gleich viele Namen enthalten?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, jede Zeile in Anführungszeichen muss genau so viele Namen enthalten, wie es Spalten im Grid gibt, sonst meldet der Browser einen ungültigen Wert und ignoriert die ganze Eigenschaft. Diese Regel hilft dir gleichzeitig, Tippfehler früh zu bemerken, weil eine fehlende Spalte sofort auffällt.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann derselbe Name in grid-template-areas mehrfach vorkommen, um ein größeres Feld zu bilden?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, genau so entstehen größere, zusammengesetzte Bereiche. Schreibst du denselben Namen zweimal nebeneinander in einer Zeile, erstreckt sich dieser Bereich über beide Spalten; schreibst du ihn in zwei Zeilen untereinander an derselben Stelle, erstreckt er sich über beide Zeilen.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Was ist der Unterschied zwischen grid-template-columns mit festen Pixelwerten und mit dem Wert fr?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein fester Pixelwert bleibt immer genau gleich groß, egal wie breit der Bildschirm ist. Der Wert fr dagegen verteilt den jeweils übrigen, freien Platz anteilig, sodass sich diese Spalte automatisch an unterschiedliche Bildschirmbreiten anpasst, ohne dass du für jede Größe eine eigene Regel schreiben musst. Genau diese Flexibilität macht fr zur bevorzugten Wahl für Bereiche, die auf möglichst vielen Bildschirmgrößen gut aussehen sollen, ohne für jede Größe eine eigene Zeile grid-template-columns zu schreiben.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann ich einer Box statt eines Namens aus grid-template-areas auch direkt sagen, in welcher Zeile und Spalte sie stehen soll?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, dafür gibt es die Eigenschaften grid-row und grid-column, mit denen du eine Box direkt über Zahlen statt über einen Namen platzierst. Für den Einstieg ist der Weg über grid-template-areas und grid-area meist verständlicher, weil du die Form deiner Seite als lesbare Wortkarte siehst statt nur als Zahlen. Die zahlenbasierte Variante lohnt sich vor allem bei sehr unregelmäßigen oder sich oft ändernden Rastern. Für heute merkst du dir am besten nur, dass es diesen zweiten Weg gibt, ohne ihn schon selbst benutzen zu müssen.",
+      "isKeySentence": false,
+      "role": "faq"
+    }
+  ],
+  "practiceExample": {
+    "text": "Im Repo portfolio steht in src/components/Footer.tsx, Zeile 72, die Klasse 'grid gap-10 sm:grid-cols-2 lg:grid-cols-4': Die Box wird zum Grid-Container mit zwei Spalten auf mittleren Bildschirmen (sm:grid-cols-2) und vier Spalten auf breiten Bildschirmen (lg:grid-cols-4), mit festem Abstand von zehn Schritten zwischen den Feldern (gap-10).",
+    "repoNote": "repo-portfolio",
+    "location": "src/components/Footer.tsx:72 (Klasse 'grid gap-10 sm:grid-cols-2 lg:grid-cols-4')"
+  },
+  "quiz": [
+    {
+      "question": "Warum reicht Flexbox allein oft nicht für eine ganze Webseite mit Kopfbereich, Seitenleiste, Inhalt und Fußbereich gleichzeitig?",
+      "area": "Grid-Grundlagen",
+      "options": [
+        {
+          "text": "Flexbox kann nur eine Richtung gleichzeitig ordnen, für ein Layout in zwei Richtungen wird es schnell unübersichtlich.",
+          "isCorrect": true,
+          "explanation": "Genau das wurde am Anfang der Lektion erklärt."
+        },
+        {
+          "text": "Flexbox funktioniert technisch überhaupt nicht in modernen Browsern, ein technisches Missverständnis, das mit modernen Browsern nichts zu tun hat und so nicht zutrifft",
+          "isCorrect": false,
+          "explanation": "Flexbox funktioniert einwandfrei, das Problem ist nur die Übersichtlichkeit bei zwei Richtungen."
+        },
+        {
+          "text": "Flexbox darf laut CSS-Regeln nur für Menüleisten benutzt werden.",
+          "isCorrect": false,
+          "explanation": "Es gibt keine solche Einschränkung für Flexbox."
+        },
+        {
+          "text": "Flexbox kennt keine Farben.",
+          "isCorrect": false,
+          "explanation": "Farben haben mit dem Unterschied zwischen Flexbox und Grid nichts zu tun."
+        }
+      ]
+    },
+    {
+      "question": "Womit machst du eine Box zu einem Grid-Container?",
+      "area": "Grid-Grundlagen",
+      "options": [
+        {
+          "text": "Mit display: grid;",
+          "isCorrect": true,
+          "explanation": "Genau diese Eigenschaft verwandelt eine Box in ein Raster für ihre Kind-Boxen."
+        },
+        {
+          "text": "Mit grid-area: container;",
+          "isCorrect": false,
+          "explanation": "grid-area weist einer Box einen Platz zu, macht aber keine Box zum Grid-Container."
+        },
+        {
+          "text": "Mit border: grid;",
+          "isCorrect": false,
+          "explanation": "border regelt nur den Rahmen einer Box, dafür gibt es keinen Wert namens grid."
+        },
+        {
+          "text": "Mit gap: grid;",
+          "isCorrect": false,
+          "explanation": "gap setzt einen Abstand, es gibt dafür keinen Wert namens grid."
+        }
+      ]
+    },
+    {
+      "question": "Was legt grid-template-columns fest?",
+      "area": "Grid-Spalten",
+      "options": [
+        {
+          "text": "Wie viele Zeilen das Grid hat.",
+          "isCorrect": false,
+          "explanation": "Zeilen werden über grid-template-rows festgelegt, nicht über grid-template-columns."
+        },
+        {
+          "text": "Wie viele Spalten das Grid hat und wie breit jede davon ist.",
+          "isCorrect": true,
+          "explanation": "Genau das ist die Aufgabe dieser CSS-Eigenschaft."
+        },
+        {
+          "text": "Welche Farbe die Spalten haben.",
+          "isCorrect": false,
+          "explanation": "Farben werden über andere CSS-Eigenschaften festgelegt, nicht über grid-template-columns."
+        },
+        {
+          "text": "Ob Boxen in eine neue Zeile umbrechen dürfen, was die eigentliche Aufgabe dieser CSS-Eigenschaft nicht trifft",
+          "isCorrect": false,
+          "explanation": "Das beschreibt flex-wrap aus der Flexbox-Lektion, nicht grid-template-columns."
+        }
+      ]
+    },
+    {
+      "question": "Du schreibst grid-template-columns: 200px 1fr 200px. Was bedeutet die mittlere Spalte?",
+      "area": "Grid-Spalten",
+      "options": [
+        {
+          "text": "Sie ist genau 200 Pixel breit, wie die äußeren Spalten, eine Verwechslung mit den beiden äußeren, fest angegebenen Spalten",
+          "isCorrect": false,
+          "explanation": "Nur die erste und dritte Spalte sind mit 200px fest, die mittlere ist anders angegeben."
+        },
+        {
+          "text": "Sie füllt den jeweils übrig bleibenden Platz zwischen den beiden festen Spalten aus.",
+          "isCorrect": true,
+          "explanation": "Genau das bedeutet der Wert 1fr, so in der Lektion erklärt."
+        },
+        {
+          "text": "Sie bleibt immer unsichtbar.",
+          "isCorrect": false,
+          "explanation": "1fr macht eine Spalte nicht unsichtbar, sie bleibt sichtbar und nutzbar."
+        },
+        {
+          "text": "Sie wird automatisch auf 0 Pixel gesetzt.",
+          "isCorrect": false,
+          "explanation": "1fr bedeutet gerade nicht null, sondern den verfügbaren Anteil vom übrigen Platz."
+        }
+      ]
+    },
+    {
+      "question": "Was ist ein Bereich in einem CSS-Grid?",
+      "area": "Grid-Bereiche",
+      "options": [
+        {
+          "text": "Ein benannter Platz im Grid, zusammengesetzt aus einem oder mehreren Feldern.",
+          "isCorrect": true,
+          "explanation": "Genau das wurde mit der Wohnungsskizze in der Lektion erklärt."
+        },
+        {
+          "text": "Eine andere Bezeichnung für den Grid-Container selbst.",
+          "isCorrect": false,
+          "explanation": "Der Grid-Container ist die ganze Box, ein Bereich ist nur ein Platz darin."
+        },
+        {
+          "text": "Der Name für die Farbe eines Feldes.",
+          "isCorrect": false,
+          "explanation": "Ein Bereich beschreibt eine Fläche im Raster, keine Farbe."
+        },
+        {
+          "text": "Ein anderer Name für gap.",
+          "isCorrect": false,
+          "explanation": "gap setzt Abstand, ein Bereich beschreibt einen benannten Platz im Raster."
+        }
+      ]
+    },
+    {
+      "question": "Wie verbindest du eine HTML-Box mit einem in grid-template-areas benannten Bereich?",
+      "area": "Grid-Bereiche",
+      "options": [
+        {
+          "text": "Mit grid-area: name-des-bereichs;",
+          "isCorrect": true,
+          "explanation": "Genau so wird eine Box einem benannten Bereich zugeordnet."
+        },
+        {
+          "text": "Mit dem Selektor #name-des-bereichs; allein, ohne weitere Eigenschaft.",
+          "isCorrect": false,
+          "explanation": "Ein Selektor allein weist einer Box noch keinen Grid-Bereich zu, dafür braucht es grid-area."
+        },
+        {
+          "text": "Mit justify-content: name-des-bereichs;",
+          "isCorrect": false,
+          "explanation": "justify-content verteilt Platz in Flexbox, es kennt keine Bereichsnamen."
+        },
+        {
+          "text": "Indem die Box denselben Klassennamen wie der Bereich trägt.",
+          "isCorrect": false,
+          "explanation": "Ein gleicher Klassenname allein stellt keine Verbindung zu einem Grid-Bereich her, dafür braucht es grid-area."
+        }
+      ]
+    },
+    {
+      "question": "Warum meldet der Browser einen Fehler, wenn eine Zeile in grid-template-areas weniger Namen enthält als eine andere?",
+      "area": "Grid-Bereiche",
+      "options": [
+        {
+          "text": "Weil jede Zeile genau so viele Namen enthalten muss, wie es Spalten im Grid gibt.",
+          "isCorrect": true,
+          "explanation": "Genau diese Regel wurde in der FAQ der Lektion erklärt."
+        },
+        {
+          "text": "Weil grid-template-areas grundsätzlich nur eine einzige Zeile erlaubt.",
+          "isCorrect": false,
+          "explanation": "grid-template-areas erlaubt ausdrücklich mehrere Zeilen, das ist gerade der Sinn der Eigenschaft."
+        },
+        {
+          "text": "Weil Namen in grid-template-areas nur Kleinbuchstaben enthalten dürfen.",
+          "isCorrect": false,
+          "explanation": "Groß- oder Kleinschreibung ist nicht die Ursache dieses Fehlers."
+        },
+        {
+          "text": "Weil grid-template-areas niemals mit grid-template-columns kombiniert werden darf.",
+          "isCorrect": false,
+          "explanation": "Beide Eigenschaften werden in der Praxis gerade zusammen benutzt."
+        }
+      ]
+    },
+    {
+      "question": "Wann eignet sich Flexbox eher als Grid?",
+      "area": "Grid oder Flexbox",
+      "options": [
+        {
+          "text": "Für eine einzelne Reihe von Boxen, etwa eine Menüleiste oder drei Karten nebeneinander.",
+          "isCorrect": true,
+          "explanation": "Genau dieser Anwendungsfall wurde in der Lektion für Flexbox genannt."
+        },
+        {
+          "text": "Für das komplette Gerüst einer ganzen Seite mit vier verschiedenen Bereichen gleichzeitig.",
+          "isCorrect": false,
+          "explanation": "Für genau diesen Fall eignet sich Grid besser als Flexbox."
+        },
+        {
+          "text": "Nur für Seiten ganz ohne CSS.",
+          "isCorrect": false,
+          "explanation": "Sowohl Flexbox als auch Grid sind Teil von CSS, keine Alternative dazu."
+        },
+        {
+          "text": "Nur, wenn die Seite gedruckt werden soll.",
+          "isCorrect": false,
+          "explanation": "Die Wahl zwischen Flexbox und Grid hängt nicht vom Drucken ab."
+        }
+      ]
+    },
+    {
+      "question": "Können Grid und Flexbox auf derselben Webseite gleichzeitig verwendet werden?",
+      "area": "Grid oder Flexbox",
+      "options": [
+        {
+          "text": "Nein, ein Browser erlaubt immer nur eines der beiden Systeme pro Seite.",
+          "isCorrect": false,
+          "explanation": "Das Gegenteil wurde in der FAQ der Lektion erklärt."
+        },
+        {
+          "text": "Ja, häufig legt Grid das große Gerüst fest, während Flexbox einzelne Bereiche darin ordnet.",
+          "isCorrect": true,
+          "explanation": "Genau diese Kombination wurde in der FAQ beschrieben."
+        },
+        {
+          "text": "Nur, wenn beide dieselbe CSS-Datei benutzen.",
+          "isCorrect": false,
+          "explanation": "Die Datei spielt für die Kombination von Grid und Flexbox keine Rolle."
+        },
+        {
+          "text": "Nur auf sehr breiten Bildschirmen ab 1920 Pixeln.",
+          "isCorrect": false,
+          "explanation": "Die Kombination funktioniert unabhängig von der Bildschirmbreite."
+        }
+      ]
+    },
+    {
+      "question": "Im Portfolio-Beispiel steht die Klasse 'grid gap-10 sm:grid-cols-2 lg:grid-cols-4'. Was bewirken die letzten beiden Teile?",
+      "area": "Praxisbeispiel",
+      "options": [
+        {
+          "text": "Zwei Spalten auf mittleren Bildschirmen, vier Spalten auf breiten Bildschirmen.",
+          "isCorrect": true,
+          "explanation": "Genau so wurde die Klasse in der Lektion übersetzt."
+        },
+        {
+          "text": "Zwei Zeilen auf mittleren Bildschirmen, vier Zeilen auf breiten Bildschirmen, was die tatsächliche Bedeutung von grid-cols in diesem Beispiel nicht trifft",
+          "isCorrect": false,
+          "explanation": "grid-cols legt Spalten fest, keine Zeilen."
+        },
+        {
+          "text": "Immer genau vier Spalten, unabhängig von der Bildschirmbreite.",
+          "isCorrect": false,
+          "explanation": "Die Spaltenzahl unterscheidet sich hier gerade je nach Bildschirmbreite."
+        },
+        {
+          "text": "Einen Abstand von zehn Pixeln zwischen den Wörtern eines Textes.",
+          "isCorrect": false,
+          "explanation": "gap-10 setzt Abstand zwischen den Grid-Feldern, nicht zwischen Wörtern in einem Text."
+        }
+      ]
+    },
+    {
+      "question": "Was passiert, wenn du in grid-template-areas einen Bereichsnamen benutzt, der von keiner HTML-Box mit grid-area beansprucht wird?",
+      "area": "Grid-Bereiche",
+      "options": [
+        {
+          "text": "Das Feld bleibt leer, aber der Platz dafür wird trotzdem reserviert.",
+          "isCorrect": true,
+          "explanation": "Genau das wurde in der FAQ der Lektion beschrieben."
+        },
+        {
+          "text": "Der Browser lädt die ganze Seite gar nicht mehr.",
+          "isCorrect": false,
+          "explanation": "Ein unbenutzter Bereichsname führt nicht dazu, dass die Seite gar nicht lädt."
+        },
+        {
+          "text": "Alle anderen Bereiche verschwinden ebenfalls.",
+          "isCorrect": false,
+          "explanation": "Ein einzelner ungenutzter Bereich hat keinen Einfluss auf die anderen Bereiche."
+        },
+        {
+          "text": "grid-template-areas wird komplett ignoriert.",
+          "isCorrect": false,
+          "explanation": "Nur das eine ungenutzte Feld bleibt leer, die restliche Eigenschaft bleibt wirksam."
+        }
+      ]
+    },
+    {
+      "question": "Wie kann derselbe Name in grid-template-areas ein größeres, zusammengesetztes Feld ergeben?",
+      "area": "Grid-Bereiche",
+      "options": [
+        {
+          "text": "Indem der Name mehrfach nebeneinander oder untereinander an den passenden Stellen wiederholt wird.",
+          "isCorrect": true,
+          "explanation": "Genau das wurde in der letzten FAQ-Antwort der Lektion erklärt."
+        },
+        {
+          "text": "Indem der Name in Großbuchstaben statt in Kleinbuchstaben geschrieben wird, was die Bedeutung von Groß- und Kleinschreibung in CSS-Namen nicht richtig wiedergibt",
+          "isCorrect": false,
+          "explanation": "Groß- oder Kleinschreibung vergrößert einen Bereich nicht."
+        },
+        {
+          "text": "Indem zusätzlich justify-content auf den Bereich angewendet wird.",
+          "isCorrect": false,
+          "explanation": "justify-content gehört zu Flexbox, nicht zur Größe eines Grid-Bereichs."
+        },
+        {
+          "text": "Das ist in CSS grundsätzlich nicht möglich.",
+          "isCorrect": false,
+          "explanation": "Genau das Gegenteil ist möglich und in der Lektion beschrieben."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Lege eine HTML-Datei mit vier Boxen an: Kopfbereich, Seitenleiste, Inhalt, Fußbereich. Mache den umgebenden Kasten zu einem Grid-Container mit display: grid, lege mit grid-template-columns und grid-template-rows eine Aufteilung fest und ordne die vier Boxen über grid-template-areas und grid-area den passenden Bereichen zu.",
+    "expectation": "Im Browser siehst du eine Seite mit Kopfbereich oben über die volle Breite, Seitenleiste und Inhalt nebeneinander in der Mitte, und einem Fußbereich unten über die volle Breite.",
+    "checklist": [
+      "Vier Boxen für Kopfbereich, Seitenleiste, Inhalt und Fußbereich stehen in der HTML-Datei",
+      "Der umgebende Kasten hat display: grid sowie grid-template-columns und grid-template-rows",
+      "grid-template-areas beschreibt die vier Bereiche als Skizze aus Namen",
+      "Jede der vier Boxen hat mit grid-area den passenden Bereich zugewiesen bekommen",
+      "Ergebnis im Browser kontrolliert: alle vier Bereiche sind an der erwarteten Stelle sichtbar"
+    ]
+  },
+  "audio": {
+    "file": "M02-02-03.mp3",
+    "durationSeconds": 1320,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Kann ich Grid und Flexbox in derselben Webseite gleichzeitig benutzen, oder muss ich mich für eines von beiden entscheiden?",
+      "answer": "Du kannst beide problemlos gleichzeitig benutzen, sogar ineinander verschachtelt. Häufig legt Grid das große Gerüst der ganzen Seite fest, während Flexbox innerhalb einzelner Grid-Bereiche, etwa in der Menüleiste, für die Feinanordnung sorgt."
+    },
+    {
+      "question": "Was passiert, wenn ich in grid-template-areas einen Namen benutze, der in HTML mit keiner Box über grid-area verbunden ist?",
+      "answer": "Dann bleibt genau dieses Feld im Grid einfach leer, es entsteht kein Fehler und keine Fehlermeldung. Der Browser reserviert trotzdem den Platz für diesen Bereich, du siehst also eine leere Fläche an genau der Stelle im Layout."
+    },
+    {
+      "question": "Muss jede Zeile in grid-template-areas gleich viele Namen enthalten?",
+      "answer": "Ja, jede Zeile in Anführungszeichen muss genau so viele Namen enthalten, wie es Spalten im Grid gibt, sonst meldet der Browser einen ungültigen Wert und ignoriert die ganze Eigenschaft. Diese Regel hilft dir gleichzeitig, Tippfehler früh zu bemerken, weil eine fehlende Spalte sofort auffällt."
+    },
+    {
+      "question": "Kann derselbe Name in grid-template-areas mehrfach vorkommen, um ein größeres Feld zu bilden?",
+      "answer": "Ja, genau so entstehen größere, zusammengesetzte Bereiche. Schreibst du denselben Namen zweimal nebeneinander in einer Zeile, erstreckt sich dieser Bereich über beide Spalten; schreibst du ihn in zwei Zeilen untereinander an derselben Stelle, erstreckt er sich über beide Zeilen."
+    },
+    {
+      "question": "Was ist der Unterschied zwischen grid-template-columns mit festen Pixelwerten und mit dem Wert fr?",
+      "answer": "Ein fester Pixelwert bleibt immer genau gleich groß, egal wie breit der Bildschirm ist. Der Wert fr dagegen verteilt den jeweils übrigen, freien Platz anteilig, sodass sich diese Spalte automatisch an unterschiedliche Bildschirmbreiten anpasst, ohne dass du für jede Größe eine eigene Regel schreiben musst. Genau diese Flexibilität macht fr zur bevorzugten Wahl für Bereiche, die auf möglichst vielen Bildschirmgrößen gut aussehen sollen, ohne für jede Größe eine eigene Zeile grid-template-columns zu schreiben."
+    },
+    {
+      "question": "Kann ich einer Box statt eines Namens aus grid-template-areas auch direkt sagen, in welcher Zeile und Spalte sie stehen soll?",
+      "answer": "Ja, dafür gibt es die Eigenschaften grid-row und grid-column, mit denen du eine Box direkt über Zahlen statt über einen Namen platzierst. Für den Einstieg ist der Weg über grid-template-areas und grid-area meist verständlicher, weil du die Form deiner Seite als lesbare Wortkarte siehst statt nur als Zahlen. Die zahlenbasierte Variante lohnt sich vor allem bei sehr unregelmäßigen oder sich oft ändernden Rastern. Für heute merkst du dir am besten nur, dass es diesen zweiten Weg gibt, ohne ihn schon selbst benutzen zu müssen."
+    }
+  ]
+}
