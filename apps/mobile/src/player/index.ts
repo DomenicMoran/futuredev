@@ -27,8 +27,16 @@ async function TP() {
   return mod.default;
 }
 
-function audioBaseUrl(): string {
-  return process.env.EXPO_PUBLIC_AUDIO_BASE_URL ?? '';
+/**
+ * Basis-URL fuer Audio-/Cue-Dateien: Manifest zuerst (lokal abgelegt nach
+ * Erststart-Kopie/Sync, gleiches Muster wie content/sync.ts:25-28).
+ * `EXPO_PUBLIC_AUDIO_BASE_URL` bleibt als Override fuer lokale
+ * Entwicklung/Tests erhalten, ist in der gebauten Expo-App aber leer (B-01)
+ * — ohne den Manifest-Fallback blieb jede Wiedergabe stumm.
+ */
+export async function resolveAudioBaseUrl(fs: Awaited<ReturnType<typeof getContentFs>>): Promise<string> {
+  const manifest = await loadLocalManifest(fs);
+  return process.env.EXPO_PUBLIC_AUDIO_BASE_URL ?? manifest?.audioBaseUrl ?? '';
 }
 
 let setupPromise: Promise<void> | null = null;
@@ -109,7 +117,7 @@ async function loadCueSheet(lessonId: string): Promise<CueSheet> {
   if (await existsSafe(fs, localCuesPath)) {
     raw = await fs.readFile(localCuesPath);
   } else {
-    const response = await fetch(remoteCuesUrl(audioBaseUrl(), lessonId), { cache: 'no-store' });
+    const response = await fetch(remoteCuesUrl(await resolveAudioBaseUrl(fs), lessonId), { cache: 'no-store' });
     if (!response.ok) {
       throw new Error(`loadCueSheet: Cue-Abruf für ${lessonId} fehlgeschlagen (HTTP ${response.status})`);
     }
@@ -132,7 +140,7 @@ async function audioSourceForLesson(lessonId: string): Promise<string> {
   const fs = await getContentFs();
   const localPath = downloadedAudioPath(fs.documentDirectory, lessonId);
   if (await existsSafe(fs, localPath)) return localPath;
-  return remoteAudioUrl(audioBaseUrl(), lessonId);
+  return remoteAudioUrl(await resolveAudioBaseUrl(fs), lessonId);
 }
 
 /**
@@ -352,7 +360,8 @@ export async function downloadLesson(lessonId: string): Promise<void> {
   usePlayerStore.getState().setDownloadState({ lessonId, status: 'downloading', progress: 0, bytesTotal: null });
 
   try {
-    const cuesResponse = await fetch(remoteCuesUrl(audioBaseUrl(), lessonId), { cache: 'no-store' });
+    const base = await resolveAudioBaseUrl(fs);
+    const cuesResponse = await fetch(remoteCuesUrl(base, lessonId), { cache: 'no-store' });
     if (!cuesResponse.ok) throw new Error(`Cue-Download fehlgeschlagen (HTTP ${cuesResponse.status})`);
     await fs.writeFile(downloadedCuesPath(fs.documentDirectory, lessonId), await cuesResponse.text());
 
@@ -361,7 +370,7 @@ export async function downloadLesson(lessonId: string): Promise<void> {
     // Laufzeit nur einen Deprecation-Hinweis, siehe legacyWarnings.d.ts). Die
     // echte Implementierung liegt unter dem Unterpfad "/legacy".
     const { createDownloadResumable } = await import('expo-file-system/legacy');
-    const audioUrl = remoteAudioUrl(audioBaseUrl(), lessonId);
+    const audioUrl = remoteAudioUrl(base, lessonId);
     const audioPath = downloadedAudioPath(fs.documentDirectory, lessonId);
 
     const resumable = createDownloadResumable(audioUrl, audioPath, {}, (p) => {

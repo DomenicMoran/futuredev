@@ -7,19 +7,27 @@
 // falls eine Lektion lokal noch fehlt; savePlaybackPosition/markListened
 // binden an `getProgress`/`markLessonState` (src/data/progress.ts), die schon
 // die Felder aus datenmodell.md tragen (listenedUntil).
-import { lessonSchema, type Lesson } from '@futuredev/content-schema';
+import { lessonSchema, type Lesson, type Manifest } from '@futuredev/content-schema';
 import { getProgress, markLessonState } from '../data/index.js';
 import { getContentFs } from '../content/contentFs.js';
 import { loadLesson, loadLocalManifest } from '../content/lessonLoader.js';
 
-function contentBaseUrl(): string {
-  return process.env.EXPO_PUBLIC_CONTENT_BASE_URL ?? '';
+/**
+ * Basis-URL kommt vorrangig aus dem Manifest (lokal abgelegt nach
+ * Erststart-Kopie/Sync, gleiches Muster wie content/sync.ts:25-28).
+ * `EXPO_PUBLIC_CONTENT_BASE_URL` bleibt als Override fuer lokale
+ * Entwicklung/Tests erhalten, ist in der gebauten Expo-App aber leer
+ * (B-01) — ohne den Manifest-Fallback blieb der Lektionsabruf dort ohne
+ * lokale Kopie immer ohne Basis-URL stehen.
+ */
+export function resolveContentBaseUrl(localManifest: Manifest | null): string {
+  return process.env.EXPO_PUBLIC_CONTENT_BASE_URL ?? localManifest?.contentBaseUrl ?? '';
 }
 
 async function fetchRemoteLesson(lessonId: string): Promise<Lesson> {
-  const base = contentBaseUrl();
   const fs = await getContentFs();
   const localManifest = await loadLocalManifest(fs);
+  const base = resolveContentBaseUrl(localManifest);
   const trimmedBase = base.replace(/\/$/, '');
   if (!trimmedBase) {
     throw new Error(

@@ -14,6 +14,14 @@ export default function TabsLayout() {
         headerShown: false,
         tabBarActiveTintColor: theme.colors.accent,
         tabBarInactiveTintColor: theme.colors.textWeak,
+        // B-07: der aktive Hintergrund (die "Unterstreichung" unter dem
+        // Symbol) klebt ohne Layout-Messung fest unter dem Mittelreiter
+        // "Hören". Der aktive Reiter wird laut design-system.md
+        // (Komponente "Reiterleiste") ausschliesslich ueber die Farbe
+        // markiert — daher die fehlerhafte Hintergrund-Hervorhebung
+        // entfernen, statt eine nicht vorhandene Indikator-Option zu setzen.
+        tabBarActiveBackgroundColor: 'transparent',
+        tabBarInactiveBackgroundColor: 'transparent',
         tabBarStyle: {
           backgroundColor: theme.colors.surface,
           borderTopColor: theme.colors.border,
