@@ -1,0 +1,977 @@
+{
+  "id": "M02-04-04",
+  "title": "Wie TypeScript zu JavaScript wird: Kompilierung, tsconfig, strict",
+  "durationMinutes": 24,
+  "prerequisites": [
+    "M02-04-03"
+  ],
+  "terms": [
+    {
+      "term": "Kompilierung",
+      "definition": "das Übersetzen von TypeScript-Code in gewöhnliches JavaScript, das ein Browser oder ein anderer Ort direkt ausführen kann."
+    },
+    {
+      "term": "tsc",
+      "definition": "das Werkzeug, das TypeScript-Dateien in JavaScript übersetzt, kurz für TypeScript Compiler."
+    },
+    {
+      "term": "tsconfig.json",
+      "definition": "die Datei mit den gemeinsamen Regeln für die Kompilierung eines ganzen Projekts."
+    },
+    {
+      "term": "strict-Modus",
+      "definition": "die strenge Einstellung, bei der TypeScript besonders genau prüft und wenig durchgehen lässt."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "text": "Stell dir eine Konferenz vor, bei der eine Rednerin auf Deutsch spricht, aber im Saal sitzen auch Menschen, die nur Englisch verstehen. Eine Dolmetscherin steht daneben und übersetzt jeden Satz sofort.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Die Rednerin selbst muss dafür kein Englisch können. Sie spricht ganz normal Deutsch weiter, und die Dolmetscherin sorgt dafür, dass am Ende trotzdem jeder versteht, was gesagt wurde.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Und was hat eine Dolmetscherin mit TypeScript zu tun?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein Browser und die meisten anderen Orte, an denen Code wirklich läuft, verstehen nur JavaScript, keine geschriebenen Etiketten aus TypeScript. Damit dein TypeScript-Code trotzdem laufen kann, braucht es genau so eine Dolmetscherin, nur eben für Code statt für gesprochene Sprache.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Das Übersetzen von TypeScript-Code in gewöhnliches JavaScript, das ein Browser oder ein anderer Ort direkt ausführen kann, nennt man Kompilierung.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Kompilierung.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Schreibst du eine Datei mit dem Namen programm.ts, mit Etiketten wie string oder number darin, entsteht durch die Kompilierung eine zweite Datei, programm.js, in der alle Etiketten wieder verschwunden sind. Nur noch gewöhnliches JavaScript bleibt übrig, genau das, was ein Browser versteht.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Verschwinden dabei nicht auch alle Typfehler, die TypeScript vorher gefunden hat?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, im Gegenteil: die Kompilierung findet genau in diesem Moment statt, zur Kompilierzeit aus der ersten Lektion dieses Untermoduls. Findet TypeScript dabei einen Typfehler, meldet es ihn genau jetzt, bevor die fertige JavaScript-Datei überhaupt entsteht.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Wer oder was übernimmt eigentlich diese Übersetzung, ganz konkret auf meinem eigenen Rechner?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Die Dolmetscherin von eben hat einen Namen und lässt sich mit einem einzigen Ruf herbeirufen: Frau Meier, bitte übersetzen Sie den nächsten Satz.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Für TypeScript gibt es genau so ein rufbares Werkzeug, ein kleines Programm, das du im Terminal aus einer früheren Lektion mit einem kurzen Befehl aufrufst.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Dieses Werkzeug, das TypeScript-Dateien in JavaScript übersetzt, heißt tsc, kurz für TypeScript Compiler.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "tsc. T, S, C.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Im Terminal, im Ordner deines Projekts, reicht der Befehl npx tsc programm Punkt ts. npx sorgt dafür, dass tsc auch dann gefunden wird, wenn es nicht dauerhaft auf deinem Rechner installiert ist, sondern nur für dieses eine Projekt.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Und was sehe ich danach, wenn dieser Befehl fertig ist?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "War alles in Ordnung, erscheint ohne viel Aufhebens eine neue Datei programm.js im selben Ordner, bereit zum Ausführen. Gab es einen Typfehler, zeigt tsc stattdessen im Terminal eine Fehlermeldung mit der genauen Stelle, und die JavaScript-Datei entsteht in diesem Fall gar nicht erst.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss ich tsc jedes Mal für jede einzelne Datei einzeln aufrufen, bei einem größeren Projekt mit vielen Dateien?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir ein Restaurant vor, in dem eine Köchin nicht bei jedem einzelnen Gericht neu erklärt bekommt, wie scharf gewürzt werden soll. Stattdessen hängt in der Küche ein einziger Zettel mit den festen Regeln für die ganze Karte.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau so einen gemeinsamen Zettel mit festen Regeln gibt es auch für tsc, für ein ganzes Projekt auf einmal, statt jede Regel bei jedem einzelnen Aufruf neu aufzuschreiben.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Diese Datei mit den gemeinsamen Regeln für die Kompilierung eines ganzen Projekts heißt tsconfig.json.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "tsconfig.json.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Liegt eine Datei mit genau diesem Namen im Hauptordner deines Projekts, reicht der bloße Befehl npx tsc, ganz ohne Dateinamen dahinter. tsc liest dann die tsconfig.json und übersetzt automatisch alle dort genannten Dateien nach diesen gemeinsamen Regeln.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Was für Regeln stehen denn typischerweise in so einer tsconfig.json drin?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Zum Beispiel, für welche Umgebung übersetzt werden soll, welche Dateien überhaupt dazugehören, und wie streng TypeScript beim Prüfen sein soll. Genau diese letzte Regel schauen wir uns jetzt als Nächstes genauer an.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Was heißt streng beim Prüfen genau, kann TypeScript da nachlässig oder genau sein?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir zwei Türsteher vor einem Club vor. Der eine lässt jeden hinein, der halbwegs passend aussieht. Der andere prüft jeden Ausweis genau und weist auch bei der kleinsten Unstimmigkeit ab.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "TypeScript kann sich genau so unterschiedlich streng verhalten. In der lockeren Einstellung übersieht es manche riskante Stelle im Code großzügig. In der strengen Einstellung meldet es jede einzelne davon als Typfehler.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Diese strenge Einstellung, bei der TypeScript besonders genau prüft und wenig durchgehen lässt, nennt man den strict-Modus.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "strict-Modus.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "In der tsconfig.json aktivierst du das mit einer einzigen Zeile: Anführungszeichen strict Anführungszeichen Doppelpunkt true. Mit dieser einen Zeile schaltest du gleichzeitig eine ganze Reihe strenger Einzelprüfungen ein, statt jede von ihnen einzeln von Hand aufzuzählen.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Warum sollte ich mir das Leben mit dem strict-Modus absichtlich schwerer machen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Weil eine Stelle, die im lockeren Modus durchrutscht, später trotzdem zu einem echten Fehler werden kann, nur eben zur Laufzeit statt zur Kompilierzeit. Genau diese Reihenfolge haben wir in der ersten Lektion dieses Untermoduls als schlechter kennengelernt. Der strict-Modus verschiebt solche Stellen konsequent zurück zur Kompilierzeit.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein typisches Beispiel: ohne strict-Modus darf eine Variable manchmal heimlich den besonderen Wert null annehmen, ohne dass TypeScript das meldet. Im strict-Modus musst du diesen Fall ausdrücklich behandeln, genau wie beim Rückgabetyp ParsedCron senkrechter Strich null aus der ersten Lektion.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Gibt es dafür auch wieder ein Beispiel aus einem echten Projekt, so wie in den vorherigen Lektionen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Diesmal sogar aus dem Projekt, in dem diese Lektion selbst entsteht, dem FutureDev-Repo. Dieses Repo ist öffentlich einsehbar, so wie es für ein solches Lernprojekt üblich ist.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Im Hauptordner dieses Projekts liegt eine Datei mit dem Namen tsconfig.base.json. Sie heißt so, weil mehrere kleinere Projektteile innerhalb desselben Repos diese eine gemeinsame Grundlage benutzen, statt jede für sich alleine neu zu erfinden.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "In dieser Datei steht unter anderem die Zeile Anführungszeichen strict Anführungszeichen Doppelpunkt true. Das FutureDev-Projekt schaltet den strict-Modus also ausdrücklich für sich selbst ein, für jeden einzelnen Projektteil, der diese gemeinsame Grundlage benutzt.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Warum verlangt ausgerechnet dieses Lernprojekt selbst so eine strenge Einstellung von sich?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Weil in dieser Lektion dieselbe Regel gilt wie überall: eine Stelle, die man ohne strict-Modus als eventuell falsch übersehen könnte, meldet sich hier bereits während des Schreibens. Ein Projekt, das selbst Programmieren unterrichtet, will diese eigene Regel besonders ernst nehmen und nicht bloß predigen, ohne sie selbst zu befolgen.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Weiter oben in derselben Datei stehen außerdem Regeln wie target, also für welche JavaScript-Version übersetzt wird, und module, also wie die einzelnen Dateien des Projekts sich später gegenseitig finden. Für unsere Lektion reicht es, strict als das wichtigste einzelne Feld herauszugreifen.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Andere Ordner desselben Projekts, etwa der Ordner der Android-App, haben eine eigene, kleinere tsconfig.json, die diese gemeinsame Grundlage extra einbindet, statt sie noch einmal komplett neu aufzuschreiben. So bleibt die Regel strict wahr für true an einer einzigen Stelle gepflegt, für das ganze Projekt gültig.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Du hast eben target und module erwähnt. Was bedeuten diese beiden Regeln in der tsconfig.json genauer?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir vor, dieselbe Speisekarte muss für zwei verschiedene Küchen übersetzt werden, eine mit einem ganz modernen Induktionsherd, eine mit einem alten Gasherd. Manche Zubereitungsschritte lassen sich auf dem alten Herd schlicht nicht genauso ausführen.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau so unterscheiden sich auch Browser und andere Orte, an denen JavaScript läuft: manche verstehen ganz neue Schreibweisen der Sprache, andere, ältere brauchen eine vorsichtigere, etwas altmodischere Übersetzung.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Die Regel target in der tsconfig.json legt fest, für welche JavaScript-Version die Kompilierung übersetzen soll.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Steht dort Anführungszeichen target Anführungszeichen Doppelpunkt Anführungszeichen ES2022 Anführungszeichen, benutzt tsc beim Übersetzen Schreibweisen, die ab dem Jahr 2022 als JavaScript-Standard gelten. Für eine ältere Zielumgebung würde eine frühere Jahreszahl gewählt.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Und module, was regelt diese Einstellung?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "module legt fest, mit welcher Methode einzelne Dateien eines Projekts sich gegenseitig einbinden können, also wie eine Datei auf Funktionen oder Werte aus einer anderen Datei zugreift. Diese Lektion geht darauf nicht in die Tiefe, das gehört in eine eigene, spätere Lektion.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Für den Anfang reicht es, zu wissen, dass diese beiden Regeln existieren und in der tsconfig.json stehen, damit du sie in einer echten Datei wiedererkennst, auch ohne schon jede einzelne mögliche Einstellung auswendig zu kennen.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss ich tsc wirklich nach jeder einzelnen Änderung von Hand neu aufrufen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir einen Rauchmelder vor, der nicht erst auf Knopfdruck prüft, ob es brennt, sondern die ganze Zeit im Hintergrund mitläuft und sofort meldet, sobald sich etwas verändert.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "tsc kennt eine ganz ähnliche Betriebsart: statt einmal zu übersetzen und dann wieder aufzuhören, kann es dauerhaft im Hintergrund weiterlaufen und bei jeder gespeicherten Änderung sofort neu übersetzen.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Der Befehl dafür lautet npx tsc minus minus watch. Das Terminal-Fenster bleibt danach offen, und jedes Mal, wenn du eine .ts-Datei speicherst, erscheint sofort eine neue Meldung, ob alles in Ordnung war oder ob gerade ein Typfehler aufgetaucht ist.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Wie beende ich diesen Beobachtungsmodus wieder, wenn ich fertig bin?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Mit der Tastenkombination Strg C im selben Terminal-Fenster, aus einer früheren Lektion über das Terminal schon bekannt. Der Beobachtungsmodus lohnt sich vor allem, solange du aktiv an einer Datei arbeitest, weil du dann jeden neuen Typfehler sofort siehst, ganz ohne jedes Mal erneut tsc von Hand aufzurufen.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Merkt man den Nutzen einer gemeinsamen tsconfig.json eigentlich schon allein, oder erst im Team?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir zwei Handwerker vor, die gemeinsam an einem Haus bauen, aber jeder nach seinem eigenen Maßstab misst, der eine in Zentimetern, der andere in Zoll. Am Ende passen ihre beiden Bauteile nicht zusammen.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Ohne eine gemeinsame tsconfig.json könnte theoretisch jede Person im Team ihre eigenen Kompilierungs-Regeln benutzen, eine mit strict-Modus, eine ohne, eine mit einer ganz anderen Ziel-Version.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Läuft bei einer Person der strict-Modus und bei einer anderen nicht, meldet TypeScript bei beiden unterschiedlich viele Typfehler für denselben Code. Was bei der einen Person sauber durchläuft, könnte bei der anderen sofort eine ganze Reihe an Meldungen auslösen.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Eine gemeinsame tsconfig.json im Projekt sorgt dafür, dass alle im Team nach denselben Regeln geprüft werden, unabhängig davon, wessen Rechner den Code gerade übersetzt. Das ist derselbe Grundgedanke wie bei einem gemeinsamen interface aus einer früheren Lektion, nur eben für die Kompilierung selbst statt für ein einzelnes Objekt.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Wird die tsconfig.json dann auch mit ins gemeinsame Repo aufgenommen, so wie der eigentliche Code?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, genau das ist der übliche Weg. Die tsconfig.json wird ganz normal mit gespeichert, so wie jede andere Projektdatei auch, damit jede Person, die sich das Projekt neu auf den eigenen Rechner holt, sofort dieselben Regeln bekommt, ganz ohne eigene Einrichtung von Hand.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Im TypeScript Playground aus den vorherigen Lektionen hast du nie extra tsc aufgerufen, trotzdem kam sofort eine rote Wellenlinie. Wie passt das zusammen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir eine Rechtschreibprüfung in einem Schreibprogramm vor. Sie unterstreicht ein falsch geschriebenes Wort sofort, während du tippst, ganz ohne dass du extra einen Knopf drücken musst, um die Prüfung zu starten.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau so eine eingebaute, ständig mitlaufende Prüfung bringen auch viele Schreibprogramme für Code mit, und der TypeScript Playground ist im Grunde nichts anderes als so ein Schreibprogramm, direkt im Browser.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Im Hintergrund benutzen diese Werkzeuge dieselbe Prüftechnik wie tsc, nur ohne jedes Mal wirklich eine fertige JavaScript-Datei zu erzeugen. Das ist der Grund, warum du eine rote Wellenlinie schon siehst, bevor du überhaupt einen einzigen Kompilierungs-Befehl von Hand aufgerufen hast.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Brauche ich tsc dann überhaupt noch, wenn mein Schreibprogramm die Fehler doch schon vorher zeigt?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, denn die fertige JavaScript-Datei, die ein Browser wirklich ausführen kann, entsteht nach wie vor erst durch einen echten Kompilierungs-Lauf, sei es von Hand mit tsc oder automatisch als Teil eines größeren Build-Vorgangs. Die Wellenlinie im Schreibprogramm hilft dir nur früher, den Fehler überhaupt zu bemerken.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Was passiert, wenn mein Projekt aus vielen einzelnen .ts-Dateien besteht, nicht nur aus einer einzigen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir eine ganze Bäckerei-Filiale vor, mit mehreren Räumen: Backstube, Verkaufsraum, Lager. Jeder Raum hat seine eigene Aufgabe, trotzdem gehören alle zusammen zu derselben Filiale.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau so bestehen größere TypeScript-Projekte fast immer aus mehreren einzelnen .ts-Dateien, jede mit ihrer eigenen Aufgabe, etwa eine Datei nur für Funktionen zum Rechnen, eine andere nur für das Lesen von Formularen.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Die tsconfig.json legt fest, welche dieser Dateien überhaupt zum Projekt gehören und mit übersetzt werden sollen. Ein einziger Aufruf von npx tsc reicht dann für das gesamte Projekt auf einmal, statt jede Datei einzeln von Hand anzugeben.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Findet TypeScript dabei in nur einer einzigen von zehn Dateien einen Typfehler, meldet es genau diese eine Stelle, während alle anderen neun Dateien für sich betrachtet weiterhin fehlerfrei bleiben. Ein einzelner Fehler reißt also nicht das ganze Projekt gleichzeitig mit sich.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Also noch einmal ganz kurz: Kompilierung übersetzt TypeScript in gewöhnliches JavaScript, das Werkzeug dafür heißt tsc, seine gemeinsamen Regeln für ein ganzes Projekt stehen in der tsconfig.json, und der strict-Modus schaltet dort besonders genaue Prüfungen ein, damit möglichst viele Fehler schon zur Kompilierzeit auffallen.",
+      "isKeySentence": true,
+      "role": "key"
+    },
+    {
+      "speaker": "A",
+      "text": "Zum Schluss noch einmal alle neuen Begriffe von heute in einer kurzen Liste.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Kompilierung: das Übersetzen von TypeScript-Code in gewöhnliches JavaScript, das ein Browser oder ein anderer Ort direkt ausführen kann.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "tsc: das Werkzeug, das TypeScript-Dateien in JavaScript übersetzt, kurz für TypeScript Compiler.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "tsconfig.json: die Datei mit den gemeinsamen Regeln für die Kompilierung eines ganzen Projekts.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "strict-Modus: die strenge Einstellung, bei der TypeScript besonders genau prüft und wenig durchgehen lässt.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss ich meine fertige programm.js-Datei nach der Kompilierung noch von Hand anfassen?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, im Regelfall nicht, sie ist reines Arbeitsergebnis der Kompilierung und wird bei der nächsten Änderung deiner programm.ts-Datei einfach neu erzeugt. Änderungen nimmst du stattdessen in der TypeScript-Datei vor, niemals direkt in der erzeugten JavaScript-Datei.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Was passiert, wenn ich versuche, tsc auf eine Datei ohne einen einzigen Typfehler anzuwenden?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Dann läuft die Kompilierung ganz ohne Meldung durch, und du bekommst schlicht deine übersetzte JavaScript-Datei. Keine Meldung ist in diesem Fall eine gute Nachricht, sie bedeutet, TypeScript hat nichts Verdächtiges gefunden.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Brauche ich für jedes kleine Übungsprojekt sofort eine eigene tsconfig.json?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Für ein einzelnes kurzes Beispiel wie in dieser Lektion reicht oft ein einfacher Aufruf von tsc mit dem Dateinamen dahinter, ganz ohne eigene tsconfig.json. Sobald ein Projekt mehrere Dateien hat oder eigene Regeln braucht, lohnt sich eine eigene tsconfig.json von Anfang an.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann ich den strict-Modus nachträglich wieder ausschalten, wenn er mir zu viele Meldungen zeigt?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Technisch ja, indem du in der tsconfig.json strict auf false setzt, aber davon rät diese Lektion ausdrücklich ab. Die vielen Meldungen zeigen meist echte, bisher versteckte Schwachstellen im eigenen Code, kein Ausschalten macht diese Schwachstellen wieder ungeschehen, es blendet sie nur aus.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss ich tsconfig.base.json und tsconfig.json auswendig auseinanderhalten können?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, für den Anfang reicht das Grundprinzip: eine tsconfig.json enthält die Regeln für ein Projekt, und ein Name mit dem Zusatz base weist nur darauf hin, dass mehrere kleinere Projektteile diese eine Datei gemeinsam als Grundlage benutzen. Die genaue Aufteilung in mehrere solcher Dateien lernst du bei Bedarf erst in einem größeren eigenen Projekt.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Verändert die Kompilierung eigentlich auch, wie mein Code inhaltlich funktioniert, oder nur seine Schreibweise?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Im Regelfall nur die Schreibweise, nicht das eigentliche Verhalten deines Programms. Eine Funktion, die vorher in TypeScript eine bestimmte Zahl berechnet hat, berechnet nach der Kompilierung in JavaScript weiterhin dieselbe Zahl, nur eben ohne die geschriebenen Etiketten drumherum.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Was, wenn ich eine fertige .js-Datei aus dem Internet habe und wissen will, ob sie aus TypeScript kompiliert wurde?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Von außen ist das oft nicht mehr zu erkennen, weil die Kompilierung alle Etiketten restlos entfernt. Manchmal verrät eine begleitende Datei mit der Endung .d.ts, die zusätzlich zur eigentlichen JavaScript-Datei mitgeliefert wird, dass ursprünglich TypeScript im Spiel war, das lernst du aber erst in einer späteren, vertiefenden Lektion.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann ich in derselben tsconfig.json auch eigene, zusätzliche Regeln neben strict, target und module ergänzen?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, eine tsconfig.json kann noch viele weitere einzelne Regeln enthalten, etwa welcher Ordner die fertigen JavaScript-Dateien am Ende aufnehmen soll. Für den Anfang genügt es völlig, die drei in dieser Lektion genannten Regeln wiederzuerkennen, weitere Regeln lernst du bei Bedarf dazu, sobald ein eigenes Projekt sie wirklich braucht.",
+      "isKeySentence": false,
+      "role": "faq"
+    }
+  ],
+  "practiceExample": {
+    "text": "Im FutureDev-Repo schaltet die Datei tsconfig.base.json im Hauptordner mit der Zeile strict Doppelpunkt true den strict-Modus für das ganze Projekt ein. Mehrere kleinere Projektteile im selben Repo binden diese eine gemeinsame Grundlage ein, statt die Regel mehrfach getrennt aufzuschreiben, laut der README-Datei des Projekts.",
+    "repoNote": "repo-futuredev",
+    "location": "tsconfig.base.json, Wurzelverzeichnis, Feld strict; README, Abschnitt zu TypeScript strict"
+  },
+  "quiz": [
+    {
+      "question": "Welches Alltagsbild benutzt diese Lektion für die Kompilierung?",
+      "area": "Kompilierung-Grundlagen",
+      "options": [
+        {
+          "text": "Eine Dolmetscherin, die auf einer Konferenz sofort in eine andere Sprache übersetzt.",
+          "isCorrect": true,
+          "explanation": "Genau dieses Bild eröffnet die Lektion für das Übersetzen von TypeScript in JavaScript."
+        },
+        {
+          "text": "Ein Kellner, der Bestellungen in der Küche laut vorliest.",
+          "isCorrect": false,
+          "explanation": "Dieses Bild kommt in der Lektion nicht vor."
+        },
+        {
+          "text": "Ein Postbote, der jeden Morgen Briefe von einem Haus zum nächsten trägt, ohne deren Inhalt zu lesen.",
+          "isCorrect": false,
+          "explanation": "Auch dieses Bild wird in der Lektion nicht benutzt."
+        },
+        {
+          "text": "Ein Wachhund, der nachts das Grundstück bewacht.",
+          "isCorrect": false,
+          "explanation": "Ein Wachhund passt eher zu einer Sicherheitsprüfung, nicht zur Kompilierung."
+        }
+      ]
+    },
+    {
+      "question": "Was ist laut Lektion Kompilierung?",
+      "area": "Kompilierung-Grundlagen",
+      "options": [
+        {
+          "text": "Das Übersetzen von TypeScript-Code in gewöhnliches JavaScript.",
+          "isCorrect": true,
+          "explanation": "Das ist genau die Definition aus der Lektion."
+        },
+        {
+          "text": "Das Löschen aller Kommentare aus einer Textdatei.",
+          "isCorrect": false,
+          "explanation": "Kommentare werden bei der Kompilierung nicht zwingend gelöscht, das ist nicht ihre Aufgabe."
+        },
+        {
+          "text": "Das Verschicken einer Datei über das Internet an einen Server.",
+          "isCorrect": false,
+          "explanation": "Das beschreibt eher einen Upload, nicht die Übersetzung von TypeScript in JavaScript."
+        },
+        {
+          "text": "Das Umbenennen einer Datei von .ts in .js, ohne den Inhalt zu verändern.",
+          "isCorrect": false,
+          "explanation": "Der Inhalt verändert sich sehr wohl, alle geschriebenen Etiketten verschwinden dabei."
+        }
+      ]
+    },
+    {
+      "question": "Was passiert laut Lektion, wenn TypeScript bei der Kompilierung einen Typfehler findet?",
+      "area": "Kompilierung-Grundlagen",
+      "options": [
+        {
+          "text": "Der Fehler wird gemeldet, bevor die fertige JavaScript-Datei überhaupt entsteht.",
+          "isCorrect": true,
+          "explanation": "Genau das erklärt die Lektion als Beispiel für Kompilierzeit aus der ersten Lektion."
+        },
+        {
+          "text": "Der Typfehler verschwindet dabei ganz automatisch und stillschweigend beim Übersetzen, völlig ohne jede sichtbare Meldung.",
+          "isCorrect": false,
+          "explanation": "Die Lektion beschreibt das Gegenteil, der Fehler wird gerade jetzt gemeldet."
+        },
+        {
+          "text": "Die JavaScript-Datei entsteht trotzdem ganz normal weiter.",
+          "isCorrect": false,
+          "explanation": "Bei einem Typfehler entsteht die fertige Datei in diesem Beispiel gerade nicht."
+        },
+        {
+          "text": "Der Browser zeigt den Fehler erst beim Öffnen der fertigen Webseite an.",
+          "isCorrect": false,
+          "explanation": "Genau das will die Kompilierung ja verhindern, der Fehler zeigt sich schon vorher."
+        }
+      ]
+    },
+    {
+      "question": "Wofür steht laut Lektion die Abkürzung tsc?",
+      "area": "tsc",
+      "options": [
+        {
+          "text": "Für TypeScript Compiler, das Werkzeug, das TypeScript in JavaScript übersetzt.",
+          "isCorrect": true,
+          "explanation": "Genau das erklärt die Lektion als Bedeutung der Abkürzung."
+        },
+        {
+          "text": "Für Text String Converter, ein Werkzeug zum Umwandeln von Groß- und Kleinschreibung.",
+          "isCorrect": false,
+          "explanation": "Diese Bedeutung erfindet die Lektion nicht, tsc steht für TypeScript Compiler."
+        },
+        {
+          "text": "Für Terminal Session Control, ein Werkzeug zum Verwalten von Terminal-Fenstern.",
+          "isCorrect": false,
+          "explanation": "Auch diese Bedeutung kommt in der Lektion nicht vor."
+        },
+        {
+          "text": "Für Type Safety Check, eine reine Prüfung ganz ohne Übersetzung.",
+          "isCorrect": false,
+          "explanation": "tsc übersetzt tatsächlich auch, es prüft nicht nur, ohne eine Datei zu erzeugen."
+        }
+      ]
+    },
+    {
+      "question": "Was passiert laut Lektion nach dem Befehl npx tsc programm.ts, wenn alles in Ordnung war?",
+      "area": "tsc",
+      "options": [
+        {
+          "text": "Eine neue Datei programm.js erscheint im selben Ordner.",
+          "isCorrect": true,
+          "explanation": "Genau das beschreibt die Lektion als Ergebnis einer erfolgreichen Kompilierung."
+        },
+        {
+          "text": "Die Datei programm.ts wird dabei unwiderruflich gelöscht.",
+          "isCorrect": false,
+          "explanation": "Die ursprüngliche TypeScript-Datei bleibt laut Lektion erhalten, sie wird nicht gelöscht."
+        },
+        {
+          "text": "Der Browser öffnet sich automatisch mit der fertigen Webseite.",
+          "isCorrect": false,
+          "explanation": "Die Lektion beschreibt nur das Entstehen der JavaScript-Datei, kein automatisches Öffnen eines Browsers."
+        },
+        {
+          "text": "Es erscheint eine Fehlermeldung, auch wenn kein Typfehler vorlag.",
+          "isCorrect": false,
+          "explanation": "Bei einer fehlerfreien Datei erscheint laut Lektion gerade keine Fehlermeldung."
+        }
+      ]
+    },
+    {
+      "question": "Wofür dient laut Lektion eine tsconfig.json?",
+      "area": "tsconfig.json",
+      "options": [
+        {
+          "text": "Für die gemeinsamen Kompilierungs-Regeln eines ganzen Projekts an einer einzigen Stelle.",
+          "isCorrect": true,
+          "explanation": "Genau das erklärt die Lektion mit dem Bild des Zettels in der Restaurantküche."
+        },
+        {
+          "text": "Für die Speicherung des eigentlichen Programmcodes selbst.",
+          "isCorrect": false,
+          "explanation": "Der eigentliche Programmcode steht in den .ts-Dateien, nicht in der tsconfig.json."
+        },
+        {
+          "text": "Für eine vollständige Liste aller Mitwirkenden an einem irgendwo veröffentlichten Projekt.",
+          "isCorrect": false,
+          "explanation": "Eine solche Liste ist nicht die Aufgabe der tsconfig.json in dieser Lektion."
+        },
+        {
+          "text": "Für die Anzeige von Quizfragen innerhalb einer Lern-App.",
+          "isCorrect": false,
+          "explanation": "Quizfragen haben mit der tsconfig.json aus dieser Lektion nichts zu tun."
+        }
+      ]
+    },
+    {
+      "question": "Was passiert laut Lektion, wenn eine tsconfig.json im Hauptordner eines Projekts liegt?",
+      "area": "tsconfig.json",
+      "options": [
+        {
+          "text": "Der bloße Befehl npx tsc reicht aus, ganz ohne Dateinamen dahinter.",
+          "isCorrect": true,
+          "explanation": "Genau das beschreibt die Lektion als Vorteil einer vorhandenen tsconfig.json."
+        },
+        {
+          "text": "tsc funktioniert dann überhaupt nicht mehr.",
+          "isCorrect": false,
+          "explanation": "Das Gegenteil ist richtig, tsc wird durch die Datei gerade einfacher zu benutzen."
+        },
+        {
+          "text": "Jede einzelne Datei muss trotzdem weiterhin einzeln beim Befehl genannt werden.",
+          "isCorrect": false,
+          "explanation": "Genau das will die tsconfig.json laut Lektion vermeiden."
+        },
+        {
+          "text": "Die Datei wird von TypeScript vollständig ignoriert.",
+          "isCorrect": false,
+          "explanation": "tsc liest die tsconfig.json laut Lektion ausdrücklich aus, statt sie zu ignorieren."
+        }
+      ]
+    },
+    {
+      "question": "Wie beschreibt die Lektion den Unterschied zwischen einer lockeren und der strengen Einstellung von TypeScript?",
+      "area": "strict-Modus",
+      "options": [
+        {
+          "text": "Mit zwei Türstehern, von denen einer viel genauer prüft als der andere.",
+          "isCorrect": true,
+          "explanation": "Genau dieses Bild benutzt die Lektion für den Unterschied zwischen locker und strict-Modus."
+        },
+        {
+          "text": "Mit zwei Köchinnen, die exakt dasselbe Rezept auf unterschiedliche Weise kochen.",
+          "isCorrect": false,
+          "explanation": "Dieses Bild kommt in der Lektion an dieser Stelle nicht vor."
+        },
+        {
+          "text": "Mit einer Ampel, die niemals auf Rot springt.",
+          "isCorrect": false,
+          "explanation": "Auch dieses Bild wird in der Lektion nicht benutzt."
+        },
+        {
+          "text": "Mit zwei Postboten, die unterschiedlich schnell laufen.",
+          "isCorrect": false,
+          "explanation": "Über Geschwindigkeit sagt die Lektion an dieser Stelle nichts aus."
+        }
+      ]
+    },
+    {
+      "question": "Wie schaltet man laut Lektion den strict-Modus in der tsconfig.json ein?",
+      "area": "strict-Modus",
+      "options": [
+        {
+          "text": "Mit der Zeile Anführungszeichen strict Anführungszeichen Doppelpunkt true.",
+          "isCorrect": true,
+          "explanation": "Genau diese Zeile nennt die Lektion als Beispiel."
+        },
+        {
+          "text": "Indem man die Datei tsconfig.json vollständig löscht.",
+          "isCorrect": false,
+          "explanation": "Ein Löschen der Datei schaltet keine Einstellung ein, es entfernt die gemeinsamen Regeln."
+        },
+        {
+          "text": "Indem man jede Datei einzeln in strict.ts umbenennt.",
+          "isCorrect": false,
+          "explanation": "Der Dateiname allein hat keinen Einfluss auf den strict-Modus."
+        },
+        {
+          "text": "Indem man den Befehl tsc im Terminal mit einem doppelten Ausrufezeichen direkt dahinter erneut aufruft.",
+          "isCorrect": false,
+          "explanation": "Ein doppeltes Ausrufezeichen hinter tsc kommt in der Lektion nicht vor."
+        }
+      ]
+    },
+    {
+      "question": "Warum lohnt sich laut Lektion der strict-Modus, obwohl er mehr Meldungen zeigt?",
+      "area": "strict-Modus",
+      "options": [
+        {
+          "text": "Weil er riskante Stellen schon zur Kompilierzeit meldet statt erst später zur Laufzeit.",
+          "isCorrect": true,
+          "explanation": "Genau das nennt die Lektion als Hauptgrund, mit Verweis auf die erste Lektion des Untermoduls."
+        },
+        {
+          "text": "Weil er die fertige JavaScript-Datei kleiner macht als ohne strict-Modus.",
+          "isCorrect": false,
+          "explanation": "Über die Dateigröße der fertigen JavaScript-Datei sagt diese Lektion nichts aus."
+        },
+        {
+          "text": "Weil er automatisch alle Kommentare aus dem Code entfernt.",
+          "isCorrect": false,
+          "explanation": "Kommentare werden vom strict-Modus laut dieser Lektion nicht angefasst."
+        },
+        {
+          "text": "Weil ohne ihn tsc überhaupt nicht startet.",
+          "isCorrect": false,
+          "explanation": "tsc funktioniert laut Lektion auch ganz ohne strict-Modus, nur eben nachlässiger."
+        }
+      ]
+    },
+    {
+      "question": "Was zeigt das Beispiel tsconfig.base.json aus dem FutureDev-Repo laut Lektion?",
+      "area": "Praxisbeispiel FutureDev",
+      "options": [
+        {
+          "text": "Das Projekt schaltet strict für sich selbst ausdrücklich ein, mit strict Doppelpunkt true.",
+          "isCorrect": true,
+          "explanation": "Genau das nennt die Lektion als Fundstelle in dieser Datei."
+        },
+        {
+          "text": "Das Projekt verzichtet vollständig auf jede eigene tsconfig-Datei.",
+          "isCorrect": false,
+          "explanation": "Das Gegenteil ist richtig, genau so eine Datei liegt im Hauptordner des Projekts."
+        },
+        {
+          "text": "Das Projekt benutzt ausschließlich JavaScript, niemals TypeScript.",
+          "isCorrect": false,
+          "explanation": "Laut Lektion benutzt das Projekt gerade TypeScript mit eingeschaltetem strict-Modus."
+        },
+        {
+          "text": "Das Projekt schaltet strict absichtlich für alle Teile ausdrücklich aus.",
+          "isCorrect": false,
+          "explanation": "Laut Lektion ist strict in dieser Datei ausdrücklich eingeschaltet, nicht ausgeschaltet."
+        }
+      ]
+    },
+    {
+      "question": "Welche Aussage fasst die Kernidee dieser Lektion am besten zusammen?",
+      "area": "Zusammenfassung",
+      "options": [
+        {
+          "text": "tsc übersetzt TypeScript nach den Regeln der tsconfig.json in JavaScript, und strict macht diese Prüfung besonders genau.",
+          "isCorrect": true,
+          "explanation": "Das ist genau der Kernsatz der Lektion, in Sprecher B zusammengefasst."
+        },
+        {
+          "text": "Der strict-Modus ersetzt laut dieser Lektion vollständig das Schreiben einer tsconfig.json.",
+          "isCorrect": false,
+          "explanation": "strict ist laut Lektion nur eine einzelne Einstellung innerhalb der tsconfig.json, kein Ersatz für sie."
+        },
+        {
+          "text": "tsc wird laut dieser Lektion ausschließlich im Browser selbst ausgeführt, niemals im Terminal.",
+          "isCorrect": false,
+          "explanation": "Die Lektion beschreibt tsc gerade als Terminal-Befehl, nicht als Browser-Werkzeug."
+        },
+        {
+          "text": "Eine tsconfig.json darf laut dieser Lektion nur für ein einziges Projekt gleichzeitig existieren.",
+          "isCorrect": false,
+          "explanation": "Über eine solche Obergrenze trifft diese Lektion keine Aussage."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Lege auf deinem Rechner einen neuen, leeren Ordner an und erstelle darin eine Datei namens uebung.ts mit dem Inhalt let text Doppelpunkt string ist gleich 5 (bewusst eine Zahl statt Text). Installiere TypeScript einmalig mit npm install minus g typescript im Terminal, und übersetze die Datei danach mit npx tsc uebung.ts.",
+    "expectation": "Das Terminal zeigt eine Fehlermeldung mit einem Typfehler, weil 5 keine Zeichenkette ist. Korrigierst du den Wert auf Anführungszeichen fünf Anführungszeichen und rufst den Befehl erneut auf, entsteht ohne Fehlermeldung eine Datei uebung.js. Ein Screenshot von beiden Zuständen, mit und ohne Fehlermeldung.",
+    "checklist": [
+      "Neuen Ordner mit Datei uebung.ts angelegt",
+      "TypeScript per npm install minus g typescript installiert",
+      "npx tsc uebung.ts mit absichtlichem Typfehler ausgeführt und Fehlermeldung gesehen",
+      "Wert korrigiert und Befehl erneut ausgeführt",
+      "Entstandene Datei uebung.js im Ordner gefunden und beide Zustände per Screenshot festgehalten"
+    ]
+  },
+  "audio": {
+    "file": "M02-04-04.mp3",
+    "durationSeconds": 1180,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Muss ich meine fertige programm.js-Datei nach der Kompilierung noch von Hand anfassen?",
+      "answer": "Nein, im Regelfall nicht, sie ist reines Arbeitsergebnis der Kompilierung und wird bei der nächsten Änderung deiner programm.ts-Datei einfach neu erzeugt. Änderungen nimmst du stattdessen in der TypeScript-Datei vor, niemals direkt in der erzeugten JavaScript-Datei."
+    },
+    {
+      "question": "Was passiert, wenn ich versuche, tsc auf eine Datei ohne einen einzigen Typfehler anzuwenden?",
+      "answer": "Dann läuft die Kompilierung ganz ohne Meldung durch, und du bekommst schlicht deine übersetzte JavaScript-Datei. Keine Meldung ist in diesem Fall eine gute Nachricht, sie bedeutet, TypeScript hat nichts Verdächtiges gefunden."
+    },
+    {
+      "question": "Brauche ich für jedes kleine Übungsprojekt sofort eine eigene tsconfig.json?",
+      "answer": "Für ein einzelnes kurzes Beispiel wie in dieser Lektion reicht oft ein einfacher Aufruf von tsc mit dem Dateinamen dahinter, ganz ohne eigene tsconfig.json. Sobald ein Projekt mehrere Dateien hat oder eigene Regeln braucht, lohnt sich eine eigene tsconfig.json von Anfang an."
+    },
+    {
+      "question": "Kann ich den strict-Modus nachträglich wieder ausschalten, wenn er mir zu viele Meldungen zeigt?",
+      "answer": "Technisch ja, indem du in der tsconfig.json strict auf false setzt, aber davon rät diese Lektion ausdrücklich ab. Die vielen Meldungen zeigen meist echte, bisher versteckte Schwachstellen im eigenen Code, kein Ausschalten macht diese Schwachstellen wieder ungeschehen, es blendet sie nur aus."
+    },
+    {
+      "question": "Muss ich tsconfig.base.json und tsconfig.json auswendig auseinanderhalten können?",
+      "answer": "Nein, für den Anfang reicht das Grundprinzip: eine tsconfig.json enthält die Regeln für ein Projekt, und ein Name mit dem Zusatz base weist nur darauf hin, dass mehrere kleinere Projektteile diese eine Datei gemeinsam als Grundlage benutzen. Die genaue Aufteilung in mehrere solcher Dateien lernst du bei Bedarf erst in einem größeren eigenen Projekt."
+    },
+    {
+      "question": "Verändert die Kompilierung eigentlich auch, wie mein Code inhaltlich funktioniert, oder nur seine Schreibweise?",
+      "answer": "Im Regelfall nur die Schreibweise, nicht das eigentliche Verhalten deines Programms. Eine Funktion, die vorher in TypeScript eine bestimmte Zahl berechnet hat, berechnet nach der Kompilierung in JavaScript weiterhin dieselbe Zahl, nur eben ohne die geschriebenen Etiketten drumherum."
+    },
+    {
+      "question": "Was, wenn ich eine fertige .js-Datei aus dem Internet habe und wissen will, ob sie aus TypeScript kompiliert wurde?",
+      "answer": "Von außen ist das oft nicht mehr zu erkennen, weil die Kompilierung alle Etiketten restlos entfernt. Manchmal verrät eine begleitende Datei mit der Endung .d.ts, die zusätzlich zur eigentlichen JavaScript-Datei mitgeliefert wird, dass ursprünglich TypeScript im Spiel war, das lernst du aber erst in einer späteren, vertiefenden Lektion."
+    },
+    {
+      "question": "Kann ich in derselben tsconfig.json auch eigene, zusätzliche Regeln neben strict, target und module ergänzen?",
+      "answer": "Ja, eine tsconfig.json kann noch viele weitere einzelne Regeln enthalten, etwa welcher Ordner die fertigen JavaScript-Dateien am Ende aufnehmen soll. Für den Anfang genügt es völlig, die drei in dieser Lektion genannten Regeln wiederzuerkennen, weitere Regeln lernst du bei Bedarf dazu, sobald ein eigenes Projekt sie wirklich braucht."
+    }
+  ]
+}
