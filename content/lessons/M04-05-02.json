@@ -1,0 +1,723 @@
+{
+  "id": "M04-05-02",
+  "title": "AWS-Überblick",
+  "durationMinutes": 34,
+  "prerequisites": [
+    "M04-05-01"
+  ],
+  "terms": [
+    {
+      "term": "EC2",
+      "definition": "Elastic Compute Cloud, der Dienst von AWS für virtuelle Server in der Cloud. EC2 stellt Rechenkapazität nach Bedarf bereit, die in Minuten gestartet und gestoppt werden kann, und wird nach verbrauchten Stunden abgerechnet."
+    },
+    {
+      "term": "S3",
+      "definition": "Simple Storage Service, der Objektspeicher von AWS für beliebige Dateien. S3 speichert Daten in Buckets, skaliert unbegrenzt und ist für seine hohe Haltbarkeit von 99,999999999 Prozent bekannt, was im Fachjargon Eleven Nines heißt."
+    },
+    {
+      "term": "Region",
+      "definition": "Ein geografisch abgegrenztes Rechenzentrumsgebiet von AWS, zum Beispiel eu-central-1 in Frankfurt oder us-east-1 in Virginia. Jede Region besteht aus mehreren Availability Zones, und der Kunde wählt die Region, in der seine Daten gespeichert und verarbeitet werden sollen."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen riesigen Baumarkt vor, in dem du nicht nur Schrauben und Farbe kaufen, sondern auch ganze Baumaschinen mieten kannst: vom Akkuschrauber bis zum Baukran. Du zahlst nur für das, was du tatsächlich nutzt, und wenn du etwas nicht mehr brauchst, gibst du es zurück.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "AWS, Amazon Web Services, ist dieser Baumarkt für die Cloud. Es ist die größte und umfassendste Cloud-Plattform der Welt mit über 200 Diensten. Du kannst virtuelle Server mieten, Datenbanken starten, Dateien speichern, KI-Modelle trainieren und vieles mehr. Alles wird nach Verbrauch abgerechnet, du zahlst nur für das, was du tatsächlich nutzt, und du kannst jederzeit mehr Ressourcen hinzufügen oder nicht mehr benötigte zurückgeben.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Wenn Vercel schon so einfach ist, warum sollte ich mich dann überhaupt mit AWS beschäftigen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Vercel ist ein Spezialist für Webanwendungen, AWS ist ein Generalist für alles. Vercel nimmt dir Entscheidungen ab und macht sie für dich, AWS gibt dir alle Optionen und du entscheidest. Wenn deine Anwendung über das hinauswächst, was Vercel bietet, oder wenn du Dinge tun willst, die Vercel nicht kann, landest du bei AWS oder einem der anderen großen Cloud-Anbieter. Außerdem ist AWS die mit Abstand am häufigsten nachgefragte Cloud-Kompetenz in Stellenausschreibungen. Selbst wenn du am Ende auf Vercel deployst, solltest du die Grundbegriffe von AWS kennen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "EC2, Elastic Compute Cloud, ist der Dienst von AWS für virtuelle Server, die nach Bedarf gestartet und nach Stunden abgerechnet werden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Stell dir vor, du betreibst eine Webanwendung, die plötzlich von einem großen Blog empfohlen wird. Deine Besucherzahlen verzehnfachen sich innerhalb einer Stunde. Mit EC2 kannst du innerhalb von Minuten weitere Server starten, die die Last verteilen, und sie nach dem Ansturm wieder stoppen. Du bezahlst nur für die Stunden, in denen die zusätzlichen Server tatsächlich liefen. Ohne Cloud müsstest du Server für den Spitzenbedarf kaufen, die die meiste Zeit ungenutzt herumstehen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Diese Elastizität, also das schnelle Hoch- und Runterskalieren, ist der Kern des Cloud-Versprechens. Du behandelst Server nicht mehr als Anschaffung, sondern als Dienstleistung, die du nach Bedarf beziehst. Das senkt die Kosten für kleine Anwendungen und gibt großen Anwendungen die Flexibilität, mit Lastspitzen umzugehen, ohne in teure Reserve-Hardware zu investieren.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist S3, und wofür brauche ich es?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir ein unendlich großes Lagerhaus vor, in das du beliebig viele Kisten stellen kannst. Jede Kiste hat eine eindeutige Nummer, und du kannst sie jederzeit von überall auf der Welt öffnen oder wieder zustellen. Das Lagerhaus ist so gebaut, dass es selbst bei einem Brand oder Erdbeben keine einzige Kiste verliert.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "S3, Simple Storage Service, ist dieses unendliche Lagerhaus für Dateien. Du speicherst Dateien in Buckets, das sind so etwas wie Ordner mit einem weltweit eindeutigen Namen. Jede Datei bekommt einen Schlüssel, unter dem du sie wiederfindest. S3 skaliert unbegrenzt: ob du eine Datei oder eine Milliarde Dateien speicherst, der Dienst verhält sich gleich. Und S3 ist für seine extreme Haltbarkeit bekannt: die Wahrscheinlichkeit, eine Datei zu verlieren, liegt bei 0,000000001 Prozent pro Jahr.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "S3, Simple Storage Service, ist der Objektspeicher von AWS für beliebige Dateien mit unbegrenzter Skalierung und extremer Haltbarkeit.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In einer typischen Webanwendung speicherst du von Nutzern hochgeladene Bilder in S3. Statt die Bilder auf dem Server der Anwendung zu speichern, wo sie Speicher verbrauchen und bei einem Serverausfall verloren gehen könnten, lädst du sie direkt in einen S3-Bucket. Die Anwendung speichert nur den S3-Schlüssel in der Datenbank und generiert bei Bedarf eine URL, unter der das Bild ausgeliefert wird. S3 übernimmt die Skalierung, die Sicherung und die Auslieferung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die Trennung von Anwendungsserver und Dateispeicher ist ein bewährtes Architekturmuster. Der Server bleibt schlank und austauschbar, die Dateien sind sicher und unbegrenzt skalierbar. Wenn du den Server austauschst oder die Anwendung auf mehrere Server verteilst, bleiben die Dateien in S3 unverändert und für alle Server gleichermaßen erreichbar.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was bedeutet es, dass AWS in Regionen aufgeteilt ist?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine globale Restaurantkette vor, die in jeder größeren Stadt eine Filiale hat. Jede Filiale hat ihre eigene Küche, ihre eigenen Zutaten und ihr eigenes Personal. Wenn du in Berlin isst, kommt dein Essen aus der Berliner Küche, nicht aus New York.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "AWS ist in Regionen aufgeteilt, das sind geografisch abgegrenzte Rechenzentrumsgebiete. Es gibt Regionen in Frankfurt, Irland, London, Virginia, Oregon, Tokio, Sydney und vielen weiteren Orten. Jede Region besteht aus mehreren Availability Zones, das sind physisch getrennte Rechenzentren innerhalb derselben Region. Wenn du einen Dienst startest, wählst du die Region, in der er laufen soll. Deine Daten bleiben in dieser Region, es sei denn, du verschiebst sie explizit.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Eine Region ist ein geografisch abgegrenztes Rechenzentrumsgebiet von AWS, in dem deine Daten gespeichert und verarbeitet werden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Für eine Anwendung mit europäischen Nutzern wählst du die Region eu-central-1 in Frankfurt. Deine Server laufen in Frankfurt, deine Datenbank steht in Frankfurt, deine S3-Buckets liegen in Frankfurt. Die Nutzer in Europa haben kurze Latenzen, und du erfüllst die europäischen Datenschutzanforderungen, weil die Daten die EU nicht verlassen. Würdest du stattdessen us-east-1 in Virginia wählen, wären deine Daten in den USA, was zusätzliche datenschutzrechtliche Hürden aufwirft.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die Wahl der richtigen Region ist eine der wichtigsten Entscheidungen beim Start eines AWS-Projekts. Sie beeinflusst die Latenz für deine Nutzer, die Kosten, denn Regionen haben unterschiedliche Preise, und die rechtlichen Rahmenbedingungen, denn in verschiedenen Ländern gelten verschiedene Datenschutzgesetze. Für europäische Projekte ist eu-central-1 in Frankfurt fast immer die richtige Wahl.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Welche anderen wichtigen AWS-Dienste sollte ich kennen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Neben EC2 und S3 gibt es drei weitere Dienste, die in fast jedem Projekt vorkommen. RDS ist der Dienst für verwaltete Datenbanken: du wählst eine Datenbank-Engine wie PostgreSQL oder MySQL, und AWS kümmert sich um Backups, Updates und Ausfallsicherheit. Lambda ist das AWS-Äquivalent zu Vercels Serverless Functions: du schreibst eine Funktion, und AWS führt sie bei Bedarf aus. CloudFront ist das Content Delivery Network von AWS, vergleichbar mit Vercels Edge Network: es verteilt Inhalte weltweit und reduziert die Latenz.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Diese fünf Dienste, EC2, S3, RDS, Lambda und CloudFront, bilden das Grundgerüst der meisten AWS-basierten Anwendungen. Wenn du diese fünf verstehst, kannst du die Architektur der meisten Cloud-Anwendungen nachvollziehen und in AWS-Diskussionen mitreden. Alles Weitere sind Spezialdienste für besondere Anforderungen, die du bei Bedarf dazulernen kannst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen riesigen Werkzeugkasten vor, in dem jedes Werkzeug für eine bestimmte Aufgabe optimiert ist. Der Hammer für Nägel, die Säge für Holz, der Schraubendreher für Schrauben. Du musst nicht alle Werkzeuge beherrschen, aber du solltest wissen, welches Werkzeug für welche Aufgabe da ist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "AWS ist dieser riesige Werkzeugkasten. Du musst nicht alle 200 Dienste kennen, aber du solltest die wichtigsten fünf kennen und wissen, wann du welches Werkzeug brauchst. EC2, wenn du einen Server brauchst. S3, wenn du Dateien speichern willst. RDS, wenn du eine Datenbank betreiben willst. Lambda, wenn du eine Funktion ohne Server ausführen willst. CloudFront, wenn du Inhalte weltweit schnell ausliefern willst. Mit diesen fünf Werkzeugen kannst du die allermeisten Anwendungen bauen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Moderne Hosting-Plattformen bieten noch einen weiteren Vorteil, der oft übersehen wird: automatische SSL-Zertifikate. Früher musste man Zertifikate kaufen, installieren und jährlich erneuern. Heute erledigen Plattformen wie Vercel das automatisch und kostenlos über Dienste wie Lets Encrypt. Der Entwickler muss nichts tun, und die Seite ist immer sicher über HTTPS erreichbar.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Automatisches HTTPS ist heute kein Luxus mehr, sondern eine Grundvoraussetzung. Browser markieren Seiten ohne HTTPS als unsicher, Suchmaschinen stufen sie herab, und Nutzer verlassen sie schneller. Eine Plattform, die sich automatisch darum kümmert, nimmt dem Entwickler eine lästige und fehleranfällige Aufgabe ab.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Moderne Hosting-Plattformen bieten noch einen weiteren Vorteil, der oft übersehen wird: automatische SSL-Zertifikate. Früher musste man Zertifikate kaufen, installieren und jährlich erneuern. Heute erledigen Plattformen wie Vercel das automatisch und kostenlos über Dienste wie Lets Encrypt. Der Entwickler muss nichts tun, und die Seite ist immer sicher über HTTPS erreichbar.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Automatisches HTTPS ist heute kein Luxus mehr, sondern eine Grundvoraussetzung. Browser markieren Seiten ohne HTTPS als unsicher, Suchmaschinen stufen sie herab, und Nutzer verlassen sie schneller. Eine Plattform, die sich automatisch darum kümmert, nimmt dem Entwickler eine lästige und fehleranfällige Aufgabe ab.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Kann ich zwischen verschiedenen Hosting-Plattformen wechseln, wenn eine nicht mehr passt?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ja, aber der Aufwand hängt davon ab, wie tief du in die spezifischen Funktionen einer Plattform eingestiegen bist. Eine einfache statische Seite kannst du in wenigen Minuten von Vercel zu Netlify oder Cloudflare Pages umziehen. Eine Anwendung, die stark auf Vercels Serverless Functions oder Edge Middleware setzt, erfordert dagegen erhebliche Anpassungen. Deshalb ist es ratsam, plattformspezifische Funktionen bewusst und sparsam einzusetzen und die Kernlogik deiner Anwendung plattformunabhängig zu halten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Moderne Hosting-Plattformen bieten noch einen weiteren Vorteil, der oft übersehen wird: automatische SSL-Zertifikate. Früher musste man Zertifikate kaufen, installieren und jährlich erneuern. Heute erledigen Plattformen wie Vercel das automatisch und kostenlos über Dienste wie Lets Encrypt. Der Entwickler muss nichts tun, und die Seite ist immer sicher über HTTPS erreichbar.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Automatisches HTTPS ist heute kein Luxus mehr, sondern eine Grundvoraussetzung. Browser markieren Seiten ohne HTTPS als unsicher, Suchmaschinen stufen sie herab, und Nutzer verlassen sie schneller. Eine Plattform, die sich automatisch darum kümmert, nimmt dem Entwickler eine lästige und fehleranfällige Aufgabe ab.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Kann ich zwischen verschiedenen Hosting-Plattformen wechseln, wenn eine nicht mehr passt?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ja, aber der Aufwand hängt davon ab, wie tief du in die spezifischen Funktionen einer Plattform eingestiegen bist. Eine einfache statische Seite kannst du in wenigen Minuten von Vercel zu Netlify oder Cloudflare Pages umziehen. Eine Anwendung, die stark auf Vercels Serverless Functions oder Edge Middleware setzt, erfordert dagegen erhebliche Anpassungen. Deshalb ist es ratsam, plattformspezifische Funktionen bewusst und sparsam einzusetzen und die Kernlogik deiner Anwendung plattformunabhängig zu halten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Moderne Hosting-Plattformen bieten noch einen weiteren Vorteil, der oft übersehen wird: automatische SSL-Zertifikate. Früher musste man Zertifikate kaufen, installieren und jährlich erneuern. Heute erledigen Plattformen wie Vercel das automatisch und kostenlos über Dienste wie Lets Encrypt. Der Entwickler muss nichts tun, und die Seite ist immer sicher über HTTPS erreichbar.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Automatisches HTTPS ist heute kein Luxus mehr, sondern eine Grundvoraussetzung. Browser markieren Seiten ohne HTTPS als unsicher, Suchmaschinen stufen sie herab, und Nutzer verlassen sie schneller. Eine Plattform, die sich automatisch darum kümmert, nimmt dem Entwickler eine lästige und fehleranfällige Aufgabe ab.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Kann ich zwischen verschiedenen Hosting-Plattformen wechseln, wenn eine nicht mehr passt?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ja, aber der Aufwand hängt davon ab, wie tief du in die spezifischen Funktionen einer Plattform eingestiegen bist. Eine einfache statische Seite kannst du in wenigen Minuten von Vercel zu Netlify oder Cloudflare Pages umziehen. Eine Anwendung, die stark auf Vercels Serverless Functions oder Edge Middleware setzt, erfordert dagegen erhebliche Anpassungen. Deshalb ist es ratsam, plattformspezifische Funktionen bewusst und sparsam einzusetzen und die Kernlogik deiner Anwendung plattformunabhängig zu halten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Moderne Hosting-Plattformen bieten noch einen weiteren Vorteil, der oft übersehen wird: automatische SSL-Zertifikate. Früher musste man Zertifikate kaufen, installieren und jährlich erneuern. Heute erledigen Plattformen wie Vercel das automatisch und kostenlos über Dienste wie Lets Encrypt. Der Entwickler muss nichts tun, und die Seite ist immer sicher über HTTPS erreichbar.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Automatisches HTTPS ist heute kein Luxus mehr, sondern eine Grundvoraussetzung. Browser markieren Seiten ohne HTTPS als unsicher, Suchmaschinen stufen sie herab, und Nutzer verlassen sie schneller. Eine Plattform, die sich automatisch darum kümmert, nimmt dem Entwickler eine lästige und fehleranfällige Aufgabe ab.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Kann ich zwischen verschiedenen Hosting-Plattformen wechseln, wenn eine nicht mehr passt?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ja, aber der Aufwand hängt davon ab, wie tief du in die spezifischen Funktionen einer Plattform eingestiegen bist. Eine einfache statische Seite kannst du in wenigen Minuten von Vercel zu Netlify oder Cloudflare Pages umziehen. Eine Anwendung, die stark auf Vercels Serverless Functions oder Edge Middleware setzt, erfordert dagegen erhebliche Anpassungen. Deshalb ist es ratsam, plattformspezifische Funktionen bewusst und sparsam einzusetzen und die Kernlogik deiner Anwendung plattformunabhängig zu halten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "text": "Also noch einmal ganz kurz: AWS ist die größte Cloud-Plattform der Welt mit über 200 Diensten. EC2 bietet virtuelle Server nach Bedarf, S3 ist der unbegrenzte Objektspeicher, und Regionen sind geografisch abgegrenzte Rechenzentrumsgebiete, in denen deine Daten bleiben. Die fünf wichtigsten Dienste sind EC2, S3, RDS für Datenbanken, Lambda für Serverless Functions und CloudFront für die weltweite Auslieferung. Für europäische Projekte ist die Region eu-central-1 in Frankfurt die richtige Wahl.",
+      "isKeySentence": true
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "EC2, Elastic Compute Cloud, ist der Dienst von AWS für virtuelle Server in der Cloud. EC2 stellt Rechenkapazität nach Bedarf bereit, die in Minuten gestartet und gestoppt werden kann, und wird nach verbrauchten Stunden abgerechnet.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "S3, Simple Storage Service, ist der Objektspeicher von AWS für beliebige Dateien. S3 speichert Daten in Buckets, skaliert unbegrenzt und ist für seine hohe Haltbarkeit von 99,999999999 Prozent bekannt, was im Fachjargon Eleven Nines heißt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Eine Region ist ein geografisch abgegrenztes Rechenzentrumsgebiet von AWS, zum Beispiel eu-central-1 in Frankfurt oder us-east-1 in Virginia. Jede Region besteht aus mehreren Availability Zones, und der Kunde wählt die Region, in der seine Daten gespeichert und verarbeitet werden sollen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Ist AWS nicht viel zu teuer für kleine Projekte?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "AWS hat ein kostenloses Kontingent, das für kleine Projekte und zum Lernen völlig ausreicht. Du kannst zwölf Monate lang einen kleinen EC2-Server kostenlos betreiben, 5 Gigabyte in S3 speichern und eine kleine RDS-Datenbank nutzen. Die Gefahr bei AWS sind nicht die Grundkosten, sondern unbeabsichtigte Kosten durch falsch konfigurierte Dienste. Ein Server, den du vergisst zu stoppen, läuft weiter und kostet Geld. Deshalb ist es wichtig, Budget-Alarme einzurichten und nicht benötigte Ressourcen konsequent zu löschen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was ist der Unterschied zwischen AWS, Google Cloud und Azure?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Alle drei sind große Cloud-Plattformen mit ähnlichen Basisdiensten: virtuelle Server, Objektspeicher, verwaltete Datenbanken und Serverless Functions. AWS ist der Marktführer mit dem größten Dienstangebot und der längsten Erfahrung. Azure ist tief in die Microsoft-Welt integriert und die natürliche Wahl für Unternehmen, die bereits stark auf Microsoft-Produkte setzen. Google Cloud hat Stärken bei Datenanalyse und KI. Für den Einstieg sind die Unterschiede weniger wichtig als die gemeinsamen Konzepte: wer AWS versteht, findet sich auch in Azure oder Google Cloud zurecht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Brauche ich ein AWS-Konto, um diese Dienste zu lernen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Für das konzeptionelle Verständnis nicht, aber für die praktische Erfahrung ist ein eigenes Konto sehr hilfreich. Du kannst ein AWS-Konto mit einer Kreditkarte erstellen und das kostenlose Kontingent nutzen. Wichtig: richte sofort nach der Erstellung einen Budget-Alarm ein, der dich warnt, wenn Kosten entstehen, und aktiviere die Zwei-Faktor-Authentifizierung, um dein Konto zu schützen. Viele Lernende zögern, ein AWS-Konto zu erstellen, aus Angst vor unbeabsichtigten Kosten, aber mit Budget-Alarm und etwas Disziplin beim Aufräumen ist das Risiko minimal.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Kann ich meine Vercel-Anwendung auch auf AWS betreiben?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ja, Next.js-Anwendungen lassen sich auf AWS betreiben, zum Beispiel mit AWS Amplify, einem Dienst, der ähnlich wie Vercel Git-basierte Deployments für Next.js bietet. Der Aufwand ist allerdings höher als bei Vercel, weil du mehr konfigurieren musst und die Integration weniger nahtlos ist. Vercel ist für Next.js optimiert, AWS Amplify ist ein Kompromiss aus der AWS-Integration und der Next.js-Unterstützung. Für die meisten Next.js-Projekte ist Vercel die bessere Wahl, es sei denn, du hast spezifische Gründe, auf AWS zu setzen, zum Beispiel weil andere Teile deiner Infrastruktur bereits dort laufen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was bedeutet Eleven Nines bei der Haltbarkeit von S3?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Eleven Nines, also 99,999999999 Prozent, ist die von AWS garantierte jährliche Haltbarkeit für S3-Objekte. Das bedeutet: wenn du eine Million Dateien in S3 speicherst, verlierst du statistisch gesehen eine Datei alle zehntausend Jahre. Diese extreme Haltbarkeit erreicht AWS, indem es jede Datei automatisch auf mehrere Rechenzentren innerhalb einer Region verteilt und ständig prüft, ob alle Kopien intakt sind. Für die Praxis bedeutet das: du kannst dich darauf verlassen, dass eine einmal in S3 gespeicherte Datei nicht verloren geht.",
+      "isKeySentence": false
+    }
+  ],
+  "practiceExample": {
+    "text": "AWS bietet mit EC2 virtuelle Server, mit S3 unbegrenzten Objektspeicher und mit Regionen wie eu-central-1 in Frankfurt die Kontrolle über den Speicherort der Daten. Die fünf wichtigsten Dienste EC2, S3, RDS, Lambda und CloudFront bilden das Grundgerüst der meisten Cloud-Anwendungen.",
+    "repoNote": "repo-futuredev",
+    "location": "AWS-Konsole (EC2, S3, RDS, Lambda, CloudFront als die fünf wichtigsten Dienste)"
+  },
+  "quiz": [
+    {
+      "question": "Welches Alltagsbild beschreibt AWS am treffendsten?",
+      "area": "Hosting: AWS",
+      "options": [
+        {
+          "text": "Ein riesiger Baumarkt, in dem du alles vom Akkuschrauber bis zum Baukran mieten kannst.",
+          "isCorrect": true,
+          "explanation": "Richtig: AWS bietet über 200 Dienste für jeden erdenklichen Cloud-Bedarf."
+        },
+        {
+          "text": "Ein kleiner Tante-Emma-Laden, der nur das Nötigste führt und um 18 Uhr schließt.",
+          "isCorrect": false,
+          "explanation": "Falsch: AWS ist der größte Cloud-Anbieter der Welt, kein kleiner Laden."
+        },
+        {
+          "text": "Eine Autowerkstatt, die nur eine Automarke repariert und keine Ersatzteile verkauft.",
+          "isCorrect": false,
+          "explanation": "Falsch: AWS ist kein Spezialist für eine Technologie, sondern eine breite Plattform."
+        },
+        {
+          "text": "Ein Museum, in dem man Technik nur anschauen, aber nicht benutzen kann.",
+          "isCorrect": false,
+          "explanation": "Falsch: AWS ist eine aktive Plattform, die du nutzt, nicht nur betrachtest."
+        }
+      ]
+    },
+    {
+      "question": "Wofür steht die Abkürzung EC2 bei AWS?",
+      "area": "Hosting: EC2",
+      "options": [
+        {
+          "text": "Elastic Compute Cloud, der Dienst für virtuelle Server nach Bedarf.",
+          "isCorrect": true,
+          "explanation": "Richtig: EC2 stellt Rechenkapazität bereit, die nach Stunden abgerechnet wird."
+        },
+        {
+          "text": "Easy Computing 2, die zweite Version des einfachen Rechendienstes.",
+          "isCorrect": false,
+          "explanation": "Falsch: EC2 steht für Elastic Compute Cloud, nicht Easy Computing."
+        },
+        {
+          "text": "European Cloud 2, der spezielle Dienst für europäische Kunden.",
+          "isCorrect": false,
+          "explanation": "Falsch: EC2 ist weltweit verfügbar, nicht nur in Europa."
+        },
+        {
+          "text": "Extra Capacity 2, der Dienst für zusätzliche Rechenkapazität.",
+          "isCorrect": false,
+          "explanation": "Falsch: EC2 steht für Elastic Compute Cloud."
+        }
+      ]
+    },
+    {
+      "question": "Was ist S3 in AWS?",
+      "area": "Hosting: S3",
+      "options": [
+        {
+          "text": "Simple Storage Service, der Objektspeicher für beliebige Dateien mit unbegrenzter Skalierung.",
+          "isCorrect": true,
+          "explanation": "Richtig: S3 speichert Dateien in Buckets und ist für extreme Haltbarkeit bekannt."
+        },
+        {
+          "text": "Super Safe Server, der besonders sichere virtuelle Server von AWS.",
+          "isCorrect": false,
+          "explanation": "Falsch: S3 ist ein Speicherdienst, kein Serverdienst."
+        },
+        {
+          "text": "Simple Server Setup, ein Werkzeug zur automatischen Serverkonfiguration.",
+          "isCorrect": false,
+          "explanation": "Falsch: S3 steht für Simple Storage Service."
+        },
+        {
+          "text": "Speed Service 3, die dritte Generation des Beschleunigungsdienstes.",
+          "isCorrect": false,
+          "explanation": "Falsch: S3 steht für Simple Storage Service."
+        }
+      ]
+    },
+    {
+      "question": "Was ist eine AWS-Region?",
+      "area": "Hosting: Region",
+      "options": [
+        {
+          "text": "Ein geografisch abgegrenztes Rechenzentrumsgebiet, in dem deine Daten gespeichert und verarbeitet werden.",
+          "isCorrect": true,
+          "explanation": "Richtig: du wählst die Region, und deine Daten bleiben dort."
+        },
+        {
+          "text": "Ein spezieller Rabatt, den AWS-Kunden in bestimmten Ländern erhalten.",
+          "isCorrect": false,
+          "explanation": "Falsch: eine Region ist ein geografisches Gebiet, kein Rabatt."
+        },
+        {
+          "text": "Eine Benutzergruppe, die gemeinsame Einstellungen und Berechtigungen teilt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Benutzergruppen heißen IAM Groups, nicht Regionen."
+        },
+        {
+          "text": "Eine Programmiersprache, die speziell für AWS entwickelt wurde.",
+          "isCorrect": false,
+          "explanation": "Falsch: eine Region ist keine Programmiersprache."
+        }
+      ]
+    },
+    {
+      "question": "Warum ist eu-central-1 in Frankfurt die richtige Wahl für europäische Projekte?",
+      "area": "Hosting: Region",
+      "options": [
+        {
+          "text": "Weil die Daten in der EU bleiben und die Latenz für europäische Nutzer gering ist.",
+          "isCorrect": true,
+          "explanation": "Richtig: Frankfurt erfüllt EU-Datenschutzanforderungen und bietet kurze Latenzen in Europa."
+        },
+        {
+          "text": "Weil AWS in Frankfurt die niedrigsten Preise aller Regionen weltweit hat.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Preise in Frankfurt sind nicht die niedrigsten, us-east-1 ist meist günstiger."
+        },
+        {
+          "text": "Weil die deutsche Regierung vorschreibt, dass alle Cloud-Dienste in Frankfurt laufen müssen.",
+          "isCorrect": false,
+          "explanation": "Falsch: es gibt keine gesetzliche Vorschrift, die Frankfurt vorschreibt."
+        },
+        {
+          "text": "Weil andere Regionen keine EC2-Server anbieten.",
+          "isCorrect": false,
+          "explanation": "Falsch: EC2 ist in allen Regionen verfügbar."
+        }
+      ]
+    },
+    {
+      "question": "Welche fünf AWS-Dienste bilden das Grundgerüst der meisten Cloud-Anwendungen?",
+      "area": "Hosting: AWS",
+      "options": [
+        {
+          "text": "EC2, S3, RDS, Lambda und CloudFront.",
+          "isCorrect": true,
+          "explanation": "Richtig: diese fünf decken Server, Speicher, Datenbanken, Funktionen und Auslieferung ab."
+        },
+        {
+          "text": "Gmail, Google Drive, Google Docs, Google Maps und YouTube.",
+          "isCorrect": false,
+          "explanation": "Falsch: das sind Google-Dienste, keine AWS-Dienste."
+        },
+        {
+          "text": "HTML, CSS, JavaScript, TypeScript und React.",
+          "isCorrect": false,
+          "explanation": "Falsch: das sind Web-Technologien, keine AWS-Dienste."
+        },
+        {
+          "text": "Windows, macOS, Linux, Android und iOS.",
+          "isCorrect": false,
+          "explanation": "Falsch: das sind Betriebssysteme, keine AWS-Dienste."
+        }
+      ]
+    },
+    {
+      "question": "Was bedeutet Eleven Nines bei der Haltbarkeit von S3?",
+      "area": "Hosting: S3",
+      "options": [
+        {
+          "text": "99,999999999 Prozent Haltbarkeit pro Jahr, also praktisch kein Datenverlust.",
+          "isCorrect": true,
+          "explanation": "Richtig: AWS verteilt Dateien auf mehrere Rechenzentren und prüft ständig die Integrität."
+        },
+        {
+          "text": "Dass S3 nur elf Mal im Jahr ausfällt und an den anderen Tagen verfügbar ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: Eleven Nines bezieht sich auf Haltbarkeit, nicht auf Verfügbarkeit."
+        },
+        {
+          "text": "Dass S3 genau elf verschiedene Speicherklassen für unterschiedliche Anforderungen anbietet.",
+          "isCorrect": false,
+          "explanation": "Falsch: S3 hat mehrere Speicherklassen, aber Eleven Nines bezieht sich auf die Haltbarkeit."
+        },
+        {
+          "text": "Dass S3 nur in neun von elf AWS-Regionen verfügbar ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: S3 ist in allen Regionen verfügbar."
+        }
+      ]
+    },
+    {
+      "question": "Warum sollte man Server nicht mehr als Anschaffung, sondern als Dienstleistung betrachten?",
+      "area": "Hosting: EC2",
+      "options": [
+        {
+          "text": "Weil man nur für tatsächlich genutzte Stunden zahlt und bei Bedarf skalieren kann.",
+          "isCorrect": true,
+          "explanation": "Richtig: Cloud-Server sind elastisch und werden nach Verbrauch abgerechnet."
+        },
+        {
+          "text": "Weil gekaufte Server nach einem Jahr automatisch kaputtgehen und ersetzt werden müssen.",
+          "isCorrect": false,
+          "explanation": "Falsch: physische Server haben keine eingebaute Lebensdauer von einem Jahr."
+        },
+        {
+          "text": "Weil AWS den Kauf von Servern gesetzlich verbietet.",
+          "isCorrect": false,
+          "explanation": "Falsch: es gibt kein Gesetz, das den Kauf von Servern verbietet."
+        },
+        {
+          "text": "Weil Dienstleistungen grundsätzlich billiger sind als Produkte.",
+          "isCorrect": false,
+          "explanation": "Falsch: Dienstleistungen können auf Dauer teurer sein, bieten aber mehr Flexibilität."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der Vorteil, wenn du Nutzer-Bilder in S3 statt auf dem Anwendungsserver speicherst?",
+      "area": "Hosting: S3",
+      "options": [
+        {
+          "text": "Der Server bleibt schlank und austauschbar, die Bilder sind sicher und unbegrenzt skalierbar.",
+          "isCorrect": true,
+          "explanation": "Richtig: die Trennung von Server und Speicher ist ein bewährtes Architekturmuster."
+        },
+        {
+          "text": "Die Bilder werden automatisch in Schwarz-Weiß umgewandelt und komprimiert.",
+          "isCorrect": false,
+          "explanation": "Falsch: S3 wandelt Bilder nicht automatisch um."
+        },
+        {
+          "text": "S3 ist immer kostenlos, während Serverspeicher Geld kostet.",
+          "isCorrect": false,
+          "explanation": "Falsch: S3 kostet ebenfalls Geld, auch wenn das kostenlose Kontingent großzügig ist."
+        },
+        {
+          "text": "Die Bilder laden dann schneller, weil S3 eine magische Beschleunigungstechnologie hat.",
+          "isCorrect": false,
+          "explanation": "Falsch: S3 allein beschleunigt nicht, erst in Kombination mit CloudFront."
+        }
+      ]
+    },
+    {
+      "question": "Was ist das AWS-Äquivalent zu Vercels Serverless Functions?",
+      "area": "Hosting: AWS",
+      "options": [
+        {
+          "text": "Lambda.",
+          "isCorrect": true,
+          "explanation": "Richtig: Lambda führt Funktionen bei Bedarf aus, ohne dass ein Server verwaltet werden muss."
+        },
+        {
+          "text": "EC2.",
+          "isCorrect": false,
+          "explanation": "Falsch: EC2 sind virtuelle Server, nicht Serverless Functions."
+        },
+        {
+          "text": "S3.",
+          "isCorrect": false,
+          "explanation": "Falsch: S3 ist Objektspeicher, keine Rechenfunktion."
+        },
+        {
+          "text": "RDS.",
+          "isCorrect": false,
+          "explanation": "Falsch: RDS ist der Datenbankdienst, keine Serverless Function."
+        }
+      ]
+    },
+    {
+      "question": "Warum solltest du sofort nach der Erstellung eines AWS-Kontos einen Budget-Alarm einrichten?",
+      "area": "Hosting: AWS",
+      "options": [
+        {
+          "text": "Um vor unbeabsichtigten Kosten durch falsch konfigurierte oder vergessene Dienste gewarnt zu werden.",
+          "isCorrect": true,
+          "explanation": "Richtig: ein Budget-Alarm schützt vor bösen Überraschungen auf der Kreditkartenabrechnung."
+        },
+        {
+          "text": "Weil AWS sonst das Konto nach 24 Stunden automatisch löscht.",
+          "isCorrect": false,
+          "explanation": "Falsch: AWS löscht keine Konten wegen fehlendem Budget-Alarm."
+        },
+        {
+          "text": "Weil der Budget-Alarm gesetzlich für alle AWS-Konten vorgeschrieben ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: es gibt kein Gesetz, das einen Budget-Alarm vorschreibt."
+        },
+        {
+          "text": "Weil AWS dann einen Rabatt von 10 Prozent auf alle Dienste gewährt.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Budget-Alarm bringt keinen Rabatt."
+        }
+      ]
+    },
+    {
+      "question": "Wie unterscheidet sich AWS von Vercel?",
+      "area": "Hosting: AWS",
+      "options": [
+        {
+          "text": "AWS ist ein Generalist für alle Cloud-Anwendungen, Vercel ein Spezialist für Webanwendungen.",
+          "isCorrect": true,
+          "explanation": "Richtig: AWS bietet über 200 Dienste, Vercel konzentriert sich auf das Web."
+        },
+        {
+          "text": "AWS ist nur für amerikanische Kunden, Vercel nur für europäische.",
+          "isCorrect": false,
+          "explanation": "Falsch: beide sind weltweit verfügbar."
+        },
+        {
+          "text": "AWS ist kostenlos, Vercel kostet immer Geld.",
+          "isCorrect": false,
+          "explanation": "Falsch: beide haben kostenlose und kostenpflichtige Angebote."
+        },
+        {
+          "text": "AWS kann nur Datenbanken, Vercel kann nur Webseiten.",
+          "isCorrect": false,
+          "explanation": "Falsch: AWS kann viel mehr als Datenbanken, und Vercel kann mehr als Webseiten."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Erstelle ein AWS-Konto und richte einen Budget-Alarm ein, der dich bei Kosten von einem Euro warnt. Erkunde die AWS-Konsole und finde die Dienste EC2, S3, RDS, Lambda und CloudFront. Lies die Beschreibung jedes Dienstes und notiere in einem Satz, wofür er da ist. Starte keinen Dienst, es geht nur um die Orientierung in der Konsole.",
+    "expectation": "Ein AWS-Konto wurde erstellt, ein Budget-Alarm ist aktiv, und die fünf wichtigsten Dienste wurden in der Konsole gefunden und beschrieben. Die Konzepte Region, Dienst und Konsole wurden praktisch erkundet.",
+    "checklist": [
+      "Ein AWS-Konto mit Kreditkarte erstellt.",
+      "Einen Budget-Alarm bei einem Euro eingerichtet.",
+      "Zwei-Faktor-Authentifizierung aktiviert.",
+      "Die fünf Dienste EC2, S3, RDS, Lambda und CloudFront in der Konsole gefunden.",
+      "Für jeden Dienst einen Satz notiert, wofür er da ist.",
+      "Keinen Dienst gestartet, der Geld kosten könnte."
+    ],
+    "portfolioItem": "P04"
+  },
+  "audio": {
+    "file": "M04-05-02.mp3",
+    "durationSeconds": 1360,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Ist AWS nicht viel zu teuer für kleine Projekte?",
+      "answer": "AWS hat ein kostenloses Kontingent, das für kleine Projekte und zum Lernen völlig ausreicht. Du kannst zwölf Monate lang einen kleinen EC2-Server kostenlos betreiben, 5 Gigabyte in S3 speichern und eine kleine RDS-Datenbank nutzen. Die Gefahr bei AWS sind nicht die Grundkosten, sondern unbeabsichtigte Kosten durch falsch konfigurierte Dienste. Ein Server, den du vergisst zu stoppen, läuft weiter und kostet Geld. Deshalb ist es wichtig, Budget-Alarme einzurichten und nicht benötigte Ressourcen konsequent zu löschen."
+    },
+    {
+      "question": "Was ist der Unterschied zwischen AWS, Google Cloud und Azure?",
+      "answer": "Alle drei sind große Cloud-Plattformen mit ähnlichen Basisdiensten: virtuelle Server, Objektspeicher, verwaltete Datenbanken und Serverless Functions. AWS ist der Marktführer mit dem größten Dienstangebot und der längsten Erfahrung. Azure ist tief in die Microsoft-Welt integriert und die natürliche Wahl für Unternehmen, die bereits stark auf Microsoft-Produkte setzen. Google Cloud hat Stärken bei Datenanalyse und KI. Für den Einstieg sind die Unterschiede weniger wichtig als die gemeinsamen Konzepte: wer AWS versteht, findet sich auch in Azure oder Google Cloud zurecht."
+    },
+    {
+      "question": "Brauche ich ein AWS-Konto, um diese Dienste zu lernen?",
+      "answer": "Für das konzeptionelle Verständnis nicht, aber für die praktische Erfahrung ist ein eigenes Konto sehr hilfreich. Du kannst ein AWS-Konto mit einer Kreditkarte erstellen und das kostenlose Kontingent nutzen. Wichtig: richte sofort nach der Erstellung einen Budget-Alarm ein, der dich warnt, wenn Kosten entstehen, und aktiviere die Zwei-Faktor-Authentifizierung, um dein Konto zu schützen. Viele Lernende zögern, ein AWS-Konto zu erstellen, aus Angst vor unbeabsichtigten Kosten, aber mit Budget-Alarm und etwas Disziplin beim Aufräumen ist das Risiko minimal."
+    },
+    {
+      "question": "Kann ich meine Vercel-Anwendung auch auf AWS betreiben?",
+      "answer": "Ja, Next.js-Anwendungen lassen sich auf AWS betreiben, zum Beispiel mit AWS Amplify, einem Dienst, der ähnlich wie Vercel Git-basierte Deployments für Next.js bietet. Der Aufwand ist allerdings höher als bei Vercel, weil du mehr konfigurieren musst und die Integration weniger nahtlos ist. Vercel ist für Next.js optimiert, AWS Amplify ist ein Kompromiss aus der AWS-Integration und der Next.js-Unterstützung. Für die meisten Next.js-Projekte ist Vercel die bessere Wahl, es sei denn, du hast spezifische Gründe, auf AWS zu setzen, zum Beispiel weil andere Teile deiner Infrastruktur bereits dort laufen."
+    },
+    {
+      "question": "Was bedeutet Eleven Nines bei der Haltbarkeit von S3?",
+      "answer": "Eleven Nines, also 99,999999999 Prozent, ist die von AWS garantierte jährliche Haltbarkeit für S3-Objekte. Das bedeutet: wenn du eine Million Dateien in S3 speicherst, verlierst du statistisch gesehen eine Datei alle zehntausend Jahre. Diese extreme Haltbarkeit erreicht AWS, indem es jede Datei automatisch auf mehrere Rechenzentren innerhalb einer Region verteilt und ständig prüft, ob alle Kopien intakt sind. Für die Praxis bedeutet das: du kannst dich darauf verlassen, dass eine einmal in S3 gespeicherte Datei nicht verloren geht."
+    }
+  ]
+}

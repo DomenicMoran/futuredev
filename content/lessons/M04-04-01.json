@@ -1,0 +1,725 @@
+{
+  "id": "M04-04-01",
+  "title": "Was eine Pipeline prüft",
+  "durationMinutes": 33,
+  "prerequisites": [
+    "M04-03-01",
+    "M04-02-01",
+    "M02-05-01"
+  ],
+  "terms": [
+    {
+      "term": "Pipeline",
+      "definition": "Eine automatisierte Abfolge von Schritten, die bei jeder Code-Änderung durchlaufen wird. Jeder Schritt prüft eine bestimmte Eigenschaft des Codes, und nur wenn alle Schritte erfolgreich sind, gilt die Änderung als bestanden."
+    },
+    {
+      "term": "CI/CD",
+      "definition": "Continuous Integration und Continuous Delivery, zwei zusammengehörende Praktiken der Softwareentwicklung. CI bedeutet, dass Code-Änderungen häufig in einen gemeinsamen Zweig integriert und automatisch geprüft werden. CD bedeutet, dass bestandene Änderungen automatisch in eine Umgebung ausgeliefert werden können."
+    },
+    {
+      "term": "Workflow",
+      "definition": "Eine in einer YAML-Datei beschriebene Automatisierung, die bei bestimmten Ereignissen wie einem Push oder einem Pull Request ausgelöst wird. Ein Workflow besteht aus einem oder mehreren Jobs, die jeweils eine Folge von Schritten ausführen."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine Qualitätskontrolle in einer Autofabrik vor. Jedes Auto, das vom Band läuft, durchläuft eine Reihe von Prüfstationen: eine prüft die Bremsen, eine die Elektronik, eine die Lackierung. Erst wenn alle Stationen grünes Licht geben, darf das Auto die Fabrik verlassen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "In der Softwareentwicklung heißt diese Qualitätskontrolle Pipeline. Immer wenn jemand Code ändert und diese Änderung im gemeinsamen Repository eincheckt, läuft eine automatisierte Abfolge von Prüfungen an. Eine Station prüft, ob der Code überhaupt fehlerfrei kompiliert. Die nächste prüft, ob die automatisierten Tests noch grün sind. Eine weitere prüft, ob die Formatierungsregeln eingehalten wurden. Nur wenn alle Stationen grünes Licht geben, darf die Änderung in den Hauptzweig einfließen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Warum reicht es nicht, wenn jeder Entwickler diese Prüfungen auf seinem eigenen Rechner macht?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Weil der eigene Rechner trügt. Auf deinem Rechner hast du vielleicht vergessen, die Tests laufen zu lassen. Oder du hast eine andere Node.js-Version als dein Kollege. Oder du hast eine Datei nicht eingecheckt, die für den Build nötig ist. Die Pipeline läuft in einer neutralen, sauberen Umgebung, die bei jedem Durchlauf exakt gleich ist. Sie vergisst nichts, sie wird nicht müde, und sie lässt sich nicht von Zeitdruck beeindrucken. Was auf deinem Rechner funktioniert, aber in der Pipeline scheitert, hätte auch auf dem Rechner deines Kollegen oder auf dem Produktionsserver nicht funktioniert.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Diese automatisierte Abfolge von Prüfungen heißt Pipeline.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-futuredev definiert die Datei .github/workflows/ci.yml eine Pipeline, die bei jedem Push auf den main-Zweig und bei jedem Pull Request ausgelöst wird. Die Pipeline besteht aus mehreren Schritten: Typprüfung mit pnpm typecheck, Lint-Prüfung mit pnpm lint, automatisierte Tests mit pnpm test und eine Inhaltsprüfung mit pnpm content:validate. Jeder dieser Schritte prüft eine andere Eigenschaft des Codes, und alle müssen grün sein, bevor eine Änderung als gültig gilt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Diese mehrstufige Prüfung ist wichtig, weil sie verschiedene Fehlerklassen in einer festen Reihenfolge abfängt. Ein Typfehler wird sofort in der ersten Station entdeckt, noch bevor die langsameren Tests überhaupt starten. Das spart Zeit und gibt dem Entwickler schnelles Feedback: Typfehler in Sekunden statt erst nach Minuten in den Tests.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was genau bedeuten CI und CD, diese beiden Abkürzungen, die immer zusammen genannt werden?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine Brücke vor, die aus vielen einzelnen Segmenten besteht. Jedes neue Segment wird sofort an die bestehende Brücke angebaut und geprüft, ob es trägt. Niemand baut wochenlang allein an einem Segment und hofft dann, dass es am Ende zur Brücke passt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "CI, Continuous Integration, bedeutet genau das: integriere deine Code-Änderungen häufig, mindestens einmal am Tag, in den gemeinsamen Hauptzweig. Jede Integration wird automatisch geprüft, sodass Fehler sofort auffallen, nicht erst nach Wochen, wenn der Code längst weitergewachsen ist. CD, Continuous Delivery, geht einen Schritt weiter: wenn die Integration alle Prüfungen bestanden hat, wird die Änderung automatisch in eine Testumgebung oder sogar direkt in Produktion ausgeliefert. Kein manuelles Hochladen, kein händisches Konfigurieren, kein nächtliches Deployment.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Diese beiden zusammengehörenden Praktiken heißen CI/CD, Continuous Integration und Continuous Delivery.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-futuredev ist CI bereits umgesetzt: jeder Push und jeder Pull Request durchläuft die Pipeline. CD ist für die Inhalte ebenfalls umgesetzt: bestandene Änderungen an den Lektionsdateien werden automatisch in die Produktionsdatenbank übertragen, ohne dass ein Mensch eingreifen muss. Die Kombination aus CI und CD stellt sicher, dass kein fehlerhafter Inhalt in die App gelangt und dass korrekte Inhalte ohne Verzögerung verfügbar sind.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "CI/CD ist wichtig, weil es die Zeit zwischen einer Code-Änderung und ihrem Nutzen für den Anwender drastisch verkürzt. Ohne CI/CD vergehen oft Tage oder Wochen zwischen dem Schreiben des Codes und seiner Auslieferung, und in dieser Zeit entstehen Konflikte mit anderen Änderungen. Mit CI/CD kann eine Änderung innerhalb von Minuten nach dem Push in Produktion sein, und Konflikte werden sofort erkannt und behoben.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was genau ist ein Workflow in diesem Zusammenhang?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen detaillierten Einsatzplan der Feuerwehr vor. Der Plan legt fest: bei einem Feueralarm rückt zuerst der Löschzug aus, dann sichert die Drehleiter das Gebäude, dann kümmert sich der Rettungsdienst um Verletzte. Jeder Schritt hat eine feste Reihenfolge und eine klare Zuständigkeit.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein Workflow ist dieser Einsatzplan, niedergeschrieben in einer YAML-Datei. Er definiert, bei welchem Ereignis die Automatisierung ausgelöst wird, zum Beispiel bei einem Push auf den main-Zweig. Er definiert, welche Jobs in welcher Reihenfolge ausgeführt werden. Und er definiert, was in jedem Job genau passiert: welche Befehle ausgeführt werden, welche Aktionen verwendet werden und was bei einem Fehler geschehen soll.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Ein Workflow ist eine in einer YAML-Datei beschriebene Automatisierung, die bei bestimmten Ereignissen ausgelöst wird und aus einem oder mehreren Jobs besteht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-futuredev ist die Datei .github/workflows/ci.yml der Workflow für die Qualitätsprüfung. Sie beginnt mit on: push: branches: [main], pull_request:, was bedeutet: dieser Workflow wird bei jedem Push auf main und bei jedem Pull Request ausgelöst. Dann folgt ein Job namens check, der auf ubuntu-latest läuft und die Schritte Repo auschecken, Node einrichten, Abhängigkeiten installieren, Typprüfung, Lint, Tests und Inhalte prüfen enthält.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die YAML-Datei als ausführbare Spezifikation zu haben ist wichtig, weil sie die Pipeline versionierbar, wiederholbar und für das ganze Team transparent macht. Jeder im Team kann nachlesen, welche Prüfungen in welcher Reihenfolge ablaufen, und Änderungen an der Pipeline werden wie Code-Änderungen per Pull Request vorgeschlagen und geprüft.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was passiert, wenn ein Schritt in der Pipeline fehlschlägt?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine rote Warnleuchte an der Prüfstation in der Autofabrik vor. Sobald ein Fehler entdeckt wird, leuchtet die Lampe rot, ein Signalton ertönt, und das Band stoppt. Kein Auto mit defekten Bremsen verlässt die Fabrik.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Wenn ein Schritt in der Pipeline fehlschlägt, wird die gesamte Pipeline als fehlgeschlagen markiert. Der Entwickler, der die Änderung vorgenommen hat, bekommt eine Benachrichtigung, meist per E-Mail oder direkt in der Pull-Request-Oberfläche. Der fehlgeschlagene Pull Request kann nicht in den Hauptzweig integriert werden, bis der Fehler behoben ist. Das ist das fail-closed-Prinzip: im Zweifel wird die Änderung blockiert, nicht durchgewunken.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Fail-closed ist ein fundamentales Sicherheitsprinzip. Eine Pipeline, die bei einem Fehler trotzdem grün zeigt, ist wertlos, weil sie ein falsches Gefühl der Sicherheit vermittelt. Die Pipeline muss so konfiguriert sein, dass jeder Fehler, egal wie klein, zum Abbruch führt. Nur so kann das Team darauf vertrauen, dass ein grüner Pipeline-Lauf wirklich fehlerfreien Code bedeutet.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Welche Prüfungen gehören in eine gute Pipeline?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Eine gute Pipeline prüft mindestens vier Dinge. Erstens: kompiliert der Code fehlerfrei? Bei TypeScript ist das die Typprüfung. Zweitens: sind die automatisierten Tests grün? Drittens: hält der Code die vereinbarten Formatierungs- und Stilregeln ein? Das ist der Lint-Schritt. Viertens: lässt sich die Anwendung bauen? Das ist der Build-Schritt, der sicherstellt, dass aus dem Code ein lauffähiges Artefakt entsteht. Je nach Projekt kommen weitere Prüfungen hinzu: Sicherheitsscans, Abhängigkeitsprüfungen, Barrierefreiheitstests oder wie bei repo-futuredev eine Inhaltsprüfung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die Reihenfolge dieser Prüfungen ist nicht beliebig. Schnelle Prüfungen, die die meisten Fehler finden, gehören an den Anfang. Die Typprüfung findet in Sekunden Dutzende Fehler und sollte vor den langsameren Tests laufen. Die Tests kommen als Nächstes, weil sie die eigentliche Logik prüfen. Der Build kommt zum Schluss, weil er nur sinnvoll ist, wenn der Code die vorherigen Prüfungen bestanden hat. Diese Reihenfolge spart in der Summe wertvolle Zeit.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen TÜV-Prüfer vor, der ein Auto nach einer festen Checkliste durchgeht. Er prüft zuerst die Bremsen, dann die Beleuchtung, dann die Abgaswerte. Er überspringt keine Prüfung, weil er müde ist oder weil der letzte Prüfling ja auch in Ordnung war.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Die Pipeline ist der TÜV-Prüfer für deinen Code. Sie prüft nach einer festen, für alle gleichen Checkliste, ohne Ausnahme und ohne Ermüdung. Was heute grün ist, ist morgen auch grün, solange niemand den Code ändert. Und was heute rot ist, bleibt rot, bis der Fehler behoben ist. Diese Unbestechlichkeit ist der Kern des Werts einer Pipeline: sie liefert kein Bauchgefühl, sondern ein belastbares, reproduzierbares Ergebnis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein weiterer wichtiger Aspekt von CI/CD ist das Feedback. Eine Pipeline, die innerhalb von zwei Minuten grünes oder rotes Licht gibt, ermöglicht einen Arbeitsfluss, bei dem du eine Änderung machst, pusht und fast sofort weißt, ob sie korrekt ist. Dieses schnelle Feedback ist psychologisch wichtig, weil es den Entwickler im Fluss hält.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Schnelles Feedback ist einer der am meisten unterschätzten Faktoren für Entwicklerproduktivität. Teams, die ihre Pipeline von zwanzig auf zwei Minuten beschleunigen, berichten von spürbar höherer Zufriedenheit und weniger Fehlern, weil die Entwickler häufiger pushen und schneller korrigieren.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein weiterer wichtiger Aspekt von CI/CD ist das Feedback. Eine Pipeline, die innerhalb von zwei Minuten grünes oder rotes Licht gibt, ermöglicht einen Arbeitsfluss, bei dem du eine Änderung machst, pusht und fast sofort weißt, ob sie korrekt ist. Dieses schnelle Feedback ist psychologisch wichtig, weil es den Entwickler im Fluss hält.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Schnelles Feedback ist einer der am meisten unterschätzten Faktoren für Entwicklerproduktivität. Teams, die ihre Pipeline von zwanzig auf zwei Minuten beschleunigen, berichten von spürbar höherer Zufriedenheit und weniger Fehlern, weil die Entwickler häufiger pushen und schneller korrigieren.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was mache ich, wenn die Pipeline bei einem Pull Request rot ist, ich den Fehler aber nicht verstehe?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Das ist ein normaler Teil des Lernprozesses. Lies die Fehlermeldung genau, sie sagt dir fast immer, was falsch ist. Wenn du sie nicht verstehst, kopiere sie in eine Suche oder frage ein Teammitglied. Der wichtige Punkt ist: die Pipeline hat einen echten Fehler gefunden, auch wenn du ihn noch nicht verstehst. Ignoriere eine rote Pipeline niemals mit der Hoffnung, dass der Fehler von allein verschwindet. Er wird nicht verschwinden, und er wird in Produktion wieder auftauchen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein weiterer wichtiger Aspekt von CI/CD ist das Feedback. Eine Pipeline, die innerhalb von zwei Minuten grünes oder rotes Licht gibt, ermöglicht einen Arbeitsfluss, bei dem du eine Änderung machst, pusht und fast sofort weißt, ob sie korrekt ist. Dieses schnelle Feedback ist psychologisch wichtig, weil es den Entwickler im Fluss hält.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Schnelles Feedback ist einer der am meisten unterschätzten Faktoren für Entwicklerproduktivität. Teams, die ihre Pipeline von zwanzig auf zwei Minuten beschleunigen, berichten von spürbar höherer Zufriedenheit und weniger Fehlern, weil die Entwickler häufiger pushen und schneller korrigieren.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was mache ich, wenn die Pipeline bei einem Pull Request rot ist, ich den Fehler aber nicht verstehe?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Das ist ein normaler Teil des Lernprozesses. Lies die Fehlermeldung genau, sie sagt dir fast immer, was falsch ist. Wenn du sie nicht verstehst, kopiere sie in eine Suche oder frage ein Teammitglied. Der wichtige Punkt ist: die Pipeline hat einen echten Fehler gefunden, auch wenn du ihn noch nicht verstehst. Ignoriere eine rote Pipeline niemals mit der Hoffnung, dass der Fehler von allein verschwindet. Er wird nicht verschwinden, und er wird in Produktion wieder auftauchen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein weiterer wichtiger Aspekt von CI/CD ist das Feedback. Eine Pipeline, die innerhalb von zwei Minuten grünes oder rotes Licht gibt, ermöglicht einen Arbeitsfluss, bei dem du eine Änderung machst, pusht und fast sofort weißt, ob sie korrekt ist. Dieses schnelle Feedback ist psychologisch wichtig, weil es den Entwickler im Fluss hält.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Schnelles Feedback ist einer der am meisten unterschätzten Faktoren für Entwicklerproduktivität. Teams, die ihre Pipeline von zwanzig auf zwei Minuten beschleunigen, berichten von spürbar höherer Zufriedenheit und weniger Fehlern, weil die Entwickler häufiger pushen und schneller korrigieren.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was mache ich, wenn die Pipeline bei einem Pull Request rot ist, ich den Fehler aber nicht verstehe?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Das ist ein normaler Teil des Lernprozesses. Lies die Fehlermeldung genau, sie sagt dir fast immer, was falsch ist. Wenn du sie nicht verstehst, kopiere sie in eine Suche oder frage ein Teammitglied. Der wichtige Punkt ist: die Pipeline hat einen echten Fehler gefunden, auch wenn du ihn noch nicht verstehst. Ignoriere eine rote Pipeline niemals mit der Hoffnung, dass der Fehler von allein verschwindet. Er wird nicht verschwinden, und er wird in Produktion wieder auftauchen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "text": "Also noch einmal ganz kurz: Eine Pipeline ist eine automatisierte Abfolge von Prüfungen, die bei jeder Code-Änderung durchlaufen wird. CI/CD steht für Continuous Integration und Continuous Delivery: häufiges Integrieren mit automatischer Prüfung und automatisches Ausliefern bestandener Änderungen. Ein Workflow ist die YAML-Datei, die beschreibt, bei welchem Ereignis welche Jobs ausgeführt werden. Eine gute Pipeline prüft mindestens Typsicherheit, Tests, Lint und Build, und sie folgt dem fail-closed-Prinzip: ein einziger Fehler lässt die gesamte Pipeline scheitern.",
+      "isKeySentence": true
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Eine Pipeline ist eine automatisierte Abfolge von Schritten, die bei jeder Code-Änderung durchlaufen wird. Jeder Schritt prüft eine bestimmte Eigenschaft des Codes, und nur wenn alle Schritte erfolgreich sind, gilt die Änderung als bestanden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "CI/CD steht für Continuous Integration und Continuous Delivery, zwei zusammengehörende Praktiken der Softwareentwicklung. CI bedeutet, dass Code-Änderungen häufig in einen gemeinsamen Zweig integriert und automatisch geprüft werden. CD bedeutet, dass bestandene Änderungen automatisch in eine Umgebung ausgeliefert werden können.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Ein Workflow ist eine in einer YAML-Datei beschriebene Automatisierung, die bei bestimmten Ereignissen wie einem Push oder einem Pull Request ausgelöst wird. Ein Workflow besteht aus einem oder mehreren Jobs, die jeweils eine Folge von Schritten ausführen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Muss ich für jedes Projekt eine eigene Pipeline schreiben?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ja, aber du musst nicht bei null anfangen. Viele Projekte haben ähnliche Anforderungen, und du kannst eine bestehende Pipeline als Vorlage nehmen und anpassen. Die ci.yml aus repo-futuredev ist eine gute Vorlage für ein TypeScript-Monorepo mit pnpm. Du kopierst sie, passt die Node-Version und die spezifischen Prüfbefehle an, und hast in wenigen Minuten eine lauffähige Pipeline. Mit der Zeit baust du dir einen Fundus an bewährten Workflow-Dateien auf, die du projektübergreifend wiederverwendest.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was kostet eine Pipeline?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "GitHub Actions bietet ein großzügiges kostenloses Kontingent: 2000 Minuten pro Monat für private Repos, unbegrenzt für öffentliche Repos. Für die allermeisten Einzelentwickler und kleinen Teams reicht das völlig aus. Erst wenn du Dutzende von Pipelines am Tag laufen lässt oder sehr lange Builds hast, können Kosten entstehen. Die Minutenpreise sind transparent und liegen im Bereich von wenigen Cent pro Minute. Andere Anbieter wie Bitbucket oder GitLab haben ähnliche Modelle mit eigenen Freikontingenten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Kann ich eine Pipeline auch lokal auf meinem Rechner ausführen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ja, mit Werkzeugen wie act für GitHub Actions kannst du Workflows lokal simulieren. Das ist nützlich, um eine Pipeline zu testen, bevor du sie ins Repository pushst. Allerdings ist die lokale Ausführung nie hundertprozentig identisch mit der Ausführung in der Cloud, weil die Umgebung leicht abweichen kann. Für schnelles Feedback während der Entwicklung sind die einzelnen Prüfschritte wie typecheck und test direkt auf deinem Rechner meist ausreichend. Die Pipeline ist die letzte, neutrale Instanz, nicht der Ersatz für lokales Testen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was ist der Unterschied zwischen einer Pipeline und einem Pre-Commit-Hook?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ein Pre-Commit-Hook läuft lokal auf deinem Rechner, bevor du eine Änderung committest. Er ist schnell und verhindert, dass offensichtliche Fehler überhaupt ins Repository gelangen. Eine Pipeline läuft in der Cloud, nachdem der Commit bereits im Repository ist. Sie ist gründlicher und prüft Dinge, die lokal zu lange dauern würden, wie den vollständigen Testdurchlauf. Beide ergänzen sich: der Pre-Commit-Hook fängt die schnellen Fehler ab, die Pipeline die gründlichen. Im Repo repo-futuredev gibt es beide: einen Pre-Commit-Hook für die Geheimnisprüfung und die CI-Pipeline für den vollständigen Check.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was mache ich, wenn die Pipeline einen Fehler meldet, den ich auf meinem Rechner nicht nachvollziehen kann?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Das ist der klassische bei mir läuft es doch-Moment, und genau dafür ist die Pipeline da. Der häufigste Grund sind unterschiedliche Umgebungen: eine andere Node.js-Version, ein anderes Betriebssystem oder eine Datei, die auf deinem Rechner existiert, aber nicht im Repository ist. Lies die Pipeline-Logs genau, sie zeigen dir den exakten Befehl, der fehlgeschlagen ist, und die genaue Fehlermeldung. Meistens findest du den Unterschied innerhalb weniger Minuten. Wenn nicht, hilft es, die Pipeline-Umgebung lokal nachzubauen, zum Beispiel mit Docker, um exakt dieselbe Umgebung wie in der Pipeline zu haben.",
+      "isKeySentence": false
+    }
+  ],
+  "practiceExample": {
+    "text": "Im Repo repo-futuredev definiert .github/workflows/ci.yml eine Pipeline, die bei jedem Push und Pull Request Typprüfung, Lint, Tests und Inhaltsprüfung durchläuft. Die Pipeline nutzt pnpm und Node.js 22, läuft auf ubuntu-latest und folgt dem fail-closed-Prinzip: jeder Fehler bricht den Lauf ab.",
+    "repoNote": "repo-futuredev",
+    "location": ".github/workflows/ci.yml (vollständige CI-Pipeline mit Typecheck, Lint, Test und Content-Validate)"
+  },
+  "quiz": [
+    {
+      "question": "Welches Alltagsbild beschreibt eine CI/CD-Pipeline am treffendsten?",
+      "area": "CI/CD: Pipeline",
+      "options": [
+        {
+          "text": "Eine Qualitätskontrolle in einer Fabrik mit mehreren Prüfstationen, die kein defektes Produkt durchlassen.",
+          "isCorrect": true,
+          "explanation": "Richtig: jede Prüfstation testet eine andere Eigenschaft, und nur wer alle besteht, kommt durch."
+        },
+        {
+          "text": "Ein einzelner Prüfer, der stichprobenartig jedes hundertste Produkt kontrolliert und den Rest durchwinkt.",
+          "isCorrect": false,
+          "explanation": "Falsch: eine Pipeline prüft jede Änderung, nicht nur Stichproben."
+        },
+        {
+          "text": "Eine Werkskantine, die die Arbeiter mit Essen versorgt, aber nichts mit der Qualität zu tun hat.",
+          "isCorrect": false,
+          "explanation": "Falsch: eine Pipeline prüft aktiv die Qualität, sie ist keine passive Infrastruktur."
+        },
+        {
+          "text": "Ein Ausstellungsraum, in dem fertige Produkte präsentiert werden, aber keine Prüfungen stattfinden.",
+          "isCorrect": false,
+          "explanation": "Falsch: eine Pipeline prüft, sie präsentiert nicht nur."
+        }
+      ]
+    },
+    {
+      "question": "Wofür steht die Abkürzung CI in CI/CD?",
+      "area": "CI/CD: CI/CD",
+      "options": [
+        {
+          "text": "Continuous Integration, das häufige Integrieren von Code-Änderungen mit automatischer Prüfung.",
+          "isCorrect": true,
+          "explanation": "Richtig: CI bedeutet, Änderungen oft zu integrieren und automatisch zu prüfen."
+        },
+        {
+          "text": "Code Inspection, die manuelle Durchsicht des Codes durch einen zweiten Entwickler.",
+          "isCorrect": false,
+          "explanation": "Falsch: Code Inspection ist ein manueller Prozess, CI ist automatisiert."
+        },
+        {
+          "text": "Continuous Installation, das automatische Installieren von Abhängigkeiten.",
+          "isCorrect": false,
+          "explanation": "Falsch: CI steht für Integration, nicht Installation."
+        },
+        {
+          "text": "Code Improvement, die automatische Verbesserung der Codequalität durch KI.",
+          "isCorrect": false,
+          "explanation": "Falsch: CI verbessert keinen Code, es prüft ihn."
+        }
+      ]
+    },
+    {
+      "question": "Was ist ein Workflow in GitHub Actions?",
+      "area": "CI/CD: Workflow",
+      "options": [
+        {
+          "text": "Eine YAML-Datei, die beschreibt, bei welchem Ereignis welche Jobs ausgeführt werden.",
+          "isCorrect": true,
+          "explanation": "Richtig: ein Workflow ist die ausführbare Spezifikation der Automatisierung."
+        },
+        {
+          "text": "Ein Diagramm, das den Arbeitsablauf im Team darstellt, aber keine technische Funktion hat.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Workflow in GitHub Actions ist eine ausführbare Datei, kein bloßes Diagramm."
+        },
+        {
+          "text": "Ein Meeting, in dem das Team den Arbeitsfortschritt der Woche bespricht.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Workflow ist eine technische Automatisierung, kein Meeting."
+        },
+        {
+          "text": "Eine Datenbank, die alle jemals ausgeführten Pipelines und ihre Ergebnisse speichert.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Ergebnisse werden in der GitHub-Oberfläche angezeigt, aber der Workflow ist die YAML-Datei."
+        }
+      ]
+    },
+    {
+      "question": "Welche Aussage über die CI-Pipeline im Repo repo-futuredev ist richtig?",
+      "area": "Praxisbeispiel repo-futuredev",
+      "options": [
+        {
+          "text": "Sie prüft Typsicherheit, Lint, Tests und Inhalte und wird bei Push und Pull Request ausgelöst.",
+          "isCorrect": true,
+          "explanation": "Richtig: die ci.yml enthält typecheck, lint, test und content:validate."
+        },
+        {
+          "text": "Sie prüft nur, ob der Code kompiliert, und ignoriert Tests und Formatierung.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Pipeline prüft mehrere Aspekte, nicht nur die Kompilierung."
+        },
+        {
+          "text": "Sie wird nur einmal im Monat manuell gestartet, nicht automatisch bei jedem Push.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Pipeline wird bei jedem Push auf main und jedem Pull Request automatisch ausgelöst."
+        },
+        {
+          "text": "Sie läuft auf Windows, weil die Entwickler alle Windows verwenden.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Pipeline läuft auf ubuntu-latest, nicht auf Windows."
+        }
+      ]
+    },
+    {
+      "question": "Was bedeutet das fail-closed-Prinzip in einer Pipeline?",
+      "area": "CI/CD: Pipeline",
+      "options": [
+        {
+          "text": "Ein einziger Fehler lässt die gesamte Pipeline scheitern, die Änderung wird blockiert.",
+          "isCorrect": true,
+          "explanation": "Richtig: fail-closed blockiert im Zweifel, statt fehlerhaften Code durchzulassen."
+        },
+        {
+          "text": "Die Pipeline läuft auch bei Fehlern weiter, um möglichst viele Fehler auf einmal zu finden.",
+          "isCorrect": false,
+          "explanation": "Falsch: das wäre fail-open, nicht fail-closed."
+        },
+        {
+          "text": "Die Pipeline schließt sich automatisch, wenn alle Prüfungen bestanden sind.",
+          "isCorrect": false,
+          "explanation": "Falsch: fail-closed bezieht sich auf das Verhalten bei Fehlern, nicht bei Erfolg."
+        },
+        {
+          "text": "Nur der letzte Schritt der Pipeline entscheidet über Erfolg oder Misserfolg.",
+          "isCorrect": false,
+          "explanation": "Falsch: bei fail-closed führt jeder fehlgeschlagene Schritt zum Abbruch."
+        }
+      ]
+    },
+    {
+      "question": "Warum sollte die Typprüfung vor den Tests in der Pipeline laufen?",
+      "area": "CI/CD: Pipeline",
+      "options": [
+        {
+          "text": "Weil sie schneller ist und die meisten Fehler findet, bevor die langsameren Tests starten.",
+          "isCorrect": true,
+          "explanation": "Richtig: schnelle Prüfungen zuerst sparen Zeit und geben schnelleres Feedback."
+        },
+        {
+          "text": "Weil die Tests sonst die Typinformationen überschreiben und falsche Ergebnisse liefern.",
+          "isCorrect": false,
+          "explanation": "Falsch: Tests und Typprüfung sind unabhängig, die Reihenfolge ist eine Frage der Effizienz."
+        },
+        {
+          "text": "Weil GitHub Actions das alphabetisch so vorschreibt und nicht anders zulässt.",
+          "isCorrect": false,
+          "explanation": "Falsch: GitHub Actions schreibt keine alphabetische Reihenfolge vor."
+        },
+        {
+          "text": "Weil die Typprüfung die Tests generiert und ohne sie keine Tests existieren.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Typprüfung generiert keine Tests, sie sind unabhängig voneinander."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der Vorteil einer neutralen Pipeline-Umgebung gegenüber dem Entwickler-Rechner?",
+      "area": "CI/CD: Pipeline",
+      "options": [
+        {
+          "text": "Sie ist bei jedem Durchlauf exakt gleich und frei von nicht eingecheckten Dateien oder Konfigurationen.",
+          "isCorrect": true,
+          "explanation": "Richtig: die Pipeline-Umgebung ist sauber, reproduzierbar und unbestechlich."
+        },
+        {
+          "text": "Sie hat mehr Arbeitsspeicher und schnellere CPUs als jeder Entwickler-Rechner.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Pipeline-Umgebung ist oft sogar schwächer als ein Entwickler-Rechner."
+        },
+        {
+          "text": "Sie kann Code schreiben, den der Entwickler nur noch überprüfen muss.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Pipeline schreibt keinen Code, sie prüft ihn nur."
+        },
+        {
+          "text": "Sie ersetzt die Code-Review durch einen zweiten Entwickler vollständig.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Pipeline ersetzt keine menschliche Code-Review, sie ergänzt sie."
+        }
+      ]
+    },
+    {
+      "question": "Welche vier Prüfungen gehören mindestens in eine gute Pipeline?",
+      "area": "CI/CD: Pipeline",
+      "options": [
+        {
+          "text": "Typprüfung, automatisierte Tests, Lint und Build.",
+          "isCorrect": true,
+          "explanation": "Richtig: diese vier decken die wichtigsten Fehlerklassen ab."
+        },
+        {
+          "text": "Rechtschreibprüfung, Grammatikprüfung, Zeichensetzung und Silbentrennung.",
+          "isCorrect": false,
+          "explanation": "Falsch: das sind Prüfungen für Text, nicht für Code."
+        },
+        {
+          "text": "Festplattenprüfung, Arbeitsspeichertest, Netzwerktest und CPU-Benchmark.",
+          "isCorrect": false,
+          "explanation": "Falsch: das sind Hardware-Tests, keine Code-Prüfungen."
+        },
+        {
+          "text": "Design-Review, Barrierefreiheitsaudit, Übersetzungsprüfung und Marketing-Freigabe.",
+          "isCorrect": false,
+          "explanation": "Falsch: das sind manuelle Prozesse, keine automatisierten Pipeline-Schritte."
+        }
+      ]
+    },
+    {
+      "question": "Wofür steht das CD in CI/CD?",
+      "area": "CI/CD: CI/CD",
+      "options": [
+        {
+          "text": "Continuous Delivery, das automatische Ausliefern bestandener Änderungen.",
+          "isCorrect": true,
+          "explanation": "Richtig: CD automatisiert die Auslieferung nach bestandener Prüfung."
+        },
+        {
+          "text": "Code Deletion, das automatische Löschen von ungenutztem Code.",
+          "isCorrect": false,
+          "explanation": "Falsch: CD steht für Delivery oder Deployment, nicht Deletion."
+        },
+        {
+          "text": "Continuous Debugging, das automatische Finden und Beheben von Fehlern.",
+          "isCorrect": false,
+          "explanation": "Falsch: CD behebt keine Fehler, es liefert aus."
+        },
+        {
+          "text": "Code Documentation, das automatische Generieren von Dokumentation.",
+          "isCorrect": false,
+          "explanation": "Falsch: CD steht nicht für Documentation."
+        }
+      ]
+    },
+    {
+      "question": "Warum ist es wichtig, dass die Pipeline-Datei in Git versioniert ist?",
+      "area": "CI/CD: Pipeline",
+      "options": [
+        {
+          "text": "Damit Änderungen an der Pipeline nachvollziehbar sind und per Pull Request geprüft werden können.",
+          "isCorrect": true,
+          "explanation": "Richtig: die Pipeline ist Code und wird wie Code versioniert und reviewed."
+        },
+        {
+          "text": "Weil GitHub sonst eine Strafe von 100 Dollar pro nicht versionierter Pipeline-Datei verhängt.",
+          "isCorrect": false,
+          "explanation": "Falsch: es gibt keine Strafen für nicht versionierte Dateien."
+        },
+        {
+          "text": "Damit die Pipeline automatisch auf allen Rechnern der Entwickler installiert wird.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Pipeline läuft in der Cloud, nicht auf den Entwickler-Rechnern."
+        },
+        {
+          "text": "Weil Git die Pipeline sonst nicht ausführen kann und einen Fehler wirft.",
+          "isCorrect": false,
+          "explanation": "Falsch: Git führt keine Pipelines aus, das macht GitHub Actions."
+        }
+      ]
+    },
+    {
+      "question": "Was passiert, wenn ein Pull Request eine rote Pipeline hat?",
+      "area": "CI/CD: Pipeline",
+      "options": [
+        {
+          "text": "Er kann nicht in den Hauptzweig integriert werden, bis der Fehler behoben ist.",
+          "isCorrect": true,
+          "explanation": "Richtig: eine rote Pipeline blockiert die Integration, das ist fail-closed."
+        },
+        {
+          "text": "Er wird automatisch integriert, aber mit einer Warnung für den Reviewer.",
+          "isCorrect": false,
+          "explanation": "Falsch: eine rote Pipeline blockiert die Integration, nicht nur mit Warnung."
+        },
+        {
+          "text": "Er wird gelöscht, und der Entwickler muss einen neuen Pull Request erstellen.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Pull Request bleibt bestehen, aber er kann nicht integriert werden."
+        },
+        {
+          "text": "Die Pipeline wird automatisch dreimal wiederholt, bevor sie endgültig als fehlgeschlagen gilt.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Pipeline wird nicht automatisch wiederholt, der Entwickler muss den Fehler beheben."
+        }
+      ]
+    },
+    {
+      "question": "Welche Rolle spielt die Pipeline beim Onboarding neuer Teammitglieder?",
+      "area": "CI/CD: Pipeline",
+      "options": [
+        {
+          "text": "Sie gibt sofort Feedback, ob der Code den Projektstandards entspricht, ohne auf eine manuelle Review zu warten.",
+          "isCorrect": true,
+          "explanation": "Richtig: die Pipeline ist der geduldige, immer verfügbare erste Reviewer."
+        },
+        {
+          "text": "Sie schreibt automatisch eine Willkommens-E-Mail an das neue Teammitglied.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Pipeline hat nichts mit E-Mails zu tun."
+        },
+        {
+          "text": "Sie erstellt automatisch einen Avatar und einen Benutzernamen für das neue Teammitglied.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Pipeline erstellt keine Benutzerkonten."
+        },
+        {
+          "text": "Sie deaktiviert sich für neue Teammitglieder, um sie nicht mit Fehlern zu überfordern.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Pipeline gilt für alle gleich, neue wie erfahrene Teammitglieder."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Erstelle in einem eigenen Repository eine einfache GitHub-Actions-Pipeline. Die Pipeline soll bei jedem Push ausgelöst werden und mindestens zwei Schritte enthalten: einen, der echo 'Hallo Pipeline' ausgibt, und einen, der mit node -e \"console.log('Node.js läuft')\" prüft, ob Node.js verfügbar ist. Die Pipeline-Datei muss im Verzeichnis .github/workflows liegen und auf .yml enden. Pushe die Datei und beobachte in der GitHub-Oberfläche unter Actions, wie die Pipeline läuft.",
+    "expectation": "Eine eigene Pipeline-Datei wurde erstellt und erfolgreich ausgeführt. In der GitHub-Oberfläche unter Actions ist ein grüner Lauf sichtbar. Das Konzept von Workflow, Job und Step wurde praktisch angewendet.",
+    "checklist": [
+      "Ein Repository auf GitHub erstellt oder ein bestehendes verwendet.",
+      "Das Verzeichnis .github/workflows angelegt.",
+      "Eine .yml-Datei mit on: push und einem Job mit zwei Steps erstellt.",
+      "Die Datei ins Repository gepusht.",
+      "In der GitHub-Oberfläche unter Actions den Pipeline-Lauf beobachtet.",
+      "Der Lauf ist grün und zeigt die Ausgabe beider echo-Befehle."
+    ],
+    "portfolioItem": "P04"
+  },
+  "audio": {
+    "file": "M04-04-01.mp3",
+    "durationSeconds": 1320,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Muss ich für jedes Projekt eine eigene Pipeline schreiben?",
+      "answer": "Ja, aber du musst nicht bei null anfangen. Viele Projekte haben ähnliche Anforderungen, und du kannst eine bestehende Pipeline als Vorlage nehmen und anpassen. Die ci.yml aus repo-futuredev ist eine gute Vorlage für ein TypeScript-Monorepo mit pnpm. Du kopierst sie, passt die Node-Version und die spezifischen Prüfbefehle an, und hast in wenigen Minuten eine lauffähige Pipeline. Mit der Zeit baust du dir einen Fundus an bewährten Workflow-Dateien auf, die du projektübergreifend wiederverwendest."
+    },
+    {
+      "question": "Was kostet eine Pipeline?",
+      "answer": "GitHub Actions bietet ein großzügiges kostenloses Kontingent: 2000 Minuten pro Monat für private Repos, unbegrenzt für öffentliche Repos. Für die allermeisten Einzelentwickler und kleinen Teams reicht das völlig aus. Erst wenn du Dutzende von Pipelines am Tag laufen lässt oder sehr lange Builds hast, können Kosten entstehen. Die Minutenpreise sind transparent und liegen im Bereich von wenigen Cent pro Minute. Andere Anbieter wie Bitbucket oder GitLab haben ähnliche Modelle mit eigenen Freikontingenten."
+    },
+    {
+      "question": "Kann ich eine Pipeline auch lokal auf meinem Rechner ausführen?",
+      "answer": "Ja, mit Werkzeugen wie act für GitHub Actions kannst du Workflows lokal simulieren. Das ist nützlich, um eine Pipeline zu testen, bevor du sie ins Repository pushst. Allerdings ist die lokale Ausführung nie hundertprozentig identisch mit der Ausführung in der Cloud, weil die Umgebung leicht abweichen kann. Für schnelles Feedback während der Entwicklung sind die einzelnen Prüfschritte wie typecheck und test direkt auf deinem Rechner meist ausreichend. Die Pipeline ist die letzte, neutrale Instanz, nicht der Ersatz für lokales Testen."
+    },
+    {
+      "question": "Was ist der Unterschied zwischen einer Pipeline und einem Pre-Commit-Hook?",
+      "answer": "Ein Pre-Commit-Hook läuft lokal auf deinem Rechner, bevor du eine Änderung committest. Er ist schnell und verhindert, dass offensichtliche Fehler überhaupt ins Repository gelangen. Eine Pipeline läuft in der Cloud, nachdem der Commit bereits im Repository ist. Sie ist gründlicher und prüft Dinge, die lokal zu lange dauern würden, wie den vollständigen Testdurchlauf. Beide ergänzen sich: der Pre-Commit-Hook fängt die schnellen Fehler ab, die Pipeline die gründlichen. Im Repo repo-futuredev gibt es beide: einen Pre-Commit-Hook für die Geheimnisprüfung und die CI-Pipeline für den vollständigen Check."
+    },
+    {
+      "question": "Was mache ich, wenn die Pipeline einen Fehler meldet, den ich auf meinem Rechner nicht nachvollziehen kann?",
+      "answer": "Das ist der klassische bei mir läuft es doch-Moment, und genau dafür ist die Pipeline da. Der häufigste Grund sind unterschiedliche Umgebungen: eine andere Node.js-Version, ein anderes Betriebssystem oder eine Datei, die auf deinem Rechner existiert, aber nicht im Repository ist. Lies die Pipeline-Logs genau, sie zeigen dir den exakten Befehl, der fehlgeschlagen ist, und die genaue Fehlermeldung. Meistens findest du den Unterschied innerhalb weniger Minuten. Wenn nicht, hilft es, die Pipeline-Umgebung lokal nachzubauen, zum Beispiel mit Docker, um exakt dieselbe Umgebung wie in der Pipeline zu haben."
+    }
+  ]
+}

@@ -1,0 +1,748 @@
+{
+  "id": "M04-09-01",
+  "title": "Weg einer Mail",
+  "durationMinutes": 32,
+  "prerequisites": [
+    "M01-03-01",
+    "M01-04-01"
+  ],
+  "terms": [
+    {
+      "term": "SMTP",
+      "definition": "Simple Mail Transfer Protocol, das Protokoll zum Versenden von E-Mails. SMTP regelt, wie ein Mail-Client eine E-Mail an einen Mail-Server übergibt und wie Mail-Server E-Mails untereinander weiterleiten, bis sie den Zielserver erreichen."
+    },
+    {
+      "term": "MTA",
+      "definition": "Mail Transfer Agent, ein Server-Programm, das E-Mails nach den SMTP-Regeln annimmt, weiterleitet und zustellt. Jede E-Mail durchläuft auf ihrem Weg mindestens zwei MTAs: den des Absenders und den des Empfängers."
+    },
+    {
+      "term": "MX-Record",
+      "definition": "Mail Exchange Record, ein DNS-Eintrag, der festlegt, welcher Server für eine Domain die E-Mails annimmt. Der MX-Record ist der Wegweiser im DNS, der einer sendenden Mail-Infrastruktur sagt, wohin sie eine E-Mail für diese Domain schicken muss."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen Brief vor, den du in Berlin einwirfst und der an einen Empfänger in München adressiert ist. Du wirfst ihn in den nächsten Briefkasten, die Post holt ihn ab, sortiert ihn im Briefzentrum, transportiert ihn nach München, sortiert ihn dort erneut und stellt ihn schließlich dem Empfänger zu. Der Brief durchläuft mehrere Stationen, und jede Station hat eine klar definierte Aufgabe.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Eine E-Mail nimmt einen sehr ähnlichen Weg, nur dass er in Sekundenbruchteilen abläuft. Du schreibst eine E-Mail in deinem Programm, klickst auf Senden, und dein Mail-Programm übergibt sie an den Mail-Server deines Anbieters. Der schaut sich die Empfängeradresse an, fragt das DNS nach dem MX-Record der Empfängerdomain und schickt die E-Mail an den dort angegebenen Server. Der Empfängerserver nimmt die E-Mail an, prüft sie auf Spam und Viren und legt sie schließlich im Postfach des Empfängers ab, wo sie von dessen Mail-Programm abgeholt wird.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was genau ist SMTP, und warum heißt es Simple?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "SMTP, Simple Mail Transfer Protocol, ist das Protokoll, das den gesamten E-Mail-Transport regelt. Es wurde 1982 entwickelt, als das Internet noch ein überschaubares Netzwerk vertrauenswürdiger Teilnehmer war. Simple heißt es, weil es ursprünglich tatsächlich einfach war: ein Server verbindet sich mit einem anderen, sagt Hallo, ich habe eine E-Mail für dich, übergibt sie und beendet die Verbindung. Keine Authentifizierung, keine Verschlüsselung, keine Spam-Prüfung. All das wurde später hinzugefügt, aber der Name ist geblieben.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "SMTP, Simple Mail Transfer Protocol, ist das Protokoll zum Versenden und Weiterleiten von E-Mails zwischen Mail-Servern.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Wenn du in deiner Anwendung eine E-Mail verschickst, zum Beispiel eine Willkommens-E-Mail nach der Registrierung, sprichst du mit einem SMTP-Server. Deine Anwendung verbindet sich mit dem SMTP-Server deines E-Mail-Anbieters, authentifiziert sich mit einem Benutzernamen und einem Passwort oder API-Schlüssel und übergibt die E-Mail. Der SMTP-Server nimmt sie an und leitet sie weiter. Deine Anwendung muss sich nicht darum kümmern, wie die E-Mail zum Empfänger kommt, das übernimmt der SMTP-Server.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "SMTP zu verstehen ist wichtig, weil fast jede Webanwendung E-Mails verschickt: Registrierungsbestätigungen, Passwort-Zurücksetzungen, Benachrichtigungen. Wenn diese E-Mails nicht ankommen, liegt das Problem fast immer an einer falschen SMTP-Konfiguration oder an fehlenden Sicherheitsmechanismen, die der Empfängerserver verlangt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist ein MTA, und wie viele davon berührt meine E-Mail?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir die Postverteilzentren vor, die dein Brief auf dem Weg von Berlin nach München durchläuft. Jedes Zentrum nimmt den Brief an, sortiert ihn und schickt ihn an das nächste Zentrum weiter, bis er schließlich im Zustellzentrum des Empfängers landet.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein MTA, Mail Transfer Agent, ist so ein Postverteilzentrum für E-Mails. Es ist ein Server-Programm, das E-Mails nach den SMTP-Regeln annimmt und weiterleitet. Jede E-Mail durchläuft mindestens zwei MTAs: den des Absenders, der die E-Mail aus deinem Postausgang entgegennimmt und auf die Reise schickt, und den des Empfängers, der die E-Mail am Ziel annimmt und im Postfach ablegt. Bei größeren Anbietern oder wenn Absender und Empfänger bei verschiedenen Anbietern sind, können es auch mehr MTAs sein.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Ein MTA, Mail Transfer Agent, ist ein Server-Programm, das E-Mails nach den SMTP-Regeln annimmt, weiterleitet und zustellt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Wenn du von deiner Gmail-Adresse eine E-Mail an eine Outlook-Adresse schickst, durchläuft sie mehrere MTAs. Dein Gmail-MTA nimmt die E-Mail an, prüft den MX-Record von outlook.com und verbindet sich mit einem der Outlook-MTAs. Der Outlook-MTA nimmt die E-Mail an, prüft sie auf Spam und legt sie im Postfach des Empfängers ab. Jeder dieser MTAs hinterlässt einen Received-Header in der E-Mail, sodass du den gesamten Weg nachvollziehen kannst, ähnlich wie die Poststempel auf einem Brief.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die Received-Header zu lesen ist eine wichtige Fähigkeit bei der Fehlersuche. Wenn eine E-Mail nicht ankommt, zeigen die Header, welcher MTA sie als letztes angenommen hat und wo sie möglicherweise abgewiesen wurde. Das ist der erste Schritt bei jeder Zustellungsdiagnose.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist ein MX-Record, und warum ist er so wichtig?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir ein Telefonbuch vor, in dem für jeden Namen eine Telefonnummer steht. Wenn du jemanden anrufen willst, schlägst du den Namen nach und wählst die Nummer. Ohne Telefonbuch wüsstest du nicht, welche Nummer du wählen sollst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der MX-Record, Mail Exchange Record, ist der Telefonbucheintrag für E-Mails. Er steht im DNS einer Domain und sagt: E-Mails für diese Domain bitte an diesen Server schicken. Wenn jemand eine E-Mail an dich@deinedomain.de schickt, fragt der sendende MTA das DNS nach dem MX-Record von deinedomain.de. Das DNS antwortet mit dem Namen des Mail-Servers, zum Beispiel mail.deinedomain.de. Der sendende MTA verbindet sich dann mit diesem Server und übergibt die E-Mail. Ohne MX-Record weiß der sendende MTA nicht, wohin er die E-Mail schicken soll, und sie kommt nie an.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Ein MX-Record, Mail Exchange Record, ist ein DNS-Eintrag, der festlegt, welcher Server für eine Domain die E-Mails annimmt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Wenn du eine eigene Domain für deine E-Mails nutzen willst, musst du im DNS deiner Domain einen MX-Record setzen. Der zeigt auf den Mail-Server deines E-Mail-Anbieters. Bei Google Workspace zeigt er auf ASPMX.L.GOOGLE.COM, bei Microsoft 365 auf etwas wie deinedomain.mail.protection.outlook.com. Ohne diesen Eintrag kommen keine E-Mails an, egal wie gut deine Webseite funktioniert. Der MX-Record ist die grundlegendste Voraussetzung für den E-Mail-Empfang.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Der MX-Record ist oft das Erste, was bei E-Mail-Problemen überprüft werden muss. Ein fehlender oder falsch gesetzter MX-Record ist die häufigste Ursache dafür, dass eine neu eingerichtete Domain keine E-Mails empfängt. Die Überprüfung dauert mit einem DNS-Lookup-Werkzeug weniger als eine Minute und sollte der erste Schritt bei jeder Zustellungsdiagnose sein.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Wie finde ich heraus, welchen Weg meine E-Mail genommen hat?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Jede E-Mail enthält im Header eine Reihe von Received-Einträgen, die den Weg der E-Mail dokumentieren. Jeder MTA, der die E-Mail berührt, fügt einen Received-Header hinzu, mit Zeitstempel und Server-Namen. Du liest diese Header von unten nach oben: der unterste Eintrag ist der erste MTA, der oberste der letzte. In Gmail findest du die Header unter den drei Punkten und dann Original anzeigen. In Outlook unter den drei Punkten und dann Nachrichtenquelltext anzeigen. Die Header sind der Fahrtenbuch deiner E-Mail und zeigen dir genau, wo sie war und wo sie möglicherweise hängengeblieben ist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die Fähigkeit, E-Mail-Header zu lesen, unterscheidet den Profi vom Anfänger. Wenn ein Kunde sagt, meine E-Mails kommen nicht an, kannst du mit einem Blick in die Header sehen, ob die E-Mail den sendenden MTA überhaupt verlassen hat, ob sie vom empfangenden MTA abgewiesen wurde oder ob sie im Spam-Ordner gelandet ist. Das spart Stunden an Rätselraten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine Paketverfolgung vor, bei der du jeden einzelnen Schritt deines Pakets siehst: wann es abgeholt wurde, in welchem Verteilzentrum es war, wann es zugestellt wurde. Die Received-Header sind die Paketverfolgung für E-Mails.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Genau wie bei der Paketverfolgung kannst du mit den Received-Headern jeden Schritt deiner E-Mail nachvollziehen. Du siehst, wann sie deinen Mail-Server verlassen hat, welche Server sie auf dem Weg berührt hat und wann sie beim Zielserver angekommen ist. Wenn eine E-Mail nicht ankommt, zeigen die Header dir den letzten erfolgreichen Schritt und damit den Ort, an dem das Problem liegt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein oft unterschätzter Aspekt des E-Mail-Versands ist die Reputation der sendenden IP-Adresse. Große E-Mail-Anbieter wie Gmail und Outlook bewerten nicht nur jede einzelne E-Mail, sondern auch die Historie der sendenden IP. Eine IP, von der in der Vergangenheit viel Spam kam, hat eine schlechte Reputation, und selbst legitime E-Mails von dieser IP landen im Spam-Ordner.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die IP-Reputation ist einer der Hauptgründe, warum selbst gebaute Mail-Server so unzuverlässig sind. Eine frische IP hat keine Reputation und wird von den großen Anbietern zunächst misstrauisch beäugt. Es kann Wochen dauern, bis eine neue IP eine ausreichend gute Reputation aufgebaut hat.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein oft unterschätzter Aspekt des E-Mail-Versands ist die Reputation der sendenden IP-Adresse. Große E-Mail-Anbieter wie Gmail und Outlook bewerten nicht nur jede einzelne E-Mail, sondern auch die Historie der sendenden IP. Eine IP, von der in der Vergangenheit viel Spam kam, hat eine schlechte Reputation, und selbst legitime E-Mails von dieser IP landen im Spam-Ordner.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die IP-Reputation ist einer der Hauptgründe, warum selbst gebaute Mail-Server so unzuverlässig sind. Eine frische IP hat keine Reputation und wird von den großen Anbietern zunächst misstrauisch beäugt. Es kann Wochen dauern, bis eine neue IP eine ausreichend gute Reputation aufgebaut hat.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Wie finde ich heraus, ob meine E-Mails im Spam-Ordner landen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Es gibt spezielle Dienste wie Mail-Tester oder GlockApps, die deine E-Mail-Konfiguration analysieren und dir sagen, wie Spam-Filter deine E-Mails bewerten. Du schickst eine Test-E-Mail an eine von ihnen bereitgestellte Adresse und bekommst einen detaillierten Bericht: SPF-Status, DKIM-Status, DMARC-Status, IP-Reputation, Inhaltsspam-Score und vieles mehr. Diese Dienste sind für die Fehlersuche unverzichtbar und sollten vor jedem größeren E-Mail-Versand konsultiert werden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein oft unterschätzter Aspekt des E-Mail-Versands ist die Reputation der sendenden IP-Adresse. Große E-Mail-Anbieter wie Gmail und Outlook bewerten nicht nur jede einzelne E-Mail, sondern auch die Historie der sendenden IP. Eine IP, von der in der Vergangenheit viel Spam kam, hat eine schlechte Reputation, und selbst legitime E-Mails von dieser IP landen im Spam-Ordner.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die IP-Reputation ist einer der Hauptgründe, warum selbst gebaute Mail-Server so unzuverlässig sind. Eine frische IP hat keine Reputation und wird von den großen Anbietern zunächst misstrauisch beäugt. Es kann Wochen dauern, bis eine neue IP eine ausreichend gute Reputation aufgebaut hat.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Wie finde ich heraus, ob meine E-Mails im Spam-Ordner landen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Es gibt spezielle Dienste wie Mail-Tester oder GlockApps, die deine E-Mail-Konfiguration analysieren und dir sagen, wie Spam-Filter deine E-Mails bewerten. Du schickst eine Test-E-Mail an eine von ihnen bereitgestellte Adresse und bekommst einen detaillierten Bericht: SPF-Status, DKIM-Status, DMARC-Status, IP-Reputation, Inhaltsspam-Score und vieles mehr. Diese Dienste sind für die Fehlersuche unverzichtbar und sollten vor jedem größeren E-Mail-Versand konsultiert werden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein oft unterschätzter Aspekt des E-Mail-Versands ist die Reputation der sendenden IP-Adresse. Große E-Mail-Anbieter wie Gmail und Outlook bewerten nicht nur jede einzelne E-Mail, sondern auch die Historie der sendenden IP. Eine IP, von der in der Vergangenheit viel Spam kam, hat eine schlechte Reputation, und selbst legitime E-Mails von dieser IP landen im Spam-Ordner.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die IP-Reputation ist einer der Hauptgründe, warum selbst gebaute Mail-Server so unzuverlässig sind. Eine frische IP hat keine Reputation und wird von den großen Anbietern zunächst misstrauisch beäugt. Es kann Wochen dauern, bis eine neue IP eine ausreichend gute Reputation aufgebaut hat.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Wie finde ich heraus, ob meine E-Mails im Spam-Ordner landen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Es gibt spezielle Dienste wie Mail-Tester oder GlockApps, die deine E-Mail-Konfiguration analysieren und dir sagen, wie Spam-Filter deine E-Mails bewerten. Du schickst eine Test-E-Mail an eine von ihnen bereitgestellte Adresse und bekommst einen detaillierten Bericht: SPF-Status, DKIM-Status, DMARC-Status, IP-Reputation, Inhaltsspam-Score und vieles mehr. Diese Dienste sind für die Fehlersuche unverzichtbar und sollten vor jedem größeren E-Mail-Versand konsultiert werden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein oft unterschätzter Aspekt des E-Mail-Versands ist die Reputation der sendenden IP-Adresse. Große E-Mail-Anbieter wie Gmail und Outlook bewerten nicht nur jede einzelne E-Mail, sondern auch die Historie der sendenden IP. Eine IP, von der in der Vergangenheit viel Spam kam, hat eine schlechte Reputation, und selbst legitime E-Mails von dieser IP landen im Spam-Ordner.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die IP-Reputation ist einer der Hauptgründe, warum selbst gebaute Mail-Server so unzuverlässig sind. Eine frische IP hat keine Reputation und wird von den großen Anbietern zunächst misstrauisch beäugt. Es kann Wochen dauern, bis eine neue IP eine ausreichend gute Reputation aufgebaut hat.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Wie finde ich heraus, ob meine E-Mails im Spam-Ordner landen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Es gibt spezielle Dienste wie Mail-Tester oder GlockApps, die deine E-Mail-Konfiguration analysieren und dir sagen, wie Spam-Filter deine E-Mails bewerten. Du schickst eine Test-E-Mail an eine von ihnen bereitgestellte Adresse und bekommst einen detaillierten Bericht: SPF-Status, DKIM-Status, DMARC-Status, IP-Reputation, Inhaltsspam-Score und vieles mehr. Diese Dienste sind für die Fehlersuche unverzichtbar und sollten vor jedem größeren E-Mail-Versand konsultiert werden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein oft unterschätzter Aspekt des E-Mail-Versands ist die Reputation der sendenden IP-Adresse. Große E-Mail-Anbieter wie Gmail und Outlook bewerten nicht nur jede einzelne E-Mail, sondern auch die Historie der sendenden IP. Eine IP, von der in der Vergangenheit viel Spam kam, hat eine schlechte Reputation, und selbst legitime E-Mails von dieser IP landen im Spam-Ordner.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die IP-Reputation ist einer der Hauptgründe, warum selbst gebaute Mail-Server so unzuverlässig sind. Eine frische IP hat keine Reputation und wird von den großen Anbietern zunächst misstrauisch beäugt. Es kann Wochen dauern, bis eine neue IP eine ausreichend gute Reputation aufgebaut hat.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Wie finde ich heraus, ob meine E-Mails im Spam-Ordner landen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Es gibt spezielle Dienste wie Mail-Tester oder GlockApps, die deine E-Mail-Konfiguration analysieren und dir sagen, wie Spam-Filter deine E-Mails bewerten. Du schickst eine Test-E-Mail an eine von ihnen bereitgestellte Adresse und bekommst einen detaillierten Bericht: SPF-Status, DKIM-Status, DMARC-Status, IP-Reputation, Inhaltsspam-Score und vieles mehr. Diese Dienste sind für die Fehlersuche unverzichtbar und sollten vor jedem größeren E-Mail-Versand konsultiert werden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "text": "Also noch einmal ganz kurz: SMTP ist das Protokoll, das den gesamten E-Mail-Transport regelt. Ein MTA ist ein Server-Programm, das E-Mails nach den SMTP-Regeln annimmt und weiterleitet, und jede E-Mail durchläuft mindestens zwei MTAs. Der MX-Record im DNS ist der Wegweiser, der dem sendenden MTA sagt, an welchen Server er die E-Mail für eine Domain schicken muss. Die Received-Header dokumentieren den gesamten Weg der E-Mail und sind das wichtigste Werkzeug bei der Fehlersuche.",
+      "isKeySentence": true
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "SMTP, Simple Mail Transfer Protocol, ist das Protokoll zum Versenden von E-Mails. SMTP regelt, wie ein Mail-Client eine E-Mail an einen Mail-Server übergibt und wie Mail-Server E-Mails untereinander weiterleiten, bis sie den Zielserver erreichen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Ein MTA, Mail Transfer Agent, ist ein Server-Programm, das E-Mails nach den SMTP-Regeln annimmt, weiterleitet und zustellt. Jede E-Mail durchläuft auf ihrem Weg mindestens zwei MTAs: den des Absenders und den des Empfängers.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Ein MX-Record, Mail Exchange Record, ist ein DNS-Eintrag, der festlegt, welcher Server für eine Domain die E-Mails annimmt. Der MX-Record ist der Wegweiser im DNS, der einer sendenden Mail-Infrastruktur sagt, wohin sie eine E-Mail für diese Domain schicken muss.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Warum kommen meine E-Mails nicht an, obwohl ich sie versendet habe?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Die häufigsten Ursachen sind fehlende oder falsche SPF- und DKIM-Einträge im DNS, eine IP-Adresse des sendenden Servers, die auf einer schwarzen Liste steht, oder der Inhalt der E-Mail, der von Spam-Filtern als verdächtig eingestuft wird. Prüfe zuerst die Received-Header einer Test-E-Mail, um zu sehen, ob sie den sendenden MTA überhaupt verlassen hat. Dann prüfe mit einem Werkzeug wie MXToolbox, ob SPF und DKIM korrekt eingerichtet sind. Und schließlich prüfe den Inhalt: zu viele Links, zu viele Bilder, zu wenig Text oder bestimmte Schlüsselwörter können Spam-Filter auslösen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Kann ich E-Mails auch ohne eigenen Mail-Server verschicken?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ja, und das ist für die meisten Anwendungen der richtige Weg. Dienste wie SendGrid, Mailgun, Resend oder der SMTP-Dienst deines Hosting-Anbieters betreiben die Mail-Server für dich. Du konfigurierst deine Anwendung so, dass sie E-Mails über die API oder den SMTP-Server dieses Dienstes verschickt, und der Dienst kümmert sich um Zustellbarkeit, Reputation und Bounce-Verarbeitung. Einen eigenen Mail-Server zu betreiben ist aufwendig und riskant, weil du dich selbst um Reputation und Zustellbarkeit kümmern musst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was ist der Unterschied zwischen SMTP und IMAP?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "SMTP ist das Protokoll zum Versenden von E-Mails, IMAP ist das Protokoll zum Abholen von E-Mails. Wenn du eine E-Mail schickst, wird SMTP verwendet. Wenn du deine eingegangenen E-Mails in einem Mail-Programm wie Outlook oder Thunderbird liest, wird IMAP oder das ältere POP3 verwendet. SMTP und IMAP sind zwei verschiedene Protokolle für zwei verschiedene Richtungen: SMTP für den Versand, IMAP für den Empfang. In der Webentwicklung hast du fast nur mit SMTP zu tun, weil deine Anwendung E-Mails versendet, aber keine empfängt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Wie finde ich den MX-Record einer Domain heraus?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Mit dem Befehl nslookup -type=MX domain.de im Terminal oder mit einem Online-Werkzeug wie MXToolbox. Du bekommst eine Liste von Mail-Servern mit Prioritäten zurück. Die niedrigste Prioritätsnummer ist der primäre Mail-Server, die höheren sind Ausweichserver. Wenn der primäre Server nicht erreichbar ist, versucht der sendende MTA den nächsten in der Liste. Das ist der Grund, warum du oft mehrere MX-Records mit unterschiedlichen Prioritäten siehst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was bedeutet es, wenn eine E-Mail bounced, also zurückkommt?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ein Bounce bedeutet, dass der empfangende MTA die E-Mail abgewiesen hat. Es gibt zwei Arten: Hard Bounces und Soft Bounces. Ein Hard Bounce ist dauerhaft, zum Beispiel weil die E-Mail-Adresse nicht existiert. Diese Adressen solltest du aus deiner Liste entfernen, weil wiederholte Hard Bounces deiner Reputation schaden. Ein Soft Bounce ist vorübergehend, zum Beispiel weil das Postfach voll ist oder der Server gerade nicht erreichbar ist. Der sendende MTA wird es in der Regel noch einige Male versuchen, bevor er aufgibt.",
+      "isKeySentence": false
+    }
+  ],
+  "practiceExample": {
+    "text": "Der Weg einer E-Mail vom Absender zum Empfänger führt über mehrere MTAs, die durch den MX-Record der Empfängerdomain gesteuert werden. Die Received-Header dokumentieren jeden Schritt und sind das wichtigste Werkzeug bei der Fehlersuche.",
+    "repoNote": "repo-futuredev",
+    "location": "E-Mail-Header einer beliebigen E-Mail (Received-Header, MX-Record und SMTP-Transportweg)"
+  },
+  "quiz": [
+    {
+      "question": "Welches Alltagsbild beschreibt den Weg einer E-Mail am treffendsten?",
+      "area": "E-Mail: SMTP",
+      "options": [
+        {
+          "text": "Ein Brief, der mehrere Postverteilzentren durchläuft, bevor er beim Empfänger ankommt.",
+          "isCorrect": true,
+          "explanation": "Richtig: eine E-Mail durchläuft mehrere MTAs, wie ein Brief mehrere Postzentren."
+        },
+        {
+          "text": "Ein Telefonanruf, bei dem zwei Personen direkt miteinander sprechen, ohne Zwischenstationen.",
+          "isCorrect": false,
+          "explanation": "Falsch: eine E-Mail hat mehrere Zwischenstationen, anders als ein direktes Telefonat."
+        },
+        {
+          "text": "Eine Flaschenpost, die ziellos im Meer treibt und irgendwann zufällig gefunden wird.",
+          "isCorrect": false,
+          "explanation": "Falsch: eine E-Mail hat ein klares Ziel und einen definierten Weg."
+        },
+        {
+          "text": "Ein Fax, das eine Seite einscannt und als Bild an eine andere Nummer schickt.",
+          "isCorrect": false,
+          "explanation": "Falsch: E-Mail ist textbasiert und digital, nicht bildbasiert wie ein Fax."
+        }
+      ]
+    },
+    {
+      "question": "Wofür steht die Abkürzung SMTP?",
+      "area": "E-Mail: SMTP",
+      "options": [
+        {
+          "text": "Simple Mail Transfer Protocol, das Protokoll zum Versenden von E-Mails.",
+          "isCorrect": true,
+          "explanation": "Richtig: SMTP regelt den gesamten E-Mail-Transport zwischen Servern."
+        },
+        {
+          "text": "Secure Message Transfer Process, ein verschlüsseltes Nachrichtenprotokoll.",
+          "isCorrect": false,
+          "explanation": "Falsch: SMTP steht für Simple Mail Transfer Protocol."
+        },
+        {
+          "text": "Server Mail Transport Provider, ein Dienst zum Betreiben von Mail-Servern.",
+          "isCorrect": false,
+          "explanation": "Falsch: SMTP ist ein Protokoll, kein Dienst."
+        },
+        {
+          "text": "Standard Message Text Protocol, ein Format für Textnachrichten.",
+          "isCorrect": false,
+          "explanation": "Falsch: SMTP steht für Simple Mail Transfer Protocol."
+        }
+      ]
+    },
+    {
+      "question": "Was ist ein MTA?",
+      "area": "E-Mail: MTA",
+      "options": [
+        {
+          "text": "Ein Server-Programm, das E-Mails nach den SMTP-Regeln annimmt, weiterleitet und zustellt.",
+          "isCorrect": true,
+          "explanation": "Richtig: der MTA ist das Postverteilzentrum für E-Mails."
+        },
+        {
+          "text": "Ein E-Mail-Programm wie Outlook oder Thunderbird, das der Nutzer auf seinem Computer installiert.",
+          "isCorrect": false,
+          "explanation": "Falsch: das E-Mail-Programm des Nutzers heißt MUA, Mail User Agent."
+        },
+        {
+          "text": "Ein Zertifikat, das die Echtheit einer E-Mail-Adresse bestätigt.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein MTA ist ein Server-Programm, kein Zertifikat."
+        },
+        {
+          "text": "Eine gesetzliche Vorschrift, wie lange E-Mails gespeichert werden müssen.",
+          "isCorrect": false,
+          "explanation": "Falsch: MTA ist ein technischer Begriff, keine gesetzliche Vorschrift."
+        }
+      ]
+    },
+    {
+      "question": "Was ist ein MX-Record?",
+      "area": "E-Mail: MX-Record",
+      "options": [
+        {
+          "text": "Ein DNS-Eintrag, der festlegt, welcher Server für eine Domain die E-Mails annimmt.",
+          "isCorrect": true,
+          "explanation": "Richtig: der MX-Record ist der Wegweiser für E-Mails im DNS."
+        },
+        {
+          "text": "Ein Protokoll zur Verschlüsselung von E-Mails während der Übertragung.",
+          "isCorrect": false,
+          "explanation": "Falsch: MX-Record ist ein DNS-Eintrag, kein Verschlüsselungsprotokoll."
+        },
+        {
+          "text": "Eine Datenbank, in der alle jemals versendeten E-Mails gespeichert werden.",
+          "isCorrect": false,
+          "explanation": "Falsch: der MX-Record speichert keine E-Mails, er ist nur ein Wegweiser."
+        },
+        {
+          "text": "Ein Programm, das E-Mails auf Spam und Viren prüft, bevor sie zugestellt werden.",
+          "isCorrect": false,
+          "explanation": "Falsch: das ist ein Spam-Filter, kein MX-Record."
+        }
+      ]
+    },
+    {
+      "question": "Wie viele MTAs durchläuft eine E-Mail mindestens?",
+      "area": "E-Mail: MTA",
+      "options": [
+        {
+          "text": "Zwei: den des Absenders und den des Empfängers.",
+          "isCorrect": true,
+          "explanation": "Richtig: mindestens ein sendender und ein empfangender MTA sind beteiligt."
+        },
+        {
+          "text": "Einen: der MTA des Absenders stellt direkt beim Empfänger zu.",
+          "isCorrect": false,
+          "explanation": "Falsch: der MTA des Absenders stellt nicht direkt zu, er übergibt an den MTA des Empfängers."
+        },
+        {
+          "text": "Keinen: E-Mails werden direkt zwischen den Mail-Programmen der Nutzer ausgetauscht.",
+          "isCorrect": false,
+          "explanation": "Falsch: E-Mails laufen immer über MTAs, nie direkt zwischen Nutzern."
+        },
+        {
+          "text": "Fünf: das ist die im SMTP-Standard festgelegte Mindestanzahl.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Standard legt keine Mindestanzahl fest, zwei sind das praktische Minimum."
+        }
+      ]
+    },
+    {
+      "question": "Was dokumentieren die Received-Header in einer E-Mail?",
+      "area": "E-Mail: SMTP",
+      "options": [
+        {
+          "text": "Den gesamten Weg der E-Mail mit Zeitstempeln und Server-Namen jedes beteiligten MTAs.",
+          "isCorrect": true,
+          "explanation": "Richtig: die Received-Header sind das Fahrtenbuch der E-Mail."
+        },
+        {
+          "text": "Die Liste aller Empfänger, die die E-Mail erhalten haben, inklusive BCC.",
+          "isCorrect": false,
+          "explanation": "Falsch: BCC-Empfänger erscheinen nicht in den Headern, das ist der Sinn von BCC."
+        },
+        {
+          "text": "Den Inhalt der E-Mail in verschlüsselter Form.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Inhalt steht im Body, nicht in den Received-Headern."
+        },
+        {
+          "text": "Die Bewertung der E-Mail durch den Spam-Filter des Empfängers.",
+          "isCorrect": false,
+          "explanation": "Falsch: Spam-Bewertungen stehen in anderen Headern, nicht in Received."
+        }
+      ]
+    },
+    {
+      "question": "Warum ist ein fehlender MX-Record die häufigste Ursache für nicht ankommende E-Mails?",
+      "area": "E-Mail: MX-Record",
+      "options": [
+        {
+          "text": "Weil der sendende MTA ohne MX-Record nicht weiß, an welchen Server er die E-Mail schicken soll.",
+          "isCorrect": true,
+          "explanation": "Richtig: ohne MX-Record kein Ziel, ohne Ziel keine Zustellung."
+        },
+        {
+          "text": "Weil der MX-Record die E-Mail verschlüsselt und ohne Verschlüsselung keine Zustellung erfolgt.",
+          "isCorrect": false,
+          "explanation": "Falsch: der MX-Record verschlüsselt nichts, er ist nur ein Wegweiser."
+        },
+        {
+          "text": "Weil der MX-Record das Passwort für den Mail-Server enthält.",
+          "isCorrect": false,
+          "explanation": "Falsch: der MX-Record enthält keine Passwörter."
+        },
+        {
+          "text": "Weil der Internetprovider den MX-Record als Berechtigungsnachweis verlangt.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Provider verlangt keinen MX-Record als Berechtigungsnachweis."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der Unterschied zwischen SMTP und IMAP?",
+      "area": "E-Mail: SMTP",
+      "options": [
+        {
+          "text": "SMTP ist zum Versenden, IMAP zum Abholen von E-Mails.",
+          "isCorrect": true,
+          "explanation": "Richtig: SMTP für den Versand, IMAP für den Empfang."
+        },
+        {
+          "text": "SMTP ist sicher, IMAP ist unsicher.",
+          "isCorrect": false,
+          "explanation": "Falsch: beide können sicher oder unsicher konfiguriert sein."
+        },
+        {
+          "text": "SMTP ist für große E-Mails, IMAP für kleine.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Größe der E-Mail hat nichts mit dem Protokoll zu tun."
+        },
+        {
+          "text": "Es gibt keinen Unterschied, beide Begriffe bedeuten dasselbe.",
+          "isCorrect": false,
+          "explanation": "Falsch: SMTP und IMAP sind verschiedene Protokolle für verschiedene Zwecke."
+        }
+      ]
+    },
+    {
+      "question": "Was ist ein Hard Bounce?",
+      "area": "E-Mail: SMTP",
+      "options": [
+        {
+          "text": "Eine dauerhafte Abweisung, zum Beispiel weil die E-Mail-Adresse nicht existiert.",
+          "isCorrect": true,
+          "explanation": "Richtig: Hard Bounces sind endgültig, die Adresse sollte aus der Liste entfernt werden."
+        },
+        {
+          "text": "Eine vorübergehende Abweisung, zum Beispiel weil das Postfach voll ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: das ist ein Soft Bounce, kein Hard Bounce."
+        },
+        {
+          "text": "Eine E-Mail, die mit besonders hoher Geschwindigkeit zugestellt wurde.",
+          "isCorrect": false,
+          "explanation": "Falsch: Bounce hat nichts mit Geschwindigkeit zu tun."
+        },
+        {
+          "text": "Eine E-Mail, die vom Empfänger manuell zurückgeschickt wurde.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Bounce ist eine automatische Abweisung, keine manuelle Rücksendung."
+        }
+      ]
+    },
+    {
+      "question": "Solltest du einen eigenen Mail-Server betreiben?",
+      "area": "E-Mail: SMTP",
+      "options": [
+        {
+          "text": "Nein, für die meisten Anwendungen ist ein E-Mail-Dienst wie SendGrid oder Mailgun die bessere Wahl.",
+          "isCorrect": true,
+          "explanation": "Richtig: eigene Mail-Server sind aufwendig und riskant, Dienste kümmern sich um Reputation und Zustellbarkeit."
+        },
+        {
+          "text": "Ja, ein eigener Mail-Server ist die einzige Möglichkeit, E-Mails zuverlässig zu versenden.",
+          "isCorrect": false,
+          "explanation": "Falsch: E-Mail-Dienste sind oft zuverlässiger als eigene Server."
+        },
+        {
+          "text": "Nur wenn du mehr als 1000 E-Mails pro Tag verschickst.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Menge der E-Mails ist nicht das entscheidende Kriterium."
+        },
+        {
+          "text": "Ja, weil E-Mail-Dienste grundsätzlich unsicher sind und Daten verkaufen.",
+          "isCorrect": false,
+          "explanation": "Falsch: seriöse E-Mail-Dienste verkaufen keine Daten."
+        }
+      ]
+    },
+    {
+      "question": "Wie liest du die Received-Header einer E-Mail?",
+      "area": "E-Mail: SMTP",
+      "options": [
+        {
+          "text": "Von unten nach oben: der unterste Eintrag ist der erste MTA, der oberste der letzte.",
+          "isCorrect": true,
+          "explanation": "Richtig: jeder MTA fügt seinen Header oben an, deshalb liest man von unten nach oben."
+        },
+        {
+          "text": "Von oben nach unten: der oberste Eintrag ist der erste MTA, der unterste der letzte.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Reihenfolge ist umgekehrt, weil jeder MTA oben anfügt."
+        },
+        {
+          "text": "Alphabetisch: die Einträge sind nach Server-Namen sortiert.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Einträge sind chronologisch, nicht alphabetisch."
+        },
+        {
+          "text": "Zufällig: die Reihenfolge der Einträge hat keine Bedeutung.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Reihenfolge ist streng chronologisch und zeigt den Weg der E-Mail."
+        }
+      ]
+    },
+    {
+      "question": "Was bedeutet eine niedrigere Prioritätsnummer im MX-Record?",
+      "area": "E-Mail: MX-Record",
+      "options": [
+        {
+          "text": "Dieser Server wird zuerst versucht, er ist der primäre Mail-Server.",
+          "isCorrect": true,
+          "explanation": "Richtig: je niedriger die Zahl, desto höher die Priorität."
+        },
+        {
+          "text": "Dieser Server ist weniger wichtig und wird nur im Notfall verwendet.",
+          "isCorrect": false,
+          "explanation": "Falsch: niedrigere Zahl bedeutet höhere Priorität, nicht niedrigere."
+        },
+        {
+          "text": "Dieser Server hat eine langsamere Internetverbindung.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Priorität hat nichts mit der Geschwindigkeit zu tun."
+        },
+        {
+          "text": "Dieser Server akzeptiert nur E-Mails mit niedriger Priorität im Betreff.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Priorität bezieht sich auf die Server-Auswahl, nicht auf den E-Mail-Inhalt."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Schicke dir selbst eine E-Mail von einem deiner Konten an ein anderes. Öffne die E-Mail und zeige die vollständigen Header an. Identifiziere die Received-Header und verfolge den Weg der E-Mail von deinem sendenden MTA bis zu deinem empfangenden MTA. Notiere die Server-Namen und Zeitstempel. Führe dann einen MX-Record-Lookup für deine Empfängerdomain durch und vergleiche das Ergebnis mit den Received-Headern.",
+    "expectation": "Der Weg einer E-Mail wurde anhand der Received-Header nachvollzogen, und der MX-Record der Empfängerdomain wurde überprüft. Die Konzepte SMTP, MTA und MX-Record wurden praktisch angewendet.",
+    "checklist": [
+      "Eine E-Mail von einem Konto an ein anderes geschickt.",
+      "Die vollständigen Header der empfangenen E-Mail angezeigt.",
+      "Die Received-Header identifiziert und von unten nach oben gelesen.",
+      "Den Weg der E-Mail mit Server-Namen und Zeitstempeln notiert.",
+      "Einen MX-Record-Lookup für die Empfängerdomain durchgeführt.",
+      "Das Ergebnis mit den Received-Headern verglichen."
+    ],
+    "portfolioItem": "P04"
+  },
+  "audio": {
+    "file": "M04-09-01.mp3",
+    "durationSeconds": 1280,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Warum kommen meine E-Mails nicht an, obwohl ich sie versendet habe?",
+      "answer": "Die häufigsten Ursachen sind fehlende oder falsche SPF- und DKIM-Einträge im DNS, eine IP-Adresse des sendenden Servers, die auf einer schwarzen Liste steht, oder der Inhalt der E-Mail, der von Spam-Filtern als verdächtig eingestuft wird. Prüfe zuerst die Received-Header einer Test-E-Mail, um zu sehen, ob sie den sendenden MTA überhaupt verlassen hat. Dann prüfe mit einem Werkzeug wie MXToolbox, ob SPF und DKIM korrekt eingerichtet sind. Und schließlich prüfe den Inhalt: zu viele Links, zu viele Bilder, zu wenig Text oder bestimmte Schlüsselwörter können Spam-Filter auslösen."
+    },
+    {
+      "question": "Kann ich E-Mails auch ohne eigenen Mail-Server verschicken?",
+      "answer": "Ja, und das ist für die meisten Anwendungen der richtige Weg. Dienste wie SendGrid, Mailgun, Resend oder der SMTP-Dienst deines Hosting-Anbieters betreiben die Mail-Server für dich. Du konfigurierst deine Anwendung so, dass sie E-Mails über die API oder den SMTP-Server dieses Dienstes verschickt, und der Dienst kümmert sich um Zustellbarkeit, Reputation und Bounce-Verarbeitung. Einen eigenen Mail-Server zu betreiben ist aufwendig und riskant, weil du dich selbst um Reputation und Zustellbarkeit kümmern musst."
+    },
+    {
+      "question": "Was ist der Unterschied zwischen SMTP und IMAP?",
+      "answer": "SMTP ist das Protokoll zum Versenden von E-Mails, IMAP ist das Protokoll zum Abholen von E-Mails. Wenn du eine E-Mail schickst, wird SMTP verwendet. Wenn du deine eingegangenen E-Mails in einem Mail-Programm wie Outlook oder Thunderbird liest, wird IMAP oder das ältere POP3 verwendet. SMTP und IMAP sind zwei verschiedene Protokolle für zwei verschiedene Richtungen: SMTP für den Versand, IMAP für den Empfang. In der Webentwicklung hast du fast nur mit SMTP zu tun, weil deine Anwendung E-Mails versendet, aber keine empfängt."
+    },
+    {
+      "question": "Wie finde ich den MX-Record einer Domain heraus?",
+      "answer": "Mit dem Befehl nslookup -type=MX domain.de im Terminal oder mit einem Online-Werkzeug wie MXToolbox. Du bekommst eine Liste von Mail-Servern mit Prioritäten zurück. Die niedrigste Prioritätsnummer ist der primäre Mail-Server, die höheren sind Ausweichserver. Wenn der primäre Server nicht erreichbar ist, versucht der sendende MTA den nächsten in der Liste. Das ist der Grund, warum du oft mehrere MX-Records mit unterschiedlichen Prioritäten siehst."
+    },
+    {
+      "question": "Was bedeutet es, wenn eine E-Mail bounced, also zurückkommt?",
+      "answer": "Ein Bounce bedeutet, dass der empfangende MTA die E-Mail abgewiesen hat. Es gibt zwei Arten: Hard Bounces und Soft Bounces. Ein Hard Bounce ist dauerhaft, zum Beispiel weil die E-Mail-Adresse nicht existiert. Diese Adressen solltest du aus deiner Liste entfernen, weil wiederholte Hard Bounces deiner Reputation schaden. Ein Soft Bounce ist vorübergehend, zum Beispiel weil das Postfach voll ist oder der Server gerade nicht erreichbar ist. Der sendende MTA wird es in der Regel noch einige Male versuchen, bevor er aufgibt."
+    }
+  ]
+}

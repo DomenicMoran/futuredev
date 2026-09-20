@@ -1,0 +1,748 @@
+{
+  "id": "M04-05-01",
+  "title": "Vercel",
+  "durationMinutes": 33,
+  "prerequisites": [
+    "M04-04-03",
+    "M02-01-01"
+  ],
+  "terms": [
+    {
+      "term": "Vercel",
+      "definition": "Eine Cloud-Plattform für das Hosting von Webanwendungen, optimiert für Next.js und andere moderne Frameworks. Vercel bietet automatische Deployments aus Git, eine globale Edge-Infrastruktur und Serverless Functions, die bei Bedarf automatisch skalieren."
+    },
+    {
+      "term": "Serverless Function",
+      "definition": "Eine Funktion, die in der Cloud ausgeführt wird, ohne dass der Entwickler einen Server bereitstellen oder verwalten muss. Die Plattform startet die Funktion bei jedem Aufruf in einer isolierten Umgebung, skaliert automatisch und berechnet nur die tatsächlich verbrauchte Rechenzeit."
+    },
+    {
+      "term": "Edge Network",
+      "definition": "Ein weltweit verteiltes Netzwerk von Rechenzentren, das Inhalte und Berechnungen so nah wie möglich am Nutzer ausliefert. Statt dass jeder Nutzer ein zentrales Rechenzentrum ansteuert, bekommt er die Antwort aus dem nächstgelegenen Standort, was die Latenz drastisch reduziert."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen Concierge in einem Hotel vor, der sich um alles kümmert, was du brauchst. Du sagst ihm, welches Zimmer du willst, und er bringt deine Koffer hin, macht das Licht an, stellt die Heizung ein und sorgt dafür, dass dein Zimmer immer sauber ist. Du musst dich um nichts kümmern außer um deinen Aufenthalt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Vercel ist dieser Concierge für deine Webanwendung. Du verbindest dein GitHub-Repository mit Vercel, und ab da läuft alles automatisch. Jeder Push auf den Hauptzweig löst ein Deployment aus. Vercel baut deine Anwendung, verteilt sie auf ein weltweites Netzwerk von Servern und sorgt dafür, dass sie immer erreichbar ist. Du musst keinen Server mieten, keine Software installieren und keine Skalierung konfigurieren. Du schreibst Code, pusht ihn, und Vercel erledigt den Rest.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was macht Vercel anders als ein herkömmlicher Webhoster, bei dem ich einfach Dateien per FTP hochlade?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein herkömmlicher Webhoster gibt dir einen Ordner auf einem Server, in den du Dateien legst. Der Server liefert diese Dateien aus, mehr nicht. Vercel ist eine Plattform, die viel mehr kann. Sie baut deine Next.js-Anwendung automatisch, optimiert die Bilder, komprimiert das JavaScript, verteilt die statischen Seiten auf ein weltweites Edge-Netzwerk und führt serverseitigen Code als Serverless Functions aus. Und das alles ohne, dass du einen Server konfigurieren musst. Du gibst Vercel dein Repository, Vercel gibt dir eine live URL.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Diese Cloud-Plattform für moderne Webanwendungen heißt Vercel.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-portfolio, der Portfolio-Website eines Entwicklers, ist Vercel die Hosting-Plattform. Das Repository enthält eine Next.js-Anwendung, und Vercel ist so konfiguriert, dass jeder Push auf den main-Zweig automatisch ein Deployment auslöst. Vercel erkennt automatisch, dass es sich um ein Next.js-Projekt handelt, wendet die optimalen Build-Einstellungen an und liefert die Seite über das Edge-Netzwerk aus. Die gesamte Konfiguration besteht aus wenigen Klicks in der Vercel-Oberfläche, keine Server-Konfiguration nötig.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Diese Einfachheit ist der Kern des Vercel-Versprechens. Du sollst dich auf deine Anwendung konzentrieren, nicht auf die Infrastruktur. Vercel übernimmt alles, was nicht deine Anwendungslogik ist: Build, Deployment, Skalierung, Sicherheit, HTTPS, CDN. Das senkt die Einstiegshürde für das Deployment dramatisch und macht es auch für Einzelentwickler möglich, eine professionell gehostete Anwendung zu betreiben.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was sind Serverless Functions, von denen in der Vercel-Dokumentation immer die Rede ist?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen Koch vor, der nur dann in die Küche kommt, wenn ein Gast etwas bestellt. In der restlichen Zeit existiert die Küche nicht, sie verbraucht keinen Strom und kostet kein Geld. Sobald eine Bestellung hereinkommt, erscheint die Küche, der Koch bereitet das Gericht zu, serviert es, und die Küche verschwindet wieder.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Eine Serverless Function ist eine Funktion, die nur dann existiert, wenn sie aufgerufen wird. Du schreibst eine Funktion, zum Beispiel um ein Kontaktformular zu verarbeiten, und legst sie in deinem Projekt ab. Vercel erkennt sie automatisch und stellt sie als API-Endpunkt bereit. Wenn ein Nutzer das Formular abschickt, startet Vercel eine isolierte Umgebung, führt deine Funktion aus und gibt das Ergebnis zurück. Danach wird die Umgebung eingefroren oder gelöscht. Du bezahlst nur für die tatsächliche Ausführungszeit, nicht für einen Server, der 24 Stunden am Tag läuft und die meiste Zeit nichts tut.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Eine solche Funktion, die ohne eigenen Server in der Cloud ausgeführt wird, heißt Serverless Function.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-portfolio könnte eine Serverless Function das Kontaktformular verarbeiten. Die Funktion nimmt die Formulardaten entgegen, validiert sie, speichert sie in einer Datenbank und verschickt eine Bestätigungs-E-Mail. All das läuft in einer Serverless Function auf Vercel, ohne dass der Entwickler einen Server dafür bereitstellen musste. Die Funktion skaliert automatisch: ob ein Formular pro Tag oder tausend pro Minute abgeschickt werden, Vercel startet genügend Instanzen der Funktion.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Serverless Functions sind wichtig, weil sie die Lücke zwischen rein statischen Seiten und vollständigen Webanwendungen schließen. Eine statische Seite kann kein Formular verarbeiten, keine E-Mail verschicken und keine Datenbankabfrage machen. Mit Serverless Functions kannst du all das tun, ohne einen dauerhaft laufenden Server zu betreiben. Das macht Vercel zu einer vollwertigen Plattform für Webanwendungen, nicht nur für statische Seiten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was bedeutet Edge Network, und warum ist das wichtig?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine Pizzakette vor, die in jeder größeren Stadt eine Filiale hat. Wenn du eine Pizza bestellst, backt sie die Filiale in deiner Nähe, nicht die Zentrale am anderen Ende des Landes. Die Pizza ist frisch, heiß und schnell bei dir.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Das Edge Network von Vercel funktioniert nach demselben Prinzip. Statt deine Anwendung in einem einzigen Rechenzentrum zu hosten, verteilt Vercel sie auf Dutzende Standorte weltweit. Wenn ein Nutzer aus Tokio deine Seite aufruft, bekommt er sie aus dem Rechenzentrum in Tokio, nicht aus Virginia. Das reduziert die Latenz, also die Zeit, die die Daten unterwegs sind, von mehreren hundert Millisekunden auf wenige Dutzend. Für den Nutzer fühlt sich die Seite dadurch sofort geladen an, egal wo auf der Welt er sich befindet.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Dieses weltweit verteilte Netzwerk von Rechenzentren heißt Edge Network.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-portfolio profitiert die Portfolio-Website direkt vom Edge Network. Die statischen Seiten, Bilder und Stile werden automatisch auf allen Edge-Standorten zwischengespeichert. Ein potenzieller Arbeitgeber in New York sieht die Seite genauso schnell wie ein Freund in Berlin. Der Entwickler musste nichts dafür tun, Vercel hat das Edge Network automatisch für das Projekt aktiviert.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Das Edge Network ist einer der Hauptgründe, warum Plattformen wie Vercel herkömmlichen Hostern überlegen sind. Ein einzelner Server in einem Rechenzentrum kann geografisch weit entfernte Nutzer nur langsam bedienen, weil die Daten physikalisch um die halbe Welt reisen müssen. Ein Edge Network bringt die Daten zum Nutzer, nicht den Nutzer zu den Daten. Das ist der Unterschied zwischen einer Seite, die sich träge anfühlt, und einer, die sofort da ist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Kostet Vercel etwas, oder kann ich es kostenlos nutzen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Vercel hat ein großzügiges kostenloses Angebot, das für die meisten Einzelentwickler und kleinen Projekte völlig ausreicht. Du kannst unbegrenzt statische Seiten hosten, hast ein monatliches Kontingent für Serverless Functions und Bandbreite und bekommst automatisch HTTPS und eine vercel.app-Domain. Wenn du eine eigene Domain aufschalten willst oder mehr Funktionen brauchst, gibt es kostenpflichtige Pläne ab etwa 20 Dollar im Monat. Für das Portfolio eines Entwicklers oder eine kleine Webanwendung reicht der kostenlose Plan in der Regel aus.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Das kostenlose Angebot ist strategisch wichtig für Vercel, weil es Entwickler früh an die Plattform bindet. Was als kostenloses Portfolio beginnt, wird später vielleicht zur bezahlten Geschäftsanwendung. Für dich als Lernenden bedeutet das: du kannst Vercel ohne finanzielles Risiko ausprobieren und deine ersten Projekte live stellen, ohne einen Cent zu bezahlen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen persönlichen Assistenten vor, der nicht nur deine Koffer trägt, sondern auch dafür sorgt, dass dein Zimmer in jedem Hotel der Welt gleich aussieht, egal ob du in Berlin, Tokio oder New York eincheckst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Vercel ist dieser Assistent für deine Webanwendung. Du schreibst den Code einmal, und Vercel sorgt dafür, dass er überall auf der Welt gleich aussieht und gleich schnell lädt. Du musst dich nicht um Server, Skalierung oder geografische Verteilung kümmern. Das ist die Abstraktion, die moderne Cloud-Plattformen bieten: sie nehmen dir die Infrastrukturarbeit ab, damit du dich auf deine Anwendung konzentrieren kannst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Moderne Hosting-Plattformen bieten noch einen weiteren Vorteil, der oft übersehen wird: automatische SSL-Zertifikate. Früher musste man Zertifikate kaufen, installieren und jährlich erneuern. Heute erledigen Plattformen wie Vercel das automatisch und kostenlos über Dienste wie Lets Encrypt. Der Entwickler muss nichts tun, und die Seite ist immer sicher über HTTPS erreichbar.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Automatisches HTTPS ist heute kein Luxus mehr, sondern eine Grundvoraussetzung. Browser markieren Seiten ohne HTTPS als unsicher, Suchmaschinen stufen sie herab, und Nutzer verlassen sie schneller. Eine Plattform, die sich automatisch darum kümmert, nimmt dem Entwickler eine lästige und fehleranfällige Aufgabe ab.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Moderne Hosting-Plattformen bieten noch einen weiteren Vorteil, der oft übersehen wird: automatische SSL-Zertifikate. Früher musste man Zertifikate kaufen, installieren und jährlich erneuern. Heute erledigen Plattformen wie Vercel das automatisch und kostenlos über Dienste wie Lets Encrypt. Der Entwickler muss nichts tun, und die Seite ist immer sicher über HTTPS erreichbar.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Automatisches HTTPS ist heute kein Luxus mehr, sondern eine Grundvoraussetzung. Browser markieren Seiten ohne HTTPS als unsicher, Suchmaschinen stufen sie herab, und Nutzer verlassen sie schneller. Eine Plattform, die sich automatisch darum kümmert, nimmt dem Entwickler eine lästige und fehleranfällige Aufgabe ab.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Kann ich zwischen verschiedenen Hosting-Plattformen wechseln, wenn eine nicht mehr passt?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ja, aber der Aufwand hängt davon ab, wie tief du in die spezifischen Funktionen einer Plattform eingestiegen bist. Eine einfache statische Seite kannst du in wenigen Minuten von Vercel zu Netlify oder Cloudflare Pages umziehen. Eine Anwendung, die stark auf Vercels Serverless Functions oder Edge Middleware setzt, erfordert dagegen erhebliche Anpassungen. Deshalb ist es ratsam, plattformspezifische Funktionen bewusst und sparsam einzusetzen und die Kernlogik deiner Anwendung plattformunabhängig zu halten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Moderne Hosting-Plattformen bieten noch einen weiteren Vorteil, der oft übersehen wird: automatische SSL-Zertifikate. Früher musste man Zertifikate kaufen, installieren und jährlich erneuern. Heute erledigen Plattformen wie Vercel das automatisch und kostenlos über Dienste wie Lets Encrypt. Der Entwickler muss nichts tun, und die Seite ist immer sicher über HTTPS erreichbar.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Automatisches HTTPS ist heute kein Luxus mehr, sondern eine Grundvoraussetzung. Browser markieren Seiten ohne HTTPS als unsicher, Suchmaschinen stufen sie herab, und Nutzer verlassen sie schneller. Eine Plattform, die sich automatisch darum kümmert, nimmt dem Entwickler eine lästige und fehleranfällige Aufgabe ab.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Kann ich zwischen verschiedenen Hosting-Plattformen wechseln, wenn eine nicht mehr passt?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ja, aber der Aufwand hängt davon ab, wie tief du in die spezifischen Funktionen einer Plattform eingestiegen bist. Eine einfache statische Seite kannst du in wenigen Minuten von Vercel zu Netlify oder Cloudflare Pages umziehen. Eine Anwendung, die stark auf Vercels Serverless Functions oder Edge Middleware setzt, erfordert dagegen erhebliche Anpassungen. Deshalb ist es ratsam, plattformspezifische Funktionen bewusst und sparsam einzusetzen und die Kernlogik deiner Anwendung plattformunabhängig zu halten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Moderne Hosting-Plattformen bieten noch einen weiteren Vorteil, der oft übersehen wird: automatische SSL-Zertifikate. Früher musste man Zertifikate kaufen, installieren und jährlich erneuern. Heute erledigen Plattformen wie Vercel das automatisch und kostenlos über Dienste wie Lets Encrypt. Der Entwickler muss nichts tun, und die Seite ist immer sicher über HTTPS erreichbar.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Automatisches HTTPS ist heute kein Luxus mehr, sondern eine Grundvoraussetzung. Browser markieren Seiten ohne HTTPS als unsicher, Suchmaschinen stufen sie herab, und Nutzer verlassen sie schneller. Eine Plattform, die sich automatisch darum kümmert, nimmt dem Entwickler eine lästige und fehleranfällige Aufgabe ab.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Kann ich zwischen verschiedenen Hosting-Plattformen wechseln, wenn eine nicht mehr passt?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ja, aber der Aufwand hängt davon ab, wie tief du in die spezifischen Funktionen einer Plattform eingestiegen bist. Eine einfache statische Seite kannst du in wenigen Minuten von Vercel zu Netlify oder Cloudflare Pages umziehen. Eine Anwendung, die stark auf Vercels Serverless Functions oder Edge Middleware setzt, erfordert dagegen erhebliche Anpassungen. Deshalb ist es ratsam, plattformspezifische Funktionen bewusst und sparsam einzusetzen und die Kernlogik deiner Anwendung plattformunabhängig zu halten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Moderne Hosting-Plattformen bieten noch einen weiteren Vorteil, der oft übersehen wird: automatische SSL-Zertifikate. Früher musste man Zertifikate kaufen, installieren und jährlich erneuern. Heute erledigen Plattformen wie Vercel das automatisch und kostenlos über Dienste wie Lets Encrypt. Der Entwickler muss nichts tun, und die Seite ist immer sicher über HTTPS erreichbar.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Automatisches HTTPS ist heute kein Luxus mehr, sondern eine Grundvoraussetzung. Browser markieren Seiten ohne HTTPS als unsicher, Suchmaschinen stufen sie herab, und Nutzer verlassen sie schneller. Eine Plattform, die sich automatisch darum kümmert, nimmt dem Entwickler eine lästige und fehleranfällige Aufgabe ab.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Kann ich zwischen verschiedenen Hosting-Plattformen wechseln, wenn eine nicht mehr passt?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ja, aber der Aufwand hängt davon ab, wie tief du in die spezifischen Funktionen einer Plattform eingestiegen bist. Eine einfache statische Seite kannst du in wenigen Minuten von Vercel zu Netlify oder Cloudflare Pages umziehen. Eine Anwendung, die stark auf Vercels Serverless Functions oder Edge Middleware setzt, erfordert dagegen erhebliche Anpassungen. Deshalb ist es ratsam, plattformspezifische Funktionen bewusst und sparsam einzusetzen und die Kernlogik deiner Anwendung plattformunabhängig zu halten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Moderne Hosting-Plattformen bieten noch einen weiteren Vorteil, der oft übersehen wird: automatische SSL-Zertifikate. Früher musste man Zertifikate kaufen, installieren und jährlich erneuern. Heute erledigen Plattformen wie Vercel das automatisch und kostenlos über Dienste wie Lets Encrypt. Der Entwickler muss nichts tun, und die Seite ist immer sicher über HTTPS erreichbar.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Automatisches HTTPS ist heute kein Luxus mehr, sondern eine Grundvoraussetzung. Browser markieren Seiten ohne HTTPS als unsicher, Suchmaschinen stufen sie herab, und Nutzer verlassen sie schneller. Eine Plattform, die sich automatisch darum kümmert, nimmt dem Entwickler eine lästige und fehleranfällige Aufgabe ab.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Kann ich zwischen verschiedenen Hosting-Plattformen wechseln, wenn eine nicht mehr passt?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ja, aber der Aufwand hängt davon ab, wie tief du in die spezifischen Funktionen einer Plattform eingestiegen bist. Eine einfache statische Seite kannst du in wenigen Minuten von Vercel zu Netlify oder Cloudflare Pages umziehen. Eine Anwendung, die stark auf Vercels Serverless Functions oder Edge Middleware setzt, erfordert dagegen erhebliche Anpassungen. Deshalb ist es ratsam, plattformspezifische Funktionen bewusst und sparsam einzusetzen und die Kernlogik deiner Anwendung plattformunabhängig zu halten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "text": "Also noch einmal ganz kurz: Vercel ist eine Cloud-Plattform für moderne Webanwendungen, die automatische Deployments aus Git, Serverless Functions für serverseitige Logik und ein globales Edge Network für schnelle Auslieferung bietet. Du verbindest dein Repository, pushst Code, und Vercel baut, deployt und skaliert deine Anwendung automatisch. Der kostenlose Plan reicht für die meisten Einzelentwickler und kleine Projekte völlig aus.",
+      "isKeySentence": true
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Vercel ist eine Cloud-Plattform für das Hosting von Webanwendungen, optimiert für Next.js und andere moderne Frameworks. Vercel bietet automatische Deployments aus Git, eine globale Edge-Infrastruktur und Serverless Functions, die bei Bedarf automatisch skalieren.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Eine Serverless Function ist eine Funktion, die in der Cloud ausgeführt wird, ohne dass der Entwickler einen Server bereitstellen oder verwalten muss. Die Plattform startet die Funktion bei jedem Aufruf in einer isolierten Umgebung, skaliert automatisch und berechnet nur die tatsächlich verbrauchte Rechenzeit.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Ein Edge Network ist ein weltweit verteiltes Netzwerk von Rechenzentren, das Inhalte und Berechnungen so nah wie möglich am Nutzer ausliefert. Statt dass jeder Nutzer ein zentrales Rechenzentrum ansteuert, bekommt er die Antwort aus dem nächstgelegenen Standort, was die Latenz drastisch reduziert.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Kann ich Vercel auch für Projekte nutzen, die nicht mit Next.js gebaut sind?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ja, Vercel unterstützt viele Frameworks, nicht nur Next.js. Du kannst Projekte mit SvelteKit, Nuxt, Astro, Remix, Gatsby oder sogar reinem HTML deployen. Vercel erkennt das Framework automatisch und wendet die passenden Build-Einstellungen an. Next.js ist nur das Framework, für das Vercel am tiefsten optimiert ist, weil es vom selben Unternehmen entwickelt wird. Aber die Plattform ist bewusst framework-agnostisch gehalten, und die meisten modernen Web-Frameworks funktionieren ohne zusätzliche Konfiguration.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was passiert mit meiner Anwendung, wenn Vercel ausfällt?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Vercel ist eine Plattform mit sehr hoher Verfügbarkeit, aber kein Dienst ist perfekt. Im Falle eines Ausfalls greift das Edge Network: statische Inhalte sind auf Dutzenden Standorten weltweit zwischengespeichert und bleiben auch bei einem Ausfall der zentralen Infrastruktur erreichbar. Serverless Functions können dagegen betroffen sein, weil sie eine aktive Ausführungsumgebung brauchen. Für geschäftskritische Anwendungen solltest du einen Status-Monitor einrichten und einen Plan B haben, zum Beispiel ein Backup-Deployment auf einer zweiten Plattform.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Kann ich meine eigene Domain mit Vercel verwenden?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ja, du kannst jede beliebige Domain mit Vercel verwenden. Du trägst die Domain in den Vercel-Einstellungen ein, Vercel gibt dir die nötigen DNS-Einträge, und du konfigurierst sie bei deinem Domain-Anbieter. Vercel stellt automatisch ein SSL-Zertifikat aus und erneuert es, sodass deine Seite immer über HTTPS erreichbar ist. Der gesamte Vorgang dauert etwa zehn Minuten, und Vercel führt dich mit einer Schritt-für-Schritt-Anleitung durch die Einrichtung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Wie unterscheidet sich Vercel von Netlify?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Vercel und Netlify sind die beiden führenden Plattformen für moderne Webanwendungen und ähneln sich in vielen Punkten. Beide bieten Git-basierte Deployments, Serverless Functions und ein Edge Network. Der Hauptunterschied liegt in der Framework-Nähe: Vercel ist der Erfinder von Next.js und dafür am tiefsten optimiert, Netlify hat eine etwas breitere Framework-Unterstützung und gilt als etwas einsteigerfreundlicher. Für Next.js-Projekte ist Vercel die natürliche Wahl, für andere Frameworks sind beide Plattformen gut geeignet. Die Entscheidung ist oft eine Frage des persönlichen Geschmacks.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was sind die Grenzen von Serverless Functions?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Serverless Functions haben technische Grenzen, die du kennen solltest. Sie haben eine maximale Ausführungsdauer, auf Vercel zum Beispiel 10 Sekunden im kostenlosen Plan und bis zu 60 Sekunden im Pro-Plan. Sie haben eine maximale Größe und einen begrenzten Arbeitsspeicher. Sie sind nicht für langanhaltende Verbindungen wie WebSockets oder für rechenintensive Aufgaben wie Videokodierung geeignet. Für die allermeisten Webanwendungen, die Formulare verarbeiten, Datenbankabfragen machen oder APIs anbinden, sind Serverless Functions aber völlig ausreichend.",
+      "isKeySentence": false
+    }
+  ],
+  "practiceExample": {
+    "text": "Im Repo repo-portfolio ist Vercel die Hosting-Plattform für die Next.js-Portfolio-Website. Vercel erkennt das Framework automatisch, baut die Anwendung bei jedem Push und liefert sie über das globale Edge Network aus. Serverless Functions könnten für das Kontaktformular verwendet werden.",
+    "repoNote": "repo-portfolio",
+    "location": "Vercel-Dashboard (automatische Deployments, Edge Network, Serverless Functions für die Portfolio-Website)"
+  },
+  "quiz": [
+    {
+      "question": "Welches Alltagsbild beschreibt Vercel am treffendsten?",
+      "area": "Hosting: Vercel",
+      "options": [
+        {
+          "text": "Ein Hotel-Concierge, der sich um alles kümmert, während du nur deinen Aufenthalt genießt.",
+          "isCorrect": true,
+          "explanation": "Richtig: Vercel übernimmt Build, Deployment, Skalierung und Verteilung, du schreibst nur den Code."
+        },
+        {
+          "text": "Ein leerer Raum, in den du alle Möbel selbst hineintragen und aufbauen musst.",
+          "isCorrect": false,
+          "explanation": "Falsch: Vercel ist keine leere Infrastruktur, sondern eine vollständige Plattform."
+        },
+        {
+          "text": "Ein Möbelhaus, das nur die Möbel verkauft, aber nicht aufbaut oder liefert.",
+          "isCorrect": false,
+          "explanation": "Falsch: Vercel verkauft nichts, es hostet und betreibt deine Anwendung."
+        },
+        {
+          "text": "Ein Architekt, der nur den Bauplan zeichnet, aber nicht baut.",
+          "isCorrect": false,
+          "explanation": "Falsch: Vercel zeichnet keine Pläne, es führt deine Anwendung aus."
+        }
+      ]
+    },
+    {
+      "question": "Was ist eine Serverless Function?",
+      "area": "Hosting: Serverless Function",
+      "options": [
+        {
+          "text": "Eine Funktion, die in der Cloud bei Bedarf ausgeführt wird, ohne dass ein Server verwaltet werden muss.",
+          "isCorrect": true,
+          "explanation": "Richtig: Serverless Functions starten bei jedem Aufruf in einer isolierten Umgebung und skalieren automatisch."
+        },
+        {
+          "text": "Eine Funktion, die ohne Programmiersprache auskommt und nur mit HTML und CSS arbeitet.",
+          "isCorrect": false,
+          "explanation": "Falsch: Serverless Functions werden in JavaScript, Python oder anderen Sprachen geschrieben."
+        },
+        {
+          "text": "Eine Funktion, die nur auf dem eigenen Computer des Entwicklers läuft und nicht in der Cloud.",
+          "isCorrect": false,
+          "explanation": "Falsch: Serverless Functions laufen in der Cloud, nicht lokal."
+        },
+        {
+          "text": "Eine Funktion, die keine Parameter entgegennimmt und keinen Rückgabewert hat.",
+          "isCorrect": false,
+          "explanation": "Falsch: Serverless Functions können sehr wohl Parameter und Rückgabewerte haben."
+        }
+      ]
+    },
+    {
+      "question": "Was ist ein Edge Network?",
+      "area": "Hosting: Edge Network",
+      "options": [
+        {
+          "text": "Ein weltweit verteiltes Netzwerk von Rechenzentren, das Inhalte so nah wie möglich am Nutzer ausliefert.",
+          "isCorrect": true,
+          "explanation": "Richtig: das Edge Network reduziert die Latenz, indem es Daten aus dem nächstgelegenen Standort liefert."
+        },
+        {
+          "text": "Ein Netzwerk, das nur an den Rändern des Internets funktioniert und in der Mitte nicht erreichbar ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: Edge bezieht sich auf die geografische Nähe zum Nutzer, nicht auf die Netzwerktopologie."
+        },
+        {
+          "text": "Ein veraltetes Netzwerkprotokoll, das durch HTTP/3 ersetzt wurde.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Edge Network ist kein Protokoll, sondern eine Infrastruktur."
+        },
+        {
+          "text": "Ein Netzwerk, das nur für die Übertragung von Bildern optimiert ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Edge Network liefert alle Arten von Inhalten aus, nicht nur Bilder."
+        }
+      ]
+    },
+    {
+      "question": "Welche Aussage über das Repo repo-portfolio und Vercel ist richtig?",
+      "area": "Praxisbeispiel repo-portfolio",
+      "options": [
+        {
+          "text": "Vercel hostet die Next.js-Portfolio-Website mit automatischen Deployments und Edge Network.",
+          "isCorrect": true,
+          "explanation": "Richtig: repo-portfolio nutzt Vercel für Hosting, Build und globale Auslieferung."
+        },
+        {
+          "text": "Das Portfolio wird auf einem eigenen Server im Keller des Entwicklers gehostet.",
+          "isCorrect": false,
+          "explanation": "Falsch: repo-portfolio nutzt Vercel, keinen eigenen Server."
+        },
+        {
+          "text": "Vercel wird nur für die Entwicklung verwendet, die Produktion läuft auf AWS.",
+          "isCorrect": false,
+          "explanation": "Falsch: Vercel ist die Produktionsplattform für repo-portfolio."
+        },
+        {
+          "text": "Das Portfolio ist eine reine HTML-Seite ohne Framework und braucht kein Vercel.",
+          "isCorrect": false,
+          "explanation": "Falsch: repo-portfolio ist eine Next.js-Anwendung, die von Vercels Optimierungen profitiert."
+        }
+      ]
+    },
+    {
+      "question": "Warum ist das Edge Network für die Ladezeit einer Website wichtig?",
+      "area": "Hosting: Edge Network",
+      "options": [
+        {
+          "text": "Weil es die Daten aus dem nächstgelegenen Rechenzentrum liefert und die physikalische Distanz minimiert.",
+          "isCorrect": true,
+          "explanation": "Richtig: kürzere Distanz bedeutet geringere Latenz und schnellere Ladezeiten."
+        },
+        {
+          "text": "Weil es die Bilder automatisch in Schwarz-Weiß umwandelt und dadurch die Dateigröße reduziert.",
+          "isCorrect": false,
+          "explanation": "Falsch: das Edge Network wandelt keine Bilder um, es liefert sie nur schneller aus."
+        },
+        {
+          "text": "Weil es die Schriftart der Website durch eine schnellere Schriftart ersetzt.",
+          "isCorrect": false,
+          "explanation": "Falsch: das Edge Network ändert keine Schriftarten."
+        },
+        {
+          "text": "Weil es den Code der Website automatisch in Maschinensprache übersetzt.",
+          "isCorrect": false,
+          "explanation": "Falsch: das Edge Network übersetzt keinen Code."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der Hauptvorteil von Vercel gegenüber einem herkömmlichen Webhoster?",
+      "area": "Hosting: Vercel",
+      "options": [
+        {
+          "text": "Vercel baut, deployt und skaliert automatisch, ohne dass ein Server konfiguriert werden muss.",
+          "isCorrect": true,
+          "explanation": "Richtig: Vercel ist eine Plattform, kein bloßer Speicherplatz."
+        },
+        {
+          "text": "Vercel ist immer kostenlos, während herkömmliche Hoster Geld kosten.",
+          "isCorrect": false,
+          "explanation": "Falsch: Vercel hat auch kostenpflichtige Pläne, und viele Hoster haben kostenlose Angebote."
+        },
+        {
+          "text": "Vercel funktioniert nur mit Next.js, herkömmliche Hoster unterstützen alle Sprachen.",
+          "isCorrect": false,
+          "explanation": "Falsch: Vercel unterstützt viele Frameworks, nicht nur Next.js."
+        },
+        {
+          "text": "Vercel hostet die Seite auf dem Mond, um die Schwerkraft zu reduzieren.",
+          "isCorrect": false,
+          "explanation": "Falsch: Vercel hostet auf der Erde, in einem globalen Edge Network."
+        }
+      ]
+    },
+    {
+      "question": "Wie löst Vercel ein Deployment aus?",
+      "area": "Hosting: Vercel",
+      "options": [
+        {
+          "text": "Automatisch bei jedem Push auf den konfigurierten Git-Zweig, zum Beispiel main.",
+          "isCorrect": true,
+          "explanation": "Richtig: Vercel verbindet sich mit Git und deployt bei jedem Push automatisch."
+        },
+        {
+          "text": "Nur manuell, indem der Entwickler eine E-Mail an den Vercel-Support schickt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Deployments sind automatisch oder per Knopfdruck, nicht per E-Mail."
+        },
+        {
+          "text": "Nach einem festen Zeitplan, zum Beispiel jeden Freitag um 18 Uhr.",
+          "isCorrect": false,
+          "explanation": "Falsch: Vercel deployt bei Git-Ereignissen, nicht nach Zeitplan."
+        },
+        {
+          "text": "Nur wenn der Entwickler einen speziellen Deploy-Code in den Commit schreibt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Vercel braucht keinen speziellen Code, jeder Push löst ein Deployment aus."
+        }
+      ]
+    },
+    {
+      "question": "Was sind die Grenzen von Serverless Functions auf Vercel?",
+      "area": "Hosting: Serverless Function",
+      "options": [
+        {
+          "text": "Begrenzte Ausführungsdauer, begrenzter Arbeitsspeicher und nicht für langanhaltende Verbindungen geeignet.",
+          "isCorrect": true,
+          "explanation": "Richtig: Serverless Functions haben technische Limits, die für die meisten Webanwendungen aber ausreichen."
+        },
+        {
+          "text": "Sie können nur in der Programmiersprache Python geschrieben werden.",
+          "isCorrect": false,
+          "explanation": "Falsch: Vercel unterstützt mehrere Sprachen, nicht nur Python."
+        },
+        {
+          "text": "Sie funktionieren nur montags bis freitags zwischen 9 und 17 Uhr.",
+          "isCorrect": false,
+          "explanation": "Falsch: Serverless Functions sind rund um die Uhr verfügbar."
+        },
+        {
+          "text": "Sie können nur Text verarbeiten, keine Bilder oder andere Dateien.",
+          "isCorrect": false,
+          "explanation": "Falsch: Serverless Functions können beliebige Daten verarbeiten."
+        }
+      ]
+    },
+    {
+      "question": "Kannst du deine eigene Domain mit Vercel verwenden?",
+      "area": "Hosting: Vercel",
+      "options": [
+        {
+          "text": "Ja, Vercel unterstützt eigene Domains und stellt automatisch ein SSL-Zertifikat aus.",
+          "isCorrect": true,
+          "explanation": "Richtig: eigene Domains sind in allen Plänen möglich, inklusive automatischem HTTPS."
+        },
+        {
+          "text": "Nein, du musst die vercel.app-Domain verwenden, eigene Domains sind nicht erlaubt.",
+          "isCorrect": false,
+          "explanation": "Falsch: eigene Domains sind ein Kernfeature von Vercel."
+        },
+        {
+          "text": "Nur wenn du den teuersten Enterprise-Plan buchst.",
+          "isCorrect": false,
+          "explanation": "Falsch: eigene Domains sind bereits im kostenlosen Plan möglich."
+        },
+        {
+          "text": "Ja, aber nur Domains, die bei Vercel selbst gekauft wurden.",
+          "isCorrect": false,
+          "explanation": "Falsch: du kannst Domains von jedem Anbieter verwenden."
+        }
+      ]
+    },
+    {
+      "question": "Wie unterscheidet sich Vercel von Netlify?",
+      "area": "Hosting: Vercel",
+      "options": [
+        {
+          "text": "Vercel ist tiefer für Next.js optimiert, Netlify gilt als etwas einsteigerfreundlicher.",
+          "isCorrect": true,
+          "explanation": "Richtig: beide sind ähnlich, aber Vercel hat den Next.js-Vorteil."
+        },
+        {
+          "text": "Vercel ist nur für statische Seiten, Netlify nur für dynamische Anwendungen.",
+          "isCorrect": false,
+          "explanation": "Falsch: beide können statische und dynamische Inhalte."
+        },
+        {
+          "text": "Vercel ist europäisch, Netlify ist amerikanisch.",
+          "isCorrect": false,
+          "explanation": "Falsch: beide sind amerikanische Unternehmen."
+        },
+        {
+          "text": "Es gibt keinen Unterschied, es sind zwei Namen für denselben Dienst.",
+          "isCorrect": false,
+          "explanation": "Falsch: es sind zwei verschiedene Unternehmen mit unterschiedlichen Plattformen."
+        }
+      ]
+    },
+    {
+      "question": "Warum ist das kostenlose Angebot von Vercel für Lernende wichtig?",
+      "area": "Hosting: Vercel",
+      "options": [
+        {
+          "text": "Weil es erlaubt, Projekte ohne finanzielles Risiko live zu stellen und zu testen.",
+          "isCorrect": true,
+          "explanation": "Richtig: der kostenlose Plan senkt die Einstiegshürde für das Deployment auf null."
+        },
+        {
+          "text": "Weil Vercel dann automatisch eine Bewerbung an Partnerunternehmen schickt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Vercel schickt keine Bewerbungen."
+        },
+        {
+          "text": "Weil der kostenlose Plan mehr Funktionen hat als der teuerste Enterprise-Plan.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Enterprise-Plan hat mehr Funktionen als der kostenlose."
+        },
+        {
+          "text": "Weil Vercel sonst den Quellcode des Projekts veröffentlicht.",
+          "isCorrect": false,
+          "explanation": "Falsch: Vercel veröffentlicht keinen Quellcode."
+        }
+      ]
+    },
+    {
+      "question": "Was passiert mit statischen Inhalten auf Vercel, wenn die zentrale Infrastruktur ausfällt?",
+      "area": "Hosting: Edge Network",
+      "options": [
+        {
+          "text": "Sie bleiben über das Edge Network erreichbar, weil sie auf vielen Standorten zwischengespeichert sind.",
+          "isCorrect": true,
+          "explanation": "Richtig: das Edge Network cached statische Inhalte dezentral und übersteht zentrale Ausfälle."
+        },
+        {
+          "text": "Sie sind sofort nicht mehr erreichbar, weil alles von einem zentralen Server abhängt.",
+          "isCorrect": false,
+          "explanation": "Falsch: das Edge Network verteilt die Inhalte, sie hängen nicht von einem zentralen Server ab."
+        },
+        {
+          "text": "Sie werden automatisch auf eine andere Plattform wie Netlify umgeleitet.",
+          "isCorrect": false,
+          "explanation": "Falsch: es gibt keine automatische Umleitung zu einer anderen Plattform."
+        },
+        {
+          "text": "Sie werden in einer Notfall-E-Mail an alle Nutzer verschickt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Inhalte werden nicht per E-Mail verschickt."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Erstelle eine einfache Next.js-Anwendung mit einer Startseite und einer Kontaktseite. Verbinde das Repository mit Vercel und konfiguriere automatische Deployments bei Push auf main. Füge eine eigene Domain hinzu, falls du eine hast, oder nutze die vercel.app-Domain. Mache eine sichtbare Änderung, pushe sie und beobachte im Vercel-Dashboard, wie das Deployment automatisch startet. Prüfe die Seite auf verschiedenen Geräten und notiere die Ladezeit.",
+    "expectation": "Eine Next.js-Anwendung ist auf Vercel live, automatische Deployments funktionieren, und die Seite ist über die Vercel-Domain oder eine eigene Domain erreichbar. Die Konzepte Deployment, Edge Network und Serverless Functions wurden praktisch angewendet.",
+    "checklist": [
+      "Eine Next.js-Anwendung mit mindestens zwei Seiten erstellt.",
+      "Das Repository mit Vercel verbunden.",
+      "Automatische Deployments bei Push auf main konfiguriert.",
+      "Eine sichtbare Änderung gepusht und das automatische Deployment beobachtet.",
+      "Die live URL im Browser aufgerufen und die Seite geprüft.",
+      "Optional: eine eigene Domain eingerichtet."
+    ],
+    "portfolioItem": "P01"
+  },
+  "audio": {
+    "file": "M04-05-01.mp3",
+    "durationSeconds": 1320,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Kann ich Vercel auch für Projekte nutzen, die nicht mit Next.js gebaut sind?",
+      "answer": "Ja, Vercel unterstützt viele Frameworks, nicht nur Next.js. Du kannst Projekte mit SvelteKit, Nuxt, Astro, Remix, Gatsby oder sogar reinem HTML deployen. Vercel erkennt das Framework automatisch und wendet die passenden Build-Einstellungen an. Next.js ist nur das Framework, für das Vercel am tiefsten optimiert ist, weil es vom selben Unternehmen entwickelt wird. Aber die Plattform ist bewusst framework-agnostisch gehalten, und die meisten modernen Web-Frameworks funktionieren ohne zusätzliche Konfiguration."
+    },
+    {
+      "question": "Was passiert mit meiner Anwendung, wenn Vercel ausfällt?",
+      "answer": "Vercel ist eine Plattform mit sehr hoher Verfügbarkeit, aber kein Dienst ist perfekt. Im Falle eines Ausfalls greift das Edge Network: statische Inhalte sind auf Dutzenden Standorten weltweit zwischengespeichert und bleiben auch bei einem Ausfall der zentralen Infrastruktur erreichbar. Serverless Functions können dagegen betroffen sein, weil sie eine aktive Ausführungsumgebung brauchen. Für geschäftskritische Anwendungen solltest du einen Status-Monitor einrichten und einen Plan B haben, zum Beispiel ein Backup-Deployment auf einer zweiten Plattform."
+    },
+    {
+      "question": "Kann ich meine eigene Domain mit Vercel verwenden?",
+      "answer": "Ja, du kannst jede beliebige Domain mit Vercel verwenden. Du trägst die Domain in den Vercel-Einstellungen ein, Vercel gibt dir die nötigen DNS-Einträge, und du konfigurierst sie bei deinem Domain-Anbieter. Vercel stellt automatisch ein SSL-Zertifikat aus und erneuert es, sodass deine Seite immer über HTTPS erreichbar ist. Der gesamte Vorgang dauert etwa zehn Minuten, und Vercel führt dich mit einer Schritt-für-Schritt-Anleitung durch die Einrichtung."
+    },
+    {
+      "question": "Wie unterscheidet sich Vercel von Netlify?",
+      "answer": "Vercel und Netlify sind die beiden führenden Plattformen für moderne Webanwendungen und ähneln sich in vielen Punkten. Beide bieten Git-basierte Deployments, Serverless Functions und ein Edge Network. Der Hauptunterschied liegt in der Framework-Nähe: Vercel ist der Erfinder von Next.js und dafür am tiefsten optimiert, Netlify hat eine etwas breitere Framework-Unterstützung und gilt als etwas einsteigerfreundlicher. Für Next.js-Projekte ist Vercel die natürliche Wahl, für andere Frameworks sind beide Plattformen gut geeignet. Die Entscheidung ist oft eine Frage des persönlichen Geschmacks."
+    },
+    {
+      "question": "Was sind die Grenzen von Serverless Functions?",
+      "answer": "Serverless Functions haben technische Grenzen, die du kennen solltest. Sie haben eine maximale Ausführungsdauer, auf Vercel zum Beispiel 10 Sekunden im kostenlosen Plan und bis zu 60 Sekunden im Pro-Plan. Sie haben eine maximale Größe und einen begrenzten Arbeitsspeicher. Sie sind nicht für langanhaltende Verbindungen wie WebSockets oder für rechenintensive Aufgaben wie Videokodierung geeignet. Für die allermeisten Webanwendungen, die Formulare verarbeiten, Datenbankabfragen machen oder APIs anbinden, sind Serverless Functions aber völlig ausreichend."
+    }
+  ]
+}

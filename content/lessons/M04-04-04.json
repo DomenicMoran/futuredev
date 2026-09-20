@@ -1,0 +1,723 @@
+{
+  "id": "M04-04-04",
+  "title": "Bitbucket Pipelines",
+  "durationMinutes": 32,
+  "prerequisites": [
+    "M04-04-02"
+  ],
+  "terms": [
+    {
+      "term": "Bitbucket Pipelines",
+      "definition": "Der in Bitbucket integrierte CI/CD-Dienst, der Workflows in einer bitbucket-pipelines.yml-Datei definiert. Anders als GitHub Actions setzt Bitbucket Pipelines auf Docker-Container als Ausführungsumgebung für jeden Schritt und ist eng mit dem Bitbucket-Ökosystem verzahnt."
+    },
+    {
+      "term": "Step",
+      "definition": "Eine einzelne Ausführungseinheit innerhalb einer Bitbucket Pipeline, die in einem eigenen Docker-Container läuft. Jeder Step hat Zugriff auf das Repository und kann Artefakte erzeugen, die an nachfolgende Steps weitergereicht werden."
+    },
+    {
+      "term": "Artifact",
+      "definition": "Eine Datei oder ein Verzeichnis, das in einem Step erzeugt und an nachfolgende Steps oder manuelle Downloads weitergereicht wird. Artefakte ermöglichen es, Build-Ergebnisse zwischen Steps zu teilen, ohne sie extern speichern zu müssen."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir zwei verschiedene Automarken vor, die beide Autos bauen, aber mit unterschiedlichen Fabriken. Beide haben ein Fließband, beide haben Prüfstationen, beide liefern Autos aus. Aber die eine Fabrik setzt auf Roboter, die andere auf Facharbeiter. Das Ergebnis ist vergleichbar, der Weg dorthin unterscheidet sich.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "GitHub Actions und Bitbucket Pipelines sind wie diese beiden Fabriken. Beide sind CI/CD-Dienste, beide automatisieren Prüfungen und Deployments, beide werden durch YAML-Dateien im Repository gesteuert. Aber sie unterscheiden sich in ihrer Architektur und ihrer Philosophie. Bitbucket Pipelines setzt konsequent auf Docker: jeder einzelne Schritt läuft in einem eigenen, frischen Docker-Container. Das gibt dir maximale Kontrolle über die Ausführungsumgebung, erfordert aber auch, dass du für jeden Schritt ein Image angibst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Warum sollte ich Bitbucket Pipelines nutzen, wenn ich schon GitHub Actions kenne?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Die Wahl zwischen GitHub Actions und Bitbucket Pipelines ist fast immer keine persönliche Entscheidung, sondern eine des Arbeitgebers oder des Projekts. Wenn das Unternehmen Bitbucket als Git-Plattform nutzt, nutzt du Bitbucket Pipelines. Wenn es GitHub nutzt, nutzt du GitHub Actions. Beide Dienste sind tief in ihre jeweilige Plattform integriert, und ein Wechsel ist aufwendig. Als Entwickler solltest du beide kennen, damit du in jedem Projekt sofort arbeitsfähig bist, egal welche Plattform das Team gewählt hat.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Dieser in Bitbucket integrierte CI/CD-Dienst heißt Bitbucket Pipelines.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In einem typischen Bitbucket-Projekt liegt die Pipeline in der Datei bitbucket-pipelines.yml im Wurzelverzeichnis. Sie definiert einen default-Abschnitt mit einem Step, der das Image node:22 nutzt, das Repository auscheckt, Abhängigkeiten installiert und Tests ausführt. Anders als bei GitHub Actions gibt es keine vorgefertigten Aktionen wie actions/checkout, weil das Auschecken des Repos in Bitbucket Pipelines automatisch passiert, bevor der Step startet.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die Docker-zentrierte Architektur von Bitbucket Pipelines ist Fluch und Segen zugleich. Sie gibt dir volle Kontrolle: du bestimmst exakt, welche Version von Node.js, welche Systembibliotheken und welche Werkzeuge in jedem Step verfügbar sind. Aber du musst diese Kontrolle auch ausüben: für jeden Step ein Image angeben, bei Bedarf zusätzliche Pakete installieren und die Umgebung selbst einrichten. GitHub Actions nimmt dir mit seinen vorgefertigten Aktionen viel davon ab, gibt dir dafür aber weniger Kontrolle.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was genau ist ein Step in Bitbucket Pipelines?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einzelne Laborstationen vor, jede in einem eigenen, sterilen Raum. In jedem Raum steht ein anderer Apparat, und zwischen den Räumen werden die Proben durch eine Schleuse gereicht. Kein Raum kontaminiert den anderen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein Step in Bitbucket Pipelines ist eine einzelne Ausführungseinheit, die in einem eigenen Docker-Container läuft. Jeder Step bekommt einen frischen Container, in dem nichts vom vorherigen Step übrig ist. Das ist anders als bei GitHub Actions, wo alle Steps eines Jobs im selben Runner laufen und sich ein Dateisystem teilen. In Bitbucket musst du Daten, die von einem Step zum nächsten sollen, explizit als Artefakte deklarieren. Alles andere wird nach dem Step gelöscht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Ein Step ist eine einzelne Ausführungseinheit, die in einem eigenen Docker-Container läuft.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Eine typische bitbucket-pipelines.yml hat mehrere Steps. Der erste Step baut die Anwendung und deklariert den build-Ordner als Artefakt. Der zweite Step führt die Tests aus und nutzt das Artefakt aus dem ersten Step. Der dritte Step deployt die Anwendung und nutzt ebenfalls das Artefakt. Jeder Step läuft in seinem eigenen Container, und die Artefakte sind die einzige Verbindung zwischen ihnen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die strikte Trennung der Steps durch eigene Container hat einen großen Vorteil: ein Step kann den nächsten nicht durch zurückgelassene Dateien oder veränderte Umgebungsvariablen beeinflussen. Was in Step eins funktioniert, aber in Step zwei nicht, liegt garantiert nicht an einer Verunreinigung aus Step eins. Das macht die Fehlersuche einfacher, weil jeder Step eine in sich geschlossene, reproduzierbare Einheit ist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was sind Artefakte und wie funktionieren sie?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine Rohrpost in einem alten Kaufhaus vor. Du steckst eine Nachricht in eine Kapsel, schickst sie durch das Rohrsystem, und am anderen Ende kommt sie unverändert an. Die Kapsel ist das Artefakt, das Rohrsystem ist Bitbucket Pipelines.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Artefakte sind Dateien oder Verzeichnisse, die ein Step erzeugt und an nachfolgende Steps weitergibt. Du deklarierst im Step, welche Dateien als Artefakte gespeichert werden sollen, und in den folgenden Steps stehen diese Dateien dann automatisch zur Verfügung. Bitbucket speichert die Artefakte für 14 Tage, und du kannst sie auch manuell aus der Pipeline-Oberfläche herunterladen. Artefakte sind der einzige Weg, Daten zwischen Steps auszutauschen, weil jeder Step in einem eigenen Container läuft.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Ein Artefakt ist eine Datei oder ein Verzeichnis, das in einem Step erzeugt und an nachfolgende Steps weitergereicht wird.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In einer Bitbucket-Pipeline für eine Next.js-Anwendung erzeugt der Build-Step das Verzeichnis .next als Artefakt. Der Test-Step nutzt dieses Artefakt, um die gebaute Anwendung zu testen. Der Deploy-Step nutzt dasselbe Artefakt, um es auf den Server hochzuladen. Alle drei Steps arbeiten mit demselben Build-Ergebnis, aber jeder in seinem eigenen Container. Das spart Zeit, weil die Anwendung nur einmal gebaut wird, und stellt sicher, dass getestet und deployt wird, was tatsächlich gebaut wurde.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Artefakte sind das Bindeglied zwischen den isolierten Steps. Ohne Artefakte müsste jeder Step die Anwendung neu bauen, was Zeit kostet und das Risiko birgt, dass unterschiedliche Steps mit unterschiedlichen Build-Ergebnissen arbeiten. Mit Artefakten baust du einmal und verwendest das Ergebnis mehrfach, was schneller und konsistenter ist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Wie unterscheidet sich die Syntax von Bitbucket Pipelines von GitHub Actions?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Die grundlegende Struktur ist ähnlich: beide nutzen YAML, beide haben Trigger wie Push und Pull Request, beide definieren Schritte, die Befehle ausführen. Der Hauptunterschied liegt in der Granularität. GitHub Actions hat Jobs, die Steps enthalten, und alle Steps eines Jobs teilen sich einen Runner. Bitbucket Pipelines hat nur Steps, und jeder Step hat seinen eigenen Container. Außerdem hat Bitbucket keine vorgefertigten Aktionen wie uses in GitHub Actions. Stattdessen schreibst du die Befehle direkt als Shell-Kommandos in den Step oder nutzt Pipes, das Bitbucket-Äquivalent zu Aktionen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Diese Unterschiede bedeuten, dass du eine GitHub-Actions-Datei nicht einfach nach Bitbucket kopieren kannst. Du musst die Struktur anpassen: aus Jobs werden Steps, aus uses werden direkte Shell-Befehle oder Pipes, und du musst für jeden Step ein Image angeben. Der gedankliche Aufwand ist überschaubar, aber du solltest nicht erwarten, dass eine Pipeline ohne Anpassung auf der anderen Plattform läuft.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir zwei verschiedene Küchen vor, in denen du dasselbe Gericht kochst. Die eine hat einen Gasherd, die andere Induktion. Die Zutaten sind gleich, das Rezept ist gleich, aber die Handgriffe unterscheiden sich, weil die Werkzeuge anders sind.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "GitHub Actions und Bitbucket Pipelines sind wie diese beiden Küchen. Das Rezept, also die CI/CD-Logik, ist dasselbe: prüfen, testen, bauen, deployen. Aber die Handgriffe, also die YAML-Syntax und die verfügbaren Werkzeuge, unterscheiden sich. Ein guter Koch kann in beiden Küchen kochen, weil er das Rezept versteht und die Handgriffe an die Werkzeuge anpasst. Genauso kannst du als Entwickler mit beiden Plattformen arbeiten, weil du die CI/CD-Prinzipien verstehst und die Syntax an die Plattform anpasst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein weiterer wichtiger Aspekt von CI/CD ist das Feedback. Eine Pipeline, die innerhalb von zwei Minuten grünes oder rotes Licht gibt, ermöglicht einen Arbeitsfluss, bei dem du eine Änderung machst, pusht und fast sofort weißt, ob sie korrekt ist. Dieses schnelle Feedback ist psychologisch wichtig, weil es den Entwickler im Fluss hält.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Schnelles Feedback ist einer der am meisten unterschätzten Faktoren für Entwicklerproduktivität. Teams, die ihre Pipeline von zwanzig auf zwei Minuten beschleunigen, berichten von spürbar höherer Zufriedenheit und weniger Fehlern, weil die Entwickler häufiger pushen und schneller korrigieren.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein weiterer wichtiger Aspekt von CI/CD ist das Feedback. Eine Pipeline, die innerhalb von zwei Minuten grünes oder rotes Licht gibt, ermöglicht einen Arbeitsfluss, bei dem du eine Änderung machst, pusht und fast sofort weißt, ob sie korrekt ist. Dieses schnelle Feedback ist psychologisch wichtig, weil es den Entwickler im Fluss hält.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Schnelles Feedback ist einer der am meisten unterschätzten Faktoren für Entwicklerproduktivität. Teams, die ihre Pipeline von zwanzig auf zwei Minuten beschleunigen, berichten von spürbar höherer Zufriedenheit und weniger Fehlern, weil die Entwickler häufiger pushen und schneller korrigieren.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was mache ich, wenn die Pipeline bei einem Pull Request rot ist, ich den Fehler aber nicht verstehe?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Das ist ein normaler Teil des Lernprozesses. Lies die Fehlermeldung genau, sie sagt dir fast immer, was falsch ist. Wenn du sie nicht verstehst, kopiere sie in eine Suche oder frage ein Teammitglied. Der wichtige Punkt ist: die Pipeline hat einen echten Fehler gefunden, auch wenn du ihn noch nicht verstehst. Ignoriere eine rote Pipeline niemals mit der Hoffnung, dass der Fehler von allein verschwindet. Er wird nicht verschwinden, und er wird in Produktion wieder auftauchen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein weiterer wichtiger Aspekt von CI/CD ist das Feedback. Eine Pipeline, die innerhalb von zwei Minuten grünes oder rotes Licht gibt, ermöglicht einen Arbeitsfluss, bei dem du eine Änderung machst, pusht und fast sofort weißt, ob sie korrekt ist. Dieses schnelle Feedback ist psychologisch wichtig, weil es den Entwickler im Fluss hält.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Schnelles Feedback ist einer der am meisten unterschätzten Faktoren für Entwicklerproduktivität. Teams, die ihre Pipeline von zwanzig auf zwei Minuten beschleunigen, berichten von spürbar höherer Zufriedenheit und weniger Fehlern, weil die Entwickler häufiger pushen und schneller korrigieren.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was mache ich, wenn die Pipeline bei einem Pull Request rot ist, ich den Fehler aber nicht verstehe?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Das ist ein normaler Teil des Lernprozesses. Lies die Fehlermeldung genau, sie sagt dir fast immer, was falsch ist. Wenn du sie nicht verstehst, kopiere sie in eine Suche oder frage ein Teammitglied. Der wichtige Punkt ist: die Pipeline hat einen echten Fehler gefunden, auch wenn du ihn noch nicht verstehst. Ignoriere eine rote Pipeline niemals mit der Hoffnung, dass der Fehler von allein verschwindet. Er wird nicht verschwinden, und er wird in Produktion wieder auftauchen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein weiterer wichtiger Aspekt von CI/CD ist das Feedback. Eine Pipeline, die innerhalb von zwei Minuten grünes oder rotes Licht gibt, ermöglicht einen Arbeitsfluss, bei dem du eine Änderung machst, pusht und fast sofort weißt, ob sie korrekt ist. Dieses schnelle Feedback ist psychologisch wichtig, weil es den Entwickler im Fluss hält.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Schnelles Feedback ist einer der am meisten unterschätzten Faktoren für Entwicklerproduktivität. Teams, die ihre Pipeline von zwanzig auf zwei Minuten beschleunigen, berichten von spürbar höherer Zufriedenheit und weniger Fehlern, weil die Entwickler häufiger pushen und schneller korrigieren.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was mache ich, wenn die Pipeline bei einem Pull Request rot ist, ich den Fehler aber nicht verstehe?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Das ist ein normaler Teil des Lernprozesses. Lies die Fehlermeldung genau, sie sagt dir fast immer, was falsch ist. Wenn du sie nicht verstehst, kopiere sie in eine Suche oder frage ein Teammitglied. Der wichtige Punkt ist: die Pipeline hat einen echten Fehler gefunden, auch wenn du ihn noch nicht verstehst. Ignoriere eine rote Pipeline niemals mit der Hoffnung, dass der Fehler von allein verschwindet. Er wird nicht verschwinden, und er wird in Produktion wieder auftauchen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein weiterer wichtiger Aspekt von CI/CD ist das Feedback. Eine Pipeline, die innerhalb von zwei Minuten grünes oder rotes Licht gibt, ermöglicht einen Arbeitsfluss, bei dem du eine Änderung machst, pusht und fast sofort weißt, ob sie korrekt ist. Dieses schnelle Feedback ist psychologisch wichtig, weil es den Entwickler im Fluss hält.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Schnelles Feedback ist einer der am meisten unterschätzten Faktoren für Entwicklerproduktivität. Teams, die ihre Pipeline von zwanzig auf zwei Minuten beschleunigen, berichten von spürbar höherer Zufriedenheit und weniger Fehlern, weil die Entwickler häufiger pushen und schneller korrigieren.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was mache ich, wenn die Pipeline bei einem Pull Request rot ist, ich den Fehler aber nicht verstehe?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Das ist ein normaler Teil des Lernprozesses. Lies die Fehlermeldung genau, sie sagt dir fast immer, was falsch ist. Wenn du sie nicht verstehst, kopiere sie in eine Suche oder frage ein Teammitglied. Der wichtige Punkt ist: die Pipeline hat einen echten Fehler gefunden, auch wenn du ihn noch nicht verstehst. Ignoriere eine rote Pipeline niemals mit der Hoffnung, dass der Fehler von allein verschwindet. Er wird nicht verschwinden, und er wird in Produktion wieder auftauchen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "text": "Also noch einmal ganz kurz: Bitbucket Pipelines ist der CI/CD-Dienst von Bitbucket, der Workflows in einer bitbucket-pipelines.yml definiert. Jeder Step läuft in einem eigenen Docker-Container, und Daten zwischen Steps werden als Artefakte weitergereicht. Anders als GitHub Actions hat Bitbucket keine vorgefertigten Aktionen, sondern setzt auf direkte Shell-Befehle oder Pipes. Die Wahl zwischen den Plattformen ist meist durch das Unternehmen vorgegeben, und als Entwickler solltest du beide kennen, um in jedem Projekt arbeitsfähig zu sein.",
+      "isKeySentence": true
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Bitbucket Pipelines ist der in Bitbucket integrierte CI/CD-Dienst, der Workflows in einer bitbucket-pipelines.yml-Datei definiert. Anders als GitHub Actions setzt Bitbucket Pipelines auf Docker-Container als Ausführungsumgebung für jeden Schritt und ist eng mit dem Bitbucket-Ökosystem verzahnt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Ein Step ist eine einzelne Ausführungseinheit innerhalb einer Bitbucket Pipeline, die in einem eigenen Docker-Container läuft. Jeder Step hat Zugriff auf das Repository und kann Artefakte erzeugen, die an nachfolgende Steps weitergereicht werden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Ein Artefakt ist eine Datei oder ein Verzeichnis, das in einem Step erzeugt und an nachfolgende Steps oder manuelle Downloads weitergereicht wird. Artefakte ermöglichen es, Build-Ergebnisse zwischen Steps zu teilen, ohne sie extern speichern zu müssen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Kann ich meine GitHub-Actions-Workflows nach Bitbucket Pipelines übertragen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Die CI/CD-Logik kannst du übertragen, aber nicht die YAML-Datei selbst. Du musst die Struktur anpassen: aus Jobs werden Steps, aus uses werden direkte Shell-Befehle oder Pipes, und du musst für jeden Step ein Image angeben. Der Aufwand hängt von der Komplexität deiner Workflows ab. Einfache Workflows mit wenigen Schritten sind in einer Stunde übertragen. Komplexe Workflows mit vielen vorgefertigten Aktionen können mehrere Tage Arbeit bedeuten, weil du für jede Aktion ein Äquivalent finden oder selbst schreiben musst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was sind Pipes in Bitbucket Pipelines?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Pipes sind das Bitbucket-Äquivalent zu GitHub Actions. Es sind vorgefertigte, wiederverwendbare Bausteine, die du in deine Pipeline einbaust, zum Beispiel eine Pipe zum Deployen auf AWS oder zum Senden einer Slack-Nachricht. Anders als GitHub Actions sind Pipes weniger zahlreich und weniger tief in die Plattform integriert. Viele Teams schreiben ihre Schritte lieber direkt als Shell-Befehle, weil das transparenter und weniger abhängig von Drittanbietern ist. Pipes sind nützlich für komplexe Integrationen, bei denen du nicht die gesamte Logik selbst schreiben willst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Welche Images sollte ich für meine Steps verwenden?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Verwende offizielle Images von Docker Hub, die genau die Werkzeuge enthalten, die du für den Step brauchst. Für einen Node.js-Build ist node:22 das richtige Image. Für einen Python-Test ist python:3.12 das richtige. Achte darauf, möglichst schlanke Images zu verwenden, zum Beispiel alpine-Varianten, weil der Container bei jedem Step neu gestartet wird und die Image-Größe direkt die Startzeit beeinflusst. Du kannst auch eigene Images bauen und in einer Registry hinterlegen, wenn du spezielle Werkzeuge oder Konfigurationen brauchst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Wie lange werden Artefakte in Bitbucket Pipelines gespeichert?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Artefakte werden standardmäßig 14 Tage gespeichert. Danach werden sie automatisch gelöscht. Du kannst sie innerhalb dieser Zeit aus der Pipeline-Oberfläche herunterladen. Wenn du Artefakte länger aufbewahren musst, solltest du sie in einem externen Speicher wie AWS S3 ablegen, statt dich auf die Pipeline-Speicherung zu verlassen. Für die Weitergabe zwischen Steps innerhalb eines Pipeline-Laufs sind die 14 Tage mehr als ausreichend, da ein Pipeline-Lauf typischerweise nur Minuten dauert.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Kann ich Bitbucket Pipelines auch mit selbst gehosteten Runnern betreiben?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ja, Bitbucket unterstützt selbst gehostete Runner, die du auf deiner eigenen Infrastruktur betreibst. Das ist nützlich, wenn du spezielle Hardware brauchst, zum Beispiel für iOS-Builds, die nur auf macOS laufen, oder wenn du das Minuten-Kontingent von Bitbucket Cloud überschreitest. Selbst gehostete Runner geben dir volle Kontrolle über die Umgebung, aber du bist für Wartung, Sicherheit und Updates verantwortlich. Für die meisten Projekte sind die von Bitbucket bereitgestellten Runner ausreichend.",
+      "isKeySentence": false
+    }
+  ],
+  "practiceExample": {
+    "text": "Eine typische bitbucket-pipelines.yml definiert mehrere Steps, jeder in einem eigenen Docker-Container. Der erste Step baut die Anwendung und deklariert Artefakte, die folgenden Steps nutzen diese Artefakte für Tests und Deployment. Anders als GitHub Actions gibt es keine uses-Anweisungen, sondern direkte Shell-Befehle oder Pipes.",
+    "repoNote": "repo-futuredev",
+    "location": "bitbucket-pipelines.yml (hypothetisches Beispiel für die Bitbucket-Variante der CI/CD-Pipeline)"
+  },
+  "quiz": [
+    {
+      "question": "Welches Alltagsbild beschreibt Bitbucket Pipelines im Vergleich zu GitHub Actions am treffendsten?",
+      "area": "CI/CD: Bitbucket Pipelines",
+      "options": [
+        {
+          "text": "Zwei verschiedene Autofabriken, die beide Autos bauen, aber mit unterschiedlichen Maschinen und Abläufen.",
+          "isCorrect": true,
+          "explanation": "Richtig: beide Dienste machen dasselbe, aber mit unterschiedlicher Architektur und Syntax."
+        },
+        {
+          "text": "Ein einziges Auto, das von zwei verschiedenen Fahrern gleichzeitig gesteuert wird.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Dienste arbeiten nicht gleichzeitig am selben Projekt."
+        },
+        {
+          "text": "Zwei völlig verschiedene Produkte, die nichts miteinander zu tun haben.",
+          "isCorrect": false,
+          "explanation": "Falsch: beide sind CI/CD-Dienste mit sehr ähnlichen Zielen."
+        },
+        {
+          "text": "Ein Auto und ein Fahrrad, die völlig unterschiedliche Fortbewegungsmittel sind.",
+          "isCorrect": false,
+          "explanation": "Falsch: beide Dienste sind vergleichbar, nicht grundverschieden."
+        }
+      ]
+    },
+    {
+      "question": "Was ist ein Step in Bitbucket Pipelines?",
+      "area": "CI/CD: Step",
+      "options": [
+        {
+          "text": "Eine einzelne Ausführungseinheit, die in einem eigenen Docker-Container läuft.",
+          "isCorrect": true,
+          "explanation": "Richtig: jeder Step bekommt einen frischen Container, isoliert von allen anderen Steps."
+        },
+        {
+          "text": "Eine vorgefertigte Aktion aus dem Bitbucket Marketplace, ähnlich wie uses in GitHub Actions.",
+          "isCorrect": false,
+          "explanation": "Falsch: vorgefertigte Bausteine heißen in Bitbucket Pipes, nicht Steps."
+        },
+        {
+          "text": "Ein einzelner Shell-Befehl, der innerhalb eines Containers ausgeführt wird.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Step kann mehrere Shell-Befehle enthalten, er ist die übergeordnete Einheit."
+        },
+        {
+          "text": "Die Konfigurationsdatei, die die gesamte Pipeline beschreibt.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Konfigurationsdatei heißt bitbucket-pipelines.yml."
+        }
+      ]
+    },
+    {
+      "question": "Was ist ein Artefakt in Bitbucket Pipelines?",
+      "area": "CI/CD: Artifact",
+      "options": [
+        {
+          "text": "Eine Datei oder ein Verzeichnis, das in einem Step erzeugt und an nachfolgende Steps weitergereicht wird.",
+          "isCorrect": true,
+          "explanation": "Richtig: Artefakte sind die einzige Verbindung zwischen den isolierten Steps."
+        },
+        {
+          "text": "Ein altes, nicht mehr verwendetes Stück Code, das aus dem Repository entfernt werden sollte.",
+          "isCorrect": false,
+          "explanation": "Falsch: das wäre toter Code, kein Artefakt im Bitbucket-Sinne."
+        },
+        {
+          "text": "Eine Fehlermeldung, die während der Pipeline-Ausführung auftritt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Fehlermeldungen sind keine Artefakte."
+        },
+        {
+          "text": "Ein Docker-Image, das als Basis für einen Step verwendet wird.",
+          "isCorrect": false,
+          "explanation": "Falsch: das Basis-Image wird mit image deklariert, nicht als Artefakt."
+        }
+      ]
+    },
+    {
+      "question": "Warum läuft jeder Step in Bitbucket Pipelines in einem eigenen Container?",
+      "area": "CI/CD: Bitbucket Pipelines",
+      "options": [
+        {
+          "text": "Damit Steps sich nicht durch zurückgelassene Dateien oder Umgebungsvariablen beeinflussen können.",
+          "isCorrect": true,
+          "explanation": "Richtig: die strikte Isolation macht jeden Step zu einer reproduzierbaren Einheit."
+        },
+        {
+          "text": "Weil Bitbucket sonst eine Lizenzgebühr an Docker zahlen müsste.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Container-Isolation ist eine Designentscheidung, keine Lizenzfrage."
+        },
+        {
+          "text": "Damit die Pipeline schneller läuft, weil mehrere Container parallel arbeiten.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Isolation macht die Pipeline eher langsamer, weil jeder Container neu starten muss."
+        },
+        {
+          "text": "Weil Docker das einzige von Bitbucket unterstützte Laufzeitsystem ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: Bitbucket hat sich bewusst für Docker entschieden, nicht aus technischer Notwendigkeit."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der Hauptunterschied zwischen GitHub Actions und Bitbucket Pipelines?",
+      "area": "CI/CD: Bitbucket Pipelines",
+      "options": [
+        {
+          "text": "Bitbucket hat keine vorgefertigten Aktionen, sondern setzt auf direkte Shell-Befehle oder Pipes.",
+          "isCorrect": true,
+          "explanation": "Richtig: Bitbucket hat kein uses-Äquivalent, du schreibst die Befehle direkt."
+        },
+        {
+          "text": "GitHub Actions kann nur auf Linux laufen, Bitbucket Pipelines nur auf Windows.",
+          "isCorrect": false,
+          "explanation": "Falsch: beide unterstützen mehrere Betriebssysteme."
+        },
+        {
+          "text": "Bitbucket Pipelines ist kostenlos, GitHub Actions kostet immer Geld.",
+          "isCorrect": false,
+          "explanation": "Falsch: beide haben kostenlose Kontingente und kostenpflichtige Erweiterungen."
+        },
+        {
+          "text": "GitHub Actions verwendet JSON, Bitbucket Pipelines verwendet XML.",
+          "isCorrect": false,
+          "explanation": "Falsch: beide verwenden YAML für ihre Konfigurationsdateien."
+        }
+      ]
+    },
+    {
+      "question": "Wie lange werden Artefakte in Bitbucket Pipelines standardmäßig gespeichert?",
+      "area": "CI/CD: Artifact",
+      "options": [
+        {
+          "text": "14 Tage.",
+          "isCorrect": true,
+          "explanation": "Richtig: nach 14 Tagen werden Artefakte automatisch gelöscht."
+        },
+        {
+          "text": "Für immer, bis der Nutzer sie manuell löscht.",
+          "isCorrect": false,
+          "explanation": "Falsch: Artefakte haben eine begrenzte Lebensdauer von 14 Tagen."
+        },
+        {
+          "text": "Nur während des laufenden Pipeline-Durchlaufs, danach sofort.",
+          "isCorrect": false,
+          "explanation": "Falsch: Artefakte überleben den Pipeline-Lauf um 14 Tage."
+        },
+        {
+          "text": "7 Tage.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Standardaufbewahrungsdauer beträgt 14 Tage, nicht 7."
+        }
+      ]
+    },
+    {
+      "question": "Was sind Pipes in Bitbucket Pipelines?",
+      "area": "CI/CD: Bitbucket Pipelines",
+      "options": [
+        {
+          "text": "Vorgefertigte, wiederverwendbare Bausteine, ähnlich wie GitHub Actions.",
+          "isCorrect": true,
+          "explanation": "Richtig: Pipes sind das Bitbucket-Äquivalent zu den uses-Aktionen in GitHub Actions."
+        },
+        {
+          "text": "Rohre, durch die der Code physisch von einem Server zum anderen fließt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Pipes sind ein technisches Konzept, keine physischen Rohre."
+        },
+        {
+          "text": "Die Shell-Befehle, die in einem Step ausgeführt werden.",
+          "isCorrect": false,
+          "explanation": "Falsch: Shell-Befehle sind script, Pipes sind vorgefertigte Bausteine."
+        },
+        {
+          "text": "Die Benachrichtigungen, die Bitbucket nach einem Pipeline-Lauf verschickt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Benachrichtigungen sind notifications, nicht Pipes."
+        }
+      ]
+    },
+    {
+      "question": "Warum sollte ein Entwickler sowohl GitHub Actions als auch Bitbucket Pipelines kennen?",
+      "area": "CI/CD: Bitbucket Pipelines",
+      "options": [
+        {
+          "text": "Weil die Wahl der Plattform meist vom Arbeitgeber vorgegeben ist und man in jedem Projekt arbeitsfähig sein sollte.",
+          "isCorrect": true,
+          "explanation": "Richtig: wer beide kennt, kann in jedem Team sofort mitarbeiten."
+        },
+        {
+          "text": "Weil GitHub Actions und Bitbucket Pipelines im selben Projekt gleichzeitig verwendet werden müssen.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Projekt nutzt typischerweise nur eine der beiden Plattformen."
+        },
+        {
+          "text": "Weil Bitbucket Pipelines nur funktioniert, wenn GitHub Actions ebenfalls eingerichtet ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Dienste sind unabhängig voneinander."
+        },
+        {
+          "text": "Weil GitHub Actions in Deutschland verboten ist und man auf Bitbucket ausweichen muss.",
+          "isCorrect": false,
+          "explanation": "Falsch: GitHub Actions ist in Deutschland nicht verboten."
+        }
+      ]
+    },
+    {
+      "question": "Welches Image solltest du für einen Node.js-Build-Step in Bitbucket Pipelines verwenden?",
+      "area": "CI/CD: Bitbucket Pipelines",
+      "options": [
+        {
+          "text": "node:22, das offizielle Node.js-Image von Docker Hub.",
+          "isCorrect": true,
+          "explanation": "Richtig: offizielle Images sind getestet, aktuell und für den Einsatzzweck optimiert."
+        },
+        {
+          "text": "ubuntu:latest, weil Ubuntu alles kann und Node.js automatisch installiert ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: ubuntu:latest enthält Node.js nicht vorinstalliert, du müsstest es erst installieren."
+        },
+        {
+          "text": "Ein selbst gebautes Image mit allen erdenklichen Werkzeugen für alle Eventualitäten.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein überladenes Image ist langsam und schwer zu warten."
+        },
+        {
+          "text": "bitbucket/node:latest, ein speziell für Bitbucket optimiertes Image.",
+          "isCorrect": false,
+          "explanation": "Falsch: es gibt kein spezielles Bitbucket-Node-Image, die offiziellen Docker-Hub-Images sind der Standard."
+        }
+      ]
+    },
+    {
+      "question": "Kannst du eine GitHub-Actions-YAML-Datei direkt in Bitbucket Pipelines verwenden?",
+      "area": "CI/CD: Bitbucket Pipelines",
+      "options": [
+        {
+          "text": "Nein, die Syntax unterscheidet sich, und du musst die Struktur anpassen.",
+          "isCorrect": true,
+          "explanation": "Richtig: aus Jobs werden Steps, aus uses werden Shell-Befehle oder Pipes."
+        },
+        {
+          "text": "Ja, beide verwenden YAML und sind vollständig kompatibel zueinander.",
+          "isCorrect": false,
+          "explanation": "Falsch: obwohl beide YAML nutzen, ist die Syntax unterschiedlich."
+        },
+        {
+          "text": "Nur wenn die Datei weniger als 100 Zeilen hat.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Länge der Datei hat keinen Einfluss auf die Kompatibilität."
+        },
+        {
+          "text": "Ja, aber nur in öffentlichen Repositories.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Sichtbarkeit des Repos ändert nichts an der Syntax-Inkompatibilität."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der Vorteil, wenn jeder Step in einem eigenen Container läuft?",
+      "area": "CI/CD: Bitbucket Pipelines",
+      "options": [
+        {
+          "text": "Fehler sind leichter zu finden, weil kein Step den nächsten verunreinigen kann.",
+          "isCorrect": true,
+          "explanation": "Richtig: die strikte Isolation macht jeden Step zu einer in sich geschlossenen Einheit."
+        },
+        {
+          "text": "Die Pipeline läuft schneller, weil mehrere Container parallel arbeiten können.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Container-Isolation macht die Pipeline eher langsamer durch die Startzeiten."
+        },
+        {
+          "text": "Bitbucket kann dann mehr Geld für die Nutzung verlangen.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Preisgestaltung hängt nicht von der Container-Anzahl ab."
+        },
+        {
+          "text": "Die Pipeline kann dann in verschiedenen Programmiersprachen geschrieben werden.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Pipeline selbst ist immer YAML, unabhängig von den Containern."
+        }
+      ]
+    },
+    {
+      "question": "Wo wird die Bitbucket-Pipelines-Konfiguration gespeichert?",
+      "area": "CI/CD: Bitbucket Pipelines",
+      "options": [
+        {
+          "text": "In der Datei bitbucket-pipelines.yml im Wurzelverzeichnis des Repositories.",
+          "isCorrect": true,
+          "explanation": "Richtig: Bitbucket sucht nach dieser Datei und führt sie automatisch aus."
+        },
+        {
+          "text": "In den Einstellungen des Bitbucket-Repositories unter dem Menüpunkt Pipelines.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Konfiguration steht in einer Datei im Repository, nicht in den Einstellungen."
+        },
+        {
+          "text": "In einer externen Datenbank, die über eine API mit Bitbucket verbunden ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Konfiguration ist Teil des Repositories und wird mit versioniert."
+        },
+        {
+          "text": "In der Datei .github/workflows/pipelines.yml.",
+          "isCorrect": false,
+          "explanation": "Falsch: .github/workflows ist der Pfad für GitHub Actions, nicht für Bitbucket."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Erstelle ein kostenloses Bitbucket-Konto und ein neues Repository. Lege eine bitbucket-pipelines.yml im Wurzelverzeichnis an, die einen Step mit dem Image node:22 definiert. Der Step soll das Repository auschecken, was in Bitbucket automatisch passiert, und dann node -e \"console.log('Bitbucket Pipelines läuft')\" ausführen. Pushe die Datei und beobachte in der Bitbucket-Oberfläche unter Pipelines, wie der Step läuft. Vergleiche die Struktur mit einer GitHub-Actions-Datei und notiere die Unterschiede.",
+    "expectation": "Eine Bitbucket-Pipeline wurde erstellt und erfolgreich ausgeführt. Die Unterschiede zu GitHub Actions wurden erkannt und dokumentiert. Die Konzepte Step, Image und die Docker-zentrierte Architektur wurden praktisch angewendet.",
+    "checklist": [
+      "Ein Bitbucket-Konto erstellt und ein neues Repository angelegt.",
+      "Eine bitbucket-pipelines.yml mit einem Step und image: node:22 erstellt.",
+      "Die Datei ins Repository gepusht.",
+      "In der Bitbucket-Oberfläche unter Pipelines den Lauf beobachtet.",
+      "Der Lauf ist grün und zeigt die Konsolenausgabe.",
+      "Die Unterschiede zu GitHub Actions notiert (keine uses, eigener Container pro Step, automatischer Checkout)."
+    ],
+    "portfolioItem": "P04"
+  },
+  "audio": {
+    "file": "M04-04-04.mp3",
+    "durationSeconds": 1280,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Kann ich meine GitHub-Actions-Workflows nach Bitbucket Pipelines übertragen?",
+      "answer": "Die CI/CD-Logik kannst du übertragen, aber nicht die YAML-Datei selbst. Du musst die Struktur anpassen: aus Jobs werden Steps, aus uses werden direkte Shell-Befehle oder Pipes, und du musst für jeden Step ein Image angeben. Der Aufwand hängt von der Komplexität deiner Workflows ab. Einfache Workflows mit wenigen Schritten sind in einer Stunde übertragen. Komplexe Workflows mit vielen vorgefertigten Aktionen können mehrere Tage Arbeit bedeuten, weil du für jede Aktion ein Äquivalent finden oder selbst schreiben musst."
+    },
+    {
+      "question": "Was sind Pipes in Bitbucket Pipelines?",
+      "answer": "Pipes sind das Bitbucket-Äquivalent zu GitHub Actions. Es sind vorgefertigte, wiederverwendbare Bausteine, die du in deine Pipeline einbaust, zum Beispiel eine Pipe zum Deployen auf AWS oder zum Senden einer Slack-Nachricht. Anders als GitHub Actions sind Pipes weniger zahlreich und weniger tief in die Plattform integriert. Viele Teams schreiben ihre Schritte lieber direkt als Shell-Befehle, weil das transparenter und weniger abhängig von Drittanbietern ist. Pipes sind nützlich für komplexe Integrationen, bei denen du nicht die gesamte Logik selbst schreiben willst."
+    },
+    {
+      "question": "Welche Images sollte ich für meine Steps verwenden?",
+      "answer": "Verwende offizielle Images von Docker Hub, die genau die Werkzeuge enthalten, die du für den Step brauchst. Für einen Node.js-Build ist node:22 das richtige Image. Für einen Python-Test ist python:3.12 das richtige. Achte darauf, möglichst schlanke Images zu verwenden, zum Beispiel alpine-Varianten, weil der Container bei jedem Step neu gestartet wird und die Image-Größe direkt die Startzeit beeinflusst. Du kannst auch eigene Images bauen und in einer Registry hinterlegen, wenn du spezielle Werkzeuge oder Konfigurationen brauchst."
+    },
+    {
+      "question": "Wie lange werden Artefakte in Bitbucket Pipelines gespeichert?",
+      "answer": "Artefakte werden standardmäßig 14 Tage gespeichert. Danach werden sie automatisch gelöscht. Du kannst sie innerhalb dieser Zeit aus der Pipeline-Oberfläche herunterladen. Wenn du Artefakte länger aufbewahren musst, solltest du sie in einem externen Speicher wie AWS S3 ablegen, statt dich auf die Pipeline-Speicherung zu verlassen. Für die Weitergabe zwischen Steps innerhalb eines Pipeline-Laufs sind die 14 Tage mehr als ausreichend, da ein Pipeline-Lauf typischerweise nur Minuten dauert."
+    },
+    {
+      "question": "Kann ich Bitbucket Pipelines auch mit selbst gehosteten Runnern betreiben?",
+      "answer": "Ja, Bitbucket unterstützt selbst gehostete Runner, die du auf deiner eigenen Infrastruktur betreibst. Das ist nützlich, wenn du spezielle Hardware brauchst, zum Beispiel für iOS-Builds, die nur auf macOS laufen, oder wenn du das Minuten-Kontingent von Bitbucket Cloud überschreitest. Selbst gehostete Runner geben dir volle Kontrolle über die Umgebung, aber du bist für Wartung, Sicherheit und Updates verantwortlich. Für die meisten Projekte sind die von Bitbucket bereitgestellten Runner ausreichend."
+    }
+  ]
+}

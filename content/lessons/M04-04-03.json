@@ -1,0 +1,747 @@
+{
+  "id": "M04-04-03",
+  "title": "Deploy auslösen",
+  "durationMinutes": 33,
+  "prerequisites": [
+    "M04-04-02"
+  ],
+  "terms": [
+    {
+      "term": "Deployment",
+      "definition": "Der Vorgang, bei dem eine neue Version einer Anwendung auf einem Server oder einer Plattform in Betrieb genommen wird. Ein Deployment umfasst das Bauen, Testen und Ausliefern der Anwendung und kann manuell oder automatisch ausgelöst werden."
+    },
+    {
+      "term": "Environment",
+      "definition": "Eine abgegrenzte Umgebung, in der eine Anwendung läuft, mit eigener Konfiguration, eigenen Daten und eigenen Zugriffsrechten. Typische Environments sind Development, Staging und Production, die sich in Stabilität und Zugänglichkeit unterscheiden."
+    },
+    {
+      "term": "Rollback",
+      "definition": "Das Zurücksetzen einer Anwendung auf eine frühere Version, nachdem ein Deployment fehlgeschlagen ist oder einen Fehler in Produktion verursacht hat. Ein Rollback muss schnell und zuverlässig möglich sein, idealerweise automatisiert."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen Bäcker vor, der frühmorgens frische Brötchen backt. Er hat einen genauen Plan: zuerst den Ofen vorheizen, dann die Brötchen formen, dann backen, dann ausliefern. Wenn ein Blech verbrennt, hat er ein zweites in Reserve. Und er liefert nur aus, was die Qualitätskontrolle bestanden hat.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "In der Softwareentwicklung heißt dieser Vorgang vom Backen bis zur Auslieferung Deployment. Nachdem die Pipeline alle Prüfungen bestanden hat, wird die Anwendung gebaut und auf einen Server oder eine Plattform gebracht, wo echte Nutzer sie verwenden können. Das kann ein Knopfdruck sein oder vollautomatisch ablaufen, sobald die Pipeline grün ist. Entscheidend ist: nur geprüfter Code wird deployt, und ein fehlgeschlagenes Deployment muss rückgängig gemacht werden können.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was genau passiert bei einem Deployment technisch?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein Deployment besteht typischerweise aus drei Schritten. Erstens: Bauen. Der Code wird in ein lauffähiges Artefakt verwandelt, zum Beispiel ein Docker-Image oder ein gebündeltes JavaScript-Paket. Zweitens: Hochladen. Das Artefakt wird auf den Zielserver oder die Zielplattform übertragen. Drittens: Aktivieren. Die neue Version wird in Betrieb genommen, indem zum Beispiel der alte Container durch den neuen ersetzt oder der Traffic auf die neue Version umgeleitet wird. Diese drei Schritte müssen in dieser Reihenfolge und ohne Unterbrechung ablaufen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Dieser Vorgang, eine neue Version einer Anwendung in Betrieb zu nehmen, heißt Deployment.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-futuredev wird das Deployment der Inhalte automatisch ausgelöst, sobald die CI-Pipeline grün ist. Ein Workflow baut die Lektionsdaten, validiert sie und lädt sie in die Produktionsdatenbank hoch. Die App selbst wird auf Vercel deployt: jeder Push auf den main-Zweig, der die Pipeline besteht, löst automatisch ein Deployment auf Vercel aus. Innerhalb weniger Minuten nach dem Merge ist die Änderung live.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Automatische Deployments sind wichtig, weil sie die Zeit zwischen einer fertigen Änderung und ihrem Nutzen für den Anwender auf nahezu null reduzieren. Manuelles Deployen bedeutet Wartezeit, und Wartezeit bedeutet, dass fertiger Code ungenutzt herumliegt. Jede Minute, die eine fertige Änderung nicht in Produktion ist, ist eine Minute, in der ein Fehler unentdeckt oder eine Verbesserung ungenutzt bleibt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Warum gibt es verschiedene Umgebungen wie Development, Staging und Production?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine Theaterproduktion vor. Die Schauspieler proben im Proberaum, dann gibt es eine Generalprobe auf der echten Bühne mit Licht und Ton, und erst dann kommt die Premiere vor zahlendem Publikum. Jede dieser Phasen hat einen anderen Zweck und ein anderes Publikum.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "In der Softwareentwicklung gibt es mindestens drei Umgebungen, auf Englisch Environments. Development ist die Spielwiese der Entwickler: hier wird experimentiert, hier darf etwas kaputtgehen. Staging ist die Generalprobe: eine Umgebung, die der Produktion so ähnlich wie möglich ist, aber ohne echte Nutzer. Hier werden Deployments geprobt, bevor sie scharf geschaltet werden. Production ist die Premiere: die Umgebung, die echte Nutzer sehen und benutzen. Jede Umgebung hat ihre eigene Konfiguration, ihre eigenen Daten und ihre eigenen Zugriffsrechte.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Eine solche abgegrenzte Umgebung mit eigener Konfiguration und eigenen Daten heißt Environment.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-futuredev gibt es mehrere Environments. Die lokale Entwicklungsumgebung wird mit Docker Compose gestartet und nutzt eine lokale Datenbank mit Testdaten. Die Staging-Umgebung auf Vercel wird bei jedem Pull Request automatisch als Vorschau erstellt und nach dem Merge wieder gelöscht. Die Production-Umgebung ist die Live-App, die echte Lernende nutzen. Jede Umgebung hat ihre eigenen Umgebungsvariablen, ihre eigene Datenbank und ihre eigenen Zugriffsbeschränkungen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Getrennte Environments sind wichtig, weil sie das Risiko von Deployments drastisch reduzieren. Ein Fehler, der in Development passiert, betrifft nur den Entwickler. Ein Fehler in Staging betrifft niemanden, aber er wird vor dem Deployment in Production entdeckt. Und ein Fehler in Production betrifft echte Nutzer und kann Geld kosten. Die Environments sind die Sicherheitsnetze, die verhindern, dass ein Fehler durchrutscht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was passiert, wenn ein Deployment fehlschlägt oder einen Fehler in Produktion verursacht?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir ein Sicherungsseil beim Klettern vor. Wenn du abrutschst, fällst du nicht in die Tiefe, sondern hängst im Seil und kannst dich wieder hochziehen. Das Seil ist immer da, und es muss im Ernstfall sofort halten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Das Sicherungsseil in der Softwareentwicklung heißt Rollback. Ein Rollback setzt die Anwendung auf die letzte bekannte funktionierende Version zurück. Das muss schnell gehen, idealerweise in Sekunden, und es muss zuverlässig funktionieren. Die meisten Plattformen bieten eingebaute Rollback-Mechanismen: Vercel speichert jede Deployment-Version und kann mit einem Klick zurücksetzen. Docker-Container können einfach durch den vorherigen Container ersetzt werden. Datenbanken haben Transaktionen, die bei einem Fehler automatisch rückgängig gemacht werden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Dieses Zurücksetzen auf eine frühere Version heißt Rollback.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-futuredev ist der Rollback-Mechanismus in Vercel eingebaut. Jedes Deployment erhält eine eindeutige URL und eine Versionsnummer. Wenn ein Deployment einen Fehler enthält, kann mit einem Klick auf die vorherige Version zurückgesetzt werden. Das dauert Sekunden, und die Nutzer bekommen sofort wieder die funktionierende Version zu sehen. Für die Inhalte in der Datenbank gibt es Supabase-Backups, die im Notfall eingespielt werden können.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Ein schneller Rollback ist die letzte Verteidigungslinie. Selbst die beste Pipeline und das gründlichste Staging können nicht jeden Fehler abfangen. Ein Rollback, der in Sekunden funktioniert, macht aus einem potenziell geschäftskritischen Vorfall eine kurze Unannehmlichkeit. Ein fehlender oder langsamer Rollback macht aus einem kleinen Fehler eine Katastrophe.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Wie löse ich ein Deployment aus GitHub Actions aus?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Du erweiterst deinen Workflow um einen Deploy-Job, der nach dem Test-Job läuft. Dieser Job nutzt entweder eine vorgefertigte Aktion aus dem Marketplace, zum Beispiel eine Aktion für Vercel oder AWS, oder er führt die Deploy-Befehle direkt per Shell aus. Wichtig ist, dass der Deploy-Job nur läuft, wenn alle vorherigen Jobs grün waren, und dass er Secrets für die Zugangsdaten der Zielplattform verwendet. Ein typischer Deploy-Job hat drei Steps: bauen, hochladen, aktivieren.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Das Deployment in denselben Workflow zu integrieren, der auch die Prüfungen ausführt, stellt sicher, dass nur geprüfter Code deployt wird. Es gibt keine Lücke zwischen Prüfung und Deployment, in der jemand ungeprüften Code einschleusen könnte. Die Kette von Push über Prüfung bis Deployment ist lückenlos und automatisiert.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine Staffel vor, bei der die Läufer den Stab nahtlos übergeben. Der erste Läufer ist die Pipeline, der zweite das Deployment. Die Übergabe muss fließend sein, ohne dass der Stab fallen gelassen wird.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Die Übergabe von der Pipeline zum Deployment muss nahtlos sein. Sobald die Pipeline grün ist, übergibt sie den Stab an das Deployment, ohne dass ein Mensch eingreifen muss. Das Deployment nimmt das geprüfte Artefakt, bringt es in die richtige Umgebung und aktiviert es. Diese Nahtlosigkeit ist das Ziel von Continuous Delivery: jede bestandene Änderung geht ohne manuellen Zwischenschritt in Produktion.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein weiterer wichtiger Aspekt von CI/CD ist das Feedback. Eine Pipeline, die innerhalb von zwei Minuten grünes oder rotes Licht gibt, ermöglicht einen Arbeitsfluss, bei dem du eine Änderung machst, pusht und fast sofort weißt, ob sie korrekt ist. Dieses schnelle Feedback ist psychologisch wichtig, weil es den Entwickler im Fluss hält.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Schnelles Feedback ist einer der am meisten unterschätzten Faktoren für Entwicklerproduktivität. Teams, die ihre Pipeline von zwanzig auf zwei Minuten beschleunigen, berichten von spürbar höherer Zufriedenheit und weniger Fehlern, weil die Entwickler häufiger pushen und schneller korrigieren.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein weiterer wichtiger Aspekt von CI/CD ist das Feedback. Eine Pipeline, die innerhalb von zwei Minuten grünes oder rotes Licht gibt, ermöglicht einen Arbeitsfluss, bei dem du eine Änderung machst, pusht und fast sofort weißt, ob sie korrekt ist. Dieses schnelle Feedback ist psychologisch wichtig, weil es den Entwickler im Fluss hält.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Schnelles Feedback ist einer der am meisten unterschätzten Faktoren für Entwicklerproduktivität. Teams, die ihre Pipeline von zwanzig auf zwei Minuten beschleunigen, berichten von spürbar höherer Zufriedenheit und weniger Fehlern, weil die Entwickler häufiger pushen und schneller korrigieren.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was mache ich, wenn die Pipeline bei einem Pull Request rot ist, ich den Fehler aber nicht verstehe?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Das ist ein normaler Teil des Lernprozesses. Lies die Fehlermeldung genau, sie sagt dir fast immer, was falsch ist. Wenn du sie nicht verstehst, kopiere sie in eine Suche oder frage ein Teammitglied. Der wichtige Punkt ist: die Pipeline hat einen echten Fehler gefunden, auch wenn du ihn noch nicht verstehst. Ignoriere eine rote Pipeline niemals mit der Hoffnung, dass der Fehler von allein verschwindet. Er wird nicht verschwinden, und er wird in Produktion wieder auftauchen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein weiterer wichtiger Aspekt von CI/CD ist das Feedback. Eine Pipeline, die innerhalb von zwei Minuten grünes oder rotes Licht gibt, ermöglicht einen Arbeitsfluss, bei dem du eine Änderung machst, pusht und fast sofort weißt, ob sie korrekt ist. Dieses schnelle Feedback ist psychologisch wichtig, weil es den Entwickler im Fluss hält.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Schnelles Feedback ist einer der am meisten unterschätzten Faktoren für Entwicklerproduktivität. Teams, die ihre Pipeline von zwanzig auf zwei Minuten beschleunigen, berichten von spürbar höherer Zufriedenheit und weniger Fehlern, weil die Entwickler häufiger pushen und schneller korrigieren.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was mache ich, wenn die Pipeline bei einem Pull Request rot ist, ich den Fehler aber nicht verstehe?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Das ist ein normaler Teil des Lernprozesses. Lies die Fehlermeldung genau, sie sagt dir fast immer, was falsch ist. Wenn du sie nicht verstehst, kopiere sie in eine Suche oder frage ein Teammitglied. Der wichtige Punkt ist: die Pipeline hat einen echten Fehler gefunden, auch wenn du ihn noch nicht verstehst. Ignoriere eine rote Pipeline niemals mit der Hoffnung, dass der Fehler von allein verschwindet. Er wird nicht verschwinden, und er wird in Produktion wieder auftauchen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein weiterer wichtiger Aspekt von CI/CD ist das Feedback. Eine Pipeline, die innerhalb von zwei Minuten grünes oder rotes Licht gibt, ermöglicht einen Arbeitsfluss, bei dem du eine Änderung machst, pusht und fast sofort weißt, ob sie korrekt ist. Dieses schnelle Feedback ist psychologisch wichtig, weil es den Entwickler im Fluss hält.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Schnelles Feedback ist einer der am meisten unterschätzten Faktoren für Entwicklerproduktivität. Teams, die ihre Pipeline von zwanzig auf zwei Minuten beschleunigen, berichten von spürbar höherer Zufriedenheit und weniger Fehlern, weil die Entwickler häufiger pushen und schneller korrigieren.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was mache ich, wenn die Pipeline bei einem Pull Request rot ist, ich den Fehler aber nicht verstehe?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Das ist ein normaler Teil des Lernprozesses. Lies die Fehlermeldung genau, sie sagt dir fast immer, was falsch ist. Wenn du sie nicht verstehst, kopiere sie in eine Suche oder frage ein Teammitglied. Der wichtige Punkt ist: die Pipeline hat einen echten Fehler gefunden, auch wenn du ihn noch nicht verstehst. Ignoriere eine rote Pipeline niemals mit der Hoffnung, dass der Fehler von allein verschwindet. Er wird nicht verschwinden, und er wird in Produktion wieder auftauchen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein weiterer wichtiger Aspekt von CI/CD ist das Feedback. Eine Pipeline, die innerhalb von zwei Minuten grünes oder rotes Licht gibt, ermöglicht einen Arbeitsfluss, bei dem du eine Änderung machst, pusht und fast sofort weißt, ob sie korrekt ist. Dieses schnelle Feedback ist psychologisch wichtig, weil es den Entwickler im Fluss hält.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Schnelles Feedback ist einer der am meisten unterschätzten Faktoren für Entwicklerproduktivität. Teams, die ihre Pipeline von zwanzig auf zwei Minuten beschleunigen, berichten von spürbar höherer Zufriedenheit und weniger Fehlern, weil die Entwickler häufiger pushen und schneller korrigieren.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was mache ich, wenn die Pipeline bei einem Pull Request rot ist, ich den Fehler aber nicht verstehe?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Das ist ein normaler Teil des Lernprozesses. Lies die Fehlermeldung genau, sie sagt dir fast immer, was falsch ist. Wenn du sie nicht verstehst, kopiere sie in eine Suche oder frage ein Teammitglied. Der wichtige Punkt ist: die Pipeline hat einen echten Fehler gefunden, auch wenn du ihn noch nicht verstehst. Ignoriere eine rote Pipeline niemals mit der Hoffnung, dass der Fehler von allein verschwindet. Er wird nicht verschwinden, und er wird in Produktion wieder auftauchen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein weiterer wichtiger Aspekt von CI/CD ist das Feedback. Eine Pipeline, die innerhalb von zwei Minuten grünes oder rotes Licht gibt, ermöglicht einen Arbeitsfluss, bei dem du eine Änderung machst, pusht und fast sofort weißt, ob sie korrekt ist. Dieses schnelle Feedback ist psychologisch wichtig, weil es den Entwickler im Fluss hält.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Schnelles Feedback ist einer der am meisten unterschätzten Faktoren für Entwicklerproduktivität. Teams, die ihre Pipeline von zwanzig auf zwei Minuten beschleunigen, berichten von spürbar höherer Zufriedenheit und weniger Fehlern, weil die Entwickler häufiger pushen und schneller korrigieren.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was mache ich, wenn die Pipeline bei einem Pull Request rot ist, ich den Fehler aber nicht verstehe?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Das ist ein normaler Teil des Lernprozesses. Lies die Fehlermeldung genau, sie sagt dir fast immer, was falsch ist. Wenn du sie nicht verstehst, kopiere sie in eine Suche oder frage ein Teammitglied. Der wichtige Punkt ist: die Pipeline hat einen echten Fehler gefunden, auch wenn du ihn noch nicht verstehst. Ignoriere eine rote Pipeline niemals mit der Hoffnung, dass der Fehler von allein verschwindet. Er wird nicht verschwinden, und er wird in Produktion wieder auftauchen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "text": "Also noch einmal ganz kurz: Ein Deployment bringt eine neue Version einer Anwendung in Betrieb, typischerweise in drei Schritten: bauen, hochladen, aktivieren. Environments wie Development, Staging und Production sind abgegrenzte Umgebungen mit eigener Konfiguration, die das Risiko von Deployments schrittweise reduzieren. Ein Rollback setzt die Anwendung bei einem Fehler auf die letzte funktionierende Version zurück und muss in Sekunden möglich sein. Das Deployment wird in denselben Workflow integriert wie die Prüfungen, sodass nur geprüfter Code automatisch in Produktion gelangt.",
+      "isKeySentence": true
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Ein Deployment ist der Vorgang, bei dem eine neue Version einer Anwendung auf einem Server oder einer Plattform in Betrieb genommen wird. Ein Deployment umfasst das Bauen, Testen und Ausliefern der Anwendung und kann manuell oder automatisch ausgelöst werden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Ein Environment ist eine abgegrenzte Umgebung, in der eine Anwendung läuft, mit eigener Konfiguration, eigenen Daten und eigenen Zugriffsrechten. Typische Environments sind Development, Staging und Production, die sich in Stabilität und Zugänglichkeit unterscheiden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Ein Rollback ist das Zurücksetzen einer Anwendung auf eine frühere Version, nachdem ein Deployment fehlgeschlagen ist oder einen Fehler in Produktion verursacht hat. Ein Rollback muss schnell und zuverlässig möglich sein, idealerweise automatisiert.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was ist der Unterschied zwischen Continuous Delivery und Continuous Deployment?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Continuous Delivery bedeutet, dass jede bestandene Änderung automatisch in eine Staging-Umgebung deployt wird, aber das Deployment in Production noch einen manuellen Knopfdruck erfordert. Continuous Deployment geht einen Schritt weiter: auch das Deployment in Production läuft vollautomatisch, ohne jeden manuellen Eingriff. Continuous Delivery ist der häufigere Ansatz, weil er eine letzte menschliche Kontrolle vor dem Production-Deployment erlaubt. Continuous Deployment erfordert sehr viel Vertrauen in die automatisierte Prüfung und ist eher in großen Tech-Unternehmen mit extrem hoher Testabdeckung zu finden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Wie verhindere ich, dass ein fehlerhaftes Deployment die Datenbank zerstört?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Datenbankänderungen sind der riskanteste Teil eines Deployments. Die wichtigste Schutzmaßnahme sind Datenbank-Migrationen, die rückwärtskompatibel sind: eine neue Spalte hinzufügen ist sicher, eine Spalte umbenennen oder löschen ist gefährlich. Zweitens: mache vor jedem Deployment ein Datenbank-Backup, das im Notfall eingespielt werden kann. Drittens: führe Datenbankänderungen getrennt von Code-Änderungen durch, zuerst die Datenbank, dann den Code. Viele Plattformen wie Supabase bieten Point-in-Time-Recovery, mit der du die Datenbank auf den Stand vor dem Deployment zurücksetzen kannst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Kann ich ein Deployment auch rückgängig machen, wenn es schon Stunden zurückliegt?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ja, die meisten Plattformen speichern mehrere Deployment-Versionen. Vercel speichert zum Beispiel jede Deployment-Version und erlaubt das Zurücksetzen auf jede beliebige frühere Version. Allerdings musst du bedenken, dass ein Rollback nur den Code zurücksetzt, nicht die Daten. Wenn das fehlerhafte Deployment bereits Daten in der Datenbank verändert hat, musst du zusätzlich die Datenbank zurücksetzen. Deshalb ist es wichtig, Datenbank-Backups zu haben, die zeitlich mit den Deployments korrespondieren.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was ist eine Vorschau-Umgebung und wie unterscheidet sie sich von Staging?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Eine Vorschau-Umgebung, auch Preview Deployment genannt, wird automatisch für jeden Pull Request erstellt und nach dem Merge wieder gelöscht. Sie ist kurzlebig und dient dazu, eine Änderung vor dem Merge in einer produktionsähnlichen Umgebung zu begutachten. Staging ist dagegen eine dauerhafte Umgebung, die immer die letzte Version des Hauptzweigs widerspiegelt und für letzte Tests vor dem Production-Deployment dient. Vorschau-Umgebungen sind ein mächtiges Werkzeug für Code-Reviews, weil der Reviewer die Änderung nicht nur im Code sehen, sondern auch live ausprobieren kann.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Wie oft sollte ich deployen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "So oft wie möglich. Je häufiger du deployst, desto kleiner sind die einzelnen Änderungen, desto geringer ist das Risiko pro Deployment und desto schneller ist ein Rollback. Teams, die einmal im Monat deployen, haben riesige, riskante Deployments, bei denen immer etwas schiefgeht. Teams, die mehrmals am Tag deployen, haben kleine, unspektakuläre Deployments, die kaum auffallen. Das Ziel ist, dass ein Deployment so langweilig und risikolos wird wie das Abschicken einer E-Mail.",
+      "isKeySentence": false
+    }
+  ],
+  "practiceExample": {
+    "text": "Im Repo repo-futuredev wird das Deployment automatisch nach bestandener CI-Pipeline ausgelöst. Inhalte werden in die Supabase-Produktionsdatenbank übertragen, die App wird auf Vercel deployt. Vercel bietet eingebaute Rollbacks auf jede frühere Version, und Supabase sichert die Datenbank für den Notfall.",
+    "repoNote": "repo-futuredev",
+    "location": ".github/workflows/ (Deployment-Workflows) und Vercel-Dashboard (automatische Deployments bei Push auf main)"
+  },
+  "quiz": [
+    {
+      "question": "Welches Alltagsbild beschreibt ein Deployment am treffendsten?",
+      "area": "CI/CD: Deployment",
+      "options": [
+        {
+          "text": "Ein Bäcker, der Brötchen backt, prüft und ausliefert, mit Reserveblech für den Fall eines Fehlers.",
+          "isCorrect": true,
+          "explanation": "Richtig: backen, prüfen, ausliefern und bei Fehler das Reserveblech nehmen ist der Deployment-Prozess."
+        },
+        {
+          "text": "Ein Kunde, der Brötchen kauft und zu Hause isst, ohne zu wissen, wie sie gebacken wurden.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Kunde ist der Nutzer, nicht der Deployment-Prozess."
+        },
+        {
+          "text": "Ein Getreidefeld, auf dem der Weizen für die Brötchen wächst.",
+          "isCorrect": false,
+          "explanation": "Falsch: das Getreidefeld ist die Entwicklung, nicht das Deployment."
+        },
+        {
+          "text": "Eine Backstube, die nur den Ofen bereitstellt, aber keine Brötchen backt.",
+          "isCorrect": false,
+          "explanation": "Falsch: das Deployment backt und liefert aus, es stellt nicht nur die Infrastruktur bereit."
+        }
+      ]
+    },
+    {
+      "question": "Was ist ein Environment in der Softwareentwicklung?",
+      "area": "CI/CD: Environment",
+      "options": [
+        {
+          "text": "Eine abgegrenzte Umgebung mit eigener Konfiguration, eigenen Daten und eigenen Zugriffsrechten.",
+          "isCorrect": true,
+          "explanation": "Richtig: Development, Staging und Production sind die drei typischen Environments."
+        },
+        {
+          "text": "Die natürliche Umgebung, in der der Server steht, also Temperatur und Luftfeuchtigkeit im Rechenzentrum.",
+          "isCorrect": false,
+          "explanation": "Falsch: Environment meint die Software-Umgebung, nicht die physische."
+        },
+        {
+          "text": "Ein Ordner auf dem Entwickler-Rechner, in dem der Code gespeichert ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Ordner ist kein Environment im Sinne von Deployment-Umgebungen."
+        },
+        {
+          "text": "Die Programmiersprache, in der die Anwendung geschrieben ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Programmiersprache ist kein Environment."
+        }
+      ]
+    },
+    {
+      "question": "Was ist ein Rollback?",
+      "area": "CI/CD: Rollback",
+      "options": [
+        {
+          "text": "Das Zurücksetzen einer Anwendung auf eine frühere Version nach einem fehlgeschlagenen Deployment.",
+          "isCorrect": true,
+          "explanation": "Richtig: ein Rollback macht ein fehlerhaftes Deployment rückgängig."
+        },
+        {
+          "text": "Das Vorwärtsdrehen einer Anwendung auf die nächste Version.",
+          "isCorrect": false,
+          "explanation": "Falsch: vorwärts wäre ein Deployment, nicht ein Rollback."
+        },
+        {
+          "text": "Eine spezielle Art von Datenbank, die nur rückwärts gelesen werden kann.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Rollback ist ein Vorgang, keine Datenbank."
+        },
+        {
+          "text": "Ein körperlicher Bewegungsablauf, bei dem man sich rückwärts über den Boden rollt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Rollback hat in der Softwareentwicklung eine spezifische technische Bedeutung."
+        }
+      ]
+    },
+    {
+      "question": "Welche Aussage über das Repo repo-futuredev und Deployments ist richtig?",
+      "area": "Praxisbeispiel repo-futuredev",
+      "options": [
+        {
+          "text": "Deployments werden automatisch nach bestandener Pipeline ausgelöst, mit Rollback über Vercel.",
+          "isCorrect": true,
+          "explanation": "Richtig: CI/CD ist für Inhalte und App eingerichtet, Vercel bietet eingebaute Rollbacks."
+        },
+        {
+          "text": "Deployments müssen manuell vom Administrator per FTP auf den Server hochgeladen werden.",
+          "isCorrect": false,
+          "explanation": "Falsch: repo-futuredev nutzt moderne CI/CD, kein manuelles FTP."
+        },
+        {
+          "text": "Es gibt nur eine einzige Umgebung, in der entwickelt und produziert wird.",
+          "isCorrect": false,
+          "explanation": "Falsch: repo-futuredev hat Development, Staging und Production."
+        },
+        {
+          "text": "Rollbacks sind nicht möglich, weil Vercel keine Versionshistorie speichert.",
+          "isCorrect": false,
+          "explanation": "Falsch: Vercel speichert jede Deployment-Version und erlaubt Rollbacks."
+        }
+      ]
+    },
+    {
+      "question": "Warum sind getrennte Environments wie Development, Staging und Production wichtig?",
+      "area": "CI/CD: Environment",
+      "options": [
+        {
+          "text": "Sie reduzieren das Risiko, indem Fehler in frühen Umgebungen abgefangen werden, bevor sie Nutzer erreichen.",
+          "isCorrect": true,
+          "explanation": "Richtig: jedes Environment ist ein Sicherheitsnetz, das Fehler eine Stufe früher abfängt."
+        },
+        {
+          "text": "Weil GitHub sonst eine Strafe für die Vermischung von Umgebungen verhängt.",
+          "isCorrect": false,
+          "explanation": "Falsch: es gibt keine Strafen, es geht um Risikominimierung."
+        },
+        {
+          "text": "Damit jeder Entwickler seine eigene Programmiersprache verwenden kann.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Programmiersprache ist projektweit festgelegt, nicht pro Environment."
+        },
+        {
+          "text": "Weil die Server sonst überhitzen und automatisch herunterfahren.",
+          "isCorrect": false,
+          "explanation": "Falsch: Environments haben nichts mit Server-Temperatur zu tun."
+        }
+      ]
+    },
+    {
+      "question": "Aus welchen drei Schritten besteht ein typisches Deployment?",
+      "area": "CI/CD: Deployment",
+      "options": [
+        {
+          "text": "Bauen, Hochladen, Aktivieren.",
+          "isCorrect": true,
+          "explanation": "Richtig: das Artefakt wird gebaut, auf den Zielserver übertragen und dort aktiviert."
+        },
+        {
+          "text": "Schreiben, Lesen, Löschen.",
+          "isCorrect": false,
+          "explanation": "Falsch: das sind Dateioperationen, keine Deployment-Schritte."
+        },
+        {
+          "text": "Frühstücken, Mittagessen, Abendessen.",
+          "isCorrect": false,
+          "explanation": "Falsch: das sind Mahlzeiten, keine Deployment-Schritte."
+        },
+        {
+          "text": "Planen, Diskutieren, Dokumentieren.",
+          "isCorrect": false,
+          "explanation": "Falsch: das sind Planungsphasen, nicht die technischen Schritte eines Deployments."
+        }
+      ]
+    },
+    {
+      "question": "Warum sollte der Deploy-Job im selben Workflow wie die Prüfungen laufen?",
+      "area": "CI/CD: Deployment",
+      "options": [
+        {
+          "text": "Damit nur geprüfter Code deployt wird und keine Lücke zwischen Prüfung und Deployment entsteht.",
+          "isCorrect": true,
+          "explanation": "Richtig: die Integration in denselben Workflow schließt die Lücke zwischen Prüfung und Deployment."
+        },
+        {
+          "text": "Weil GitHub Actions sonst doppelt so viele Runner-Minuten berechnet.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Kosten hängen nicht davon ab, ob Jobs im selben Workflow sind."
+        },
+        {
+          "text": "Weil der Deploy-Job sonst nicht auf die Secrets zugreifen kann.",
+          "isCorrect": false,
+          "explanation": "Falsch: Secrets sind workflow-übergreifend verfügbar."
+        },
+        {
+          "text": "Damit der Entwickler weniger YAML-Dateien schreiben muss.",
+          "isCorrect": false,
+          "explanation": "Falsch: es geht um Sicherheit und Lückenlosigkeit, nicht um Bequemlichkeit."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der Unterschied zwischen Continuous Delivery und Continuous Deployment?",
+      "area": "CI/CD: Deployment",
+      "options": [
+        {
+          "text": "Bei Continuous Delivery ist der letzte Schritt nach Production manuell, bei Continuous Deployment automatisch.",
+          "isCorrect": true,
+          "explanation": "Richtig: Continuous Delivery erfordert einen manuellen Knopfdruck für Production, Continuous Deployment nicht."
+        },
+        {
+          "text": "Continuous Delivery liefert nur Code, Continuous Deployment liefert nur Daten.",
+          "isCorrect": false,
+          "explanation": "Falsch: beide liefern die gesamte Anwendung aus, der Unterschied liegt im Automatisierungsgrad."
+        },
+        {
+          "text": "Continuous Delivery ist für kleine Projekte, Continuous Deployment für große.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Projektgröße ist nicht das Unterscheidungsmerkmal."
+        },
+        {
+          "text": "Es gibt keinen Unterschied, die Begriffe sind synonym.",
+          "isCorrect": false,
+          "explanation": "Falsch: sie unterscheiden sich im Automatisierungsgrad des letzten Schritts."
+        }
+      ]
+    },
+    {
+      "question": "Warum muss ein Rollback in Sekunden möglich sein?",
+      "area": "CI/CD: Rollback",
+      "options": [
+        {
+          "text": "Weil jede Minute Ausfallzeit echte Nutzer betrifft und Geld kosten kann.",
+          "isCorrect": true,
+          "explanation": "Richtig: ein schneller Rollback minimiert die Auswirkungen eines Fehlers auf die Nutzer."
+        },
+        {
+          "text": "Weil GitHub Actions sonst den Workflow automatisch abbricht.",
+          "isCorrect": false,
+          "explanation": "Falsch: GitHub Actions hat kein Zeitlimit für Rollbacks."
+        },
+        {
+          "text": "Weil die Datenbank nach 60 Sekunden automatisch alle Daten löscht.",
+          "isCorrect": false,
+          "explanation": "Falsch: Datenbanken haben keine automatische Löschung nach 60 Sekunden."
+        },
+        {
+          "text": "Weil der Browser sonst die alte Version aus dem Cache lädt.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Browser-Cache hat nichts mit der Rollback-Geschwindigkeit zu tun."
+        }
+      ]
+    },
+    {
+      "question": "Was ist eine Vorschau-Umgebung?",
+      "area": "CI/CD: Environment",
+      "options": [
+        {
+          "text": "Eine kurzlebige Umgebung, die für jeden Pull Request erstellt und nach dem Merge gelöscht wird.",
+          "isCorrect": true,
+          "explanation": "Richtig: Vorschau-Umgebungen erlauben es, Änderungen vor dem Merge live zu begutachten."
+        },
+        {
+          "text": "Eine Umgebung, die nur Screenshots der Anwendung anzeigt, aber nicht interaktiv ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: eine Vorschau-Umgebung ist voll funktionsfähig, nicht nur ein Screenshot."
+        },
+        {
+          "text": "Die erste Umgebung, die ein neuer Entwickler sieht, wenn er dem Team beitritt.",
+          "isCorrect": false,
+          "explanation": "Falsch: das wäre die Development-Umgebung, nicht die Vorschau-Umgebung."
+        },
+        {
+          "text": "Eine Umgebung, die nur für das Marketing-Team zugänglich ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: Vorschau-Umgebungen sind für Entwickler und Reviewer gedacht."
+        }
+      ]
+    },
+    {
+      "question": "Warum sollten Datenbankänderungen getrennt von Code-Änderungen deployt werden?",
+      "area": "CI/CD: Deployment",
+      "options": [
+        {
+          "text": "Weil ein Rollback des Codes die Datenbankänderungen nicht automatisch rückgängig macht.",
+          "isCorrect": true,
+          "explanation": "Richtig: Datenbank und Code haben unterschiedliche Rollback-Mechanismen und sollten entkoppelt sein."
+        },
+        {
+          "text": "Weil die Datenbank sonst langsamer wird und Anfragen länger dauern.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Geschwindigkeit der Datenbank hängt nicht von der Deployment-Reihenfolge ab."
+        },
+        {
+          "text": "Weil GitHub Actions keine Datenbank-Befehle ausführen kann.",
+          "isCorrect": false,
+          "explanation": "Falsch: GitHub Actions kann sehr wohl Datenbank-Befehle ausführen."
+        },
+        {
+          "text": "Weil der Code sonst in der falschen Programmiersprache geschrieben wird.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Programmiersprache hat nichts mit der Deployment-Reihenfolge zu tun."
+        }
+      ]
+    },
+    {
+      "question": "Wie oft sollte ein Team idealerweise deployen?",
+      "area": "CI/CD: Deployment",
+      "options": [
+        {
+          "text": "So oft wie möglich, damit Deployments klein, risikoarm und langweilig werden.",
+          "isCorrect": true,
+          "explanation": "Richtig: häufige kleine Deployments sind sicherer als seltene große."
+        },
+        {
+          "text": "Einmal im Monat, damit genug Zeit für gründliche manuelle Tests bleibt.",
+          "isCorrect": false,
+          "explanation": "Falsch: seltene Deployments sind größer und riskanter, nicht sicherer."
+        },
+        {
+          "text": "Nur an Feiertagen, wenn niemand arbeitet und Fehler nicht auffallen.",
+          "isCorrect": false,
+          "explanation": "Falsch: an Feiertagen ist niemand da, um auf Fehler zu reagieren."
+        },
+        {
+          "text": "Nie, die Anwendung sollte nach dem ersten Deployment nie wieder angefasst werden.",
+          "isCorrect": false,
+          "explanation": "Falsch: Software lebt von kontinuierlicher Verbesserung, nicht von Stillstand."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Erstelle eine kostenlose Vercel-App und verbinde sie mit einem GitHub-Repository. Konfiguriere Vercel so, dass jeder Push auf den main-Zweig automatisch ein Deployment auslöst. Mache eine kleine sichtbare Änderung an der Seite, pushe sie und beobachte im Vercel-Dashboard, wie das Deployment automatisch startet und nach wenigen Sekunden live ist. Löse dann manuell einen Rollback auf die vorherige Version aus und prüfe, ob die Änderung rückgängig gemacht wurde.",
+    "expectation": "Eine Vercel-App ist mit GitHub verbunden, automatische Deployments funktionieren, und ein manueller Rollback hat die vorherige Version wiederhergestellt. Die Konzepte Deployment, Environment und Rollback wurden praktisch angewendet.",
+    "checklist": [
+      "Eine kostenlose Vercel-App erstellt und mit GitHub verbunden.",
+      "Automatische Deployments bei Push auf main konfiguriert.",
+      "Eine sichtbare Änderung gepusht und das automatische Deployment beobachtet.",
+      "Im Vercel-Dashboard die Deployment-Historie eingesehen.",
+      "Einen Rollback auf die vorherige Version ausgelöst.",
+      "Geprüft, dass die Änderung rückgängig gemacht wurde."
+    ],
+    "portfolioItem": "P04"
+  },
+  "audio": {
+    "file": "M04-04-03.mp3",
+    "durationSeconds": 1320,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Was ist der Unterschied zwischen Continuous Delivery und Continuous Deployment?",
+      "answer": "Continuous Delivery bedeutet, dass jede bestandene Änderung automatisch in eine Staging-Umgebung deployt wird, aber das Deployment in Production noch einen manuellen Knopfdruck erfordert. Continuous Deployment geht einen Schritt weiter: auch das Deployment in Production läuft vollautomatisch, ohne jeden manuellen Eingriff. Continuous Delivery ist der häufigere Ansatz, weil er eine letzte menschliche Kontrolle vor dem Production-Deployment erlaubt. Continuous Deployment erfordert sehr viel Vertrauen in die automatisierte Prüfung und ist eher in großen Tech-Unternehmen mit extrem hoher Testabdeckung zu finden."
+    },
+    {
+      "question": "Wie verhindere ich, dass ein fehlerhaftes Deployment die Datenbank zerstört?",
+      "answer": "Datenbankänderungen sind der riskanteste Teil eines Deployments. Die wichtigste Schutzmaßnahme sind Datenbank-Migrationen, die rückwärtskompatibel sind: eine neue Spalte hinzufügen ist sicher, eine Spalte umbenennen oder löschen ist gefährlich. Zweitens: mache vor jedem Deployment ein Datenbank-Backup, das im Notfall eingespielt werden kann. Drittens: führe Datenbankänderungen getrennt von Code-Änderungen durch, zuerst die Datenbank, dann den Code. Viele Plattformen wie Supabase bieten Point-in-Time-Recovery, mit der du die Datenbank auf den Stand vor dem Deployment zurücksetzen kannst."
+    },
+    {
+      "question": "Kann ich ein Deployment auch rückgängig machen, wenn es schon Stunden zurückliegt?",
+      "answer": "Ja, die meisten Plattformen speichern mehrere Deployment-Versionen. Vercel speichert zum Beispiel jede Deployment-Version und erlaubt das Zurücksetzen auf jede beliebige frühere Version. Allerdings musst du bedenken, dass ein Rollback nur den Code zurücksetzt, nicht die Daten. Wenn das fehlerhafte Deployment bereits Daten in der Datenbank verändert hat, musst du zusätzlich die Datenbank zurücksetzen. Deshalb ist es wichtig, Datenbank-Backups zu haben, die zeitlich mit den Deployments korrespondieren."
+    },
+    {
+      "question": "Was ist eine Vorschau-Umgebung und wie unterscheidet sie sich von Staging?",
+      "answer": "Eine Vorschau-Umgebung, auch Preview Deployment genannt, wird automatisch für jeden Pull Request erstellt und nach dem Merge wieder gelöscht. Sie ist kurzlebig und dient dazu, eine Änderung vor dem Merge in einer produktionsähnlichen Umgebung zu begutachten. Staging ist dagegen eine dauerhafte Umgebung, die immer die letzte Version des Hauptzweigs widerspiegelt und für letzte Tests vor dem Production-Deployment dient. Vorschau-Umgebungen sind ein mächtiges Werkzeug für Code-Reviews, weil der Reviewer die Änderung nicht nur im Code sehen, sondern auch live ausprobieren kann."
+    },
+    {
+      "question": "Wie oft sollte ich deployen?",
+      "answer": "So oft wie möglich. Je häufiger du deployst, desto kleiner sind die einzelnen Änderungen, desto geringer ist das Risiko pro Deployment und desto schneller ist ein Rollback. Teams, die einmal im Monat deployen, haben riesige, riskante Deployments, bei denen immer etwas schiefgeht. Teams, die mehrmals am Tag deployen, haben kleine, unspektakuläre Deployments, die kaum auffallen. Das Ziel ist, dass ein Deployment so langweilig und risikolos wird wie das Abschicken einer E-Mail."
+    }
+  ]
+}

@@ -1,0 +1,762 @@
+{
+  "id": "M04-03-01",
+  "title": "Was ein Container ist",
+  "durationMinutes": 34,
+  "prerequisites": [
+    "M04-01-01",
+    "M04-01-02",
+    "M01-03-01"
+  ],
+  "terms": [
+    {
+      "term": "Container",
+      "definition": "Eine isolierte, leichtgewichtige Laufzeitumgebung, die eine Anwendung mit all ihren Abhängigkeiten in einer einzigen, portablen Einheit verpackt. Container teilen sich den Kernel des Host-Systems, sind aber voneinander und vom Host abgeschottet."
+    },
+    {
+      "term": "Image",
+      "definition": "Eine unveränderliche Vorlage im Schichtenmodell, aus der Container gestartet werden. Ein Image enthält das Betriebssystem-Grundgerüst, die Laufzeitumgebung, den Anwendungscode und alle Abhängigkeiten in einer festen, versionierten Form."
+    },
+    {
+      "term": "Docker",
+      "definition": "Die am weitesten verbreitete Plattform zum Bauen, Transportieren und Ausführen von Containern. Docker stellt die Werkzeuge bereit, um Images zu bauen, in einer Registry zu speichern und als Container zu starten."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen Schiffscontainer vor, wie du ihn aus jedem Hafen kennst: ein genormter Stahlkasten, der auf ein Schiff, einen Zug oder einen Lkw passt, ohne dass der Inhalt je umgepackt werden muss.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Vor der Erfindung des Schiffscontainers musste jede Kiste einzeln von Hand umgeladen werden, wenn die Ware vom Schiff auf den Zug oder den Lkw wechselte. Das dauerte Tage, kostete ein Vermögen, und ständig ging etwas kaputt oder verschwand. Der genormte Container hat die gesamte Logistik revolutioniert, weil die Ware nur noch einmal verpackt wird und dann unverändert jedes Transportmittel durchläuft.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Und was hat ein Schiffscontainer mit Software zu tun?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "In der Softwareentwicklung gab es jahrzehntelang dasselbe Problem: Eine Anwendung lief auf dem Rechner des Entwicklers einwandfrei, aber auf dem Server des Kunden oder in der Testumgebung stürzte sie ab. Der Grund war fast immer derselbe: unterschiedliche Versionen von Programmiersprachen, Bibliotheken oder Betriebssystemwerkzeugen. Der Entwickler hatte Node.js Version 20, der Server hatte Version 18. Der Entwickler hatte eine bestimmte Systembibliothek, der Server hatte eine andere. Dieses Problem war so notorisch, dass es einen eigenen Spruch bekam: bei mir läuft es doch.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein Software-Container löst dieses Problem auf dieselbe Weise wie der Schiffscontainer das Umladen: Er verpackt die Anwendung mitsamt aller ihrer Abhängigkeiten in eine genormte, portable Einheit. Diese Einheit läuft auf dem Laptop des Entwicklers genauso wie auf dem Server im Rechenzentrum oder in der Cloud, weil alles, was die Anwendung braucht, bereits im Container steckt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Diese isolierte, portable Laufzeitumgebung heißt in der Softwareentwicklung Container.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-futuredev, dem Monorepo dieser Lernplattform, wird für die lokale Entwicklung eine Supabase-Instanz in einem Container gestartet. Ein einziger Befehl genügt, und der Container bringt eine vollständige PostgreSQL-Datenbank mitsamt aller Supabase-Erweiterungen mit, exakt in derselben Version wie in der Produktionsumgebung. Kein Entwickler muss PostgreSQL manuell installieren oder sich Gedanken über Versionsunterschiede machen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Das ist wichtig, weil es den gefürchteten Unterschied zwischen Entwicklungs- und Produktionsumgebung beseitigt. Wenn der Container in der Entwicklung läuft, läuft er auch in Produktion, weil es derselbe Container ist. Fehler, die aus unterschiedlichen Umgebungen entstehen, gehören damit der Vergangenheit an.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Ist ein Container dasselbe wie eine virtuelle Maschine?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir ein Mehrfamilienhaus vor, in dem jede Wohnung ihre eigene Küche, ihr eigenes Bad und ihren eigenen Eingang hat, aber alle Wohnungen teilen sich dasselbe Fundament, dieselben Wasserleitungen und dieselbe Heizungsanlage.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Eine virtuelle Maschine ist wie ein einzelnes Haus mit eigenem Fundament, eigenen Leitungen und eigenem Garten. Sie enthält ein vollständiges Betriebssystem mitsamt eigenem Kernel, eigenem Speicher und eigenen virtuellen Hardware-Komponenten. Ein Container ist wie eine Wohnung im Mehrfamilienhaus: Er hat seinen eigenen abgeschlossenen Bereich, aber er teilt sich den Kernel und die Hardware des Host-Systems mit allen anderen Containern. Deshalb startet ein Container in Sekunden, während eine virtuelle Maschine Minuten braucht, und ein Container verbraucht nur einen Bruchteil des Speichers.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Dieser Unterschied ist in der Praxis entscheidend. Auf einem durchschnittlichen Server kannst du Dutzende oder sogar Hunderte Container gleichzeitig betreiben, aber nur eine Handvoll virtueller Maschinen. Container machen es wirtschaftlich möglich, jede einzelne Komponente einer Anwendung in ihrer eigenen isolierten Umgebung laufen zu lassen, ohne den Server zu überlasten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Woher weiß ein Container, was er enthalten soll?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir ein Backrezept vor, das exakt auflistet, welche Zutaten du brauchst und in welcher Reihenfolge du sie zusammengeben musst, um einen Kuchen zu backen. Das Rezept selbst ist kein Kuchen, aber wenn du es Schritt für Schritt befolgst, entsteht immer derselbe Kuchen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "In der Container-Welt heißt dieses Rezept Image. Ein Image ist eine unveränderliche Vorlage, die in Schichten aufgebaut ist. Die unterste Schicht enthält ein minimalistisches Betriebssystem, darüber liegen Schichten mit der Laufzeitumgebung, den Bibliotheken und schließlich dem eigenen Anwendungscode. Jede Schicht ist unveränderlich, und wenn du etwas änderst, wird eine neue Schicht obenauf gelegt, statt die alten zu verändern.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Diese unveränderliche Vorlage im Schichtenmodell heißt Image.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-futuredev wird das Image für die Supabase-Entwicklungsumgebung aus einem öffentlichen Image in der Docker Hub Registry bezogen. Dieses Image ist von Supabase selbst gebaut und getestet worden. Der Befehl docker compose up lädt das Image herunter, falls es noch nicht lokal vorhanden ist, und startet daraus einen Container. Jeder Entwickler im Team bekommt exakt dasselbe Image, und damit exakt dieselbe Umgebung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die Unveränderlichkeit des Images ist der Schlüssel zur Reproduzierbarkeit. Weil ein Image nie verändert, sondern nur durch ein neues Image ersetzt wird, kannst du jede jemals gebaute Version einer Anwendung exakt wiederherstellen. Wenn ein Kunde einen Fehler in Version 1.2.3 meldet, startest du einfach einen Container aus dem Image von Version 1.2.3 und hast die exakt gleiche Umgebung wie der Kunde.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Und Docker, was ist das dann genau?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Docker ist die Plattform, die das alles möglich macht. Docker stellt die Werkzeuge bereit, um Images zu bauen, sie in einer Registry zu speichern und als Container zu starten. Docker ist nicht die einzige Container-Plattform, aber mit Abstand die am weitesten verbreitete. Wenn jemand von Containern spricht, meint er fast immer Docker-Container, und die Begriffe werden im Alltag oft synonym verwendet, auch wenn das technisch nicht ganz korrekt ist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Docker ist die am weitesten verbreitete Plattform zum Bauen, Transportieren und Ausführen von Containern.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-futuredev ist Docker die Grundlage der gesamten Entwicklungsumgebung. Die Datei docker-compose.yml im Wurzelverzeichnis beschreibt, welche Container für die Entwicklung benötigt werden. Ein einziger Befehl, docker compose up, startet die gesamte Infrastruktur: eine PostgreSQL-Datenbank, die Supabase-API, die Authentifizierung und den Speicherdienst. Ohne Docker müsste jeder Entwickler diese Dienste einzeln installieren und konfigurieren, ein Prozess, der Stunden dauern kann und fast nie bei allen gleich abläuft.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Docker senkt die Einstiegshürde für neue Teammitglieder dramatisch. Statt einer seitenlangen Installationsanleitung, die bei jedem Betriebssystem anders aussieht und nach zwei Wochen veraltet ist, reicht ein einziger Befehl. Das ist nicht nur bequemer, sondern verhindert auch die schleichenden Unterschiede, die entstehen, wenn jeder Entwickler seine Umgebung anders einrichtet.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Wenn Container so isoliert sind, wie kommunizieren sie dann mit der Außenwelt?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine Wohnung mit einer Gegensprechanlage vor. Von außen kommt niemand in die Wohnung, außer du drückst den Türöffner. Aber du kannst sehr wohl mit der Person an der Tür sprechen und entscheiden, ob du sie hereinlässt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein Container ist standardmäßig vollständig von der Außenwelt abgeschottet. Er hat sein eigenes privates Netzwerk, sein eigenes Dateisystem und sieht andere Container nicht. Damit er mit der Außenwelt kommunizieren kann, musst du explizit Türen öffnen, in der Fachsprache Ports freigeben. Du sagst zum Beispiel: alles, was auf Port 3000 des Host-Systems ankommt, leite an Port 3000 des Containers weiter. Nur diese eine Tür steht offen, alles andere bleibt verschlossen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Diese explizite Freigabe ist ein Sicherheitsmerkmal, kein Hindernis. Ein Container, der keine Ports freigegeben hat, ist von außen unsichtbar und damit auch nicht angreifbar. Anders als bei einer traditionellen Installation, bei der oft standardmäßig viele Dienste auf allen Netzwerkschnittstellen lauschen, folgen Container dem Prinzip der minimalen Angriffsfläche: nur was du ausdrücklich freigibst, ist erreichbar.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was passiert mit den Daten, die ein Container während seiner Laufzeit erzeugt?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine Sandburg am Strand vor. Sie steht, solange die Flut fernbleibt, aber wenn die Flut kommt, ist sie spurlos verschwunden. Alles, was du in die Sandburg geschrieben oder gezeichnet hast, ist für immer verloren.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein Container ist von Natur aus vergänglich, in der Fachsprache ephemer. Wenn du einen Container stoppst und löschst, sind alle Daten, die während seiner Laufzeit im Container entstanden sind, unwiderruflich verloren. Das ist Absicht, kein Fehler: Container sollen zustandslos sein, damit du sie jederzeit durch einen neuen Container aus demselben Image ersetzen kannst. Für Daten, die über die Lebensdauer eines Containers hinaus bestehen müssen, gibt es Volumes, aber das ist ein Thema für eine spätere Lektion.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die Vergänglichkeit der Container ist eine Tugend, kein Makel. Sie zwingt dazu, Anwendungen so zu bauen, dass sie keinen lokalen Zustand im Container speichern. Eine Anwendung, die dieser Disziplin folgt, kannst du horizontal skalieren, indem du einfach mehr Container startest, ohne dass sich die Container gegenseitig ins Gehege kommen. Das ist die Grundlage moderner Cloud-Architekturen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Muss ich für jeden Container ein eigenes Betriebssystem kaufen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Nein, das ist einer der großen Vorteile von Containern gegenüber virtuellen Maschinen. Ein Container enthält kein vollständiges Betriebssystem, sondern nur das Nötigste: ein paar Systembibliotheken, die Laufzeitumgebung und deine Anwendung. Den Kernel, also den innersten Kern des Betriebssystems, teilt er mit dem Host und allen anderen Containern. Deshalb ist ein Container-Image oft nur wenige hundert Megabyte groß, während das Image einer virtuellen Maschine mehrere Gigabyte umfassen kann.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die geringe Größe hat praktische Konsequenzen: Images lassen sich schnell herunterladen und verteilen, Container starten in Sekunden statt in Minuten, und auf einem Server laufen mehr Container als virtuelle Maschinen. In einer Cloud-Umgebung, wo du nach verbrauchten Ressourcen bezahlst, spart das bares Geld.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine Bibliothek vor, in der jedes Buch nicht nur den Text enthält, sondern auch gleich das Regal, die Lampe und den Lesetisch. Das wäre unhandlich, schwer und teuer.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Eine virtuelle Maschine ist wie dieses überladene Buch: sie bringt alles mit, auch das, was schon da ist. Ein Container ist wie ein normales Buch, das sich in die vorhandenen Regale stellt und das vorhandene Licht nutzt. Er bringt nur mit, was er wirklich braucht, und nutzt für alles andere die Infrastruktur des Hosts.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Kann ein Container auch auf meinem Windows-Laptop laufen, wenn das Image für Linux gebaut wurde?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ja, Docker kümmert sich darum. Auf Windows und macOS betreibt Docker eine schlanke virtuelle Maschine im Hintergrund, in der ein Linux-Kernel läuft. Deine Linux-Container laufen dann in dieser virtuellen Maschine, ohne dass du etwas davon merkst. Der Befehl docker run funktioniert auf allen Betriebssystemen gleich, und der Container verhält sich überall identisch. Das ist der Kern des Versprechens: baue einmal, laufe überall.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Diese Plattformunabhängigkeit ist im Team-Alltag Gold wert. Ein Entwickler mit Windows, einer mit macOS und der Produktionsserver mit Linux führen alle exakt denselben Container aus. Unterschiede in der Umgebung, die früher stundenlange Fehlersuche verursacht haben, sind damit ausgeschlossen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen Frachtbrief vor, der in jeder Sprache der Welt gleich aussieht und von jedem Zollbeamten auf der Welt gleich verstanden wird, egal ob in Shanghai, Rotterdam oder Los Angeles.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein Container-Image ist wie dieser genormte Frachtbrief. Es enthält alle Informationen, die jede Container-Laufzeitumgebung auf der Welt braucht, um daraus einen lauffähigen Container zu machen. Das Format ist standardisiert, und jede konforme Laufzeitumgebung, ob Docker, Podman oder containerd, versteht es. Diese Standardisierung ist der Grund, warum Container in den letzten zehn Jahren die Softwareindustrie im Sturm erobert haben.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein oft übersehener Vorteil von Containern ist die Reproduzierbarkeit in der Qualitätssicherung. Wenn ein Tester einen Fehler in Version 2.1.3 meldet, startet er einfach einen Container aus dem Image von Version 2.1.3 und hat die exakt gleiche Umgebung wie der Kunde. Kein Raten, keine Unterschiede in den installierten Bibliotheken, keine verlorene Zeit mit der Suche nach der richtigen Konfiguration.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Diese Reproduzierbarkeit spart in der Praxis enorm viel Zeit und Geld. Studien zeigen, dass Entwickler bis zu einem Drittel ihrer Zeit mit der Fehlersuche in nicht reproduzierbaren Umgebungen verbringen. Container eliminieren diese Klasse von Problemen vollständig, weil die Umgebung Teil des Artefakts ist und nicht Teil der Infrastruktur.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein oft übersehener Vorteil von Containern ist die Reproduzierbarkeit in der Qualitätssicherung. Wenn ein Tester einen Fehler in Version 2.1.3 meldet, startet er einfach einen Container aus dem Image von Version 2.1.3 und hat die exakt gleiche Umgebung wie der Kunde. Kein Raten, keine Unterschiede in den installierten Bibliotheken, keine verlorene Zeit mit der Suche nach der richtigen Konfiguration.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Diese Reproduzierbarkeit spart in der Praxis enorm viel Zeit und Geld. Studien zeigen, dass Entwickler bis zu einem Drittel ihrer Zeit mit der Fehlersuche in nicht reproduzierbaren Umgebungen verbringen. Container eliminieren diese Klasse von Problemen vollständig, weil die Umgebung Teil des Artefakts ist und nicht Teil der Infrastruktur.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Gibt es Situationen, in denen Container nicht die richtige Wahl sind?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ja, es gibt Grenzfälle. Anwendungen, die direkten Hardware-Zugriff benötigen, wie bestimmte Datenbanken oder Systemwerkzeuge, laufen in Containern manchmal langsamer oder mit Einschränkungen. Auch Echtzeitanwendungen mit harten Latenzanforderungen können unter der zusätzlichen Abstraktionsschicht leiden. Und für sehr kleine, einfache Skripte ist der Overhead eines Containers manchmal größer als der Nutzen. Aber für die allermeisten Webanwendungen und Microservices sind Container die richtige Wahl.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Diese Abwägung ist wichtig, weil kein Werkzeug für jeden Einsatzzweck das beste ist. Container sind ein mächtiges Werkzeug, aber sie sind kein Allheilmittel. Zu wissen, wann man sie einsetzt und wann nicht, unterscheidet den erfahrenen Entwickler vom Anfänger, der jedes Problem mit dem gleichen Hammer schlagen will.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "text": "Also noch einmal ganz kurz: Ein Container ist eine isolierte, portable Laufzeitumgebung, die eine Anwendung mit all ihren Abhängigkeiten verpackt. Ein Image ist die unveränderliche Vorlage, aus der Container gestartet werden. Docker ist die Plattform, die das Bauen, Transportieren und Ausführen von Containern ermöglicht. Container teilen sich den Kernel des Hosts, sind dadurch leichtgewichtig und starten in Sekunden, und sie laufen auf jedem System gleich, weil alles, was die Anwendung braucht, bereits im Container steckt.",
+      "isKeySentence": true
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Ein Container ist eine isolierte, leichtgewichtige Laufzeitumgebung, die eine Anwendung mit all ihren Abhängigkeiten in einer einzigen, portablen Einheit verpackt. Container teilen sich den Kernel des Host-Systems, sind aber voneinander und vom Host abgeschottet.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Ein Image ist eine unveränderliche Vorlage im Schichtenmodell, aus der Container gestartet werden. Ein Image enthält das Betriebssystem-Grundgerüst, die Laufzeitumgebung, den Anwendungscode und alle Abhängigkeiten in einer festen, versionierten Form.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Docker ist die am weitesten verbreitete Plattform zum Bauen, Transportieren und Ausführen von Containern. Docker stellt die Werkzeuge bereit, um Images zu bauen, in einer Registry zu speichern und als Container zu starten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Ist Docker das Gleiche wie ein Container?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Nein, Docker und Container sind nicht dasselbe, auch wenn die Begriffe im Alltag oft vermischt werden. Ein Container ist das allgemeine Konzept einer isolierten Laufzeitumgebung, standardisiert durch die Open Container Initiative. Docker ist eine konkrete Plattform, die dieses Konzept umsetzt. Es gibt auch andere Container-Plattformen wie Podman oder containerd, die dasselbe standardisierte Image-Format verwenden und Container nach denselben Regeln ausführen. Docker ist einfach die mit Abstand bekannteste und am weitesten verbreitete dieser Plattformen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Brauche ich Docker, um Container zu nutzen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Für den Einstieg und die allermeisten Anwendungsfälle ist Docker die beste Wahl. Es gibt Alternativen wie Podman, die ohne Hintergrunddienst auskommen und in manchen Sicherheitsumgebungen bevorzugt werden, aber Docker ist einfacher einzurichten, besser dokumentiert und wird von mehr Diensten und Werkzeugen unterstützt. Wenn du Container lernen willst, lerne Docker. Die Konzepte sind auf andere Plattformen übertragbar, und der Umstieg ist später leicht, falls du ihn je brauchst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Kann ein Container auf meine Dateien zugreifen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Standardmäßig nicht. Ein Container hat sein eigenes isoliertes Dateisystem und sieht die Dateien des Hosts nicht. Du kannst aber gezielt Verzeichnisse des Hosts in den Container einblenden, sodass der Container darin lesen und schreiben kann. Das ist zum Beispiel in der Entwicklung nützlich, wenn du deinen Code auf dem Host bearbeiten willst, aber im Container ausführen möchtest. Diese eingeblendeten Verzeichnisse heißen Volumes oder Bind Mounts und sind ein zentrales Konzept, das in einer späteren Lektion vertieft wird.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was ist der Unterschied zwischen Docker Desktop und Docker Engine?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Docker Engine ist der eigentliche Dienst, der Container ausführt. Er läuft im Hintergrund, hat keine grafische Oberfläche und wird über die Kommandozeile gesteuert. Docker Desktop ist eine Anwendung, die Docker Engine mitsamt einer grafischen Oberfläche, einer virtuellen Maschine für Windows und macOS und einigen Zusatzwerkzeugen bündelt. Für die meisten Entwickler ist Docker Desktop der einfachste Einstieg. Auf Servern läuft dagegen meist nur die Docker Engine ohne Desktop, weil dort keine grafische Oberfläche gebraucht wird.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Sind Container sicher?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Container bieten eine gute Isolation, aber sie sind keine Sicherheitswunder. Ein Container teilt den Kernel mit dem Host, und eine Schwachstelle im Kernel kann potenziell die Isolation aushebeln. Für die allermeisten Anwendungen ist die Container-Isolation völlig ausreichend, aber für hochsensible oder streng regulierte Umgebungen gibt es zusätzliche Härtungsmaßnahmen wie rootless Container oder spezielle Laufzeitumgebungen wie gVisor oder Firecracker. Für den Einstieg gilt: Container sind deutlich sicherer als eine Anwendung direkt auf dem Host laufen zu lassen, weil sie die Angriffsfläche auf das Nötigste reduzieren.",
+      "isKeySentence": false
+    }
+  ],
+  "practiceExample": {
+    "text": "Im Repo repo-futuredev wird die lokale Entwicklungsumgebung mit Docker betrieben. Die Datei docker-compose.yml im Wurzelverzeichnis beschreibt mehrere Container: eine PostgreSQL-Datenbank, die Supabase-API und weitere Dienste. Der Befehl docker compose up startet alle Container gemeinsam und stellt eine vollständige Entwicklungsumgebung bereit, ohne dass ein Entwickler PostgreSQL oder Supabase manuell installieren muss.",
+    "repoNote": "repo-futuredev",
+    "location": "docker-compose.yml im Wurzelverzeichnis (Container-Definitionen für die lokale Entwicklung)"
+  },
+  "quiz": [
+    {
+      "question": "Welches Alltagsbild beschreibt einen Software-Container am treffendsten?",
+      "area": "Docker: Container",
+      "options": [
+        {
+          "text": "Ein genormter Schiffscontainer, der auf Schiff, Zug und Lkw passt, ohne dass die Ware umgepackt werden muss.",
+          "isCorrect": true,
+          "explanation": "Richtig: der Schiffscontainer verpackt Ware einmal und transportiert sie unverändert über alle Verkehrsmittel, genau wie ein Software-Container eine Anwendung einmal verpackt und auf jedem System unverändert ausführt."
+        },
+        {
+          "text": "Ein Kühlschrank, der Lebensmittel frisch hält, aber nur in der eigenen Küche funktioniert und nicht transportiert werden kann.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Kühlschrank ist ortsgebunden, während die Portabilität das Kernmerkmal eines Containers ist."
+        },
+        {
+          "text": "Ein Briefumschlag, der eine Nachricht enthält, aber nach dem Öffnen zerstört wird und nicht wiederverwendet werden kann.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Container kann beliebig oft gestartet und gestoppt werden, er ist nicht nur zur einmaligen Verwendung gedacht."
+        },
+        {
+          "text": "Ein leerer Werkzeugkasten, der erst am Zielort mit den passenden Werkzeugen befüllt wird.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Container bringt alle Abhängigkeiten bereits mit und wird nicht erst am Zielort befüllt."
+        }
+      ]
+    },
+    {
+      "question": "Was ist ein Image in der Container-Welt?",
+      "area": "Docker: Image",
+      "options": [
+        {
+          "text": "Eine unveränderliche Vorlage im Schichtenmodell, aus der Container gestartet werden.",
+          "isCorrect": true,
+          "explanation": "Richtig: ein Image ist die Bauanleitung für Container, unveränderlich und in Schichten aufgebaut."
+        },
+        {
+          "text": "Ein laufender Container, der gerade eine Anwendung ausführt und dabei Daten verarbeitet.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein laufender Container ist die Instanz, das Image ist die Vorlage, aus der er gestartet wurde."
+        },
+        {
+          "text": "Eine grafische Benutzeroberfläche für Docker, die Container visuell verwaltet.",
+          "isCorrect": false,
+          "explanation": "Falsch: die grafische Oberfläche heißt Docker Desktop, nicht Image."
+        },
+        {
+          "text": "Ein Netzwerkprotokoll, über das Container miteinander kommunizieren.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Image hat nichts mit Netzwerkprotokollen zu tun, es ist eine Datei auf der Festplatte."
+        }
+      ]
+    },
+    {
+      "question": "Was ist Docker?",
+      "area": "Docker: Docker",
+      "options": [
+        {
+          "text": "Die am weitesten verbreitete Plattform zum Bauen, Transportieren und Ausführen von Containern.",
+          "isCorrect": true,
+          "explanation": "Richtig: Docker ist die dominierende Container-Plattform mit Werkzeugen für den gesamten Lebenszyklus."
+        },
+        {
+          "text": "Eine Programmiersprache, die speziell für Cloud-Anwendungen entwickelt wurde.",
+          "isCorrect": false,
+          "explanation": "Falsch: Docker ist keine Programmiersprache, sondern eine Plattform für Container."
+        },
+        {
+          "text": "Ein Betriebssystem, das nur in Containern läuft und keinen eigenen Kernel hat.",
+          "isCorrect": false,
+          "explanation": "Falsch: Docker ist kein Betriebssystem, sondern eine Plattform, die auf einem bestehenden Betriebssystem aufsetzt."
+        },
+        {
+          "text": "Ein Cloud-Anbieter wie AWS oder Google Cloud, der Container hostet.",
+          "isCorrect": false,
+          "explanation": "Falsch: Docker ist eine Plattform, kein Cloud-Anbieter, auch wenn viele Cloud-Anbieter Docker-Container ausführen können."
+        }
+      ]
+    },
+    {
+      "question": "Worin unterscheidet sich ein Container von einer virtuellen Maschine?",
+      "area": "Docker: Container",
+      "options": [
+        {
+          "text": "Ein Container teilt den Kernel mit dem Host, eine virtuelle Maschine hat einen eigenen Kernel.",
+          "isCorrect": true,
+          "explanation": "Richtig: Container teilen den Kernel, sind dadurch leichter und starten schneller als virtuelle Maschinen."
+        },
+        {
+          "text": "Ein Container ist immer größer als eine virtuelle Maschine, weil er mehr Software enthält.",
+          "isCorrect": false,
+          "explanation": "Falsch: Container sind typischerweise kleiner, weil sie kein vollständiges Betriebssystem enthalten."
+        },
+        {
+          "text": "Eine virtuelle Maschine kann nur auf Linux laufen, ein Container läuft auf jedem Betriebssystem.",
+          "isCorrect": false,
+          "explanation": "Falsch: virtuelle Maschinen gibt es für alle Betriebssysteme, und auch Container brauchen einen kompatiblen Kernel."
+        },
+        {
+          "text": "Container und virtuelle Maschinen sind technisch identisch, nur die Namen sind anders.",
+          "isCorrect": false,
+          "explanation": "Falsch: sie unterscheiden sich grundlegend in Architektur, Ressourcenverbrauch und Startzeit."
+        }
+      ]
+    },
+    {
+      "question": "Warum sind Container von Natur aus vergänglich, also ephemer?",
+      "area": "Docker: Container",
+      "options": [
+        {
+          "text": "Damit sie jederzeit durch einen neuen Container aus demselben Image ersetzt werden können.",
+          "isCorrect": true,
+          "explanation": "Richtig: die Vergänglichkeit ist Absicht und ermöglicht es, Container beliebig zu ersetzen und zu skalieren."
+        },
+        {
+          "text": "Weil Docker einen bekannten Fehler hat, der Daten in Containern nach kurzer Zeit automatisch löscht.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Vergänglichkeit ist kein Fehler, sondern ein bewusstes Designprinzip."
+        },
+        {
+          "text": "Weil Container nur eine begrenzte Lizenz haben, die nach 30 Tagen abläuft.",
+          "isCorrect": false,
+          "explanation": "Falsch: Container haben keine zeitlich begrenzte Lizenz, sie laufen unbegrenzt, bis sie gestoppt werden."
+        },
+        {
+          "text": "Damit der Host-Server nicht mit alten Daten überfüllt wird und langsamer läuft.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Vergänglichkeit dient der Austauschbarkeit und Skalierbarkeit, nicht primär der Speicherbereinigung."
+        }
+      ]
+    },
+    {
+      "question": "Wie kommuniziert ein Container mit der Außenwelt?",
+      "area": "Docker: Container",
+      "options": [
+        {
+          "text": "Nur über explizit freigegebene Ports, die vom Host an den Container weitergeleitet werden.",
+          "isCorrect": true,
+          "explanation": "Richtig: Container sind standardmäßig isoliert, jede Netzwerkkommunikation muss explizit freigegeben werden."
+        },
+        {
+          "text": "Container kommunizieren automatisch über alle verfügbaren Netzwerkschnittstellen ohne Einschränkung.",
+          "isCorrect": false,
+          "explanation": "Falsch: Container sind standardmäßig abgeschottet, nichts wird automatisch freigegeben."
+        },
+        {
+          "text": "Container können nur untereinander kommunizieren, aber nie mit dem Host oder dem Internet.",
+          "isCorrect": false,
+          "explanation": "Falsch: Container können sehr wohl mit dem Internet kommunizieren, wenn die entsprechenden Ports freigegeben sind."
+        },
+        {
+          "text": "Container nutzen ein spezielles Docker-Protokoll, das Firewalls automatisch umgeht.",
+          "isCorrect": false,
+          "explanation": "Falsch: Docker umgeht keine Firewalls, es nutzt die normalen Netzwerkmechanismen des Hosts."
+        }
+      ]
+    },
+    {
+      "question": "Welche Aussage über das Repo repo-futuredev und Docker ist richtig?",
+      "area": "Praxisbeispiel repo-futuredev",
+      "options": [
+        {
+          "text": "Die Entwicklungsumgebung nutzt Docker, um Supabase und PostgreSQL ohne manuelle Installation bereitzustellen.",
+          "isCorrect": true,
+          "explanation": "Richtig: docker compose up startet alle benötigten Dienste in Containern, ohne dass Entwickler etwas installieren müssen."
+        },
+        {
+          "text": "Das Repo verwendet keine Container, weil die Entwickler alle Dienste lieber manuell installieren.",
+          "isCorrect": false,
+          "explanation": "Falsch: repo-futuredev setzt stark auf Docker für die lokale Entwicklung."
+        },
+        {
+          "text": "Docker wird nur für die Produktionsumgebung verwendet, nicht für die lokale Entwicklung.",
+          "isCorrect": false,
+          "explanation": "Falsch: Docker wird gerade für die lokale Entwicklungsumgebung eingesetzt."
+        },
+        {
+          "text": "Jeder Entwickler muss sich sein eigenes Docker-Image aus dem Quellcode selbst bauen.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Images werden aus öffentlichen Registries bezogen, nicht selbst gebaut."
+        }
+      ]
+    },
+    {
+      "question": "Warum ist die Unveränderlichkeit eines Images wichtig?",
+      "area": "Docker: Image",
+      "options": [
+        {
+          "text": "Weil sie garantiert, dass jeder Container aus demselben Image exakt dieselbe Umgebung hat.",
+          "isCorrect": true,
+          "explanation": "Richtig: ein unveränderliches Image stellt sicher, dass die Umgebung immer identisch reproduziert wird."
+        },
+        {
+          "text": "Weil Docker sonst gegen die Lizenzbedingungen des Betriebssystems verstoßen würde.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Unveränderlichkeit hat nichts mit Lizenzbedingungen zu tun."
+        },
+        {
+          "text": "Weil veränderliche Images vom Docker Hub automatisch gelöscht werden.",
+          "isCorrect": false,
+          "explanation": "Falsch: Docker Hub löscht keine Images wegen Veränderlichkeit, das Konzept veränderlicher Images existiert technisch nicht."
+        },
+        {
+          "text": "Weil ein veränderliches Image nicht komprimiert werden kann und zu viel Speicher verbraucht.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Komprimierbarkeit hängt nicht mit der Unveränderlichkeit zusammen."
+        }
+      ]
+    },
+    {
+      "question": "Kann ein Linux-Container auf einem Windows-Laptop laufen?",
+      "area": "Docker: Container",
+      "options": [
+        {
+          "text": "Ja, Docker betreibt im Hintergrund eine schlanke virtuelle Maschine mit einem Linux-Kernel.",
+          "isCorrect": true,
+          "explanation": "Richtig: Docker Desktop auf Windows und macOS nutzt eine VM, um Linux-Container auszuführen."
+        },
+        {
+          "text": "Nein, Linux-Container laufen ausschließlich auf Linux-Systemen und sind auf Windows nicht nutzbar.",
+          "isCorrect": false,
+          "explanation": "Falsch: Docker Desktop macht Linux-Container auf Windows und macOS nutzbar."
+        },
+        {
+          "text": "Nur wenn Windows zuerst in einer virtuellen Maschine gestartet wird, die dann Docker enthält.",
+          "isCorrect": false,
+          "explanation": "Falsch: Docker Desktop managed die virtuelle Maschine selbst, der Nutzer muss nichts davon wissen."
+        },
+        {
+          "text": "Ja, aber nur, wenn der Container kleiner als 100 Megabyte ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Größe des Containers spielt für die Plattformkompatibilität keine Rolle."
+        }
+      ]
+    },
+    {
+      "question": "Was bedeutet es, dass Container den Kernel des Hosts teilen?",
+      "area": "Docker: Container",
+      "options": [
+        {
+          "text": "Container haben keinen eigenen Kernel, sondern nutzen den des Host-Betriebssystems gemeinsam.",
+          "isCorrect": true,
+          "explanation": "Richtig: das Teilen des Kernels macht Container leichtgewichtig und schnell startbar."
+        },
+        {
+          "text": "Alle Container teilen sich einen gemeinsamen Arbeitsspeicher und können gegenseitig ihre Daten lesen.",
+          "isCorrect": false,
+          "explanation": "Falsch: Container teilen den Kernel, nicht den Arbeitsspeicher, sie bleiben voneinander isoliert."
+        },
+        {
+          "text": "Der Kernel wird bei jedem Container-Start neu kompiliert und dann auf die Container verteilt.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Kernel wird nicht neu kompiliert, er läuft einmal auf dem Host und wird von allen Containern genutzt."
+        },
+        {
+          "text": "Container können nur dann starten, wenn der Host mindestens vier CPU-Kerne hat.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Anzahl der CPU-Kerne hat nichts mit dem Kernel-Sharing zu tun."
+        }
+      ]
+    },
+    {
+      "question": "Welches Problem lösen Container in der Softwareentwicklung?",
+      "area": "Docker: Container",
+      "options": [
+        {
+          "text": "Dass eine Anwendung auf dem Rechner des Entwicklers läuft, aber auf dem Server nicht.",
+          "isCorrect": true,
+          "explanation": "Richtig: Container beseitigen Umgebungsunterschiede, indem sie die Anwendung mit all ihren Abhängigkeiten verpacken."
+        },
+        {
+          "text": "Dass der Quellcode zu langsam kompiliert wird und der Build-Prozess zu lange dauert.",
+          "isCorrect": false,
+          "explanation": "Falsch: Container beschleunigen nicht die Kompilierung, sie lösen das Problem unterschiedlicher Laufzeitumgebungen."
+        },
+        {
+          "text": "Dass Entwickler zu wenig Kommentare in ihren Code schreiben.",
+          "isCorrect": false,
+          "explanation": "Falsch: Container haben nichts mit Code-Kommentaren zu tun."
+        },
+        {
+          "text": "Dass die Internetverbindung im Büro zu langsam für große Downloads ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: Container lösen kein Problem der Internetgeschwindigkeit."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der Vorteil, wenn ein neues Teammitglied nur docker compose up eingeben muss?",
+      "area": "Docker: Container",
+      "options": [
+        {
+          "text": "Die Einstiegshürde sinkt dramatisch, und alle haben garantiert dieselbe Umgebung.",
+          "isCorrect": true,
+          "explanation": "Richtig: ein Befehl statt seitenlanger Installationsanleitung, und die Umgebung ist bei allen identisch."
+        },
+        {
+          "text": "Docker installiert dann automatisch die neueste Version aller Programmiersprachen der Welt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Docker installiert nur, was im Image definiert ist, nicht automatisch alle Programmiersprachen."
+        },
+        {
+          "text": "Der Befehl schickt automatisch eine Willkommens-E-Mail an das neue Teammitglied.",
+          "isCorrect": false,
+          "explanation": "Falsch: docker compose up hat nichts mit E-Mails zu tun."
+        },
+        {
+          "text": "Das Teammitglied braucht dann keinen Computer mehr, weil alles im Container läuft.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Container läuft auf einem Computer, er ersetzt ihn nicht."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Installiere Docker Desktop auf deinem Rechner und führe den Befehl docker run hello-world aus. Dieser Befehl lädt ein Test-Image herunter und startet einen Container, der eine Willkommensnachricht ausgibt. Prüfe mit docker ps -a, ob der Container in der Liste der ausgeführten Container erscheint. Starte dann einen zweiten Container mit docker run -it alpine sh und gib im Container den Befehl whoami ein. Beende den Container mit exit.",
+    "expectation": "Docker Desktop ist installiert, der hello-world-Container hat eine Willkommensnachricht ausgegeben, und du hast eine interaktive Shell in einem Alpine-Container geöffnet und wieder verlassen. Die Befehle docker ps -a und docker run sind bekannt.",
+    "checklist": [
+      "Docker Desktop installiert und gestartet.",
+      "docker run hello-world erfolgreich ausgeführt.",
+      "Die Willkommensnachricht des hello-world-Containers gelesen und verstanden.",
+      "docker ps -a zeigt den beendeten hello-world-Container an.",
+      "Einen interaktiven Alpine-Container mit docker run -it alpine sh gestartet.",
+      "Im Container den Befehl whoami ausgeführt und das Ergebnis notiert.",
+      "Den Container mit exit sauber beendet."
+    ],
+    "portfolioItem": "P04"
+  },
+  "audio": {
+    "file": "M04-03-01.mp3",
+    "durationSeconds": 1360,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Ist Docker das Gleiche wie ein Container?",
+      "answer": "Nein, Docker und Container sind nicht dasselbe, auch wenn die Begriffe im Alltag oft vermischt werden. Ein Container ist das allgemeine Konzept einer isolierten Laufzeitumgebung, standardisiert durch die Open Container Initiative. Docker ist eine konkrete Plattform, die dieses Konzept umsetzt. Es gibt auch andere Container-Plattformen wie Podman oder containerd, die dasselbe standardisierte Image-Format verwenden und Container nach denselben Regeln ausführen. Docker ist einfach die mit Abstand bekannteste und am weitesten verbreitete dieser Plattformen."
+    },
+    {
+      "question": "Brauche ich Docker, um Container zu nutzen?",
+      "answer": "Für den Einstieg und die allermeisten Anwendungsfälle ist Docker die beste Wahl. Es gibt Alternativen wie Podman, die ohne Hintergrunddienst auskommen und in manchen Sicherheitsumgebungen bevorzugt werden, aber Docker ist einfacher einzurichten, besser dokumentiert und wird von mehr Diensten und Werkzeugen unterstützt. Wenn du Container lernen willst, lerne Docker. Die Konzepte sind auf andere Plattformen übertragbar, und der Umstieg ist später leicht, falls du ihn je brauchst."
+    },
+    {
+      "question": "Kann ein Container auf meine Dateien zugreifen?",
+      "answer": "Standardmäßig nicht. Ein Container hat sein eigenes isoliertes Dateisystem und sieht die Dateien des Hosts nicht. Du kannst aber gezielt Verzeichnisse des Hosts in den Container einblenden, sodass der Container darin lesen und schreiben kann. Das ist zum Beispiel in der Entwicklung nützlich, wenn du deinen Code auf dem Host bearbeiten willst, aber im Container ausführen möchtest. Diese eingeblendeten Verzeichnisse heißen Volumes oder Bind Mounts und sind ein zentrales Konzept, das in einer späteren Lektion vertieft wird."
+    },
+    {
+      "question": "Was ist der Unterschied zwischen Docker Desktop und Docker Engine?",
+      "answer": "Docker Engine ist der eigentliche Dienst, der Container ausführt. Er läuft im Hintergrund, hat keine grafische Oberfläche und wird über die Kommandozeile gesteuert. Docker Desktop ist eine Anwendung, die Docker Engine mitsamt einer grafischen Oberfläche, einer virtuellen Maschine für Windows und macOS und einigen Zusatzwerkzeugen bündelt. Für die meisten Entwickler ist Docker Desktop der einfachste Einstieg. Auf Servern läuft dagegen meist nur die Docker Engine ohne Desktop, weil dort keine grafische Oberfläche gebraucht wird."
+    },
+    {
+      "question": "Sind Container sicher?",
+      "answer": "Container bieten eine gute Isolation, aber sie sind keine Sicherheitswunder. Ein Container teilt den Kernel mit dem Host, und eine Schwachstelle im Kernel kann potenziell die Isolation aushebeln. Für die allermeisten Anwendungen ist die Container-Isolation völlig ausreichend, aber für hochsensible oder streng regulierte Umgebungen gibt es zusätzliche Härtungsmaßnahmen wie rootless Container oder spezielle Laufzeitumgebungen wie gVisor oder Firecracker. Für den Einstieg gilt: Container sind deutlich sicherer als eine Anwendung direkt auf dem Host laufen zu lassen, weil sie die Angriffsfläche auf das Nötigste reduzieren."
+    }
+  ]
+}

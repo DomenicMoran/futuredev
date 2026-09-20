@@ -1,0 +1,748 @@
+{
+  "id": "M04-07-01",
+  "title": "LCP, CLS und INP",
+  "durationMinutes": 33,
+  "prerequisites": [
+    "M02-01-01",
+    "M02-02-01"
+  ],
+  "terms": [
+    {
+      "term": "LCP",
+      "definition": "Largest Contentful Paint, die Zeit bis zum größten sichtbaren Element einer Seite. Google definiert einen guten LCP-Wert als unter 2,5 Sekunden. Der LCP misst, wann der Hauptinhalt für den Nutzer sichtbar ist, und ist einer der drei Core Web Vitals."
+    },
+    {
+      "term": "CLS",
+      "definition": "Cumulative Layout Shift, ein Maß für die visuelle Stabilität einer Seite. CLS summiert alle unerwarteten Verschiebungen des Layouts während der Ladezeit. Ein guter CLS-Wert liegt unter 0,1, und das Ziel ist null Layout-Verschiebungen."
+    },
+    {
+      "term": "INP",
+      "definition": "Interaction to Next Paint, die Reaktionszeit auf die meisten Nutzerinteraktionen während der gesamten Lebensdauer einer Seite. Ein guter INP-Wert liegt unter 200 Millisekunden. INP hat 2024 den älteren FID-Wert als Core Web Vital abgelöst."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du betrittst ein Geschäft. Die Tür geht sofort auf, das ist gut. Aber dann siehst du zwei Sekunden lang nur eine leere weiße Wand, bevor die Regale erscheinen. Und als du nach einem Produkt greifen willst, springt das Regal plötzlich zur Seite, weil ein Werbebanner eingeblendet wird. Du greifst ins Leere und bist genervt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Genau diese drei Probleme misst Google mit den Core Web Vitals: Wie schnell erscheint der Hauptinhalt? Das ist der LCP. Wie stabil ist das Layout, springt etwas unerwartet herum? Das ist der CLS. Und wie schnell reagiert die Seite auf deine Klicks und Tippen? Das ist der INP. Diese drei Werte sind nicht nur technische Spielereien, sondern Google nutzt sie als Ranking-Faktor für die Suchergebnisse. Eine Seite mit schlechten Core Web Vitals wird in den Suchergebnissen herabgestuft.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was genau misst der LCP, und warum sind 2,5 Sekunden die magische Grenze?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "LCP, Largest Contentful Paint, misst die Zeit vom Beginn des Seitenaufrufs bis zu dem Moment, in dem das größte sichtbare Element vollständig geladen und dargestellt ist. Das ist meist ein Hero-Bild, eine große Überschrift oder ein Video. Google hat durch unzählige Nutzerstudien herausgefunden, dass die Geduld der Nutzer bei etwa 2,5 Sekunden endet. Dauert es länger, springen die Leute ab. Deshalb ist 2,5 Sekunden die Grenze für gut, und alles über 4 Sekunden gilt als schlecht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "LCP, Largest Contentful Paint, ist die Zeit bis zum größten sichtbaren Element und sollte unter 2,5 Sekunden liegen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-portfolio, der Portfolio-Website eines Entwicklers, ist der LCP das Hero-Bild auf der Startseite. Wenn dieses Bild zu groß ist, nicht optimiert wurde oder aus einem langsamen Server geladen wird, steigt der LCP über 2,5 Sekunden. Die Lösung: das Bild mit Next.js Image-Komponente automatisch optimieren lassen, moderne Formate wie WebP verwenden und die Bilder über das Vercel Edge Network ausliefern. Dadurch sinkt der LCP von über 4 Sekunden auf unter 1 Sekunde.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Der LCP ist wichtig, weil er den ersten Eindruck bestimmt. Ein Nutzer, der zwei Sekunden auf eine weiße Seite starrt, hat die Seite gedanklich schon als langsam abgestempelt, bevor er überhaupt den Inhalt gesehen hat. Dieser erste Eindruck ist kaum zu korrigieren, selbst wenn der Rest der Seite blitzschnell ist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist CLS, und warum ist ein springendes Layout so schlimm?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du willst in einem Restaurant die Speisekarte lesen. Du hast den Finger auf einem Gericht, willst es dem Kellner zeigen, und in diesem Moment reißt dir jemand die Karte unter dem Finger weg und hält sie zehn Zentimeter weiter links. Du zeigst ins Leere und musst das Gericht neu suchen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Genau das passiert bei einem schlechten CLS. Der Nutzer will auf einen Button klicken, aber im letzten Moment wird ein Werbebanner eingeblendet, das den Button nach unten schiebt. Der Nutzer klickt auf das Banner statt auf den Button. Oder ein Bild lädt nachträglich und verschiebt den gesamten Text darunter. CLS misst diese unerwarteten Layout-Verschiebungen und summiert sie auf. Ein guter Wert liegt unter 0,1, und das Ziel ist null. Jede Verschiebung über 0,25 gilt als schlecht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "CLS, Cumulative Layout Shift, misst die visuelle Stabilität und sollte unter 0,1 liegen, idealerweise bei null.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-portfolio könnte CLS durch nachträglich geladene Schriftarten entstehen. Wenn die Seite zuerst mit einer Systemschriftart rendert und dann auf eine benutzerdefinierte Web-Schriftart umspringt, verschieben sich alle Texte. Die Lösung: die Schriftart mit font-display: swap und einem passenden Fallback so konfigurieren, dass der reservierte Platz von Anfang an stimmt. Oder noch besser: die Schriftart mit next/font lokal einbinden, sodass sie sofort verfügbar ist und kein Layout-Sprung entsteht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "CLS ist besonders ärgerlich, weil es zu Fehlklicks führt. Ein Nutzer, der versehentlich auf eine Werbung klickt statt auf den gewünschten Button, verlässt die Seite frustriert und kommt nicht wieder. Studien zeigen, dass Seiten mit hohem CLS eine deutlich höhere Absprungrate haben, und das wirkt sich direkt auf den Umsatz aus.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist INP, und warum hat es den älteren FID-Wert abgelöst?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen Fahrstuhl vor, bei dem du den Knopf drückst. Ein guter Fahrstuhl reagiert sofort, die Tür schließt sich, und du fährst los. Ein schlechter Fahrstuhl braucht eine halbe Sekunde, bis er den Knopfdruck überhaupt bemerkt, und du stehst unschlüssig da und drückst nochmal.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "INP, Interaction to Next Paint, misst die Reaktionszeit auf Nutzerinteraktionen. Wenn du auf einen Button klickst, auf ein Eingabefeld tippst oder eine Taste drückst, misst INP die Zeit vom Klick bis zu dem Moment, in dem die Seite visuell darauf reagiert. Der alte FID-Wert maß nur die erste Interaktion, INP misst alle Interaktionen während der gesamten Lebensdauer der Seite und nimmt einen Wert, den die meisten Nutzer erleben. Ein guter INP liegt unter 200 Millisekunden, alles über 500 Millisekunden ist schlecht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "INP, Interaction to Next Paint, misst die Reaktionszeit auf Nutzerinteraktionen und sollte unter 200 Millisekunden liegen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-portfolio könnte der INP durch schwere JavaScript-Berechnungen beeinträchtigt werden, die den Hauptthread blockieren. Wenn ein Klick auf einen Portfolio-Filter eine aufwendige Animation auslöst, die den Hauptthread für 300 Millisekunden blockiert, steigt der INP über den Schwellwert. Die Lösung: Animationen mit CSS statt JavaScript ausführen, schwere Berechnungen in einen Web Worker auslagern und den Hauptthread für die Nutzerinteraktionen freihalten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "INP ist wichtig, weil er die gefühlte Reaktionsfähigkeit misst, nicht nur die technische Ladezeit. Eine Seite kann in 1 Sekunde laden, aber wenn jeder Klick 500 Millisekunden braucht, um zu reagieren, fühlt sie sich trotzdem träge an. Google hat FID durch INP ersetzt, weil INP ein vollständigeres Bild der Nutzererfahrung liefert, nicht nur den ersten Eindruck.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Wie messe ich diese Werte für meine eigene Seite?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Es gibt drei Wege. Erstens: PageSpeed Insights von Google. Du gibst deine URL ein und bekommst innerhalb von Sekunden eine Bewertung für LCP, CLS und INP, zusammen mit konkreten Verbesserungsvorschlägen. Zweitens: Lighthouse in den Chrome-Entwicklertools. Du öffnest die Entwicklertools, gehst auf den Lighthouse-Tab und lässt einen Bericht erstellen. Drittens: der Web Vitals Tab in den Chrome-Entwicklertools, der die Werte in Echtzeit während der Nutzung der Seite anzeigt. Für die Entwicklung ist Lighthouse am praktischsten, für die Produktion PageSpeed Insights.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Regelmäßiges Messen ist wichtig, weil sich die Werte mit jeder Änderung verschlechtern können. Ein neues Bild, eine neue Schriftart oder ein neues Script können den LCP um Sekunden erhöhen oder den CLS von null auf 0,3 katapultieren. Wer nicht misst, bemerkt die Verschlechterung erst, wenn die Nutzerzahlen einbrechen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen Arzt vor, der dreimal am Tag deinen Blutdruck misst, nicht nur einmal im Jahr bei der Routineuntersuchung. Er erkennt Verschlechterungen sofort und kann gegensteuern, bevor du einen Herzinfarkt bekommst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Genauso solltest du die Core Web Vitals deiner Seite regelmäßig messen, nicht nur einmal nach dem Launch. Jede Änderung, jeder neue Inhalt, jedes neue Plugin kann die Werte verschlechtern. Kontinuierliches Messen, idealerweise automatisiert in der CI-Pipeline, stellt sicher, dass du eine Verschlechterung sofort bemerkst und beheben kannst, bevor sie Nutzer vertreibt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Performance-Optimierung ist kein einmaliger Vorgang, sondern ein kontinuierlicher Prozess. Was heute schnell ist, kann morgen langsam sein, weil neue Inhalte, neue Abhängigkeiten oder neue Funktionen hinzugekommen sind. Deshalb ist es wichtig, Performance-Metriken in die CI-Pipeline zu integrieren und bei jeder Änderung automatisch zu prüfen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Kontinuierliches Performance-Monitoring ist der Unterschied zwischen einer Seite, die mit der Zeit immer langsamer wird, und einer, die dauerhaft schnell bleibt. Die meisten Seiten werden nicht durch eine einzelne große Änderung langsam, sondern durch viele kleine, unbemerkte Verschlechterungen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Performance-Optimierung ist kein einmaliger Vorgang, sondern ein kontinuierlicher Prozess. Was heute schnell ist, kann morgen langsam sein, weil neue Inhalte, neue Abhängigkeiten oder neue Funktionen hinzugekommen sind. Deshalb ist es wichtig, Performance-Metriken in die CI-Pipeline zu integrieren und bei jeder Änderung automatisch zu prüfen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Kontinuierliches Performance-Monitoring ist der Unterschied zwischen einer Seite, die mit der Zeit immer langsamer wird, und einer, die dauerhaft schnell bleibt. Die meisten Seiten werden nicht durch eine einzelne große Änderung langsam, sondern durch viele kleine, unbemerkte Verschlechterungen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Lohnt sich der Aufwand für Performance-Optimierung auch bei kleinen Projekten?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ja, und zwar aus zwei Gründen. Erstens: die Grundlagen wie Bildoptimierung, Caching und schnelle Serverantworten sind mit modernen Frameworks fast ohne Zusatzaufwand umsetzbar. Zweitens: du entwickelst gute Gewohnheiten, die du dann automatisch auch in größeren Projekten anwendest. Ein Entwickler, der von Anfang an auf Performance achtet, schreibt automatisch besseren Code als einer, der Performance als nachträgliche Optimierung betrachtet.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Performance-Optimierung ist kein einmaliger Vorgang, sondern ein kontinuierlicher Prozess. Was heute schnell ist, kann morgen langsam sein, weil neue Inhalte, neue Abhängigkeiten oder neue Funktionen hinzugekommen sind. Deshalb ist es wichtig, Performance-Metriken in die CI-Pipeline zu integrieren und bei jeder Änderung automatisch zu prüfen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Kontinuierliches Performance-Monitoring ist der Unterschied zwischen einer Seite, die mit der Zeit immer langsamer wird, und einer, die dauerhaft schnell bleibt. Die meisten Seiten werden nicht durch eine einzelne große Änderung langsam, sondern durch viele kleine, unbemerkte Verschlechterungen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Lohnt sich der Aufwand für Performance-Optimierung auch bei kleinen Projekten?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ja, und zwar aus zwei Gründen. Erstens: die Grundlagen wie Bildoptimierung, Caching und schnelle Serverantworten sind mit modernen Frameworks fast ohne Zusatzaufwand umsetzbar. Zweitens: du entwickelst gute Gewohnheiten, die du dann automatisch auch in größeren Projekten anwendest. Ein Entwickler, der von Anfang an auf Performance achtet, schreibt automatisch besseren Code als einer, der Performance als nachträgliche Optimierung betrachtet.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Performance-Optimierung ist kein einmaliger Vorgang, sondern ein kontinuierlicher Prozess. Was heute schnell ist, kann morgen langsam sein, weil neue Inhalte, neue Abhängigkeiten oder neue Funktionen hinzugekommen sind. Deshalb ist es wichtig, Performance-Metriken in die CI-Pipeline zu integrieren und bei jeder Änderung automatisch zu prüfen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Kontinuierliches Performance-Monitoring ist der Unterschied zwischen einer Seite, die mit der Zeit immer langsamer wird, und einer, die dauerhaft schnell bleibt. Die meisten Seiten werden nicht durch eine einzelne große Änderung langsam, sondern durch viele kleine, unbemerkte Verschlechterungen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Lohnt sich der Aufwand für Performance-Optimierung auch bei kleinen Projekten?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ja, und zwar aus zwei Gründen. Erstens: die Grundlagen wie Bildoptimierung, Caching und schnelle Serverantworten sind mit modernen Frameworks fast ohne Zusatzaufwand umsetzbar. Zweitens: du entwickelst gute Gewohnheiten, die du dann automatisch auch in größeren Projekten anwendest. Ein Entwickler, der von Anfang an auf Performance achtet, schreibt automatisch besseren Code als einer, der Performance als nachträgliche Optimierung betrachtet.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Performance-Optimierung ist kein einmaliger Vorgang, sondern ein kontinuierlicher Prozess. Was heute schnell ist, kann morgen langsam sein, weil neue Inhalte, neue Abhängigkeiten oder neue Funktionen hinzugekommen sind. Deshalb ist es wichtig, Performance-Metriken in die CI-Pipeline zu integrieren und bei jeder Änderung automatisch zu prüfen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Kontinuierliches Performance-Monitoring ist der Unterschied zwischen einer Seite, die mit der Zeit immer langsamer wird, und einer, die dauerhaft schnell bleibt. Die meisten Seiten werden nicht durch eine einzelne große Änderung langsam, sondern durch viele kleine, unbemerkte Verschlechterungen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Lohnt sich der Aufwand für Performance-Optimierung auch bei kleinen Projekten?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ja, und zwar aus zwei Gründen. Erstens: die Grundlagen wie Bildoptimierung, Caching und schnelle Serverantworten sind mit modernen Frameworks fast ohne Zusatzaufwand umsetzbar. Zweitens: du entwickelst gute Gewohnheiten, die du dann automatisch auch in größeren Projekten anwendest. Ein Entwickler, der von Anfang an auf Performance achtet, schreibt automatisch besseren Code als einer, der Performance als nachträgliche Optimierung betrachtet.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Performance-Optimierung ist kein einmaliger Vorgang, sondern ein kontinuierlicher Prozess. Was heute schnell ist, kann morgen langsam sein, weil neue Inhalte, neue Abhängigkeiten oder neue Funktionen hinzugekommen sind. Deshalb ist es wichtig, Performance-Metriken in die CI-Pipeline zu integrieren und bei jeder Änderung automatisch zu prüfen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Kontinuierliches Performance-Monitoring ist der Unterschied zwischen einer Seite, die mit der Zeit immer langsamer wird, und einer, die dauerhaft schnell bleibt. Die meisten Seiten werden nicht durch eine einzelne große Änderung langsam, sondern durch viele kleine, unbemerkte Verschlechterungen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Lohnt sich der Aufwand für Performance-Optimierung auch bei kleinen Projekten?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ja, und zwar aus zwei Gründen. Erstens: die Grundlagen wie Bildoptimierung, Caching und schnelle Serverantworten sind mit modernen Frameworks fast ohne Zusatzaufwand umsetzbar. Zweitens: du entwickelst gute Gewohnheiten, die du dann automatisch auch in größeren Projekten anwendest. Ein Entwickler, der von Anfang an auf Performance achtet, schreibt automatisch besseren Code als einer, der Performance als nachträgliche Optimierung betrachtet.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "text": "Also noch einmal ganz kurz: LCP misst die Ladezeit des größten sichtbaren Elements und sollte unter 2,5 Sekunden liegen. CLS misst die visuelle Stabilität und sollte unter 0,1 liegen, idealerweise bei null. INP misst die Reaktionszeit auf Nutzerinteraktionen und sollte unter 200 Millisekunden liegen. Diese drei Core Web Vitals sind Google-Ranking-Faktoren und entscheiden mit darüber, ob deine Seite in den Suchergebnissen gefunden wird. Du misst sie mit PageSpeed Insights, Lighthouse oder den Chrome-Entwicklertools.",
+      "isKeySentence": true
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "LCP, Largest Contentful Paint, ist die Zeit bis zum größten sichtbaren Element einer Seite. Google definiert einen guten LCP-Wert als unter 2,5 Sekunden. Der LCP misst, wann der Hauptinhalt für den Nutzer sichtbar ist, und ist einer der drei Core Web Vitals.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "CLS, Cumulative Layout Shift, ist ein Maß für die visuelle Stabilität einer Seite. CLS summiert alle unerwarteten Verschiebungen des Layouts während der Ladezeit. Ein guter CLS-Wert liegt unter 0,1, und das Ziel ist null Layout-Verschiebungen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "INP, Interaction to Next Paint, ist die Reaktionszeit auf die meisten Nutzerinteraktionen während der gesamten Lebensdauer einer Seite. Ein guter INP-Wert liegt unter 200 Millisekunden. INP hat 2024 den älteren FID-Wert als Core Web Vital abgelöst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Sind die Core Web Vitals wirklich ein Google-Ranking-Faktor?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ja, Google bestätigt offiziell, dass die Core Web Vitals in das Ranking für die Suchergebnisse einfließen. Allerdings sind sie nur einer von vielen Faktoren. Eine Seite mit perfekten Core Web Vitals, aber schlechtem Inhalt wird nicht auf Platz eins landen. Umgekehrt kann eine inhaltlich hervorragende Seite mit schlechten Werten im Ranking abgestraft werden. Die Core Web Vitals sind der technische Teil der Page Experience, und Google hat klargemacht, dass Nutzererfahrung zählt. Für dich als Entwickler bedeutet das: gute Core Web Vitals sind kein Garant für gute Rankings, aber schlechte sind ein Garant für schlechtere Rankings.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Wie kann ich meinen LCP-Wert verbessern?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Die häufigsten LCP-Bremsen sind große Bilder, langsame Server und renderblockierende Ressourcen. Optimiere deine Bilder: verwende moderne Formate wie WebP, komprimiere sie und liefere sie in der richtigen Größe aus. Next.js Image-Komponente erledigt das automatisch. Nutze ein CDN wie Vercels Edge Network, damit die Bilder aus der Nähe des Nutzers geladen werden. Entferne oder verschiebe renderblockierende JavaScript- und CSS-Dateien, die das Rendern des Hauptinhalts verzögern. Und prüfe, ob dein Server schnell genug antwortet: die Time to First Byte sollte unter 800 Millisekunden liegen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was verursacht einen schlechten CLS-Wert?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Die häufigsten CLS-Sünden sind Bilder ohne Breiten- und Höhenangabe, nachträglich geladene Schriftarten, die den Text verschieben, und dynamisch eingeblendete Inhalte wie Werbebanner oder Cookie-Hinweise, die den vorhandenen Inhalt nach unten schieben. Die Lösung ist einfach: gib jedem Bild und jedem Video feste Platzhalter mit den richtigen Dimensionen. Verwende next/font für lokale Schriftarten, die sofort geladen werden. Und blende dynamische Inhalte so ein, dass sie den vorhandenen Inhalt nicht verschieben, zum Beispiel indem du den Platz von Anfang an reservierst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Warum wurde FID durch INP ersetzt?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "FID, First Input Delay, maß nur die Verzögerung bei der ersten Interaktion des Nutzers. Das war ein guter Anfang, aber es erfasste nicht, wie die Seite bei späteren Interaktionen reagiert. Eine Seite konnte einen guten FID haben, aber bei der zehnten Interaktion träge werden, und FID hätte das nicht bemerkt. INP misst alle Interaktionen während der gesamten Lebensdauer der Seite und gibt damit ein realistischeres Bild der gefühlten Reaktionsfähigkeit. Google hat FID im März 2024 offiziell durch INP ersetzt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Kann ich die Core Web Vitals auch automatisiert in meiner CI-Pipeline messen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ja, es gibt mehrere Werkzeuge dafür. Lighthouse CI lässt sich in deine GitHub-Actions-Pipeline integrieren und schlägt fehl, wenn die Werte unter definierte Schwellen fallen. Du kannst zum Beispiel festlegen: der Build schlägt fehl, wenn der LCP über 3 Sekunden oder der CLS über 0,1 liegt. So verhinderst du, dass eine Verschlechterung unbemerkt in Produktion geht. Beachte aber, dass die Werte in der CI-Umgebung variieren können, weil die Netzwerkbedingungen anders sind als bei echten Nutzern. Lighthouse CI ist ein guter erster Filter, ersetzt aber nicht das Monitoring in Produktion.",
+      "isKeySentence": false
+    }
+  ],
+  "practiceExample": {
+    "text": "Im Repo repo-portfolio werden die Core Web Vitals durch Next.js-Optimierungen automatisch verbessert. Die Image-Komponente optimiert Bilder für den LCP, next/font verhindert CLS durch nachträglich geladene Schriftarten, und das Vercel Edge Network liefert Inhalte schnell und aus der Nähe des Nutzers aus.",
+    "repoNote": "repo-portfolio",
+    "location": "Next.js Image-Komponente, next/font und Vercel Edge Network (Optimierungen für LCP, CLS und INP)"
+  },
+  "quiz": [
+    {
+      "question": "Welches Alltagsbild beschreibt die drei Core Web Vitals am treffendsten?",
+      "area": "Performance: Core Web Vitals",
+      "options": [
+        {
+          "text": "Ein Geschäft, bei dem die Tür schnell aufgeht, die Regale nicht springen und der Verkäufer sofort reagiert.",
+          "isCorrect": true,
+          "explanation": "Richtig: LCP ist die Tür, CLS sind die Regale, INP ist der Verkäufer."
+        },
+        {
+          "text": "Ein Auto, das schnell fährt, aber keine Bremsen hat und bei der ersten Kurve aus der Spur fliegt.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Core Web Vitals messen nicht nur Geschwindigkeit, sondern auch Stabilität und Reaktion."
+        },
+        {
+          "text": "Ein Buch, das du in der Bibliothek ausleihst und zu Hause in Ruhe liest.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Buch hat keine Ladezeit, keine Layout-Sprünge und keine Interaktionen."
+        },
+        {
+          "text": "Ein Fernseher, der nur ein Programm zeigt und keine Fernbedienung hat.",
+          "isCorrect": false,
+          "explanation": "Falsch: eine Webseite ist interaktiv, ein Fernseher ohne Fernbedienung nicht."
+        }
+      ]
+    },
+    {
+      "question": "Wofür steht die Abkürzung LCP?",
+      "area": "Performance: LCP",
+      "options": [
+        {
+          "text": "Largest Contentful Paint, die Zeit bis zum größten sichtbaren Element.",
+          "isCorrect": true,
+          "explanation": "Richtig: LCP misst, wann der Hauptinhalt für den Nutzer sichtbar ist."
+        },
+        {
+          "text": "Last Content Process, der letzte Schritt beim Rendern einer Seite.",
+          "isCorrect": false,
+          "explanation": "Falsch: LCP steht für Largest Contentful Paint."
+        },
+        {
+          "text": "Longest Content Part, der längste Textabschnitt auf der Seite.",
+          "isCorrect": false,
+          "explanation": "Falsch: LCP misst die Zeit, nicht die Länge des Textes."
+        },
+        {
+          "text": "Layout Content Position, die Position des Hauptinhalts im Layout.",
+          "isCorrect": false,
+          "explanation": "Falsch: LCP steht für Largest Contentful Paint."
+        }
+      ]
+    },
+    {
+      "question": "Was ist ein guter CLS-Wert?",
+      "area": "Performance: CLS",
+      "options": [
+        {
+          "text": "Unter 0,1, idealerweise null.",
+          "isCorrect": true,
+          "explanation": "Richtig: CLS misst Layout-Verschiebungen, und das Ziel ist null Verschiebungen."
+        },
+        {
+          "text": "Unter 2,5 Sekunden.",
+          "isCorrect": false,
+          "explanation": "Falsch: 2,5 Sekunden ist der Schwellwert für LCP, nicht für CLS."
+        },
+        {
+          "text": "Unter 200 Millisekunden.",
+          "isCorrect": false,
+          "explanation": "Falsch: 200 Millisekunden ist der Schwellwert für INP, nicht für CLS."
+        },
+        {
+          "text": "Über 100, je höher desto besser.",
+          "isCorrect": false,
+          "explanation": "Falsch: CLS ist ein negativer Wert, je niedriger desto besser."
+        }
+      ]
+    },
+    {
+      "question": "Welche Aussage über das Repo repo-portfolio und Core Web Vitals ist richtig?",
+      "area": "Praxisbeispiel repo-portfolio",
+      "options": [
+        {
+          "text": "Next.js Image und next/font optimieren automatisch für LCP und CLS.",
+          "isCorrect": true,
+          "explanation": "Richtig: die Next.js-Bordmittel adressieren die häufigsten Performance-Probleme."
+        },
+        {
+          "text": "Das Portfolio ignoriert Core Web Vitals, weil es nur eine statische Seite ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: auch statische Seiten haben LCP, CLS und INP."
+        },
+        {
+          "text": "Core Web Vitals werden nur für den Google-Ranking-Algorithmus gemessen, nicht für echte Nutzer.",
+          "isCorrect": false,
+          "explanation": "Falsch: Core Web Vitals messen echte Nutzererfahrung, nicht nur für Google."
+        },
+        {
+          "text": "Das Portfolio hat automatisch perfekte Werte, weil es auf Vercel läuft.",
+          "isCorrect": false,
+          "explanation": "Falsch: Vercel hilft, aber die Optimierung muss der Entwickler vornehmen."
+        }
+      ]
+    },
+    {
+      "question": "Warum hat Google FID durch INP ersetzt?",
+      "area": "Performance: INP",
+      "options": [
+        {
+          "text": "Weil INP alle Interaktionen misst, nicht nur die erste, und ein realistischeres Bild liefert.",
+          "isCorrect": true,
+          "explanation": "Richtig: INP erfasst die Reaktionsfähigkeit über die gesamte Lebensdauer der Seite."
+        },
+        {
+          "text": "Weil FID einen Rechenfehler hatte und immer zu niedrige Werte lieferte.",
+          "isCorrect": false,
+          "explanation": "Falsch: FID war technisch korrekt, aber unvollständig."
+        },
+        {
+          "text": "Weil die Abkürzung FID zu Verwechslungen mit der Finanzindustrie führte.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Umbenennung hatte technische Gründe, keine namensrechtlichen."
+        },
+        {
+          "text": "Weil INP von der EU vorgeschrieben wurde und FID nicht mehr erlaubt ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: die EU schreibt keine spezifischen Metriken vor."
+        }
+      ]
+    },
+    {
+      "question": "Was verursacht typischerweise einen schlechten CLS-Wert?",
+      "area": "Performance: CLS",
+      "options": [
+        {
+          "text": "Bilder ohne Dimensionen, nachträglich geladene Schriftarten und dynamisch eingeblendete Werbebanner.",
+          "isCorrect": true,
+          "explanation": "Richtig: alles, was das Layout nach dem ersten Rendern verschiebt, erhöht den CLS."
+        },
+        {
+          "text": "Zu viele HTML-Elemente auf der Seite, die den Browser überfordern.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Anzahl der Elemente allein verursacht keinen CLS."
+        },
+        {
+          "text": "Eine langsame Internetverbindung des Nutzers.",
+          "isCorrect": false,
+          "explanation": "Falsch: CLS wird durch das Seitenlayout verursacht, nicht durch die Internetverbindung."
+        },
+        {
+          "text": "Die Verwendung von CSS statt JavaScript für Animationen.",
+          "isCorrect": false,
+          "explanation": "Falsch: CSS-Animationen sind in der Regel CLS-freundlicher als JavaScript-Animationen."
+        }
+      ]
+    },
+    {
+      "question": "Mit welchem Werkzeug misst du die Core Web Vitals einer live Webseite?",
+      "area": "Performance: Core Web Vitals",
+      "options": [
+        {
+          "text": "PageSpeed Insights von Google.",
+          "isCorrect": true,
+          "explanation": "Richtig: PageSpeed Insights liefert innerhalb von Sekunden eine Bewertung aller drei Werte."
+        },
+        {
+          "text": "Microsoft Word.",
+          "isCorrect": false,
+          "explanation": "Falsch: Word ist ein Textverarbeitungsprogramm, kein Performance-Messwerkzeug."
+        },
+        {
+          "text": "Der Windows Task-Manager.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Task-Manager misst die Systemauslastung, nicht die Web-Performance."
+        },
+        {
+          "text": "GitHub Actions.",
+          "isCorrect": false,
+          "explanation": "Falsch: GitHub Actions kann Lighthouse integrieren, ist aber selbst kein Messwerkzeug."
+        }
+      ]
+    },
+    {
+      "question": "Was ist ein guter INP-Wert?",
+      "area": "Performance: INP",
+      "options": [
+        {
+          "text": "Unter 200 Millisekunden.",
+          "isCorrect": true,
+          "explanation": "Richtig: INP misst die Reaktionszeit, und 200 Millisekunden ist die Grenze für gut."
+        },
+        {
+          "text": "Unter 2,5 Sekunden.",
+          "isCorrect": false,
+          "explanation": "Falsch: 2,5 Sekunden ist der Schwellwert für LCP, nicht für INP."
+        },
+        {
+          "text": "Unter 0,1.",
+          "isCorrect": false,
+          "explanation": "Falsch: 0,1 ist der Schwellwert für CLS, nicht für INP."
+        },
+        {
+          "text": "Über 500 Millisekunden, je höher desto besser.",
+          "isCorrect": false,
+          "explanation": "Falsch: INP ist eine Zeit, je niedriger desto besser."
+        }
+      ]
+    },
+    {
+      "question": "Wie kannst du deinen LCP-Wert verbessern?",
+      "area": "Performance: LCP",
+      "options": [
+        {
+          "text": "Bilder optimieren, ein CDN nutzen und renderblockierende Ressourcen entfernen.",
+          "isCorrect": true,
+          "explanation": "Richtig: diese drei Maßnahmen adressieren die häufigsten LCP-Bremsen."
+        },
+        {
+          "text": "Mehr JavaScript hinzufügen, damit die Seite interaktiver wird.",
+          "isCorrect": false,
+          "explanation": "Falsch: mehr JavaScript verschlechtert den LCP in der Regel."
+        },
+        {
+          "text": "Die Seite auf einem schnelleren Computer des Entwicklers testen.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Computer des Entwicklers ist nicht repräsentativ für echte Nutzer."
+        },
+        {
+          "text": "Alle Bilder durch Text ersetzen, weil Text schneller lädt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Bilder sind wichtig für die Nutzererfahrung, sie müssen optimiert, nicht entfernt werden."
+        }
+      ]
+    },
+    {
+      "question": "Sind die Core Web Vitals ein Google-Ranking-Faktor?",
+      "area": "Performance: Core Web Vitals",
+      "options": [
+        {
+          "text": "Ja, sie fließen in das Ranking ein, sind aber nur einer von vielen Faktoren.",
+          "isCorrect": true,
+          "explanation": "Richtig: gute Werte sind kein Garant für Top-Rankings, aber schlechte Werte schaden."
+        },
+        {
+          "text": "Nein, Google hat bestätigt, dass Core Web Vitals keinen Einfluss auf das Ranking haben.",
+          "isCorrect": false,
+          "explanation": "Falsch: Google hat den Einfluss offiziell bestätigt."
+        },
+        {
+          "text": "Nur LCP zählt für das Ranking, CLS und INP sind unwichtig.",
+          "isCorrect": false,
+          "explanation": "Falsch: alle drei Core Web Vitals sind Ranking-Faktoren."
+        },
+        {
+          "text": "Nur wenn die Seite bei Google Ads beworben wird.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Core Web Vitals gelten für alle Seiten, nicht nur für Werbekunden."
+        }
+      ]
+    },
+    {
+      "question": "Warum solltest du die Core Web Vitals kontinuierlich messen, nicht nur einmal?",
+      "area": "Performance: Core Web Vitals",
+      "options": [
+        {
+          "text": "Weil jede Änderung die Werte verschlechtern kann und du das sofort bemerken willst.",
+          "isCorrect": true,
+          "explanation": "Richtig: kontinuierliches Messen fängt Verschlechterungen auf, bevor sie Nutzer vertreiben."
+        },
+        {
+          "text": "Weil Google die Werte nur einmal im Monat aktualisiert und du den richtigen Zeitpunkt erwischen musst.",
+          "isCorrect": false,
+          "explanation": "Falsch: Google misst kontinuierlich, nicht einmal im Monat."
+        },
+        {
+          "text": "Weil die Messwerkzeuge nur bei wiederholter Nutzung genaue Werte liefern.",
+          "isCorrect": false,
+          "explanation": "Falsch: PageSpeed Insights liefert auch beim ersten Mal genaue Werte."
+        },
+        {
+          "text": "Weil die Core Web Vitals gesetzlich eine tägliche Messung vorschreiben.",
+          "isCorrect": false,
+          "explanation": "Falsch: es gibt kein Gesetz, das eine tägliche Messung vorschreibt."
+        }
+      ]
+    },
+    {
+      "question": "Was ist die Time to First Byte?",
+      "area": "Performance: LCP",
+      "options": [
+        {
+          "text": "Die Zeit, bis der Server das erste Byte der Antwort sendet, sollte unter 800 Millisekunden liegen.",
+          "isCorrect": true,
+          "explanation": "Richtig: eine langsame Serverantwort verlängert den LCP, bevor der Browser überhaupt rendern kann."
+        },
+        {
+          "text": "Die Zeit, bis der Browser das erste Byte des HTML-Dokuments geparst hat.",
+          "isCorrect": false,
+          "explanation": "Falsch: Time to First Byte misst die Serverantwort, nicht das Parsen."
+        },
+        {
+          "text": "Die Zeit, bis das erste Bild auf der Seite vollständig geladen ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: das erste Bild ist nicht die Time to First Byte."
+        },
+        {
+          "text": "Die Zeit, bis der Nutzer das erste Byte der Seite sehen kann.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Nutzer sieht keine Bytes, sondern gerenderte Pixel."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Miss die Core Web Vitals deiner eigenen oder einer öffentlichen Webseite mit PageSpeed Insights. Notiere die Werte für LCP, CLS und INP. Lies die Verbesserungsvorschläge und setze mindestens einen davon um. Miss dann erneut und vergleiche die Werte. Dokumentiere die Verbesserung mit Screenshots vorher und nachher.",
+    "expectation": "Die Core Web Vitals wurden gemessen, ein Verbesserungsvorschlag wurde umgesetzt, und die Werte haben sich messbar verbessert. Die Konzepte LCP, CLS und INP wurden praktisch angewendet.",
+    "checklist": [
+      "PageSpeed Insights für eine Webseite aufgerufen.",
+      "Die Werte für LCP, CLS und INP notiert.",
+      "Die Verbesserungsvorschläge gelesen und verstanden.",
+      "Mindestens einen Vorschlag umgesetzt.",
+      "Erneut gemessen und die Verbesserung dokumentiert.",
+      "Screenshots vorher und nachher gemacht."
+    ],
+    "portfolioItem": "P06"
+  },
+  "audio": {
+    "file": "M04-07-01.mp3",
+    "durationSeconds": 1320,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Sind die Core Web Vitals wirklich ein Google-Ranking-Faktor?",
+      "answer": "Ja, Google bestätigt offiziell, dass die Core Web Vitals in das Ranking für die Suchergebnisse einfließen. Allerdings sind sie nur einer von vielen Faktoren. Eine Seite mit perfekten Core Web Vitals, aber schlechtem Inhalt wird nicht auf Platz eins landen. Umgekehrt kann eine inhaltlich hervorragende Seite mit schlechten Werten im Ranking abgestraft werden. Die Core Web Vitals sind der technische Teil der Page Experience, und Google hat klargemacht, dass Nutzererfahrung zählt. Für dich als Entwickler bedeutet das: gute Core Web Vitals sind kein Garant für gute Rankings, aber schlechte sind ein Garant für schlechtere Rankings."
+    },
+    {
+      "question": "Wie kann ich meinen LCP-Wert verbessern?",
+      "answer": "Die häufigsten LCP-Bremsen sind große Bilder, langsame Server und renderblockierende Ressourcen. Optimiere deine Bilder: verwende moderne Formate wie WebP, komprimiere sie und liefere sie in der richtigen Größe aus. Next.js Image-Komponente erledigt das automatisch. Nutze ein CDN wie Vercels Edge Network, damit die Bilder aus der Nähe des Nutzers geladen werden. Entferne oder verschiebe renderblockierende JavaScript- und CSS-Dateien, die das Rendern des Hauptinhalts verzögern. Und prüfe, ob dein Server schnell genug antwortet: die Time to First Byte sollte unter 800 Millisekunden liegen."
+    },
+    {
+      "question": "Was verursacht einen schlechten CLS-Wert?",
+      "answer": "Die häufigsten CLS-Sünden sind Bilder ohne Breiten- und Höhenangabe, nachträglich geladene Schriftarten, die den Text verschieben, und dynamisch eingeblendete Inhalte wie Werbebanner oder Cookie-Hinweise, die den vorhandenen Inhalt nach unten schieben. Die Lösung ist einfach: gib jedem Bild und jedem Video feste Platzhalter mit den richtigen Dimensionen. Verwende next/font für lokale Schriftarten, die sofort geladen werden. Und blende dynamische Inhalte so ein, dass sie den vorhandenen Inhalt nicht verschieben, zum Beispiel indem du den Platz von Anfang an reservierst."
+    },
+    {
+      "question": "Warum wurde FID durch INP ersetzt?",
+      "answer": "FID, First Input Delay, maß nur die Verzögerung bei der ersten Interaktion des Nutzers. Das war ein guter Anfang, aber es erfasste nicht, wie die Seite bei späteren Interaktionen reagiert. Eine Seite konnte einen guten FID haben, aber bei der zehnten Interaktion träge werden, und FID hätte das nicht bemerkt. INP misst alle Interaktionen während der gesamten Lebensdauer der Seite und gibt damit ein realistischeres Bild der gefühlten Reaktionsfähigkeit. Google hat FID im März 2024 offiziell durch INP ersetzt."
+    },
+    {
+      "question": "Kann ich die Core Web Vitals auch automatisiert in meiner CI-Pipeline messen?",
+      "answer": "Ja, es gibt mehrere Werkzeuge dafür. Lighthouse CI lässt sich in deine GitHub-Actions-Pipeline integrieren und schlägt fehl, wenn die Werte unter definierte Schwellen fallen. Du kannst zum Beispiel festlegen: der Build schlägt fehl, wenn der LCP über 3 Sekunden oder der CLS über 0,1 liegt. So verhinderst du, dass eine Verschlechterung unbemerkt in Produktion geht. Beachte aber, dass die Werte in der CI-Umgebung variieren können, weil die Netzwerkbedingungen anders sind als bei echten Nutzern. Lighthouse CI ist ein guter erster Filter, ersetzt aber nicht das Monitoring in Produktion."
+    }
+  ]
+}

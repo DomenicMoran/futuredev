@@ -1,0 +1,746 @@
+{
+  "id": "M04-07-02",
+  "title": "Caching",
+  "durationMinutes": 32,
+  "prerequisites": [
+    "M04-07-01"
+  ],
+  "terms": [
+    {
+      "term": "Cache",
+      "definition": "Ein Zwischenspeicher, der Ergebnisse einer einmal ausgeführten Operation vorhält und bei wiederholten Anfragen sofort ausliefert, statt die Operation erneut auszuführen. Caches gibt es auf vielen Ebenen: im Browser, im CDN, auf dem Server und in der Datenbank."
+    },
+    {
+      "term": "CDN",
+      "definition": "Content Delivery Network, ein weltweit verteiltes Netzwerk von Servern, das statische Inhalte wie Bilder, CSS und JavaScript zwischenspeichert und aus dem nächstgelegenen Standort ausliefert. Ein CDN reduziert die Latenz und entlastet den Ursprungsserver."
+    },
+    {
+      "term": "Cache-Control",
+      "definition": "Ein HTTP-Header, mit dem der Server dem Browser und zwischengeschalteten Caches mitteilt, wie lange eine Ressource zwischengespeichert werden darf. Der wichtigste Wert ist max-age, der die Gültigkeitsdauer in Sekunden angibt."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen Bibliothekar vor, der sich die Antworten auf häufig gestellte Fragen auf einen Zettel schreibt und an die Theke klebt. Wenn der nächste Besucher dieselbe Frage stellt, liest der Bibliothekar die Antwort vom Zettel ab, statt jedes Mal ins Archiv zu laufen und in dicken Büchern nachzuschlagen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Genau das macht ein Cache in der Softwareentwicklung. Statt jedes Mal eine teure Operation auszuführen, eine Datenbankabfrage zu machen oder eine Datei vom Server zu laden, wird das Ergebnis beim ersten Mal zwischengespeichert und bei allen folgenden Anfragen sofort ausgeliefert. Caching ist die wirksamste Einzelmaßnahme, um eine Webseite schneller zu machen, weil es die Arbeit, die einmal erledigt wurde, nicht wiederholt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Auf welchen Ebenen kann ich cachen, und welche bringt am meisten?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Es gibt vier Hauptebenen. Die erste und wirksamste ist das Browser-Caching: der Browser speichert Bilder, CSS und JavaScript lokal auf dem Gerät des Nutzers. Beim nächsten Besuch lädt er sie aus dem lokalen Cache, ohne den Server überhaupt anzufragen. Die zweite Ebene ist das CDN-Caching: ein weltweit verteiltes Netzwerk speichert Kopien deiner statischen Inhalte und liefert sie aus der Nähe des Nutzers aus. Die dritte Ebene ist das Server-Caching: der Server speichert die Ergebnisse teurer Berechnungen oder Datenbankabfragen. Die vierte Ebene ist das Datenbank-Caching: die Datenbank hält häufig abgefragte Daten im Arbeitsspeicher.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Ein Cache ist ein Zwischenspeicher, der Ergebnisse vorhält und bei wiederholten Anfragen sofort ausliefert.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-futuredev wird Caching auf mehreren Ebenen eingesetzt. Die Lektionsdaten, die sich selten ändern, werden im CDN von Vercel zwischengespeichert und mit einem Cache-Control-Header versehen, der dem Browser sagt: diese Daten sind eine Stunde lang gültig. Die Next.js-Anwendung nutzt Incremental Static Regeneration, um Seiten einmal zu bauen und dann nur bei Bedarf zu aktualisieren. Und die Supabase-Datenbank cached häufig abgefragte Lektionsinhalte im Arbeitsspeicher.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Mehrstufiges Caching ist wichtig, weil jede Ebene eine andere Art von Arbeit einspart. Das Browser-Caching spart Netzwerk-Latenz, das CDN-Caching spart Server-Last, das Server-Caching spart Datenbankabfragen, und das Datenbank-Caching spart Festplattenzugriffe. Zusammen können diese vier Ebenen die Antwortzeit einer Seite von mehreren Sekunden auf wenige Millisekunden reduzieren.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was genau ist ein CDN, und wie unterscheidet es sich vom Browser-Cache?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine Pizzakette vor, die in jeder Stadt eine Filiale hat. Der Browser-Cache ist dein eigener Kühlschrank zu Hause: du hast die Pizza schon da und musst nirgendwo anrufen. Das CDN ist die Filiale um die Ecke: du musst zwar bestellen, aber die Pizza kommt aus der Nähe, nicht aus der Zentrale am anderen Ende des Landes.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein CDN, Content Delivery Network, ist ein Netzwerk von Servern, die über die ganze Welt verteilt sind. Wenn ein Nutzer in Tokio deine Seite aufruft, lädt er die statischen Inhalte aus dem CDN-Server in Tokio, nicht von deinem Ursprungsserver in Frankfurt. Der Browser-Cache ist noch näher: er liegt auf dem Gerät des Nutzers selbst. Der Browser-Cache ist die schnellste Ebene, aber er funktioniert nur für wiederkehrende Besucher. Das CDN funktioniert auch für neue Besucher, solange ein anderer Besucher aus derselben Region die Inhalte schon einmal angefragt hat.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Ein CDN, Content Delivery Network, ist ein weltweit verteiltes Netzwerk, das statische Inhalte zwischenspeichert und aus der Nähe des Nutzers ausliefert.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-futuredev übernimmt das Vercel Edge Network die Rolle des CDN. Alle statischen Assets wie Bilder, CSS und JavaScript werden automatisch auf den Edge-Standorten zwischengespeichert. Ein Nutzer in Sydney bekommt die FutureDev-App aus Sydney, nicht aus Frankfurt. Das reduziert die Ladezeit von mehreren Sekunden auf unter eine Sekunde, ohne dass der Entwickler etwas dafür tun musste. Vercel macht das CDN-Caching automatisch.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Ein CDN ist heute keine optionale Optimierung mehr, sondern eine Notwendigkeit. Das Internet ist global, und ein Server in Frankfurt kann einen Nutzer in Sydney physikalisch nicht in unter 300 Millisekunden erreichen, weil die Lichtgeschwindigkeit die Grenze setzt. Ein CDN umgeht diese physikalische Grenze, indem es die Daten näher zum Nutzer bringt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist der Cache-Control-Header, und wie setze ich ihn richtig?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir ein Haltbarkeitsdatum auf einer Milchpackung vor. Solange das Datum nicht überschritten ist, kannst du die Milch bedenkenlos trinken. Ist das Datum überschritten, musst du eine neue Packung kaufen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der Cache-Control-Header ist das Haltbarkeitsdatum für Web-Inhalte. Der Server schickt mit jeder Antwort einen Header, der dem Browser und allen zwischengeschalteten Caches sagt, wie lange sie diese Antwort zwischenspeichern dürfen. Der wichtigste Wert ist max-age, zum Beispiel Cache-Control: public, max-age=3600 für eine Stunde. Nach Ablauf dieser Stunde muss der Browser beim Server nachfragen, ob es eine neue Version gibt. Für unveränderliche Dateien wie Build-Assets mit Hash im Namen kannst du max-age auf ein Jahr setzen, weil sich die Datei nie ändert.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Cache-Control ist ein HTTP-Header, der die Gültigkeitsdauer einer Ressource für Browser und Caches festlegt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im Repo repo-futuredev setzt Next.js die Cache-Control-Header automatisch. Statische Assets mit Hash im Dateinamen bekommen max-age=31536000, also ein Jahr. Dynamische Seiten wie die Lektionsübersicht bekommen max-age=3600, also eine Stunde. Und API-Antworten, die sich häufig ändern, bekommen max-age=0 mit einem Validierungsmechanismus, sodass der Browser bei jeder Anfrage prüft, ob sich etwas geändert hat. Der Entwickler muss diese Header nicht von Hand setzen, Next.js erledigt das basierend auf der Art der Seite.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Richtig gesetzte Cache-Control-Header sind der Unterschied zwischen einer Seite, die bei jedem Besuch alles neu lädt, und einer Seite, die beim zweiten Besuch fast nichts lädt. Ein Nutzer, der deine Seite heute besucht und morgen wiederkommt, sollte nicht dieselben Bilder, dasselbe CSS und dasselbe JavaScript erneut herunterladen müssen. Mit max-age=31536000 für unveränderliche Assets tust du genau das: der Browser lädt sie einmal und nie wieder.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was mache ich, wenn sich eine zwischengespeicherte Datei doch ändert?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Das ist das Cache-Invalidation-Problem, einer der beiden schweren Probleme der Informatik, wie ein berühmtes Zitat sagt. Die Lösung ist einfach: ändere den Namen der Datei. Wenn dein Build-Tool einen Hash des Inhalts in den Dateinamen einbaut, zum Beispiel main.abc123.js, dann ist eine neue Version der Datei automatisch eine neue Datei mit einem neuen Namen. Der Browser sieht den neuen Namen, hat ihn nicht im Cache und lädt die Datei neu. Die alte Datei mit dem alten Namen bleibt im Cache, bis ihr max-age abläuft, aber sie wird nicht mehr angefordert, weil die HTML-Seite jetzt auf den neuen Namen verweist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Diese Strategie, Dateinamen zu hashen, ist der Grund, warum moderne Build-Tools wie Next.js, Webpack oder Vite das automatisch tun. Sie lösen das Cache-Invalidation-Problem ein für alle Mal, indem sie jede Version einer Datei zu einer neuen Datei machen. Du kannst den Cache bedenkenlos auf ein Jahr setzen, weil sich eine Datei mit einem bestimmten Namen nie ändert.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine Bibliothek vor, in der jedes Buch eine eindeutige ISBN hat. Wenn eine neue Auflage erscheint, bekommt sie eine neue ISBN. Die alte Auflage mit der alten ISBN bleibt im Regal stehen, aber niemand leiht sie mehr aus, weil der Katalog jetzt auf die neue ISBN verweist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Genauso funktioniert das Cache-Invalidation durch Dateinamen-Hashing. Jede Version einer Datei bekommt eine eindeutige Kennung, und die Verweise in der Anwendung zeigen immer auf die neueste Version. Die alten Versionen bleiben im Cache, bis sie ablaufen, aber sie werden nicht mehr verwendet. Das ist die sauberste und zuverlässigste Form der Cache-Invalidation.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Performance-Optimierung ist kein einmaliger Vorgang, sondern ein kontinuierlicher Prozess. Was heute schnell ist, kann morgen langsam sein, weil neue Inhalte, neue Abhängigkeiten oder neue Funktionen hinzugekommen sind. Deshalb ist es wichtig, Performance-Metriken in die CI-Pipeline zu integrieren und bei jeder Änderung automatisch zu prüfen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Kontinuierliches Performance-Monitoring ist der Unterschied zwischen einer Seite, die mit der Zeit immer langsamer wird, und einer, die dauerhaft schnell bleibt. Die meisten Seiten werden nicht durch eine einzelne große Änderung langsam, sondern durch viele kleine, unbemerkte Verschlechterungen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Performance-Optimierung ist kein einmaliger Vorgang, sondern ein kontinuierlicher Prozess. Was heute schnell ist, kann morgen langsam sein, weil neue Inhalte, neue Abhängigkeiten oder neue Funktionen hinzugekommen sind. Deshalb ist es wichtig, Performance-Metriken in die CI-Pipeline zu integrieren und bei jeder Änderung automatisch zu prüfen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Kontinuierliches Performance-Monitoring ist der Unterschied zwischen einer Seite, die mit der Zeit immer langsamer wird, und einer, die dauerhaft schnell bleibt. Die meisten Seiten werden nicht durch eine einzelne große Änderung langsam, sondern durch viele kleine, unbemerkte Verschlechterungen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Lohnt sich der Aufwand für Performance-Optimierung auch bei kleinen Projekten?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ja, und zwar aus zwei Gründen. Erstens: die Grundlagen wie Bildoptimierung, Caching und schnelle Serverantworten sind mit modernen Frameworks fast ohne Zusatzaufwand umsetzbar. Zweitens: du entwickelst gute Gewohnheiten, die du dann automatisch auch in größeren Projekten anwendest. Ein Entwickler, der von Anfang an auf Performance achtet, schreibt automatisch besseren Code als einer, der Performance als nachträgliche Optimierung betrachtet.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Performance-Optimierung ist kein einmaliger Vorgang, sondern ein kontinuierlicher Prozess. Was heute schnell ist, kann morgen langsam sein, weil neue Inhalte, neue Abhängigkeiten oder neue Funktionen hinzugekommen sind. Deshalb ist es wichtig, Performance-Metriken in die CI-Pipeline zu integrieren und bei jeder Änderung automatisch zu prüfen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Kontinuierliches Performance-Monitoring ist der Unterschied zwischen einer Seite, die mit der Zeit immer langsamer wird, und einer, die dauerhaft schnell bleibt. Die meisten Seiten werden nicht durch eine einzelne große Änderung langsam, sondern durch viele kleine, unbemerkte Verschlechterungen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Lohnt sich der Aufwand für Performance-Optimierung auch bei kleinen Projekten?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ja, und zwar aus zwei Gründen. Erstens: die Grundlagen wie Bildoptimierung, Caching und schnelle Serverantworten sind mit modernen Frameworks fast ohne Zusatzaufwand umsetzbar. Zweitens: du entwickelst gute Gewohnheiten, die du dann automatisch auch in größeren Projekten anwendest. Ein Entwickler, der von Anfang an auf Performance achtet, schreibt automatisch besseren Code als einer, der Performance als nachträgliche Optimierung betrachtet.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Performance-Optimierung ist kein einmaliger Vorgang, sondern ein kontinuierlicher Prozess. Was heute schnell ist, kann morgen langsam sein, weil neue Inhalte, neue Abhängigkeiten oder neue Funktionen hinzugekommen sind. Deshalb ist es wichtig, Performance-Metriken in die CI-Pipeline zu integrieren und bei jeder Änderung automatisch zu prüfen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Kontinuierliches Performance-Monitoring ist der Unterschied zwischen einer Seite, die mit der Zeit immer langsamer wird, und einer, die dauerhaft schnell bleibt. Die meisten Seiten werden nicht durch eine einzelne große Änderung langsam, sondern durch viele kleine, unbemerkte Verschlechterungen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Lohnt sich der Aufwand für Performance-Optimierung auch bei kleinen Projekten?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ja, und zwar aus zwei Gründen. Erstens: die Grundlagen wie Bildoptimierung, Caching und schnelle Serverantworten sind mit modernen Frameworks fast ohne Zusatzaufwand umsetzbar. Zweitens: du entwickelst gute Gewohnheiten, die du dann automatisch auch in größeren Projekten anwendest. Ein Entwickler, der von Anfang an auf Performance achtet, schreibt automatisch besseren Code als einer, der Performance als nachträgliche Optimierung betrachtet.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Performance-Optimierung ist kein einmaliger Vorgang, sondern ein kontinuierlicher Prozess. Was heute schnell ist, kann morgen langsam sein, weil neue Inhalte, neue Abhängigkeiten oder neue Funktionen hinzugekommen sind. Deshalb ist es wichtig, Performance-Metriken in die CI-Pipeline zu integrieren und bei jeder Änderung automatisch zu prüfen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Kontinuierliches Performance-Monitoring ist der Unterschied zwischen einer Seite, die mit der Zeit immer langsamer wird, und einer, die dauerhaft schnell bleibt. Die meisten Seiten werden nicht durch eine einzelne große Änderung langsam, sondern durch viele kleine, unbemerkte Verschlechterungen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Lohnt sich der Aufwand für Performance-Optimierung auch bei kleinen Projekten?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ja, und zwar aus zwei Gründen. Erstens: die Grundlagen wie Bildoptimierung, Caching und schnelle Serverantworten sind mit modernen Frameworks fast ohne Zusatzaufwand umsetzbar. Zweitens: du entwickelst gute Gewohnheiten, die du dann automatisch auch in größeren Projekten anwendest. Ein Entwickler, der von Anfang an auf Performance achtet, schreibt automatisch besseren Code als einer, der Performance als nachträgliche Optimierung betrachtet.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Performance-Optimierung ist kein einmaliger Vorgang, sondern ein kontinuierlicher Prozess. Was heute schnell ist, kann morgen langsam sein, weil neue Inhalte, neue Abhängigkeiten oder neue Funktionen hinzugekommen sind. Deshalb ist es wichtig, Performance-Metriken in die CI-Pipeline zu integrieren und bei jeder Änderung automatisch zu prüfen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Kontinuierliches Performance-Monitoring ist der Unterschied zwischen einer Seite, die mit der Zeit immer langsamer wird, und einer, die dauerhaft schnell bleibt. Die meisten Seiten werden nicht durch eine einzelne große Änderung langsam, sondern durch viele kleine, unbemerkte Verschlechterungen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Lohnt sich der Aufwand für Performance-Optimierung auch bei kleinen Projekten?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ja, und zwar aus zwei Gründen. Erstens: die Grundlagen wie Bildoptimierung, Caching und schnelle Serverantworten sind mit modernen Frameworks fast ohne Zusatzaufwand umsetzbar. Zweitens: du entwickelst gute Gewohnheiten, die du dann automatisch auch in größeren Projekten anwendest. Ein Entwickler, der von Anfang an auf Performance achtet, schreibt automatisch besseren Code als einer, der Performance als nachträgliche Optimierung betrachtet.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "text": "Also noch einmal ganz kurz: Ein Cache ist ein Zwischenspeicher, der Ergebnisse vorhält und wiederholte Arbeit einspart. Die vier Caching-Ebenen sind Browser, CDN, Server und Datenbank. Ein CDN ist ein weltweit verteiltes Netzwerk, das Inhalte aus der Nähe des Nutzers ausliefert. Der Cache-Control-Header legt mit max-age fest, wie lange eine Ressource zwischengespeichert werden darf. Und das Cache-Invalidation-Problem löst du, indem du Dateinamen mit einem Inhalts-Hash versiehst, sodass jede neue Version automatisch eine neue Datei ist.",
+      "isKeySentence": true
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Ein Cache ist ein Zwischenspeicher, der Ergebnisse einer einmal ausgeführten Operation vorhält und bei wiederholten Anfragen sofort ausliefert, statt die Operation erneut auszuführen. Caches gibt es auf vielen Ebenen: im Browser, im CDN, auf dem Server und in der Datenbank.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Ein CDN, Content Delivery Network, ist ein weltweit verteiltes Netzwerk von Servern, das statische Inhalte wie Bilder, CSS und JavaScript zwischenspeichert und aus dem nächstgelegenen Standort ausliefert. Ein CDN reduziert die Latenz und entlastet den Ursprungsserver.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Cache-Control ist ein HTTP-Header, mit dem der Server dem Browser und zwischengeschalteten Caches mitteilt, wie lange eine Ressource zwischengespeichert werden darf. Der wichtigste Wert ist max-age, der die Gültigkeitsdauer in Sekunden angibt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was ist der Unterschied zwischen Cache und CDN?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ein Cache ist das allgemeine Konzept eines Zwischenspeichers, ein CDN ist eine spezifische Implementierung auf Netzwerkebene. Der Browser-Cache ist ein Cache auf dem Gerät des Nutzers. Das CDN ist ein Cache auf Servern, die über die Welt verteilt sind. Beide sind Caches, aber sie arbeiten auf unterschiedlichen Ebenen und für unterschiedliche Zwecke. Der Browser-Cache ist am schnellsten, aber nur für wiederkehrende Besucher. Das CDN ist etwas langsamer, funktioniert aber für alle Besucher aus einer Region.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Wie verhindere ich, dass sensible Daten im Cache landen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Setze den Cache-Control-Header auf private, no-store für Seiten mit sensiblen Daten. private bedeutet, dass nur der Browser des Nutzers die Daten cachen darf, nicht das CDN oder andere zwischengeschaltete Caches. no-store bedeutet, dass die Daten überhaupt nicht zwischengespeichert werden dürfen und bei jeder Anfrage neu vom Server geladen werden müssen. Das ist die richtige Einstellung für persönliche Daten wie das Nutzerprofil oder den Warenkorb. Öffentliche, für alle gleiche Inhalte wie die Startseite oder ein Blog-Artikel können dagegen mit public gecached werden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was ist Incremental Static Regeneration in Next.js?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Incremental Static Regeneration, kurz ISR, ist eine Next.js-Funktion, die das Beste aus statischen und dynamischen Seiten kombiniert. Eine Seite wird einmal statisch gebaut und dann für eine bestimmte Zeit, zum Beispiel eine Stunde, aus dem Cache ausgeliefert. Nach Ablauf dieser Zeit wird die Seite im Hintergrund neu gebaut, während der nächste Besucher noch die alte Version bekommt. Erst der übernächste Besucher sieht die neue Version. ISR ist ideal für Seiten, die sich selten ändern, aber nicht komplett statisch sind, wie eine Lektionsübersicht oder ein Blog.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Kann ich zu viel cachen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ja, das häufigste Problem mit Caching sind veraltete Daten, die der Nutzer sieht, obwohl sich auf dem Server schon etwas geändert hat. Das passiert, wenn der max-age-Wert zu hoch ist oder die Cache-Invalidation nicht richtig funktioniert. Ein Nutzer löscht seinen Account, aber die Seite zeigt ihn noch als angemeldet, weil der Cache die alte Seite ausliefert. Die Lösung: kurze Cache-Zeiten für dynamische Inhalte, lange Cache-Zeiten nur für unveränderliche Assets mit Hash im Namen, und immer einen Weg vorsehen, den Cache manuell zu leeren, wenn etwas schiefgeht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Wie messe ich, ob mein Caching funktioniert?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Öffne die Chrome-Entwicklertools, gehe auf den Network-Tab und lade deine Seite. In der Spalte Size siehst du, welche Ressourcen aus dem Cache geladen wurden, sie sind mit disk cache oder memory cache markiert. In der Spalte Time siehst du die Ladezeit. Eine Ressource aus dem Browser-Cache hat eine Time von null Millisekunden. Wenn du die Seite ein zweites Mal lädst, sollten die meisten statischen Ressourcen aus dem Cache kommen. Wenn nicht, stimmt etwas mit deinen Cache-Control-Headern nicht.",
+      "isKeySentence": false
+    }
+  ],
+  "practiceExample": {
+    "text": "Im Repo repo-futuredev wird Caching auf mehreren Ebenen eingesetzt. Das Vercel Edge Network cached statische Assets, Next.js setzt automatisch Cache-Control-Header, und Incremental Static Regeneration hält die Lektionsseiten aktuell, ohne sie bei jedem Aufruf neu zu bauen.",
+    "repoNote": "repo-futuredev",
+    "location": "Vercel Edge Network, Next.js Cache-Control-Header und Incremental Static Regeneration für Lektionsseiten"
+  },
+  "quiz": [
+    {
+      "question": "Welches Alltagsbild beschreibt einen Cache am treffendsten?",
+      "area": "Performance: Cache",
+      "options": [
+        {
+          "text": "Ein Bibliothekar, der häufige Antworten auf einen Zettel schreibt, statt jedes Mal ins Archiv zu laufen.",
+          "isCorrect": true,
+          "explanation": "Richtig: der Cache speichert Ergebnisse und liefert sie sofort aus, statt die Arbeit zu wiederholen."
+        },
+        {
+          "text": "Ein Archivar, der jedes Dokument nach strengen Regeln ablegt und nie etwas wegwirft.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Cache speichert nur eine Auswahl, nicht alles, und verwirft alte Einträge."
+        },
+        {
+          "text": "Ein Drucker, der jedes Dokument sofort ausdruckt und das Papier ablegt.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Cache druckt nichts aus, er speichert digital."
+        },
+        {
+          "text": "Ein Postbote, der Briefe zustellt, aber keine Kopien behält.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Cache behält Kopien, genau das ist sein Zweck."
+        }
+      ]
+    },
+    {
+      "question": "Was ist ein CDN?",
+      "area": "Performance: CDN",
+      "options": [
+        {
+          "text": "Ein weltweit verteiltes Netzwerk, das statische Inhalte zwischenspeichert und aus der Nähe des Nutzers ausliefert.",
+          "isCorrect": true,
+          "explanation": "Richtig: ein CDN reduziert die Latenz, indem es Daten näher zum Nutzer bringt."
+        },
+        {
+          "text": "Ein lokales Netzwerk im Büro, das die Internetverbindung aller Computer bündelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein CDN ist global, nicht lokal."
+        },
+        {
+          "text": "Ein Protokoll zur Verschlüsselung von Daten während der Übertragung.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein CDN ist ein Netzwerk, kein Protokoll."
+        },
+        {
+          "text": "Eine Datenbank, die alle Inhalte einer Webseite speichert.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein CDN speichert Kopien, nicht die Originaldaten."
+        }
+      ]
+    },
+    {
+      "question": "Was bewirkt der Cache-Control-Header max-age=3600?",
+      "area": "Performance: Cache-Control",
+      "options": [
+        {
+          "text": "Die Ressource darf eine Stunde lang zwischengespeichert werden, danach muss sie neu geladen werden.",
+          "isCorrect": true,
+          "explanation": "Richtig: max-age gibt die Gültigkeitsdauer in Sekunden an, 3600 Sekunden sind eine Stunde."
+        },
+        {
+          "text": "Die Ressource wird genau 3600 Mal ausgeliefert und dann gelöscht.",
+          "isCorrect": false,
+          "explanation": "Falsch: max-age ist eine Zeitangabe, keine Anzahl."
+        },
+        {
+          "text": "Die Ressource darf nur von Nutzern unter 3600 Jahren angesehen werden.",
+          "isCorrect": false,
+          "explanation": "Falsch: max-age hat nichts mit dem Alter der Nutzer zu tun."
+        },
+        {
+          "text": "Der Server schickt die Ressource 3600 Mal pro Sekunde an den Browser.",
+          "isCorrect": false,
+          "explanation": "Falsch: max-age steuert die Cache-Dauer, nicht die Übertragungsrate."
+        }
+      ]
+    },
+    {
+      "question": "Welche Aussage über das Repo repo-futuredev und Caching ist richtig?",
+      "area": "Praxisbeispiel repo-futuredev",
+      "options": [
+        {
+          "text": "Vercel Edge Network cached Assets, Next.js setzt Cache-Control-Header, und ISR hält Seiten aktuell.",
+          "isCorrect": true,
+          "explanation": "Richtig: repo-futuredev nutzt mehrstufiges Caching für optimale Performance."
+        },
+        {
+          "text": "Das Repo verwendet kein Caching, weil alle Inhalte in Echtzeit generiert werden.",
+          "isCorrect": false,
+          "explanation": "Falsch: repo-futuredev cached auf mehreren Ebenen."
+        },
+        {
+          "text": "Caching wird nur für Bilder verwendet, nicht für HTML oder JavaScript.",
+          "isCorrect": false,
+          "explanation": "Falsch: alle statischen Assets werden gecached."
+        },
+        {
+          "text": "Das Caching muss von jedem Entwickler manuell in einer Konfigurationsdatei eingerichtet werden.",
+          "isCorrect": false,
+          "explanation": "Falsch: Next.js und Vercel übernehmen das Caching weitgehend automatisch."
+        }
+      ]
+    },
+    {
+      "question": "Wie löst du das Cache-Invalidation-Problem?",
+      "area": "Performance: Cache",
+      "options": [
+        {
+          "text": "Indem du Dateinamen mit einem Inhalts-Hash versiehst, sodass jede neue Version eine neue Datei ist.",
+          "isCorrect": true,
+          "explanation": "Richtig: gehashte Dateinamen machen jede Version zu einer neuen Datei, die alte bleibt im Cache."
+        },
+        {
+          "text": "Indem du den Cache jede Nacht um drei Uhr automatisch löschst.",
+          "isCorrect": false,
+          "explanation": "Falsch: nächtliches Löschen ist eine grobe, ineffiziente Lösung."
+        },
+        {
+          "text": "Indem du den Nutzer bittest, seinen Browser-Cache manuell zu leeren.",
+          "isCorrect": false,
+          "explanation": "Falsch: du kannst nicht von Nutzern verlangen, ihren Cache zu leeren."
+        },
+        {
+          "text": "Indem du gar nicht cachest, dann gibt es auch kein Invalidation-Problem.",
+          "isCorrect": false,
+          "explanation": "Falsch: kein Caching ist keine Lösung, sondern ein Performance-Problem."
+        }
+      ]
+    },
+    {
+      "question": "Auf welchen vier Ebenen kannst du cachen?",
+      "area": "Performance: Cache",
+      "options": [
+        {
+          "text": "Browser, CDN, Server und Datenbank.",
+          "isCorrect": true,
+          "explanation": "Richtig: diese vier Ebenen sparen jeweils eine andere Art von Arbeit ein."
+        },
+        {
+          "text": "HTML, CSS, JavaScript und Bilder.",
+          "isCorrect": false,
+          "explanation": "Falsch: das sind Dateitypen, keine Caching-Ebenen."
+        },
+        {
+          "text": "Entwicklung, Test, Staging und Produktion.",
+          "isCorrect": false,
+          "explanation": "Falsch: das sind Environments, keine Caching-Ebenen."
+        },
+        {
+          "text": "Montag, Mittwoch, Freitag und Sonntag.",
+          "isCorrect": false,
+          "explanation": "Falsch: Caching-Ebenen haben nichts mit Wochentagen zu tun."
+        }
+      ]
+    },
+    {
+      "question": "Warum ist der Browser-Cache die schnellste Caching-Ebene?",
+      "area": "Performance: Cache",
+      "options": [
+        {
+          "text": "Weil die Daten auf dem Gerät des Nutzers liegen und keine Netzwerkanfrage nötig ist.",
+          "isCorrect": true,
+          "explanation": "Richtig: der Browser-Cache liefert Daten in null Millisekunden, weil sie lokal vorliegen."
+        },
+        {
+          "text": "Weil der Browser eine spezielle Cache-CPU hat, die schneller ist als normale Prozessoren.",
+          "isCorrect": false,
+          "explanation": "Falsch: es gibt keine spezielle Cache-CPU im Browser."
+        },
+        {
+          "text": "Weil der Browser-Cache von Google priorisiert wird und Vorfahrt im Netzwerk hat.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Browser-Cache hat keine Netzwerkpriorität, er umgeht das Netzwerk komplett."
+        },
+        {
+          "text": "Weil der Browser-Cache die Daten komprimiert und dadurch schneller ausliefert.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Geschwindigkeit kommt von der lokalen Verfügbarkeit, nicht von Kompression."
+        }
+      ]
+    },
+    {
+      "question": "Was bedeutet private im Cache-Control-Header?",
+      "area": "Performance: Cache-Control",
+      "options": [
+        {
+          "text": "Nur der Browser des Nutzers darf die Daten cachen, nicht das CDN oder andere Zwischencaches.",
+          "isCorrect": true,
+          "explanation": "Richtig: private ist für persönliche Daten, die nicht in öffentlichen Caches landen dürfen."
+        },
+        {
+          "text": "Die Daten sind privat und dürfen von niemandem gecached werden, auch nicht vom Browser.",
+          "isCorrect": false,
+          "explanation": "Falsch: private erlaubt das Caching im Browser, verbietet es nur in Zwischencaches."
+        },
+        {
+          "text": "Nur der Entwickler, der die Seite gebaut hat, darf die Daten sehen.",
+          "isCorrect": false,
+          "explanation": "Falsch: private bezieht sich auf Caches, nicht auf Zugriffsrechte."
+        },
+        {
+          "text": "Die Daten werden mit einem privaten Schlüssel verschlüsselt.",
+          "isCorrect": false,
+          "explanation": "Falsch: private hat nichts mit Verschlüsselung zu tun."
+        }
+      ]
+    },
+    {
+      "question": "Was ist Incremental Static Regeneration in Next.js?",
+      "area": "Performance: Cache",
+      "options": [
+        {
+          "text": "Eine Seite wird statisch gebaut, gecached und im Hintergrund aktualisiert, ohne den Nutzer warten zu lassen.",
+          "isCorrect": true,
+          "explanation": "Richtig: ISR kombiniert die Geschwindigkeit statischer Seiten mit der Aktualität dynamischer Seiten."
+        },
+        {
+          "text": "Eine Seite wird bei jedem Aufruf komplett neu gebaut, aber nur die geänderten Teile.",
+          "isCorrect": false,
+          "explanation": "Falsch: ISR baut die Seite nicht bei jedem Aufruf neu, sondern in festgelegten Intervallen."
+        },
+        {
+          "text": "Eine Seite wird einmal gebaut und dann nie wieder aktualisiert.",
+          "isCorrect": false,
+          "explanation": "Falsch: das wäre eine rein statische Seite, nicht ISR."
+        },
+        {
+          "text": "Eine Seite wird auf dem Gerät des Nutzers gebaut, nicht auf dem Server.",
+          "isCorrect": false,
+          "explanation": "Falsch: ISR baut die Seite auf dem Server, nicht im Browser."
+        }
+      ]
+    },
+    {
+      "question": "Wie erkennst du in den Chrome-Entwicklertools, ob eine Ressource aus dem Cache geladen wurde?",
+      "area": "Performance: Cache",
+      "options": [
+        {
+          "text": "In der Network-Tab-Spalte Size steht disk cache oder memory cache.",
+          "isCorrect": true,
+          "explanation": "Richtig: disk cache und memory cache zeigen an, dass die Ressource lokal geladen wurde."
+        },
+        {
+          "text": "Die Ressource ist grün markiert und hat einen Stern daneben.",
+          "isCorrect": false,
+          "explanation": "Falsch: es gibt keine grüne Markierung für Cache-Treffer."
+        },
+        {
+          "text": "In der Console erscheint die Meldung cached resource loaded.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Console zeigt keine automatischen Cache-Meldungen."
+        },
+        {
+          "text": "Die Ressource hat eine Größe von null Byte.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Größe ist nicht null, sondern wird aus dem Cache gelesen."
+        }
+      ]
+    },
+    {
+      "question": "Warum solltest du max-age=31536000 für unveränderliche Assets setzen?",
+      "area": "Performance: Cache-Control",
+      "options": [
+        {
+          "text": "Weil die Datei sich nie ändert und der Browser sie nur einmal laden muss.",
+          "isCorrect": true,
+          "explanation": "Richtig: ein Jahr max-age für unveränderliche Assets spart Bandbreite und Ladezeit."
+        },
+        {
+          "text": "Weil Google sonst die Seite aus dem Index entfernt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Google bestraft keine kurzen Cache-Zeiten."
+        },
+        {
+          "text": "Weil der Browser sonst die Datei bei jedem Seitenaufruf dreimal lädt.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Browser lädt die Datei einmal, nicht dreimal."
+        },
+        {
+          "text": "Weil 31536000 die maximale Anzahl von Cache-Einträgen im Browser ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: 31536000 ist die Anzahl der Sekunden in einem Jahr, keine maximale Eintragszahl."
+        }
+      ]
+    },
+    {
+      "question": "Was passiert, wenn du sensible Daten mit public cachest?",
+      "area": "Performance: Cache-Control",
+      "options": [
+        {
+          "text": "Die Daten könnten in öffentlichen CDN-Caches landen und von anderen Nutzern eingesehen werden.",
+          "isCorrect": true,
+          "explanation": "Richtig: public erlaubt das Caching in Zwischencaches, was für sensible Daten ein Sicherheitsrisiko ist."
+        },
+        {
+          "text": "Nichts, public und private sind dasselbe und können beliebig ausgetauscht werden.",
+          "isCorrect": false,
+          "explanation": "Falsch: public und private haben unterschiedliche Sicherheitsimplikationen."
+        },
+        {
+          "text": "Die Daten werden automatisch verschlüsselt, bevor sie im Cache landen.",
+          "isCorrect": false,
+          "explanation": "Falsch: public verschlüsselt nichts automatisch."
+        },
+        {
+          "text": "Der Browser zeigt eine Warnung an und verweigert das Caching.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Browser warnt nicht, er folgt den Cache-Headern."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Öffne die Chrome-Entwicklertools deiner eigenen oder einer öffentlichen Webseite und gehe auf den Network-Tab. Lade die Seite und identifiziere, welche Ressourcen aus dem Cache geladen wurden und welche vom Server. Prüfe die Cache-Control-Header der wichtigsten Ressourcen. Finde mindestens eine Ressource, die besser gecached werden könnte, und notiere, welchen Cache-Control-Header du stattdessen setzen würdest.",
+    "expectation": "Die Cache-Strategie einer Webseite wurde analysiert, und mindestens eine Verbesserungsmöglichkeit wurde identifiziert. Die Konzepte Browser-Cache, CDN-Cache und Cache-Control-Header wurden praktisch angewendet.",
+    "checklist": [
+      "Chrome-Entwicklertools geöffnet und Network-Tab ausgewählt.",
+      "Die Seite geladen und Cache-Treffer identifiziert.",
+      "Cache-Control-Header der wichtigsten Ressourcen geprüft.",
+      "Mindestens eine Verbesserungsmöglichkeit identifiziert.",
+      "Den vorgeschlagenen Cache-Control-Header notiert."
+    ],
+    "portfolioItem": "P06"
+  },
+  "audio": {
+    "file": "M04-07-02.mp3",
+    "durationSeconds": 1280,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Was ist der Unterschied zwischen Cache und CDN?",
+      "answer": "Ein Cache ist das allgemeine Konzept eines Zwischenspeichers, ein CDN ist eine spezifische Implementierung auf Netzwerkebene. Der Browser-Cache ist ein Cache auf dem Gerät des Nutzers. Das CDN ist ein Cache auf Servern, die über die Welt verteilt sind. Beide sind Caches, aber sie arbeiten auf unterschiedlichen Ebenen und für unterschiedliche Zwecke. Der Browser-Cache ist am schnellsten, aber nur für wiederkehrende Besucher. Das CDN ist etwas langsamer, funktioniert aber für alle Besucher aus einer Region."
+    },
+    {
+      "question": "Wie verhindere ich, dass sensible Daten im Cache landen?",
+      "answer": "Setze den Cache-Control-Header auf private, no-store für Seiten mit sensiblen Daten. private bedeutet, dass nur der Browser des Nutzers die Daten cachen darf, nicht das CDN oder andere zwischengeschaltete Caches. no-store bedeutet, dass die Daten überhaupt nicht zwischengespeichert werden dürfen und bei jeder Anfrage neu vom Server geladen werden müssen. Das ist die richtige Einstellung für persönliche Daten wie das Nutzerprofil oder den Warenkorb. Öffentliche, für alle gleiche Inhalte wie die Startseite oder ein Blog-Artikel können dagegen mit public gecached werden."
+    },
+    {
+      "question": "Was ist Incremental Static Regeneration in Next.js?",
+      "answer": "Incremental Static Regeneration, kurz ISR, ist eine Next.js-Funktion, die das Beste aus statischen und dynamischen Seiten kombiniert. Eine Seite wird einmal statisch gebaut und dann für eine bestimmte Zeit, zum Beispiel eine Stunde, aus dem Cache ausgeliefert. Nach Ablauf dieser Zeit wird die Seite im Hintergrund neu gebaut, während der nächste Besucher noch die alte Version bekommt. Erst der übernächste Besucher sieht die neue Version. ISR ist ideal für Seiten, die sich selten ändern, aber nicht komplett statisch sind, wie eine Lektionsübersicht oder ein Blog."
+    },
+    {
+      "question": "Kann ich zu viel cachen?",
+      "answer": "Ja, das häufigste Problem mit Caching sind veraltete Daten, die der Nutzer sieht, obwohl sich auf dem Server schon etwas geändert hat. Das passiert, wenn der max-age-Wert zu hoch ist oder die Cache-Invalidation nicht richtig funktioniert. Ein Nutzer löscht seinen Account, aber die Seite zeigt ihn noch als angemeldet, weil der Cache die alte Seite ausliefert. Die Lösung: kurze Cache-Zeiten für dynamische Inhalte, lange Cache-Zeiten nur für unveränderliche Assets mit Hash im Namen, und immer einen Weg vorsehen, den Cache manuell zu leeren, wenn etwas schiefgeht."
+    },
+    {
+      "question": "Wie messe ich, ob mein Caching funktioniert?",
+      "answer": "Öffne die Chrome-Entwicklertools, gehe auf den Network-Tab und lade deine Seite. In der Spalte Size siehst du, welche Ressourcen aus dem Cache geladen wurden, sie sind mit disk cache oder memory cache markiert. In der Spalte Time siehst du die Ladezeit. Eine Ressource aus dem Browser-Cache hat eine Time von null Millisekunden. Wenn du die Seite ein zweites Mal lädst, sollten die meisten statischen Ressourcen aus dem Cache kommen. Wenn nicht, stimmt etwas mit deinen Cache-Control-Headern nicht."
+    }
+  ]
+}
