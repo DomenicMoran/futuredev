@@ -1,0 +1,749 @@
+{
+  "id": "M03-02-01",
+  "title": "Was ein Server im Hintergrund tut",
+  "durationMinutes": 24,
+  "prerequisites": [
+    "M01-03-01",
+    "M01-05-01",
+    "M01-05-02",
+    "M01-05-03",
+    "M02-03-05"
+  ],
+  "terms": [
+    {
+      "term": "Backend",
+      "definition": "der Teil einer Anwendung, der im Hintergrund auf einem fremden Rechner läuft, Anfragen annimmt und beantwortet, aber selbst nie zu sehen ist."
+    },
+    {
+      "term": "Laufzeitumgebung",
+      "definition": "das Programm, das den eigenen Code tatsächlich ausführt und ihm dabei Zugriff auf den Rechner gibt, etwa auf das Netzwerk oder Dateien."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir ein Restaurant vor. Du stehst am Tresen und bestellst. Du siehst den Koch nicht, aber irgendwo dahinter brutzelt gerade dein Essen. Ein Backend arbeitet genau wie diese Küche."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Bei einer Webseite oder App ist das ganz ähnlich. Es gibt einen Teil, den du direkt siehst und berührst, im Browser oder auf dem Handy. Das nennt man das Frontend."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Und was ist dann die Küche in diesem Bild?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Genau das ist das Backend. Ein Backend ist der Teil einer Anwendung, der im Hintergrund auf einem fremden Rechner läuft, Anfragen annimmt und beantwortet, aber selbst nie direkt zu sehen ist, ganz gleich, wie oft man danach sucht."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Im Repository repo-lexipulse gibt es genau so ein verstecktes Backend. Eine Datei namens route.ts liegt unter apps/web/src/app/api/extract. Niemand, der die App benutzt, sieht diese Backend-Datei jemals direkt."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Wofür ist dieser eine versteckte Teil bei LexiPulse denn überhaupt da?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "LexiPulse liest normalerweise Dokumente nur auf deinem eigenen Gerät. Aber ein Link aus dem Internet kann der Browser aus Sicherheitsgründen nicht einfach selbst laden. Deshalb übernimmt genau diese eine Backend-Datei diese eine Aufgabe."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir jetzt einen Postschalter vor. Ein Brief kommt an. Die Angestellte prüft erst, ob eine Briefmarke drauf ist und die Adresse lesbar ist, bevor sie ihn überhaupt weiterleitet."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Ein Backend arbeitet fast immer nach demselben festen Ablauf. Erst nimmt es eine Anfrage an, so wie du sie schon aus M01-05 kennst. Dann prüft es diese Anfrage. Erst danach holt oder verändert es Daten. Zum Schluss schickt es eine Antwort zurück."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Warum prüft das Backend die Anfrage eigentlich zuerst, statt gleich loszulegen?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Weil eine Anfrage aus dem Internet von wirklich jedem kommen kann, nicht nur von ehrlichen Nutzerinnen und Nutzern. Ohne Prüfung könnte jemand leere, falsche oder sogar gefährliche Angaben schicken, und das Backend würde trotzdem einfach loslegen."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Genau diesen Vierschritt zeigt route.ts in den Zeilen 285 bis 303. Erst liest die Funktion POST die Anfrage aus, mit raw gleich await request.json Klammer auf Klammer zu. Dann prüft sie, ob wirklich eine Adresse namens url mitgeschickt wurde und ob dieser Text nicht leer oder viel zu lang ist."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Erst danach ruft sie assertSafeUrl und fetchHtml auf, um die eigentliche Seite zu holen. Ganz am Ende schickt sie mit NextResponse.json eine Antwort zurück, entweder mit dem gefundenen Dokument oder mit einer Fehlermeldung. Genau das ist das Backend bei der Arbeit, Schritt für Schritt."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Was würde denn passieren, wenn eine dieser vier Stufen einfach fehlen würde?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Genau das ist in der Praxis der häufigste Grund für Sicherheitslücken. Würde die Prüfstufe fehlen, könnte das Backend versehentlich private Adressen im eigenen Netz abrufen, statt nur echte, öffentliche Webseiten. Damit beschäftigt sich später die ganze Lektion M03-02-03."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir jetzt eine riesige Bibliothek in einer fremden Stadt vor. Du musst nicht wissen, in welchem Regal genau ein Buch steht. Du gibst nur deine Anfrage am Schalter ab und bekommst eine Antwort."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Ein Backend läuft fast nie auf dem eigenen Rechner der Nutzerin. Es läuft auf einem fremden Rechner, oft in einem großen Gebäude voller Rechner, einem sogenannten Rechenzentrum. Ein Anbieter vermietet dort Rechenleistung, statt dass jede Firma ein eigenes Gebäude braucht."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Reicht es dann, den eigenen Code einfach auf so einen fremden Rechner zu kopieren?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Nein, der Rechner allein reicht nicht. Der Code braucht dazu noch ein Programm, das ihn tatsächlich ausführt und ihm erlaubt, mit dem Netzwerk oder mit Dateien zu arbeiten."
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Dieses ausführende Programm heißt Laufzeitumgebung. Eine Laufzeitumgebung ist das Programm, das den eigenen Code tatsächlich ausführt und ihm dabei Zugriff auf den Rechner gibt, etwa auf das Netzwerk oder Dateien."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "In route.ts steht ganz oben export const runtime gleich Anführungszeichen nodejs Anführungszeichen. Diese eine Zeile legt fest, dass genau diese Backend-Datei in der Node.js-Laufzeitumgebung läuft, weil sie unter anderem eine echte DNS-Abfrage braucht, die du schon aus M01-04-02 kennst."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Könnte man diese eine Zeile denn auch einfach weglassen?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Nein, ohne diese Festlegung könnte die App auf eine andere, schnellere, aber eingeschränktere Laufzeitumgebung ausweichen, in der eine echte DNS-Abfrage gar nicht möglich wäre. Genau diese DNS-Abfrage braucht die spätere Sicherheitsprüfung aus M03-02-03 aber zwingend."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir eine Fabrikhalle vor, in der immer nur genau die Maschine läuft, die gerade wirklich gebraucht wird. Steht keine Bestellung an, ruht die Maschine, statt ständig unnötig zu laufen."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Viele Backends heute funktionieren genauso. Der Code für eine einzelne Route wird nur dann überhaupt gestartet, wenn wirklich eine passende Anfrage ankommt. Das spart Rechenleistung und damit auch Kosten, weil eine ruhende Maschine keinen Strom braucht."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Merkt sich das Backend dann eigentlich etwas zwischen zwei verschiedenen Anfragen?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Von sich aus meistens nicht sehr viel, und das ist bei route.ts sogar ausdrücklich so gewollt. Die angefragte Internetadresse wird laut einem Kommentar im Code nie geloggt, aus Datenschutzgründen, die du in M06 vertiefst."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Ein Backend kann sich trotzdem etwas merken, wenn es das ausdrücklich so programmiert bekommt, etwa in einer Datenbank. Ohne eine solche ausdrückliche Speicherung vergisst es aber nach jeder einzelnen Anfrage sofort wieder restlos alles, ganz ohne jede Ausnahme."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Bearbeitet ein Backend eigentlich immer nur genau eine Anfrage nach der anderen?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Nein, in der Praxis kommen bei einem beliebten Backend oft viele Anfragen fast gleichzeitig an, von ganz unterschiedlichen Personen überall auf der Welt. Ein gut gebautes Backend muss deshalb mit vielen gleichzeitigen Anfragen umgehen können, nicht nur mit einer einzelnen."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir eine Bäckerei mit mehreren Verkäuferinnen gleichzeitig am Tresen vor, statt nur einer einzigen. So werden mehrere Kundinnen gleichzeitig bedient, statt dass sich eine lange Schlange bildet."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Ein Rechenzentrum kann für ein beliebtes Backend ganz genauso mehrere Kopien desselben Codes gleichzeitig bereithalten. Kommen viele Anfragen auf einmal an, teilt eine Art Verteiler sie automatisch auf mehrere solcher Kopien auf."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Muss man sich als angehende Entwicklerin am Anfang schon um diesen Verteiler kümmern?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Am Anfang praktisch nie, das übernimmt meist der Anbieter des Rechenzentrums automatisch. Wichtig ist erst einmal, dass du verstehst, warum ein Backend überhaupt so gebaut wird, dass es viele gleichzeitige Anfragen aushält, ohne selbst durcheinanderzukommen."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Nicht jede Aufgabe braucht übrigens gleich ein vollständiges Backend mit eigener Route und eigenem Server. Im Repository repo-microsaas liegen zum Beispiel elf einzelne Funktionsbausteine ganz ohne eigenen Server und ganz ohne Netzwerkzugriff."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Was ist denn dann der entscheidende Unterschied zwischen so einem einzelnen Funktionsbaustein und einem echten Backend?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Ein einzelner Funktionsbaustein läuft direkt dort, wo er aufgerufen wird, ohne eigene Anfrage über das Internet. Ein Backend dagegen wartet ständig an einer festen Adresse auf Anfragen, die über das Internet ankommen, ganz gleich von welchem Gerät aus."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Genau das macht ein Backend besonders wertvoll, aber auch besonders verantwortungsvoll. Wertvoll, weil viele verschiedene Geräte dieselbe zentrale Stelle nutzen können. Verantwortungsvoll, weil ein einziger Fehler dort gleich alle betreffen kann, nicht nur eine einzelne Nutzerin."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Warum ist diese Backend-Datei bei LexiPulse laut der Repo-Notiz eigentlich bewusst klein gehalten?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Weil jede zusätzliche Backend-Aufgabe eine zusätzliche Angriffsfläche bedeutet. Ein kleines Backend mit genau einer klaren Aufgabe lässt sich leichter vollständig prüfen als ein großes Backend mit vielen verschiedenen Aufgaben gleichzeitig."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Fassen wir den Ablauf noch einmal in eigenen Worten zusammen. Eine Anfrage kommt über das Internet an, genau wie in M01-05 beschrieben. Das Backend läuft dabei in einer Laufzeitumgebung auf einem fremden Rechner in einem Rechenzentrum."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Und danach folgt wieder genau dieser eine Vierschritt aus Annehmen, Prüfen, Verarbeiten und Antworten?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Ganz genau, in dieser festen Reihenfolge, nie anders herum. Erst danach kommt die fertige Antwort beim Frontend an, dort, wo die Person die App tatsächlich benutzt, meist so schnell, dass der ganze Weg unsichtbar bleibt."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Für deinen weiteren Lernweg lohnt sich dieses Bild von der Küche hinter dem Tresen, weil es dich durch die nächsten Lektionen begleitet. In M03-02-02 lernst du, mit welchen Werkzeugen man so ein Backend in JavaScript tatsächlich schreibt, Zeile für Zeile, mit einem echten, lauffähigen Beispiel zum Nachbauen auf dem eigenen Rechner."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Reicht dieses eine Bild von der Küche denn aus, um wirklich jedes Backend zu verstehen?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Als Ausgangspunkt reicht es sehr gut, auch wenn ein echtes Backend am Ende deutlich mehr Feinheiten kennt, etwa den genauen Aufbau einer Adresse, verschiedene Datenformate oder dauerhafte Verbindungen. Genau diese Feinheiten kommen Schritt für Schritt in den nächsten Lektionen dieses Untermoduls dazu."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir eine Grenzkontrolle vor. Der Beamte fragt nach Ausweis und Grund der Reise, bevor er überhaupt jemanden durchlässt. Ohne diese Frage könnte niemand wissen, wer da eigentlich kommt."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Ein Backend prüft bei einer Anfrage oft ganz ähnlich, wer sie eigentlich schickt und ob diese Person das überhaupt darf. Manche Anfragen sind für jeden offen, andere nur für angemeldete Personen. Diesen Teil vertiefst du erst in M03-05, mit Anmeldung und Berechtigung."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Prüft route.ts in unserem Beispiel eigentlich auch, wer genau die Anfrage schickt?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Nein, bei diesem einen Beispiel nicht, weil der Link-Import bei LexiPulse für jede Person offen ist, ganz ohne eigenes Konto. Route.ts prüft dafür etwas anderes streng, nämlich ob die angefragte Adresse überhaupt sicher ist, und begrenzt zusätzlich, wie oft dieselbe Person die Route in kurzer Zeit aufrufen darf."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Warum begrenzt route.ts überhaupt, wie oft jemand dieselbe Adresse in kurzer Zeit aufrufen darf?"
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Ohne diese Grenze könnte eine einzelne Person das Backend mit sehr vielen Anfragen hintereinander überlasten, absichtlich oder aus Versehen. Eine solche Grenze schützt das Backend also selbst davor, unter zu viel Last zusammenzubrechen."
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "isKeySentence": true,
+      "text": "Halten wir also fest: Ein Backend ist der unsichtbare Teil einer Anwendung, der auf einem fremden Rechner in einer Laufzeitumgebung läuft. Es nimmt eine Anfrage an, prüft sie, holt oder verändert Daten und schickt am Ende eine Antwort zurück, immer in genau dieser Reihenfolge. Bei LexiPulse übernimmt genau eine kleine, bewusst schmal gehaltene Backend-Datei diesen Ablauf, nur für den einen Fall eines Link-Imports aus dem Internet."
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "isKeySentence": false,
+      "text": "Noch einmal die Begriffe dieser Lektion. Backend: der Teil einer Anwendung, der im Hintergrund auf einem fremden Rechner läuft, Anfragen annimmt und beantwortet, aber selbst nie zu sehen ist. Laufzeitumgebung: das Programm, das den eigenen Code tatsächlich ausführt und ihm dabei Zugriff auf den Rechner gibt, etwa auf das Netzwerk oder Dateien."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Ist ein Backend eigentlich dasselbe wie ein Server?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Fast, aber nicht ganz. Ein Server ist der Rechner oder das Programm, das grundsätzlich auf Anfragen wartet, wie du es aus M01-00 kennst. Ein Backend ist der eigene Code, der auf diesem Server läuft und die konkrete Aufgabe der jeweiligen Anwendung erledigt, egal ob groß oder klein."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Kann ein Backend auch auf meinem eigenen Rechner zuhause laufen, statt in einem fremden Rechenzentrum?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Ja, technisch geht das durchaus, viele Entwicklerinnen und Entwickler testen ihr Backend zuerst genau so auf dem eigenen Rechner. Für eine echte Anwendung mit vielen Nutzerinnen und Nutzern wählt man aber fast immer ein Rechenzentrum, weil es ständig erreichbar bleibt, auch wenn der eigene Rechner mal ausgeschaltet ist."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Was passiert, wenn beim Backend einer der vier Schritte einen Fehler findet?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Dann bricht das Backend an dieser Stelle ab und schickt trotzdem eine Antwort zurück, meist mit einem passenden Fehler-Statuscode aus M01-05-03. Ein Backend antwortet also fast immer, auch im Fehlerfall, nur eben mit einer Fehlermeldung statt mit den gewünschten Daten."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Warum hat LexiPulse überhaupt nur eine einzige Backend-Datei und nicht viele verschiedene?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Weil die App laut ihrer eigenen Architektur bewusst offline-first gebaut ist: alle Dokumente bleiben auf dem eigenen Gerät. Nur für den einen Sonderfall, eine fremde Internetadresse zu laden, braucht sie überhaupt ein Backend, deshalb reicht genau eine Route."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Läuft eine Laufzeitumgebung eigentlich immer auf demselben Rechner wie das Frontend?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Nein, meistens sogar ausdrücklich nicht. Das Frontend läuft im Browser auf dem Gerät der Person, während die Laufzeitumgebung des Backends auf einem ganz anderen, fremden Rechner im Rechenzentrum läuft. Genau darüber tauschen beide Seiten Anfragen und Antworten über das Internet aus."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Sieht eine Nutzerin oder ein Nutzer den Quellcode eines Backends jemals direkt?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Normalerweise nicht, das ist sogar der ganze Sinn eines Backends. Nur wer den Quellcode wie du gerade selbst im Original ansieht, kann ihn lesen, eine gewöhnliche Nutzerin sieht immer nur das fertige Ergebnis im Frontend."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Warum wird die angefragte Adresse bei LexiPulse laut dieser Lektion bewusst nicht gespeichert?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Weil ein gespeicherter Verlauf verraten würde, welche Webseiten eine bestimmte Person gelesen hat, und das wäre ein Eingriff in ihre Privatsphäre. Die Entscheidung, nichts zu speichern, ist deshalb keine technische Nebensache, sondern ein bewusstes Versprechen an die Nutzerin."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Braucht wirklich jede App oder Webseite überhaupt ein eigenes Backend?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Nein, keineswegs jede. Eine reine Visitenkarten-Webseite ohne Formular und ohne fremde Daten kommt oft ganz ohne eigenes Backend aus. Sobald aber Daten geprüft, gespeichert oder von einer fremden Adresse geholt werden müssen, braucht sie fast immer eins, wie bei LexiPulse."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Was unterscheidet einen einzelnen Funktionsbaustein wie in repo-microsaas von einem echten Backend?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Ein einzelner Funktionsbaustein läuft direkt dort, wo er aufgerufen wird, ganz ohne eigene Anfrage über das Internet und ohne eigene Laufzeitumgebung im Rechenzentrum. Ein Backend wartet dagegen ständig an einer festen Adresse auf Anfragen, egal von welchem Gerät sie kommen."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Warum ist es für ein Backend so wichtig, viele gleichzeitige Anfragen zu vertragen?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Weil ein beliebtes Backend von sehr vielen Geräten weltweit gleichzeitig angesprochen werden kann, nicht nur nacheinander von einer einzigen Person. Ohne diese Fähigkeit müsste jede Person warten, bis alle vor ihr fertig bedient wurden, ähnlich wie an einer Bäckerei mit nur einer einzigen Verkäuferin. Diese eine Verkäuferin würde trotz langer Schlange stur nur eine Kundin nach der anderen bedienen, statt Hilfe zu holen."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Prüft ein Backend eigentlich immer, wer genau eine Anfrage schickt?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Nicht immer, das hängt von der jeweiligen Aufgabe ab. Manche Backend-Aufgaben sind bewusst für jede Person offen, wie der Link-Import bei LexiPulse, andere prüfen streng, wer sich zuvor angemeldet hat. Diesen zweiten Fall lernst du ausführlich in M03-05 kennen."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Was passiert, wenn eine einzelne Person route.ts sehr viele Male in kurzer Zeit aufruft?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Dann greift eine eingebaute Grenze, die genau das verhindern soll. Nach zu vielen Aufrufen in kurzer Zeit lehnt route.ts weitere Anfragen zeitweise ab, damit eine einzelne Person das Backend nicht für alle anderen überlasten kann."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Verändert sich der grundsätzliche Vierschritt eines Backends eigentlich, wenn später eine Anmeldung dazukommt?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Nein, der Vierschritt aus Annehmen, Prüfen, Verarbeiten und Antworten bleibt gleich. Eine Anmeldung ergänzt lediglich die Prüfstufe um eine zusätzliche Frage, nämlich wer die Anfrage schickt und was diese Person darf, wie du in M03-05 im Detail lernst."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Muss ich als angehende Entwicklerin sofort ein eigenes Rechenzentrum betreiben, um ein Backend zu bauen?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Nein, überhaupt nicht. Für den Anfang reicht der eigene Rechner völlig aus, um ein Backend zu schreiben und zu testen. Ein eigenes Rechenzentrum betreibt so gut wie niemand selbst, stattdessen mietet man bei Bedarf Rechenleistung bei einem Anbieter, wie du in M09 noch genauer lernst."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Woher weiß ein Backend eigentlich, dass gerade eine neue Anfrage angekommen ist?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Es lauscht ständig an einer festen Netzwerkadresse, ganz ähnlich wie ein Telefon, das auf einen Anruf wartet. Kommt über das Internet eine passende Anfrage an dieser Adresse an, weckt das die Laufzeitumgebung auf und startet den beschriebenen Vierschritt von vorne."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Kann ein und dasselbe Backend gleichzeitig mehrere unterschiedliche Aufgaben erledigen?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Ja, das ist sogar sehr üblich. Ein Backend kann mehrere verschiedene Adressen gleichzeitig anbieten, jede mit ihrer eigenen Aufgabe, ähnlich wie ein Restaurant mehrere unterschiedliche Gerichte gleichzeitig anbietet. LexiPulse hält sich bewusst an genau eine einzige Aufgabe, das ist eine bewusste Entscheidung der Architektur, keine technische Grenze der verwendeten Werkzeuge."
+    }
+  ],
+  "practiceExample": {
+    "text": "Die Funktion POST in route.ts zeigt den vollständigen Vierschritt eines Backends an einem echten Beispiel. Sie liest zuerst die Anfrage mit request.json aus, prüft danach, ob eine gültige Adresse namens url mitgeschickt wurde, ruft anschließend assertSafeUrl und fetchHtml auf, um die eigentliche Seite zu holen, und schickt am Ende mit NextResponse.json eine Antwort zurück, im Erfolgsfall mit dem gefundenen Dokument, sonst mit einer Fehlermeldung und einem passenden Statuscode. Ganz oben in derselben Datei legt export const runtime gleich nodejs zusätzlich fest, in welcher Laufzeitumgebung dieser gesamte Ablauf stattfindet.",
+    "repoNote": "repo-lexipulse",
+    "location": "apps/web/src/app/api/extract/route.ts, Zeile 20 (Laufzeitumgebung) und Zeilen 285 bis 303 (Funktion POST: Anfrage annehmen, prüfen, verarbeiten, antworten)"
+  },
+  "quiz": [
+    {
+      "question": "Welches Bild passt am besten zu einem Backend?",
+      "area": "Backend",
+      "options": [
+        { "text": "Die Küche hinter dem Tresen.", "isCorrect": true, "explanation": "Genau dieses Bild nutzt die Lektion, um Backend verständlich zu machen." },
+        { "text": "Die Speisekarte, die für alle sichtbar am Tisch ausliegt.", "isCorrect": false, "explanation": "Die Speisekarte entspricht eher dem sichtbaren Frontend, nicht dem Backend." },
+        { "text": "Der leere Parkplatz vor dem Restaurant, auf dem gerade niemand steht.", "isCorrect": false, "explanation": "Ein leerer Parkplatz hat keinen Bezug zur Aufgabe eines Backends." },
+        { "text": "Ein Gast, der sich zuhause ganz allein sein eigenes Essen kocht.", "isCorrect": false, "explanation": "Ein Backend arbeitet für fremde Anfragen, nicht für sich selbst wie ein Gast zuhause." }
+      ]
+    },
+    {
+      "question": "Was ist ein Backend laut dieser Lektion?",
+      "area": "Backend",
+      "options": [
+        { "text": "Der sichtbare Teil einer App, den man im Browser direkt anklickt und sieht.", "isCorrect": false, "explanation": "Das beschreibt gerade das Frontend, nicht das Backend." },
+        { "text": "Der Teil einer Anwendung, der im Hintergrund Anfragen beantwortet.", "isCorrect": true, "explanation": "Genau das ist die Definition von Backend aus dieser Lektion." },
+        { "text": "Ein Bauteil im eigenen Computer, ähnlich wie die CPU aus M01-01.", "isCorrect": false, "explanation": "CPU und Backend sind unterschiedliche Konzepte aus unterschiedlichen Lektionen." },
+        { "text": "Ein anderer Name für das gesamte Internet, wie du es aus M01-00 kennst.", "isCorrect": false, "explanation": "Das Internet ist das Netz aus M01-00, ein Backend ist nur ein Teil einer bestimmten Anwendung." }
+      ]
+    },
+    {
+      "question": "In welcher Reihenfolge arbeitet ein Backend laut dieser Lektion typischerweise?",
+      "area": "Vierschritt",
+      "options": [
+        { "text": "Antworten, dann Prüfen, dann Annehmen, dann erst Verarbeiten.", "isCorrect": false, "explanation": "Eine Antwort kann erst ganz am Ende kommen, nicht zuerst." },
+        { "text": "Annehmen, Prüfen, Verarbeiten, Antworten.", "isCorrect": true, "explanation": "Genau diese vier Schritte in genau dieser Reihenfolge beschreibt die Lektion." },
+        { "text": "Verarbeiten, Antworten, danach erst Annehmen und zuletzt Prüfen.", "isCorrect": false, "explanation": "Ohne vorheriges Annehmen der Anfrage gibt es nichts zu verarbeiten." },
+        { "text": "Prüfen, Antworten, Annehmen, ganz am Schluss erst Verarbeiten.", "isCorrect": false, "explanation": "Eine Antwort vor dem eigentlichen Annehmen der Anfrage ergibt keinen Sinn." }
+      ]
+    },
+    {
+      "question": "Warum prüft ein Backend eine Anfrage, bevor es sie verarbeitet?",
+      "area": "Vierschritt",
+      "options": [
+        { "text": "Weil Anfragen von jedem kommen können, auch mit gefährlichen Angaben.", "isCorrect": true, "explanation": "Genau diesen Grund nennt die Lektion für die Prüfstufe." },
+        { "text": "Weil eine Prüfung die gesamte Antwortzeit einer Anfrage automatisch verkürzt.", "isCorrect": false, "explanation": "Eine Prüfung kostet zusätzliche Zeit, sie verkürzt sie nicht." },
+        { "text": "Weil das Frontend ohne diese eine Prüfung technisch gar nicht laden würde.", "isCorrect": false, "explanation": "Das Laden des Frontends hängt nicht von dieser Prüfstufe im Backend ab." },
+        { "text": "Weil eine Prüfung für jede Laufzeitumgebung gesetzlich vorgeschrieben ist.", "isCorrect": false, "explanation": "Eine Laufzeitumgebung erzwingt selbst keine Prüfung, das muss der eigene Code übernehmen." }
+      ]
+    },
+    {
+      "question": "Was zeigt die Zeile raw gleich await request.json Klammer auf Klammer zu in route.ts?",
+      "area": "Praxisbeispiel",
+      "options": [
+        { "text": "Den Schritt, in dem das Backend die ankommende Anfrage ausliest.", "isCorrect": true, "explanation": "Genau das ist laut Lektion der erste Schritt, das Annehmen der Anfrage." },
+        { "text": "Den Schritt, in dem das Backend am Ende die fertige Antwort verschickt.", "isCorrect": false, "explanation": "Das Verschicken der Antwort passiert erst am Ende mit NextResponse.json." },
+        { "text": "Den Schritt, in dem eine fremde Webseite bereits vollständig geladen wird.", "isCorrect": false, "explanation": "Die fremde Seite wird erst später mit fetchHtml geladen, nicht in dieser Zeile." },
+        { "text": "Den Schritt, in dem für diese Datei die passende Laufzeitumgebung ausgewählt wird.", "isCorrect": false, "explanation": "Die Laufzeitumgebung legt eine andere Zeile ganz oben in der Datei fest." }
+      ]
+    },
+    {
+      "question": "Wozu dient laut Praxisbeispiel die Zeile export const runtime gleich nodejs?",
+      "area": "Laufzeitumgebung",
+      "options": [
+        { "text": "Sie legt fest, in welcher Laufzeitumgebung diese Datei ausgeführt wird.", "isCorrect": true, "explanation": "Genau das erklärt die Lektion zu dieser Zeile." },
+        { "text": "Sie schickt sofort eine vorläufige Antwort an das wartende Frontend.", "isCorrect": false, "explanation": "Eine Antwort verschickt erst eine spätere Zeile, nicht diese Festlegung." },
+        { "text": "Sie prüft die vom Nutzer eingegebene Internetadresse auf Gültigkeit.", "isCorrect": false, "explanation": "Die Adressprüfung übernimmt eine andere Funktion, nicht diese Festlegung der Laufzeitumgebung." },
+        { "text": "Sie speichert jede einzelne Anfrage dauerhaft in einer Datenbank ab.", "isCorrect": false, "explanation": "Route.ts speichert die Anfrage laut Lektion ausdrücklich nicht." }
+      ]
+    },
+    {
+      "question": "Was ist eine Laufzeitumgebung?",
+      "area": "Laufzeitumgebung",
+      "options": [
+        { "text": "Das Programm, das eigenen Code ausführt und ihm Zugriff auf den Rechner gibt.", "isCorrect": true, "explanation": "Genau das ist die Definition aus dieser Lektion." },
+        { "text": "Ein anderer Name für den sichtbaren Teil einer Anwendung, das Frontend.", "isCorrect": false, "explanation": "Frontend und Laufzeitumgebung sind zwei unterschiedliche Konzepte dieser Lektion." },
+        { "text": "Ein Gerät, das immer nur ausschließlich Statuscodes erzeugen kann.", "isCorrect": false, "explanation": "Statuscodes stammen aus M01-05-03, eine Laufzeitumgebung erzeugt sie nicht selbst." },
+        { "text": "Ein fest eingebauter, unveränderlicher Teil jeder einzelnen Internetadresse.", "isCorrect": false, "explanation": "Eine Internetadresse und eine Laufzeitumgebung sind unterschiedliche Dinge." }
+      ]
+    },
+    {
+      "question": "Warum läuft ein Backend meist in einem Rechenzentrum statt auf dem eigenen Rechner zuhause?",
+      "area": "Rechenzentrum",
+      "options": [
+        { "text": "Weil es dort ständig erreichbar bleibt, auch nach dem Ausschalten zuhause.", "isCorrect": true, "explanation": "Genau diesen Grund nennt die Lektion." },
+        { "text": "Weil die Miete für ein Rechenzentrum grundsätzlich immer bei null Euro liegt.", "isCorrect": false, "explanation": "Ein Rechenzentrum kostet Miete, die Lektion nennt Kosten nicht als Grund für Erreichbarkeit." },
+        { "text": "Weil dort im Unterschied zu zuhause überhaupt keine Laufzeitumgebung nötig ist.", "isCorrect": false, "explanation": "Auch im Rechenzentrum braucht der Code weiterhin eine Laufzeitumgebung." },
+        { "text": "Weil ein Statuscode ausschließlich von einem Rechenzentrum aus erzeugt werden darf.", "isCorrect": false, "explanation": "Ein Statuscode kann grundsätzlich von jedem Rechner zurückgegeben werden." }
+      ]
+    },
+    {
+      "question": "Warum hat LexiPulse laut Praxisbeispiel nur eine einzige, kleine Backend-Route?",
+      "area": "Praxisbeispiel",
+      "options": [
+        { "text": "Weil die App sonst offline arbeitet und nur für den Import ein Backend braucht.", "isCorrect": true, "explanation": "Genau diesen Grund nennt die Lektion zur Architektur von LexiPulse." },
+        { "text": "Weil eine zweite Backend-Route technisch überhaupt niemals möglich wäre.", "isCorrect": false, "explanation": "Eine zweite Route wäre technisch möglich, die App verzichtet bewusst darauf." },
+        { "text": "Weil das ganze Frontend ohne irgendein Backend gar nicht erst laden könnte.", "isCorrect": false, "explanation": "Das Frontend von LexiPulse lädt laut Architektur unabhängig von dieser einen Backend-Route." },
+        { "text": "Weil ein Repository nur eine einzige Datei insgesamt enthalten darf.", "isCorrect": false, "explanation": "Ein Repository kann beliebig viele Dateien gleichzeitig enthalten." }
+      ]
+    },
+    {
+      "question": "Was passiert bei route.ts, wenn eine der vier Stufen einen Fehler findet?",
+      "area": "Vierschritt",
+      "options": [
+        { "text": "Es antwortet trotzdem, meist mit einer Fehlermeldung und einem Statuscode.", "isCorrect": true, "explanation": "Genau das beschreibt die Lektion zum Umgang mit Fehlern im Backend." },
+        { "text": "Es bleibt danach für alle künftigen Anfragen für immer vollständig stumm.", "isCorrect": false, "explanation": "Ein einzelner Fehler legt das Backend nicht dauerhaft lahm." },
+        { "text": "Das Frontend übernimmt in diesem Fall automatisch die fehlende Prüfung selbst.", "isCorrect": false, "explanation": "Die Prüfung findet im Backend statt, das Frontend übernimmt sie nicht automatisch." },
+        { "text": "Die Laufzeitumgebung wechselt in diesem Fall automatisch die Programmiersprache.", "isCorrect": false, "explanation": "Ein Fehler in der Prüfung ändert nicht die verwendete Programmiersprache." }
+      ]
+    },
+    {
+      "question": "Was unterscheidet laut FAQ einen einzelnen Funktionsbaustein von einem echten Backend?",
+      "area": "Backend",
+      "options": [
+        { "text": "Ein Backend wartet ständig an einer festen Adresse auf Anfragen aus dem Internet.", "isCorrect": true, "explanation": "Genau diese Unterscheidung trifft die Lektion in der FAQ." },
+        { "text": "Ein einzelner Funktionsbaustein läuft grundsätzlich niemals ohne ein eigenes Rechenzentrum.", "isCorrect": false, "explanation": "Genau umgekehrt: ein einzelner Funktionsbaustein braucht kein eigenes Rechenzentrum." },
+        { "text": "Ein echtes Backend kann anders als ein Funktionsbaustein niemals Fehler zurückgeben.", "isCorrect": false, "explanation": "Auch ein Backend gibt bei einem Problem einen Fehler zurück, wie die Lektion zeigt." },
+        { "text": "Ein Funktionsbaustein braucht anders als ein Backend zwingend eine Laufzeitumgebung.", "isCorrect": false, "explanation": "Genau umgekehrt: gerade das Backend braucht laut Lektion eine eigene Laufzeitumgebung." }
+      ]
+    },
+    {
+      "question": "Warum muss ein beliebtes Backend laut dieser Lektion viele gleichzeitige Anfragen aushalten können?",
+      "area": "Gleichzeitigkeit",
+      "options": [
+        { "text": "Weil viele verschiedene Geräte weltweit dieselbe zentrale Stelle gleichzeitig nutzen können.", "isCorrect": true, "explanation": "Genau das erklärt die Lektion mit dem Bild der Bäckerei mit mehreren Verkäuferinnen." },
+        { "text": "Weil eine Laufzeitumgebung technisch immer nur genau eine Anfrage gleichzeitig zulässt.", "isCorrect": false, "explanation": "Das Gegenteil ist der Fall, eine Laufzeitumgebung erlaubt mehrere gleichzeitige Anfragen." },
+        { "text": "Weil sonst jede Anfrage automatisch einen anderen Statuscode zurückbekommen würde.", "isCorrect": false, "explanation": "Der Statuscode hängt vom Ergebnis der Anfrage ab, nicht von Gleichzeitigkeit." },
+        { "text": "Weil ein Rechenzentrum ansonsten grundsätzlich keine zweite Anfrage annehmen dürfte.", "isCorrect": false, "explanation": "Ein Rechenzentrum darf und kann durchaus mehrere Anfragen gleichzeitig annehmen." }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Öffne im Browser die Netzwerk-Ansicht der Entwicklerwerkzeuge (in Chrome oder Firefox mit F12, dann Reiter Netzwerk oder Network) und rufe eine beliebige Webseite auf. Suche in der Liste eine Zeile mit dem Status 200 und öffne sie. Suche darin nach einem Hinweis auf den verwendeten Server, meist unter dem Namen server oder x-powered-by in den Antwort-Kopfzeilen.",
+    "expectation": "Eine sichtbare Liste von Netzwerkanfragen mit Statuscodes, und mindestens eine geöffnete Anfrage mit sichtbaren Antwort-Kopfzeilen, die einen Hinweis auf das dahinterliegende Backend zeigen.",
+    "checklist": [
+      "Entwicklerwerkzeuge geöffnet und Reiter Netzwerk gefunden",
+      "eine Webseite neu geladen und die Liste der Anfragen beobachtet",
+      "eine Anfrage mit Statuscode 200 geöffnet",
+      "die Antwort-Kopfzeilen dieser Anfrage angesehen und einen Hinweis auf den Server notiert"
+    ]
+  },
+  "audio": {
+    "file": "M03-02-01.mp3",
+    "durationSeconds": 1440,
+    "voices": ["A", "B"],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Ist ein Backend eigentlich dasselbe wie ein Server?",
+      "answer": "Fast, aber nicht ganz. Ein Server ist der Rechner oder das Programm, das grundsätzlich auf Anfragen wartet, wie du es aus M01-00 kennst. Ein Backend ist der eigene Code, der auf diesem Server läuft und die konkrete Aufgabe der jeweiligen Anwendung erledigt, egal ob groß oder klein."
+    },
+    {
+      "question": "Kann ein Backend auch auf meinem eigenen Rechner zuhause laufen, statt in einem fremden Rechenzentrum?",
+      "answer": "Ja, technisch geht das durchaus, viele Entwicklerinnen und Entwickler testen ihr Backend zuerst genau so auf dem eigenen Rechner. Für eine echte Anwendung mit vielen Nutzerinnen und Nutzern wählt man aber fast immer ein Rechenzentrum, weil es ständig erreichbar bleibt, auch wenn der eigene Rechner mal ausgeschaltet ist."
+    },
+    {
+      "question": "Was passiert, wenn beim Backend einer der vier Schritte einen Fehler findet?",
+      "answer": "Dann bricht das Backend an dieser Stelle ab und schickt trotzdem eine Antwort zurück, meist mit einem passenden Fehler-Statuscode aus M01-05-03. Ein Backend antwortet also fast immer, auch im Fehlerfall, nur eben mit einer Fehlermeldung statt mit den gewünschten Daten."
+    },
+    {
+      "question": "Warum hat LexiPulse überhaupt nur eine einzige Backend-Datei und nicht viele verschiedene?",
+      "answer": "Weil die App laut ihrer eigenen Architektur bewusst offline-first gebaut ist: alle Dokumente bleiben auf dem eigenen Gerät. Nur für den einen Sonderfall, eine fremde Internetadresse zu laden, braucht sie überhaupt ein Backend, deshalb reicht genau eine Route."
+    },
+    {
+      "question": "Läuft eine Laufzeitumgebung eigentlich immer auf demselben Rechner wie das Frontend?",
+      "answer": "Nein, meistens sogar ausdrücklich nicht. Das Frontend läuft im Browser auf dem Gerät der Person, während die Laufzeitumgebung des Backends auf einem ganz anderen, fremden Rechner im Rechenzentrum läuft. Genau darüber tauschen beide Seiten Anfragen und Antworten über das Internet aus."
+    },
+    {
+      "question": "Sieht eine Nutzerin oder ein Nutzer den Quellcode eines Backends jemals direkt?",
+      "answer": "Normalerweise nicht, das ist sogar der ganze Sinn eines Backends. Nur wer den Quellcode wie du gerade selbst im Original ansieht, kann ihn lesen, eine gewöhnliche Nutzerin sieht immer nur das fertige Ergebnis im Frontend."
+    },
+    {
+      "question": "Warum wird die angefragte Adresse bei LexiPulse laut dieser Lektion bewusst nicht gespeichert?",
+      "answer": "Weil ein gespeicherter Verlauf verraten würde, welche Webseiten eine bestimmte Person gelesen hat, und das wäre ein Eingriff in ihre Privatsphäre. Die Entscheidung, nichts zu speichern, ist deshalb keine technische Nebensache, sondern ein bewusstes Versprechen an die Nutzerin."
+    },
+    {
+      "question": "Braucht wirklich jede App oder Webseite überhaupt ein eigenes Backend?",
+      "answer": "Nein, keineswegs jede. Eine reine Visitenkarten-Webseite ohne Formular und ohne fremde Daten kommt oft ganz ohne eigenes Backend aus. Sobald aber Daten geprüft, gespeichert oder von einer fremden Adresse geholt werden müssen, braucht sie fast immer eins, wie bei LexiPulse."
+    },
+    {
+      "question": "Was unterscheidet einen einzelnen Funktionsbaustein wie in repo-microsaas von einem echten Backend?",
+      "answer": "Ein einzelner Funktionsbaustein läuft direkt dort, wo er aufgerufen wird, ganz ohne eigene Anfrage über das Internet und ohne eigene Laufzeitumgebung im Rechenzentrum. Ein Backend wartet dagegen ständig an einer festen Adresse auf Anfragen, egal von welchem Gerät sie kommen."
+    },
+    {
+      "question": "Warum ist es für ein Backend so wichtig, viele gleichzeitige Anfragen zu vertragen?",
+      "answer": "Weil ein beliebtes Backend von sehr vielen Geräten weltweit gleichzeitig angesprochen werden kann, nicht nur nacheinander von einer einzigen Person. Ohne diese Fähigkeit müsste jede Person warten, bis alle vor ihr fertig bedient wurden, ähnlich wie an einer Bäckerei mit nur einer einzigen Verkäuferin. Diese eine Verkäuferin würde trotz langer Schlange stur nur eine Kundin nach der anderen bedienen, statt Hilfe zu holen."
+    },
+    {
+      "question": "Prüft ein Backend eigentlich immer, wer genau eine Anfrage schickt?",
+      "answer": "Nicht immer, das hängt von der jeweiligen Aufgabe ab. Manche Backend-Aufgaben sind bewusst für jede Person offen, wie der Link-Import bei LexiPulse, andere prüfen streng, wer sich zuvor angemeldet hat. Diesen zweiten Fall lernst du ausführlich in M03-05 kennen."
+    },
+    {
+      "question": "Was passiert, wenn eine einzelne Person route.ts sehr viele Male in kurzer Zeit aufruft?",
+      "answer": "Dann greift eine eingebaute Grenze, die genau das verhindern soll. Nach zu vielen Aufrufen in kurzer Zeit lehnt route.ts weitere Anfragen zeitweise ab, damit eine einzelne Person das Backend nicht für alle anderen überlasten kann."
+    },
+    {
+      "question": "Verändert sich der grundsätzliche Vierschritt eines Backends eigentlich, wenn später eine Anmeldung dazukommt?",
+      "answer": "Nein, der Vierschritt aus Annehmen, Prüfen, Verarbeiten und Antworten bleibt gleich. Eine Anmeldung ergänzt lediglich die Prüfstufe um eine zusätzliche Frage, nämlich wer die Anfrage schickt und was diese Person darf, wie du in M03-05 im Detail lernst."
+    },
+    {
+      "question": "Muss ich als angehende Entwicklerin sofort ein eigenes Rechenzentrum betreiben, um ein Backend zu bauen?",
+      "answer": "Nein, überhaupt nicht. Für den Anfang reicht der eigene Rechner völlig aus, um ein Backend zu schreiben und zu testen. Ein eigenes Rechenzentrum betreibt so gut wie niemand selbst, stattdessen mietet man bei Bedarf Rechenleistung bei einem Anbieter, wie du in M09 noch genauer lernst."
+    },
+    {
+      "question": "Woher weiß ein Backend eigentlich, dass gerade eine neue Anfrage angekommen ist?",
+      "answer": "Es lauscht ständig an einer festen Netzwerkadresse, ganz ähnlich wie ein Telefon, das auf einen Anruf wartet. Kommt über das Internet eine passende Anfrage an dieser Adresse an, weckt das die Laufzeitumgebung auf und startet den beschriebenen Vierschritt von vorne."
+    },
+    {
+      "question": "Kann ein und dasselbe Backend gleichzeitig mehrere unterschiedliche Aufgaben erledigen?",
+      "answer": "Ja, das ist sogar sehr üblich. Ein Backend kann mehrere verschiedene Adressen gleichzeitig anbieten, jede mit ihrer eigenen Aufgabe, ähnlich wie ein Restaurant mehrere unterschiedliche Gerichte gleichzeitig anbietet. LexiPulse hält sich bewusst an genau eine einzige Aufgabe, das ist eine bewusste Entscheidung der Architektur, keine technische Grenze der verwendeten Werkzeuge."
+    }
+  ]
+}
