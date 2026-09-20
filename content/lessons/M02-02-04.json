@@ -1,0 +1,897 @@
+{
+  "id": "M02-02-04",
+  "title": "Responsive Design für Handy und Bildschirm",
+  "durationMinutes": 22,
+  "prerequisites": [
+    "M02-02-01",
+    "M02-02-02",
+    "M02-02-03"
+  ],
+  "terms": [
+    {
+      "term": "Viewport",
+      "definition": "Der sichtbare Bereich einer Webseite auf einem Bildschirm oder Handy, dessen Breite sich je nach Gerät unterscheidet."
+    },
+    {
+      "term": "Media Query",
+      "definition": "Eine CSS-Regel, die nur gilt, wenn der Viewport eine bestimmte Bedingung erfüllt, etwa eine Mindestbreite."
+    },
+    {
+      "term": "Breakpoint",
+      "definition": "Die Viewport-Breite, ab der eine Media Query eine neue Regel einschaltet und sich das Layout sichtbar ändert."
+    },
+    {
+      "term": "Mobile First",
+      "definition": "Die Arbeitsweise, zuerst CSS für schmale Bildschirme zu schreiben und danach mit Media Queries Regeln für breitere Bildschirme zu ergänzen."
+    },
+    {
+      "term": "rem",
+      "definition": "Eine CSS-Einheit für Schriftgrößen, die sich immer nach der Grundschriftgröße des Browsers richtet, statt eine feste Anzahl Pixel zu sein."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "text": "Stell dir Wasser vor, das in ein Glas gegossen wird. Egal ob das Glas hoch und schmal oder breit und flach ist, das Wasser nimmt immer genau die Form des Glases an. Niemand gießt das Wasser um, das Glas allein bestimmt die Form, in der sich das Wasser einordnet.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "In den letzten drei Lektionen hast du das Box-Modell, Flexbox und Grid kennengelernt, aber immer für eine einzige, feste Bildschirmbreite gedacht.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Sieht denn eine Webseite nicht auf jedem Gerät automatisch richtig aus, ganz von selbst?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ohne besondere Vorkehrung sieht eine für einen breiten Computerbildschirm gebaute Seite auf einem schmalen Handy oft winzig klein oder abgeschnitten aus, weil der Browser nichts von sich aus anpasst.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Eine Webseite, die sich wie Wasser der Form ihres Glases anpasst, also jeder Bildschirmbreite, nennt man responsiv.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Damit das überhaupt möglich wird, muss der Browser zuerst wissen, wie breit der sichtbare Bereich des Geräts tatsächlich ist.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir ein Schaufenster vor. Auf der Straße gibt es schmale Schaufenster und ganz breite Schaufenster, und ein Geschäft richtet seine Auslage nach der tatsächlichen Breite des eigenen Fensters.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau dieser sichtbare Bereich heißt Viewport.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Viewport. V, I, E, W, P, O, R, T.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein Computerbildschirm hat oft einen Viewport von 1440 Pixeln Breite, ein Handy oft nur 390 Pixel. Ohne eine bestimmte Zeile im Kopf der HTML-Datei behandelt ein Handy-Browser seine Seite aber standardmäßig so, als wäre sie viel breiter als der eigentliche Viewport, und zeigt alles winzig verkleinert an.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Ohne die richtige Viewport-Angabe würde jede Webseite auf dem Handy erst einmal wie durch ein zu kleines Schaufenster wirken, mit winzigem Text, den man ständig heranzoomen müsste. Genau dieses Erlebnis schreckt viele Besucher innerhalb weniger Sekunden wieder ab.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann ich das auf meinem eigenen Computer testen, ohne extra ein Handy in die Hand zu nehmen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, die Entwickler-Werkzeuge deines Browsers haben eine Geräte-Ansicht, mit der du verschiedene Handy- und Tablet-Breiten direkt am Computer simulieren kannst, ganz ohne ein zweites Gerät zu besitzen.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Dort wählst du zum Beispiel ein Handy-Modell aus einer Liste aus, und der Browser zeigt deine Seite testweise in genau dieser schmalen Breite an, inklusive der Viewport-Angabe, die du gerade gesetzt hast. Diese Simulation ersetzt einen echten Test auf einem echten Gerät nicht vollständig, sie reicht aber für die meisten Layout-Fragen völlig aus, ohne dass du extra ein zweites Gerät kaufen musst. Vor der Veröffentlichung einer wichtigen Seite lohnt sich trotzdem ein kurzer Blick auf ein echtes Gerät.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Wie sage ich dem Handy-Browser denn, dass er den echten Viewport benutzen soll?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Dafür schreibst du eine einzige Zeile im head-Bereich deiner HTML-Datei: meta name='viewport' content='width=device-width, initial-scale=1'. Diese Zeile sagt dem Browser, dass er die tatsächliche Gerätebreite als Viewport benutzen soll, ohne künstlich zu verkleinern.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Jetzt kennt der Browser die echte Breite des Bildschirms. Als Nächstes brauchst du eine Möglichkeit, dein CSS an diese Breite anzupassen.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann ich nicht einfach dieselben CSS-Regeln für jede Bildschirmbreite benutzen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein Grid mit drei festen Spalten von je 300 Pixeln braucht mindestens 900 Pixel Platz. Auf einem Handy mit 390 Pixeln Breite quetscht dieselbe Regel alles unlesbar eng zusammen.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir eine Ladentür vor, die im Sommer offen bleiben darf, im Winter aber geschlossen sein muss. Dieselbe Tür verhält sich je nach Bedingung unterschiedlich.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau so eine bedingte CSS-Regel, die nur unter einer bestimmten Bedingung gilt, heißt Media Query.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Schreibst du @media (min-width: 900px) { .regal { display: flex; } }, gilt diese Flexbox-Regel nur, wenn der Viewport mindestens 900 Pixel breit ist. Auf einem schmaleren Viewport bleibt die Regel einfach ungenutzt.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Ohne Media Queries müsstest du dich für genau eine feste Breite entscheiden und alle anderen Geräte einfach in Kauf nehmen, ob sie gut aussehen oder nicht.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Gab es Webseiten früher überhaupt schon für Handys, oder ist das eine ganz neue Erfindung?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Früher haben viele Firmen für ihr Handy-Publikum eine komplett zweite Webseite unter einer eigenen Adresse gebaut, oft mit 'm.' vor dem Domainnamen. Das bedeutete doppelte Arbeit und zwei Seiten, die getrennt aktuell gehalten werden mussten.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Media Queries lösten dieses Problem, weil dieselbe HTML-Datei und dieselbe Webadresse für jedes Gerät bleibt, nur das CSS reagiert unterschiedlich auf die jeweilige Breite. Suchmaschinen bevorzugen heute außerdem eine einzige, für jedes Gerät passende Seite gegenüber zwei getrennt gepflegten Fassungen mit demselben Inhalt. Das erspart dir zusätzlich doppelte Pflegearbeit bei jeder inhaltlichen Änderung.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Bei welcher Breite genau sollte ich denn so eine Media Query einbauen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir eine Standleuchte vor, deren Licht sich automatisch einschaltet, sobald es draußen dunkel genug wird, an einem bestimmten, vorher festgelegten Helligkeitswert.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Diese Viewport-Breite, ab der eine Media Query eine neue Regel einschaltet und das Layout sich sichtbar ändert, heißt Breakpoint.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Viele Layouts benutzen einen Breakpoint bei etwa 640 Pixeln, um Handy von Tablet zu unterscheiden, und einen weiteren bei etwa 1024 Pixeln, um Tablet von Computerbildschirm zu unterscheiden. Diese Zahlen sind keine feste Regel, sondern richten sich danach, wo dein eigenes Layout unbequem eng wird.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Ohne einen bewusst gewählten Breakpoint würdest du entweder viel zu früh oder viel zu spät ins neue Layout wechseln, an einer Stelle, die für deinen Inhalt gar nicht passt.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein vollständiges Beispiel: @media (min-width: 640px) { .seite { grid-template-columns: 200px 1fr; } }. Bis 639 Pixel Breite bleibt die Seite bei einer einzigen Spalte, ab 640 Pixeln übernimmt diese Regel die zweispaltige Aufteilung aus der letzten Lektion. Genau nach diesem Muster baust du gleich in der Praxisaufgabe dein eigenes responsives Grid. Speichere deine Datei nach jeder kleinen Änderung und lade die Seite neu, statt alles auf einmal zu schreiben und erst am Ende zu testen. So findest du sofort, welche Zeile für ein unerwartetes Ergebnis verantwortlich war.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "B",
+      "text": "Schreibe ich zuerst das CSS für den großen Bildschirm oder zuerst für das Handy?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir vor, du packst zuerst einen kleinen Rucksack für eine Tagestour, mit nur dem Nötigsten. Erst wenn mehr Platz da ist, zum Beispiel bei einem großen Koffer für eine lange Reise, packst du zusätzliche Dinge dazu.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau diese Arbeitsweise, zuerst CSS für schmale Bildschirme zu schreiben und danach mit Media Queries Regeln für breitere Bildschirme zu ergänzen, nennt man Mobile First.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Bei Mobile First beginnst du also mit einer einzigen Spalte für alle Boxen, ganz ohne Media Query. Erst mit @media (min-width: 900px) fügst du die Regel für drei Spalten nebeneinander hinzu, für breitere Bildschirme.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Mobile First zwingt dich, zuerst über den wichtigsten Inhalt nachzudenken, weil auf einem schmalen Bildschirm kein Platz für Nebensächliches bleibt. Das Ergebnis ist am Ende auf jeder Bildschirmgröße aufgeräumter.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Fühlt sich das nicht rückständig an, zuerst für das kleinste statt für das wichtigste Gerät zu planen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Für sehr viele Webseiten ist das Handy heute sogar das meistgenutzte Gerät überhaupt, nicht der Computerbildschirm. Mobile First bedeutet also oft, zuerst für das Gerät zu planen, das die meisten Besucher tatsächlich benutzen. Ein Layout, das zuerst auf dem Handy überzeugt, überzeugt danach fast immer auch auf dem großen Bildschirm, der umgekehrte Weg gelingt deutlich seltener. Das liegt daran, dass ein aufgeräumtes, schmales Layout selten schlecht aussieht, wenn plötzlich mehr Platz dazukommt.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Was passiert eigentlich mit Bildern, wenn der Bildschirm plötzlich viel schmaler wird?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir ein Poster vor, das genau auf eine breite Wand zugeschnitten ist. Klebst du es an eine viel schmalere Wand, ragt es seitlich über den Rand hinaus.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau das passiert mit einem Bild, das eine feste Breite in Pixeln hat, sobald der Viewport schmaler wird als das Bild selbst.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Dagegen hilft eine einfache CSS-Regel: img { max-width: 100%; height: auto; }. Das Bild darf dann nie breiter werden als sein umgebender Kasten, egal wie schmal der Viewport ist, und die Höhe passt sich automatisch mit an, ohne das Bild zu verzerren.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Ohne diese Regel würde ein zu breites Bild den ganzen umgebenden Kasten sprengen und eine waagerechte Scrollleiste erzwingen, selbst wenn der restliche Text sauber umbricht.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Lädt der Browser eigentlich trotzdem die riesige Originaldatei eines Bildes, auch wenn es auf dem Handy klein angezeigt wird?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Mit nur max-width: 100% ja, das Bild wird lediglich kleiner angezeigt, aber trotzdem in voller Dateigröße heruntergeladen. Für unterschiedliche Dateigrößen je nach Bildschirm gibt es ein eigenes HTML-Attribut namens srcset, das eine spätere, vertiefende Lektion behandelt. Für eine reine Layout-Lektion wie diese reicht dir aber erst einmal das Wissen, dass max-width das Sprengen des Layouts verhindert.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Und Schriftgrößen? Muss ich für jede Bildschirmbreite eine eigene Schriftgröße in Pixeln festlegen?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Stell dir ein Kochrezept vor, das immer 'zwei Teelöffel' Salz verlangt, egal ob du für zwei oder für zwanzig Personen kochst. Ein Rezept, das stattdessen 'zwei Prozent des Nudelgewichts' verlangt, würde sich automatisch mitskalieren.",
+      "isKeySentence": false,
+      "role": "image"
+    },
+    {
+      "speaker": "A",
+      "text": "Eine Schriftgröße in Pixeln ist wie das feste 'zwei Teelöffel'-Rezept, immer gleich groß, egal was der Nutzer in seinem Browser eingestellt hat. Dafür gibt es eine mitskalierende Einheit, sie heißt rem.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "rem. R, E, M.",
+      "isKeySentence": false,
+      "role": "term"
+    },
+    {
+      "speaker": "A",
+      "text": "Diese Einheit schreibst du einfach als rem hinter eine Zahl. 1rem entspricht immer der Grundschriftgröße, die im Browser eingestellt ist, meist 16 Pixel. Schreibst du font-size: 1.5rem, wird der Text bei den meisten Nutzern 24 Pixel groß, aber bei einem Nutzer, der in seinem Browser eine größere Grundschrift eingestellt hat, wächst dein Text automatisch mit.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein Nutzer mit Sehschwäche, der in seinem Browser eine größere Grundschrift eingestellt hat, sieht mit rem-Angaben deine ganze Seite größer, mit fester Pixel-Angabe bleibt dein Text dagegen stur bei seiner ursprünglichen Größe. Genau diese Rücksicht auf individuelle Browsereinstellungen gehört zu einer sauber gebauten, zugänglichen Webseite dazu, nicht nur zu einer responsiven. Manche Nutzer stellen ihre Grundschrift bewusst größer ein, gerade weil sie sonst kaum lesen könnten, und rem gibt ihnen genau diese Kontrolle zurück. Eine Seite, die das ignoriert, schließt genau diese Nutzer unnötig aus.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Kannst du kurz zusammenfassen, was jetzt alles zu einer responsiven Seite dazugehört?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "B",
+      "text": "Fassen wir das kurz zusammen: Die Viewport-Zeile im HTML-Kopf sorgt dafür, dass der Browser die echte Gerätebreite kennt. Media Queries schalten bei einem gewählten Breakpoint neue CSS-Regeln ein, am besten nach dem Mobile-First-Prinzip von schmal nach breit gedacht. Bilder bekommen max-width: 100%, und Schriftgrößen stehen in rem statt in festen Pixeln.",
+      "isKeySentence": true,
+      "role": "key"
+    },
+    {
+      "speaker": "A",
+      "text": "Genau dieses Zusammenspiel aus Media Queries und relativen Einheiten findest du auch im echten Portfolio-Projekt von Domenic. Beide Werkzeuge zusammen sorgen dafür, dass dieselbe HTML- und CSS-Datei auf einem Handy genauso durchdacht aussieht wie auf einem großen Bildschirm. Genau das ist am Ende das Ziel jeder responsiven Seite: dieselbe Botschaft, verständlich auf jedem Gerät.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Im Repo portfolio, in der Datei src/app/globals.css, Zeilen 44 bis 46, stehen Schriftgrößen nicht als feste Pixelzahl, sondern mit der Funktion clamp, zum Beispiel --text-display: clamp(2.75rem, 9vw, 8.5rem);. Das bedeutet: mindestens 2,75rem, höchstens 8,5rem, dazwischen richtet sich die Größe nach der Breite des Viewports.",
+      "isKeySentence": false,
+      "role": "example"
+    },
+    {
+      "speaker": "A",
+      "text": "Zusätzlich steht in derselben Datei bei Zeile 467 eine echte Media Query, @media (min-width: 640px). Sie schaltet ab genau diesem Breakpoint eine stärkere Weichzeichnung für dekorative Leuchtkreise ein, weil dafür auf größeren Bildschirmen mehr Rechenleistung übrig ist.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Reicht clamp allein schon aus, oder braucht man dafür trotzdem noch zusätzliche Media Queries?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "clamp deckt oft schon einen großen Teil ab, weil sich der Wert zwischen einem Minimum und einem Maximum stufenlos mitskaliert, ohne eine einzige Media Query. Für Änderungen, die nicht stufenlos, sondern sprunghaft an einer bestimmten Breite passieren sollen, wie ein komplett neues Spaltenlayout, bleibt eine Media Query mit einem festen Breakpoint trotzdem das richtige Werkzeug. Du kannst clamp für Schriftgrößen und eine Media Query für ein sprunghaftes Spaltenlayout in derselben Lektion nebeneinander einsetzen, jedes für die Art von Änderung, für die es am besten passt.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Auch das entstehende FutureDev-Projekt selbst, an dem diese Lektion gerade gebaut wird, wird für seine App später ein eigenes Design-System mit hellen und dunklen Farbtönen brauchen. Das folgt demselben Grundprinzip aus Tokens und Media Queries wie hier im Portfolio-Beispiel.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Jetzt bist du dran. Nimm die Seite mit Kopf, Seitenleiste, Inhalt und Fußbereich aus der letzten Lektion über Grid.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Trage zuerst die Viewport-Zeile in den head-Bereich deiner HTML-Datei ein, falls sie noch fehlt. Baue dein Grid danach nach dem Mobile-First-Prinzip: eine Spalte als Grundzustand, und erst ab einem selbst gewählten Breakpoint, etwa 700 Pixel, über eine Media Query die Spalten für Seitenleiste und Inhalt nebeneinander.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Verkleinere dazu das Browserfenster testweise ganz schmal und wieder breit, und beobachte, wie deine Seite genau am gewählten Breakpoint von einer Spalte auf mehrere Spalten umschaltet.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "B",
+      "text": "Was mache ich, wenn beim Umschalten am Breakpoint kurz alles verrutscht oder springt?",
+      "isKeySentence": false,
+      "role": "question"
+    },
+    {
+      "speaker": "A",
+      "text": "Ein kurzes Springen ist normal, solange am Ende beide Zustände sauber aussehen. Sieht dagegen einer der beiden Zustände dauerhaft falsch aus, prüfe zuerst, ob die Media Query wirklich die richtige Bedingung und denselben Selektor wie deine Grundregel benutzt. Vergleiche dazu die Namen der Bereiche in grid-template-areas mit den Namen in grid-area jeder Box, ein vertauschter Buchstabe reicht dort schon für ein unerwartetes Ergebnis. Nimm dir dafür ruhig die Zeit, es lohnt sich am Ende deutlich mehr als geraten weiterzumachen.",
+      "isKeySentence": false,
+      "role": "why"
+    },
+    {
+      "speaker": "A",
+      "text": "Fassen wir die Begriffe von heute noch einmal als Liste zusammen.",
+      "isKeySentence": false,
+      "role": "explain"
+    },
+    {
+      "speaker": "A",
+      "text": "Viewport: der sichtbare Bereich einer Webseite auf einem Bildschirm oder Handy.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Media Query: eine CSS-Regel, die nur unter einer bestimmten Bedingung gilt, etwa einer Mindestbreite.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Breakpoint: die Viewport-Breite, ab der eine Media Query eine neue Regel einschaltet.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "Mobile First: zuerst CSS für schmale Bildschirme schreiben, danach für breitere ergänzen.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "A",
+      "text": "rem: eine CSS-Einheit für Schriftgrößen, die sich nach der Grundschriftgröße des Browsers richtet.",
+      "isKeySentence": false,
+      "role": "terms_list"
+    },
+    {
+      "speaker": "B",
+      "text": "Was ist, wenn ich die Viewport-Zeile im head-Bereich vergesse, aber trotzdem Media Queries benutze?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Dann bleiben deine Media Queries technisch funktionsfähig, aber viele Handy-Browser messen den Viewport ohne diese Zeile so, als wäre er viel breiter als tatsächlich, oft um die 980 Pixel. Deine für schmale Bildschirme gedachten Regeln greifen dann nie, weil der Browser den Viewport falsch einschätzt.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Kann ich statt min-width auch max-width in einer Media Query benutzen?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Ja, das geht auch. min-width gilt ab einer Mindestbreite aufwärts, max-width gilt bis zu einer Höchstbreite. Beim Mobile-First-Ansatz benutzt du meist min-width, weil du von schmal nach breit ergänzt, statt umgekehrt von breit nach schmal einzuschränken.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Woher weiß ich, welcher Breakpoint für meine eigene Seite der richtige ist?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Am zuverlässigsten findest du das, indem du dein eigenes Browserfenster langsam schmaler ziehst und genau beobachtest, an welcher Breite dein Layout zum ersten Mal unbequem eng oder unübersichtlich wirkt. Genau dort, nicht bei einer aus einer Liste kopierten Zahl, setzt du deinen Breakpoint.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Muss ich wirklich jede einzelne Schriftgröße auf meiner Seite in rem statt in Pixeln schreiben?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Für Schriftgrößen ist rem fast immer die bessere Wahl, weil sie sich mit der Einstellung des Nutzers mitskaliert. Für sehr kleine, feste Details wie eine ein Pixel dünne Trennlinie bleibt eine Pixel-Angabe dagegen weiterhin sinnvoll, weil sich eine Linie nicht sinnvoll mitskalieren soll.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Reicht img mit max-width: 100% auch für Hintergrundbilder, die über CSS eingebunden sind?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Nein, max-width: 100% wirkt nur auf ein echtes img-Element in HTML. Ein über CSS eingebundenes Hintergrundbild regelst du stattdessen über eigene Eigenschaften wie background-size, das ist ein eigenes Thema für eine spätere, vertiefende Lektion.",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "B",
+      "text": "Brauche ich für jede einzelne CSS-Eigenschaft eine eigene Media Query, oder kann ich mehrere Regeln in einer einzigen bündeln?",
+      "isKeySentence": false,
+      "role": "faq"
+    },
+    {
+      "speaker": "A",
+      "text": "Du kannst beliebig viele CSS-Regeln in eine einzige Media Query packen, solange sie alle unter dieselbe Bedingung fallen sollen. Schreibst du @media (min-width: 900px) { .regal { display: flex; } .seite { grid-template-columns: 200px 1fr 200px; } }, gelten beide Regeln gemeinsam ab genau diesem Breakpoint, statt zwei getrennte Media Queries mit derselben Bedingung zu wiederholen.",
+      "isKeySentence": false,
+      "role": "faq"
+    }
+  ],
+  "practiceExample": {
+    "text": "Im Repo portfolio, in der Datei src/app/globals.css, Zeilen 44 bis 46, stehen Schriftgrößen mit der Funktion clamp, etwa --text-display: clamp(2.75rem, 9vw, 8.5rem): mindestens 2,75rem, höchstens 8,5rem, dazwischen abhängig von der Viewport-Breite. In derselben Datei, Zeile 467, schaltet eine echte Media Query, @media (min-width: 640px), ab diesem Breakpoint eine stärkere Weichzeichnung für dekorative Elemente ein.",
+    "repoNote": "repo-portfolio",
+    "location": "src/app/globals.css:44-46 (clamp-Schriftgrößen) und src/app/globals.css:467 (@media (min-width: 640px))"
+  },
+  "quiz": [
+    {
+      "question": "Was passiert mit einer für einen breiten Computerbildschirm gebauten Webseite auf einem Handy, ohne besondere Vorkehrung?",
+      "area": "Responsive Grundlagen",
+      "options": [
+        {
+          "text": "Sie sieht oft winzig klein oder abgeschnitten aus, weil der Browser nichts von sich aus anpasst.",
+          "isCorrect": true,
+          "explanation": "Genau das wurde am Anfang der Lektion erklärt."
+        },
+        {
+          "text": "Sie lädt automatisch überhaupt nicht mehr.",
+          "isCorrect": false,
+          "explanation": "Die Seite lädt weiterhin, sie sieht nur unpassend aus."
+        },
+        {
+          "text": "Der Browser wechselt automatisch zu einer komplett anderen Webseite, ein Missverständnis, das mit dem tatsächlichen Verhalten von Handy-Browsern nichts zu tun hat",
+          "isCorrect": false,
+          "explanation": "Der Browser zeigt dieselbe Seite, nur ohne passende Anpassung."
+        },
+        {
+          "text": "Alle Bilder werden automatisch entfernt.",
+          "isCorrect": false,
+          "explanation": "Bilder bleiben vorhanden, sie können nur zu breit für den Bildschirm wirken."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der Viewport?",
+      "area": "Responsive Grundlagen",
+      "options": [
+        {
+          "text": "Eine CSS-Regel für Schriftgrößen.",
+          "isCorrect": false,
+          "explanation": "Das beschreibt eher eine Einheit wie rem, nicht den Viewport."
+        },
+        {
+          "text": "Der sichtbare Bereich einer Webseite auf einem Bildschirm oder Handy.",
+          "isCorrect": true,
+          "explanation": "Genau das wurde mit dem Schaufenster-Bild in der Lektion erklärt."
+        },
+        {
+          "text": "Der Name der HTML-Datei.",
+          "isCorrect": false,
+          "explanation": "Der Dateiname hat mit dem sichtbaren Bereich eines Geräts nichts zu tun."
+        },
+        {
+          "text": "Ein anderer Name für einen Breakpoint, eine Verwechslung mit einem Breakpoint statt mit dem sichtbaren Bereich eines Geräts",
+          "isCorrect": false,
+          "explanation": "Viewport und Breakpoint sind zwei unterschiedliche Begriffe."
+        }
+      ]
+    },
+    {
+      "question": "Wozu dient die Zeile meta name='viewport' content='width=device-width, initial-scale=1' im head-Bereich?",
+      "area": "Responsive Grundlagen",
+      "options": [
+        {
+          "text": "Sie sagt dem Browser, die tatsächliche Gerätebreite als Viewport zu benutzen, statt künstlich zu verkleinern.",
+          "isCorrect": true,
+          "explanation": "Genau diese Aufgabe der Zeile wurde in der Lektion erklärt."
+        },
+        {
+          "text": "Sie lädt automatisch ein Stylesheet für Handys nach, eine Verwechslung, die den eigentlichen Zweck dieser einen Zeile im head-Bereich verfehlt",
+          "isCorrect": false,
+          "explanation": "Diese Zeile lädt kein zusätzliches Stylesheet, sie setzt nur die Viewport-Breite."
+        },
+        {
+          "text": "Sie schaltet automatisch alle Media Queries auf der Seite aus.",
+          "isCorrect": false,
+          "explanation": "Media Queries bleiben davon unberührt, sie funktionieren mit dieser Zeile sogar erst richtig."
+        },
+        {
+          "text": "Sie vergrößert automatisch alle Schriftgrößen um das Doppelte.",
+          "isCorrect": false,
+          "explanation": "Diese Zeile verändert keine Schriftgröße, sie setzt nur die Basis-Breite."
+        }
+      ]
+    },
+    {
+      "question": "Was ist eine Media Query?",
+      "area": "Media Queries",
+      "options": [
+        {
+          "text": "Eine CSS-Regel, die nur unter einer bestimmten Bedingung wie einer Mindestbreite gilt.",
+          "isCorrect": true,
+          "explanation": "Genau das wurde mit der Ladentür in der Lektion erklärt."
+        },
+        {
+          "text": "Eine Datenbankabfrage für Bildschirmgrößen, eine Verwechslung mit einer Datenbankabfrage statt einer bedingten CSS-Regel",
+          "isCorrect": false,
+          "explanation": "Eine Media Query ist eine CSS-Regel, keine Datenbankabfrage."
+        },
+        {
+          "text": "Eine feste Schriftgröße in rem.",
+          "isCorrect": false,
+          "explanation": "rem ist eine Einheit, keine Media Query."
+        },
+        {
+          "text": "Ein anderer Name für den Grid-Container.",
+          "isCorrect": false,
+          "explanation": "Ein Grid-Container ist eine Box, eine Media Query ist eine bedingte Regel."
+        }
+      ]
+    },
+    {
+      "question": "Was ist ein Breakpoint?",
+      "area": "Media Queries",
+      "options": [
+        {
+          "text": "Die Viewport-Breite, ab der eine Media Query eine neue Regel einschaltet.",
+          "isCorrect": true,
+          "explanation": "Genau das wurde mit der Standleuchte in der Lektion erklärt."
+        },
+        {
+          "text": "Ein Fehler, der die Seite komplett zum Absturz bringt, eine Verwechslung, die den eigentlichen Zweck eines bewusst gewählten Umschaltpunkts nicht trifft",
+          "isCorrect": false,
+          "explanation": "Ein Breakpoint ist eine bewusst gewählte Bildschirmbreite, kein Fehler."
+        },
+        {
+          "text": "Der Name für eine feste Pixel-Schriftgröße.",
+          "isCorrect": false,
+          "explanation": "Das beschreibt keine Schriftgröße, sondern eine Bildschirmbreite."
+        },
+        {
+          "text": "Ein anderer Name für rem.",
+          "isCorrect": false,
+          "explanation": "rem ist eine Einheit für Schriftgrößen, kein Breakpoint."
+        }
+      ]
+    },
+    {
+      "question": "Was bedeutet die Arbeitsweise Mobile First?",
+      "area": "Mobile First",
+      "options": [
+        {
+          "text": "Zuerst CSS für schmale Bildschirme schreiben, danach mit Media Queries für breitere ergänzen.",
+          "isCorrect": true,
+          "explanation": "Genau das wurde mit dem Rucksack-Bild in der Lektion erklärt."
+        },
+        {
+          "text": "Eine Webseite darf ausschließlich auf Handys angesehen werden, eine Einschränkung, die es bei Mobile First so tatsächlich nicht gibt",
+          "isCorrect": false,
+          "explanation": "Mobile First beschreibt eine Reihenfolge beim Schreiben von CSS, keine Einschränkung der Nutzung."
+        },
+        {
+          "text": "Zuerst wird das Layout für den größten Bildschirm geschrieben.",
+          "isCorrect": false,
+          "explanation": "Das beschreibt gerade das Gegenteil von Mobile First."
+        },
+        {
+          "text": "Bilder werden grundsätzlich zuerst geladen, Text danach.",
+          "isCorrect": false,
+          "explanation": "Mobile First hat mit der Ladereihenfolge von Bildern nichts zu tun."
+        }
+      ]
+    },
+    {
+      "question": "Ein Bild ragt auf einem schmalen Viewport über den Rand seines umgebenden Kastens hinaus. Welche CSS-Regel hilft?",
+      "area": "Bilder skalieren",
+      "options": [
+        {
+          "text": "img { max-width: 100%; height: auto; }",
+          "isCorrect": true,
+          "explanation": "Genau diese Regel wurde in der Lektion für dieses Problem erklärt."
+        },
+        {
+          "text": "img { font-size: 1rem; }",
+          "isCorrect": false,
+          "explanation": "font-size wirkt auf Text, nicht auf die Breite eines Bildes."
+        },
+        {
+          "text": "img { display: flex; }",
+          "isCorrect": false,
+          "explanation": "display: flex ordnet Kind-Boxen an, es begrenzt nicht die Breite eines einzelnen Bildes."
+        },
+        {
+          "text": "img { margin: 0 auto; }",
+          "isCorrect": false,
+          "explanation": "margin: 0 auto zentriert eine Box, es verhindert nicht, dass ein Bild zu breit wird."
+        }
+      ]
+    },
+    {
+      "question": "Warum ist rem für Schriftgrößen oft besser geeignet als eine feste Pixelangabe?",
+      "area": "Relative Einheiten",
+      "options": [
+        {
+          "text": "Weil sich rem automatisch mit der vom Nutzer eingestellten Grundschriftgröße mitskaliert.",
+          "isCorrect": true,
+          "explanation": "Genau dieser Vorteil wurde mit dem Rezept-Beispiel in der Lektion erklärt."
+        },
+        {
+          "text": "Weil rem in jedem Browser exakt genau ein Pixel groß ist, eine Verwechslung zwischen Schriftgröße und der Breite eines Bildes",
+          "isCorrect": false,
+          "explanation": "rem entspricht meist 16 Pixeln, nicht einem einzigen Pixel."
+        },
+        {
+          "text": "Weil rem ausschließlich für Bilder verwendet werden darf.",
+          "isCorrect": false,
+          "explanation": "rem wird vor allem für Schriftgrößen und Abstände benutzt, nicht speziell nur für Bilder."
+        },
+        {
+          "text": "Weil rem eine Media Query überflüssig macht.",
+          "isCorrect": false,
+          "explanation": "rem und Media Queries lösen unterschiedliche Probleme und ergänzen sich, statt sich zu ersetzen."
+        }
+      ]
+    },
+    {
+      "question": "Im Portfolio-Beispiel steht --text-display: clamp(2.75rem, 9vw, 8.5rem). Was bedeutet das?",
+      "area": "Praxisbeispiel",
+      "options": [
+        {
+          "text": "Die Schriftgröße bleibt zwischen 2,75rem und 8,5rem und richtet sich dazwischen nach der Viewport-Breite.",
+          "isCorrect": true,
+          "explanation": "Genau so wurde clamp in der Lektion erklärt."
+        },
+        {
+          "text": "Die Schriftgröße ist immer exakt 9 Pixel groß, ein Wert, der bei clamp gar nicht als feste Pixelzahl gemeint ist",
+          "isCorrect": false,
+          "explanation": "9vw ist der mittlere, veränderliche Wert, keine feste Pixelzahl."
+        },
+        {
+          "text": "Die Schriftgröße gilt nur auf Bildschirmen unter 640 Pixeln Breite.",
+          "isCorrect": false,
+          "explanation": "clamp selbst ist nicht an einen Breakpoint gebunden, es skaliert stufenlos."
+        },
+        {
+          "text": "clamp ist eine Media Query für Bilder.",
+          "isCorrect": false,
+          "explanation": "clamp ist eine CSS-Funktion für Werte wie Schriftgrößen, keine Media Query."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der Unterschied zwischen min-width und max-width in einer Media Query?",
+      "area": "Media Queries",
+      "options": [
+        {
+          "text": "min-width gilt ab einer Mindestbreite aufwärts, max-width gilt bis zu einer Höchstbreite.",
+          "isCorrect": true,
+          "explanation": "Genau dieser Unterschied wurde in der FAQ der Lektion erklärt."
+        },
+        {
+          "text": "Beide bedeuten exakt dasselbe und sind beliebig austauschbar.",
+          "isCorrect": false,
+          "explanation": "Beide wirken in entgegengesetzte Richtungen, sie sind nicht austauschbar."
+        },
+        {
+          "text": "min-width betrifft nur Schriftgrößen, max-width nur Bilder.",
+          "isCorrect": false,
+          "explanation": "Beide betreffen die Viewport-Breite insgesamt, nicht bestimmte Elementarten."
+        },
+        {
+          "text": "max-width funktioniert nur zusammen mit rem.",
+          "isCorrect": false,
+          "explanation": "max-width funktioniert unabhängig davon, welche Einheit sonst im CSS benutzt wird."
+        }
+      ]
+    },
+    {
+      "question": "Wie findest du für deine eigene Seite den passenden Breakpoint?",
+      "area": "Mobile First",
+      "options": [
+        {
+          "text": "Indem du das Browserfenster schmaler ziehst und beobachtest, wo dein Layout zuerst unbequem eng wirkt.",
+          "isCorrect": true,
+          "explanation": "Genau dieser Weg wurde in der FAQ der Lektion empfohlen."
+        },
+        {
+          "text": "Indem du immer exakt 500 Pixel als einzig richtigen Wert benutzt.",
+          "isCorrect": false,
+          "explanation": "Die Lektion nennt keinen einzigen immer richtigen Wert, sondern eine Beobachtungsmethode."
+        },
+        {
+          "text": "Indem du eine Münze wirfst.",
+          "isCorrect": false,
+          "explanation": "Der Breakpoint richtet sich nach dem tatsächlichen Verhalten des eigenen Layouts, nicht nach Zufall."
+        },
+        {
+          "text": "Indem du grid-template-areas komplett weglässt.",
+          "isCorrect": false,
+          "explanation": "Das Weglassen von grid-template-areas hat mit der Wahl eines Breakpoints nichts zu tun."
+        }
+      ]
+    },
+    {
+      "question": "Reicht die CSS-Regel img { max-width: 100%; } auch für ein über CSS eingebundenes Hintergrundbild?",
+      "area": "Bilder skalieren",
+      "options": [
+        {
+          "text": "Nein, diese Regel wirkt nur auf ein echtes img-Element in HTML, für Hintergrundbilder braucht es andere Eigenschaften.",
+          "isCorrect": true,
+          "explanation": "Genau das wurde in der letzten FAQ-Antwort der Lektion erklärt."
+        },
+        {
+          "text": "Ja, max-width: 100% wirkt automatisch auf jedes Bild, egal wie es eingebunden wurde.",
+          "isCorrect": false,
+          "explanation": "Ein img-Selektor trifft nur echte img-Elemente, keine CSS-Hintergrundbilder."
+        },
+        {
+          "text": "Nein, Hintergrundbilder können in CSS grundsätzlich nicht skaliert werden.",
+          "isCorrect": false,
+          "explanation": "Hintergrundbilder lassen sich sehr wohl skalieren, nur über andere Eigenschaften wie background-size."
+        },
+        {
+          "text": "Ja, aber nur wenn zusätzlich rem für die Schriftgröße benutzt wird.",
+          "isCorrect": false,
+          "explanation": "Die Einheit der Schriftgröße hat keinen Einfluss auf Hintergrundbilder."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Nimm die Seite mit Kopf, Seitenleiste, Inhalt und Fußbereich aus der Grid-Lektion. Trage die Viewport-Zeile in den head-Bereich ein, falls sie fehlt. Baue das Grid nach dem Mobile-First-Prinzip: eine Spalte als Grundzustand, ab einem selbst gewählten Breakpoint über eine Media Query mehrere Spalten nebeneinander.",
+    "expectation": "Ziehst du das Browserfenster schmal, siehst du alle vier Bereiche der Seite untereinander in einer Spalte. Ab deinem gewählten Breakpoint stehen Seitenleiste und Inhalt nebeneinander.",
+    "checklist": [
+      "Viewport-Zeile steht im head-Bereich der HTML-Datei",
+      "Grundzustand des Grids zeigt alle Bereiche in einer einzigen Spalte",
+      "Eine Media Query mit einem selbst gewählten Breakpoint schaltet ein mehrspaltiges Layout ein",
+      "Browserfenster testweise schmal und breit gezogen, Umschaltpunkt beobachtet",
+      "Mindestens eine Schriftgröße auf der Seite in rem statt in Pixeln angegeben"
+    ]
+  },
+  "audio": {
+    "file": "M02-02-04.mp3",
+    "durationSeconds": 1350,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Was ist, wenn ich die Viewport-Zeile im head-Bereich vergesse, aber trotzdem Media Queries benutze?",
+      "answer": "Dann bleiben deine Media Queries technisch funktionsfähig, aber viele Handy-Browser messen den Viewport ohne diese Zeile so, als wäre er viel breiter als tatsächlich, oft um die 980 Pixel. Deine für schmale Bildschirme gedachten Regeln greifen dann nie, weil der Browser den Viewport falsch einschätzt."
+    },
+    {
+      "question": "Kann ich statt min-width auch max-width in einer Media Query benutzen?",
+      "answer": "Ja, das geht auch. min-width gilt ab einer Mindestbreite aufwärts, max-width gilt bis zu einer Höchstbreite. Beim Mobile-First-Ansatz benutzt du meist min-width, weil du von schmal nach breit ergänzt, statt umgekehrt von breit nach schmal einzuschränken."
+    },
+    {
+      "question": "Woher weiß ich, welcher Breakpoint für meine eigene Seite der richtige ist?",
+      "answer": "Am zuverlässigsten findest du das, indem du dein eigenes Browserfenster langsam schmaler ziehst und genau beobachtest, an welcher Breite dein Layout zum ersten Mal unbequem eng oder unübersichtlich wirkt. Genau dort, nicht bei einer aus einer Liste kopierten Zahl, setzt du deinen Breakpoint."
+    },
+    {
+      "question": "Muss ich wirklich jede einzelne Schriftgröße auf meiner Seite in rem statt in Pixeln schreiben?",
+      "answer": "Für Schriftgrößen ist rem fast immer die bessere Wahl, weil sie sich mit der Einstellung des Nutzers mitskaliert. Für sehr kleine, feste Details wie eine ein Pixel dünne Trennlinie bleibt eine Pixel-Angabe dagegen weiterhin sinnvoll, weil sich eine Linie nicht sinnvoll mitskalieren soll."
+    },
+    {
+      "question": "Reicht img mit max-width: 100% auch für Hintergrundbilder, die über CSS eingebunden sind?",
+      "answer": "Nein, max-width: 100% wirkt nur auf ein echtes img-Element in HTML. Ein über CSS eingebundenes Hintergrundbild regelst du stattdessen über eigene Eigenschaften wie background-size, das ist ein eigenes Thema für eine spätere, vertiefende Lektion."
+    },
+    {
+      "question": "Brauche ich für jede einzelne CSS-Eigenschaft eine eigene Media Query, oder kann ich mehrere Regeln in einer einzigen bündeln?",
+      "answer": "Du kannst beliebig viele CSS-Regeln in eine einzige Media Query packen, solange sie alle unter dieselbe Bedingung fallen sollen. Schreibst du @media (min-width: 900px) { .regal { display: flex; } .seite { grid-template-columns: 200px 1fr 200px; } }, gelten beide Regeln gemeinsam ab genau diesem Breakpoint, statt zwei getrennte Media Queries mit derselben Bedingung zu wiederholen."
+    }
+  ]
+}
