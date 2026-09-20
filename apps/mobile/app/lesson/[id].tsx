@@ -218,6 +218,11 @@ export default function LessonScreen() {
         stickySectionHeadersEnabled={false}
         onViewableItemsChanged={(info) => void handleViewableChanged(info)}
         viewabilityConfig={{ itemVisiblePercentThreshold: 60 }}
+        getItemLayout={(_data, index) => {
+          const length = 120;
+          const offset = length * index;
+          return { length, offset, index };
+        }}
         initialScrollIndex={readUntil > 0 ? undefined : undefined}
         ListHeaderComponent={
           <LessonHeader
