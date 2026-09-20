@@ -1,0 +1,516 @@
+{
+  "id": "M03-05-05",
+  "title": "CSRF und CORS: wenn fremde Seiten in deinem Namen handeln",
+  "durationMinutes": 28,
+  "prerequisites": [
+    "M03-05-01",
+    "M03-02-04",
+    "M03-04-01"
+  ],
+  "terms": [
+    {
+      "term": "Same-Origin Policy",
+      "definition": "die grundlegende Sicherheitsregel des Browsers, die verhindert, dass eine Webseite von einer Domain auf Daten einer anderen Domain zugreift, es sei denn, der Server erlaubt es ausdrücklich."
+    },
+    {
+      "term": "CORS",
+      "definition": "ein Mechanismus, mit dem ein Server die Same-Origin Policy gezielt lockert und bestimmten anderen Domains erlaubt, auf seine Daten zuzugreifen, indem er spezielle HTTP-Header wie Access-Control-Allow-Origin setzt."
+    },
+    {
+      "term": "CSRF",
+      "definition": "ein Angriff, bei dem eine fremde Webseite den Browser eines Nutzers dazu bringt, eine ungewollte Aktion auf einer anderen Webseite auszuführen, auf der der Nutzer bereits angemeldet ist, ohne dass der Nutzer es merkt."
+    },
+    {
+      "term": "SameSite",
+      "definition": "eine Einstellung für Cookies, die dem Browser sagt, ob ein Cookie nur bei Anfragen von derselben Seite oder auch bei Anfragen von fremden Seiten mitgeschickt werden darf, und damit CSRF-Angriffe auf Cookie-Ebene blockiert."
+    },
+    {
+      "term": "CSRF-Token",
+      "definition": "ein einmaliger, zufälliger Wert, den der Server in jedes Formular einbettet und bei der Verarbeitung prüft, sodass ein Angreifer kein gültiges Formular fälschen kann, weil er den Token nicht kennt."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir vor, du sitzt in deinem Wohnzimmer und hast deine Haustür mit einem Schlüssel abgeschlossen. Aber die Fenster stehen offen. Jemand könnte durchs Fenster hereinkommen, deinen Schlüssel vom Tisch nehmen und die Tür von innen öffnen. Du hast die Tür abgeschlossen, aber das Haus ist trotzdem nicht sicher."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "In den letzten Lektionen hast du gelernt, wie Anmeldung funktioniert und wie OAuth2 fremde Zugriffe regelt. Aber es gibt eine viel heimtückischere Gefahr: Was, wenn eine fremde Webseite deinen Browser dazu bringt, in deinem Namen eine Aktion auszuführen, ohne dass du es merkst? Diese Lektion handelt von zwei Schutzmechanismen, die genau das verhindern."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Wie kann eine fremde Seite in meinem Namen handeln? Ich bin doch auf einer ganz anderen Webseite."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Dein Browser schickt bei jeder Anfrage automatisch alle Cookies mit, die zu der angefragten Domain gehören. Wenn du bei deiner Bank angemeldet bist und parallel eine fremde Seite besuchst, kann diese fremde Seite eine Anfrage an deine Bank schicken. Dein Browser schickt das Bank-Cookie mit, und die Bank denkt, die Anfrage kommt von dir."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil dieser Angriff keine Sicherheitslücke im klassischen Sinn ausnutzt. Der Browser verhält sich völlig korrekt, die Bank verhält sich völlig korrekt. Der Angriff nutzt nur die Tatsache aus, dass der Browser nicht weiß, ob du die Anfrage wirklich stellen wolltest."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir zwei benachbarte Grundstücke mit einem Zaun dazwischen vor. Der Zaun ist die Grundregel: Was auf deinem Grundstück passiert, bleibt auf deinem Grundstück. Aber du kannst ein Tor in den Zaun einbauen und sagen: Der Nachbar darf durch dieses Tor hereinkommen, um Blumen zu gießen."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Der Browser hat eine grundlegende Sicherheitsregel, die wie dieser Zaun funktioniert. Sie verhindert, dass eine Webseite von einer Domain einfach auf die Daten einer anderen Domain zugreift. Ohne diese Regel könnte jede Webseite deine E-Mails lesen, sobald du sie besuchst."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Wie heißt diese Grundregel, und warum gibt es sie überhaupt?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Diese Grundregel heißt Same-Origin Policy. Die Same-Origin Policy ist die grundlegende Sicherheitsregel des Browsers, die verhindert, dass eine Webseite von einer Domain auf Daten einer anderen Domain zugreift, es sei denn, der Server erlaubt es ausdrücklich."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil ohne diese Regel das gesamte Web unsicher wäre. Jede Webseite, die du besuchst, könnte heimlich deine Bankdaten abrufen, deine E-Mails lesen oder in deinem Namen bei sozialen Netzwerken posten. Die Same-Origin Policy ist die Mutter aller Browser-Sicherheitsregeln."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Wenn du auf meiner-bank.de eingeloggt bist und parallel boese-seite.de besuchst, kann boese-seite.de nicht einfach die Daten von meiner-bank.de abrufen. Der Browser blockiert diese Anfrage, weil die beiden Seiten unterschiedliche Origins haben. Eine Origin besteht aus Protokoll, Domain und Port."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir das Tor im Zaun wieder vor. Du willst nicht jeden Nachbarn durchlassen, sondern nur den einen, der deine Blumen gießt. Also hängst du ein Schild ans Tor: Nur Nachbar Müller darf hier durch. Der Briefträger und der Paketbote müssen draußen bleiben."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Manchmal will ein Server die Same-Origin Policy gezielt lockern, zum Beispiel wenn das Frontend unter einer anderen Domain läuft als das Backend. Dafür gibt es einen Mechanismus, mit dem der Server bestimmten anderen Domains den Zugriff erlaubt."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Wie heißt dieser Mechanismus, und wie funktioniert er technisch?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Dieser Mechanismus heißt CORS, ausgeschrieben Cross-Origin Resource Sharing. CORS ist ein Mechanismus, mit dem ein Server die Same-Origin Policy gezielt lockert und bestimmten anderen Domains erlaubt, auf seine Daten zuzugreifen, indem er spezielle HTTP-Header wie Access-Control-Allow-Origin setzt."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil moderne Webanwendungen oft aus getrennten Diensten bestehen. Das Frontend läuft unter app.de, das Backend unter api.app.de. Ohne CORS könnte das Frontend nicht mit dem Backend sprechen, weil der Browser die Anfragen blockieren würde."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Wenn dein Backend unter api.app.de läuft und dein Frontend unter app.de, setzt das Backend den Header Access-Control-Allow-Origin: app.de. Der Browser sieht diesen Header und erlaubt dem Frontend den Zugriff. Ohne diesen Header würde der Browser die Antwort verwerfen."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir vor, jemand schickt dir eine gefälschte Postkarte, die aussieht, als käme sie von deiner Bank. Auf der Karte steht: Bitte überweise 1000 Euro an dieses Konto, unterschrieben mit deinem Namen. Du erkennst die Fälschung nicht und führst die Überweisung aus."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Genau so funktioniert ein Angriff, bei dem eine fremde Webseite deinen Browser dazu bringt, eine Aktion auf einer anderen Webseite auszuführen. Die fremde Seite erstellt ein unsichtbares Formular, das eine Überweisung auslöst, und schickt es an deine Bank. Dein Browser fügt automatisch dein Bank-Cookie hinzu, und die Bank führt die Überweisung aus."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Wie heißt dieser Angriff, und warum ist er so schwer zu erkennen?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Dieser Angriff heißt CSRF, ausgeschrieben Cross-Site Request Forgery, auf Deutsch etwa gefälschte Anfrage über Seiten hinweg. CSRF ist ein Angriff, bei dem eine fremde Webseite den Browser eines Nutzers dazu bringt, eine ungewollte Aktion auf einer anderen Webseite auszuführen, auf der der Nutzer bereits angemeldet ist."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil CSRF für den Nutzer völlig unsichtbar ist. Es gibt keine Warnmeldung, kein Popup, keinen Hinweis. Der Nutzer besucht eine harmlos aussehende Seite, und im Hintergrund wird eine Aktion in seinem Namen ausgeführt. Erst Tage später, wenn er seinen Kontoauszug prüft, fällt der Schaden auf."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Ein klassisches Beispiel: Du bist bei deiner Bank angemeldet und öffnest parallel eine E-Mail mit einem Link. Der Link führt zu einer Seite, die ein unsichtbares Formular enthält. Dieses Formular schickt eine Überweisung an die Bank. Dein Browser hängt dein Bank-Cookie an, die Bank prüft das Cookie, erkennt dich, und führt die Überweisung aus."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir eine Eintrittskarte für ein Konzert vor, die nur am Eingang des Konzertsaals gültig ist. Wenn du die Karte an einem anderen Ort vorzeigst, zum Beispiel im Supermarkt, wird sie nicht akzeptiert. Die Karte ist an den Ort gebunden, für den sie ausgestellt wurde."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Die einfachste Verteidigung gegen CSRF ist, das Cookie an die Seite zu binden, von der es ausgestellt wurde. Der Browser schickt das Cookie nur mit, wenn die Anfrage wirklich von derselben Seite kommt. Eine fremde Seite kann das Cookie nicht für ihre Zwecke missbrauchen."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Wie heißt diese Cookie-Einstellung, und wie genau blockiert sie CSRF?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Diese Einstellung heißt SameSite. SameSite ist eine Einstellung für Cookies, die dem Browser sagt, ob ein Cookie nur bei Anfragen von derselben Seite oder auch bei Anfragen von fremden Seiten mitgeschickt werden darf, und damit CSRF-Angriffe auf Cookie-Ebene blockiert."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil SameSite die eleganteste Lösung für CSRF ist. Du musst keinen zusätzlichen Code schreiben, keine Tokens verwalten, keine Formulare anpassen. Du setzt eine einzige Cookie-Eigenschaft, und der Browser blockiert alle CSRF-Angriffe automatisch."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Ein Cookie mit SameSite=Strict wird nur mitgeschickt, wenn die Anfrage von derselben Domain kommt. Ein Cookie mit SameSite=Lax wird auch mitgeschickt, wenn der Nutzer einem Link folgt, aber nicht bei versteckten Formularen. Für die meisten Anwendungen ist Lax der beste Kompromiss aus Sicherheit und Benutzerfreundlichkeit."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir ein Formular bei einer Behörde vor, das eine einmalige Vorgangsnummer enthält. Du kannst das Formular nur mit dieser Nummer einreichen. Ein Angreifer könnte das Formular kopieren, aber er kennt die Vorgangsnummer nicht. Sein gefälschtes Formular wird abgelehnt."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Neben SameSite gibt es eine zweite, ältere Verteidigung gegen CSRF: einen einmaligen, zufälligen Wert, den der Server in jedes Formular einbettet. Der Angreifer kann das Formular nicht fälschen, weil er diesen Wert nicht kennt."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Wie heißt dieser Wert, und warum verwendet man ihn heute noch, obwohl es SameSite gibt?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Dieser Wert heißt CSRF-Token. Ein CSRF-Token ist ein einmaliger, zufälliger Wert, den der Server in jedes Formular einbettet und bei der Verarbeitung prüft, sodass ein Angreifer kein gültiges Formular fälschen kann, weil er den Token nicht kennt."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil SameSite nicht in allen Browsern und nicht für alle Anwendungsfälle ausreicht. Ältere Browser unterstützen SameSite nicht, und manche Anwendungen brauchen Cookies, die auch von fremden Seiten aus erreichbar sind. In diesen Fällen ist der CSRF-Token die bewährte Fallback-Lösung."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Der Server erzeugt einen zufälligen Token, speichert ihn in der Sitzung und bettet ihn als verstecktes Feld ins Formular ein. Beim Absenden prüft der Server, ob der Token aus dem Formular mit dem Token in der Sitzung übereinstimmt. Ein Angreifer kann das Formular nicht fälschen, weil er den Token nicht errät."
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "isKeySentence": true,
+      "text": "CSRF-Angriffe bringen den Browser eines Nutzers dazu, ungewollte Aktionen auf einer anderen Webseite auszuführen, und werden durch SameSite-Cookies oder CSRF-Tokens verhindert, während CORS die Same-Origin Policy gezielt lockert, um erlaubte Zugriffe zwischen verschiedenen Domains zu ermöglichen."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "CORS und CSRF werden oft verwechselt, weil beide mit domainübergreifenden Anfragen zu tun haben. Aber sie schützen vor völlig unterschiedlichen Dingen. CORS schützt den Server vor unerlaubten Lesezugriffen. CSRF schützt den Nutzer vor ungewollten Schreibaktionen."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil du beide Schutzmechanismen brauchst. CORS allein schützt nicht vor CSRF, weil CSRF-Angriffe keine Antwort lesen müssen. Und CSRF-Schutz allein schützt nicht vor unerlaubten Lesezugriffen. Beide ergänzen sich zu einer vollständigen Absicherung."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Das Praxisbeispiel repo-ssrf-guarded-fetch zeigt, wie eine fetch-Funktion gegen CSRF und SSRF abgesichert wird. Die fetch-Funktion prüft vor jeder Anfrage, ob die Ziel-URL auf einer erlaubten Liste steht, und blockiert Anfragen an interne Netzwerkadressen, die ein Angreifer für SSRF-Angriffe missbrauchen könnte."
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "isKeySentence": false,
+      "text": "In dieser Lektion hast du fünf Begriffe kennengelernt. Same-Origin Policy: die grundlegende Sicherheitsregel des Browsers, die den Zugriff zwischen verschiedenen Domains blockiert. CORS: ein Mechanismus, mit dem ein Server die Same-Origin Policy gezielt lockert. CSRF: ein Angriff, bei dem eine fremde Seite den Browser zu ungewollten Aktionen bringt. SameSite: eine Cookie-Einstellung, die CSRF auf Cookie-Ebene blockiert. CSRF-Token: ein einmaliger Wert, den der Server in Formulare einbettet und prüft."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Ist CORS dasselbe wie CSRF-Schutz?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Nein, das ist ein häufiger Irrtum. CORS schützt den Server vor unerlaubten Lesezugriffen aus dem Browser. CSRF schützt den Nutzer vor ungewollten Schreibaktionen. Ein Server mit korrekt konfiguriertem CORS kann trotzdem anfällig für CSRF sein, weil CSRF-Angriffe die Antwort gar nicht lesen müssen. Du brauchst beide Schutzmechanismen unabhängig voneinander."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Reicht SameSite=Lax für alle meine Cookies, oder brauche ich trotzdem CSRF-Tokens?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Für die meisten Anwendungen reicht SameSite=Lax in modernen Browsern aus, weil es CSRF-Angriffe über Formulare und versteckte Anfragen zuverlässig blockiert. Wenn du aber Nutzer mit sehr alten Browsern unterstützen musst oder Cookies brauchst, die auch von fremden Seiten aus erreichbar sein sollen, solltest du zusätzlich CSRF-Tokens verwenden. Viele Frameworks wie Express oder Spring Boot bieten CSRF-Tokens standardmäßig an."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Warum sehe ich ständig CORS-Fehler in der Browser-Konsole, wenn ich ein Frontend und Backend getrennt entwickle?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Weil dein Frontend unter localhost:3000 und dein Backend unter localhost:8080 läuft, was für den Browser zwei verschiedene Origins sind. Die Same-Origin Policy blockiert die Anfragen. Du musst im Backend den CORS-Header setzen, der localhost:3000 als erlaubte Origin einträgt. In der Entwicklung kannst du vorübergehend auch alle Origins erlauben, aber im Produktionsbetrieb solltest du nur die tatsächlich benötigten Origins freigeben."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Kann ein CSRF-Angriff auch meine API treffen, wenn ich gar keine Cookies verwende, sondern nur JWTs im Authorization-Header?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Nein, wenn du JWTs ausschließlich im Authorization-Header mitschickst und keine Cookies verwendest, bist du gegen klassische CSRF-Angriffe immun. Der Angreifer kann den Authorization-Header nicht setzen, weil sein gefälschtes Formular keine benutzerdefinierten Header mitschicken kann. Allerdings musst du dann sicherstellen, dass dein JWT nicht in einem Cookie gespeichert wird, denn sonst wäre der CSRF-Schutz wieder ausgehebelt."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Was ist der Unterschied zwischen CSRF und SSRF?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "CSRF bringt den Browser eines Nutzers dazu, eine ungewollte Aktion auszuführen. SSRF, Server-Side Request Forgery, bringt den Server dazu, eine ungewollte Anfrage an eine interne Adresse zu schicken. Bei CSRF ist der Browser das Werkzeug, bei SSRF der Server. Das Praxisbeispiel repo-ssrf-guarded-fetch schützt vor beiden, indem es sowohl die Herkunft der Anfrage als auch das Ziel der Anfrage prüft."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Muss ich CORS für jede einzelne Route in meinem Backend konfigurieren?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "In den meisten Frameworks konfigurierst du CORS einmal global als Middleware, und sie gilt für alle Routen. Du kannst aber auch für bestimmte Routen abweichende Regeln festlegen, zum Beispiel wenn eine Route für öffentliche APIs von überall erreichbar sein soll, während der Rest nur von deiner eigenen Domain aus erreichbar ist. Die globale Konfiguration ist der Normalfall."
+    }
+  ],
+  "practiceExample": {
+    "text": "Das Repo repo-ssrf-guarded-fetch enthält eine abgesicherte fetch-Funktion, die vor jeder Anfrage prüft, ob die Ziel-URL auf einer erlaubten Liste steht. Sie blockiert Anfragen an interne Netzwerkadressen und verhindert so SSRF-Angriffe. Die gleiche Technik lässt sich mit CSRF-Tokens kombinieren.",
+    "repoNote": "repo-ssrf-guarded-fetch",
+    "location": "src/guarded-fetch.ts"
+  },
+  "quiz": [
+    {
+      "question": "Was ist die Same-Origin Policy?",
+      "area": "Same-Origin Policy",
+      "options": [
+        { "text": "Die Browser-Regel, die verhindert, dass eine Webseite auf Daten einer anderen Domain zugreift.", "isCorrect": true, "explanation": "Richtig: Die Same-Origin Policy ist die grundlegende Sicherheitsregel des Browsers." },
+        { "text": "Eine Regel, die vorschreibt, dass alle Webseiten denselben Ursprung haben müssen.", "isCorrect": false, "explanation": "Die Same-Origin Policy schreibt nicht vor, dass alle Seiten denselben Ursprung haben." },
+        { "text": "Ein Gesetz, das die Gleichbehandlung aller Webseiten im Internet vorschreibt.", "isCorrect": false, "explanation": "Die Same-Origin Policy ist eine technische Regel, kein Gesetz." },
+        { "text": "Eine Einstellung im Browser, die Werbung von fremden Seiten blockiert.", "isCorrect": false, "explanation": "Die Same-Origin Policy blockiert keine Werbung." }
+      ]
+    },
+    {
+      "question": "Was ist CORS?",
+      "area": "CORS",
+      "options": [
+        { "text": "Ein Mechanismus, mit dem ein Server die Same-Origin Policy gezielt lockert.", "isCorrect": true, "explanation": "Richtig: CORS erlaubt bestimmten Domains den Zugriff über spezielle HTTP-Header." },
+        { "text": "Ein Angriff, bei dem fremde Seiten Cookies stehlen.", "isCorrect": false, "explanation": "CORS ist ein Schutzmechanismus, kein Angriff." },
+        { "text": "Ein Programm, das Cross-Origin-Anfragen grundsätzlich verbietet.", "isCorrect": false, "explanation": "CORS verbietet nicht, es erlaubt gezielt." },
+        { "text": "Eine spezielle Firewall für Browser.", "isCorrect": false, "explanation": "CORS ist keine Firewall, sondern ein HTTP-Header-Mechanismus." }
+      ]
+    },
+    {
+      "question": "Was ist ein CSRF-Angriff?",
+      "area": "CSRF",
+      "options": [
+        { "text": "Ein Angriff, bei dem eine fremde Seite den Browser zu ungewollten Aktionen auf einer anderen Seite bringt.", "isCorrect": true, "explanation": "Richtig: CSRF nutzt die automatische Cookie-Übertragung des Browsers aus." },
+        { "text": "Ein Angriff, bei dem der Server gehackt und die Datenbank gestohlen wird.", "isCorrect": false, "explanation": "CSRF zielt nicht auf den Server, sondern auf den Browser des Nutzers." },
+        { "text": "Ein Angriff, bei dem das Passwort des Nutzers durch Ausprobieren erraten wird.", "isCorrect": false, "explanation": "Das ist ein Brute-Force-Angriff, kein CSRF." },
+        { "text": "Ein Angriff, bei dem die Internetverbindung des Nutzers abgehört wird.", "isCorrect": false, "explanation": "Das ist ein Man-in-the-Middle-Angriff, kein CSRF." }
+      ]
+    },
+    {
+      "question": "Was ist SameSite bei Cookies?",
+      "area": "SameSite",
+      "options": [
+        { "text": "Eine Einstellung, die dem Browser sagt, ob ein Cookie nur bei Anfragen von derselben Seite mitgeschickt wird.", "isCorrect": true, "explanation": "Richtig: SameSite blockiert CSRF auf Cookie-Ebene." },
+        { "text": "Eine Regel, dass alle Cookies von derselben Webseite stammen müssen.", "isCorrect": false, "explanation": "SameSite ist eine Cookie-Eigenschaft, keine Herkunftsregel." },
+        { "text": "Ein Programm, das Cookies von verschiedenen Seiten zusammenführt.", "isCorrect": false, "explanation": "SameSite führt keine Cookies zusammen." },
+        { "text": "Eine gesetzliche Vorschrift zur Cookie-Verwendung.", "isCorrect": false, "explanation": "SameSite ist eine technische Einstellung, kein Gesetz." }
+      ]
+    },
+    {
+      "question": "Was ist ein CSRF-Token?",
+      "area": "CSRF-Token",
+      "options": [
+        { "text": "Ein einmaliger Zufallswert, den der Server in Formulare einbettet und bei der Verarbeitung prüft.", "isCorrect": true, "explanation": "Richtig: Der Token macht gefälschte Formulare unmöglich." },
+        { "text": "Ein spezielles Cookie, das CSRF-Angriffe automatisch erkennt.", "isCorrect": false, "explanation": "Der CSRF-Token ist kein Cookie, sondern ein Formularfeld." },
+        { "text": "Ein Passwort, das der Nutzer zusätzlich eingeben muss.", "isCorrect": false, "explanation": "Der CSRF-Token wird nicht vom Nutzer eingegeben, sondern automatisch eingebettet." },
+        { "text": "Eine Signatur, die die Echtheit der Webseite bestätigt.", "isCorrect": false, "explanation": "Der CSRF-Token bestätigt nicht die Echtheit der Seite." }
+      ]
+    },
+    {
+      "question": "Warum reicht CORS allein nicht als Schutz gegen CSRF?",
+      "area": "CSRF",
+      "options": [
+        { "text": "Weil CSRF-Angriffe die Antwort nicht lesen müssen und CORS nur Lesezugriffe schützt.", "isCorrect": true, "explanation": "Richtig: CORS und CSRF schützen vor unterschiedlichen Dingen." },
+        { "text": "Weil CORS nur in modernen Browsern funktioniert.", "isCorrect": false, "explanation": "CORS funktioniert in allen modernen Browsern, das ist nicht der Grund." },
+        { "text": "Weil CORS grundsätzlich keine POST-Anfragen schützt.", "isCorrect": false, "explanation": "CORS schützt auch POST-Anfragen, aber CSRF braucht diesen Schutz nicht." },
+        { "text": "Weil CORS und CSRF dasselbe sind und sich gegenseitig aufheben.", "isCorrect": false, "explanation": "CORS und CSRF sind nicht dasselbe." }
+      ]
+    },
+    {
+      "question": "Welcher SameSite-Wert ist für die meisten Anwendungen der beste Kompromiss?",
+      "area": "SameSite",
+      "options": [
+        { "text": "Lax, weil es CSRF blockiert, aber Links von anderen Seiten erlaubt.", "isCorrect": true, "explanation": "Richtig: Lax blockiert versteckte Angriffe, erlaubt aber normale Navigation." },
+        { "text": "Strict, weil es die höchste Sicherheit bietet.", "isCorrect": false, "explanation": "Strict blockiert auch normale Links, was die Benutzerfreundlichkeit einschränkt." },
+        { "text": "None, weil es die wenigsten Einschränkungen hat.", "isCorrect": false, "explanation": "None bietet keinerlei CSRF-Schutz." },
+        { "text": "Default, weil der Browser dann selbst entscheidet.", "isCorrect": false, "explanation": "Default ist kein gültiger SameSite-Wert." }
+      ]
+    },
+    {
+      "question": "Warum ist ein CSRF-Angriff für den Nutzer unsichtbar?",
+      "area": "CSRF",
+      "options": [
+        { "text": "Weil der Browser die Anfrage automatisch im Hintergrund stellt, ohne den Nutzer zu fragen.", "isCorrect": true, "explanation": "Richtig: Der Nutzer merkt nichts von der gefälschten Anfrage." },
+        { "text": "Weil der Angreifer den Bildschirm des Nutzers schwarz färbt.", "isCorrect": false, "explanation": "Der Angreifer manipuliert nicht den Bildschirm." },
+        { "text": "Weil der Angriff nur nachts stattfindet, wenn der Nutzer schläft.", "isCorrect": false, "explanation": "CSRF-Angriffe sind nicht an Tageszeiten gebunden." },
+        { "text": "Weil der Browser bei CSRF-Angriffen abstürzt und der Nutzer nichts sieht.", "isCorrect": false, "explanation": "Der Browser stürzt bei CSRF nicht ab." }
+      ]
+    },
+    {
+      "question": "Was ist der Unterschied zwischen CSRF und SSRF?",
+      "area": "CSRF",
+      "options": [
+        { "text": "CSRF nutzt den Browser des Nutzers, SSRF nutzt den Server für ungewollte Anfragen.", "isCorrect": true, "explanation": "Richtig: CSRF = Client-seitig, SSRF = Server-seitig." },
+        { "text": "CSRF ist gefährlicher als SSRF.", "isCorrect": false, "explanation": "Beide sind gefährlich, aber auf unterschiedliche Weise." },
+        { "text": "SSRF ist die moderne Version von CSRF.", "isCorrect": false, "explanation": "SSRF ist keine neuere Version, sondern ein anderer Angriff." },
+        { "text": "Es gibt keinen Unterschied, die Begriffe bedeuten dasselbe.", "isCorrect": false, "explanation": "CSRF und SSRF sind verschiedene Angriffsarten." }
+      ]
+    },
+    {
+      "question": "Schützt ein JWT im Authorization-Header vor CSRF?",
+      "area": "CSRF-Token",
+      "options": [
+        { "text": "Ja, weil der Angreifer keinen benutzerdefinierten Header in seinem gefälschten Formular setzen kann.", "isCorrect": true, "explanation": "Richtig: JWTs im Header sind immun gegen klassisches CSRF." },
+        { "text": "Nein, JWTs bieten keinerlei Schutz vor CSRF.", "isCorrect": false, "explanation": "JWTs im Header schützen sehr wohl, weil der Angreifer den Header nicht setzen kann." },
+        { "text": "Nur wenn das JWT zusätzlich signiert ist.", "isCorrect": false, "explanation": "Die Signatur des JWT ist nicht der Grund für den CSRF-Schutz." },
+        { "text": "Nur wenn das JWT in einem Cookie gespeichert wird.", "isCorrect": false, "explanation": "Im Cookie gespeicherte JWTs sind genauso anfällig wie andere Cookies." }
+      ]
+    },
+    {
+      "question": "Welche zwei Schutzmechanismen ergänzen sich zu einer vollständigen Absicherung gegen domainübergreifende Angriffe?",
+      "area": "CORS",
+      "options": [
+        { "text": "CORS für Lesezugriffe und CSRF-Schutz für Schreibaktionen.", "isCorrect": true, "explanation": "Richtig: Beide schützen vor unterschiedlichen Angriffsarten." },
+        { "text": "Firewall und Virenscanner.", "isCorrect": false, "explanation": "Das sind allgemeine Sicherheitsmaßnahmen, nicht spezifisch für domainübergreifende Angriffe." },
+        { "text": "Verschlüsselung und Komprimierung.", "isCorrect": false, "explanation": "Weder Verschlüsselung noch Komprimierung schützen vor CSRF oder CORS-Verletzungen." },
+        { "text": "Login und Passwort.", "isCorrect": false, "explanation": "Login und Passwort sind Authentifizierung, kein Schutz vor domainübergreifenden Angriffen." }
+      ]
+    },
+    {
+      "question": "Was macht die guarded-fetch-Funktion aus repo-ssrf-guarded-fetch?",
+      "area": "CSRF",
+      "options": [
+        { "text": "Sie prüft vor jeder Anfrage, ob die Ziel-URL auf einer erlaubten Liste steht.", "isCorrect": true, "explanation": "Richtig: Die Funktion blockiert Anfragen an nicht erlaubte Ziele." },
+        { "text": "Sie verschlüsselt alle Anfragen automatisch.", "isCorrect": false, "explanation": "Die guarded-fetch-Funktion verschlüsselt nicht, sie prüft die Ziel-URL." },
+        { "text": "Sie speichert alle Antworten in einem Cache.", "isCorrect": false, "explanation": "Die guarded-fetch-Funktion ist kein Cache." },
+        { "text": "Sie leitet alle Anfragen über einen Proxy um.", "isCorrect": false, "explanation": "Die guarded-fetch-Funktion leitet nicht um, sie blockiert oder erlaubt." }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Öffne die Entwicklertools deines Browsers und gehe auf eine beliebige Webseite. Wechsle zum Reiter Netzwerk und lade die Seite neu. Suche nach einem Eintrag mit dem Header Access-Control-Allow-Origin. Notiere, welche Origin dort erlaubt wird. Öffne dann den Reiter Anwendung und suche nach Cookies mit dem Attribut SameSite.",
+    "expectation": "Mindestens ein Access-Control-Allow-Origin-Header wurde gefunden und notiert. Mindestens ein Cookie mit SameSite-Attribut wurde gefunden und notiert.",
+    "checklist": [
+      "Entwicklertools geöffnet",
+      "Netzwerk-Reiter aufgerufen",
+      "Access-Control-Allow-Origin-Header gefunden",
+      "Anwendungs-Reiter aufgerufen",
+      "Cookie mit SameSite-Attribut gefunden"
+    ]
+  },
+  "audio": {
+    "file": "M03-05-05.mp3",
+    "durationSeconds": 1680,
+    "voices": ["A", "B"],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Ist CORS dasselbe wie CSRF-Schutz?",
+      "answer": "Nein, das ist ein häufiger Irrtum. CORS schützt den Server vor unerlaubten Lesezugriffen aus dem Browser. CSRF schützt den Nutzer vor ungewollten Schreibaktionen. Ein Server mit korrekt konfiguriertem CORS kann trotzdem anfällig für CSRF sein, weil CSRF-Angriffe die Antwort gar nicht lesen müssen. Du brauchst beide Schutzmechanismen unabhängig voneinander."
+    },
+    {
+      "question": "Reicht SameSite=Lax für alle meine Cookies, oder brauche ich trotzdem CSRF-Tokens?",
+      "answer": "Für die meisten Anwendungen reicht SameSite=Lax in modernen Browsern aus, weil es CSRF-Angriffe über Formulare und versteckte Anfragen zuverlässig blockiert. Wenn du aber Nutzer mit sehr alten Browsern unterstützen musst oder Cookies brauchst, die auch von fremden Seiten aus erreichbar sein sollen, solltest du zusätzlich CSRF-Tokens verwenden. Viele Frameworks wie Express oder Spring Boot bieten CSRF-Tokens standardmäßig an."
+    },
+    {
+      "question": "Warum sehe ich ständig CORS-Fehler in der Browser-Konsole, wenn ich ein Frontend und Backend getrennt entwickle?",
+      "answer": "Weil dein Frontend unter localhost:3000 und dein Backend unter localhost:8080 läuft, was für den Browser zwei verschiedene Origins sind. Die Same-Origin Policy blockiert die Anfragen. Du musst im Backend den CORS-Header setzen, der localhost:3000 als erlaubte Origin einträgt. In der Entwicklung kannst du vorübergehend auch alle Origins erlauben, aber im Produktionsbetrieb solltest du nur die tatsächlich benötigten Origins freigeben."
+    },
+    {
+      "question": "Kann ein CSRF-Angriff auch meine API treffen, wenn ich gar keine Cookies verwende, sondern nur JWTs im Authorization-Header?",
+      "answer": "Nein, wenn du JWTs ausschließlich im Authorization-Header mitschickst und keine Cookies verwendest, bist du gegen klassische CSRF-Angriffe immun. Der Angreifer kann den Authorization-Header nicht setzen, weil sein gefälschtes Formular keine benutzerdefinierten Header mitschicken kann. Allerdings musst du dann sicherstellen, dass dein JWT nicht in einem Cookie gespeichert wird, denn sonst wäre der CSRF-Schutz wieder ausgehebelt."
+    },
+    {
+      "question": "Was ist der Unterschied zwischen CSRF und SSRF?",
+      "answer": "CSRF bringt den Browser eines Nutzers dazu, eine ungewollte Aktion auszuführen. SSRF, Server-Side Request Forgery, bringt den Server dazu, eine ungewollte Anfrage an eine interne Adresse zu schicken. Bei CSRF ist der Browser das Werkzeug, bei SSRF der Server. Das Praxisbeispiel repo-ssrf-guarded-fetch schützt vor beiden, indem es sowohl die Herkunft der Anfrage als auch das Ziel der Anfrage prüft."
+    },
+    {
+      "question": "Muss ich CORS für jede einzelne Route in meinem Backend konfigurieren?",
+      "answer": "In den meisten Frameworks konfigurierst du CORS einmal global als Middleware, und sie gilt für alle Routen. Du kannst aber auch für bestimmte Routen abweichende Regeln festlegen, zum Beispiel wenn eine Route für öffentliche APIs von überall erreichbar sein soll, während der Rest nur von deiner eigenen Domain aus erreichbar ist. Die globale Konfiguration ist der Normalfall."
+    }
+  ]
+}

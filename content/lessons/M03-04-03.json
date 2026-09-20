@@ -1,0 +1,600 @@
+{
+  "id": "M03-04-03",
+  "title": "Row Level Security: warum jeder nur seine eigenen Daten sieht",
+  "durationMinutes": 28,
+  "prerequisites": [
+    "M03-04-01",
+    "M03-04-02"
+  ],
+  "terms": [
+    {
+      "term": "Row Level Security",
+      "definition": "eine Sicherheitsebene in PostgreSQL, die den Zugriff auf einzelne Zeilen einer Tabelle abhängig vom angemeldeten Benutzer erlaubt oder verweigert, ohne dass die Anwendung diese Prüfung selbst programmieren muss."
+    },
+    {
+      "term": "Policy",
+      "definition": "eine einzelne, in SQL geschriebene Regel innerhalb von Row Level Security, die für eine bestimmte Operation wie SELECT oder INSERT festlegt, welche Zeilen ein Benutzer sehen oder verändern darf."
+    },
+    {
+      "term": "USING",
+      "definition": "der Teil einer Policy, der vor dem Lesen oder Verändern einer Zeile prüft, ob diese Zeile für den Benutzer überhaupt sichtbar sein darf, ähnlich einer WHERE-Klausel, die automatisch an jede Abfrage angehängt wird."
+    },
+    {
+      "term": "WITH CHECK",
+      "definition": "der Teil einer Policy, der vor dem Einfügen oder Ändern einer Zeile prüft, ob das Ergebnis der Operation den Regeln entspricht, und die Änderung ablehnt, wenn die neue Zeile gegen die Bedingung verstößt."
+    },
+    {
+      "term": "RLS",
+      "definition": "die Abkürzung für Row Level Security, die in der Supabase-Oberfläche und in der PostgreSQL-Dokumentation durchgängig verwendet wird und denselben Zeilen-Schutzmechanismus meint."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir ein großes Büro mit einem einzigen, riesigen Aktenschrank vor, in dem die Personalakten aller Mitarbeiter liegen. Jeder Mitarbeiter hat einen Schlüssel zu diesem Schrank, aber der Schrank hat ein besonderes Schloss: Sobald du deinen Schlüssel einsteckst, siehst du nur deine eigene Akte, keine andere. Der Schrank selbst entscheidet, was du sehen darfst, nicht die Personalabteilung."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "In der letzten Lektion hast du gelernt, wie du mit einem ORM wie Prisma oder dem Supabase-Client auf die Datenbank zugreifst. Aber eine Datenbank ohne Zugriffsschutz ist wie ein Aktenschrank ohne Schloss: Jeder, der den Schlüssel zur Datenbank hat, kann alle Zeilen aller Tabellen lesen und verändern. In dieser Lektion lernst du, wie die Datenbank selbst dafür sorgt, dass jeder Benutzer nur seine eigenen Daten sieht."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Warum reicht es nicht, einfach in meiner App zu programmieren, dass jeder nur seine eigenen Daten abfragen darf?"
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Weil ein einziger Programmierfehler oder eine vergessene WHERE-Klausel in einer einzigen Abfrage ausreicht, damit ein Benutzer plötzlich alle Daten aller anderen Benutzer sieht. Wenn du die Zugriffskontrolle nur in der App programmierst, musst du an jede einzelne Abfrage denken. Vergisst du eine, ist die Sicherheit weg."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil die Datenbank die letzte Instanz vor den Daten ist. Wenn die Datenbank selbst die Regeln durchsetzt, kann kein Fehler in der App diese Regeln umgehen. Selbst wenn jemand den Supabase-Client direkt anspricht und eine eigene Abfrage schreibt, greift die Datenbank-Regel trotzdem."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir eine Tür mit einem Türsteher vor, der nicht nur deinen Ausweis prüft, sondern auch genau weiß, zu welchem Tisch im Restaurant du gehörst. Du zeigst deinen Ausweis, und der Türsteher führt dich direkt zu deinem reservierten Tisch. Fragst du nach einem anderen Tisch, sagt er freundlich: Der gehört nicht zu dir."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Genau diese Aufgabe übernimmt in PostgreSQL eine Funktion, die Row Level Security heißt. Sie entscheidet für jede einzelne Zeile einer Tabelle, ob der angemeldete Benutzer sie sehen, verändern oder löschen darf. Die Entscheidung trifft die Datenbank selbst, nicht die App."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Was genau ist Row Level Security, und wie unterscheidet es sich von einer normalen WHERE-Klausel in meiner App?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Row Level Security ist eine Sicherheitsebene in PostgreSQL, die den Zugriff auf einzelne Zeilen einer Tabelle abhängig vom angemeldeten Benutzer erlaubt oder verweigert, ohne dass die Anwendung diese Prüfung selbst programmieren muss."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil eine WHERE-Klausel in der App nur dann greift, wenn du sie auch tatsächlich hinschreibst. Row Level Security hingegen greift immer, bei jeder Abfrage, egal ob du daran gedacht hast oder nicht. Sie ist wie ein Sicherheitsgurt, der sich automatisch anlegt, sobald du dich ins Auto setzt."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "In der FutureDev-App gibt es eine Tabelle namens user_progress, die den Lernfortschritt jedes Nutzers speichert. Ohne Row Level Security könnte ein Nutzer die gesamte Tabelle abfragen und sehen, welche Lektionen andere Nutzer schon abgeschlossen haben. Mit Row Level Security sieht jeder Nutzer nur seine eigenen Fortschrittszeilen, selbst wenn er SELECT Stern FROM user_progress ohne WHERE-Klausel schreibt."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir eine Bibliothek vor, in der jedes Buch einen unsichtbaren Stempel trägt, der nur für bestimmte Leser sichtbar wird. Du gehst durch die Regale und siehst nur die Bücher, die deinen Stempel tragen. Die anderen Bücher sind zwar da, aber für dich unsichtbar. Der Bibliothekar muss nicht jedes Mal prüfen, was du ausleihen darfst, die Bücher selbst entscheiden das."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Damit Row Level Security funktioniert, braucht die Datenbank Regeln, nach denen sie entscheidet. Diese Regeln heißen Policies. Eine Policy ist eine einzelne, in SQL geschriebene Bedingung, die für eine bestimmte Operation festlegt, welche Zeilen ein Benutzer sehen oder verändern darf."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Wie schreibt man so eine Policy, und woraus besteht sie?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Eine Policy ist eine einzelne, in SQL geschriebene Regel innerhalb von Row Level Security, die für eine bestimmte Operation wie SELECT oder INSERT festlegt, welche Zeilen ein Benutzer sehen oder verändern darf."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil du für jede Operation eine eigene Policy brauchst. Eine Policy für SELECT regelt, wer lesen darf. Eine Policy für INSERT regelt, wer neue Zeilen anlegen darf. Eine Policy für UPDATE regelt, wer ändern darf. Eine Policy für DELETE regelt, wer löschen darf. Du kannst für jede Operation eigene Bedingungen festlegen."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Für die Tabelle user_progress in FutureDev könnte eine SELECT-Policy so aussehen: CREATE POLICY nutzer_sieht_eigene_fortschritte ON user_progress FOR SELECT USING auth Punkt uid Klammer auf gleich user_id Klammer zu. Diese eine Zeile SQL sorgt dafür, dass jeder Nutzer nur die Zeilen sieht, in denen die Spalte user_id seiner eigenen Benutzerkennung entspricht."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir einen Pförtner an einer Baustelle vor, der zwei verschiedene Prüfungen durchführt. Bevor du das Gelände betrittst, prüft er deinen Ausweis und ob du auf der Liste der berechtigten Personen stehst. Bevor du das Gelände wieder verlässt, prüft er, ob du nichts mitnimmst, was dir nicht gehört. Zwei Prüfungen, zwei verschiedene Zeitpunkte."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Jede Policy in Row Level Security besteht aus bis zu zwei Teilen, die zu unterschiedlichen Zeitpunkten greifen. Der erste Teil prüft, ob du eine vorhandene Zeile überhaupt sehen oder anfassen darfst. Der zweite Teil prüft, ob das Ergebnis deiner Änderung den Regeln entspricht."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Wie heißen diese beiden Teile, und wann genau kommt welcher zum Einsatz?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Der erste Teil heißt USING. USING ist der Teil einer Policy, der vor dem Lesen oder Verändern einer Zeile prüft, ob diese Zeile für den Benutzer überhaupt sichtbar sein darf, ähnlich einer WHERE-Klausel, die automatisch an jede Abfrage angehängt wird."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil USING bei jeder Operation greift, die vorhandene Zeilen betrifft: SELECT, UPDATE und DELETE. Ohne USING könnte ein Benutzer zwar keine neuen Zeilen sehen, aber vorhandene Zeilen verändern oder löschen, die er eigentlich nicht sehen dürfte."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Die USING-Klausel user_id gleich auth Punkt uid Klammer auf Klammer zu bedeutet: Diese Zeile darf nur gelesen, verändert oder gelöscht werden, wenn die Spalte user_id mit der Benutzerkennung des angemeldeten Nutzers übereinstimmt. PostgreSQL hängt diese Bedingung automatisch an jede Abfrage an, ohne dass du sie in deiner App wiederholen musst."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir eine Paketannahme in einem Wohnhaus vor. Der Bote darf ein Paket nur dann in ein Fach legen, wenn der Name auf dem Paket mit dem Namen am Fach übereinstimmt. Legt er das Paket trotzdem ins falsche Fach, verweigert das Schloss die Annahme und das Fach bleibt leer. Die Prüfung passiert erst nach dem Einlegen, nicht davor."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Der zweite Teil einer Policy prüft nicht die vorhandene Zeile, sondern das Ergebnis der Operation. Wenn du eine neue Zeile einfügst oder eine vorhandene Zeile änderst, prüft dieser Teil, ob die neue oder geänderte Zeile den Regeln entspricht."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Wie heißt dieser zweite Teil, und warum braucht man ihn zusätzlich zu USING?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Dieser zweite Teil heißt WITH CHECK. WITH CHECK ist der Teil einer Policy, der vor dem Einfügen oder Ändern einer Zeile prüft, ob das Ergebnis den Regeln entspricht. Die Änderung wird abgelehnt, wenn die neue Zeile gegen die Bedingung verstößt."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil USING allein nicht ausreicht. USING prüft nur die vorhandene Zeile, aber wenn du eine neue Zeile einfügst, gibt es noch keine vorhandene Zeile, die USING prüfen könnte. WITH CHECK prüft stattdessen die neue Zeile, die du erschaffen willst. Ohne WITH CHECK könnte ein Benutzer eine Zeile mit einer fremden user_id einfügen und sich so Zugriff auf fremde Daten verschaffen."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Für die Tabelle user_progress würde eine INSERT-Policy mit WITH CHECK so aussehen: CREATE POLICY nutzer_fuegt_eigene_fortschritte_ein ON user_progress FOR INSERT WITH CHECK auth Punkt uid Klammer auf gleich user_id Klammer zu. Diese Regel stellt sicher, dass ein Benutzer nur Fortschrittszeilen mit seiner eigenen Benutzerkennung anlegen kann. Versucht er, eine Zeile mit einer fremden user_id einzufügen, lehnt PostgreSQL die Operation ab."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir einen Tresorraum in einer Bank vor, in dem jedes Schließfach zwei Schlösser hat. Das erste Schloss prüft, ob du überhaupt in den Raum darfst. Das zweite Schloss prüft, ob das Fach, das du öffnen willst, wirklich deines ist. Beide Schlösser müssen aufgehen, sonst bleibt das Fach zu."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "In der Praxis aktivierst du Row Level Security für eine Tabelle mit einem einzigen SQL-Befehl und legst dann die Policies fest. Supabase bietet dafür sowohl eine grafische Oberfläche als auch die Möglichkeit, die Policies direkt als SQL zu schreiben und in Migrationsdateien zu speichern."
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "isKeySentence": true,
+      "text": "Row Level Security sorgt dafür, dass jeder Nutzer nur seine eigenen Daten sieht und verändert, selbst wenn er die gesamte Tabelle ohne WHERE-Klausel abfragen würde. Die Datenbank setzt die Zugriffsregeln automatisch und bei jeder Abfrage durch."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Der erste Schritt in Supabase ist, Row Level Security für die Tabelle zu aktivieren. Ohne diese Aktivierung sind alle Zeilen für jeden lesbar und schreibbar, der den anon key kennt. Die Aktivierung selbst ist ein einzelner SQL-Befehl: ALTER TABLE user_progress ENABLE ROW LEVEL SECURITY."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil Row Level Security standardmäßig deaktiviert ist. Eine frisch angelegte Tabelle hat keinen Zeilenschutz. Du musst ihn für jede Tabelle, die benutzerspezifische Daten enthält, ausdrücklich einschalten. Vergisst du das, sind die Daten ungeschützt, egal wie sorgfältig du deine App programmierst."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "In den Supabase-Migrationsdateien des FutureDev-Repos unter supabase/migrations findest du für jede Tabelle, die Benutzerdaten enthält, sowohl das ENABLE ROW LEVEL SECURITY als auch die passenden Policies. Die Migrationen sind die Wahrheit darüber, wer welche Daten sehen darf."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir eine Alarmanlage vor, die du in deiner Wohnung installierst. Solange sie ausgeschaltet ist, kann jeder durch die Tür spazieren. Erst wenn du sie scharf schaltest, prüft sie bei jedem, der die Tür öffnet, ob er den Code kennt. Genau wie die Alarmanlage musst du Row Level Security für jede Tabelle einzeln scharf schalten."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Nach der Aktivierung legst du die Policies fest. Supabase bietet im Dashboard unter Authentication und dann Policies eine grafische Oberfläche, in der du für jede Tabelle und jede Operation eine Policy anlegen kannst. Du wählst die Operation aus, zum Beispiel SELECT, und schreibst die USING-Bedingung in ein Textfeld."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Für eine Tabelle namens todos mit den Spalten id, task und user_id würdest du vier Policies anlegen. Eine SELECT-Policy mit USING user_id gleich auth Punkt uid. Eine INSERT-Policy mit WITH CHECK user_id gleich auth Punkt uid. Eine UPDATE-Policy mit USING und WITH CHECK, beide mit user_id gleich auth Punkt uid. Und eine DELETE-Policy mit USING user_id gleich auth Punkt uid."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil du die Policies in Migrationsdateien speichern solltest, nicht nur im Dashboard anklicken. Nur so sind die Regeln Teil deines Codes, werden versioniert und können auf jedem Rechner und in jeder Umgebung exakt gleich ausgeführt werden. Das Dashboard ist gut zum Ausprobieren, aber die Wahrheit gehört in die Migrationsdatei."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir einen Koch vor, der ein Rezept nicht nur einmal im Kopf hat, sondern es in ein Kochbuch schreibt. Wenn er das Rezept nur im Kopf hat, kann er es vergessen oder versehentlich verändern. Steht es im Kochbuch, kann jeder Koch auf der Welt dasselbe Gericht exakt gleich zubereiten."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Die Abkürzung, die du in der Supabase-Oberfläche und in der PostgreSQL-Dokumentation ständig sehen wirst, ist RLS. RLS steht für Row Level Security und meint genau denselben Mechanismus, den wir in dieser Lektion besprechen."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Ist RLS dasselbe wie Row Level Security, oder gibt es da einen Unterschied?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "RLS ist die Abkürzung für Row Level Security, die in der Supabase-Oberfläche und in der PostgreSQL-Dokumentation durchgängig verwendet wird und denselben Zeilen-Schutzmechanismus meint."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil du im Supabase-Dashboard einen Schalter mit der Aufschrift Enable RLS siehst, nicht Enable Row Level Security. Wenn du nicht weißt, dass RLS die Abkürzung ist, könntest du den Schalter übersehen oder nicht verstehen, was er bewirkt."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Im Supabase-Dashboard gehst du auf Authentication, dann auf Policies, wählst eine Tabelle aus und klickst auf Enable RLS. Danach erscheint ein Dialog, in dem du für jede Operation eine neue Policy anlegen kannst. Supabase bietet sogar vorgefertigte Vorlagen an, zum Beispiel Enable read access for everyone oder Enable insert for authenticated users only."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir eine Stadt vor, in der jedes Haus eine eigene Alarmanlage hat, aber alle Alarmanlagen nach demselben Prinzip funktionieren. Der Elektriker, der sie installiert, muss nicht bei jedem Haus neu lernen, wie eine Alarmanlage funktioniert. Er kennt das Prinzip und wendet es auf jedes Haus einzeln an."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Das Schöne an Row Level Security ist, dass du das Prinzip einmal verstehst und dann auf jede Tabelle anwenden kannst. Ob todos, user_progress, bestellungen oder nachrichten, das Muster ist immer dasselbe: Tabelle aktivieren, Policies für SELECT, INSERT, UPDATE und DELETE schreiben, USING und WITH CHECK mit der passenden Benutzerkennung versehen."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil du mit diesem einen Prinzip deine gesamte Datenbank absichern kannst. Du musst nicht für jede Tabelle ein neues Sicherheitskonzept lernen, sondern wendest dasselbe Muster immer wieder an. Das spart nicht nur Zeit, sondern verhindert auch Fehler, weil du das Muster mit der Zeit verinnerlichst."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "In einer App mit zehn Tabellen, die alle benutzerspezifische Daten enthalten, schreibst du zehnmal ALTER TABLE und vierzig Policies. Das klingt nach viel, aber die Policies sind fast alle identisch: user_id gleich auth Punkt uid Klammer auf Klammer zu. Der einzige Unterschied ist der Tabellenname und die Spalte, die den Benutzerbezug herstellt."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir einen Sicherheitsdienst vor, der nicht nur die Eingangstür bewacht, sondern auch jeden einzelnen Raum im Gebäude. Selbst wenn jemand durch die Eingangstür kommt, kommt er nicht in die Räume, für die er keine Berechtigung hat. Die Sicherheit ist mehrschichtig, nicht nur ein einzelner Check am Eingang."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Row Level Security ist die letzte und wichtigste Schicht in der Sicherheitsarchitektur einer Supabase-App. Die erste Schicht ist die Anmeldung, die prüft, wer du bist. Die zweite Schicht ist die Berechtigungsprüfung, die festlegt, was du darfst. Die dritte Schicht ist Row Level Security, die prüft, welche Daten du sehen darfst. Alle drei Schichten zusammen ergeben eine vollständige Sicherheitsarchitektur."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil keine einzelne Schicht allein ausreicht. Die Anmeldung ohne Row Level Security bedeutet, dass ein angemeldeter Benutzer alle Daten aller Benutzer sehen kann. Row Level Security ohne Anmeldung bedeutet, dass die Datenbank nicht weiß, wer du bist, und deshalb keine benutzerspezifischen Regeln anwenden kann. Beide Schichten müssen zusammenarbeiten."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "In Supabase arbeitet Row Level Security nahtlos mit Auth zusammen. Die Funktion auth Punkt uid Klammer auf Klammer zu liefert die Benutzerkennung des aktuell angemeldeten Nutzers. Diese Funktion kannst du in jeder USING- und WITH CHECK-Klausel verwenden, um die Zeilen auf den aktuellen Benutzer einzuschränken. Supabase Auth und Row Level Security sind füreinander gebaut."
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "isKeySentence": false,
+      "text": "In dieser Lektion hast du fünf Begriffe kennengelernt. Row Level Security: eine Sicherheitsebene in PostgreSQL, die den Zugriff auf einzelne Zeilen einer Tabelle abhängig vom angemeldeten Benutzer erlaubt oder verweigert. Policy: eine einzelne, in SQL geschriebene Regel innerhalb von Row Level Security, die für eine bestimmte Operation festlegt, welche Zeilen ein Benutzer sehen oder verändern darf. USING: der Teil einer Policy, der vor dem Lesen oder Verändern einer Zeile prüft, ob diese Zeile für den Benutzer sichtbar sein darf. WITH CHECK: der Teil einer Policy, der vor dem Einfügen oder Ändern einer Zeile prüft, ob das Ergebnis den Regeln entspricht. RLS: die Abkürzung für Row Level Security."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Was passiert, wenn ich Row Level Security für eine Tabelle nicht aktiviere?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Dann ist die Tabelle für jeden lesbar und schreibbar, der den anon key deiner Supabase-Instanz kennt. Der anon key ist im Client-Code deiner App sichtbar, also für jeden, der die App im Browser öffnet und die Entwicklertools aufruft. Ohne Row Level Security kann jeder Nutzer alle Zeilen aller ungeschützten Tabellen lesen, verändern und löschen. Das ist kein theoretisches Risiko, sondern ein realer Angriffsweg, der in der Praxis regelmäßig ausgenutzt wird."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Muss ich für jede Tabelle alle vier Policies schreiben, auch wenn ich nur SELECT brauche?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Nein, du schreibst nur die Policies, die du für die jeweilige Tabelle tatsächlich brauchst. Wenn eine Tabelle nur gelesen werden soll, reicht eine SELECT-Policy mit USING. Wenn eine Tabelle nur von der App befüllt wird, reicht eine INSERT-Policy mit WITH CHECK. Wenn eine Tabelle sowohl gelesen als auch geschrieben wird, brauchst du Policies für beide Operationen. Du bestimmst den Schutzumfang selbst, abhängig davon, was deine App mit der Tabelle macht."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Kann ich eine Policy später ändern, oder ist sie nach dem Anlegen fest?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Du kannst Policies jederzeit ändern, löschen oder durch neue ersetzen. Die Änderung gilt sofort für alle neuen Abfragen, ohne dass du die App neu starten oder die Datenbank neu laden musst. In der Praxis änderst du Policies über Migrationsdateien, damit die Änderung versioniert ist und auf allen Umgebungen gleich ausgeführt wird. Ein ALTER POLICY oder DROP POLICY gefolgt von CREATE POLICY in einer neuen Migrationsdatei ist der saubere Weg."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Was ist der Unterschied zwischen USING und WITH CHECK bei einer UPDATE-Policy?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Bei einer UPDATE-Policy prüft USING die vorhandene Zeile, bevor sie geändert wird, und WITH CHECK prüft die geänderte Zeile, nachdem die Änderung berechnet wurde. Ein Beispiel: USING prüft, ob die vorhandene Zeile dem Benutzer gehört. WITH CHECK prüft, ob die geänderte Zeile immer noch dem Benutzer gehört. Ohne WITH CHECK könnte ein Benutzer die user_id einer Zeile auf eine fremde Benutzerkennung ändern und sich so Zugriff auf fremde Zeilen verschaffen. Mit beiden Klauseln ist die Operation in beide Richtungen abgesichert."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Gibt es Fälle, in denen Row Level Security nicht ausreicht?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Ja, Row Level Security schützt nur den Zugriff auf einzelne Zeilen, nicht auf ganze Tabellen oder Spalten. Wenn du verhindern willst, dass ein Benutzer eine ganze Tabelle löscht, brauchst du zusätzlich Berechtigungen auf Tabellenebene. Wenn du verhindern willst, dass ein Benutzer bestimmte Spalten sieht, etwa die E-Mail-Adressen anderer Nutzer, brauchst du zusätzlich Spaltenberechtigungen. Row Level Security ist eine von mehreren Sicherheitsebenen in PostgreSQL, nicht die einzige."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Warum sehe ich im Supabase-Dashboard den Schalter Enable RLS, obwohl ich die Tabelle noch gar nicht aktiviert habe?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Weil Row Level Security standardmäßig deaktiviert ist und der Schalter dir anzeigt, dass du sie noch nicht eingeschaltet hast. Der Schalter ist eine Erinnerung, keine Bestätigung. Solange er auf Aus steht, sind alle Zeilen der Tabelle für jeden lesbar und schreibbar. Sobald du ihn auf Ein stellst, greifen die Policies, die du für diese Tabelle angelegt hast. Hast du noch keine Policies angelegt, ist die Tabelle nach dem Einschalten für alle Operationen gesperrt, bis du die erste Policy erstellst."
+    }
+  ],
+  "practiceExample": {
+    "text": "In der FutureDev-App speichert die Tabelle user_progress den Lernfortschritt jedes Nutzers. Ohne Row Level Security könnte ein Nutzer SELECT * FROM user_progress schreiben und den Fortschritt aller anderen Nutzer sehen. Mit einer Policy USING auth.uid() = user_id sieht jeder nur seine eigenen Zeilen. Die Migration dazu findest du unter supabase/migrations.",
+    "repoNote": "repo-futuredev",
+    "location": "supabase/migrations"
+  },
+  "quiz": [
+    {
+      "question": "Was ist Row Level Security in PostgreSQL?",
+      "area": "Row Level Security",
+      "options": [
+        { "text": "Eine Sicherheitsebene, die den Zugriff auf einzelne Zeilen abhängig vom Benutzer regelt.", "isCorrect": true, "explanation": "Richtig: Row Level Security entscheidet für jede Zeile, ob der Benutzer sie sehen oder verändern darf." },
+        { "text": "Eine Verschlüsselung, die jede Zeile mit einem eigenen, nur dem Besitzer bekannten Passwort schützt und vor unbefugtem Zugriff bewahrt.", "isCorrect": false, "explanation": "Row Level Security verschlüsselt keine Zeilen, sondern regelt den Zugriff darauf." },
+        { "text": "Ein Backup-Verfahren, das jede Zeile einzeln sichert.", "isCorrect": false, "explanation": "Backups sind nicht die Aufgabe von Row Level Security." },
+        { "text": "Eine Funktion, die doppelte Zeilen in einer Tabelle verhindert.", "isCorrect": false, "explanation": "Doppelte Zeilen verhindert man mit UNIQUE-Constraints, nicht mit Row Level Security." }
+      ]
+    },
+    {
+      "question": "Was ist eine Policy in Row Level Security?",
+      "area": "Policy",
+      "options": [
+        { "text": "Eine in SQL geschriebene Regel, die für eine Operation festlegt, welche Zeilen ein Benutzer sehen oder verändern darf.", "isCorrect": true, "explanation": "Richtig: Eine Policy ist die einzelne Regel für eine bestimmte Operation wie SELECT oder INSERT." },
+        { "text": "Ein rechtsgültiger Vertrag, den der Benutzer vor dem Zugriff auf die Datenbank unterschreiben muss und der notariell beglaubigt werden muss.", "isCorrect": false, "explanation": "Eine Policy ist eine technische Regel, kein rechtlicher Vertrag." },
+        { "text": "Eine Sicherungskopie der gesamten Tabelle, die regelmäßig erstellt wird.", "isCorrect": false, "explanation": "Eine Policy hat nichts mit Backups zu tun." },
+        { "text": "Ein Passwort, das der Benutzer für jede Tabelle einzeln eingeben muss.", "isCorrect": false, "explanation": "Eine Policy ist eine SQL-Regel, kein Passwort." }
+      ]
+    },
+    {
+      "question": "Wofür steht die USING-Klausel in einer Policy?",
+      "area": "USING",
+      "options": [
+        { "text": "Sie prüft vor dem Lesen oder Verändern, ob die vorhandene Zeile für den Benutzer sichtbar sein darf.", "isCorrect": true, "explanation": "Richtig: USING ist die Bedingung, die an jede Abfrage automatisch angehängt wird." },
+        { "text": "Sie legt verbindlich fest, welche Programmiersprache die gesamte Applikation verwenden muss.", "isCorrect": false, "explanation": "USING hat nichts mit der Programmiersprache zu tun." },
+        { "text": "Sie gibt an, welche Datenbank die Tabelle verwenden soll.", "isCorrect": false, "explanation": "USING bezieht sich auf Zeilen, nicht auf die Wahl der Datenbank." },
+        { "text": "Sie bestimmt, wie viele Zeilen maximal in der Tabelle sein dürfen.", "isCorrect": false, "explanation": "Die maximale Zeilenanzahl wird nicht mit USING festgelegt." }
+      ]
+    },
+    {
+      "question": "Wofür steht die WITH CHECK-Klausel in einer Policy?",
+      "area": "WITH CHECK",
+      "options": [
+        { "text": "Sie prüft vor dem Einfügen oder Ändern, ob das Ergebnis der Operation den Regeln entspricht.", "isCorrect": true, "explanation": "Richtig: WITH CHECK prüft die neue oder geänderte Zeile, nicht die vorhandene." },
+        { "text": "Sie überprüft in regelmäßigen Abständen von jeweils fünf Sekunden, ob die Datenbankverbindung noch besteht.", "isCorrect": false, "explanation": "Die Verbindungsprüfung ist nicht die Aufgabe von WITH CHECK." },
+        { "text": "Sie kontrolliert, ob der Benutzer ein gültiges Passwort hat.", "isCorrect": false, "explanation": "Die Passwortprüfung übernimmt Auth, nicht WITH CHECK." },
+        { "text": "Sie testet, ob die Tabelle überhaupt existiert.", "isCorrect": false, "explanation": "Die Existenz der Tabelle wird nicht von WITH CHECK geprüft." }
+      ]
+    },
+    {
+      "question": "Warum braucht eine INSERT-Policy WITH CHECK statt USING?",
+      "area": "WITH CHECK",
+      "options": [
+        { "text": "Weil es beim Einfügen noch keine vorhandene Zeile gibt, die USING prüfen könnte.", "isCorrect": true, "explanation": "Richtig: USING prüft vorhandene Zeilen, WITH CHECK prüft die neue Zeile." },
+        { "text": "Weil INSERT grundsätzlich keine Policies unterstützt und deshalb eine andere Sicherheitsprüfung verwendet werden muss.", "isCorrect": false, "explanation": "INSERT unterstützt Policies, aber mit WITH CHECK statt USING." },
+        { "text": "Weil USING nur für DELETE-Operationen gedacht ist.", "isCorrect": false, "explanation": "USING wird auch für SELECT und UPDATE verwendet, nicht nur für DELETE." },
+        { "text": "Weil WITH CHECK schneller ist als USING.", "isCorrect": false, "explanation": "Die Geschwindigkeit ist nicht der Grund für die Trennung." }
+      ]
+    },
+    {
+      "question": "Was bedeutet die Abkürzung RLS?",
+      "area": "RLS",
+      "options": [
+        { "text": "Row Level Security, der Zeilen-Schutzmechanismus in PostgreSQL.", "isCorrect": true, "explanation": "Richtig: RLS ist die Abkürzung für Row Level Security." },
+        { "text": "Remote Login Service, ein Dienst für entfernte Anmeldungen.", "isCorrect": false, "explanation": "Remote Login Service ist keine echte Bedeutung von RLS." },
+        { "text": "Read Lock System, ein System zum Sperren von Lesevorgängen.", "isCorrect": false, "explanation": "RLS hat nichts mit Lesesperren zu tun." },
+        { "text": "Row List Storage, ein Speicherformat für Zeilenlisten.", "isCorrect": false, "explanation": "Row List Storage ist keine echte Bedeutung von RLS." }
+      ]
+    },
+    {
+      "question": "Was passiert, wenn du Row Level Security für eine Tabelle aktivierst, aber keine Policies anlegst?",
+      "area": "Row Level Security",
+      "options": [
+        { "text": "Die Tabelle ist für alle Operationen gesperrt, bis die erste Policy erstellt wird.", "isCorrect": true, "explanation": "Richtig: Ohne Policies greift die Standardregel, die alles ablehnt." },
+        { "text": "Die Tabelle ist für alle lesbar und schreibbar wie zuvor, als wäre Row Level Security nie aktiviert worden.", "isCorrect": false, "explanation": "Nach der Aktivierung ohne Policies ist die Tabelle gesperrt, nicht offen." },
+        { "text": "Die Tabelle wird automatisch gelöscht.", "isCorrect": false, "explanation": "Die Aktivierung von RLS löscht keine Tabellen." },
+        { "text": "PostgreSQL legt automatisch eine Standard-Policy an.", "isCorrect": false, "explanation": "PostgreSQL legt keine automatischen Policies an, du musst sie selbst schreiben." }
+      ]
+    },
+    {
+      "question": "Warum sollte man Policies in Migrationsdateien speichern und nicht nur im Supabase-Dashboard anklicken?",
+      "area": "Policy",
+      "options": [
+        { "text": "Damit die Regeln versioniert sind und auf jedem Rechner exakt gleich ausgeführt werden können.", "isCorrect": true, "explanation": "Richtig: Migrationsdateien sind Teil des Codes und werden versioniert." },
+        { "text": "Weil das Dashboard nur einmal pro Tag funktioniert und außerhalb der Geschäftszeiten nicht erreichbar ist.", "isCorrect": false, "explanation": "Das Dashboard funktioniert jederzeit, der Grund ist die Versionierung." },
+        { "text": "Weil das Dashboard nur auf Englisch verfügbar ist.", "isCorrect": false, "explanation": "Die Sprache des Dashboards ist nicht der Grund für Migrationsdateien." },
+        { "text": "Weil Migrationsdateien grundsätzlich schneller ausgeführt werden.", "isCorrect": false, "explanation": "Die Geschwindigkeit ist nicht der Hauptgrund, sondern die Nachvollziehbarkeit." }
+      ]
+    },
+    {
+      "question": "Welche Funktion liefert in Supabase die Benutzerkennung des aktuell angemeldeten Nutzers?",
+      "area": "Row Level Security",
+      "options": [
+        { "text": "auth.uid()", "isCorrect": true, "explanation": "Richtig: auth.uid() ist die Standardfunktion für die Benutzerkennung in Supabase-Policies." },
+        { "text": "user.id()", "isCorrect": false, "explanation": "user.id() ist keine gültige Supabase-Funktion." },
+        { "text": "current_user()", "isCorrect": false, "explanation": "current_user() gibt den Datenbankbenutzer zurück, nicht den Supabase-Auth-Benutzer." },
+        { "text": "session.user_id()", "isCorrect": false, "explanation": "session.user_id() ist keine gültige Supabase-Funktion." }
+      ]
+    },
+    {
+      "question": "Warum reicht eine WHERE-Klausel in der App nicht als Ersatz für Row Level Security?",
+      "area": "Row Level Security",
+      "options": [
+        { "text": "Weil ein einziger vergessener WHERE in einer Abfrage ausreicht, damit ein Benutzer alle Daten sieht.", "isCorrect": true, "explanation": "Richtig: Row Level Security greift immer, eine WHERE-Klausel nur, wenn du sie hinschreibst." },
+        { "text": "Weil WHERE-Klauseln in JavaScript nicht funktionieren.", "isCorrect": false, "explanation": "WHERE-Klauseln sind SQL, nicht JavaScript, und funktionieren technisch einwandfrei." },
+        { "text": "Weil WHERE-Klauseln grundsätzlich langsamer sind als Row Level Security.", "isCorrect": false, "explanation": "Die Geschwindigkeit ist nicht der Grund, sondern die Sicherheit." },
+        { "text": "Weil WHERE-Klauseln nur mit der Programmiersprache Python funktionieren.", "isCorrect": false, "explanation": "WHERE-Klauseln sind Teil von SQL und funktionieren mit jeder Sprache." }
+      ]
+    },
+    {
+      "question": "Was prüft die USING-Klausel bei einer UPDATE-Policy?",
+      "area": "USING",
+      "options": [
+        { "text": "Die vorhandene Zeile, bevor sie geändert wird.", "isCorrect": true, "explanation": "Richtig: USING prüft die Zeile vor der Änderung, WITH CHECK prüft sie danach." },
+        { "text": "Die geänderte Zeile, nachdem die Änderung berechnet wurde.", "isCorrect": false, "explanation": "Das ist die Aufgabe von WITH CHECK, nicht von USING." },
+        { "text": "Die gesamte Tabelle auf einmal.", "isCorrect": false, "explanation": "USING prüft einzelne Zeilen, nicht die gesamte Tabelle." },
+        { "text": "Die Berechtigung des Datenbankadministrators.", "isCorrect": false, "explanation": "Die Administratorberechtigung wird nicht von USING geprüft." }
+      ]
+    },
+    {
+      "question": "Welche drei Sicherheitsschichten ergeben zusammen eine vollständige Sicherheitsarchitektur in Supabase?",
+      "area": "Row Level Security",
+      "options": [
+        { "text": "Anmeldung, Berechtigungsprüfung und Row Level Security.", "isCorrect": true, "explanation": "Richtig: Alle drei Schichten ergänzen sich zu einer vollständigen Sicherheitsarchitektur." },
+        { "text": "Verschlüsselung, Firewall und Virenscanner.", "isCorrect": false, "explanation": "Diese drei Schichten sind nicht die Sicherheitsarchitektur von Supabase." },
+        { "text": "Login, Passwort und E-Mail-Bestätigung.", "isCorrect": false, "explanation": "Das sind alles Teile der Authentifizierung, nicht drei getrennte Schichten." },
+        { "text": "Frontend, Backend und Datenbank.", "isCorrect": false, "explanation": "Das sind Architekturschichten, nicht Sicherheitsschichten." }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Öffne dein Supabase-Projekt aus der Lektion M03-04-01. Gehe im Dashboard auf Authentication und dann auf Policies. Wähle eine Tabelle aus, die du in dieser Lektion angelegt hast, zum Beispiel notes. Klicke auf Enable RLS und lege zwei Policies an: eine SELECT-Policy mit USING auth.uid() = user_id und eine INSERT-Policy mit WITH CHECK auth.uid() = user_id. Falls deine Tabelle keine user_id-Spalte hat, füge sie vorher mit ALTER TABLE hinzu.",
+    "expectation": "Row Level Security ist für die Tabelle aktiviert. Zwei Policies wurden angelegt: eine für SELECT mit USING und eine für INSERT mit WITH CHECK. Der Schalter Enable RLS steht auf Ein.",
+    "checklist": [
+      "Supabase-Dashboard geöffnet",
+      "Authentication und Policies aufgerufen",
+      "Tabelle ausgewählt",
+      "Enable RLS aktiviert",
+      "SELECT-Policy mit USING auth.uid() = user_id angelegt",
+      "INSERT-Policy mit WITH CHECK auth.uid() = user_id angelegt"
+    ]
+  },
+  "audio": {
+    "file": "M03-04-03.mp3",
+    "durationSeconds": 1680,
+    "voices": ["A", "B"],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Was passiert, wenn ich Row Level Security für eine Tabelle nicht aktiviere?",
+      "answer": "Dann ist die Tabelle für jeden lesbar und schreibbar, der den anon key deiner Supabase-Instanz kennt. Der anon key ist im Client-Code deiner App sichtbar, also für jeden, der die App im Browser öffnet und die Entwicklertools aufruft. Ohne Row Level Security kann jeder Nutzer alle Zeilen aller ungeschützten Tabellen lesen, verändern und löschen. Das ist kein theoretisches Risiko, sondern ein realer Angriffsweg, der in der Praxis regelmäßig ausgenutzt wird."
+    },
+    {
+      "question": "Muss ich für jede Tabelle alle vier Policies schreiben, auch wenn ich nur SELECT brauche?",
+      "answer": "Nein, du schreibst nur die Policies, die du für die jeweilige Tabelle tatsächlich brauchst. Wenn eine Tabelle nur gelesen werden soll, reicht eine SELECT-Policy mit USING. Wenn eine Tabelle nur von der App befüllt wird, reicht eine INSERT-Policy mit WITH CHECK. Wenn eine Tabelle sowohl gelesen als auch geschrieben wird, brauchst du Policies für beide Operationen. Du bestimmst den Schutzumfang selbst, abhängig davon, was deine App mit der Tabelle macht."
+    },
+    {
+      "question": "Kann ich eine Policy später ändern, oder ist sie nach dem Anlegen fest?",
+      "answer": "Du kannst Policies jederzeit ändern, löschen oder durch neue ersetzen. Die Änderung gilt sofort für alle neuen Abfragen, ohne dass du die App neu starten oder die Datenbank neu laden musst. In der Praxis änderst du Policies über Migrationsdateien, damit die Änderung versioniert ist und auf allen Umgebungen gleich ausgeführt wird. Ein ALTER POLICY oder DROP POLICY gefolgt von CREATE POLICY in einer neuen Migrationsdatei ist der saubere Weg."
+    },
+    {
+      "question": "Was ist der Unterschied zwischen USING und WITH CHECK bei einer UPDATE-Policy?",
+      "answer": "Bei einer UPDATE-Policy prüft USING die vorhandene Zeile, bevor sie geändert wird, und WITH CHECK prüft die geänderte Zeile, nachdem die Änderung berechnet wurde. Ein Beispiel: USING prüft, ob die vorhandene Zeile dem Benutzer gehört. WITH CHECK prüft, ob die geänderte Zeile immer noch dem Benutzer gehört. Ohne WITH CHECK könnte ein Benutzer die user_id einer Zeile auf eine fremde Benutzerkennung ändern und sich so Zugriff auf fremde Zeilen verschaffen. Mit beiden Klauseln ist die Operation in beide Richtungen abgesichert."
+    },
+    {
+      "question": "Gibt es Fälle, in denen Row Level Security nicht ausreicht?",
+      "answer": "Ja, Row Level Security schützt nur den Zugriff auf einzelne Zeilen, nicht auf ganze Tabellen oder Spalten. Wenn du verhindern willst, dass ein Benutzer eine ganze Tabelle löscht, brauchst du zusätzlich Berechtigungen auf Tabellenebene. Wenn du verhindern willst, dass ein Benutzer bestimmte Spalten sieht, etwa die E-Mail-Adressen anderer Nutzer, brauchst du zusätzlich Spaltenberechtigungen. Row Level Security ist eine von mehreren Sicherheitsebenen in PostgreSQL, nicht die einzige."
+    },
+    {
+      "question": "Warum sehe ich im Supabase-Dashboard den Schalter Enable RLS, obwohl ich die Tabelle noch gar nicht aktiviert habe?",
+      "answer": "Weil Row Level Security standardmäßig deaktiviert ist und der Schalter dir anzeigt, dass du sie noch nicht eingeschaltet hast. Der Schalter ist eine Erinnerung, keine Bestätigung. Solange er auf Aus steht, sind alle Zeilen der Tabelle für jeden lesbar und schreibbar. Sobald du ihn auf Ein stellst, greifen die Policies, die du für diese Tabelle angelegt hast. Hast du noch keine Policies angelegt, ist die Tabelle nach dem Einschalten für alle Operationen gesperrt, bis du die erste Policy erstellst."
+    }
+  ]
+}

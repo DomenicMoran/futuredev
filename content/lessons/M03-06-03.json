@@ -1,0 +1,485 @@
+{
+  "id": "M03-06-03",
+  "title": "Stripe Webhooks: wenn Stripe deinem Server Bescheid sagt",
+  "durationMinutes": 24,
+  "prerequisites": [
+    "M03-06-02",
+    "M03-04-01"
+  ],
+  "terms": [
+    {
+      "term": "Webhook",
+      "definition": "eine HTTP-Anfrage, die ein Dienst wie Stripe automatisch an eine vorher festgelegte URL deines Servers schickt, sobald ein bestimmtes Ereignis eintritt, zum Beispiel eine erfolgreiche Zahlung oder eine fehlgeschlagene Abbuchung."
+    },
+    {
+      "term": "Signaturprüfung",
+      "definition": "das Verfahren, mit dem dein Server sicherstellt, dass ein eingehender Webhook wirklich von Stripe stammt und nicht von einem Angreifer gefälscht wurde, indem er eine kryptografische Signatur im Header mit einem geheimen Schlüssel vergleicht."
+    },
+    {
+      "term": "Idempotenz",
+      "definition": "die Eigenschaft einer Operation, dass sie bei mehrfacher Ausführung dasselbe Ergebnis liefert wie bei einmaliger Ausführung, sodass ein versehentlich doppelt verarbeiteter Webhook keinen doppelten Schaden anrichtet."
+    },
+    {
+      "term": "Ereignistypen",
+      "definition": "die vordefinierten Namen, die Stripe jedem Webhook mitgibt, zum Beispiel payment_intent.succeeded oder invoice.payment_failed, damit dein Server sofort weiß, was passiert ist, ohne den Inhalt analysieren zu müssen."
+    },
+    {
+      "term": "Stripe Webhook",
+      "definition": "die konkrete Implementierung des Webhook-Konzepts durch Stripe, bei der dein Server eine URL bereitstellt und Stripe bei jedem relevanten Ereignis eine signierte HTTP-Anfrage an diese URL schickt."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir vor, du bestellst eine Pizza und gibst deine Handynummer an. Der Pizzabote ruft dich nicht ständig an, um zu fragen, ob die Pizza schon da ist. Stattdessen ruft er dich genau einmal an, wenn er vor deiner Tür steht. Du musst nicht ständig nachfragen, du wirst benachrichtigt, wenn es etwas zu tun gibt."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "In der letzten Lektion hast du gelernt, wie du Stripe Checkout in deine App einbaust. Der Nutzer klickt auf Kaufen, wird zu Stripe weitergeleitet, bezahlt, und kommt zurück auf deine Erfolgsseite. Aber was, wenn der Nutzer den Browser schließt, bevor er zurückkommt? Oder wenn eine wiederkehrende Zahlung fehlschlägt? Für diese Fälle gibt es einen Mechanismus, bei dem Stripe deinen Server aktiv benachrichtigt."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Wie heißt dieser Mechanismus, und warum reicht die Erfolgsseite nach der Zahlung nicht aus?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Dieser Mechanismus heißt Webhook. Ein Webhook ist eine HTTP-Anfrage, die ein Dienst wie Stripe automatisch an eine vorher festgelegte URL deines Servers schickt, sobald ein bestimmtes Ereignis eintritt, zum Beispiel eine erfolgreiche Zahlung oder eine fehlgeschlagene Abbuchung."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil die Erfolgsseite nur dann aufgerufen wird, wenn der Nutzer nach der Zahlung zu deiner App zurückkehrt. Schließt er den Browser vorher, erfährt deine App nie von der Zahlung. Ein Webhook kommt immer an, unabhängig davon, was der Nutzer tut. Er ist die zuverlässige Benachrichtigung, auf die du dich verlassen kannst."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Ein Nutzer kauft ein Monatsabo für neun Euro. Er bezahlt mit Karte, wird zu Stripe weitergeleitet, die Zahlung ist erfolgreich. Aber statt auf Zurück zur App zu klicken, schließt er den Browser. Deine Erfolgsseite wird nie aufgerufen. Der Webhook von Stripe kommt trotzdem an deinem Server an und sagt: payment_intent.succeeded. Dein Server weiß jetzt, dass die Zahlung erfolgreich war, und schaltet das Abo frei."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir einen Brief vor, der mit einem Wachssiegel verschlossen ist. Du erkennst das Siegel deines Geschäftspartners und weißt: Dieser Brief ist echt, er kommt wirklich von ihm. Würde jemand den Brief fälschen, könnte er das Siegel nicht nachmachen, weil er den Siegelring nicht besitzt."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Jeder kann eine HTTP-Anfrage an deinen Server schicken. Ein Angreifer könnte eine gefälschte Nachricht schicken, die so aussieht, als käme sie von Stripe, und behaupten, eine Zahlung über tausend Euro sei erfolgreich gewesen. Dein Server braucht eine Möglichkeit, echte von gefälschten Webhooks zu unterscheiden."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Wie prüft mein Server, ob ein Webhook wirklich von Stripe kommt?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Diese Prüfung heißt Signaturprüfung. Die Signaturprüfung ist das Verfahren, mit dem dein Server sicherstellt, dass ein eingehender Webhook wirklich von Stripe stammt und nicht von einem Angreifer gefälscht wurde, indem er eine kryptografische Signatur im Header mit einem geheimen Schlüssel vergleicht."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil du ohne Signaturprüfung jedem vertrauen müsstest, der eine HTTP-Anfrage an deinen Webhook-Endpunkt schickt. Ein Angreifer könnte tausend gefälschte Zahlungsbenachrichtigungen schicken und deine App würde tausend Abos freischalten, ohne dass jemals Geld geflossen ist."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Stripe schickt jeden Webhook mit einem Header namens stripe-signature. Dieser Header enthält eine kryptografische Signatur, die Stripe mit deinem Webhook-Secret berechnet hat. Dein Server nimmt den rohen Body der Anfrage, dein Webhook-Secret und die Signatur und prüft mit der Stripe-Bibliothek, ob sie übereinstimmen. Nur wenn die Prüfung erfolgreich ist, verarbeitet dein Server den Webhook."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir eine Paketannahme vor, bei der jedes Paket eine eindeutige Sendungsnummer hat. Wenn dasselbe Paket zweimal ankommt, erkennst du es an der Nummer und nimmst es nicht noch einmal an. Du vermeidest, dass der Absender versehentlich doppelt bezahlt oder du doppelt auslieferst."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Manchmal schickt Stripe denselben Webhook mehrmals, zum Beispiel wenn dein Server beim ersten Mal nicht rechtzeitig geantwortet hat. Dein Server muss damit umgehen können, ohne die Zahlung doppelt zu verbuchen oder das Abo doppelt freizuschalten."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Wie heißt diese Eigenschaft, und wie setze ich sie in meinem Server um?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Diese Eigenschaft heißt Idempotenz. Idempotenz ist die Eigenschaft einer Operation, dass sie bei mehrfacher Ausführung dasselbe Ergebnis liefert wie bei einmaliger Ausführung, sodass ein versehentlich doppelt verarbeiteter Webhook keinen doppelten Schaden anrichtet."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil das Internet unzuverlässig ist. Pakete gehen verloren, Verbindungen brechen ab, Timeouts treten auf. Stripe geht davon aus, dass dein Server idempotent ist, und schickt Webhooks so lange erneut, bis du mit 200 OK antwortest. Ohne Idempotenz würde jede Wiederholung eine neue Zahlung auslösen."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Jeder Stripe-Webhook enthält eine eindeutige ID im Feld id. Dein Server speichert diese ID in der Datenbank, bevor er den Webhook verarbeitet. Kommt derselbe Webhook ein zweites Mal, findet dein Server die ID bereits in der Datenbank und überspringt die Verarbeitung. Er antwortet trotzdem mit 200 OK, damit Stripe aufhört, ihn erneut zu schicken."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir einen Briefkasten vor, der nicht nur einen Schlitz für alle Briefe hat, sondern mehrere Fächer mit Aufschriften wie Rechnungen, Mahnungen, Verträge und Werbung. Der Briefträger sortiert die Post schon beim Einwerfen, und du siehst sofort, was wichtig ist und was warten kann."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Stripe verschickt nicht für alles denselben Webhook, sondern für jedes Ereignis einen eigenen Typ. Dein Server kann anhand dieses Typs sofort entscheiden, was zu tun ist, ohne den gesamten Inhalt des Webhooks analysieren zu müssen."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Wie heißen diese Typen, und welche sind die wichtigsten?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Diese Typen heißen Ereignistypen. Ereignistypen sind die vordefinierten Namen, die Stripe jedem Webhook mitgibt, zum Beispiel payment_intent.succeeded oder invoice.payment_failed, damit dein Server sofort weiß, was passiert ist, ohne den Inhalt analysieren zu müssen."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil Stripe hunderte verschiedener Ereignisse kennt. Du willst nicht für jedes Ereignis den gesamten Webhook durchsuchen müssen. Der Ereignistyp ist wie die Betreffzeile einer E-Mail: Du siehst sofort, worum es geht, und kannst entscheiden, ob du handeln musst."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Die wichtigsten Ereignistypen sind payment_intent.succeeded für erfolgreiche Zahlungen, payment_intent.payment_failed für fehlgeschlagene Zahlungen, invoice.paid für bezahlte Rechnungen, customer.subscription.deleted für gekündigte Abos und checkout.session.completed für abgeschlossene Checkout-Sitzungen."
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "isKeySentence": true,
+      "text": "Ein Stripe Webhook ist eine signierte HTTP-Anfrage, die dein Server mit dem Webhook-Secret auf Echtheit prüft, anhand des Ereignistyps die passende Aktion auslöst und durch idempotente Verarbeitung sicherstellt, dass wiederholte Zustellungen keinen doppelten Schaden anrichten."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "In der Praxis richtest du einen Webhook-Endpunkt in deiner App ein, zum Beispiel unter /api/webhooks/stripe. Diese URL trägst du im Stripe-Dashboard unter Developers und dann Webhooks ein. Stripe schickt dann bei jedem konfigurierten Ereignis eine POST-Anfrage an diese URL."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil du im Stripe-Dashboard genau auswählen kannst, für welche Ereignisse du Webhooks erhalten willst. Du musst nicht alle hunderte Ereignisse abonnieren, sondern nur die, die für deine App relevant sind. Das spart Bandbreite und hält deinen Server sauber."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Für eine App mit Monatsabos abonnierst du mindestens checkout.session.completed, um neue Abos zu erkennen, invoice.paid, um erfolgreiche Verlängerungen zu verarbeiten, invoice.payment_failed, um den Nutzer bei fehlgeschlagenen Zahlungen zu benachrichtigen, und customer.subscription.deleted, um gekündigte Abos zu deaktivieren."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir einen Sicherheitsdienst vor, der nicht nur deine Tür bewacht, sondern auch jeden Besucher nach seinem Ausweis fragt, den Ausweis mit einer Liste berechtigter Personen abgleicht und jeden Besuch in einem Logbuch vermerkt. Drei Prüfungen, bevor der Besucher hereinkommt."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Die Verarbeitung eines Stripe-Webhooks folgt immer demselben dreistufigen Muster. Erstens: Signatur prüfen, um sicherzustellen, dass der Webhook echt ist. Zweitens: Ereignistyp auslesen und entscheiden, was zu tun ist. Drittens: Idempotenz prüfen, um Doppelverarbeitung zu vermeiden."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil du dieses Muster für jeden Webhook-Endpunkt wiederverwenden kannst, nicht nur für Stripe. GitHub, PayPal, Twilio, sie alle verwenden dasselbe Prinzip: Signatur, Ereignistyp, Idempotenz. Wenn du es einmal für Stripe gelernt hast, kannst du es überall anwenden."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Der Code für einen Stripe-Webhook-Endpunkt in Express sieht so aus: app.post mit dem Pfad /webhook, dann stripe.webhooks.constructEvent mit dem rohen Body, der Signatur und dem Secret. Wenn die Prüfung erfolgreich ist, bekommst du ein Event-Objekt mit event.type. Du prüfst den Typ mit einer switch-Anweisung und rufst die passende Funktion auf."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Für die lokale Entwicklung gibt es die Stripe CLI, mit der du Webhooks an deinen lokalen Server weiterleiten kannst. Du startest stripe listen und leitest die Ereignisse an localhost:3000/webhook weiter. So kannst du Webhooks testen, bevor deine App im Internet erreichbar ist."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil du Webhooks nicht testen kannst, indem du sie manuell im Browser aufrufst. Du brauchst die echte Signatur von Stripe, und die bekommst du nur über die Stripe CLI oder indem du im Stripe-Dashboard Test-Webhooks auslöst."
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "isKeySentence": false,
+      "text": "In dieser Lektion hast du fünf Begriffe kennengelernt. Webhook: eine HTTP-Anfrage, die ein Dienst automatisch an deinen Server schickt, sobald ein Ereignis eintritt. Signaturprüfung: das Verfahren, mit dem dein Server die Echtheit eines Webhooks sicherstellt. Idempotenz: die Eigenschaft, dass mehrfache Ausführung dasselbe Ergebnis liefert. Ereignistypen: die vordefinierten Namen, die Stripe jedem Webhook mitgibt. Stripe Webhook: die konkrete Implementierung des Webhook-Konzepts durch Stripe."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Was passiert, wenn mein Server gerade nicht erreichbar ist, wenn Stripe einen Webhook schickt?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Stripe wiederholt den Webhook automatisch nach einem festgelegten Schema. Die erste Wiederholung kommt nach wenigen Sekunden, dann nach Minuten, dann nach Stunden. Insgesamt versucht Stripe bis zu drei Tage lang, den Webhook zuzustellen. Wenn dein Server innerhalb dieser Zeit wieder erreichbar ist und mit 200 OK antwortet, gilt der Webhook als zugestellt. Antwortet dein Server nie, wird der Webhook als fehlgeschlagen markiert."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Muss ich den rohen Body der Anfrage verwenden oder kann ich den geparsten JSON-Body nehmen?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Du musst zwingend den rohen Body verwenden, also die Anfrage als Rohdaten einlesen, bevor dein Framework sie als JSON parst. Die Signatur wird über die exakten Bytes des Bodys berechnet. Wenn dein Framework den Body vorher parst und dabei vielleicht Leerzeichen oder die Reihenfolge der Felder ändert, stimmt die Signatur nicht mehr überein und die Prüfung schlägt fehl."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Kann ich Webhooks auch ohne die Stripe-Bibliothek prüfen, nur mit Bordmitteln?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Theoretisch ja, aber es ist nicht empfehlenswert. Die Signaturprüfung verwendet HMAC-SHA256, was du mit den Kryptografie-Bordmitteln jeder Sprache nachbauen könntest. Aber die Stripe-Bibliothek prüft zusätzlich Dinge wie Toleranz gegenüber Zeitabweichungen und das korrekte Format des Signatur-Headers. Diese Details selbst zu implementieren ist fehleranfällig und bringt keinen Vorteil."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Wie unterscheide ich im Stripe-Dashboard zwischen Test-Webhooks und echten Webhooks?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Im Stripe-Dashboard gibt es für den Testmodus und den Echtbetrieb getrennte Webhook-Konfigurationen mit unterschiedlichen Secrets. Du richtest beide ein und verwendest in deiner App das passende Secret je nach Umgebung. Test-Webhooks haben dasselbe Format wie echte, aber sie tragen das Ereignis nie in dein echtes Stripe-Konto ein. Du kannst sie gefahrlos ausprobieren."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Was mache ich mit Ereignistypen, die ich nicht erwarte oder nicht kenne?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Du solltest sie trotzdem mit 200 OK beantworten, damit Stripe sie nicht wiederholt. Dein Server kann unbekannte Ereignistypen einfach ignorieren oder in ein Log schreiben. Stripe führt gelegentlich neue Ereignistypen ein, und wenn dein Server bei unbekannten Typen mit einem Fehler antwortet, würde Stripe den Webhook immer wieder schicken, was deinen Server unnötig belastet."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Brauche ich Webhooks, wenn ich nur einmalige Zahlungen ohne Abos habe?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Auch bei einmaligen Zahlungen sind Webhooks die zuverlässigere Lösung als die Erfolgsseite. Der Nutzer könnte den Browser schließen, die Verbindung könnte abbrechen, oder die Zahlung könnte asynchron bestätigt werden, zum Beispiel bei einer Banküberweisung. Die Erfolgsseite ist eine nette Bestätigung für den Nutzer, aber der Webhook ist die verlässliche Quelle der Wahrheit für deinen Server."
+    }
+  ],
+  "practiceExample": {
+    "text": "In einer Express-App richtest du einen Webhook-Endpunkt mit app.post('/webhook', ...) ein. Du verwendest stripe.webhooks.constructEvent mit dem rohen Body, der stripe-signature und dem Webhook-Secret. Nach erfolgreicher Prüfung verarbeitest du den Ereignistyp mit einer switch-Anweisung.",
+    "repoNote": "repo-futuredev",
+    "location": "apps/server/src/webhooks"
+  },
+  "quiz": [
+    {
+      "question": "Was ist ein Webhook?",
+      "area": "Webhook",
+      "options": [
+        { "text": "Eine HTTP-Anfrage, die ein Dienst automatisch an deinen Server schickt, sobald ein Ereignis eintritt.", "isCorrect": true, "explanation": "Richtig: Ein Webhook ist die aktive Benachrichtigung durch den Dienst." },
+        { "text": "Ein Programm, das deinen Server regelmäßig neu startet.", "isCorrect": false, "explanation": "Ein Webhook startet keinen Server neu." },
+        { "text": "Eine spezielle URL, die nur im Browser funktioniert.", "isCorrect": false, "explanation": "Webhooks sind Server-zu-Server-Kommunikation, nicht Browser." },
+        { "text": "Ein Haken, mit dem du Webseiten im Browser speicherst.", "isCorrect": false, "explanation": "Der Name kommt von hook, aber es ist kein Lesezeichen." }
+      ]
+    },
+    {
+      "question": "Warum reicht die Erfolgsseite nach einer Stripe-Zahlung nicht als alleinige Bestätigung?",
+      "area": "Webhook",
+      "options": [
+        { "text": "Weil der Nutzer den Browser schließen kann, bevor er auf die Erfolgsseite zurückkehrt.", "isCorrect": true, "explanation": "Richtig: Die Erfolgsseite ist nicht zuverlässig, der Webhook schon." },
+        { "text": "Weil die Erfolgsseite nur auf Englisch verfügbar ist.", "isCorrect": false, "explanation": "Die Sprache der Erfolgsseite ist nicht der Grund." },
+        { "text": "Weil die Erfolgsseite grundsätzlich keine Zahlungsinformationen enthält.", "isCorrect": false, "explanation": "Die Erfolgsseite kann Zahlungsinformationen enthalten." },
+        { "text": "Weil Stripe die Erfolgsseite nur einmal pro Tag aktualisiert.", "isCorrect": false, "explanation": "Die Erfolgsseite wird sofort nach der Zahlung aufgerufen." }
+      ]
+    },
+    {
+      "question": "Was ist die Signaturprüfung bei Stripe Webhooks?",
+      "area": "Signaturprüfung",
+      "options": [
+        { "text": "Das Verfahren, mit dem dein Server prüft, ob ein Webhook wirklich von Stripe stammt.", "isCorrect": true, "explanation": "Richtig: Die Signaturprüfung verhindert gefälschte Webhooks." },
+        { "text": "Die Unterschrift des Nutzers, die er bei der Zahlung leisten muss.", "isCorrect": false, "explanation": "Die Signaturprüfung ist technisch, keine handschriftliche Unterschrift." },
+        { "text": "Ein Verfahren, bei dem Stripe deinen Server auf Sicherheitslücken prüft.", "isCorrect": false, "explanation": "Stripe prüft nicht deinen Server auf Sicherheitslücken." },
+        { "text": "Die Prüfung, ob der Nutzer volljährig ist.", "isCorrect": false, "explanation": "Die Signaturprüfung hat nichts mit dem Alter des Nutzers zu tun." }
+      ]
+    },
+    {
+      "question": "Was bedeutet Idempotenz bei der Webhook-Verarbeitung?",
+      "area": "Idempotenz",
+      "options": [
+        { "text": "Dass mehrfache Verarbeitung desselben Webhooks keinen doppelten Schaden anrichtet.", "isCorrect": true, "explanation": "Richtig: Idempotenz schützt vor den Folgen wiederholter Webhook-Zustellungen." },
+        { "text": "Dass der Webhook grundsätzlich nur einmal gesendet wird.", "isCorrect": false, "explanation": "Stripe kann Webhooks mehrfach senden, Idempotenz schützt davor." },
+        { "text": "Dass der Webhook für jeden Nutzer anders aussieht.", "isCorrect": false, "explanation": "Idempotenz hat nichts mit der Individualisierung zu tun." },
+        { "text": "Dass der Webhook nur bei volljährigen Nutzern gesendet wird.", "isCorrect": false, "explanation": "Idempotenz hat nichts mit dem Alter zu tun." }
+      ]
+    },
+    {
+      "question": "Wie setzt du Idempotenz bei Stripe Webhooks praktisch um?",
+      "area": "Idempotenz",
+      "options": [
+        { "text": "Du speicherst die Webhook-ID in der Datenbank und überspringst die Verarbeitung, wenn die ID schon existiert.", "isCorrect": true, "explanation": "Richtig: Die eindeutige ID ist der Schlüssel zur Idempotenz." },
+        { "text": "Du löscht den Webhook nach der ersten Verarbeitung.", "isCorrect": false, "explanation": "Du kannst den Webhook nicht löschen, er kommt von Stripe." },
+        { "text": "Du blockierst alle Webhooks nach dem ersten.", "isCorrect": false, "explanation": "Du willst nicht alle Webhooks blockieren, nur die doppelten." },
+        { "text": "Du antwortest mit einem Fehler, damit Stripe aufhört zu senden.", "isCorrect": false, "explanation": "Ein Fehler würde Stripe veranlassen, den Webhook weiter zu wiederholen." }
+      ]
+    },
+    {
+      "question": "Was sind Ereignistypen bei Stripe Webhooks?",
+      "area": "Ereignistypen",
+      "options": [
+        { "text": "Vordefinierte Namen wie payment_intent.succeeded, die sagen, was passiert ist.", "isCorrect": true, "explanation": "Richtig: Der Ereignistyp ist die Betreffzeile des Webhooks." },
+        { "text": "Die verschiedenen Zahlungsmethoden, die Stripe unterstützt.", "isCorrect": false, "explanation": "Ereignistypen sind keine Zahlungsmethoden." },
+        { "text": "Die unterschiedlichen Preismodelle für Stripe.", "isCorrect": false, "explanation": "Ereignistypen haben nichts mit Preisen zu tun." },
+        { "text": "Die Programmiersprachen, in denen man Stripe nutzen kann.", "isCorrect": false, "explanation": "Ereignistypen sind unabhängig von der Programmiersprache." }
+      ]
+    },
+    {
+      "question": "Welcher Header enthält die Signatur eines Stripe Webhooks?",
+      "area": "Signaturprüfung",
+      "options": [
+        { "text": "stripe-signature", "isCorrect": true, "explanation": "Richtig: Der stripe-signature-Header enthält die kryptografische Signatur." },
+        { "text": "authorization", "isCorrect": false, "explanation": "Der authorization-Header wird für andere Zwecke verwendet." },
+        { "text": "x-api-key", "isCorrect": false, "explanation": "x-api-key ist nicht der Header für die Webhook-Signatur." },
+        { "text": "content-type", "isCorrect": false, "explanation": "content-type beschreibt das Format des Bodys, nicht die Signatur." }
+      ]
+    },
+    {
+      "question": "Warum musst du den rohen Body für die Signaturprüfung verwenden?",
+      "area": "Signaturprüfung",
+      "options": [
+        { "text": "Weil die Signatur über die exakten Bytes berechnet wurde und jede Änderung die Prüfung scheitern lässt.", "isCorrect": true, "explanation": "Richtig: Nur der rohe Body garantiert byte-genaue Übereinstimmung." },
+        { "text": "Weil der rohe Body schneller zu verarbeiten ist als JSON.", "isCorrect": false, "explanation": "Die Geschwindigkeit ist nicht der Grund." },
+        { "text": "Weil Stripe keine JSON-Anfragen sendet.", "isCorrect": false, "explanation": "Stripe sendet JSON, aber die Signatur wird über die Rohdaten berechnet." },
+        { "text": "Weil der rohe Body weniger Speicher verbraucht.", "isCorrect": false, "explanation": "Der Speicherverbrauch ist nicht der Grund." }
+      ]
+    },
+    {
+      "question": "Was passiert, wenn dein Server bei einem Webhook nicht mit 200 OK antwortet?",
+      "area": "Webhook",
+      "options": [
+        { "text": "Stripe wiederholt den Webhook nach einem festgelegten Schema bis zu drei Tage lang.", "isCorrect": true, "explanation": "Richtig: Stripe versucht es immer wieder, bis du 200 OK antwortest." },
+        { "text": "Stripe löscht den Webhook und schickt ihn nie wieder.", "isCorrect": false, "explanation": "Stripe löscht fehlgeschlagene Webhooks nicht sofort." },
+        { "text": "Stripe sperrt dein Konto wegen technischer Probleme.", "isCorrect": false, "explanation": "Stripe sperrt dein Konto nicht wegen eines fehlgeschlagenen Webhooks." },
+        { "text": "Stripe schickt dir eine E-Mail mit der Bitte um manuelle Bestätigung.", "isCorrect": false, "explanation": "Stripe schickt keine manuellen Bestätigungs-E-Mails." }
+      ]
+    },
+    {
+      "question": "Welche vier Ereignistypen solltest du für eine App mit Monatsabos mindestens abonnieren?",
+      "area": "Ereignistypen",
+      "options": [
+        { "text": "checkout.session.completed, invoice.paid, invoice.payment_failed, customer.subscription.deleted", "isCorrect": true, "explanation": "Richtig: Diese vier decken den gesamten Lebenszyklus eines Abos ab." },
+        { "text": "payment_intent.created, charge.updated, refund.processed, balance.available", "isCorrect": false, "explanation": "Diese Ereignisse sind für Abos weniger relevant." },
+        { "text": "customer.created, customer.updated, customer.deleted, customer.tax_id.updated", "isCorrect": false, "explanation": "Kunden-Ereignisse allein reichen für Abos nicht aus." },
+        { "text": "price.created, product.created, coupon.created, promotion_code.created", "isCorrect": false, "explanation": "Das sind Konfigurationsereignisse, keine Abo-Ereignisse." }
+      ]
+    },
+    {
+      "question": "Welches dreistufige Muster verwendet man für die Verarbeitung jedes Webhooks?",
+      "area": "Webhook",
+      "options": [
+        { "text": "Signatur prüfen, Ereignistyp auslesen, Idempotenz sicherstellen.", "isCorrect": true, "explanation": "Richtig: Dieses Muster gilt für alle Webhook-Anbieter." },
+        { "text": "Empfangen, Speichern, Löschen.", "isCorrect": false, "explanation": "Das ist kein sinnvolles Muster für Webhooks." },
+        { "text": "Parsen, Validieren, Antworten.", "isCorrect": false, "explanation": "Das ist zu allgemein und enthält nicht die Signaturprüfung." },
+        { "text": "Öffnen, Lesen, Schließen.", "isCorrect": false, "explanation": "Das ist das Muster für Dateizugriffe, nicht für Webhooks." }
+      ]
+    },
+    {
+      "question": "Wie testest du Stripe Webhooks während der lokalen Entwicklung?",
+      "area": "Stripe Webhook",
+      "options": [
+        { "text": "Mit der Stripe CLI, die Webhooks an deinen lokalen Server weiterleitet.", "isCorrect": true, "explanation": "Richtig: stripe listen leitet echte Webhooks an localhost weiter." },
+        { "text": "Indem du die Webhook-URL im Browser aufrufst.", "isCorrect": false, "explanation": "Der Browser kann keine signierten Webhooks erzeugen." },
+        { "text": "Indem du Stripe eine E-Mail mit der Bitte um Test-Webhooks schickst.", "isCorrect": false, "explanation": "Stripe verschickt keine Test-Webhooks per E-Mail." },
+        { "text": "Indem du den Produktions-Webhook auf localhost umleitest.", "isCorrect": false, "explanation": "Produktions-Webhooks sollte man nicht auf localhost umleiten." }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Installiere die Stripe CLI von stripe.com/docs/stripe-cli. Führe stripe login aus und melde dich an. Starte dann stripe listen mit Weiterleitung an localhost:3000/webhook. Löse im Stripe-Dashboard einen Test-Webhook aus und beobachte, wie er in deinem Terminal ankommt.",
+    "expectation": "Die Stripe CLI ist installiert und eingeloggt. stripe listen läuft und zeigt eingehende Webhooks an. Ein Test-Webhook wurde ausgelöst und im Terminal gesehen.",
+    "checklist": [
+      "Stripe CLI installiert",
+      "stripe login ausgeführt",
+      "stripe listen gestartet",
+      "Test-Webhook im Dashboard ausgelöst",
+      "Webhook im Terminal gesehen"
+    ]
+  },
+  "audio": {
+    "file": "M03-06-03.mp3",
+    "durationSeconds": 1440,
+    "voices": ["A", "B"],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Was passiert, wenn mein Server gerade nicht erreichbar ist, wenn Stripe einen Webhook schickt?",
+      "answer": "Stripe wiederholt den Webhook automatisch nach einem festgelegten Schema. Die erste Wiederholung kommt nach wenigen Sekunden, dann nach Minuten, dann nach Stunden. Insgesamt versucht Stripe bis zu drei Tage lang, den Webhook zuzustellen. Wenn dein Server innerhalb dieser Zeit wieder erreichbar ist und mit 200 OK antwortet, gilt der Webhook als zugestellt. Antwortet dein Server nie, wird der Webhook als fehlgeschlagen markiert."
+    },
+    {
+      "question": "Muss ich den rohen Body der Anfrage verwenden oder kann ich den geparsten JSON-Body nehmen?",
+      "answer": "Du musst zwingend den rohen Body verwenden, also die Anfrage als Rohdaten einlesen, bevor dein Framework sie als JSON parst. Die Signatur wird über die exakten Bytes des Bodys berechnet. Wenn dein Framework den Body vorher parst und dabei vielleicht Leerzeichen oder die Reihenfolge der Felder ändert, stimmt die Signatur nicht mehr überein und die Prüfung schlägt fehl."
+    },
+    {
+      "question": "Kann ich Webhooks auch ohne die Stripe-Bibliothek prüfen, nur mit Bordmitteln?",
+      "answer": "Theoretisch ja, aber es ist nicht empfehlenswert. Die Signaturprüfung verwendet HMAC-SHA256, was du mit den Kryptografie-Bordmitteln jeder Sprache nachbauen könntest. Aber die Stripe-Bibliothek prüft zusätzlich Dinge wie Toleranz gegenüber Zeitabweichungen und das korrekte Format des Signatur-Headers. Diese Details selbst zu implementieren ist fehleranfällig und bringt keinen Vorteil."
+    },
+    {
+      "question": "Wie unterscheide ich im Stripe-Dashboard zwischen Test-Webhooks und echten Webhooks?",
+      "answer": "Im Stripe-Dashboard gibt es für den Testmodus und den Echtbetrieb getrennte Webhook-Konfigurationen mit unterschiedlichen Secrets. Du richtest beide ein und verwendest in deiner App das passende Secret je nach Umgebung. Test-Webhooks haben dasselbe Format wie echte, aber sie tragen das Ereignis nie in dein echtes Stripe-Konto ein. Du kannst sie gefahrlos ausprobieren."
+    },
+    {
+      "question": "Was mache ich mit Ereignistypen, die ich nicht erwarte oder nicht kenne?",
+      "answer": "Du solltest sie trotzdem mit 200 OK beantworten, damit Stripe sie nicht wiederholt. Dein Server kann unbekannte Ereignistypen einfach ignorieren oder in ein Log schreiben. Stripe führt gelegentlich neue Ereignistypen ein, und wenn dein Server bei unbekannten Typen mit einem Fehler antwortet, würde Stripe den Webhook immer wieder schicken, was deinen Server unnötig belastet."
+    },
+    {
+      "question": "Brauche ich Webhooks, wenn ich nur einmalige Zahlungen ohne Abos habe?",
+      "answer": "Auch bei einmaligen Zahlungen sind Webhooks die zuverlässigere Lösung als die Erfolgsseite. Der Nutzer könnte den Browser schließen, die Verbindung könnte abbrechen, oder die Zahlung könnte asynchron bestätigt werden, zum Beispiel bei einer Banküberweisung. Die Erfolgsseite ist eine nette Bestätigung für den Nutzer, aber der Webhook ist die verlässliche Quelle der Wahrheit für deinen Server."
+    }
+  ]
+}

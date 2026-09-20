@@ -1,0 +1,551 @@
+{
+  "id": "M03-05-04",
+  "title": "Passwörter richtig speichern: Hashing, Salting und warum md5 nicht reicht",
+  "durationMinutes": 26,
+  "prerequisites": [
+    "M03-05-01",
+    "M03-04-01"
+  ],
+  "terms": [
+    {
+      "term": "bcrypt",
+      "definition": "eine bewährte Hash-Funktion, die speziell für Passwörter entwickelt wurde und automatisch ein Salt erzeugt sowie die Berechnung künstlich verlangsamt, um Brute-Force-Angriffe zu erschweren."
+    },
+    {
+      "term": "argon2",
+      "definition": "die modernste Hash-Funktion für Passwörter, die 2015 einen Wettbewerb gewann und sowohl gegen Brute-Force mit normalen Computern als auch gegen spezialisierte Hardware wie Grafikkarten schützt."
+    },
+    {
+      "term": "Salt",
+      "definition": "eine zufällige Zeichenkette, die vor dem Hashen an jedes Passwort angehängt wird, damit zwei gleiche Passwörter unterschiedliche Hashes ergeben und Rainbow-Table-Angriffe wirkungslos werden."
+    },
+    {
+      "term": "Pepper",
+      "definition": "ein geheimer, für die gesamte Anwendung gleicher Wert, der zusätzlich zum Salt an das Passwort angehängt und getrennt von den Hashes aufbewahrt wird, sodass ein Datenbank-Diebstahl allein nicht für einen Angriff ausreicht."
+    },
+    {
+      "term": "Rainbow Tables",
+      "definition": "vorberechnete Tabellen, die zu Millionen von Hash-Werten das ursprüngliche Passwort enthalten und einen Angreifer ohne Salt in Sekunden statt Jahren ans Ziel bringen."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir vor, du hast ein Tagebuch mit einem Zahlenschloss. Du schreibst dein Geheimnis hinein und stellst eine dreistellige Kombination ein. Aber statt das Tagebuch zu knacken, könnte jemand einfach alle tausend Kombinationen durchprobieren. In wenigen Minuten wäre dein Geheimnis offen."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "In der Lektion zur Anmeldung hast du gelernt, was Authentifizierung ist und warum ein Passwort allein nicht immer ausreicht. Aber was passiert mit dem Passwort, nachdem der Nutzer es eingegeben hat? Wie speichert man es so, dass selbst bei einem Einbruch in die Datenbank niemand die echten Passwörter lesen kann? Diese Lektion handelt vom richtigen Speichern von Passwörtern."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Warum kann ich Passwörter nicht einfach so in die Datenbank schreiben, wie der Nutzer sie eingegeben hat?"
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Weil du damit jedem, der jemals Zugriff auf deine Datenbank bekommt, die echten Passwörter aller Nutzer in die Hand gibst. Ein einziger erfolgreicher Angriff auf deine Datenbank, und der Angreifer kann sich bei jedem einzelnen Nutzerkonto anmelden. Und weil viele Menschen dasselbe Passwort für mehrere Dienste nutzen, betrifft der Schaden nicht nur deine App."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil Datenbank-Leaks keine Seltenheit sind. Fast jeden Monat wird bekannt, dass bei irgendeinem Dienst Millionen von Passwörtern gestohlen wurden. Der Unterschied zwischen einer Katastrophe und einer beherrschbaren Panne liegt darin, wie die Passwörter gespeichert waren."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir einen Fleischwolf vor, der aus einem Stück Fleisch immer dasselbe Hackfleisch macht. Du kannst das Hackfleisch nicht mehr in das ursprüngliche Stück zurückverwandeln. Aber du kannst jederzeit prüfen, ob ein neues Stück Fleisch durch denselben Wolf gedreht dasselbe Hackfleisch ergibt."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Genau das macht eine Hash-Funktion mit einem Passwort. Sie verwandelt das Passwort in eine lange, scheinbar zufällige Zeichenkette, aus der man das ursprüngliche Passwort nicht mehr zurückrechnen kann. Beim Anmelden hasht du das eingegebene Passwort erneut und vergleichst die Ergebnisse."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Wenn ich das Passwort nicht zurückrechnen kann, woher weiß ich dann bei der Anmeldung, ob es richtig ist?"
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Du rechnest nicht zurück, du rechnest vorwärts. Du nimmst das eingegebene Passwort, wendest dieselbe Hash-Funktion darauf an und vergleichst das Ergebnis mit dem gespeicherten Hash. Sind beide gleich, war das Passwort richtig. Sind sie unterschiedlich, war es falsch."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil du das echte Passwort nie speicherst, nicht einmal verschlüsselt. Du speicherst nur den Hash. Selbst wenn jemand deine gesamte Datenbank stiehlt, sieht er nur die Hashes, nicht die Passwörter."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Aus dem Passwort geheim123 macht die Hash-Funktion SHA-256 den Wert ef92b778ba. Gibst du bei der Anmeldung geheim123 ein, kommt derselbe Hash heraus, und du wirst eingeloggt. Gibst du geheim124 ein, kommt ein völlig anderer Hash heraus, und die Anmeldung schlägt fehl."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir ein Telefonbuch vor, das rückwärts sortiert ist: Statt Namen zu Telefonnummern findest du Telefonnummern zu Namen. Ein Angreifer könnte so ein Buch vorbereiten, alle möglichen Telefonnummern durchgehen und daneben den Namen schreiben. Findet er eine Nummer, schlägt er sofort den Namen nach."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Genau nach diesem Prinzip funktionieren vorberechnete Tabellen, die zu Millionen von Hash-Werten das ursprüngliche Passwort enthalten. Ein Angreifer muss das Passwort nicht mehr knacken, er schlägt den Hash einfach in seiner Tabelle nach und liest das Passwort ab."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Wie heißen diese Tabellen, und warum sind sie so gefährlich?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Diese Tabellen heißen Rainbow Tables. Rainbow Tables sind vorberechnete Tabellen, die zu Millionen von Hash-Werten das ursprüngliche Passwort enthalten und einen Angreifer ohne Schutzmaßnahmen in Sekunden statt Jahren ans Ziel bringen."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil Rainbow Tables den Unterschied zwischen einem sicheren und einem unsicheren Hash ausmachen. Ohne Schutzmaßnahmen kann ein Angreifer mit einer einzigen Rainbow Table Millionen von Passwörtern in Sekunden knacken. Mit der richtigen Schutzmaßnahme sind Rainbow Tables vollständig wirkungslos."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Für die Hash-Funktion MD5 gibt es frei verfügbare Rainbow Tables mit Milliarden von Einträgen. Gibst du einen MD5-Hash in eine Suchmaschine ein, findest du oft innerhalb von Sekunden das ursprüngliche Passwort. Deshalb ist MD5 für Passwörter seit über einem Jahrzehnt als unsicher eingestuft."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir vor, du kochst eine Suppe und gibst vor dem Servieren in jeden Teller eine Prise eines eigenen, geheimen Gewürzes. Selbst wenn jemand dein Rezeptbuch stiehlt und genau dieselbe Suppe kocht, schmeckt sie ohne dein geheimes Gewürz anders. Der Gast am Tisch merkt den Unterschied sofort."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Die Verteidigung gegen Rainbow Tables ist verblüffend einfach: Du hängst vor dem Hashen eine zufällige Zeichenkette an jedes Passwort an. Dadurch wird jedes Passwort einzigartig, selbst wenn zwei Nutzer dasselbe Passwort gewählt haben. Die vorberechneten Tabellen des Angreifers passen auf keinen einzigen Hash mehr."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Wie heißt diese zufällige Zeichenkette, und wo wird sie gespeichert?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Diese zufällige Zeichenkette heißt Salt. Ein Salt ist eine zufällige Zeichenkette, die vor dem Hashen an jedes Passwort angehängt wird, damit zwei gleiche Passwörter unterschiedliche Hashes ergeben und Rainbow-Table-Angriffe wirkungslos werden."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil das Salt nicht geheim sein muss. Es wird zusammen mit dem Hash in der Datenbank gespeichert. Der Angreifer sieht das Salt, aber das hilft ihm nicht, weil er für jedes mögliche Salt eine eigene Rainbow Table bräuchte. Bei einem 16-stelligen zufälligen Salt wäre das mehr Speicherplatz, als es Atome im Universum gibt."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Zwei Nutzer wählen beide das Passwort 123456. Ohne Salt hätten beide denselben Hash, und der Angreifer müsste das Passwort nur einmal knacken. Mit Salt bekommt jeder ein eigenes, zufälliges Salt, zum Beispiel a7b3 und x9m2. Die Hashes sind völlig unterschiedlich, und der Angreifer muss jedes Passwort einzeln knacken."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir einen Tresor vor, der nicht nur ein Zahlenschloss hat, sondern zusätzlich einen Schlüssel braucht, der in einem anderen Raum aufbewahrt wird. Selbst wenn jemand den Tresor aus der Wand reißt und mitnimmt, fehlt ihm der Schlüssel, um ihn zu öffnen. Der Tresor allein ist wertlos."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Das Salt schützt gegen vorberechnete Tabellen, aber nicht gegen einen Angreifer, der die Datenbank gestohlen hat und nun jedes Passwort einzeln durchprobiert. Dagegen hilft ein zweiter Schutz: ein geheimer Wert, der nicht in der Datenbank steht, sondern nur im Quellcode oder in einer Umgebungsvariablen."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Wie heißt dieser geheime Wert, und worin unterscheidet er sich vom Salt?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Dieser geheime Wert heißt Pepper. Ein Pepper ist ein geheimer, für die gesamte Anwendung gleicher Wert, der zusätzlich zum Salt an das Passwort angehängt und getrennt von den Hashes aufbewahrt wird, sodass ein Datenbank-Diebstahl allein nicht für einen Angriff ausreicht."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil ein Angreifer, der nur die Datenbank stiehlt, den Pepper nicht kennt. Er kann die Hashes nicht knacken, weil ihm eine entscheidende Zutat fehlt. Erst wenn er zusätzlich zur Datenbank auch den Quellcode oder die Umgebungsvariablen des Servers stiehlt, hat er alle Teile."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Der Pepper ist ein langer, zufälliger Wert, der in der Umgebungsvariablen PEPPER_SECRET gespeichert wird. Beim Hashen wird er an das Passwort plus Salt angehängt. Beim Prüfen muss derselbe Pepper verwendet werden. Die Datenbank enthält nur Hash und Salt, der Pepper steht woanders."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir einen Tresor vor, dessen Öffnungsmechanismus absichtlich langsam ist. Selbst wenn du die richtige Kombination kennst, dauert das Öffnen eine halbe Sekunde. Für dich als Besitzer ist das kein Problem. Für einen Dieb, der tausend Kombinationen durchprobieren will, wird es zur Ewigkeit."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Moderne Hash-Funktionen für Passwörter haben eine besondere Eigenschaft: Sie sind absichtlich langsam. Während normale Hash-Funktionen wie SHA-256 Millionen von Berechnungen pro Sekunde schaffen, brauchen Passwort-Hash-Funktionen für eine einzige Berechnung mehrere Zehntelsekunden."
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "isKeySentence": false,
+      "text": "Welche Hash-Funktionen sind das, und warum ist Langsamkeit hier ein Vorteil?"
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "isKeySentence": false,
+      "text": "Die beiden wichtigsten sind bcrypt und argon2. Bcrypt ist eine bewährte Hash-Funktion, die speziell für Passwörter entwickelt wurde und automatisch ein Salt erzeugt sowie die Berechnung künstlich verlangsamt. Argon2 ist die modernste Hash-Funktion für Passwörter, die 2015 einen Wettbewerb gewann und sowohl gegen normale Computer als auch gegen spezialisierte Hardware schützt."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil die Langsamkeit den entscheidenden Unterschied bei einem Angriff macht. Mit SHA-256 kann ein Angreifer eine Milliarde Passwörter pro Sekunde durchprobieren. Mit bcrypt bei angemessener Einstellung schafft er nur ein paar Tausend pro Sekunde. Aus einem Angriff von einer Stunde wird ein Angriff von mehreren Jahren."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Bcrypt hat einen Kostenfaktor, der bestimmt, wie langsam die Berechnung ist. Ein Kostenfaktor von 12 bedeutet, dass die Berechnung etwa eine Viertelsekunde dauert. Für den Nutzer bei der Anmeldung ist das nicht spürbar. Für einen Angreifer, der Millionen von Passwörtern durchprobieren will, ist es eine Katastrophe."
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "isKeySentence": true,
+      "text": "Passwörter werden niemals im Klartext gespeichert, sondern mit einer langsamen Hash-Funktion wie bcrypt oder argon2 gehasht. Ein Salt schützt gegen Rainbow Tables, ein Pepper sichert zusätzlich ab, getrennt von der Datenbank."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Argon2 geht noch einen Schritt weiter als bcrypt. Es schützt nicht nur gegen schnelle Berechnungen mit normalen Prozessoren, sondern auch gegen spezialisierte Hardware wie Grafikkarten und gegen sogenannte Side-Channel-Angriffe, bei denen der Angreifer den Stromverbrauch oder die Rechenzeit des Servers analysiert."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil Grafikkarten tausende von Berechnungen parallel ausführen können. Eine Hash-Funktion, die nur die CPU auslastet, kann auf einer Grafikkarte trotzdem schnell sein. Argon2 wurde so entworfen, dass es auch auf Grafikkarten langsam bleibt, indem es viel Speicher benötigt, den Grafikkarten nicht effizient verwalten können."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "Argon2 gibt es in drei Varianten: Argon2d für maximale Sicherheit gegen Grafikkarten, Argon2i für Schutz gegen Side-Channel-Angriffe, und Argon2id als Kombination aus beiden. Für die meisten Webanwendungen ist Argon2id die empfohlene Wahl, weil es den besten Kompromiss bietet."
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "isKeySentence": false,
+      "text": "Stell dir eine Bibliothek vor, in der jedes Buch nicht nur einen Titel hat, sondern auch einen versteckten Code auf der Rückseite. Selbst wenn du das Inhaltsverzeichnis der ganzen Bibliothek stiehlst, kannst du ohne den Code auf der Rückseite kein einziges Buch lesen."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Salt und Pepper arbeiten zusammen wie Titel und versteckter Code. Das Salt steht offen in der Datenbank, wie der Buchtitel im Katalog. Der Pepper steht nur im Quellcode, wie der Code auf der Rückseite. Ein Angreifer, der nur den Katalog stiehlt, hat nur die Hälfte der Information."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil diese Kombination aus Salt und Pepper den Unterschied zwischen einem erfolgreichen und einem gescheiterten Angriff ausmacht. Salt allein schützt gegen Rainbow Tables. Pepper allein schützt gegen Datenbank-Diebstahl. Zusammen schützen sie gegen beides."
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "isKeySentence": false,
+      "text": "In der Praxis speicherst du in der Datenbank zwei Dinge: den Hash und das Salt. Der Pepper steht in einer Umgebungsvariablen. Beim Anmelden holst du das Salt aus der Datenbank, holst den Pepper aus der Umgebungsvariablen, hängst beides an das eingegebene Passwort, hasht das Ergebnis und vergleichst es mit dem gespeicherten Hash."
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "isKeySentence": false,
+      "text": "Supabase Auth verwendet bcrypt für alle Passwörter, die über die eingebaute Benutzerverwaltung gespeichert werden. Du als Entwickler musst dich um das Hashing nicht kümmern, es passiert automatisch. Der Kostenfaktor ist auf einen sicheren Standardwert eingestellt, der regelmäßig an die aktuelle Hardware-Geschwindigkeit angepasst wird."
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "isKeySentence": false,
+      "text": "Das ist wichtig, weil du dich auf die Geschäftslogik deiner App konzentrieren kannst, statt dich mit den Details der Passwortspeicherung zu beschäftigen. Die Entwickler von Supabase Auth haben mehr Erfahrung mit Sicherheit als die meisten App-Entwickler und halten die Konfiguration auf dem aktuellen Stand der Technik."
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "isKeySentence": false,
+      "text": "In dieser Lektion hast du fünf Begriffe kennengelernt. Bcrypt: eine bewährte Hash-Funktion speziell für Passwörter, die automatisch ein Salt erzeugt und die Berechnung künstlich verlangsamt. Argon2: die modernste Hash-Funktion für Passwörter, die auch gegen Grafikkarten und Side-Channel-Angriffe schützt. Salt: eine zufällige Zeichenkette, die vor dem Hashen an jedes Passwort angehängt wird und Rainbow Tables wirkungslos macht. Pepper: ein geheimer Wert, der getrennt von der Datenbank aufbewahrt wird. Rainbow Tables: vorberechnete Tabellen, die zu Hash-Werten das ursprüngliche Passwort enthalten."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Warum reicht md5 nicht für Passwörter, obwohl es doch auch hasht?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "MD5 hasht zwar, aber viel zu schnell. Ein moderner Computer berechnet Milliarden von MD5-Hashes pro Sekunde. Ein Angreifer kann damit in wenigen Stunden jedes achtstellige Passwort durchprobieren. Außerdem gibt es für MD5 riesige, frei verfügbare Rainbow Tables, mit denen man viele Hashes in Sekunden knacken kann. MD5 wurde 1991 entwickelt, als Computer noch tausendmal langsamer waren. Für Passwörter ist es seit mindestens 2005 als unsicher eingestuft."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Muss ich Salt und Pepper selbst programmieren, oder machen bcrypt und argon2 das automatisch?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Bcrypt und argon2 erzeugen das Salt automatisch und speichern es zusammen mit dem Hash in einer einzigen Zeichenkette. Du musst das Salt nicht selbst erzeugen oder getrennt speichern. Den Pepper musst du allerdings selbst verwalten, weil er getrennt von der Datenbank aufbewahrt werden soll. Die meisten Bibliotheken für bcrypt und argon2 bieten aber eine einfache Möglichkeit, einen Pepper zu übergeben."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Was passiert, wenn ich den Pepper verliere oder versehentlich ändere?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Dann kann sich kein einziger Nutzer mehr anmelden, weil alle Hashes mit dem alten Pepper berechnet wurden und mit dem neuen nicht mehr übereinstimmen. Der Pepper ist wie der Hauptschlüssel zu allen Passwörtern. Deshalb musst du ihn mindestens so sorgfältig sichern wie die Datenbank selbst. Ein Backup des Peppers gehört in einen Passwort-Manager oder einen gesicherten Secrets-Speicher, nicht in die Datenbank."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Sollte ich heute noch bcrypt verwenden oder lieber gleich argon2?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Wenn du ein neues Projekt startest, nimm argon2id. Es ist der Gewinner des Wettbewerbs von 2015 und bietet den besten Schutz gegen alle bekannten Angriffsarten. Bcrypt ist aber keineswegs unsicher und immer noch eine gute Wahl, besonders wenn deine Programmiersprache oder dein Framework bcrypt besser unterstützt. Beide sind um Größenordnungen sicherer als MD5 oder SHA-256 ohne Salt."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Kann ich ein Passwort aus dem Hash wiederherstellen, wenn der Nutzer es vergessen hat?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Nein, genau das ist der Sinn des Hashens. Aus dem Hash lässt sich das ursprüngliche Passwort nicht zurückrechnen, nicht von dir und nicht von einem Angreifer. Deshalb gibt es die Passwort-vergessen-Funktion: Sie setzt das Passwort auf ein neues zurück, statt das alte wiederherzustellen. Wenn jemand behauptet, er könne dein vergessenes Passwort aus der Datenbank lesen, ist das ein sicheres Zeichen dafür, dass die Passwörter falsch, nämlich ungehasht oder verschlüsselt, gespeichert wurden."
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Warum soll ich den Kostenfaktor von bcrypt nicht einfach auf 20 oder höher stellen, wenn Langsamkeit doch gut ist?"
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "isKeySentence": false,
+      "text": "Weil die Langsamkeit nicht nur den Angreifer trifft, sondern auch deine echten Nutzer. Bei einem Kostenfaktor von 20 würde jede Anmeldung mehrere Sekunden dauern, was die Nutzer frustriert und deinen Server bei vielen gleichzeitigen Anmeldungen überlastet. Ein Kostenfaktor von 10 bis 12 ist für die meisten Anwendungen ein guter Kompromiss: etwa eine Viertelsekunde für die Berechnung, für den Nutzer nicht spürbar, für den Angreifer eine massive Verlangsamung."
+    }
+  ],
+  "practiceExample": {
+    "text": "In Supabase Auth werden Passwörter automatisch mit bcrypt gehasht und mit einem Salt versehen. Du als Entwickler musst dich darum nicht kümmern. Die Hashes landen in der Tabelle auth.users, das Salt ist im Hash integriert. Einen Pepper kannst du über die Umgebungsvariable SUPABASE_PEPPER konfigurieren.",
+    "repoNote": "repo-futuredev",
+    "location": "supabase/migrations"
+  },
+  "quiz": [
+    {
+      "question": "Warum sollte man Passwörter nicht im Klartext in der Datenbank speichern?",
+      "area": "Hashing",
+      "options": [
+        { "text": "Weil ein Angreifer mit Zugriff auf die Datenbank dann alle Passwörter aller Nutzer lesen kann.", "isCorrect": true, "explanation": "Richtig: Klartext-Passwörter sind bei einem Datenbank-Leak sofort kompromittiert." },
+        { "text": "Weil Klartext-Passwörter mehr Speicherplatz in der Datenbank verbrauchen als gehashte Passwörter.", "isCorrect": false, "explanation": "Der Speicherplatz ist nicht der Grund, sondern die Sicherheit." },
+        { "text": "Weil die Datenbank keine Buchstaben speichern kann, sondern nur Zahlen.", "isCorrect": false, "explanation": "Datenbanken können selbstverständlich Buchstaben speichern." },
+        { "text": "Weil Passwörter im Klartext bei der Übertragung ins Internet langsamer sind.", "isCorrect": false, "explanation": "Die Geschwindigkeit der Übertragung ist nicht der Grund." }
+      ]
+    },
+    {
+      "question": "Was sind Rainbow Tables?",
+      "area": "Rainbow Tables",
+      "options": [
+        { "text": "Vorberechnete Tabellen, die zu Millionen von Hash-Werten das ursprüngliche Passwort enthalten.", "isCorrect": true, "explanation": "Richtig: Rainbow Tables machen das Knacken ungesalzener Hashes extrem schnell." },
+        { "text": "Eine spezielle Art von Datenbank, die nur aus farbigen Tabellen besteht und besonders schnell sortiert.", "isCorrect": false, "explanation": "Rainbow Tables haben nichts mit farbigen Datenbanktabellen zu tun." },
+        { "text": "Ein Programm, das Passwörter in Regenbogenfarben auf dem Bildschirm anzeigt.", "isCorrect": false, "explanation": "Der Name kommt von der Technik, nicht von der Darstellung." },
+        { "text": "Eine Liste aller jemals verwendeten Passwörter im Internet.", "isCorrect": false, "explanation": "Rainbow Tables enthalten Hashes, keine vollständige Liste aller Passwörter." }
+      ]
+    },
+    {
+      "question": "Was ist ein Salt?",
+      "area": "Salt",
+      "options": [
+        { "text": "Eine zufällige Zeichenkette, die vor dem Hashen an jedes Passwort angehängt wird.", "isCorrect": true, "explanation": "Richtig: Das Salt macht jeden Hash einzigartig und Rainbow Tables wirkungslos." },
+        { "text": "Ein spezielles Gewürz, das die Datenbank schneller macht.", "isCorrect": false, "explanation": "Salt ist eine kryptografische Technik, kein Gewürz für die Datenbank." },
+        { "text": "Das Passwort selbst, nur in einer anderen Sprache geschrieben.", "isCorrect": false, "explanation": "Das Salt ist eine zusätzliche Zeichenkette, nicht das Passwort selbst." },
+        { "text": "Ein Programm, das automatisch sichere Passwörter erzeugt.", "isCorrect": false, "explanation": "Salt erzeugt keine Passwörter, es schützt vorhandene." }
+      ]
+    },
+    {
+      "question": "Warum macht ein Salt Rainbow Tables wirkungslos?",
+      "area": "Salt",
+      "options": [
+        { "text": "Weil der Angreifer für jedes mögliche Salt eine eigene, riesige Rainbow Table bräuchte.", "isCorrect": true, "explanation": "Richtig: Bei einem 16-stelligen Salt wäre das mehr Speicher, als es Atome im Universum gibt." },
+        { "text": "Weil das Salt das Passwort verschlüsselt und Rainbow Tables keine Verschlüsselung knacken können.", "isCorrect": false, "explanation": "Das Salt verschlüsselt nicht, es wird an das Passwort angehängt." },
+        { "text": "Weil das Salt die Internetverbindung des Angreifers unterbricht.", "isCorrect": false, "explanation": "Das Salt hat keinen Einfluss auf die Internetverbindung." },
+        { "text": "Weil das Salt automatisch die Polizei alarmiert.", "isCorrect": false, "explanation": "Salt ist eine technische Maßnahme, kein Alarmsystem." }
+      ]
+    },
+    {
+      "question": "Was ist ein Pepper?",
+      "area": "Pepper",
+      "options": [
+        { "text": "Ein geheimer Wert, der getrennt von der Datenbank aufbewahrt wird und zusätzlich zum Salt an das Passwort angehängt wird.", "isCorrect": true, "explanation": "Richtig: Der Pepper schützt selbst dann, wenn die Datenbank gestohlen wird." },
+        { "text": "Ein zweites Passwort, das der Nutzer zusätzlich eingeben muss.", "isCorrect": false, "explanation": "Der Pepper wird nicht vom Nutzer eingegeben, sondern vom Server verwaltet." },
+        { "text": "Ein Gewürz, das die Hash-Berechnung beschleunigt.", "isCorrect": false, "explanation": "Der Pepper beschleunigt nichts, er erhöht die Sicherheit." },
+        { "text": "Eine spezielle Datenbank, die nur für Hashes verwendet wird.", "isCorrect": false, "explanation": "Der Pepper ist ein Wert, keine Datenbank." }
+      ]
+    },
+    {
+      "question": "Worin unterscheidet sich der Pepper vom Salt?",
+      "area": "Pepper",
+      "options": [
+        { "text": "Der Pepper ist geheim und steht nicht in der Datenbank, das Salt ist öffentlich und steht in der Datenbank.", "isCorrect": true, "explanation": "Richtig: Salt ist pro Passwort einzigartig und sichtbar, Pepper ist global und geheim." },
+        { "text": "Der Pepper ist süßer als das Salt.", "isCorrect": false, "explanation": "Pepper und Salt sind kryptografische Begriffe, keine Geschmacksrichtungen." },
+        { "text": "Der Pepper wird vor dem Hashen angehängt, das Salt danach.", "isCorrect": false, "explanation": "Beide werden vor dem Hashen angehängt, die Reihenfolge ist nicht der Unterschied." },
+        { "text": "Der Pepper ist länger als das Salt.", "isCorrect": false, "explanation": "Die Länge ist nicht der entscheidende Unterschied." }
+      ]
+    },
+    {
+      "question": "Was ist bcrypt?",
+      "area": "bcrypt",
+      "options": [
+        { "text": "Eine bewährte Hash-Funktion speziell für Passwörter, die automatisch ein Salt erzeugt und die Berechnung verlangsamt.", "isCorrect": true, "explanation": "Richtig: Bcrypt wurde von Grund auf für Passwörter entwickelt." },
+        { "text": "Ein Programm, das Passwörter in verschlüsselte Nachrichten umwandelt und wieder entschlüsseln kann.", "isCorrect": false, "explanation": "Bcrypt hasht, es verschlüsselt nicht. Aus dem Hash kommt man nicht zurück." },
+        { "text": "Eine spezielle Tastatur, die Passwörter beim Tippen automatisch hasht.", "isCorrect": false, "explanation": "Bcrypt ist eine Software-Funktion, keine Hardware." },
+        { "text": "Ein Algorithmus, der Passwörter in Binärcode umwandelt.", "isCorrect": false, "explanation": "Bcrypt wandelt nicht in Binärcode um, sondern erzeugt einen kryptografischen Hash." }
+      ]
+    },
+    {
+      "question": "Was ist argon2?",
+      "area": "argon2",
+      "options": [
+        { "text": "Die modernste Hash-Funktion für Passwörter, die auch gegen Grafikkarten und Side-Channel-Angriffe schützt.", "isCorrect": true, "explanation": "Richtig: Argon2 gewann 2015 den Wettbewerb für die beste Passwort-Hash-Funktion." },
+        { "text": "Ein Edelgas, das in der Kryptografie als Kühlmittel für Server verwendet wird.", "isCorrect": false, "explanation": "Argon2 ist nach dem Edelgas Argon benannt, aber es ist kein Kühlmittel." },
+        { "text": "Eine veraltete Hash-Funktion, die nicht mehr verwendet werden sollte.", "isCorrect": false, "explanation": "Argon2 ist die modernste, nicht veraltet." },
+        { "text": "Ein Programm, das automatisch Argon-Gas freisetzt, wenn ein Angriff erkannt wird.", "isCorrect": false, "explanation": "Argon2 ist eine Software-Funktion, kein physisches Sicherheitssystem." }
+      ]
+    },
+    {
+      "question": "Warum sind bcrypt und argon2 absichtlich langsam?",
+      "area": "bcrypt",
+      "options": [
+        { "text": "Damit ein Angreifer nur wenige tausend Passwörter pro Sekunde durchprobieren kann statt Milliarden.", "isCorrect": true, "explanation": "Richtig: Die Langsamkeit ist der entscheidende Schutz gegen Brute-Force-Angriffe." },
+        { "text": "Damit der Nutzer Zeit hat, seine E-Mails zu lesen, während er auf die Anmeldung wartet.", "isCorrect": false, "explanation": "Die Langsamkeit ist für den Nutzer nicht spürbar, sie trifft nur den Angreifer." },
+        { "text": "Weil langsame Funktionen weniger Strom verbrauchen.", "isCorrect": false, "explanation": "Der Stromverbrauch ist nicht der Grund für die Langsamkeit." },
+        { "text": "Damit der Server in der Zwischenzeit andere Aufgaben erledigen kann.", "isCorrect": false, "explanation": "Die Langsamkeit blockiert den Server, sie entlastet ihn nicht." }
+      ]
+    },
+    {
+      "question": "Was passiert, wenn zwei Nutzer dasselbe Passwort wählen und du kein Salt verwendest?",
+      "area": "Salt",
+      "options": [
+        { "text": "Beide bekommen denselben Hash, und der Angreifer muss das Passwort nur einmal knacken.", "isCorrect": true, "explanation": "Richtig: Ohne Salt sind gleiche Passwörter sofort als solche erkennbar." },
+        { "text": "Die Datenbank stürzt ab, weil sie keine doppelten Hashes speichern kann.", "isCorrect": false, "explanation": "Die Datenbank kann doppelte Hashes technisch speichern, es ist nur unsicher." },
+        { "text": "Der zweite Nutzer bekommt eine Fehlermeldung und muss ein anderes Passwort wählen.", "isCorrect": false, "explanation": "Ohne Salt gibt es keine solche Fehlermeldung." },
+        { "text": "Nichts Besonderes, beide Hashes sind automatisch unterschiedlich.", "isCorrect": false, "explanation": "Ohne Salt sind gleiche Passwörter als gleiche Hashes erkennbar." }
+      ]
+    },
+    {
+      "question": "Warum ist MD5 für Passwörter ungeeignet?",
+      "area": "Hashing",
+      "options": [
+        { "text": "Weil es viel zu schnell ist und riesige Rainbow Tables dafür existieren.", "isCorrect": true, "explanation": "Richtig: MD5 wurde 1991 entwickelt und ist seit 2005 als unsicher für Passwörter eingestuft." },
+        { "text": "Weil MD5 Passwörter grundsätzlich nicht hashen kann, sondern nur Textdokumente.", "isCorrect": false, "explanation": "MD5 kann beliebige Daten hashen, es ist nur zu schnell." },
+        { "text": "Weil MD5 eine veraltete Programmiersprache ist, die niemand mehr verwendet.", "isCorrect": false, "explanation": "MD5 ist eine Hash-Funktion, keine Programmiersprache." },
+        { "text": "Weil MD5 nur in den USA verwendet werden darf.", "isCorrect": false, "explanation": "MD5 unterliegt keinen geografischen Beschränkungen." }
+      ]
+    },
+    {
+      "question": "Welche drei Schutzmaßnahmen kombiniert man für die sichere Passwortspeicherung?",
+      "area": "Hashing",
+      "options": [
+        { "text": "Langsame Hash-Funktion, Salt und Pepper.", "isCorrect": true, "explanation": "Richtig: Diese drei Maßnahmen zusammen ergeben eine robuste Passwortspeicherung." },
+        { "text": "Verschlüsselung, Komprimierung und Backup.", "isCorrect": false, "explanation": "Verschlüsselung ist nicht dasselbe wie Hashing, und Komprimierung schützt nicht." },
+        { "text": "Firewall, Virenscanner und VPN.", "isCorrect": false, "explanation": "Das sind Netzwerkschutzmaßnahmen, keine Passwortspeicherung." },
+        { "text": "Login, Logout und Passwort-vergessen-Funktion.", "isCorrect": false, "explanation": "Das sind Funktionen der Benutzerverwaltung, nicht der Passwortspeicherung." }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Installiere das Paket bcryptjs in einem neuen Ordner. Schreibe ein kleines Node.js-Skript, das ein Passwort hasht und den Hash ausgibt. Rufe dann die compare-Funktion auf, um zu prüfen, ob ein eingegebenes Passwort zum Hash passt. Probiere sowohl das richtige als auch ein falsches Passwort.",
+    "expectation": "Das Skript wurde geschrieben und ausgeführt. Der Hash wurde ausgegeben. Die Prüfung mit dem richtigen Passwort ergibt true, mit dem falschen false.",
+    "checklist": [
+      "bcryptjs installiert",
+      "Node.js-Skript geschrieben",
+      "Hash eines Passworts erzeugt und ausgegeben",
+      "Richtiges Passwort erfolgreich geprüft",
+      "Falsches Passwort abgelehnt"
+    ]
+  },
+  "audio": {
+    "file": "M03-05-04.mp3",
+    "durationSeconds": 1560,
+    "voices": ["A", "B"],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Warum reicht md5 nicht für Passwörter, obwohl es doch auch hasht?",
+      "answer": "MD5 hasht zwar, aber viel zu schnell. Ein moderner Computer berechnet Milliarden von MD5-Hashes pro Sekunde. Ein Angreifer kann damit in wenigen Stunden jedes achtstellige Passwort durchprobieren. Außerdem gibt es für MD5 riesige, frei verfügbare Rainbow Tables, mit denen man viele Hashes in Sekunden knacken kann. MD5 wurde 1991 entwickelt, als Computer noch tausendmal langsamer waren. Für Passwörter ist es seit mindestens 2005 als unsicher eingestuft."
+    },
+    {
+      "question": "Muss ich Salt und Pepper selbst programmieren, oder machen bcrypt und argon2 das automatisch?",
+      "answer": "Bcrypt und argon2 erzeugen das Salt automatisch und speichern es zusammen mit dem Hash in einer einzigen Zeichenkette. Du musst das Salt nicht selbst erzeugen oder getrennt speichern. Den Pepper musst du allerdings selbst verwalten, weil er getrennt von der Datenbank aufbewahrt werden soll. Die meisten Bibliotheken für bcrypt und argon2 bieten aber eine einfache Möglichkeit, einen Pepper zu übergeben."
+    },
+    {
+      "question": "Was passiert, wenn ich den Pepper verliere oder versehentlich ändere?",
+      "answer": "Dann kann sich kein einziger Nutzer mehr anmelden, weil alle Hashes mit dem alten Pepper berechnet wurden und mit dem neuen nicht mehr übereinstimmen. Der Pepper ist wie der Hauptschlüssel zu allen Passwörtern. Deshalb musst du ihn mindestens so sorgfältig sichern wie die Datenbank selbst. Ein Backup des Peppers gehört in einen Passwort-Manager oder einen gesicherten Secrets-Speicher, nicht in die Datenbank."
+    },
+    {
+      "question": "Sollte ich heute noch bcrypt verwenden oder lieber gleich argon2?",
+      "answer": "Wenn du ein neues Projekt startest, nimm argon2id. Es ist der Gewinner des Wettbewerbs von 2015 und bietet den besten Schutz gegen alle bekannten Angriffsarten. Bcrypt ist aber keineswegs unsicher und immer noch eine gute Wahl, besonders wenn deine Programmiersprache oder dein Framework bcrypt besser unterstützt. Beide sind um Größenordnungen sicherer als MD5 oder SHA-256 ohne Salt."
+    },
+    {
+      "question": "Kann ich ein Passwort aus dem Hash wiederherstellen, wenn der Nutzer es vergessen hat?",
+      "answer": "Nein, genau das ist der Sinn des Hashens. Aus dem Hash lässt sich das ursprüngliche Passwort nicht zurückrechnen, nicht von dir und nicht von einem Angreifer. Deshalb gibt es die Passwort-vergessen-Funktion: Sie setzt das Passwort auf ein neues zurück, statt das alte wiederherzustellen. Wenn jemand behauptet, er könne dein vergessenes Passwort aus der Datenbank lesen, ist das ein sicheres Zeichen dafür, dass die Passwörter falsch, nämlich ungehasht oder verschlüsselt, gespeichert wurden."
+    },
+    {
+      "question": "Warum soll ich den Kostenfaktor von bcrypt nicht einfach auf 20 oder höher stellen, wenn Langsamkeit doch gut ist?",
+      "answer": "Weil die Langsamkeit nicht nur den Angreifer trifft, sondern auch deine echten Nutzer. Bei einem Kostenfaktor von 20 würde jede Anmeldung mehrere Sekunden dauern, was die Nutzer frustriert und deinen Server bei vielen gleichzeitigen Anmeldungen überlastet. Ein Kostenfaktor von 10 bis 12 ist für die meisten Anwendungen ein guter Kompromiss: etwa eine Viertelsekunde für die Berechnung, für den Nutzer nicht spürbar, für den Angreifer eine massive Verlangsamung."
+    }
+  ]
+}
