@@ -30,6 +30,20 @@ export default function IchScreen() {
     refresh();
   }
 
+  async function cyclePortfolioStatus(id: string, current: 'offen' | 'veroeffentlicht' | 'erklaert') {
+    const next =
+      current === 'offen' ? 'veroeffentlicht' : current === 'veroeffentlicht' ? 'erklaert' : 'offen';
+    const db = await getDatabase();
+    await db.upsertPortfolioItem({
+      id,
+      baustein: id,
+      status: next,
+      url: null,
+      updatedAt: new Date().toISOString(),
+    });
+    refresh();
+  }
+
   const hasAnyProgress = data ? data.moduleProgress.some((m) => m.completedLessons > 0) : false;
 
   return (
@@ -65,12 +79,21 @@ export default function IchScreen() {
 
           <Section title={de.ich.portfolioTitle} theme={theme}>
             {data.portfolio.map((item) => (
-              <View key={item.id} style={[styles.listRow, { borderColor: theme.colors.border }]}>
-                <Text style={[styles.body, { color: theme.colors.text, flex: 1 }]}>
-                  {item.id} · {item.title}
-                </Text>
-                <Text style={[styles.badge, { color: theme.colors.textWeak }]}>{statusLabel(item.status)}</Text>
-              </View>
+              <Pressable
+                key={item.id}
+                accessibilityRole="button"
+                accessibilityLabel={`${item.id} ${item.title}, ${statusLabel(item.status)}. Tippen zum Wechseln.`}
+                onPress={() => void cyclePortfolioStatus(item.id, item.status)}
+                style={[styles.listRow, { borderColor: theme.colors.border, minHeight: theme.minTapTarget }]}
+              >
+                <View style={{ flex: 1 }}>
+                  <Text style={[styles.body, { color: theme.colors.text }]}>
+                    {item.id} · {item.title}
+                  </Text>
+                  <Text style={[styles.badge, { color: theme.colors.textWeak, marginTop: 2 }]}>{item.goal}</Text>
+                </View>
+                <Text style={[styles.badge, { color: theme.colors.accent }]}>{statusLabel(item.status)}</Text>
+              </Pressable>
             ))}
           </Section>
 

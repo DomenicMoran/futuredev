@@ -27,6 +27,9 @@ Bau ohne EAS: lokal mit `expo prebuild --platform android` und
 `90_Werkstatt/schluessel/futuredev-android/` (siehe Entscheidung
 `2026-09-19-futuredev-apk-bau-lokal-ohne-eas` im Vault). Wegen der Windows-
 Pfadlänge beim C++-Codegen läuft der Bau über die Junction `C:\rnb\FutureDev`.
+CI (`.github/workflows/ci.yml`) baut **keine** APK: nur Typecheck, Lint, Tests,
+`content:validate` und Secrets-Scan. Ein optionaler CI-APK-Job mit Keystore als
+GitHub-Secret ist nicht implementiert.
 
 ### Bauen auf Windows
 

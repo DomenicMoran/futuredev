@@ -16,6 +16,7 @@ import { BookOpen, Bookmark, BookmarkCheck, ExternalLink, MessageSquarePlus } fr
 import type { Lesson, SpeechBlock } from '@futuredev/content-schema';
 import { useTheme } from '../../src/theme/useTheme.js';
 import { EmptyState } from '../../src/components/EmptyState.js';
+import { ModuleCover } from '../../src/components/ModuleCover.js';
 import { de } from '../../src/i18n/de.js';
 import { useContent } from '../../src/content/ContentProvider.js';
 import { getContentFs } from '../../src/content/contentFs.js';
@@ -54,6 +55,7 @@ export default function LessonScreen() {
   const [audioError, setAudioError] = useState(false);
   const listRef = useRef<SectionList<unknown, Section>>(null);
   const hasMarkedRead = useRef(false);
+  const pendingScrollRef = useRef<{ sectionIndex: number; itemIndex: number; attempts: number } | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -146,7 +148,29 @@ export default function LessonScreen() {
   function jumpTo(key: SectionKey) {
     const sectionIndex = sections.findIndex((s) => s.key === key);
     if (sectionIndex === -1) return;
+    pendingScrollRef.current = { sectionIndex, itemIndex: 0, attempts: 0 };
     listRef.current?.scrollToLocation({ sectionIndex, itemIndex: 0, viewPosition: 0, animated: true });
+  }
+
+  function retryPendingScroll(info: { averageItemLength: number; index: number }) {
+    const pending = pendingScrollRef.current;
+    if (!pending || pending.attempts >= 4) {
+      pendingScrollRef.current = null;
+      return;
+    }
+    pending.attempts += 1;
+    listRef.current?.getScrollResponder()?.scrollTo({
+      y: Math.max(0, info.averageItemLength * info.index),
+      animated: false,
+    });
+    setTimeout(() => {
+      listRef.current?.scrollToLocation({
+        sectionIndex: pending.sectionIndex,
+        itemIndex: pending.itemIndex,
+        viewPosition: 0,
+        animated: true,
+      });
+    }, 50);
   }
 
   async function openGlossary(term: string) {
@@ -218,12 +242,10 @@ export default function LessonScreen() {
         stickySectionHeadersEnabled={false}
         onViewableItemsChanged={(info) => void handleViewableChanged(info)}
         viewabilityConfig={{ itemVisiblePercentThreshold: 60 }}
-        getItemLayout={(_data, index) => {
-          const length = 120;
-          const offset = length * index;
-          return { length, offset, index };
+        onScrollToIndexFailed={(info) => retryPendingScroll(info)}
+        onMomentumScrollEnd={() => {
+          pendingScrollRef.current = null;
         }}
-        initialScrollIndex={readUntil > 0 ? undefined : undefined}
         ListHeaderComponent={
           <LessonHeader
             lesson={lesson}
@@ -414,10 +436,17 @@ function LessonHeader({
   ];
   const jumpTargets = allJumpTargets.filter((t) => sections.some((s) => s.key === t.key));
 
+  const moduleId = lesson.id.split('-')[0] ?? '';
+
   return (
     <View style={{ padding: theme.spacing.base }}>
-      <Text style={[styles.lessonId, { color: theme.colors.textWeak }]}>{lesson.id}</Text>
-      <Text style={[styles.lessonTitle, { color: theme.colors.text }]}>{lesson.title}</Text>
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: theme.spacing.sm }}>
+        {moduleId ? <ModuleCover moduleId={moduleId} size={40} /> : null}
+        <View style={{ flex: 1 }}>
+          <Text style={[styles.lessonId, { color: theme.colors.textWeak }]}>{lesson.id}</Text>
+          <Text style={[styles.lessonTitle, { color: theme.colors.text }]}>{lesson.title}</Text>
+        </View>
+      </View>
       <Text style={[styles.metaText, { color: theme.colors.textWeak }]}>
         {de.module.lessonDuration(lesson.durationMinutes)}
       </Text>

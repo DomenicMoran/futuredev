@@ -164,7 +164,7 @@ export async function playLesson(lessonId: string, blockIndex?: number): Promise
     id: lesson.id,
     url: await audioSourceForLesson(lesson.id),
     title: lesson.title,
-    artist: 'KI-Stimme (ElevenLabs)',
+    artist: 'KI-generierte Stimme',
   });
 
   const startSeconds = blockIndex !== undefined ? findPositionForBlock(cueSheet, blockIndex) : 0;
@@ -205,7 +205,7 @@ export async function enqueueLessons(lessonIds: readonly string[]): Promise<void
       id: lessonId,
       url: await audioSourceForLesson(lessonId),
       title: items.find((i) => i.lessonId === lessonId)?.title ?? lessonId,
-      artist: 'KI-Stimme (ElevenLabs)',
+      artist: 'KI-generierte Stimme',
     });
   }
 }

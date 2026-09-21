@@ -4,6 +4,7 @@ import { router } from 'expo-router';
 import { BookOpen, ChevronRight, Lock } from 'lucide-react-native';
 import { useTheme } from '../../src/theme/useTheme';
 import { EmptyState } from '../../src/components/EmptyState';
+import { ModuleCover } from '../../src/components/ModuleCover';
 import { de } from '../../src/i18n/de';
 import { useContent } from '../../src/content/ContentProvider';
 import type { ModuleListEntry } from '../../src/content/listLessons';
@@ -80,6 +81,7 @@ function ModuleRow({ module }: { module: ModuleListEntry }) {
         },
       ]}
     >
+      <ModuleCover moduleId={module.id} size={56} />
       <View style={styles.moduleRowText}>
         <Text style={[styles.moduleId, { color: theme.colors.textWeak }]}>{module.id}</Text>
         <Text style={[styles.moduleTitle, { color: theme.colors.text }]}>{module.title}</Text>
@@ -146,10 +148,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     borderWidth: 1,
+    gap: 12,
   },
   moduleRowText: {
     flex: 1,
-    marginRight: 12,
+    marginRight: 4,
   },
   moduleId: {
     fontSize: 12,

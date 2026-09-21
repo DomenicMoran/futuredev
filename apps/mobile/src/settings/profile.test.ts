@@ -78,4 +78,39 @@ describe('loadProfileData: Jobreife-Anzeige aus progress, exam_results, portfoli
     expect(m01?.totalLessons).toBe(1);
     expect(m01?.completedLessons).toBe(0);
   });
+
+  it('persistiert den Portfolio-Status-Zyklus P00 über upsert und loadProfileData (offen → veröffentlicht → erklärt → offen)', async () => {
+    const db = await getDatabase();
+    const cycle = ['veroeffentlicht', 'erklaert', 'offen'] as const;
+
+    let data = await loadProfileData();
+    expect(data.portfolio.find((p) => p.id === 'P00')?.status).toBe('offen');
+
+    for (const expected of cycle) {
+      await db.upsertPortfolioItem({
+        id: 'P00',
+        baustein: 'P00',
+        status: expected,
+        url: null,
+        updatedAt: new Date().toISOString(),
+      });
+      data = await loadProfileData();
+      expect(data.portfolio.find((p) => p.id === 'P00')?.status).toBe(expected);
+    }
+  });
+
+  it('zählt erklärte Portfolio-Bausteine für die Jobreife wie veröffentlichte', async () => {
+    const db = await getDatabase();
+    await db.upsertPortfolioItem({
+      id: 'P01',
+      baustein: 'P01',
+      status: 'erklaert',
+      url: null,
+      updatedAt: new Date().toISOString(),
+    });
+
+    const data = await loadProfileData();
+    expect(data.portfolio.find((p) => p.id === 'P01')?.status).toBe('erklaert');
+    expect(data.readiness.percent).toBeGreaterThan(0);
+  });
 });

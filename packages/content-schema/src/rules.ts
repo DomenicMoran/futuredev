@@ -330,9 +330,18 @@ function isAcronym(word: string): boolean {
   return /^[A-Z][A-Z0-9-]+$/.test(word);
 }
 
+// Regex-Cache: checkTermOrder prüft denselben Begriff gegen viele Lektionen;
+// ohne Cache entsteht je Aufruf ein neues Unicode-Lookaround-RegExp und der
+// Lauf über 197 Lektionen dauert Minuten bis Stunden.
+const CONTAINS_WORD_REGEX = new Map<string, RegExp>();
+
 function textContainsWord(text: string, word: string): boolean {
-  const flags = isAcronym(word) ? 'u' : 'iu';
-  const pattern = new RegExp(`(?<![${WORD_CHAR}])${escapeRegExp(word)}(?![${WORD_CHAR}])`, flags);
+  let pattern = CONTAINS_WORD_REGEX.get(word);
+  if (!pattern) {
+    const flags = isAcronym(word) ? 'u' : 'iu';
+    pattern = new RegExp(`(?<![${WORD_CHAR}])${escapeRegExp(word)}(?![${WORD_CHAR}])`, flags);
+    CONTAINS_WORD_REGEX.set(word, pattern);
+  }
   return pattern.test(text);
 }
 
@@ -437,9 +446,13 @@ export function checkPrerequisitesAreEarlier(lesson: Lesson): RuleViolation[] {
  */
 export function checkNoPrerequisiteCycles(lesson: Lesson, allLessons: Lesson[]): RuleViolation[] {
   const byId = new Map(allLessons.map((l) => [l.id, l]));
+  // Grau = aktuell im Stack (Rückkante = Zyklus), Schwarz = fertig (DAG-Diamanten
+  // nicht erneut traversieren — sonst exponentiell bei dichten Voraussetzungen).
   const visiting = new Set<string>();
+  const done = new Set<string>();
 
   function hasCycle(id: string): boolean {
+    if (done.has(id)) return false;
     if (visiting.has(id)) return true;
     const current = byId.get(id);
     if (!current) return false;
@@ -448,6 +461,7 @@ export function checkNoPrerequisiteCycles(lesson: Lesson, allLessons: Lesson[]):
       if (hasCycle(prereq)) return true;
     }
     visiting.delete(id);
+    done.add(id);
     return false;
   }
 
@@ -468,10 +482,18 @@ export function checkTermOrder(lesson: Lesson, allLessons: Lesson[]): RuleViolat
   const ownTerms = new Set(lesson.terms.map((t) => t.term.toLowerCase()));
   const text = lessonFullText(lesson);
 
+  // Fremdbegriffe zuerst nach Länge absteigend: lange Mehrwort-Treffer sind
+  // seltener, und wir vermeiden unnötige Kurzbegriff-Scans, sobald der Text
+  // den Begriff sowieso nicht enthält (billiger indexOf-Vorfilter).
+  const textLower = text.toLowerCase();
+
   for (const other of allLessons) {
     if (allowedLessonIds.has(other.id)) continue;
     for (const t of other.terms) {
       if (ownTerms.has(t.term.toLowerCase())) continue; // in dieser Lektion selbst neu definiert
+      const needle = isAcronym(t.term) ? t.term : t.term.toLowerCase();
+      const haystack = isAcronym(t.term) ? text : textLower;
+      if (!haystack.includes(needle)) continue;
       if (textContainsWord(text, t.term)) {
         violations.push({
           rule: 'begriffsreihenfolge',

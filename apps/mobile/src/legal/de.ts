@@ -26,7 +26,7 @@ export const legal = {
     body: [
       'Der Programmcode dieser App steht unter der MIT-Lizenz.',
       'Die Lerninhalte (Texte, Aufgaben, Quizfragen) stehen unter der Lizenz CC BY-NC-SA 4.0 (Namensnennung, nicht kommerziell, Weitergabe unter gleichen Bedingungen).',
-      'Die gesprochenen Stimmen in den Audio-Lektionen sind computererzeugt (ElevenLabs), keine echten Personen.',
+      'Die gesprochenen Stimmen in den Audio-Lektionen sind KI-generierte Stimmen, keine echten Personen.',
       'Die App verwendet außerdem quelloffene Bibliotheken. Die vollständige Liste mit ihren Lizenzen steht unten.',
     ],
   },

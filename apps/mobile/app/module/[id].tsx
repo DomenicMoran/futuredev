@@ -4,6 +4,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { ArrowLeft, CheckCircle2, Circle } from 'lucide-react-native';
 import { useTheme } from '../../src/theme/useTheme';
 import { EmptyState } from '../../src/components/EmptyState';
+import { ModuleCover } from '../../src/components/ModuleCover';
 import { de } from '../../src/i18n/de';
 import { useContent } from '../../src/content/ContentProvider';
 import type { LessonListEntry } from '../../src/content/listLessons';
@@ -30,7 +31,12 @@ export default function ModuleScreen() {
           <ArrowLeft size={22} color={theme.colors.text} />
           <Text style={[styles.backLabel, { color: theme.colors.text }]}>{de.module.backToModules}</Text>
         </Pressable>
-        <Text style={[styles.title, { color: theme.colors.text }]}>{module ? `${module.id} ${module.title}` : id}</Text>
+        <View style={styles.titleRow}>
+          {module ? <ModuleCover moduleId={module.id} size={48} /> : null}
+          <Text style={[styles.title, { color: theme.colors.text, flex: 1 }]}>
+            {module ? `${module.id} ${module.title}` : id}
+          </Text>
+        </View>
       </View>
 
       {!module || module.totalLessons === 0 ? (
@@ -116,7 +122,8 @@ const styles = StyleSheet.create({
   header: { paddingBottom: 8 },
   backButton: { flexDirection: 'row', alignItems: 'center', gap: 4 },
   backLabel: { fontSize: 16, lineHeight: 22 },
-  title: { fontSize: 22, lineHeight: 30, fontWeight: '700', marginTop: 8 },
+  titleRow: { flexDirection: 'row', alignItems: 'center', gap: 12, marginTop: 8 },
+  title: { fontSize: 22, lineHeight: 30, fontWeight: '700' },
   subModuleTitle: { fontSize: 13, lineHeight: 18, fontWeight: '600', textTransform: 'uppercase', letterSpacing: 0.5 },
   lessonRow: { flexDirection: 'row', alignItems: 'center', gap: 12, borderWidth: 1 },
   lessonRowText: { flex: 1 },

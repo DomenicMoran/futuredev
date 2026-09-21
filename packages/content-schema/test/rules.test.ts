@@ -263,6 +263,24 @@ describe('checkNoPrerequisiteCycles', () => {
     const b = makeValidLesson({ id: 'M01-00-02', prerequisites: ['M01-00-01'] });
     expect(checkNoPrerequisiteCycles(a, [a, b]).length).toBeGreaterThan(0);
   });
+
+  it('beendet Diamant-DAGs ohne exponentielle Laufzeit', () => {
+    // Viele gemeinsame Vorfahren: ohne „done"-Menge explodiert die Suche.
+    const lessons = [
+      makeValidLesson({ id: 'M01-00-01' }),
+      makeValidLesson({ id: 'M01-00-02', prerequisites: ['M01-00-01'] }),
+      makeValidLesson({ id: 'M01-00-03', prerequisites: ['M01-00-01'] }),
+      makeValidLesson({ id: 'M01-00-04', prerequisites: ['M01-00-02', 'M01-00-03'] }),
+      makeValidLesson({ id: 'M01-00-05', prerequisites: ['M01-00-02', 'M01-00-03'] }),
+      makeValidLesson({
+        id: 'M01-00-06',
+        prerequisites: ['M01-00-04', 'M01-00-05'],
+      }),
+    ];
+    const started = Date.now();
+    expect(checkNoPrerequisiteCycles(lessons[5], lessons)).toHaveLength(0);
+    expect(Date.now() - started).toBeLessThan(100);
+  });
 });
 
 describe('checkDistractorsSameArea', () => {

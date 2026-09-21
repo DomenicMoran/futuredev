@@ -64,7 +64,7 @@ export const de = {
     deleteAll: 'Alles löschen',
   },
   player: {
-    aiVoiceLabel: 'KI-Stimme (ElevenLabs)',
+    aiVoiceLabel: 'KI-generierte Stimme',
     play: 'Wiedergabe',
     pause: 'Pause',
     jumpBackward: '15 Sekunden zurück',
