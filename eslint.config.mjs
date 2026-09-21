@@ -17,6 +17,7 @@ export default tseslint.config(
       '**/coverage/**',
       'tools/audio/out/**',
       'apps/web/out/**',
+      'apps/web/next-env.d.ts',
     ],
   },
   js.configs.recommended,
