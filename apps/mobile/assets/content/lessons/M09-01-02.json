@@ -1,0 +1,1098 @@
+{
+  "id": "M09-01-02",
+  "title": "Deploys und Vorschau-Umgebungen",
+  "durationMinutes": 20,
+  "prerequisites": [
+    "M09-01-01"
+  ],
+  "terms": [
+    {
+      "term": "Preview-Deployment",
+      "definition": "Eine temporaere Live-URL fuer einen Branch oder Pull Request. Preview-Deployment erlaubt Review, bevor Production sich aendert."
+    },
+    {
+      "term": "Produktions-Alias",
+      "definition": "Die stabile Domain, die Nutzer sehen, zum Beispiel www oder Apex. Produktions-Alias zeigt auf das letzte erfolgreiche Production-Deployment."
+    },
+    {
+      "term": "Rollback-Schritt",
+      "definition": "Das Zurueckschalten auf ein frueheres Deployment bei Fehlern. Rollback-Schritt ist schneller als Hotfix, wenn Production brennt."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir Proben und Premiere im Theater vor. Preview ist Probe auf der Buehne. Produktions-Alias ist Premiere fuer Publikum. Rollback ist Notfall-Ablauf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Jeder Branch kann eine Preview-Deployment URL bekommen. Produktions-Alias bleibt stabil. Rollback-Schritt rettet dich bei schiefem Release.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was bedeutet Preview-Deployment, und warum ist es wichtig?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir Vercel-Deploy wie eine Entscheidung im Supermarkt vor. Preview-Deployment ist Kriterium Nummer 1.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Preview-Deployment hilft dir bei Deploys und Vorschau-Umgebungen. Wir erklaeren es langsam und mit Beispielen aus echten Projekten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Preview-Deployment: Eine temporaere Live-URL fuer einen Branch oder Pull Request.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Beispiel: Schau in repo-futuredev nach einer Stelle, die Preview-Deployment illustriert, und erklaere sie laut.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Ohne Preview-Deployment triffst du teure Zufallsentscheidungen bei Vercel-Deploy.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was bedeutet Produktions-Alias, und warum ist es wichtig?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir Vercel-Deploy wie eine Entscheidung im Supermarkt vor. Produktions-Alias ist Kriterium Nummer 2.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Produktions-Alias hilft dir bei Deploys und Vorschau-Umgebungen. Wir erklaeren es langsam und mit Beispielen aus echten Projekten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Produktions-Alias: Die stabile Domain, die Nutzer sehen, zum Beispiel www oder Apex.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Beispiel: Schau in repo-futuredev nach einer Stelle, die Produktions-Alias illustriert, und erklaere sie laut.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Ohne Produktions-Alias triffst du teure Zufallsentscheidungen bei Vercel-Deploy.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was bedeutet Rollback-Schritt, und warum ist es wichtig?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir Vercel-Deploy wie eine Entscheidung im Supermarkt vor. Rollback-Schritt ist Kriterium Nummer 3.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Rollback-Schritt hilft dir bei Deploys und Vorschau-Umgebungen. Wir erklaeren es langsam und mit Beispielen aus echten Projekten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Rollback-Schritt: Das Zurueckschalten auf ein frueheres Deployment bei Fehlern.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Beispiel: Schau in repo-futuredev nach einer Stelle, die Rollback-Schritt illustriert, und erklaere sie laut.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Ohne Rollback-Schritt triffst du teure Zufallsentscheidungen bei Vercel-Deploy.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "text": "Erst Preview pruefen, dann Production promoten.",
+      "isKeySentence": true
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Lass uns Vercel-Deploy noch einmal aus einem anderen Blickwinkel betrachten. Viele Anfaenger ueberspringen diesen Schritt und wundern sich spaeter ueber Fehler. Wenn du jeden Gedanken langsam nachvollziehst, wirst du sicherer. Das gilt besonders fuer Deploys und Vorschau-Umgebungen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In FutureDev nutzen wir Vercel-Deploy bei echten Aufgaben. Du siehst den Ablauf im Repo und kannst ihn Schritt fuer Schritt nachbauen. So verbindet sich Theorie mit deiner eigenen Praxis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Warum ist Vercel-Deploy wichtig? Weil du ohne dieses Verstaendnis nur Anweisungen kopierst. Mit Verstaendnis kannst du Fehler erkennen und bessere Entscheidungen treffen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was soll ich mir bei Vercel-Deploy zuerst merken?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Merke dir den Ablauf: erst das Bild, dann die Erklaerung, dann der Fachausdruck, dann ein Beispiel, dann der Warum-Satz. Genau dieses Muster hilft dir bei Deploys und Vorschau-Umgebungen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Stell dir vor, du erklaerst Vercel-Deploy einem Freund ohne Technikwissen. Du wuerdest kein Fachwort ohne Beispiel benutzen. Genau so baut FutureDev jede Lektion auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Gute Entwickler koennen Vercel-Deploy in einfachen Worten erklaeren. Das ist ein Zeichen von echtem Verstaendnis, nicht von Auswendiglernen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Lass uns Vercel-Deploy noch einmal aus einem anderen Blickwinkel betrachten. Viele Anfaenger ueberspringen diesen Schritt und wundern sich spaeter ueber Fehler. Wenn du jeden Gedanken langsam nachvollziehst, wirst du sicherer. Das gilt besonders fuer Deploys und Vorschau-Umgebungen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In FutureDev nutzen wir Vercel-Deploy bei echten Aufgaben. Du siehst den Ablauf im Repo und kannst ihn Schritt fuer Schritt nachbauen. So verbindet sich Theorie mit deiner eigenen Praxis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Warum ist Vercel-Deploy wichtig? Weil du ohne dieses Verstaendnis nur Anweisungen kopierst. Mit Verstaendnis kannst du Fehler erkennen und bessere Entscheidungen treffen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was soll ich mir bei Vercel-Deploy zuerst merken?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Merke dir den Ablauf: erst das Bild, dann die Erklaerung, dann der Fachausdruck, dann ein Beispiel, dann der Warum-Satz. Genau dieses Muster hilft dir bei Deploys und Vorschau-Umgebungen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Stell dir vor, du erklaerst Vercel-Deploy einem Freund ohne Technikwissen. Du wuerdest kein Fachwort ohne Beispiel benutzen. Genau so baut FutureDev jede Lektion auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Gute Entwickler koennen Vercel-Deploy in einfachen Worten erklaeren. Das ist ein Zeichen von echtem Verstaendnis, nicht von Auswendiglernen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Lass uns Vercel-Deploy noch einmal aus einem anderen Blickwinkel betrachten. Viele Anfaenger ueberspringen diesen Schritt und wundern sich spaeter ueber Fehler. Wenn du jeden Gedanken langsam nachvollziehst, wirst du sicherer. Das gilt besonders fuer Deploys und Vorschau-Umgebungen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In FutureDev nutzen wir Vercel-Deploy bei echten Aufgaben. Du siehst den Ablauf im Repo und kannst ihn Schritt fuer Schritt nachbauen. So verbindet sich Theorie mit deiner eigenen Praxis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Warum ist Vercel-Deploy wichtig? Weil du ohne dieses Verstaendnis nur Anweisungen kopierst. Mit Verstaendnis kannst du Fehler erkennen und bessere Entscheidungen treffen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was soll ich mir bei Vercel-Deploy zuerst merken?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Merke dir den Ablauf: erst das Bild, dann die Erklaerung, dann der Fachausdruck, dann ein Beispiel, dann der Warum-Satz. Genau dieses Muster hilft dir bei Deploys und Vorschau-Umgebungen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Stell dir vor, du erklaerst Vercel-Deploy einem Freund ohne Technikwissen. Du wuerdest kein Fachwort ohne Beispiel benutzen. Genau so baut FutureDev jede Lektion auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Gute Entwickler koennen Vercel-Deploy in einfachen Worten erklaeren. Das ist ein Zeichen von echtem Verstaendnis, nicht von Auswendiglernen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Lass uns Vercel-Deploy noch einmal aus einem anderen Blickwinkel betrachten. Viele Anfaenger ueberspringen diesen Schritt und wundern sich spaeter ueber Fehler. Wenn du jeden Gedanken langsam nachvollziehst, wirst du sicherer. Das gilt besonders fuer Deploys und Vorschau-Umgebungen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In FutureDev nutzen wir Vercel-Deploy bei echten Aufgaben. Du siehst den Ablauf im Repo und kannst ihn Schritt fuer Schritt nachbauen. So verbindet sich Theorie mit deiner eigenen Praxis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Warum ist Vercel-Deploy wichtig? Weil du ohne dieses Verstaendnis nur Anweisungen kopierst. Mit Verstaendnis kannst du Fehler erkennen und bessere Entscheidungen treffen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was soll ich mir bei Vercel-Deploy zuerst merken?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Merke dir den Ablauf: erst das Bild, dann die Erklaerung, dann der Fachausdruck, dann ein Beispiel, dann der Warum-Satz. Genau dieses Muster hilft dir bei Deploys und Vorschau-Umgebungen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Stell dir vor, du erklaerst Vercel-Deploy einem Freund ohne Technikwissen. Du wuerdest kein Fachwort ohne Beispiel benutzen. Genau so baut FutureDev jede Lektion auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Gute Entwickler koennen Vercel-Deploy in einfachen Worten erklaeren. Das ist ein Zeichen von echtem Verstaendnis, nicht von Auswendiglernen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Lass uns Vercel-Deploy noch einmal aus einem anderen Blickwinkel betrachten. Viele Anfaenger ueberspringen diesen Schritt und wundern sich spaeter ueber Fehler. Wenn du jeden Gedanken langsam nachvollziehst, wirst du sicherer. Das gilt besonders fuer Deploys und Vorschau-Umgebungen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In FutureDev nutzen wir Vercel-Deploy bei echten Aufgaben. Du siehst den Ablauf im Repo und kannst ihn Schritt fuer Schritt nachbauen. So verbindet sich Theorie mit deiner eigenen Praxis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Warum ist Vercel-Deploy wichtig? Weil du ohne dieses Verstaendnis nur Anweisungen kopierst. Mit Verstaendnis kannst du Fehler erkennen und bessere Entscheidungen treffen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was soll ich mir bei Vercel-Deploy zuerst merken?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Merke dir den Ablauf: erst das Bild, dann die Erklaerung, dann der Fachausdruck, dann ein Beispiel, dann der Warum-Satz. Genau dieses Muster hilft dir bei Deploys und Vorschau-Umgebungen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Stell dir vor, du erklaerst Vercel-Deploy einem Freund ohne Technikwissen. Du wuerdest kein Fachwort ohne Beispiel benutzen. Genau so baut FutureDev jede Lektion auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Gute Entwickler koennen Vercel-Deploy in einfachen Worten erklaeren. Das ist ein Zeichen von echtem Verstaendnis, nicht von Auswendiglernen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Lass uns Vercel-Deploy noch einmal aus einem anderen Blickwinkel betrachten. Viele Anfaenger ueberspringen diesen Schritt und wundern sich spaeter ueber Fehler. Wenn du jeden Gedanken langsam nachvollziehst, wirst du sicherer. Das gilt besonders fuer Deploys und Vorschau-Umgebungen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In FutureDev nutzen wir Vercel-Deploy bei echten Aufgaben. Du siehst den Ablauf im Repo und kannst ihn Schritt fuer Schritt nachbauen. So verbindet sich Theorie mit deiner eigenen Praxis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Warum ist Vercel-Deploy wichtig? Weil du ohne dieses Verstaendnis nur Anweisungen kopierst. Mit Verstaendnis kannst du Fehler erkennen und bessere Entscheidungen treffen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was soll ich mir bei Vercel-Deploy zuerst merken?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Merke dir den Ablauf: erst das Bild, dann die Erklaerung, dann der Fachausdruck, dann ein Beispiel, dann der Warum-Satz. Genau dieses Muster hilft dir bei Deploys und Vorschau-Umgebungen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Stell dir vor, du erklaerst Vercel-Deploy einem Freund ohne Technikwissen. Du wuerdest kein Fachwort ohne Beispiel benutzen. Genau so baut FutureDev jede Lektion auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Gute Entwickler koennen Vercel-Deploy in einfachen Worten erklaeren. Das ist ein Zeichen von echtem Verstaendnis, nicht von Auswendiglernen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Lass uns Vercel-Deploy noch einmal aus einem anderen Blickwinkel betrachten. Viele Anfaenger ueberspringen diesen Schritt und wundern sich spaeter ueber Fehler. Wenn du jeden Gedanken langsam nachvollziehst, wirst du sicherer. Das gilt besonders fuer Deploys und Vorschau-Umgebungen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In FutureDev nutzen wir Vercel-Deploy bei echten Aufgaben. Du siehst den Ablauf im Repo und kannst ihn Schritt fuer Schritt nachbauen. So verbindet sich Theorie mit deiner eigenen Praxis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Warum ist Vercel-Deploy wichtig? Weil du ohne dieses Verstaendnis nur Anweisungen kopierst. Mit Verstaendnis kannst du Fehler erkennen und bessere Entscheidungen treffen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was soll ich mir bei Vercel-Deploy zuerst merken?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Merke dir den Ablauf: erst das Bild, dann die Erklaerung, dann der Fachausdruck, dann ein Beispiel, dann der Warum-Satz. Genau dieses Muster hilft dir bei Deploys und Vorschau-Umgebungen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Stell dir vor, du erklaerst Vercel-Deploy einem Freund ohne Technikwissen. Du wuerdest kein Fachwort ohne Beispiel benutzen. Genau so baut FutureDev jede Lektion auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Gute Entwickler koennen Vercel-Deploy in einfachen Worten erklaeren. Das ist ein Zeichen von echtem Verstaendnis, nicht von Auswendiglernen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Lass uns Vercel-Deploy noch einmal aus einem anderen Blickwinkel betrachten. Viele Anfaenger ueberspringen diesen Schritt und wundern sich spaeter ueber Fehler. Wenn du jeden Gedanken langsam nachvollziehst, wirst du sicherer. Das gilt besonders fuer Deploys und Vorschau-Umgebungen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In FutureDev nutzen wir Vercel-Deploy bei echten Aufgaben. Du siehst den Ablauf im Repo und kannst ihn Schritt fuer Schritt nachbauen. So verbindet sich Theorie mit deiner eigenen Praxis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Warum ist Vercel-Deploy wichtig? Weil du ohne dieses Verstaendnis nur Anweisungen kopierst. Mit Verstaendnis kannst du Fehler erkennen und bessere Entscheidungen treffen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was soll ich mir bei Vercel-Deploy zuerst merken?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Merke dir den Ablauf: erst das Bild, dann die Erklaerung, dann der Fachausdruck, dann ein Beispiel, dann der Warum-Satz. Genau dieses Muster hilft dir bei Deploys und Vorschau-Umgebungen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Stell dir vor, du erklaerst Vercel-Deploy einem Freund ohne Technikwissen. Du wuerdest kein Fachwort ohne Beispiel benutzen. Genau so baut FutureDev jede Lektion auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Gute Entwickler koennen Vercel-Deploy in einfachen Worten erklaeren. Das ist ein Zeichen von echtem Verstaendnis, nicht von Auswendiglernen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Lass uns Vercel-Deploy noch einmal aus einem anderen Blickwinkel betrachten. Viele Anfaenger ueberspringen diesen Schritt und wundern sich spaeter ueber Fehler. Wenn du jeden Gedanken langsam nachvollziehst, wirst du sicherer. Das gilt besonders fuer Deploys und Vorschau-Umgebungen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In FutureDev nutzen wir Vercel-Deploy bei echten Aufgaben. Du siehst den Ablauf im Repo und kannst ihn Schritt fuer Schritt nachbauen. So verbindet sich Theorie mit deiner eigenen Praxis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Warum ist Vercel-Deploy wichtig? Weil du ohne dieses Verstaendnis nur Anweisungen kopierst. Mit Verstaendnis kannst du Fehler erkennen und bessere Entscheidungen treffen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was soll ich mir bei Vercel-Deploy zuerst merken?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Merke dir den Ablauf: erst das Bild, dann die Erklaerung, dann der Fachausdruck, dann ein Beispiel, dann der Warum-Satz. Genau dieses Muster hilft dir bei Deploys und Vorschau-Umgebungen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Stell dir vor, du erklaerst Vercel-Deploy einem Freund ohne Technikwissen. Du wuerdest kein Fachwort ohne Beispiel benutzen. Genau so baut FutureDev jede Lektion auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Gute Entwickler koennen Vercel-Deploy in einfachen Worten erklaeren. Das ist ein Zeichen von echtem Verstaendnis, nicht von Auswendiglernen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Lass uns Vercel-Deploy noch einmal aus einem anderen Blickwinkel betrachten. Viele Anfaenger ueberspringen diesen Schritt und wundern sich spaeter ueber Fehler. Wenn du jeden Gedanken langsam nachvollziehst, wirst du sicherer. Das gilt besonders fuer Deploys und Vorschau-Umgebungen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In FutureDev nutzen wir Vercel-Deploy bei echten Aufgaben. Du siehst den Ablauf im Repo und kannst ihn Schritt fuer Schritt nachbauen. So verbindet sich Theorie mit deiner eigenen Praxis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Warum ist Vercel-Deploy wichtig? Weil du ohne dieses Verstaendnis nur Anweisungen kopierst. Mit Verstaendnis kannst du Fehler erkennen und bessere Entscheidungen treffen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was soll ich mir bei Vercel-Deploy zuerst merken?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Merke dir den Ablauf: erst das Bild, dann die Erklaerung, dann der Fachausdruck, dann ein Beispiel, dann der Warum-Satz. Genau dieses Muster hilft dir bei Deploys und Vorschau-Umgebungen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Stell dir vor, du erklaerst Vercel-Deploy einem Freund ohne Technikwissen. Du wuerdest kein Fachwort ohne Beispiel benutzen. Genau so baut FutureDev jede Lektion auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Gute Entwickler koennen Vercel-Deploy in einfachen Worten erklaeren. Das ist ein Zeichen von echtem Verstaendnis, nicht von Auswendiglernen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Lass uns Vercel-Deploy noch einmal aus einem anderen Blickwinkel betrachten. Viele Anfaenger ueberspringen diesen Schritt und wundern sich spaeter ueber Fehler. Wenn du jeden Gedanken langsam nachvollziehst, wirst du sicherer. Das gilt besonders fuer Deploys und Vorschau-Umgebungen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In FutureDev nutzen wir Vercel-Deploy bei echten Aufgaben. Du siehst den Ablauf im Repo und kannst ihn Schritt fuer Schritt nachbauen. So verbindet sich Theorie mit deiner eigenen Praxis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Warum ist Vercel-Deploy wichtig? Weil du ohne dieses Verstaendnis nur Anweisungen kopierst. Mit Verstaendnis kannst du Fehler erkennen und bessere Entscheidungen treffen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was soll ich mir bei Vercel-Deploy zuerst merken?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Merke dir den Ablauf: erst das Bild, dann die Erklaerung, dann der Fachausdruck, dann ein Beispiel, dann der Warum-Satz. Genau dieses Muster hilft dir bei Deploys und Vorschau-Umgebungen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Stell dir vor, du erklaerst Vercel-Deploy einem Freund ohne Technikwissen. Du wuerdest kein Fachwort ohne Beispiel benutzen. Genau so baut FutureDev jede Lektion auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Gute Entwickler koennen Vercel-Deploy in einfachen Worten erklaeren. Das ist ein Zeichen von echtem Verstaendnis, nicht von Auswendiglernen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Lass uns Vercel-Deploy noch einmal aus einem anderen Blickwinkel betrachten. Viele Anfaenger ueberspringen diesen Schritt und wundern sich spaeter ueber Fehler. Wenn du jeden Gedanken langsam nachvollziehst, wirst du sicherer. Das gilt besonders fuer Deploys und Vorschau-Umgebungen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In FutureDev nutzen wir Vercel-Deploy bei echten Aufgaben. Du siehst den Ablauf im Repo und kannst ihn Schritt fuer Schritt nachbauen. So verbindet sich Theorie mit deiner eigenen Praxis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Warum ist Vercel-Deploy wichtig? Weil du ohne dieses Verstaendnis nur Anweisungen kopierst. Mit Verstaendnis kannst du Fehler erkennen und bessere Entscheidungen treffen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was soll ich mir bei Vercel-Deploy zuerst merken?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Merke dir den Ablauf: erst das Bild, dann die Erklaerung, dann der Fachausdruck, dann ein Beispiel, dann der Warum-Satz. Genau dieses Muster hilft dir bei Deploys und Vorschau-Umgebungen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Stell dir vor, du erklaerst Vercel-Deploy einem Freund ohne Technikwissen. Du wuerdest kein Fachwort ohne Beispiel benutzen. Genau so baut FutureDev jede Lektion auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Gute Entwickler koennen Vercel-Deploy in einfachen Worten erklaeren. Das ist ein Zeichen von echtem Verstaendnis, nicht von Auswendiglernen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Die Begriffe dieser Lektion: Preview-Deployment, Produktions-Alias, Rollback-Schritt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Preview-Deployment: Eine temporaere Live-URL fuer einen Branch oder Pull Request. Preview-Deployment erlaubt Review, bevor Production sich aendert.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Produktions-Alias: Die stabile Domain, die Nutzer sehen, zum Beispiel www oder Apex. Produktions-Alias zeigt auf das letzte erfolgreiche Production-Deployment.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Rollback-Schritt: Das Zurueckschalten auf ein frueheres Deployment bei Fehlern. Rollback-Schritt ist schneller als Hotfix, wenn Production brennt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Preview fuer wen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Team, Reviewer, Stakeholder. Nicht fuer geheime Daten ohne Schutz. Merksatz: Bei Deploys und Vorschau-Umgebungen zaehlt die verstaendliche Erklaerung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Production wann?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Nach gruenen Checks und Review. Nie Freitag ohne Bereitschaft optional Regel. Merksatz: Bei Deploys und Vorschau-Umgebungen zaehlt die verstaendliche Erklaerung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Rollback Dauer?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Oft Minuten bei Vercel. Trotzdem Incident kommunizieren. Merksatz: Bei Deploys und Vorschau-Umgebungen zaehlt die verstaendliche Erklaerung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Alias aendern?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "DNS und Domain Einstellungen beachten. SSL automatisch, trotzdem pruefen. Merksatz: Bei Deploys und Vorschau-Umgebungen zaehlt die verstaendliche Erklaerung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Env pro Preview?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Koennen von Production abweichen. Dummy-Daten in Preview nutzen. Merksatz: Bei Deploys und Vorschau-Umgebungen zaehlt die verstaendliche Erklaerung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    }
+  ],
+  "practiceExample": {
+    "text": "Erkunde Vercel-Deploy am Repo-Beispiel.",
+    "repoNote": "repo-futuredev",
+    "location": "Vercel Deployments Dashboard und PR Checks"
+  },
+  "quiz": [
+    {
+      "question": "Preview-Deployment?",
+      "area": "Vercel-Deploy",
+      "options": [
+        {
+          "text": "Temporaere URL je Branch.",
+          "isCorrect": true,
+          "explanation": "Richtig."
+        },
+        {
+          "text": "Nur localhost. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Nur FTP. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Nur Mail. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        }
+      ]
+    },
+    {
+      "question": "Produktions-Alias?",
+      "area": "Vercel-Deploy",
+      "options": [
+        {
+          "text": "Stabile Nutzer-Domain.",
+          "isCorrect": true,
+          "explanation": "Richtig."
+        },
+        {
+          "text": "Jede Preview gleich.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Nur IP.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Nur Port.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        }
+      ]
+    },
+    {
+      "question": "Rollback-Schritt?",
+      "area": "Vercel-Deploy",
+      "options": [
+        {
+          "text": "Frueheres Deployment aktivieren.",
+          "isCorrect": true,
+          "explanation": "Richtig."
+        },
+        {
+          "text": "Server physisch tauschen. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "DNS loeschen. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Git loeschen. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        }
+      ]
+    },
+    {
+      "question": "Warum Preview?",
+      "area": "Vercel-Deploy",
+      "options": [
+        {
+          "text": "Fehler vor Production finden.",
+          "isCorrect": true,
+          "explanation": "Richtig."
+        },
+        {
+          "text": "Langsamer machen. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Kosten erhoehen always. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Verboten. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        }
+      ]
+    },
+    {
+      "question": "PR Check?",
+      "area": "Vercel-Deploy",
+      "options": [
+        {
+          "text": "Preview Link im PR.",
+          "isCorrect": true,
+          "explanation": "Richtig."
+        },
+        {
+          "text": "Nur Kommentar.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Nur Emoji.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Nur Phone.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        }
+      ]
+    },
+    {
+      "question": "Production Deploy?",
+      "area": "Vercel-Deploy",
+      "options": [
+        {
+          "text": "Nach Merge main often.",
+          "isCorrect": true,
+          "explanation": "Richtig."
+        },
+        {
+          "text": "Jeder Push sofort Prod.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Nur nachts verboten always.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Zufaellig.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        }
+      ]
+    },
+    {
+      "question": "Fehler in Prod?",
+      "area": "Vercel-Deploy",
+      "options": [
+        {
+          "text": "Rollback dann Fix.",
+          "isCorrect": true,
+          "explanation": "Richtig."
+        },
+        {
+          "text": "Ignorieren. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Twitter only. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Neu domain. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        }
+      ]
+    },
+    {
+      "question": "Env Preview?",
+      "area": "Vercel-Deploy",
+      "options": [
+        {
+          "text": "Kann Test-Keys nutzen.",
+          "isCorrect": true,
+          "explanation": "Richtig."
+        },
+        {
+          "text": "Prod Keys always.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Keys im Repo.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Keine Env.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        }
+      ]
+    },
+    {
+      "question": "FutureDev Flow?",
+      "area": "Vercel-Deploy",
+      "options": [
+        {
+          "text": "CI plus Preview plus Prod.",
+          "isCorrect": true,
+          "explanation": "Richtig."
+        },
+        {
+          "text": "Nur manuell USB. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Kein Git. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Kein Test. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        }
+      ]
+    },
+    {
+      "question": "Stakeholder?",
+      "area": "Vercel-Deploy",
+      "options": [
+        {
+          "text": "Preview zum Abnehmen.",
+          "isCorrect": true,
+          "explanation": "Richtig."
+        },
+        {
+          "text": "Nur Code lesen. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Nur Logs. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Nur PDF. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        }
+      ]
+    },
+    {
+      "question": "SSL Preview?",
+      "area": "Vercel-Deploy",
+      "options": [
+        {
+          "text": "Meist automatisch HTTPS.",
+          "isCorrect": true,
+          "explanation": "Richtig."
+        },
+        {
+          "text": "Nur HTTP.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Nur SSH.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Nur Telnet.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        }
+      ]
+    },
+    {
+      "question": "Produktionsregel?",
+      "area": "Vercel-Deploy",
+      "options": [
+        {
+          "text": "Preview reviewed vor Prod.",
+          "isCorrect": true,
+          "explanation": "Richtig."
+        },
+        {
+          "text": "Direct Prod always. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Kein Monitor. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Kein Rollback Plan. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Oeffne eine Preview-URL eines PR und liste drei Checkpunkte.",
+    "expectation": "Du kannst Vercel-Deploy begruenden.",
+    "checklist": [
+      "Preview geoeffnet.",
+      "Drei Checks.",
+      "Rollback-Prozedur skizziert."
+    ],
+    "portfolioItem": "P01"
+  },
+  "audio": {
+    "file": "M09-01-02.mp3",
+    "durationSeconds": 1002,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Preview fuer wen?",
+      "answer": "Team, Reviewer, Stakeholder. Nicht fuer geheime Daten ohne Schutz. Merksatz: Bei Deploys und Vorschau-Umgebungen zaehlt die verstaendliche Erklaerung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    },
+    {
+      "question": "Production wann?",
+      "answer": "Nach gruenen Checks und Review. Nie Freitag ohne Bereitschaft optional Regel. Merksatz: Bei Deploys und Vorschau-Umgebungen zaehlt die verstaendliche Erklaerung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    },
+    {
+      "question": "Rollback Dauer?",
+      "answer": "Oft Minuten bei Vercel. Trotzdem Incident kommunizieren. Merksatz: Bei Deploys und Vorschau-Umgebungen zaehlt die verstaendliche Erklaerung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    },
+    {
+      "question": "Alias aendern?",
+      "answer": "DNS und Domain Einstellungen beachten. SSL automatisch, trotzdem pruefen. Merksatz: Bei Deploys und Vorschau-Umgebungen zaehlt die verstaendliche Erklaerung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    },
+    {
+      "question": "Env pro Preview?",
+      "answer": "Koennen von Production abweichen. Dummy-Daten in Preview nutzen. Merksatz: Bei Deploys und Vorschau-Umgebungen zaehlt die verstaendliche Erklaerung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    }
+  ]
+}

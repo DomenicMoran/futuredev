@@ -1,0 +1,1020 @@
+{
+  "id": "M08-03-02",
+  "title": "Anthropic und OpenAI im Vergleich",
+  "durationMinutes": 20,
+  "prerequisites": [
+    "M08-03-01"
+  ],
+  "terms": [
+    {
+      "term": "Claude-Modell-Familie",
+      "definition": "Die Modellreihe von Anthropic, darunter Varianten fuer schnelle und fuer tiefe Aufgaben. Die Claude-Modell-Familie legt Wert auf laenge Kontexte und instruktionstreues Verhalten."
+    },
+    {
+      "term": "GPT-Modell-Familie",
+      "definition": "Die Modellreihe von OpenAI mit verschiedenen Groessen und Faehigkeiten. Die GPT-Modell-Familie ist weit verbreitet und hat ein grosses Oekosystem an Tools und Integrationen."
+    },
+    {
+      "term": "Anbieter-Schnittstelle",
+      "definition": "Das gemeinsame Muster aus Endpunkt, Auth-Header, messages-Format und Preismodell, das du beim Wechsel zwischen Anbietern abstrahieren solltest. Eine stabile Anbieter-Schnittstelle in deinem Code erleichtert Anbieterwechsel."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir zwei Taxifirmen vor. Beide bringen dich ans Ziel, aber Fahrpreis, Komfort und Wartezeit unterscheiden sich. Claude-Modell-Familie und GPT-Modell-Familie sind solche Anbieter fuer KI-Aufgaben.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Anthropic und OpenAI bieten aehnliche APIs mit unterschiedlichen Staerken. Vergleiche Claude-Modell-Familie und GPT-Modell-Familie anhand deiner Aufgabe. Kapsle Unterschiede hinter einer Anbieter-Schnittstelle in deinem Code.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was bedeutet Claude-Modell-Familie, und wo triffst du es in der Praxis?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir LLM-Anbieter wie ein Werkzeug in einer Werkstatt vor. Jeder Claude-Modell-Familie hat einen festen Platz. Ohne ihn wird die Arbeit unsicher oder langsam. Das 1. Werkzeug in dieser Lektion ist Claude-Modell-Familie.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Claude-Modell-Familie ist ein zentraler Baustein bei Anthropic und OpenAI im Vergleich. Du lernst hier, wie es funktioniert und warum Teams es nutzen. Wir erklaeren jeden Schritt in einfachen Worten, ohne Vorwissen vorauszusetzen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Claude-Modell-Familie ist: Die Modellreihe von Anthropic, darunter Varianten fuer schnelle und fuer tiefe Aufgaben.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Beispiel zu Claude-Modell-Familie: In FutureDev oder deinem Lernprojekt siehst du Claude-Modell-Familie bei echter Arbeit. Schau ins Repo repo-futuredev und finde eine Stelle, die du in eigenen Worten erklaeren kannst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Ohne Verstaendnis von Claude-Modell-Familie kopierst du nur Anleitungen. Mit Verstaendnis erkennst du Fehler frueh und triffst bessere Entscheidungen bei LLM-Anbieter.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was bedeutet GPT-Modell-Familie, und wo triffst du es in der Praxis?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir LLM-Anbieter wie ein Werkzeug in einer Werkstatt vor. Jeder GPT-Modell-Familie hat einen festen Platz. Ohne ihn wird die Arbeit unsicher oder langsam. Das 2. Werkzeug in dieser Lektion ist GPT-Modell-Familie.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "GPT-Modell-Familie ist ein zentraler Baustein bei Anthropic und OpenAI im Vergleich. Du lernst hier, wie es funktioniert und warum Teams es nutzen. Wir erklaeren jeden Schritt in einfachen Worten, ohne Vorwissen vorauszusetzen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "GPT-Modell-Familie ist: Die Modellreihe von OpenAI mit verschiedenen Groessen und Faehigkeiten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Beispiel zu GPT-Modell-Familie: In FutureDev oder deinem Lernprojekt siehst du GPT-Modell-Familie bei echter Arbeit. Schau ins Repo repo-futuredev und finde eine Stelle, die du in eigenen Worten erklaeren kannst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Ohne Verstaendnis von GPT-Modell-Familie kopierst du nur Anleitungen. Mit Verstaendnis erkennst du Fehler frueh und triffst bessere Entscheidungen bei LLM-Anbieter.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was bedeutet Anbieter-Schnittstelle, und wo triffst du es in der Praxis?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir LLM-Anbieter wie ein Werkzeug in einer Werkstatt vor. Jeder Anbieter-Schnittstelle hat einen festen Platz. Ohne ihn wird die Arbeit unsicher oder langsam. Das 3. Werkzeug in dieser Lektion ist Anbieter-Schnittstelle.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Anbieter-Schnittstelle ist ein zentraler Baustein bei Anthropic und OpenAI im Vergleich. Du lernst hier, wie es funktioniert und warum Teams es nutzen. Wir erklaeren jeden Schritt in einfachen Worten, ohne Vorwissen vorauszusetzen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Anbieter-Schnittstelle ist: Das gemeinsame Muster aus Endpunkt, Auth-Header, messages-Format und Preismodell, das du beim Wechsel zwischen Anbietern abstrahieren solltest.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Beispiel zu Anbieter-Schnittstelle: In FutureDev oder deinem Lernprojekt siehst du Anbieter-Schnittstelle bei echter Arbeit. Schau ins Repo repo-futuredev und finde eine Stelle, die du in eigenen Worten erklaeren kannst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Ohne Verstaendnis von Anbieter-Schnittstelle kopierst du nur Anleitungen. Mit Verstaendnis erkennst du Fehler frueh und triffst bessere Entscheidungen bei LLM-Anbieter.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "text": "Waehle Anbieter nach Aufgabe, nicht nach Hype. Abstrahiere die Schnittstelle.",
+      "isKeySentence": true
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Lass uns LLM-Anbieter noch einmal aus einem anderen Blickwinkel betrachten. Viele Anfaenger ueberspringen diesen Schritt und wundern sich spaeter ueber Fehler. Wenn du jeden Gedanken langsam nachvollziehst, wirst du sicherer. Das gilt besonders fuer Anthropic und OpenAI im Vergleich.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In FutureDev nutzen wir LLM-Anbieter bei echten Aufgaben. Du siehst den Ablauf im Repo und kannst ihn Schritt fuer Schritt nachbauen. So verbindet sich Theorie mit deiner eigenen Praxis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Warum ist LLM-Anbieter wichtig? Weil du ohne dieses Verstaendnis nur Anweisungen kopierst. Mit Verstaendnis kannst du Fehler erkennen und bessere Entscheidungen treffen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was soll ich mir bei LLM-Anbieter zuerst merken?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Merke dir den Ablauf: erst das Bild, dann die Erklaerung, dann der Fachausdruck, dann ein Beispiel, dann der Warum-Satz. Genau dieses Muster hilft dir bei Anthropic und OpenAI im Vergleich.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Stell dir vor, du erklaerst LLM-Anbieter einem Freund ohne Technikwissen. Du wuerdest kein Fachwort ohne Beispiel benutzen. Genau so baut FutureDev jede Lektion auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Gute Entwickler koennen LLM-Anbieter in einfachen Worten erklaeren. Das ist ein Zeichen von echtem Verstaendnis, nicht von Auswendiglernen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Lass uns LLM-Anbieter noch einmal aus einem anderen Blickwinkel betrachten. Viele Anfaenger ueberspringen diesen Schritt und wundern sich spaeter ueber Fehler. Wenn du jeden Gedanken langsam nachvollziehst, wirst du sicherer. Das gilt besonders fuer Anthropic und OpenAI im Vergleich.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In FutureDev nutzen wir LLM-Anbieter bei echten Aufgaben. Du siehst den Ablauf im Repo und kannst ihn Schritt fuer Schritt nachbauen. So verbindet sich Theorie mit deiner eigenen Praxis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Warum ist LLM-Anbieter wichtig? Weil du ohne dieses Verstaendnis nur Anweisungen kopierst. Mit Verstaendnis kannst du Fehler erkennen und bessere Entscheidungen treffen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was soll ich mir bei LLM-Anbieter zuerst merken?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Merke dir den Ablauf: erst das Bild, dann die Erklaerung, dann der Fachausdruck, dann ein Beispiel, dann der Warum-Satz. Genau dieses Muster hilft dir bei Anthropic und OpenAI im Vergleich.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Stell dir vor, du erklaerst LLM-Anbieter einem Freund ohne Technikwissen. Du wuerdest kein Fachwort ohne Beispiel benutzen. Genau so baut FutureDev jede Lektion auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Gute Entwickler koennen LLM-Anbieter in einfachen Worten erklaeren. Das ist ein Zeichen von echtem Verstaendnis, nicht von Auswendiglernen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Lass uns LLM-Anbieter noch einmal aus einem anderen Blickwinkel betrachten. Viele Anfaenger ueberspringen diesen Schritt und wundern sich spaeter ueber Fehler. Wenn du jeden Gedanken langsam nachvollziehst, wirst du sicherer. Das gilt besonders fuer Anthropic und OpenAI im Vergleich.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In FutureDev nutzen wir LLM-Anbieter bei echten Aufgaben. Du siehst den Ablauf im Repo und kannst ihn Schritt fuer Schritt nachbauen. So verbindet sich Theorie mit deiner eigenen Praxis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Warum ist LLM-Anbieter wichtig? Weil du ohne dieses Verstaendnis nur Anweisungen kopierst. Mit Verstaendnis kannst du Fehler erkennen und bessere Entscheidungen treffen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was soll ich mir bei LLM-Anbieter zuerst merken?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Merke dir den Ablauf: erst das Bild, dann die Erklaerung, dann der Fachausdruck, dann ein Beispiel, dann der Warum-Satz. Genau dieses Muster hilft dir bei Anthropic und OpenAI im Vergleich.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Stell dir vor, du erklaerst LLM-Anbieter einem Freund ohne Technikwissen. Du wuerdest kein Fachwort ohne Beispiel benutzen. Genau so baut FutureDev jede Lektion auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Gute Entwickler koennen LLM-Anbieter in einfachen Worten erklaeren. Das ist ein Zeichen von echtem Verstaendnis, nicht von Auswendiglernen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Lass uns LLM-Anbieter noch einmal aus einem anderen Blickwinkel betrachten. Viele Anfaenger ueberspringen diesen Schritt und wundern sich spaeter ueber Fehler. Wenn du jeden Gedanken langsam nachvollziehst, wirst du sicherer. Das gilt besonders fuer Anthropic und OpenAI im Vergleich.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In FutureDev nutzen wir LLM-Anbieter bei echten Aufgaben. Du siehst den Ablauf im Repo und kannst ihn Schritt fuer Schritt nachbauen. So verbindet sich Theorie mit deiner eigenen Praxis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Warum ist LLM-Anbieter wichtig? Weil du ohne dieses Verstaendnis nur Anweisungen kopierst. Mit Verstaendnis kannst du Fehler erkennen und bessere Entscheidungen treffen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was soll ich mir bei LLM-Anbieter zuerst merken?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Merke dir den Ablauf: erst das Bild, dann die Erklaerung, dann der Fachausdruck, dann ein Beispiel, dann der Warum-Satz. Genau dieses Muster hilft dir bei Anthropic und OpenAI im Vergleich.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Stell dir vor, du erklaerst LLM-Anbieter einem Freund ohne Technikwissen. Du wuerdest kein Fachwort ohne Beispiel benutzen. Genau so baut FutureDev jede Lektion auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Gute Entwickler koennen LLM-Anbieter in einfachen Worten erklaeren. Das ist ein Zeichen von echtem Verstaendnis, nicht von Auswendiglernen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Lass uns LLM-Anbieter noch einmal aus einem anderen Blickwinkel betrachten. Viele Anfaenger ueberspringen diesen Schritt und wundern sich spaeter ueber Fehler. Wenn du jeden Gedanken langsam nachvollziehst, wirst du sicherer. Das gilt besonders fuer Anthropic und OpenAI im Vergleich.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In FutureDev nutzen wir LLM-Anbieter bei echten Aufgaben. Du siehst den Ablauf im Repo und kannst ihn Schritt fuer Schritt nachbauen. So verbindet sich Theorie mit deiner eigenen Praxis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Warum ist LLM-Anbieter wichtig? Weil du ohne dieses Verstaendnis nur Anweisungen kopierst. Mit Verstaendnis kannst du Fehler erkennen und bessere Entscheidungen treffen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was soll ich mir bei LLM-Anbieter zuerst merken?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Merke dir den Ablauf: erst das Bild, dann die Erklaerung, dann der Fachausdruck, dann ein Beispiel, dann der Warum-Satz. Genau dieses Muster hilft dir bei Anthropic und OpenAI im Vergleich.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Stell dir vor, du erklaerst LLM-Anbieter einem Freund ohne Technikwissen. Du wuerdest kein Fachwort ohne Beispiel benutzen. Genau so baut FutureDev jede Lektion auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Gute Entwickler koennen LLM-Anbieter in einfachen Worten erklaeren. Das ist ein Zeichen von echtem Verstaendnis, nicht von Auswendiglernen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Lass uns LLM-Anbieter noch einmal aus einem anderen Blickwinkel betrachten. Viele Anfaenger ueberspringen diesen Schritt und wundern sich spaeter ueber Fehler. Wenn du jeden Gedanken langsam nachvollziehst, wirst du sicherer. Das gilt besonders fuer Anthropic und OpenAI im Vergleich.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In FutureDev nutzen wir LLM-Anbieter bei echten Aufgaben. Du siehst den Ablauf im Repo und kannst ihn Schritt fuer Schritt nachbauen. So verbindet sich Theorie mit deiner eigenen Praxis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Warum ist LLM-Anbieter wichtig? Weil du ohne dieses Verstaendnis nur Anweisungen kopierst. Mit Verstaendnis kannst du Fehler erkennen und bessere Entscheidungen treffen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was soll ich mir bei LLM-Anbieter zuerst merken?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Merke dir den Ablauf: erst das Bild, dann die Erklaerung, dann der Fachausdruck, dann ein Beispiel, dann der Warum-Satz. Genau dieses Muster hilft dir bei Anthropic und OpenAI im Vergleich.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Stell dir vor, du erklaerst LLM-Anbieter einem Freund ohne Technikwissen. Du wuerdest kein Fachwort ohne Beispiel benutzen. Genau so baut FutureDev jede Lektion auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Gute Entwickler koennen LLM-Anbieter in einfachen Worten erklaeren. Das ist ein Zeichen von echtem Verstaendnis, nicht von Auswendiglernen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Lass uns LLM-Anbieter noch einmal aus einem anderen Blickwinkel betrachten. Viele Anfaenger ueberspringen diesen Schritt und wundern sich spaeter ueber Fehler. Wenn du jeden Gedanken langsam nachvollziehst, wirst du sicherer. Das gilt besonders fuer Anthropic und OpenAI im Vergleich.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In FutureDev nutzen wir LLM-Anbieter bei echten Aufgaben. Du siehst den Ablauf im Repo und kannst ihn Schritt fuer Schritt nachbauen. So verbindet sich Theorie mit deiner eigenen Praxis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Warum ist LLM-Anbieter wichtig? Weil du ohne dieses Verstaendnis nur Anweisungen kopierst. Mit Verstaendnis kannst du Fehler erkennen und bessere Entscheidungen treffen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was soll ich mir bei LLM-Anbieter zuerst merken?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Merke dir den Ablauf: erst das Bild, dann die Erklaerung, dann der Fachausdruck, dann ein Beispiel, dann der Warum-Satz. Genau dieses Muster hilft dir bei Anthropic und OpenAI im Vergleich.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Stell dir vor, du erklaerst LLM-Anbieter einem Freund ohne Technikwissen. Du wuerdest kein Fachwort ohne Beispiel benutzen. Genau so baut FutureDev jede Lektion auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Gute Entwickler koennen LLM-Anbieter in einfachen Worten erklaeren. Das ist ein Zeichen von echtem Verstaendnis, nicht von Auswendiglernen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Lass uns LLM-Anbieter noch einmal aus einem anderen Blickwinkel betrachten. Viele Anfaenger ueberspringen diesen Schritt und wundern sich spaeter ueber Fehler. Wenn du jeden Gedanken langsam nachvollziehst, wirst du sicherer. Das gilt besonders fuer Anthropic und OpenAI im Vergleich.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In FutureDev nutzen wir LLM-Anbieter bei echten Aufgaben. Du siehst den Ablauf im Repo und kannst ihn Schritt fuer Schritt nachbauen. So verbindet sich Theorie mit deiner eigenen Praxis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Warum ist LLM-Anbieter wichtig? Weil du ohne dieses Verstaendnis nur Anweisungen kopierst. Mit Verstaendnis kannst du Fehler erkennen und bessere Entscheidungen treffen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was soll ich mir bei LLM-Anbieter zuerst merken?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Merke dir den Ablauf: erst das Bild, dann die Erklaerung, dann der Fachausdruck, dann ein Beispiel, dann der Warum-Satz. Genau dieses Muster hilft dir bei Anthropic und OpenAI im Vergleich.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Stell dir vor, du erklaerst LLM-Anbieter einem Freund ohne Technikwissen. Du wuerdest kein Fachwort ohne Beispiel benutzen. Genau so baut FutureDev jede Lektion auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Gute Entwickler koennen LLM-Anbieter in einfachen Worten erklaeren. Das ist ein Zeichen von echtem Verstaendnis, nicht von Auswendiglernen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Lass uns LLM-Anbieter noch einmal aus einem anderen Blickwinkel betrachten. Viele Anfaenger ueberspringen diesen Schritt und wundern sich spaeter ueber Fehler. Wenn du jeden Gedanken langsam nachvollziehst, wirst du sicherer. Das gilt besonders fuer Anthropic und OpenAI im Vergleich.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In FutureDev nutzen wir LLM-Anbieter bei echten Aufgaben. Du siehst den Ablauf im Repo und kannst ihn Schritt fuer Schritt nachbauen. So verbindet sich Theorie mit deiner eigenen Praxis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Warum ist LLM-Anbieter wichtig? Weil du ohne dieses Verstaendnis nur Anweisungen kopierst. Mit Verstaendnis kannst du Fehler erkennen und bessere Entscheidungen treffen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was soll ich mir bei LLM-Anbieter zuerst merken?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Merke dir den Ablauf: erst das Bild, dann die Erklaerung, dann der Fachausdruck, dann ein Beispiel, dann der Warum-Satz. Genau dieses Muster hilft dir bei Anthropic und OpenAI im Vergleich.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Stell dir vor, du erklaerst LLM-Anbieter einem Freund ohne Technikwissen. Du wuerdest kein Fachwort ohne Beispiel benutzen. Genau so baut FutureDev jede Lektion auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Gute Entwickler koennen LLM-Anbieter in einfachen Worten erklaeren. Das ist ein Zeichen von echtem Verstaendnis, nicht von Auswendiglernen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Lass uns LLM-Anbieter noch einmal aus einem anderen Blickwinkel betrachten. Viele Anfaenger ueberspringen diesen Schritt und wundern sich spaeter ueber Fehler. Wenn du jeden Gedanken langsam nachvollziehst, wirst du sicherer. Das gilt besonders fuer Anthropic und OpenAI im Vergleich.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In FutureDev nutzen wir LLM-Anbieter bei echten Aufgaben. Du siehst den Ablauf im Repo und kannst ihn Schritt fuer Schritt nachbauen. So verbindet sich Theorie mit deiner eigenen Praxis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Warum ist LLM-Anbieter wichtig? Weil du ohne dieses Verstaendnis nur Anweisungen kopierst. Mit Verstaendnis kannst du Fehler erkennen und bessere Entscheidungen treffen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was soll ich mir bei LLM-Anbieter zuerst merken?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Merke dir den Ablauf: erst das Bild, dann die Erklaerung, dann der Fachausdruck, dann ein Beispiel, dann der Warum-Satz. Genau dieses Muster hilft dir bei Anthropic und OpenAI im Vergleich.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Stell dir vor, du erklaerst LLM-Anbieter einem Freund ohne Technikwissen. Du wuerdest kein Fachwort ohne Beispiel benutzen. Genau so baut FutureDev jede Lektion auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Gute Entwickler koennen LLM-Anbieter in einfachen Worten erklaeren. Das ist ein Zeichen von echtem Verstaendnis, nicht von Auswendiglernen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Lass uns LLM-Anbieter noch einmal aus einem anderen Blickwinkel betrachten. Viele Anfaenger ueberspringen diesen Schritt und wundern sich spaeter ueber Fehler. Wenn du jeden Gedanken langsam nachvollziehst, wirst du sicherer. Das gilt besonders fuer Anthropic und OpenAI im Vergleich.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Die Begriffe dieser Lektion: Claude-Modell-Familie, GPT-Modell-Familie, Anbieter-Schnittstelle.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Claude-Modell-Familie: Die Modellreihe von Anthropic, darunter Varianten fuer schnelle und fuer tiefe Aufgaben. Die Claude-Modell-Familie legt Wert auf laenge Kontexte und instruktionstreues Verhalten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "GPT-Modell-Familie: Die Modellreihe von OpenAI mit verschiedenen Groessen und Faehigkeiten. Die GPT-Modell-Familie ist weit verbreitet und hat ein grosses Oekosystem an Tools und Integrationen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Anbieter-Schnittstelle: Das gemeinsame Muster aus Endpunkt, Auth-Header, messages-Format und Preismodell, das du beim Wechsel zwischen Anbietern abstrahieren solltest. Eine stabile Anbieter-Schnittstelle in deinem Code erleichtert Anbieterwechsel.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Kann ich beide parallel nutzen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ja, mit Adapter-Schicht im Code. Wechsle nicht pro Request wild ohne Grund. Merksatz: Bei Anthropic und OpenAI im Vergleich zaehlt die verstaendliche Erklaerung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was ist mit Datenschutz?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Pruefe DPA und Region pro Anbieter. Keine Kundendaten ohne Vertrag in Prompts. Merksatz: Bei Anthropic und OpenAI im Vergleich zaehlt die verstaendliche Erklaerung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Wechsel wegen Preis?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Moeglich, wenn Schnittstelle abstrahiert ist. Messt Kosten pro erfolgreicher Aufgabe. Merksatz: Bei Anthropic und OpenAI im Vergleich zaehlt die verstaendliche Erklaerung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Welches Modell fuer Code?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Haengt von Tests und Review ab. Kein Modell ersetzt deine Pruefung. Merksatz: Bei Anthropic und OpenAI im Vergleich zaehlt die verstaendliche Erklaerung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Vendor Lock-in vermeiden?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Eigene Adapter und keine exotischen Features. Prompts an Standard messages koppeln. Merksatz: Bei Anthropic und OpenAI im Vergleich zaehlt die verstaendliche Erklaerung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    }
+  ],
+  "practiceExample": {
+    "text": "Erkunde LLM-Anbieter im Repo und notiere eine Fundstelle, die du erklaeren kannst.",
+    "repoNote": "repo-futuredev",
+    "location": "Dokumentation externer Anbieter plus eigene Adapter-Schicht"
+  },
+  "quiz": [
+    {
+      "question": "Claude-Modell-Familie?",
+      "area": "LLM-Anbieter",
+      "options": [
+        {
+          "text": "Anthropic Modellreihe.",
+          "isCorrect": true,
+          "explanation": "Richtig."
+        },
+        {
+          "text": "Google DNS Produkt.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Stripe Checkout.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Cloudflare Worker only.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        }
+      ]
+    },
+    {
+      "question": "GPT-Modell-Familie?",
+      "area": "LLM-Anbieter",
+      "options": [
+        {
+          "text": "OpenAI Modellreihe.",
+          "isCorrect": true,
+          "explanation": "Richtig."
+        },
+        {
+          "text": "Linux Kernel.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "React Hook.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "PostgreSQL Index.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        }
+      ]
+    },
+    {
+      "question": "Anbieter-Schnittstelle?",
+      "area": "LLM-Anbieter",
+      "options": [
+        {
+          "text": "Abstraktion ueber konkrete APIs.",
+          "isCorrect": true,
+          "explanation": "Richtig."
+        },
+        {
+          "text": "Hardcoded OpenAI only forever.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Kein Error Handling.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Nur Frontend Fetch.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        }
+      ]
+    },
+    {
+      "question": "Vergleichskriterium?",
+      "area": "LLM-Anbieter",
+      "options": [
+        {
+          "text": "Kosten, Kontext, Qualitaet, Datenschutz.",
+          "isCorrect": true,
+          "explanation": "Richtig."
+        },
+        {
+          "text": "Logo-Farbe.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Groesse der Webseite.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Anzahl Mitarbeiter only.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        }
+      ]
+    },
+    {
+      "question": "Lock-in Risiko?",
+      "area": "LLM-Anbieter",
+      "options": [
+        {
+          "text": "Exotische proprietaere Felder.",
+          "isCorrect": true,
+          "explanation": "Richtig."
+        },
+        {
+          "text": "Standard messages Array.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Env fuer Keys.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Tests fuer Adapter.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        }
+      ]
+    },
+    {
+      "question": "EU-Daten?",
+      "area": "LLM-Anbieter",
+      "options": [
+        {
+          "text": "Region und Vertrag pruefen.",
+          "isCorrect": true,
+          "explanation": "Richtig."
+        },
+        {
+          "text": "Ignorieren.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Im Prompt posten.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Oeffentlich loggen.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        }
+      ]
+    },
+    {
+      "question": "Multi-Anbieter?",
+      "area": "LLM-Anbieter",
+      "options": [
+        {
+          "text": "Adapter Pattern im Backend.",
+          "isCorrect": true,
+          "explanation": "Richtig."
+        },
+        {
+          "text": "Zwei Keys im Client.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Keys in Git.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Kein Monitoring.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        }
+      ]
+    },
+    {
+      "question": "Qualitaet messen?",
+      "area": "LLM-Anbieter",
+      "options": [
+        {
+          "text": "Feste Benchmark-Aufgaben.",
+          "isCorrect": true,
+          "explanation": "Richtig."
+        },
+        {
+          "text": "Eine Demo reicht.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Nur Twitter Meinung.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Gar nicht.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        }
+      ]
+    },
+    {
+      "question": "Kosten vergleichen?",
+      "area": "LLM-Anbieter",
+      "options": [
+        {
+          "text": "Preis pro Million Tokens plus Erfolgsrate.",
+          "isCorrect": true,
+          "explanation": "Richtig."
+        },
+        {
+          "text": "Nur Monatsabo.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Nur Gratis-Tier.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Ignorieren.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        }
+      ]
+    },
+    {
+      "question": "Code-Aufgaben?",
+      "area": "LLM-Anbieter",
+      "options": [
+        {
+          "text": "Modell plus Review plus Tests.",
+          "isCorrect": true,
+          "explanation": "Richtig."
+        },
+        {
+          "text": "Modell allein reicht.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Kein Git noetig.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Kein Lint noetig.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        }
+      ]
+    },
+    {
+      "question": "FutureDev Nutzung?",
+      "area": "LLM-Anbieter",
+      "options": [
+        {
+          "text": "Vertonung und Content-Hilfe moeglich.",
+          "isCorrect": true,
+          "explanation": "Richtig."
+        },
+        {
+          "text": "Ersetzt Autoren komplett.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Ohne Validierung.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Ohne Kostenblick.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        }
+      ]
+    },
+    {
+      "question": "Empfehlung Anfaenger?",
+      "area": "LLM-Anbieter",
+      "options": [
+        {
+          "text": "Ein Anbieter lernen, dann abstrahieren.",
+          "isCorrect": true,
+          "explanation": "Richtig."
+        },
+        {
+          "text": "Alle gleichzeitig ohne Plan.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Nur lokale Modelle only.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Keine Docs lesen.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Schreibe eine Entscheidungsmatrix mit drei Kriterien fuer dein Projekt.",
+    "expectation": "Du kannst LLM-Anbieter in einfachen Worten erklaeren und ein Beispiel zeigen.",
+    "checklist": [
+      "Kriterien definiert.",
+      "Zwei Anbieter verglichen.",
+      "Empfehlung begruendet."
+    ],
+    "portfolioItem": "P04"
+  },
+  "audio": {
+    "file": "M08-03-02.mp3",
+    "durationSeconds": 1008,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Kann ich beide parallel nutzen?",
+      "answer": "Ja, mit Adapter-Schicht im Code. Wechsle nicht pro Request wild ohne Grund. Merksatz: Bei Anthropic und OpenAI im Vergleich zaehlt die verstaendliche Erklaerung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    },
+    {
+      "question": "Was ist mit Datenschutz?",
+      "answer": "Pruefe DPA und Region pro Anbieter. Keine Kundendaten ohne Vertrag in Prompts. Merksatz: Bei Anthropic und OpenAI im Vergleich zaehlt die verstaendliche Erklaerung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    },
+    {
+      "question": "Wechsel wegen Preis?",
+      "answer": "Moeglich, wenn Schnittstelle abstrahiert ist. Messt Kosten pro erfolgreicher Aufgabe. Merksatz: Bei Anthropic und OpenAI im Vergleich zaehlt die verstaendliche Erklaerung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    },
+    {
+      "question": "Welches Modell fuer Code?",
+      "answer": "Haengt von Tests und Review ab. Kein Modell ersetzt deine Pruefung. Merksatz: Bei Anthropic und OpenAI im Vergleich zaehlt die verstaendliche Erklaerung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    },
+    {
+      "question": "Vendor Lock-in vermeiden?",
+      "answer": "Eigene Adapter und keine exotischen Features. Prompts an Standard messages koppeln. Merksatz: Bei Anthropic und OpenAI im Vergleich zaehlt die verstaendliche Erklaerung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    }
+  ]
+}

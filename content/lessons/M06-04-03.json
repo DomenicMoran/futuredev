@@ -1,0 +1,779 @@
+{
+  "id": "M06-04-03",
+  "title": "Tastaturnavigation und barrierefreie Formulare",
+  "durationMinutes": 30,
+  "prerequisites": [
+    "M06-04-01",
+    "M06-04-02"
+  ],
+  "terms": [
+    {
+      "term": "Skip-Link",
+      "definition": "Ein versteckter Link am Anfang der Seite, der es Tastaturnutzern ermöglicht, die Navigation zu überspringen und direkt zum Hauptinhalt zu springen. Der Skip-Link wird sichtbar, sobald er den Fokus erhält. Ohne Skip-Link muss der Nutzer bei jedem Seitenaufruf durch die gesamte Navigation tabben, bevor er den Inhalt erreicht. Ein Skip-Link ist eine WCAG-A-Anforderung und eine der einfachsten Maßnahmen für bessere Tastaturnavigation."
+    },
+    {
+      "term": "Fehleridentifikation",
+      "definition": "Die WCAG-Anforderung, dass Eingabefehler dem Nutzer in Textform beschrieben und mit dem fehlerhaften Feld verknüpft werden müssen. Ein roter Rahmen allein reicht nicht. Der Fehlertext muss das Problem beschreiben und eine Korrekturanweisung geben, zum Beispiel: Die E-Mail-Adresse ist ungültig, bitte geben Sie eine Adresse mit @-Zeichen ein. Der Fehlertext muss mit aria-describedby mit dem Eingabefeld verknüpft sein, damit der Screenreader ihn vorliest."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du stehst vor einem Gebäude mit einer schweren Tür. Du hast nur einen Arm und kannst die Tür nicht aufdrücken. Neben der Tür ist ein kleiner Knopf, der die Tür automatisch öffnet. Du drückst ihn mit dem Ellenbogen, und die Tür geht auf. Dieser Knopf ist die Tastaturnavigation für motorisch eingeschränkte Nutzer. Er macht den Unterschied zwischen einer unzugänglichen und einer vollständig nutzbaren Anwendung. Ohne ihn stehst du vor verschlossenen Türen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Die Tastaturnavigation ist der zweite Pfeiler der Barrierefreiheit neben dem Screenreader. Viele Nutzer können keine Maus bedienen, sei es wegen motorischer Einschränkungen, Sehbehinderungen oder weil sie einen Screenreader nutzen,. der mit der Tastatur gesteuert wird. Jede Aktion in deiner App muss mit der Tastatur erreichbar und ausführbar sein. Das betrifft Links, Buttons, Formulare, Dropdowns, Modals und jede andere interaktive Komponente. Die Tastaturnavigation ist keine optionale Zusatzleistung, sondern eine Grundvoraussetzung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Wie funktioniert die Tastaturnavigation, und welche Elemente sind automatisch fokussierbar?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Die Tastaturnavigation folgt der DOM-Reihenfolge. Der Nutzer drückt Tab, um zum nächsten fokussierbaren Element zu springen, und Shift+Tab, um zurückzuspringen. Automatisch fokussierbar sind alle interaktiven Elemente: a mit href, button, input, select und textarea. Nicht fokussierbar sind div, span, p und andere nicht-interaktive Elemente. Wenn du ein div mit onClick verwendest, ist es für die Tastatur unsichtbar. Du musst tabindex=0 hinzufügen, um es fokussierbar zu machen, aber besser ist es, ein natives button-Element zu verwenden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Die Tastaturnavigation ermöglicht die Bedienung ohne Maus und muss jedes interaktive Element erreichen können.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In der FutureDev-App haben wir die Tastaturnavigation systematisch getestet. Wir haben die Maus weggelegt und sind nur mit Tab, Enter und Escape durch die App navigiert. Dabei fiel auf: Unser Dropdown-Menü öffnete sich nur bei Maus-Hover, nicht bei Tastatur-Fokus. Wir haben :focus-within im CSS ergänzt, sodass das Menü auch bei Tastatur-Fokus sichtbar wird. Ein weiterer Fund: Die Schließen-Buttons in Modals waren divs ohne tabindex und damit für die Tastatur unsichtbar. Wir haben sie durch native button-Elemente ersetzt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die Tastaturnavigation ist der Lackmustest für Barrierefreiheit. Wenn deine App mit der Tastatur bedienbar ist, ist sie mit hoher Wahrscheinlichkeit auch mit einem Screenreader und. anderen Hilfstechnologien bedienbar. Wenn nicht, ist sie für eine große Gruppe von Nutzern komplett unbenutzbar.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist ein Skip-Link, und wie setze ich ihn um?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir ein langes Telefonmenü vor: Drücken Sie die Eins für Service, die Zwei für Rechnung, die Drei. für Technik. Du musst dir alle Optionen anhören, bevor du zu deinem gewünschten Punkt kommst. Ein Skip-Link ist wie die Ansage: Oder drücken Sie die Null, um direkt mit einem Mitarbeiter zu sprechen. Er lässt dich die langen Menüs überspringen und direkt zum Ziel kommen. Für Tastaturnutzer ist der Skip-Link diese Null-Taste.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein Skip-Link ist ein Link am Anfang der Seite, der es Tastaturnutzern ermöglicht, die Navigation zu überspringen und. direkt zum Hauptinhalt zu springen. Ohne Skip-Link muss der Nutzer bei jedem Seitenaufruf durch alle Navigationslinks tabben, bevor er den eigentlichen Inhalt erreicht. Bei einer Seite mit zehn Navigationslinks sind das zehn Tab-Drucke, bei jeder Seite, immer wieder. Der Skip-Link ist das erste fokussierbare Element auf der Seite und wird sichtbar, sobald er den Fokus erhält. Er verlinkt auf die id des main-Elements.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Ein Skip-Link überspringt die Navigation und springt direkt zum Hauptinhalt, eine WCAG-A-Anforderung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In der FutureDev-App haben wir einen Skip-Link implementiert. Er ist das erste Element im body und hat den Text Zum Hauptinhalt springen. Im Normalzustand ist er mit CSS visuell versteckt, aber nicht mit display: none, denn das würde ihn auch. für Screenreader verstecken. Stattdessen nutzen wir eine sr-only-Klasse, die das Element visuell verbirgt, aber im Accessibility-Tree belässt. Bei Fokus wird der Link sichtbar und bietet eine klare Aktion an. Der Link zeigt auf main-content, die id des main-Elements.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Der Skip-Link ist eine der einfachsten und wirkungsvollsten Maßnahmen für Tastaturnutzer. Er kostet drei Zeilen HTML und spart dem Nutzer Dutzende von Tab-Drucken pro Seitenaufruf. Es gibt keinen Grund, keinen Skip-Link zu haben.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Wie mache ich Formulare barrierefrei?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir ein Papierformular vor, bei dem die Beschriftungen mit unsichtbarer Tinte geschrieben sind. Du siehst leere Felder und sollst etwas eintragen, aber du weißt nicht, was. Ein Screenreader-Nutzer erlebt ein Formular ohne label-Elemente genauso: Er hört Eingabefeld, Text, aber er weiß nicht, ob er. seinen Namen, seine E-Mail oder sein Passwort eingeben soll. Das label-Element ist die sichtbare Tinte für den Screenreader.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Barrierefreie Formulare folgen drei Regeln. Erstens: Jedes Eingabefeld braucht ein label-Element, das mit dem for-Attribut auf die id des Feldes verweist. Zweitens: Fehlermeldungen müssen in Textform erscheinen und mit aria-describedby mit dem Feld verknüpft sein. Drittens: Die Tabulator-Reihenfolge muss logisch sein und dem visuellen Layout entsprechen. Zusätzlich sollten Pflichtfelder mit einem Sternchen und dem aria-required-Attribut gekennzeichnet sein. Platzhalter im placeholder-Attribut ersetzen kein Label, weil sie verschwinden, sobald der Nutzer tippt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Das label-Element verknüpft eine Beschriftung mit einem Formularfeld und ist die Grundlage barrierefreier Formulare.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In der FutureDev-App ist jedes Formularfeld mit einem label verknüpft. Das Login-Formular hat label for=email, das auf input id=email verweist. Der Screenreader liest: E-Mail, Eingabefeld, Text. Bei einem Fehler erscheint unter dem Feld ein roter Text: Bitte geben Sie eine gültige E-Mail-Adresse ein. Dieser Text ist mit aria-describedby=email-error mit dem Eingabefeld verknüpft. Der Screenreader liest den Fehler vor, sobald das Feld fokussiert wird. Pflichtfelder haben aria-required=true und ein visuelles Sternchen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Formulare sind die häufigste Interaktion in Apps. Wenn deine Formulare nicht barrierefrei sind, können sich blinde Nutzer nicht registrieren, nicht einloggen und nicht bezahlen. Ein unzugängliches Formular ist eine unzugängliche App.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Wie identifiziere und beschreibe ich Eingabefehler barrierefrei?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Die WCAG verlangt, dass Eingabefehler dem Nutzer in Textform beschrieben werden. Ein roter Rahmen allein reicht nicht, weil farbenblinde und blinde Nutzer ihn nicht wahrnehmen. Der Fehlertext muss das Problem konkret beschreiben und eine Korrekturanweisung geben. Statt Ungültige Eingabe schreibst du: Die Postleitzahl muss aus fünf Ziffern bestehen, Sie haben nur vier eingegeben. Der Fehlertext muss mit aria-describedby mit dem Eingabefeld verknüpft sein. Zusätzlich sollte das fehlerhafte Feld aria-invalid=true erhalten, damit der Screenreader den Fehlerzustand ansagt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Die Fehleridentifikation verlangt Fehlermeldungen in Textform, die das Problem beschreiben und mit dem Feld verknüpft sind.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In der FutureDev-App zeigen wir Fehler so an: Unter dem fehlerhaften Feld erscheint ein roter Text mit einem. Warnsymbol. Der Text beschreibt das Problem konkret: Das Passwort muss mindestens acht Zeichen lang sein und eine Zahl enthalten. Das Eingabefeld bekommt aria-invalid=true und aria-describedby=password-error. Der Screenreader liest: Passwort, Eingabefeld, ungültig, das Passwort muss mindestens acht Zeichen lang sein und eine Zahl enthalten. Der Nutzer weiß sofort, was falsch ist und wie er es korrigieren kann.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Gute Fehlermeldungen sind nicht nur eine Frage der Barrierefreiheit, sondern auch der UX. Ein Nutzer, der nicht weiß, was er falsch gemacht hat, wird frustriert aufgeben. Ein Nutzer, der eine klare Korrekturanweisung bekommt, wird das Formular erfolgreich abschließen. Barrierefreiheit und gute UX gehen hier Hand in Hand.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Ein greifbares Beispiel für Fehleridentifikation: Die WCAG-Anforderung, dass Eingabefehler dem Nutzer in Textform beschrieben und mit dem fehlerhaften. Feld verknüpft werden müssen. Ein roter Rahmen allein reicht nicht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "text": "Also noch einmal ganz kurz: Die Tastaturnavigation muss jedes interaktive Element erreichen können, verwende native HTML-Elemente statt divs. mit onClick. Ein Skip-Link am Seitenanfang spart Tastaturnutzern Dutzende von Tab-Drucken. Formulare brauchen label-Elemente, die mit dem Eingabefeld verknüpft sind. Fehlermeldungen müssen das Problem in Textform beschreiben und mit aria-describedby mit dem Feld verknüpft sein. Und der beste Test ist, die Maus wegzulegen und die App nur mit der Tastatur zu bedienen.",
+      "isKeySentence": true
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Kannst du Tastaturnavigation und barrierefreie Formulare noch einmal mit einem Alltagbeispiel erklären, ohne Fachjargon?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du erklärst das Thema einem Freund am Küchentisch. Du fängst nicht mit dem Fachwort an, sondern mit dem Problem, das der Freund schon kennt. Genau so bauen wir hier das Verständnis auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der Kern von Tastaturnavigation und barrierefreie Formulare ist eine klare Reihenfolge: erst das Problem sehen, dann die Lösung. in einfachen Worten, dann den Fachbegriff, dann ein zweites Beispiel, und zum Schluss warum es in der Praxis. zählt. Wenn du diese fünf Schritte wiederholen kannst, hast du die Lektion verstanden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In echten Projekten scheitert Tastaturnavigation und barrierefreie Formulare selten an fehlender Intelligenz, sondern an fehlender Klarheit. Wer den Ablauf laut erklären kann, findet Fehler schneller und schreibt Code, den andere morgen noch lesen können.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Deshalb üben wir das Thema so ausführlich: in Bewerbungsgesprächen und im Alltag eines Product Engineers zählt nicht, ob. du das Schlagwort kennst, sondern ob du den Zusammenhang in eigenen Worten tragen kannst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist der häufigste Anfängerfehler bei diesem Thema, und wie erkenne ich ihn früh?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der häufigste Fehler ist, eine fertige Vorlage zu kopieren und zu glauben, das sei Verständnis. Stattdessen solltest du nach jedem Abschnitt eine eigene Mini-Zusammenfassung schreiben: ein Satz Problem, ein Satz Lösung, ein Satz. Fachbegriff. Wenn dir einer der drei Sätze fehlt, lies den Abschnitt noch einmal.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Ein praktischer Selbstcheck: Schließe die App, öffne einen leeren Editor und schreibe drei Sätze zu Tastaturnavigation und barrierefreie. Formulare. Wenn die Sätze ohne Abschreiben gelingen und ein konkretes Beispiel enthalten, sitzt der Stoff. Wenn nicht, spring zurück zum Alltagsbild am Anfang der Lektion.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du sitzt mit einem Freund am Küchentisch. Du erklärst das Thema ohne Fachwörter. Erst das Problem. Dann die einfache Lösung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Genau so lernen wir hier. Erst ein Bild aus dem Alltag. Dann die Erklärung in kurzen Sätzen. Dann der Fachbegriff. Dann ein zweites Beispiel. Zum Schluss warum es zählt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In echten Projekten scheitert Tastaturnavigation und barrierefreie Formulare selten an fehlender Intelligenz. Es scheitert an unklarer Sprache. Wer den Ablauf laut erklären kann, findet Fehler schneller.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Deshalb üben wir das Thema so gründlich. In Gesprächen zählt nicht das Schlagwort. Es zählt, ob du den Zusammenhang in eigenen Worten trägst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist der häufigste Anfängerfehler bei diesem Thema?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der häufigste Fehler ist Kopieren ohne Verständnis. Schreib nach jedem Abschnitt drei Sätze. Ein Satz Problem. Ein Satz Lösung. Ein Satz Fachbegriff.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Selbstcheck: Schließe die App. Öffne einen leeren Editor. Schreibe drei Sätze zu Tastaturnavigation und barrierefreie Formulare. Wenn das ohne Abschreiben gelingt, sitzt der Stoff.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Wenn dir einer der drei Sätze fehlt, spring zurück zum Alltagsbild. Lies den Abschnitt noch einmal laut. Dann schreib die drei Sätze erneut.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Diese Wiederholung spart später Wochen. Teams verlieren Zeit durch Missverständnisse. Klare Sprache ist deshalb Teil der Technik.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Kannst du Tastaturnavigation und barrierefreie Formulare noch einmal ganz langsam erklären?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du sitzt mit einem Freund am Küchentisch. Du erklärst das Thema ohne Fachwörter. Erst das Problem. Dann die einfache Lösung. Das gilt besonders für den Teil 11.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Genau so lernen wir hier. Erst ein Bild aus dem Alltag. Dann die Erklärung in kurzen Sätzen. Dann der Fachbegriff. Dann ein zweites Beispiel. Zum Schluss warum es zählt. Das gilt besonders für den Teil 12.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In echten Projekten scheitert Tastaturnavigation und barrierefreie Formulare selten an fehlender Intelligenz. Es scheitert an unklarer Sprache. Wer den Ablauf laut erklären kann, findet Fehler schneller. Das gilt besonders für den Teil 13.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Deshalb üben wir das Thema so gründlich. In Gesprächen zählt nicht das Schlagwort. Es zählt, ob du den Zusammenhang in eigenen Worten trägst. Das gilt besonders für den Teil 14.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist der häufigste Anfängerfehler bei diesem Thema? Das gilt besonders für den Teil 15.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der häufigste Fehler ist Kopieren ohne Verständnis. Schreib nach jedem Abschnitt drei Sätze. Ein Satz Problem. Ein Satz Lösung. Ein Satz Fachbegriff. Das gilt besonders für den Teil 16.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Selbstcheck: Schließe die App. Öffne einen leeren Editor. Schreibe drei Sätze zu Tastaturnavigation und barrierefreie Formulare. Wenn das ohne Abschreiben gelingt, sitzt der Stoff. Das gilt besonders für den Teil 17.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Wiederhole den Kern von Tastaturnavigation und barrierefreie Formulare in eigenen Worten. Ein Satz Problem. Ein Satz Lösung. Ein Satz Fachbegriff. Das festigt den Stoff.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Die Begriffe dieser Lektion: Skip-Link, Fehleridentifikation.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Ein Skip-Link ist ein versteckter Link am Anfang der Seite, der es Tastaturnutzern ermöglicht, die Navigation zu überspringen. und direkt zum Hauptinhalt zu springen. Der Skip-Link wird sichtbar, sobald er den Fokus erhält. Ohne Skip-Link muss der Nutzer bei jedem Seitenaufruf durch die gesamte Navigation tabben, bevor er den Inhalt erreicht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Das label-Element ist das HTML-Element, das eine Beschriftung mit einem Formularfeld verknüpft. Die Verknüpfung erfolgt über das for-Attribut des Labels, das der id des Eingabefelds entspricht. Ein korrekt verknüpftes Label macht das Formular für Screenreader zugänglich und vergrößert die Klickfläche. Platzhalter im placeholder-Attribut ersetzen kein Label.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Die Fehleridentifikation ist die WCAG-Anforderung, dass Eingabefehler dem Nutzer in Textform beschrieben und mit dem fehlerhaften Feld verknüpft. werden müssen. Ein roter Rahmen allein reicht nicht. Der Fehlertext muss das Problem beschreiben und eine Korrekturanweisung geben. Der Fehlertext muss mit aria-describedby mit dem Eingabefeld verknüpft sein.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Kann ich tabindex=1,2,3 verwenden, um die Tabulator-Reihenfolge festzulegen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Vermeide positive tabindex-Werte wie tabindex=1, tabindex=2. Sie zwingen eine feste Reihenfolge, die schwer zu warten ist und oft vom visuellen Layout abweicht. Besser ist es, die DOM-Reihenfolge dem visuellen Layout anzupassen, sodass die natürliche Tabulator-Reihenfolge korrekt ist. Verwende tabindex=0, um ein nicht-interaktives Element fokussierbar zu machen, und tabindex=-1, um ein Element programmatisch fokussierbar zu machen,. ohne es in die Tabulator-Reihenfolge aufzunehmen. Positive tabindex-Werte sind fast immer ein Zeichen für ein tieferliegendes Problem in der DOM-Struktur. Merksatz: Bei Tastaturnavigation und barrierefreie Formulare zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Warum ersetzen placeholder-Attribute kein label?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Platzhalter verschwinden, sobald der Nutzer zu tippen beginnt. Der Nutzer sieht dann ein leeres Feld und weiß nicht mehr, was er eingeben sollte. Außerdem haben Platzhalter oft zu wenig Kontrast, weil sie standardmäßig in hellem Grau dargestellt werden. Screenreader behandeln Platzhalter unterschiedlich und lesen sie nicht immer zuverlässig vor. Ein label-Element ist immer sichtbar, hat ausreichenden Kontrast und wird von allen Screenreadern korrekt vorgelesen. Platzhalter können zusätzlich verwendet werden, um ein Beispiel für das erwartete Format zu geben, aber sie ersetzen niemals. das label. Merksatz: Bei Tastaturnavigation und barrierefreie Formulare zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Wie mache ich eine Dropdown-Liste mit der Tastatur bedienbar?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Eine barrierefreie Dropdown-Liste verwendet das native select-Element, das automatisch mit Pfeiltasten bedienbar ist. Wenn du ein benutzerdefiniertes Dropdown baust, musst du die Tastaturbedienung selbst implementieren: Pfeil runter öffnet die Liste, Pfeil. hoch und runter navigieren durch die Optionen, Enter wählt eine Option aus, Escape schließt die Liste. Die Rolle listbox für den Container und option für die Einträge informieren den Screenreader. Der ausgewählte Wert muss mit aria-selected=true markiert sein. Am einfachsten ist es, das native select-Element zu verwenden und nur bei komplexen Anforderungen eine eigene Lösung zu. bauen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Muss ich wirklich jeden Tab-Druck testen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ja, der manuelle Tastaturtest ist unersetzlich. Automatisierte Tools können prüfen, ob Elemente fokussierbar sind, aber sie können nicht prüfen, ob die Reihenfolge logisch ist,. ob der Fokus-Indikator sichtbar bleibt und ob jede Aktion tatsächlich ausführbar ist. Nimm dir dreißig Minuten, lege die Maus weg und bediene deine App nur mit der Tastatur. Du wirst überrascht sein, wie viele Barrieren du findest. Dieser Test sollte Teil deiner Definition-of-Done für jedes Feature sein, genauso wie der Lighthouse-Test.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was ist der Unterschied zwischen aria-required und dem required-Attribut?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Das HTML-Attribut required verhindert das Absenden des Formulars, wenn das Feld leer ist, und zeigt eine Browser-eigene Fehlermeldung. aria-required=true informiert nur den Screenreader, dass das Feld ein Pflichtfeld ist, hat aber keine Auswirkung auf die Formularvalidierung. Du solltest beide verwenden: required für die native Validierung und aria-required für die Screenreader-Information. Wenn du eine eigene Validierung baust, kannst du auf required verzichten, aber aria-required solltest du trotzdem setzen, damit. der Screenreader das Feld als Pflichtfeld ansagt.",
+      "isKeySentence": false
+    }
+  ],
+  "practiceExample": {
+    "text": "Tastaturnavigation und barrierefreie Formulare in der FutureDev-App mit Skip-Link und aria-Verknüpfungen.",
+    "repoNote": "repo-futuredev",
+    "location": "apps/web/src/components/SkipLink.tsx, apps/web/src/components/FormField.tsx (label, aria-describedby, aria-invalid)"
+  },
+  "quiz": [
+    {
+      "question": "Welches Alltagsbild beschreibt die Tastaturnavigation am treffendsten?",
+      "area": "Tastaturnavigation",
+      "options": [
+        {
+          "text": "Ein Türöffner-Knopf neben einer schweren Tür für Menschen…",
+          "isCorrect": true,
+          "explanation": "Richtig: die Tastaturnavigation öffnet Türen für motorisch eingeschränkte Nutzer."
+        },
+        {
+          "text": "Eine Rolltreppe, die Menschen nach oben befördert.",
+          "isCorrect": false,
+          "explanation": "Falsch: eine Rolltreppe bewegt den Nutzer, die Tastatur bewegt den Fokus."
+        },
+        {
+          "text": "Ein Aufzug, der zwischen Stockwerken fährt.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Aufzug wechselt die Ebene, die Tastatur wechselt das Element."
+        },
+        {
+          "text": "Eine Rampe für Rollstuhlfahrer. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: eine Rampe ist für physische Zugänglichkeit, nicht für digitale."
+        }
+      ]
+    },
+    {
+      "question": "Welche Elemente sind automatisch mit der Tastatur fokussierbar?",
+      "area": "Tastaturnavigation",
+      "options": [
+        {
+          "text": "a mit href, button, input, select und textarea.",
+          "isCorrect": true,
+          "explanation": "Richtig: diese Elemente sind nativ fokussierbar."
+        },
+        {
+          "text": "div, span, p und section.",
+          "isCorrect": false,
+          "explanation": "Falsch: diese Elemente sind nicht nativ fokussierbar."
+        },
+        {
+          "text": "Nur a und button.",
+          "isCorrect": false,
+          "explanation": "Falsch: auch Formularelemente sind fokussierbar."
+        },
+        {
+          "text": "Alle HTML-Elemente sind automatisch fokussierbar.",
+          "isCorrect": false,
+          "explanation": "Falsch: nicht-interaktive Elemente sind nicht fokussierbar."
+        }
+      ]
+    },
+    {
+      "question": "Wofür ist ein Skip-Link da?",
+      "area": "Skip-Link",
+      "options": [
+        {
+          "text": "Um die Navigation zu überspringen und direkt zum Hauptinh…",
+          "isCorrect": true,
+          "explanation": "Richtig: der Skip-Link spart Tastaturnutzern viele Tab-Drucke."
+        },
+        {
+          "text": "Um die Seite schneller zu laden.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Skip-Link beeinflusst nicht die Ladezeit."
+        },
+        {
+          "text": "Um Werbung zu überspringen.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Skip-Link überspringt die Navigation, nicht Werbung."
+        },
+        {
+          "text": "Um den Login zu umgehen. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: der Skip-Link umgeht keine Sicherheitsmaßnahmen."
+        }
+      ]
+    },
+    {
+      "question": "Warum ersetzen placeholder-Attribute kein label-Element?",
+      "area": "Formulare",
+      "options": [
+        {
+          "text": "Weil Platzhalter verschwinden, sobald der Nutzer tippt, u…",
+          "isCorrect": true,
+          "explanation": "Richtig: Platzhalter sind keine dauerhafte Beschriftung."
+        },
+        {
+          "text": "Weil Platzhalter nur auf Englisch verfügbar sind.",
+          "isCorrect": false,
+          "explanation": "Falsch: Platzhalter können in jeder Sprache sein."
+        },
+        {
+          "text": "Weil Platzhalter die Ladezeit verlängern.",
+          "isCorrect": false,
+          "explanation": "Falsch: Platzhalter haben keinen Einfluss auf die Ladezeit."
+        },
+        {
+          "text": "Weil die DSGVO es verbietet. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: die DSGVO regelt keine Formulargestaltung."
+        }
+      ]
+    },
+    {
+      "question": "Welches Attribut verknüpft eine Fehlermeldung mit einem Eingabefeld?",
+      "area": "Fehleridentifikation",
+      "options": [
+        {
+          "text": "aria-describedby.",
+          "isCorrect": true,
+          "explanation": "Richtig: aria-describedby verknüpft die Fehlermeldung mit dem Feld."
+        },
+        {
+          "text": "aria-label. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: aria-label setzt einen Namen, verknüpft aber keine Beschreibung."
+        },
+        {
+          "text": "aria-hidden.",
+          "isCorrect": false,
+          "explanation": "Falsch: aria-hidden versteckt Elemente."
+        },
+        {
+          "text": "aria-required.",
+          "isCorrect": false,
+          "explanation": "Falsch: aria-required markiert Pflichtfelder."
+        }
+      ]
+    },
+    {
+      "question": "Warum sind positive tabindex-Werte wie tabindex=1 problematisch?",
+      "area": "Tastaturnavigation",
+      "options": [
+        {
+          "text": "Sie zwingen eine feste Reihenfolge, die schwer zu warten…",
+          "isCorrect": true,
+          "explanation": "Richtig: positive tabindex-Werte sind ein Wartungsalbtraum."
+        },
+        {
+          "text": "Sie machen die Seite langsamer.",
+          "isCorrect": false,
+          "explanation": "Falsch: tabindex hat keinen Einfluss auf die Performance."
+        },
+        {
+          "text": "Sie sind in HTML5 verboten. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: positive tabindex-Werte sind erlaubt, aber nicht empfohlen."
+        },
+        {
+          "text": "Sie funktionieren nur im Firefox.",
+          "isCorrect": false,
+          "explanation": "Falsch: tabindex funktioniert in allen Browsern."
+        }
+      ]
+    },
+    {
+      "question": "Was muss eine gute Fehlermeldung enthalten?",
+      "area": "Fehleridentifikation",
+      "options": [
+        {
+          "text": "Eine konkrete Beschreibung des Problems und eine Korrekturanweisung.",
+          "isCorrect": true,
+          "explanation": "Richtig: der Nutzer muss wissen, was falsch ist und wie er es korrigiert."
+        },
+        {
+          "text": "Nur das Wort Fehler in roter Schrift.",
+          "isCorrect": false,
+          "explanation": "Falsch: das beschreibt das Problem nicht."
+        },
+        {
+          "text": "Einen Link zur Hilfeseite. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Link allein ist keine Fehlermeldung."
+        },
+        {
+          "text": "Einen roten Rahmen um das Feld.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein roter Rahmen allein reicht nicht."
+        }
+      ]
+    },
+    {
+      "question": "Wie versteckst du einen Skip-Link korrekt, ohne ihn für Screenreader zu verbergen?",
+      "area": "Skip-Link",
+      "options": [
+        {
+          "text": "Mit einer sr-only-Klasse, die das Element visuell verbirg…",
+          "isCorrect": true,
+          "explanation": "Richtig: sr-only versteckt visuell, aber nicht vor Screenreadern."
+        },
+        {
+          "text": "Mit display: none.",
+          "isCorrect": false,
+          "explanation": "Falsch: display: none versteckt das Element auch vor Screenreadern."
+        },
+        {
+          "text": "Mit visibility: hidden.",
+          "isCorrect": false,
+          "explanation": "Falsch: visibility: hidden versteckt das Element auch vor Screenreadern."
+        },
+        {
+          "text": "Mit opacity: 0. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: opacity: 0 macht das Element unsichtbar, aber es bleibt im Layout."
+        }
+      ]
+    },
+    {
+      "question": "Welches Attribut informiert den Screenreader über ein Pflichtfeld?",
+      "area": "Formulare",
+      "options": [
+        {
+          "text": "aria-required=true.",
+          "isCorrect": true,
+          "explanation": "Richtig: aria-required sagt dem Screenreader, dass das Feld Pflicht ist."
+        },
+        {
+          "text": "aria-invalid=true.",
+          "isCorrect": false,
+          "explanation": "Falsch: aria-invalid zeigt einen Fehlerzustand an."
+        },
+        {
+          "text": "aria-disabled=true.",
+          "isCorrect": false,
+          "explanation": "Falsch: aria-disabled zeigt ein deaktiviertes Feld an."
+        },
+        {
+          "text": "aria-hidden=true. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: aria-hidden versteckt das Element."
+        }
+      ]
+    },
+    {
+      "question": "Wie machst du ein div mit onClick für die Tastatur zugänglich?",
+      "area": "Tastaturnavigation",
+      "options": [
+        {
+          "text": "Ersetze es durch ein natives button-Element, das automati…",
+          "isCorrect": true,
+          "explanation": "Richtig: der native button ist die beste Lösung."
+        },
+        {
+          "text": "Füge tabindex=1 hinzu. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: tabindex=1 macht es fokussierbar, aber nicht per Enter bedienbar."
+        },
+        {
+          "text": "Füge role=button hinzu.",
+          "isCorrect": false,
+          "explanation": "Falsch: role=button allein fügt keine Tastaturbedienung hinzu."
+        },
+        {
+          "text": "Divs mit onClick sind bereits barrierefrei.",
+          "isCorrect": false,
+          "explanation": "Falsch: divs sind nicht automatisch barrierefrei."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der Unterschied zwischen required und aria-required?",
+      "area": "Formulare",
+      "options": [
+        {
+          "text": "required validiert das Formular, aria-required informiert nur den Screenreader.",
+          "isCorrect": true,
+          "explanation": "Richtig: required hat eine Funktion, aria-required ist nur Information."
+        },
+        {
+          "text": "Es gibt keinen Unterschied, beide machen dasselbe. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: der Unterschied ist funktional."
+        },
+        {
+          "text": "required ist für Screenreader, aria-required für die Validierung.",
+          "isCorrect": false,
+          "explanation": "Falsch: genau umgekehrt."
+        },
+        {
+          "text": "required ist veraltet, aria-required ist der Nachfolger.",
+          "isCorrect": false,
+          "explanation": "Falsch: beide sind aktuell und ergänzen sich."
+        }
+      ]
+    },
+    {
+      "question": "Welcher Test ist am effektivsten für die Tastaturnavigation?",
+      "area": "Testen",
+      "options": [
+        {
+          "text": "Die Maus weglegen und die App nur mit Tab, Enter und Esca…",
+          "isCorrect": true,
+          "explanation": "Richtig: der manuelle Test zeigt die tatsächliche Bedienbarkeit."
+        },
+        {
+          "text": "Einen Lighthouse-Test durchführen.",
+          "isCorrect": false,
+          "explanation": "Falsch: Lighthouse testet nicht die tatsächliche Tastaturbedienbarkeit."
+        },
+        {
+          "text": "Den HTML-Code validieren. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: der Validator prüft Syntax, nicht Tastaturnavigation."
+        },
+        {
+          "text": "Einen Screenreader-Test durchführen.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Screenreader-Test ist wichtig, aber nicht spezifisch für Tastatur."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Teste die FutureDev-App nur mit der Tastatur. Lege die Maus weg und navigiere mit Tab, Shift+Tab, Enter und Escape. Fülle das Registrierungsformular aus, öffne und schließe einen Dialog, navigiere durch die Navigation. Notiere jede Stelle, an der du nicht weiterkommst. Implementiere einen Skip-Link und behebe die drei größten Tastatur-Barrieren.",
+    "expectation": "Die Anforderungen an Tastaturnavigation und barrierefreie Formulare wurden verstanden und auf die FutureDev-App angewendet.",
+    "checklist": [
+      "Die App vollständig nur mit der Tastatur bedient.",
+      "Alle Tastatur-Barrieren identifiziert und dokumentiert.",
+      "Einen Skip-Link implementiert.",
+      "Alle Formularfelder mit label-Elementen versehen.",
+      "Fehlermeldungen mit aria-describedby verknüpft."
+    ],
+    "portfolioItem": "P05"
+  },
+  "audio": {
+    "file": "M06-04-03.mp3",
+    "durationSeconds": 1400,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Kann ich tabindex=1,2,3 verwenden, um die Tabulator-Reihenfolge festzulegen?",
+      "answer": "Vermeide positive tabindex-Werte wie tabindex=1, tabindex=2. Sie zwingen eine feste Reihenfolge, die schwer zu warten ist und oft vom visuellen Layout abweicht. Besser ist es, die DOM-Reihenfolge dem visuellen Layout anzupassen, sodass die natürliche Tabulator-Reihenfolge korrekt ist. Verwende tabindex=0, um ein nicht-interaktives Element fokussierbar zu machen, und tabindex=-1, um ein Element programmatisch fokussierbar zu machen,. ohne es in die Tabulator-Reihenfolge aufzunehmen. Positive tabindex-Werte sind fast immer ein Zeichen für ein tieferliegendes Problem in der DOM-Struktur. Merksatz: Bei Tastaturnavigation und barrierefreie Formulare zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    },
+    {
+      "question": "Warum ersetzen placeholder-Attribute kein label?",
+      "answer": "Platzhalter verschwinden, sobald der Nutzer zu tippen beginnt. Der Nutzer sieht dann ein leeres Feld und weiß nicht mehr, was er eingeben sollte. Außerdem haben Platzhalter oft zu wenig Kontrast, weil sie standardmäßig in hellem Grau dargestellt werden. Screenreader behandeln Platzhalter unterschiedlich und lesen sie nicht immer zuverlässig vor. Ein label-Element ist immer sichtbar, hat ausreichenden Kontrast und wird von allen Screenreadern korrekt vorgelesen. Platzhalter können zusätzlich verwendet werden, um ein Beispiel für das erwartete Format zu geben, aber sie ersetzen niemals. das label. Merksatz: Bei Tastaturnavigation und barrierefreie Formulare zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    },
+    {
+      "question": "Wie mache ich eine Dropdown-Liste mit der Tastatur bedienbar?",
+      "answer": "Eine barrierefreie Dropdown-Liste verwendet das native select-Element, das automatisch mit Pfeiltasten bedienbar ist. Wenn du ein benutzerdefiniertes Dropdown baust, musst du die Tastaturbedienung selbst implementieren: Pfeil runter öffnet die Liste, Pfeil. hoch und runter navigieren durch die Optionen, Enter wählt eine Option aus, Escape schließt die Liste. Die Rolle listbox für den Container und option für die Einträge informieren den Screenreader. Der ausgewählte Wert muss mit aria-selected=true markiert sein. Am einfachsten ist es, das native select-Element zu verwenden und nur bei komplexen Anforderungen eine eigene Lösung zu. bauen."
+    },
+    {
+      "question": "Muss ich wirklich jeden Tab-Druck testen?",
+      "answer": "Ja, der manuelle Tastaturtest ist unersetzlich. Automatisierte Tools können prüfen, ob Elemente fokussierbar sind, aber sie können nicht prüfen, ob die Reihenfolge logisch ist,. ob der Fokus-Indikator sichtbar bleibt und ob jede Aktion tatsächlich ausführbar ist. Nimm dir dreißig Minuten, lege die Maus weg und bediene deine App nur mit der Tastatur. Du wirst überrascht sein, wie viele Barrieren du findest. Dieser Test sollte Teil deiner Definition-of-Done für jedes Feature sein, genauso wie der Lighthouse-Test."
+    },
+    {
+      "question": "Was ist der Unterschied zwischen aria-required und dem required-Attribut?",
+      "answer": "Das HTML-Attribut required verhindert das Absenden des Formulars, wenn das Feld leer ist, und zeigt eine Browser-eigene Fehlermeldung. aria-required=true informiert nur den Screenreader, dass das Feld ein Pflichtfeld ist, hat aber keine Auswirkung auf die Formularvalidierung. Du solltest beide verwenden: required für die native Validierung und aria-required für die Screenreader-Information. Wenn du eine eigene Validierung baust, kannst du auf required verzichten, aber aria-required solltest du trotzdem setzen, damit. der Screenreader das Feld als Pflichtfeld ansagt."
+    }
+  ]
+}

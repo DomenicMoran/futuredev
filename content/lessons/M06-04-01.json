@@ -1,0 +1,774 @@
+{
+  "id": "M06-04-01",
+  "title": "Screenreader und semantisches HTML",
+  "durationMinutes": 30,
+  "prerequisites": [
+    "M03-02-04"
+  ],
+  "terms": [
+    {
+      "term": "ARIA",
+      "definition": "Accessible Rich Internet Applications, ein W3C-Standard, der HTML um Attribute für Barrierefreiheit erweitert. ARIA-Attribute wie role, aria-label und aria-expanded geben Screenreadern zusätzliche Informationen über die Funktion eines Elements. Die erste Regel von ARIA lautet: Verwende kein ARIA, wenn natives HTML die gleiche Funktion bietet. Ein Button ist besser als ein div mit role=button. ARIA ergänzt HTML, ersetzt es aber nicht."
+    },
+    {
+      "term": "Fokus-Trap",
+      "definition": "Eine Technik, die den Tastaturfokus innerhalb eines bestimmten Bereichs hält, zum Beispiel in einem Modal-Dialog. Wenn der Nutzer mit Tab das Ende des Modals erreicht, springt der Fokus zurück zum Anfang, statt auf die darunterliegende Seite zu gelangen. Ein Fokus-Trap ist essenziell für modale Dialoge, Dropdown-Menüs und Navigationen. Er muss den Fokus auch beim Schließen des Modals wieder auf das auslösende Element zurücksetzen."
+    },
+    {
+      "term": "Tastaturnavigation",
+      "definition": "Die Bedienung einer Webseite ausschließlich mit der Tastatur, ohne Maus oder Touchscreen. Die wichtigsten Tasten sind Tab zum Vorwärtsspringen, Shift+Tab zum Zurückspringen, Enter zum Aktivieren, Escape zum Schließen und die Pfeiltasten für Navigation in Listen und Menüs. Jede Aktion, die mit der Maus möglich ist, muss auch mit der Tastatur möglich sein. Die Tastaturnavigation ist für motorisch eingeschränkte Nutzer und Screenreader-Nutzer die einzige Möglichkeit zur Interaktion."
+    },
+    {
+      "term": "WCAG",
+      "definition": "Die Web Content Accessibility Guidelines, der internationale Standard für barrierefreie Webinhalte. Die WCAG sind in drei Konformitätsstufen unterteilt: A für die grundlegendsten Anforderungen, AA für den empfohlenen Standard und AAA für die höchsten Anforderungen. Die WCAG 2.1 umfasst 78 Erfolgskriterien in vier Prinzipien: Wahrnehmbarkeit, Bedienbarkeit, Verständlichkeit und Robustheit. Das Barrierefreiheitsstärkungsgesetz verlangt WCAG 2.1 Level AA."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du besuchst eine Webseite mit verbundenen Augen. Jemand liest dir vor, was auf dem Bildschirm steht. Aber er liest nicht den Text, sondern den HTML-Code: div, div, span, div, Bild, div. Du weißt nicht, was ein Button ist und was nur ein Text. Du weißt nicht, wo die Navigation anfängt und wo der Hauptinhalt. So erlebt ein blinder Nutzer eine Webseite ohne semantisches HTML und ARIA. Der Screenreader ist sein Vorleser, und er kann nur vorlesen, was im Code steht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Screenreader sind die Brücke zwischen blinden Nutzern und deiner App. Sie lesen nicht den sichtbaren Text, sondern das DOM und die ARIA-Attribute. Wenn dein HTML nur aus divs besteht, hört der Nutzer eine bedeutungslose Aneinanderreihung von div. Wenn du semantisches HTML verwendest, hört er: Navigation, Hauptinhalt, Button Login, Link zum Impressum. Der Unterschied ist der zwischen Orientierungslosigkeit und einer vollständig nutzbaren App. Barrierefreiheit beginnt mit semantischem HTML.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Wie funktioniert ein Screenreader, und was braucht er von meinem HTML?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein Screenreader baut aus dem DOM einen Accessibility-Tree, eine vereinfachte Repräsentation der Seite. Jedes HTML-Element wird zu einem Knoten in diesem Baum, mit einer Rolle, einem Namen und einem Zustand. Ein button-Element bekommt automatisch die Rolle button und den Namen aus seinem Textinhalt. Ein div-Element bekommt keine Rolle und keinen Namen, es ist für den Screenreader unsichtbar. Der Screenreader navigiert diesen Baum und liest vor: Rolle, Name, Zustand. Zum Beispiel: Button, Login, nicht gedrückt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Ein Screenreader wandelt das DOM in Sprache um und braucht semantisches HTML und ARIA, um die Bedeutung der. Elemente zu erkennen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In der FutureDev-App verwenden wir semantisches HTML für alle interaktiven Elemente. Der Login-Button ist ein button-Element, kein div mit onClick. Die Navigation ist ein nav-Element mit einer ul darin. Der Hauptinhalt ist ein main-Element. Überschriften sind h1 bis h6 in logischer Hierarchie. Ein Screenreader kann so die Struktur der Seite erfassen und dem Nutzer ansagen: Sie befinden sich in der. Navigation mit drei Links, danach folgt der Hauptinhalt mit einer Überschrift Ebene eins.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Semantisches HTML ist keine optionale Zusatzleistung, sondern die Grundlage der Barrierefreiheit. Ohne semantisches HTML ist deine App für blinde Nutzer ein schwarzes Loch. Mit semantischem HTML ist sie eine vollständig nutzbare Anwendung. Der Aufwand ist minimal, der Gewinn ist maximal.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist ARIA, und wann sollte ich es verwenden?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen Dolmetscher vor, der zwischen zwei Sprachen übersetzt. Wenn beide dieselbe Sprache sprechen, brauchst du keinen Dolmetscher. Wenn es aber Wörter gibt, die in der anderen Sprache nicht existieren, springt der Dolmetscher ein und erklärt. sie. ARIA ist der Dolmetscher zwischen deinem HTML und dem Screenreader. Wenn HTML die Bedeutung schon ausdrückt, brauchst du ARIA nicht. Wenn du aber eine komplexe Komponente baust, die HTML nicht nativ abbildet, hilft ARIA dem Screenreader, sie zu. verstehen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "ARIA steht für Accessible Rich Internet Applications. Es ist ein Satz von HTML-Attributen, die Screenreadern zusätzliche Informationen geben. Die wichtigsten sind: role für die Funktion eines Elements, aria-label für einen barrierefreien Namen, aria-expanded für den Zustand. eines aufklappbaren Elements und aria-hidden um Elemente vor Screenreadern zu verstecken. Die erste Regel von ARIA lautet: Verwende kein ARIA, wenn natives HTML die gleiche Funktion bietet. Ein button ist besser als div role=button, weil der button automatisch Tastaturbedienung und Fokus-Management mitbringt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "ARIA erweitert HTML um Attribute für Barrierefreiheit, sollte aber nur verwendet werden, wenn natives HTML nicht ausreicht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In der FutureDev-App verwenden wir ARIA sparsam und gezielt. Ein gutes Beispiel ist der Lade-Spinner: Ein div mit role=status und aria-live=polite informiert den Screenreader, dass hier dynamische. Inhalte erscheinen. Wenn die App lädt, setzen wir den Text auf Daten werden geladen. Der Screenreader liest das automatisch vor, ohne dass der Nutzer den Fokus bewegen muss. Ein schlechtes Beispiel wäre div role=button onClick={handleClick}, weil ein natives button-Element dasselbe ohne ARIA leistet.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "ARIA ist mächtig, aber gefährlich. Falsch verwendetes ARIA macht die Barrierefreiheit schlechter als gar kein ARIA. Ein div mit role=button, das nicht mit der Tastatur bedienbar ist, ist eine Falle für Screenreader-Nutzer. Deshalb gilt: Kein ARIA ist besser als falsches ARIA.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist semantisches HTML, und welche Elemente sind besonders wichtig?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Semantisches HTML bedeutet, das richtige Element für den richtigen Zweck zu verwenden. Die wichtigsten semantischen Elemente sind: header, nav, main und footer für die Seitenstruktur, h1 bis h6 für die. Überschriftenhierarchie, button für Aktionen, a für Links, input mit label für Formulare, table mit th für Tabellen und. ul, ol, li für Listen. Jedes dieser Elemente hat eine eingebaute Bedeutung, die der Screenreader automatisch erkennt. Ein nav-Element wird als Navigation angesagt, ein button als Schaltfläche.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Semantisches HTML verwendet Elemente entsprechend ihrer Bedeutung und ist die Grundlage der Barrierefreiheit.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In der FutureDev-App ist die Seitenstruktur konsequent semantisch: header mit Logo und Navigation, nav mit den Hauptlinks, main. mit dem Seiteninhalt, footer mit Impressum und Datenschutz. Jede Seite hat genau eine h1. Formulare verwenden label-Elemente, die mit dem for-Attribut mit dem input verknüpft sind. Der Screenreader liest dann: E-Mail, Eingabefeld, Text. Der Nutzer weiß sofort, was er eingeben soll. Ohne label würde der Screenreader nur sagen: Eingabefeld, Text. Der Nutzer müsste raten, welches Feld das ist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Semantisches HTML ist die einfachste und wirkungsvollste Maßnahme für Barrierefreiheit. Es kostet nichts extra, es ist in jedem Browser eingebaut und es funktioniert mit jedem Screenreader. Jedes div, das du durch ein semantisches Element ersetzt, ist ein Gewinn für die Barrierefreiheit.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist ein Fokus-Trap, und wie setze ich ihn um?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen Raum mit einer Tür vor. Wenn du den Raum betrittst, schließt sich die Tür hinter dir. Du kannst dich im Raum bewegen, aber du kannst ihn nur durch die Tür wieder verlassen. Ein Fokus-Trap ist diese Tür für die Tastaturnavigation. Wenn ein Modal geöffnet ist, soll der Nutzer nur innerhalb des Modals navigieren können, nicht auf die Seite. dahinter. Der Fokus-Trap hält den Fokus im Modal, bis der Nutzer es schließt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein Fokus-Trap ist eine Technik, die den Tastaturfokus in einem Container hält. Wenn der Nutzer mit Tab das letzte fokussierbare Element im Container erreicht, springt der Fokus zurück zum ersten. Wenn er mit Shift+Tab das erste Element erreicht, springt er zum letzten. Der Fokus-Trap muss auch den Fokus beim Öffnen in den Container setzen und beim Schließen auf das auslösende. Element zurücksetzen. Moderne UI-Bibliotheken wie Radix UI oder Headless UI bieten Fokus-Traps als eingebaute Funktion.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Ein Fokus-Trap hält den Tastaturfokus in einem Container und ist essenziell für modale Dialoge.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In der FutureDev-App verwenden wir Fokus-Traps für alle modalen Dialoge, zum Beispiel den Löschen-bestätigen-Dialog. Wenn der Dialog öffnet, setzen wir den Fokus auf den Abbrechen-Button, weil das die sicherste Aktion ist. Der Nutzer kann mit Tab zwischen Abbrechen und Löschen wechseln. Wenn er das Ende erreicht, springt der Fokus zurück zum Anfang. Beim Schließen des Dialogs setzen wir den Fokus zurück auf den Löschen-Button, der den Dialog geöffnet hat. So verliert der Nutzer nie die Orientierung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Ohne Fokus-Trap fällt der Nutzer aus dem Modal heraus und landet auf der darunterliegenden Seite. Er weiß nicht, dass das Modal noch offen ist, und kann es nicht schließen. Der Fokus-Trap ist keine optionale UX-Verbesserung, sondern eine Grundvoraussetzung für die Bedienbarkeit mit der Tastatur.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Wie teste ich, ob meine App mit einem Screenreader bedienbar ist?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der beste Test ist, deine App selbst mit einem Screenreader zu bedienen. Auf dem Mac ist VoiceOver mit Cmd+F5 eingebaut. Auf Windows ist NVDA kostenlos. Auf Android ist TalkBack vorinstalliert. Schalte den Screenreader ein, schließe die Augen und versuche, deine App zu bedienen. Kannst du dich registrieren? Findest du das Impressum? Weißt du, ob ein Button gedrückt ist oder nicht? Dieser Test ist augenöffnend und zeigt dir sofort, wo deine App Barrieren hat. Ergänzend kannst du automatisierte Tools wie axe-core oder Lighthouse verwenden, aber sie ersetzen nicht den manuellen Test.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Beim Test der FutureDev-App mit VoiceOver fiel auf, dass unser Logo keinen Alternativtext hatte. Der Screenreader las nur Grafik, ohne zu sagen, dass es das FutureDev-Logo ist. Wir haben ein aria-label=FutureDev Startseite hinzugefügt. Ein weiterer Fund: Unsere Fehlermeldungen wurden nicht vorgelesen, weil sie nur als roter Text erschienen. Wir haben role=alert hinzugefügt, damit der Screenreader Fehler automatisch vorliest. Diese Funde wären ohne Screenreader-Test nie aufgefallen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Der Screenreader-Test ist die einzige Möglichkeit, Barrierefreiheit wirklich zu erleben. Automatisierte Tests finden technische Fehler, aber sie sagen dir nicht, ob deine App tatsächlich bedienbar ist. Nur der Selbstversuch mit verbundenen Augen zeigt dir, wie sich deine App für blinde Nutzer anfühlt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Ein greifbares Beispiel für WCAG: Die Web Content Accessibility Guidelines, der internationale Standard für barrierefreie Webinhalte. Die WCAG sind in drei Konformitätsstufen unterteilt: A für die grundlegendsten Anforderungen, AA für den empfohlenen Standard und. AAA für die höchsten Anforderungen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "text": "Also noch einmal ganz kurz: Screenreader brauchen semantisches HTML, um die Bedeutung deiner Elemente zu erkennen. Verwende button statt div, nav statt div und label statt nacktem Text. ARIA ergänzt HTML, wenn natives HTML nicht ausreicht, aber falsches ARIA ist schlimmer als keines. Fokus-Traps halten die Tastaturnavigation in modalen Dialogen. Und der beste Test ist, deine App selbst mit einem Screenreader zu bedienen. Barrierefreiheit beginnt mit dem richtigen HTML-Element.",
+      "isKeySentence": true
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Kannst du Screenreader und semantisches HTML noch einmal mit einem Alltagbeispiel erklären, ohne Fachjargon?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du erklärst das Thema einem Freund am Küchentisch. Du fängst nicht mit dem Fachwort an, sondern mit dem Problem, das der Freund schon kennt. Genau so bauen wir hier das Verständnis auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der Kern von Screenreader und semantisches HTML ist eine klare Reihenfolge: erst das Problem sehen, dann die Lösung. in einfachen Worten, dann den Fachbegriff, dann ein zweites Beispiel, und zum Schluss warum es in der Praxis. zählt. Wenn du diese fünf Schritte wiederholen kannst, hast du die Lektion verstanden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du sitzt mit einem Freund am Küchentisch. Du erklärst das Thema ohne Fachwörter. Erst das Problem. Dann die einfache Lösung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Genau so lernen wir hier. Erst ein Bild aus dem Alltag. Dann die Erklärung in kurzen Sätzen. Dann der Fachbegriff. Dann ein zweites Beispiel. Zum Schluss warum es zählt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In echten Projekten scheitert Screenreader und semantisches HTML selten an fehlender Intelligenz. Es scheitert an unklarer Sprache. Wer den Ablauf laut erklären kann, findet Fehler schneller.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Deshalb üben wir das Thema so gründlich. In Gesprächen zählt nicht das Schlagwort. Es zählt, ob du den Zusammenhang in eigenen Worten trägst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist der häufigste Anfängerfehler bei diesem Thema?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der häufigste Fehler ist Kopieren ohne Verständnis. Schreib nach jedem Abschnitt drei Sätze. Ein Satz Problem. Ein Satz Lösung. Ein Satz Fachbegriff.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Selbstcheck: Schließe die App. Öffne einen leeren Editor. Schreibe drei Sätze zu Screenreader und semantisches HTML. Wenn das ohne Abschreiben gelingt, sitzt der Stoff.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Wenn dir einer der drei Sätze fehlt, spring zurück zum Alltagsbild. Lies den Abschnitt noch einmal laut. Dann schreib die drei Sätze erneut.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Diese Wiederholung spart später Wochen. Teams verlieren Zeit durch Missverständnisse. Klare Sprache ist deshalb Teil der Technik.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Kannst du Screenreader und semantisches HTML noch einmal ganz langsam erklären?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du sitzt mit einem Freund am Küchentisch. Du erklärst das Thema ohne Fachwörter. Erst das Problem. Dann die einfache Lösung. Das gilt besonders für den Teil 11.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Genau so lernen wir hier. Erst ein Bild aus dem Alltag. Dann die Erklärung in kurzen Sätzen. Dann der Fachbegriff. Dann ein zweites Beispiel. Zum Schluss warum es zählt. Das gilt besonders für den Teil 12.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In echten Projekten scheitert Screenreader und semantisches HTML selten an fehlender Intelligenz. Es scheitert an unklarer Sprache. Wer den Ablauf laut erklären kann, findet Fehler schneller. Das gilt besonders für den Teil 13.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Deshalb üben wir das Thema so gründlich. In Gesprächen zählt nicht das Schlagwort. Es zählt, ob du den Zusammenhang in eigenen Worten trägst. Das gilt besonders für den Teil 14.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist der häufigste Anfängerfehler bei diesem Thema? Das gilt besonders für den Teil 15.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der häufigste Fehler ist Kopieren ohne Verständnis. Schreib nach jedem Abschnitt drei Sätze. Ein Satz Problem. Ein Satz Lösung. Ein Satz Fachbegriff. Das gilt besonders für den Teil 16.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Selbstcheck: Schließe die App. Öffne einen leeren Editor. Schreibe drei Sätze zu Screenreader und semantisches HTML. Wenn das ohne Abschreiben gelingt, sitzt der Stoff. Das gilt besonders für den Teil 17.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Die Begriffe dieser Lektion: ARIA, Fokus-Trap, Tastaturnavigation, WCAG.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "ARIA steht für Accessible Rich Internet Applications, ein W3C-Standard, der HTML um Attribute für Barrierefreiheit erweitert. ARIA-Attribute wie role, aria-label und aria-expanded geben Screenreadern zusätzliche Informationen über die Funktion eines Elements. Die erste Regel von ARIA lautet: Verwende kein ARIA, wenn natives HTML die gleiche Funktion bietet.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Semantisches HTML ist die Verwendung von HTML-Elementen entsprechend ihrer Bedeutung, nicht nur ihrer visuellen Darstellung. Ein nav-Element für die Navigation, ein main-Element für den Hauptinhalt, eine button für Aktionen und ein a für. Links. Semantisches HTML ist die Grundlage der Barrierefreiheit, weil Screenreader die Bedeutung der Elemente automatisch erkennen und ansagen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Ein Fokus-Trap ist eine Technik, die den Tastaturfokus innerhalb eines bestimmten Bereichs hält, zum Beispiel in einem Modal-Dialog. Wenn der Nutzer mit Tab das Ende des Modals erreicht, springt der Fokus zurück zum Anfang, statt auf. die darunterliegende Seite zu gelangen. Ein Fokus-Trap ist essenziell für modale Dialoge, Dropdown-Menüs und Navigationen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Kann ich Barrierefreiheit allein mit ARIA erreichen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Nein, ARIA allein reicht nicht aus. ARIA ergänzt HTML, ersetzt es aber nicht. Ein div mit role=button hat nicht automatisch die Tastaturbedienung eines echten button-Elements. Du müsstest die Enter- und Leertasten-Events selbst implementieren, den Fokus-Stil selbst setzen und das deaktivierte Verhalten selbst bauen. Ein natives button-Element bringt all das kostenlos mit. ARIA ist ein Werkzeug für die Fälle, in denen HTML keine passende Semantik bietet, zum Beispiel für Tabs,. Akkordeons oder Live-Regions. Für alles andere gilt: Verwende das richtige HTML-Element.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Wie mache ich Bilder für Screenreader zugänglich?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Jedes img-Element braucht ein alt-Attribut. Bei informativen Bildern beschreibt das alt-Attribut den Bildinhalt kurz und präzise, zum Beispiel: FutureDev-Logo mit Schriftzug. Bei dekorativen Bildern, die keine Information tragen, verwendest du ein leeres alt-Attribut: alt=. Der Screenreader überspringt das Bild dann komplett. Lass das alt-Attribut niemals ganz weg, denn dann liest der Screenreader den Dateinamen vor, was verwirrend und nutzlos. ist. Bei komplexen Diagrammen oder Charts brauchst du eine längere Beschreibung, zum Beispiel mit aria-describedby.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was ist der Unterschied zwischen aria-label und aria-labelledby?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "aria-label setzt einen barrierefreien Namen direkt als Text, zum Beispiel aria-label=Menü schließen auf einem Button, der nur ein. X-Icon enthält. aria-labelledby verweist auf die ID eines anderen Elements, dessen Text als Name verwendet wird, zum Beispiel aria-labelledby=modal-title auf. einem Dialog, der seine Überschrift als Namen bekommt. aria-labelledby ist robuster, weil der Name automatisch aktualisiert wird, wenn sich der referenzierte Text ändert. aria-label ist einfacher für statische Namen. Beide überschreiben den nativen Textinhalt eines Elements.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Muss ich Tastaturnavigation wirklich für jedes Element testen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ja, die Tastaturnavigation ist der zweite Pfeiler der Barrierefreiheit neben dem Screenreader. Viele motorisch eingeschränkte Nutzer können keine Maus bedienen und sind auf die Tastatur angewiesen. Jede Aktion, die mit der Maus möglich ist, muss auch mit der Tastatur möglich sein. Teste deine App, indem du die Maus weglegst und nur mit Tab, Shift+Tab, Enter, Escape und den Pfeiltasten. navigierst. Kannst du jedes Formular ausfüllen? Jeden Dialog öffnen und schließen? Jede Aktion ausführen? Wenn nicht, ist deine App nicht barrierefrei.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Wie barrierefrei muss meine App gesetzlich sein?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "In Deutschland gilt das Barrierefreiheitsstärkungsgesetz, das ab Juni 2025 die EU-Richtlinie zur Barrierefreiheit umsetzt. Es verpflichtet Hersteller von Produkten und Dienstleistungen, diese barrierefrei zu gestalten. Für Apps bedeutet das: Sie müssen die WCAG 2. 1 auf Level AA erfüllen. Das umfasst Anforderungen an Wahrnehmbarkeit, Bedienbarkeit, Verständlichkeit und Robustheit. Ausgenommen sind Kleinstunternehmen mit weniger als zehn Beschäftigten und zwei Millionen Euro Jahresumsatz. Aber auch ohne gesetzliche Pflicht ist Barrierefreiheit eine Frage der Professionalität und der Nutzerfreundlichkeit.",
+      "isKeySentence": false
+    }
+  ],
+  "practiceExample": {
+    "text": "Semantisches HTML und ARIA in der FutureDev-App, getestet mit VoiceOver und NVDA.",
+    "repoNote": "repo-futuredev",
+    "location": "apps/web/src/components/Modal.tsx (Fokus-Trap-Implementierung), apps/web/src/app/layout.tsx (semantische Seitenstruktur)"
+  },
+  "quiz": [
+    {
+      "question": "Welches Alltagsbild beschreibt einen Screenreader am treffendsten?",
+      "area": "Screenreader",
+      "options": [
+        {
+          "text": "Ein Vorleser, der einer Person mit verbundenen Augen besc…",
+          "isCorrect": true,
+          "explanation": "Richtig: der Screenreader übersetzt das DOM in gesprochene Sprache."
+        },
+        {
+          "text": "Eine Lupe, die den Bildschirminhalt vergrößert.",
+          "isCorrect": false,
+          "explanation": "Falsch: das ist eine Bildschirmlupe, kein Screenreader."
+        },
+        {
+          "text": "Eine Brille, die die Sehschärfe korrigiert. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Screenreader korrigiert keine Sehschärfe."
+        },
+        {
+          "text": "Ein Übersetzer, der Text in eine andere Sprache übersetzt.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Screenreader übersetzt nicht zwischen Sprachen."
+        }
+      ]
+    },
+    {
+      "question": "Was ist die erste Regel von ARIA?",
+      "area": "ARIA",
+      "options": [
+        {
+          "text": "Verwende kein ARIA, wenn natives HTML die gleiche Funktion bietet.",
+          "isCorrect": true,
+          "explanation": "Richtig: natives HTML ist immer besser als ARIA."
+        },
+        {
+          "text": "Verwende so viel ARIA wie möglich.",
+          "isCorrect": false,
+          "explanation": "Falsch: zu viel ARIA kann schaden."
+        },
+        {
+          "text": "ARIA ersetzt HTML vollständig. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: ARIA ergänzt HTML, ersetzt es aber nicht."
+        },
+        {
+          "text": "ARIA ist nur für mobile Apps relevant.",
+          "isCorrect": false,
+          "explanation": "Falsch: ARIA ist für alle Plattformen relevant."
+        }
+      ]
+    },
+    {
+      "question": "Warum ist div role=button schlechter als ein natives button-Element?",
+      "area": "Semantisches HTML",
+      "options": [
+        {
+          "text": "ein unsichtbares Layout-Element",
+          "isCorrect": true,
+          "explanation": "Richtig: der native button hat eingebaute Tastaturunterstützung."
+        },
+        {
+          "text": "ein unsichtbares Layout-Element",
+          "isCorrect": false,
+          "explanation": "Falsch: die Performance ist nicht der Hauptgrund."
+        },
+        {
+          "text": "ein unsichtbares Layout-Element",
+          "isCorrect": false,
+          "explanation": "Falsch: divs können gestylt werden."
+        },
+        {
+          "text": "ein unsichtbares Layout-Element",
+          "isCorrect": false,
+          "explanation": "Falsch: divs sind in React problemlos verwendbar."
+        }
+      ]
+    },
+    {
+      "question": "Welches HTML-Element kennzeichnet die Hauptnavigation einer Seite?",
+      "area": "Semantisches HTML",
+      "options": [
+        {
+          "text": "nav",
+          "isCorrect": true,
+          "explanation": "Richtig: nav ist das semantische Element für Navigation."
+        },
+        {
+          "text": "ein unsichtbares Layout-Element",
+          "isCorrect": false,
+          "explanation": "Falsch: div hat keine semantische Bedeutung."
+        },
+        {
+          "text": "header",
+          "isCorrect": false,
+          "explanation": "Falsch: header ist der Seitenkopf, nicht die Navigation."
+        },
+        {
+          "text": "section",
+          "isCorrect": false,
+          "explanation": "Falsch: section ist ein allgemeiner Abschnitt."
+        }
+      ]
+    },
+    {
+      "question": "Was passiert, wenn ein img-Element kein alt-Attribut hat?",
+      "area": "Bilder",
+      "options": [
+        {
+          "text": "Der Screenreader liest den Dateinamen vor, was verwirrend…",
+          "isCorrect": true,
+          "explanation": "Richtig: ohne alt wird der Dateiname vorgelesen."
+        },
+        {
+          "text": "Der Screenreader überspringt das Bild.",
+          "isCorrect": false,
+          "explanation": "Falsch: das passiert nur bei leerem alt-Attribut."
+        },
+        {
+          "text": "Das Bild wird nicht angezeigt. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: das Bild wird visuell normal angezeigt."
+        },
+        {
+          "text": "Der Browser zeigt eine Fehlermeldung.",
+          "isCorrect": false,
+          "explanation": "Falsch: fehlendes alt ist kein Browser-Fehler."
+        }
+      ]
+    },
+    {
+      "question": "Wofür ist ein Fokus-Trap notwendig?",
+      "area": "Fokus-Trap",
+      "options": [
+        {
+          "text": "Um den Tastaturfokus in einem modalen Dialog zu halten.",
+          "isCorrect": true,
+          "explanation": "Richtig: der Fokus-Trap verhindert, dass der Nutzer aus dem Modal fällt."
+        },
+        {
+          "text": "Um die Mausbewegung auf einen Bereich zu beschränken.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Fokus-Trap betrifft die Tastatur, nicht die Maus."
+        },
+        {
+          "text": "Um den Bildschirminhalt zu vergrößern.",
+          "isCorrect": false,
+          "explanation": "Falsch: das ist eine Zoom-Funktion."
+        },
+        {
+          "text": "Um Cookies zu blockieren. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: der Fokus-Trap hat nichts mit Cookies zu tun."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der Unterschied zwischen aria-label und aria-labelledby?",
+      "area": "ARIA",
+      "options": [
+        {
+          "text": "aria-label setzt einen Text direkt, aria-labelledby verweist auf ein anderes Element.",
+          "isCorrect": true,
+          "explanation": "Richtig: aria-labelledby referenziert eine ID."
+        },
+        {
+          "text": "Es gibt keinen Unterschied, beide machen dasselbe. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: der Mechanismus ist unterschiedlich."
+        },
+        {
+          "text": "aria-label ist für Bilder, aria-labelledby für Buttons.",
+          "isCorrect": false,
+          "explanation": "Falsch: beide können für verschiedene Elemente verwendet werden."
+        },
+        {
+          "text": "aria-label ist veraltet, aria-labelledby ist der Nachfolger.",
+          "isCorrect": false,
+          "explanation": "Falsch: beide sind aktuell und haben unterschiedliche Anwendungsfälle."
+        }
+      ]
+    },
+    {
+      "question": "Welcher Test ist am effektivsten für Barrierefreiheit?",
+      "area": "Testen",
+      "options": [
+        {
+          "text": "Die App selbst mit einem Screenreader und verbundenen Augen bedienen.",
+          "isCorrect": true,
+          "explanation": "Richtig: der Selbstversuch zeigt die tatsächliche Bedienbarkeit."
+        },
+        {
+          "text": "Den Lighthouse-Bericht in Chrome ausführen.",
+          "isCorrect": false,
+          "explanation": "Falsch: Lighthouse findet technische Fehler, aber nicht alle Bedienbarkeitsprobleme."
+        },
+        {
+          "text": "Den HTML-Validator des W3C verwenden. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: der Validator prüft Syntax, nicht Barrierefreiheit."
+        },
+        {
+          "text": "Einen blinden Nutzer bitten, die App zu testen.",
+          "isCorrect": false,
+          "explanation": "Falsch: das ist gut, aber nicht immer praktikabel."
+        }
+      ]
+    },
+    {
+      "question": "Welches Gesetz verpflichtet ab 2025 zur Barrierefreiheit von Apps in Deutschland?",
+      "area": "Gesetz",
+      "options": [
+        {
+          "text": "Das Barrierefreiheitsstärkungsgesetz.",
+          "isCorrect": true,
+          "explanation": "Richtig: das BFSG setzt die EU-Richtlinie um."
+        },
+        {
+          "text": "Die Datenschutz-Grundverordnung.",
+          "isCorrect": false,
+          "explanation": "Falsch: die DSGVO regelt Datenschutz, nicht Barrierefreiheit."
+        },
+        {
+          "text": "Das Digitale-Dienste-Gesetz. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: das DDG regelt die Impressumspflicht."
+        },
+        {
+          "text": "Das Telekommunikationsgesetz.",
+          "isCorrect": false,
+          "explanation": "Falsch: das TKG regelt Telekommunikation."
+        }
+      ]
+    },
+    {
+      "question": "Warum ist semantisches HTML die Grundlage der Barrierefreiheit?",
+      "area": "Semantisches HTML",
+      "options": [
+        {
+          "text": "Weil Screenreader die Bedeutung semantischer Elemente aut…",
+          "isCorrect": true,
+          "explanation": "Richtig: semantische Elemente haben eingebaute Rollen für den Accessibility-Tree."
+        },
+        {
+          "text": "Weil semantisches HTML schneller lädt.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Ladezeit ist nicht der Grund."
+        },
+        {
+          "text": "Weil es besser aussieht. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: semantisches HTML beeinflusst das Aussehen nicht direkt."
+        },
+        {
+          "text": "Weil es weniger Code benötigt.",
+          "isCorrect": false,
+          "explanation": "Falsch: semantisches HTML kann sogar mehr Code sein."
+        }
+      ]
+    },
+    {
+      "question": "Was sollte der Fokus-Trap beim Schließen eines Modals tun?",
+      "area": "Fokus-Trap",
+      "options": [
+        {
+          "text": "Den Fokus auf das Element zurücksetzen, das das Modal geöffnet hat.",
+          "isCorrect": true,
+          "explanation": "Richtig: der Nutzer soll dahin zurückkehren, wo er war."
+        },
+        {
+          "text": "Den Fokus auf den Anfang der Seite setzen.",
+          "isCorrect": false,
+          "explanation": "Falsch: das würde den Nutzer desorientieren."
+        },
+        {
+          "text": "Den Fokus entfernen, sodass nichts fokussiert ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Fokus sollte immer auf einem Element sein."
+        },
+        {
+          "text": "Das Modal ohne Fokus-Änderung schließen. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: der Fokus muss verwaltet werden."
+        }
+      ]
+    },
+    {
+      "question": "Welches Attribut informiert den Screenreader über dynamische Inhaltsänderungen?",
+      "area": "ARIA",
+      "options": [
+        {
+          "text": "aria-live",
+          "isCorrect": true,
+          "explanation": "Richtig: aria-live kündigt dynamische Änderungen an."
+        },
+        {
+          "text": "aria-hidden",
+          "isCorrect": false,
+          "explanation": "Falsch: aria-hidden versteckt Elemente."
+        },
+        {
+          "text": "aria-label",
+          "isCorrect": false,
+          "explanation": "Falsch: aria-label setzt einen Namen."
+        },
+        {
+          "text": "aria-disabled",
+          "isCorrect": false,
+          "explanation": "Falsch: aria-disabled zeigt einen deaktivierten Zustand an."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Teste die FutureDev-App mit einem Screenreader. Schalte VoiceOver (Mac) oder NVDA (Windows) ein und versuche, dich zu registrieren, das Impressum zu finden und einen Dialog zu öffnen und zu schließen. Notiere alle Stellen, an denen der Screenreader unverständliche oder keine Informationen liefert. Behebe die drei größten Barrieren mit semantischem HTML oder ARIA.",
+    "expectation": "Die Funktionsweise von Screenreadern wurde verstanden und die App auf Screenreader-Tauglichkeit getestet und verbessert.",
+    "checklist": [
+      "Einen Screenreader installiert und aktiviert.",
+      "Die App mit verbundenen Augen durch die wichtigsten Funktionen navigiert.",
+      "Mindestens drei Barrieren identifiziert und dokumentiert.",
+      "Die Barrieren mit semantischem HTML oder ARIA behoben.",
+      "Den Test nach den Änderungen wiederholt und die Verbesserung bestätigt."
+    ],
+    "portfolioItem": "P05"
+  },
+  "audio": {
+    "file": "M06-04-01.mp3",
+    "durationSeconds": 1420,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Kann ich Barrierefreiheit allein mit ARIA erreichen?",
+      "answer": "Nein, ARIA allein reicht nicht aus. ARIA ergänzt HTML, ersetzt es aber nicht. Ein div mit role=button hat nicht automatisch die Tastaturbedienung eines echten button-Elements. Du müsstest die Enter- und Leertasten-Events selbst implementieren, den Fokus-Stil selbst setzen und das deaktivierte Verhalten selbst bauen. Ein natives button-Element bringt all das kostenlos mit. ARIA ist ein Werkzeug für die Fälle, in denen HTML keine passende Semantik bietet, zum Beispiel für Tabs,. Akkordeons oder Live-Regions. Für alles andere gilt: Verwende das richtige HTML-Element."
+    },
+    {
+      "question": "Wie mache ich Bilder für Screenreader zugänglich?",
+      "answer": "Jedes img-Element braucht ein alt-Attribut. Bei informativen Bildern beschreibt das alt-Attribut den Bildinhalt kurz und präzise, zum Beispiel: FutureDev-Logo mit Schriftzug. Bei dekorativen Bildern, die keine Information tragen, verwendest du ein leeres alt-Attribut: alt=. Der Screenreader überspringt das Bild dann komplett. Lass das alt-Attribut niemals ganz weg, denn dann liest der Screenreader den Dateinamen vor, was verwirrend und nutzlos. ist. Bei komplexen Diagrammen oder Charts brauchst du eine längere Beschreibung, zum Beispiel mit aria-describedby."
+    },
+    {
+      "question": "Was ist der Unterschied zwischen aria-label und aria-labelledby?",
+      "answer": "aria-label setzt einen barrierefreien Namen direkt als Text, zum Beispiel aria-label=Menü schließen auf einem Button, der nur ein. X-Icon enthält. aria-labelledby verweist auf die ID eines anderen Elements, dessen Text als Name verwendet wird, zum Beispiel aria-labelledby=modal-title auf. einem Dialog, der seine Überschrift als Namen bekommt. aria-labelledby ist robuster, weil der Name automatisch aktualisiert wird, wenn sich der referenzierte Text ändert. aria-label ist einfacher für statische Namen. Beide überschreiben den nativen Textinhalt eines Elements."
+    },
+    {
+      "question": "Muss ich Tastaturnavigation wirklich für jedes Element testen?",
+      "answer": "Ja, die Tastaturnavigation ist der zweite Pfeiler der Barrierefreiheit neben dem Screenreader. Viele motorisch eingeschränkte Nutzer können keine Maus bedienen und sind auf die Tastatur angewiesen. Jede Aktion, die mit der Maus möglich ist, muss auch mit der Tastatur möglich sein. Teste deine App, indem du die Maus weglegst und nur mit Tab, Shift+Tab, Enter, Escape und den Pfeiltasten. navigierst. Kannst du jedes Formular ausfüllen? Jeden Dialog öffnen und schließen? Jede Aktion ausführen? Wenn nicht, ist deine App nicht barrierefrei."
+    },
+    {
+      "question": "Wie barrierefrei muss meine App gesetzlich sein?",
+      "answer": "In Deutschland gilt das Barrierefreiheitsstärkungsgesetz, das ab Juni 2025 die EU-Richtlinie zur Barrierefreiheit umsetzt. Es verpflichtet Hersteller von Produkten und Dienstleistungen, diese barrierefrei zu gestalten. Für Apps bedeutet das: Sie müssen die WCAG 2. 1 auf Level AA erfüllen. Das umfasst Anforderungen an Wahrnehmbarkeit, Bedienbarkeit, Verständlichkeit und Robustheit. Ausgenommen sind Kleinstunternehmen mit weniger als zehn Beschäftigten und zwei Millionen Euro Jahresumsatz. Aber auch ohne gesetzliche Pflicht ist Barrierefreiheit eine Frage der Professionalität und der Nutzerfreundlichkeit."
+    }
+  ]
+}

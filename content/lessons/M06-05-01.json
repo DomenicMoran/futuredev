@@ -1,0 +1,785 @@
+{
+  "id": "M06-05-01",
+  "title": "Cookie-Banner und Einwilligungsmanagement",
+  "durationMinutes": 30,
+  "prerequisites": [
+    "M04-05-03",
+    "M06-02-02",
+    "M06-02-03",
+    "M06-03-02"
+  ],
+  "terms": [
+    {
+      "term": "Consent-Management-Plattform",
+      "definition": "Eine Software, die den Cookie-Banner verwaltet, Einwilligungen speichert und die technische Umsetzung der Nutzerpräferenzen steuert. Eine CMP blockiert Skripte und Cookies, bis der Nutzer eingewilligt hat, und lädt sie nur für die Kategorien, denen zugestimmt wurde. Bekannte CMPs sind Usercentrics, Cookiebot und Consentmanager. Eine CMP muss die Einwilligungen dokumentieren, um im Streitfall nachweisen zu können, wer wann wozu eingewilligt hat."
+    },
+    {
+      "term": "Technisch notwendige Cookies",
+      "definition": "Cookies, die für den Betrieb der Webseite zwingend erforderlich sind und keine Einwilligung brauchen. Dazu gehören Session-Cookies für den Login, Warenkorb-Cookies in Shops und Sicherheits-Cookies wie CSRF-Tokens. Analytics-Cookies, Marketing-Cookies und Social-Media-Cookies sind nicht technisch notwendig und brauchen eine Einwilligung. Die Abgrenzung ist im Einzelfall schwierig und wird von Aufsichtsbehörden zunehmend strenger ausgelegt."
+    },
+    {
+      "term": "Opt-in-Prinzip",
+      "definition": "Der Grundsatz, dass die Einwilligung durch eine aktive Handlung des Nutzers erteilt werden muss, nicht durch Untätigkeit. Ein vorangekreuztes Kästchen ist kein Opt-in, sondern ein Opt-out, das der Nutzer abwählen muss. Das Opt-in-Prinzip gilt für alle Einwilligungen nach der DSGVO und wurde vom EuGH im Planet49-Urteil 2019 ausdrücklich bestätigt. Alle Cookie-Kategorien außer technisch notwendigen müssen standardmäßig deaktiviert sein."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du betrittst ein Kaufhaus. Am Eingang steht ein Mitarbeiter und fragt: Dürfen wir Ihnen folgen und notieren, welche Abteilungen Sie besuchen? Dürfen wir Ihre Daten an Werbepartner weitergeben? Dürfen wir Ihre Kreditkartendaten für spätere Einkäufe speichern? Sie können zu jeder Frage Ja oder Nein sagen. Und Sie können das Kaufhaus auch betreten, wenn Sie alle Fragen mit Nein beantworten. Genau das ist ein korrekter Cookie-Banner: Er fragt, bevor er handelt, und der Zugang bleibt auch bei Ablehnung. offen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der Cookie-Banner ist die technische Umsetzung der Einwilligungspflicht für Cookies und ähnliche Technologien. Er muss vor dem Setzen von Cookies erscheinen, die Einwilligung durch aktive Handlung einholen und die Möglichkeit bieten,. in einzelne Kategorien differenziert einzuwilligen. Ein Banner, der nur die Option Alles akzeptieren bietet und das Ablehnen in einem Untermenü versteckt, ist rechtswidrig. Ein Banner, der die Webseite blockiert, bis der Nutzer zustimmt, ist ebenfalls rechtswidrig. Der Nutzer muss eine echte Wahl haben.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Welche Cookies brauchen eine Einwilligung, und welche nicht?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Die Unterscheidung zwischen einwilligungspflichtigen und einwilligungsfreien Cookies ist der Kern des Cookie-Managements. Technisch notwendige Cookies brauchen keine Einwilligung. Das sind Cookies, ohne die die Webseite nicht funktioniert: Session-Cookies für den Login, Warenkorb-Cookies, CSRF-Token und Cookies für. die Cookie-Präferenz selbst. Alle anderen Cookies brauchen eine Einwilligung: Analytics, Marketing, Tracking, Social-Media-Plugins, A/B-Testing und Personalisierung. Die Abgrenzung ist nicht immer klar. Ein Analytics-Cookie, das anonym und ohne Personenbezug arbeitet, kann unter Umständen ohne Einwilligung auskommen, aber die Aufsichtsbehörden legen. das zunehmend streng aus.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Technisch notwendige Cookies brauchen keine Einwilligung, alle anderen Cookies wie Analytics und Marketing brauchen eine aktive Zustimmung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In der FutureDev-App verwenden wir nur zwei Arten von Cookies: Ein Session-Cookie für den Login, das technisch notwendig. ist und keine Einwilligung braucht, und ein Analytics-Cookie für anonyme Nutzungsstatistiken, für das wir eine Einwilligung einholen. Unser Cookie-Banner zeigt zwei Kategorien: Notwendig, immer aktiv und vorangekreuzt, und Statistik, standardmäßig deaktiviert. Der Nutzer kann Statistik mit einem Klick aktivieren oder deaktivieren. Es gibt keine Marketing-Cookies, weil wir keine Werbung schalten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die korrekte Kategorisierung der Cookies ist die rechtliche Grundlage des gesamten Cookie-Managements. Eine falsche Kategorisierung macht den gesamten Banner rechtswidrig. Wenn du ein Marketing-Cookie als technisch notwendig deklarierst, ist die Einwilligung unwirksam und das Cookie illegal.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist das Opt-in-Prinzip, und wie setze ich es im Cookie-Banner um?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine Wahlurne vor. Du bekommst einen Stimmzettel, auf dem bereits ein Kreuz bei einem Kandidaten gesetzt ist. Wenn du diesen Kandidaten nicht wählen willst, musst du das Kreuz ausradieren und ein neues setzen. Das ist Opt-out. Ein fairer Stimmzettel ist leer, und du setzt dein Kreuz selbst. Das ist Opt-in. Der EuGH hat 2019 entschieden: Cookie-Einwilligungen müssen Opt-in sein. Der Stimmzettel muss leer sein, der Nutzer muss sein Kreuz selbst setzen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Das Opt-in-Prinzip bedeutet: Alle Checkboxen für einwilligungspflichtige Cookies müssen standardmäßig deaktiviert sein. Der Nutzer muss sie aktiv anhaken. Ein vorangekreuztes Kästchen, das der Nutzer abwählen muss, ist Opt-out und damit rechtswidrig. Das gilt für jede einzelne Cookie-Kategorie. Auch der Button Alle akzeptieren ist nur zulässig, wenn es einen gleichwertigen Button Alle ablehnen gibt. Der Nutzer muss die gleiche Anzahl von Klicks für Zustimmung und Ablehnung haben. Ein Banner, bei dem Ablehnen drei Klicks und Akzeptieren einen Klick braucht, ist rechtswidrig.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Das Opt-in-Prinzip verlangt, dass alle einwilligungspflichtigen Cookies standardmäßig deaktiviert sind und der Nutzer aktiv zustimmen muss.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Unser Cookie-Banner in der FutureDev-App setzt Opt-in konsequent um. Die Kategorie Statistik ist standardmäßig deaktiviert. Der Nutzer sieht zwei gleich große Buttons: Alle akzeptieren und Nur notwendige. Ein Klick auf Nur notwendige schließt den Banner, ohne Statistik-Cookies zu setzen. Ein Klick auf Alle akzeptieren aktiviert die Statistik-Cookies. Beide Aktionen brauchen genau einen Klick. Es gibt keine dunklen Muster, keine versteckten Optionen und keine vorangekreuzten Kästchen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Das Opt-in-Prinzip ist die zentrale rechtliche Anforderung an Cookie-Banner. Ein Verstoß macht die gesamte Einwilligung unwirksam. Alle Cookies, die aufgrund einer unwirksamen Einwilligung gesetzt wurden, sind illegal. Die Aufsichtsbehörden prüfen Opt-in-Verstöße zunehmend und verhängen Bußgelder.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist eine Consent-Management-Plattform, und brauche ich eine?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Eine Consent-Management-Plattform, kurz CMP, ist eine Software, die den Cookie-Banner anzeigt, Einwilligungen speichert und die technische Umsetzung der. Nutzerpräferenzen steuert. Sie blockiert Skripte und Cookies, bis der Nutzer eingewilligt hat, und lädt sie nur für die Kategorien, denen. zugestimmt wurde. Eine CMP dokumentiert die Einwilligungen mit Zeitstempel und IP-Adresse, um im Streitfall den Nachweis führen zu können. Für die meisten Apps ist eine CMP die praktikabelste Lösung, weil sie die komplexe Logik des Einwilligungsmanagements übernimmt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Eine Consent-Management-Plattform verwaltet Cookie-Einwilligungen, blockiert Skripte und dokumentiert die Zustimmung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Für die FutureDev-App haben wir uns gegen eine externe CMP entschieden, weil wir nur zwei Cookie-Kategorien haben und. die Logik einfach selbst implementieren können. Wir speichern die Einwilligung in einem Cookie und prüfen vor dem Laden des Analytics-Skripts, ob die Einwilligung vorliegt. Bei einer komplexeren App mit vielen Drittanbieter-Skripten wäre eine CMP wie Usercentrics die bessere Wahl. Die Entscheidung hängt von der Komplexität deiner Cookie-Landschaft ab.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Eine CMP ist kein Freifahrtschein. Auch mit CMP musst du die Cookies korrekt kategorisieren und den Banner rechtskonform gestalten. Die CMP übernimmt die technische Umsetzung, aber die rechtliche Verantwortung bleibt bei dir.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Wie dokumentiere ich Einwilligungen, und wie lange muss ich sie aufbewahren?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Die Dokumentation der Einwilligung ist deine Beweislast. Im Streitfall musst du nachweisen können, dass der Nutzer eingewilligt hat. Die Dokumentation muss enthalten: Wer hat eingewilligt, identifiziert durch eine pseudonyme ID oder IP-Adresse, wann wurde eingewilligt, mit. Zeitstempel, wozu wurde eingewilligt, also welche Cookie-Kategorien, und wie wurde eingewilligt, also durch welchen Klick. Die Einwilligung muss für die Dauer der Datenverarbeitung und mindestens drei Jahre nach der letzten Einwilligung aufbewahrt werden,. entsprechend der gesetzlichen Verjährungsfrist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In der FutureDev-App dokumentieren wir die Cookie-Einwilligung in einem Cookie namens cookie-consent. Es speichert einen JSON-String mit den Kategorien, denen zugestimmt wurde, und dem Zeitstempel der Einwilligung. Zusätzlich loggen wir die Einwilligung serverseitig in einer Datenbanktabelle, um im Streitfall einen fälschungssicheren Nachweis zu haben. Das Cookie allein könnte der Nutzer löschen, der serverseitige Log nicht. Die Logs werden nach drei Jahren automatisch gelöscht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Ohne Dokumentation kannst du die Einwilligung im Streitfall nicht beweisen. Die Aufsichtsbehörde wird im Zweifel gegen dich entscheiden. Die Dokumentation ist kein bürokratischer Overhead, sondern deine Versicherung gegen Bußgelder.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Ein greifbares Beispiel für Consent-Management-Plattform: Eine Software, die den Cookie-Banner verwaltet, Einwilligungen speichert und die technische Umsetzung der. Nutzerpräferenzen steuert. Eine CMP blockiert Skripte und Cookies, bis der Nutzer eingewilligt hat, und lädt sie nur für die Kategorien,. denen zugestimmt wurde.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Ein greifbares Beispiel für Technisch notwendige Cookies: Cookies, die für den Betrieb der Webseite zwingend erforderlich sind und. keine Einwilligung brauchen. Dazu gehören Session-Cookies für den Login, Warenkorb-Cookies in Shops und Sicherheits-Cookies wie CSRF-Tokens.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Ein greifbares Beispiel für Opt-in-Prinzip: Der Grundsatz, dass die Einwilligung durch eine aktive Handlung des Nutzers erteilt werden. muss, nicht durch Untätigkeit. Ein vorangekreuztes Kästchen ist kein Opt-in, sondern ein Opt-out, das der Nutzer abwählen muss.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "text": "Also noch einmal ganz kurz: Der Cookie-Banner muss vor dem Setzen von Cookies die informierte Einwilligung einholen. Technisch notwendige Cookies brauchen keine Einwilligung, alle anderen schon. Das Opt-in-Prinzip verlangt, dass alle Checkboxen standardmäßig deaktiviert sind und der Nutzer aktiv zustimmt. Eine Consent-Management-Plattform übernimmt die technische Umsetzung, aber die rechtliche Verantwortung bleibt bei dir. Und jede Einwilligung muss mit Zeitstempel und Umfang dokumentiert werden, um im Streitfall den Nachweis führen zu können.",
+      "isKeySentence": true
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Kannst du Cookie-Banner und Einwilligungsmanagement noch einmal mit einem Alltagbeispiel erklären, ohne Fachjargon?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du erklärst das Thema einem Freund am Küchentisch. Du fängst nicht mit dem Fachwort an, sondern mit dem Problem, das der Freund schon kennt. Genau so bauen wir hier das Verständnis auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der Kern von Cookie-Banner und Einwilligungsmanagement ist eine klare Reihenfolge: erst das Problem sehen, dann die Lösung in. einfachen Worten, dann den Fachbegriff, dann ein zweites Beispiel, und zum Schluss warum es in der Praxis zählt. Wenn du diese fünf Schritte wiederholen kannst, hast du die Lektion verstanden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In echten Projekten scheitert Cookie-Banner und Einwilligungsmanagement selten an fehlender Intelligenz, sondern an fehlender Klarheit. Wer den Ablauf laut erklären kann, findet Fehler schneller und schreibt Code, den andere morgen noch lesen können.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Deshalb üben wir das Thema so ausführlich: in Bewerbungsgesprächen und im Alltag eines Product Engineers zählt nicht, ob. du das Schlagwort kennst, sondern ob du den Zusammenhang in eigenen Worten tragen kannst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist der häufigste Anfängerfehler bei diesem Thema, und wie erkenne ich ihn früh?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der häufigste Fehler ist, eine fertige Vorlage zu kopieren und zu glauben, das sei Verständnis. Stattdessen solltest du nach jedem Abschnitt eine eigene Mini-Zusammenfassung schreiben: ein Satz Problem, ein Satz Lösung, ein Satz. Fachbegriff. Wenn dir einer der drei Sätze fehlt, lies den Abschnitt noch einmal.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Ein praktischer Selbstcheck: Schließe die App, öffne einen leeren Editor und schreibe drei Sätze zu Cookie-Banner und Einwilligungsmanagement. Wenn die Sätze ohne Abschreiben gelingen und ein konkretes Beispiel enthalten, sitzt der Stoff. Wenn nicht, spring zurück zum Alltagsbild am Anfang der Lektion.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du sitzt mit einem Freund am Küchentisch. Du erklärst das Thema ohne Fachwörter. Erst das Problem. Dann die einfache Lösung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Genau so lernen wir hier. Erst ein Bild aus dem Alltag. Dann die Erklärung in kurzen Sätzen. Dann der Fachbegriff. Dann ein zweites Beispiel. Zum Schluss warum es zählt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In echten Projekten scheitert Cookie-Banner und Einwilligungsmanagement selten an fehlender Intelligenz. Es scheitert an unklarer Sprache. Wer den Ablauf laut erklären kann, findet Fehler schneller.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Deshalb üben wir das Thema so gründlich. In Gesprächen zählt nicht das Schlagwort. Es zählt, ob du den Zusammenhang in eigenen Worten trägst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist der häufigste Anfängerfehler bei diesem Thema?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der häufigste Fehler ist Kopieren ohne Verständnis. Schreib nach jedem Abschnitt drei Sätze. Ein Satz Problem. Ein Satz Lösung. Ein Satz Fachbegriff.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Selbstcheck: Schließe die App. Öffne einen leeren Editor. Schreibe drei Sätze zu Cookie-Banner und Einwilligungsmanagement. Wenn das ohne Abschreiben gelingt, sitzt der Stoff.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Wenn dir einer der drei Sätze fehlt, spring zurück zum Alltagsbild. Lies den Abschnitt noch einmal laut. Dann schreib die drei Sätze erneut.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Diese Wiederholung spart später Wochen. Teams verlieren Zeit durch Missverständnisse. Klare Sprache ist deshalb Teil der Technik.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Kannst du Cookie-Banner und Einwilligungsmanagement noch einmal ganz langsam erklären?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du sitzt mit einem Freund am Küchentisch. Du erklärst das Thema ohne Fachwörter. Erst das Problem. Dann die einfache Lösung. Das gilt besonders für den Teil 11.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Genau so lernen wir hier. Erst ein Bild aus dem Alltag. Dann die Erklärung in kurzen Sätzen. Dann der Fachbegriff. Dann ein zweites Beispiel. Zum Schluss warum es zählt. Das gilt besonders für den Teil 12.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In echten Projekten scheitert Cookie-Banner und Einwilligungsmanagement selten an fehlender Intelligenz. Es scheitert an unklarer Sprache. Wer den Ablauf laut erklären kann, findet Fehler schneller. Das gilt besonders für den Teil 13.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Deshalb üben wir das Thema so gründlich. In Gesprächen zählt nicht das Schlagwort. Es zählt, ob du den Zusammenhang in eigenen Worten trägst. Das gilt besonders für den Teil 14.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist der häufigste Anfängerfehler bei diesem Thema? Das gilt besonders für den Teil 15.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der häufigste Fehler ist Kopieren ohne Verständnis. Schreib nach jedem Abschnitt drei Sätze. Ein Satz Problem. Ein Satz Lösung. Ein Satz Fachbegriff. Das gilt besonders für den Teil 16.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Selbstcheck: Schließe die App. Öffne einen leeren Editor. Schreibe drei Sätze zu Cookie-Banner und Einwilligungsmanagement. Wenn das ohne Abschreiben gelingt, sitzt der Stoff. Das gilt besonders für den Teil 17.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Wenn dir einer der drei Sätze fehlt, spring zurück zum Alltagsbild. Lies den Abschnitt noch einmal laut. Dann schreib die drei Sätze erneut. Das gilt besonders für den Teil 18.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Die Begriffe dieser Lektion: Consent-Management-Plattform, Technisch notwendige Cookies, Opt-in-Prinzip.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Eine Consent-Management-Plattform ist eine Software, die den Cookie-Banner verwaltet, Einwilligungen speichert und die technische Umsetzung der Nutzerpräferenzen steuert. Eine CMP blockiert Skripte und Cookies, bis der Nutzer eingewilligt hat, und lädt sie nur für die Kategorien,. denen zugestimmt wurde. Bekannte CMPs sind Usercentrics, Cookiebot und Consentmanager.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Technisch notwendige Cookies sind Cookies, die für den Betrieb der Webseite zwingend erforderlich sind und keine Einwilligung brauchen. Dazu gehören Session-Cookies für den Login, Warenkorb-Cookies in Shops und Sicherheits-Cookies wie CSRF-Tokens. Analytics-Cookies, Marketing-Cookies und Social-Media-Cookies sind nicht technisch notwendig und brauchen eine Einwilligung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Das Opt-in-Prinzip ist der Grundsatz, dass die Einwilligung durch eine aktive Handlung des Nutzers erteilt werden muss, nicht. durch Untätigkeit. Ein vorangekreuztes Kästchen ist kein Opt-in, sondern ein Opt-out. Das Opt-in-Prinzip gilt für alle Einwilligungen nach der DSGVO und wurde vom EuGH im Planet49-Urteil 2019 ausdrücklich bestätigt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Kann ich eine Cookie-Wall verwenden, die den Zugang nur mit Zustimmung erlaubt?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Cookie-Walls, die den Zugang zur Webseite von der Cookie-Zustimmung abhängig machen, sind rechtlich umstritten. Die deutsche Datenschutzkonferenz hält sie für unzulässig, weil die Einwilligung dann nicht freiwillig ist. Der Europäische Datenschutzausschuss tendiert zur gleichen Auffassung. Einige europäische Länder wie Österreich haben Cookie-Walls ausdrücklich verboten. Die sicherste Lösung ist, den Zugang zur Webseite nicht von der Cookie-Zustimmung abhängig zu machen. Biete den vollen Funktionsumfang auch ohne Marketing-Cookies an. Wenn du ein Bezahlmodell als Alternative zur Cookie-Zustimmung anbietest, kann das zulässig sein, aber auch das ist rechtlich. nicht abschließend geklärt. Merksatz: Bei Cookie-Banner und Einwilligungsmanagement zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Wie oft muss ich die Einwilligung erneuern?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Die DSGVO schreibt keine feste Erneuerungsfrist für Cookie-Einwilligungen vor. Die Einwilligung gilt bis zum Widerruf. Allerdings empfehlen die Aufsichtsbehörden, die Einwilligung nach spätestens einem Jahr zu erneuern, weil sich die Cookie-Landschaft und die. Nutzererwartungen ändern können. In der Praxis zeigen die meisten CMPs den Banner nach sechs bis zwölf Monaten erneut an. Wenn du neue Cookies hinzufügst oder die Zwecke der Datenverarbeitung änderst, musst du sofort eine neue Einwilligung einholen. Die alte Einwilligung deckt die neuen Cookies nicht ab. Merksatz: Bei Cookie-Banner und Einwilligungsmanagement zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Brauche ich einen Cookie-Banner auch für eine App?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ja, die Einwilligungspflicht gilt nicht nur für Cookies im Browser, sondern für alle Technologien, die Informationen auf dem. Endgerät des Nutzers speichern oder darauf zugreifen. In Apps betrifft das vor allem Tracking-SDKs, Analyse-Tools und Werbe-IDs. Du brauchst einen Einwilligungsdialog in der App, der vor der Initialisierung dieser SDKs die Zustimmung einholt. Der Dialog muss die gleichen Anforderungen erfüllen wie ein Cookie-Banner: Opt-in, differenzierte Kategorien und Dokumentation. Apple und Google verlangen zusätzlich eigene Einwilligungen für das Tracking über ihre Plattformen. Merksatz: Bei Cookie-Banner und Einwilligungsmanagement zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was passiert, wenn der Nutzer seine Einwilligung widerruft?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Der Widerruf der Einwilligung muss genauso einfach sein wie die Erteilung. Ein Link in der Datenschutzerklärung oder ein Button im Footer, der die Cookie-Einstellungen erneut öffnet, ist die übliche. Umsetzung. Nach dem Widerruf musst du alle Cookies der widerrufenen Kategorien löschen und die entsprechenden Skripte nicht mehr laden. Die Daten, die bis zum Widerruf rechtmäßig verarbeitet wurden, dürfen bleiben. Der Widerruf wirkt nur für die Zukunft, nicht rückwirkend. Du musst den Widerruf genauso dokumentieren wie die Einwilligung. Merksatz: Bei Cookie-Banner und Einwilligungsmanagement zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Kann ich Google Analytics ohne Einwilligung nutzen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Die Standardversion von Google Analytics braucht eine Einwilligung, weil sie Cookies setzt und Daten in die USA übermittelt. Es gibt datenschutzfreundlichere Alternativen wie Plausible oder Matomo, die ohne Cookies und ohne Personenbezug arbeiten können. Wenn du Google Analytics ohne Einwilligung nutzen willst, musst du die IP-Anonymisierung aktivieren, alle Datenfreigaben an Google deaktivieren,. die Speicherdauer auf das Minimum reduzieren und einen Auftragsverarbeitungsvertrag abschließen. Selbst dann ist nicht garantiert, dass die Aufsichtsbehörden das akzeptieren. Die sicherste Lösung ist, Analytics nur mit Einwilligung zu laden. Merksatz: Bei Cookie-Banner und Einwilligungsmanagement zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    }
+  ],
+  "practiceExample": {
+    "text": "Cookie-Banner der FutureDev-App mit Opt-in, zwei Kategorien und serverseitiger Einwilligungsdokumentation.",
+    "repoNote": "repo-futuredev",
+    "location": "apps/web/src/components/CookieBanner.tsx (Opt-in-Banner mit zwei Kategorien), supabase/migrations/ (Tabelle consent_logs)"
+  },
+  "quiz": [
+    {
+      "question": "Welches Alltagsbild beschreibt einen korrekten Cookie-Banner am treffendsten?",
+      "area": "Cookie-Banner",
+      "options": [
+        {
+          "text": "Ein Kaufhaus-Mitarbeiter am Eingang, der vor dem Betreten…",
+          "isCorrect": true,
+          "explanation": "Richtig: der Banner muss vor der Datenerhebung fragen."
+        },
+        {
+          "text": "Ein Schild an der Kasse, das über die Videoüberwachung informiert.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Information muss vorher kommen, nicht erst an der Kasse."
+        },
+        {
+          "text": "Ein Vertrag, den du nach dem Einkauf unterschreibst.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Einwilligung muss vorher eingeholt werden."
+        },
+        {
+          "text": "Eine Rechnung, die du nach dem Einkauf bekommst. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: eine Rechnung informiert nicht über Datenerhebung."
+        }
+      ]
+    },
+    {
+      "question": "Welche Cookies brauchen KEINE Einwilligung?",
+      "area": "Cookies",
+      "options": [
+        {
+          "text": "Ein Session-Cookie für den Login, ohne das die App nicht funktioniert.",
+          "isCorrect": true,
+          "explanation": "Richtig: technisch notwendige Cookies sind einwilligungsfrei."
+        },
+        {
+          "text": "Ein Google-Analytics-Cookie für Besucherstatistiken.",
+          "isCorrect": false,
+          "explanation": "Falsch: Analytics-Cookies brauchen eine Einwilligung."
+        },
+        {
+          "text": "Ein Facebook-Pixel für Werbe-Tracking. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: Marketing-Cookies brauchen eine Einwilligung."
+        },
+        {
+          "text": "Ein Cookie für personalisierte Produktempfehlungen.",
+          "isCorrect": false,
+          "explanation": "Falsch: Personalisierungs-Cookies brauchen eine Einwilligung."
+        }
+      ]
+    },
+    {
+      "question": "Was bedeutet das Opt-in-Prinzip für Cookie-Banner?",
+      "area": "Opt-in",
+      "options": [
+        {
+          "text": "Alle Checkboxen für einwilligungspflichtige Cookies müsse…",
+          "isCorrect": true,
+          "explanation": "Richtig: der Nutzer muss aktiv zustimmen."
+        },
+        {
+          "text": "Alle Checkboxen sind standardmäßig aktiviert, der Nutzer kann abwählen.",
+          "isCorrect": false,
+          "explanation": "Falsch: das ist Opt-out und rechtswidrig."
+        },
+        {
+          "text": "Der Nutzer muss einen Vertrag unterschreiben. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: eine elektronische Einwilligung reicht."
+        },
+        {
+          "text": "Der Banner muss in einem Popup-Fenster erscheinen.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Form ist nicht vorgeschrieben."
+        }
+      ]
+    },
+    {
+      "question": "Welches Urteil hat das Opt-in-Prinzip für Cookies bestätigt?",
+      "area": "Opt-in",
+      "options": [
+        {
+          "text": "Das Planet49-Urteil des EuGH von 2019.",
+          "isCorrect": true,
+          "explanation": "Richtig: der EuGH hat vorangekreuzte Kästchen für unzulässig erklärt."
+        },
+        {
+          "text": "Das Schrems-II-Urteil des EuGH von 2020.",
+          "isCorrect": false,
+          "explanation": "Falsch: Schrems II betrifft Drittlandübermittlung."
+        },
+        {
+          "text": "Das Google-Spain-Urteil des EuGH von 2014.",
+          "isCorrect": false,
+          "explanation": "Falsch: Google Spain betrifft das Recht auf Vergessenwerden."
+        },
+        {
+          "text": "Das Cookie-Urteil des BGH von 2022.",
+          "isCorrect": false,
+          "explanation": "Falsch: es gibt kein solches BGH-Urteil."
+        }
+      ]
+    },
+    {
+      "question": "Was muss die Dokumentation einer Cookie-Einwilligung enthalten?",
+      "area": "Dokumentation",
+      "options": [
+        {
+          "text": "Wer, wann, wozu und wie eingewilligt hat.",
+          "isCorrect": true,
+          "explanation": "Richtig: diese vier Angaben sind für den Nachweis erforderlich."
+        },
+        {
+          "text": "Nur den Namen des Nutzers. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: der Name allein reicht nicht."
+        },
+        {
+          "text": "Nur den Zeitstempel der Einwilligung.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Zeitstempel allein reicht nicht."
+        },
+        {
+          "text": "Eine Kopie des Personalausweises.",
+          "isCorrect": false,
+          "explanation": "Falsch: eine Ausweiskopie ist nicht erforderlich."
+        }
+      ]
+    },
+    {
+      "question": "Was ist eine Cookie-Wall, und ist sie zulässig?",
+      "area": "Cookie-Wall",
+      "options": [
+        {
+          "text": "Eine Wand, die den Zugang nur mit Cookie-Zustimmung erlau…",
+          "isCorrect": true,
+          "explanation": "Richtig: Cookie-Walls verletzen die Freiwilligkeit der Einwilligung."
+        },
+        {
+          "text": "Eine technische Firewall gegen Cookie-Diebstahl, immer zulässig.",
+          "isCorrect": false,
+          "explanation": "Falsch: eine Cookie-Wall ist keine Firewall."
+        },
+        {
+          "text": "Eine Werbefläche für Cookies, immer zulässig. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: eine Cookie-Wall ist keine Werbefläche."
+        },
+        {
+          "text": "Ein Cookie, das die Wandfarbe der Webseite speichert, immer zulässig.",
+          "isCorrect": false,
+          "explanation": "Falsch: das ist kein Cookie-Wall."
+        }
+      ]
+    },
+    {
+      "question": "Brauchst du einen Cookie-Banner auch für eine mobile App?",
+      "area": "Apps",
+      "options": [
+        {
+          "text": "Ja, für Tracking-SDKs und Analyse-Tools, die auf das Endgerät zugreifen.",
+          "isCorrect": true,
+          "explanation": "Richtig: die Einwilligungspflicht gilt für alle Technologien auf dem Endgerät."
+        },
+        {
+          "text": "Nein, die Einwilligungspflicht gilt nur für Browser.",
+          "isCorrect": false,
+          "explanation": "Falsch: die ePrivacy-Richtlinie gilt für alle Endgeräte."
+        },
+        {
+          "text": "Nur wenn die App kostenpflichtig ist. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: die Kostenpflicht ist irrelevant."
+        },
+        {
+          "text": "Nur wenn die App mehr als tausend Nutzer hat.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Nutzerzahl ist irrelevant."
+        }
+      ]
+    },
+    {
+      "question": "Was passiert, wenn der Nutzer seine Cookie-Einwilligung widerruft?",
+      "area": "Widerruf",
+      "options": [
+        {
+          "text": "Die Cookies der widerrufenen Kategorien müssen gelöscht u…",
+          "isCorrect": true,
+          "explanation": "Richtig: der Widerruf wirkt für die Zukunft."
+        },
+        {
+          "text": "Nichts, die Einwilligung kann nicht widerrufen werden.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Einwilligung ist jederzeit widerrufbar."
+        },
+        {
+          "text": "Alle Daten müssen rückwirkend gelöscht werden. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: der Widerruf wirkt nur für die Zukunft."
+        },
+        {
+          "text": "Der Nutzer wird von der Webseite ausgeschlossen.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Zugang darf nicht vom Widerruf abhängen."
+        }
+      ]
+    },
+    {
+      "question": "Kannst du Google Analytics ohne Einwilligung nutzen?",
+      "area": "Analytics",
+      "options": [
+        {
+          "text": "Nur mit IP-Anonymisierung und weiteren Schutzmaßnahmen, a…",
+          "isCorrect": true,
+          "explanation": "Richtig: Analytics ohne Einwilligung ist riskant."
+        },
+        {
+          "text": "Ja, Google Analytics ist immer einwilligungsfrei.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Standardversion braucht eine Einwilligung."
+        },
+        {
+          "text": "Nein, Google Analytics ist in der EU verboten. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: Google Analytics ist nicht verboten, aber einwilligungspflichtig."
+        },
+        {
+          "text": "Ja, wenn du einen Auftragsverarbeitungsvertrag abschließt.",
+          "isCorrect": false,
+          "explanation": "Falsch: der AVV allein reicht nicht."
+        }
+      ]
+    },
+    {
+      "question": "Wie oft sollte die Cookie-Einwilligung erneuert werden?",
+      "area": "Erneuerung",
+      "options": [
+        {
+          "text": "Die Aufsichtsbehörden empfehlen eine Erneuerung nach spät…",
+          "isCorrect": true,
+          "explanation": "Richtig: ein Jahr ist die gängige Empfehlung."
+        },
+        {
+          "text": "Nie, die Einwilligung gilt ewig.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Einwilligung sollte regelmäßig erneuert werden."
+        },
+        {
+          "text": "Jeden Monat. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: monatlich ist zu häufig."
+        },
+        {
+          "text": "Nur wenn der Nutzer es verlangt.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Erneuerung sollte proaktiv angeboten werden."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der Vorteil einer serverseitigen Dokumentation der Einwilligung?",
+      "area": "Dokumentation",
+      "options": [
+        {
+          "text": "Sie ist fälschungssicher, weil der Nutzer sie nicht löschen kann.",
+          "isCorrect": true,
+          "explanation": "Richtig: serverseitige Logs sind manipulationssicher."
+        },
+        {
+          "text": "Sie ist billiger als ein Cookie. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: serverseitige Speicherung ist nicht billiger."
+        },
+        {
+          "text": "Sie ist schneller als ein Cookie.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Geschwindigkeit ist nicht der Hauptvorteil."
+        },
+        {
+          "text": "Sie ist gesetzlich vorgeschrieben.",
+          "isCorrect": false,
+          "explanation": "Falsch: die DSGVO schreibt keine serverseitige Speicherung vor."
+        }
+      ]
+    },
+    {
+      "question": "Warum ist ein Banner mit nur einem Alle akzeptieren-Button rechtswidrig?",
+      "area": "Opt-in",
+      "options": [
+        {
+          "text": "Weil der Nutzer keine echte Wahl hat und die Ablehnung ge…",
+          "isCorrect": true,
+          "explanation": "Richtig: die Ablehnung muss gleich einfach sein."
+        },
+        {
+          "text": "Weil der Button zu groß ist. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: die Größe ist nicht das Problem."
+        },
+        {
+          "text": "Weil der Button blau sein muss.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Farbe ist nicht vorgeschrieben."
+        },
+        {
+          "text": "Weil der Button einen Link enthalten muss.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Link ist nicht vorgeschrieben."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Implementiere einen Cookie-Banner für die FutureDev-App. Erstelle zwei Kategorien: Notwendig und Statistik. Setze Opt-in um: Statistik standardmäßig deaktiviert. Biete zwei gleichwertige Buttons: Alle akzeptieren und Nur notwendige. Speichere die Einwilligung in einem Cookie und dokumentiere sie serverseitig in einer Datenbanktabelle. Implementiere einen Link in der Datenschutzerklärung, der die Cookie-Einstellungen erneut öffnet.",
+    "expectation": "Die Anforderungen an Cookie-Banner und Einwilligungsmanagement wurden verstanden und für die FutureDev-App umgesetzt.",
+    "checklist": [
+      "Cookie-Banner mit zwei Kategorien implementiert.",
+      "Opt-in umgesetzt: Statistik standardmäßig deaktiviert.",
+      "Zwei gleichwertige Buttons für Akzeptieren und Ablehnen.",
+      "Einwilligung in Cookie und serverseitig dokumentiert.",
+      "Link zum erneuten Öffnen der Cookie-Einstellungen in der Datenschutzerklärung."
+    ],
+    "portfolioItem": "P04"
+  },
+  "audio": {
+    "file": "M06-05-01.mp3",
+    "durationSeconds": 1440,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Kann ich eine Cookie-Wall verwenden, die den Zugang nur mit Zustimmung erlaubt?",
+      "answer": "Cookie-Walls, die den Zugang zur Webseite von der Cookie-Zustimmung abhängig machen, sind rechtlich umstritten. Die deutsche Datenschutzkonferenz hält sie für unzulässig, weil die Einwilligung dann nicht freiwillig ist. Der Europäische Datenschutzausschuss tendiert zur gleichen Auffassung. Einige europäische Länder wie Österreich haben Cookie-Walls ausdrücklich verboten. Die sicherste Lösung ist, den Zugang zur Webseite nicht von der Cookie-Zustimmung abhängig zu machen. Biete den vollen Funktionsumfang auch ohne Marketing-Cookies an. Wenn du ein Bezahlmodell als Alternative zur Cookie-Zustimmung anbietest, kann das zulässig sein, aber auch das ist rechtlich. nicht abschließend geklärt. Merksatz: Bei Cookie-Banner und Einwilligungsmanagement zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    },
+    {
+      "question": "Wie oft muss ich die Einwilligung erneuern?",
+      "answer": "Die DSGVO schreibt keine feste Erneuerungsfrist für Cookie-Einwilligungen vor. Die Einwilligung gilt bis zum Widerruf. Allerdings empfehlen die Aufsichtsbehörden, die Einwilligung nach spätestens einem Jahr zu erneuern, weil sich die Cookie-Landschaft und die. Nutzererwartungen ändern können. In der Praxis zeigen die meisten CMPs den Banner nach sechs bis zwölf Monaten erneut an. Wenn du neue Cookies hinzufügst oder die Zwecke der Datenverarbeitung änderst, musst du sofort eine neue Einwilligung einholen. Die alte Einwilligung deckt die neuen Cookies nicht ab. Merksatz: Bei Cookie-Banner und Einwilligungsmanagement zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    },
+    {
+      "question": "Brauche ich einen Cookie-Banner auch für eine App?",
+      "answer": "Ja, die Einwilligungspflicht gilt nicht nur für Cookies im Browser, sondern für alle Technologien, die Informationen auf dem. Endgerät des Nutzers speichern oder darauf zugreifen. In Apps betrifft das vor allem Tracking-SDKs, Analyse-Tools und Werbe-IDs. Du brauchst einen Einwilligungsdialog in der App, der vor der Initialisierung dieser SDKs die Zustimmung einholt. Der Dialog muss die gleichen Anforderungen erfüllen wie ein Cookie-Banner: Opt-in, differenzierte Kategorien und Dokumentation. Apple und Google verlangen zusätzlich eigene Einwilligungen für das Tracking über ihre Plattformen. Merksatz: Bei Cookie-Banner und Einwilligungsmanagement zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    },
+    {
+      "question": "Was passiert, wenn der Nutzer seine Einwilligung widerruft?",
+      "answer": "Der Widerruf der Einwilligung muss genauso einfach sein wie die Erteilung. Ein Link in der Datenschutzerklärung oder ein Button im Footer, der die Cookie-Einstellungen erneut öffnet, ist die übliche. Umsetzung. Nach dem Widerruf musst du alle Cookies der widerrufenen Kategorien löschen und die entsprechenden Skripte nicht mehr laden. Die Daten, die bis zum Widerruf rechtmäßig verarbeitet wurden, dürfen bleiben. Der Widerruf wirkt nur für die Zukunft, nicht rückwirkend. Du musst den Widerruf genauso dokumentieren wie die Einwilligung. Merksatz: Bei Cookie-Banner und Einwilligungsmanagement zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    },
+    {
+      "question": "Kann ich Google Analytics ohne Einwilligung nutzen?",
+      "answer": "Die Standardversion von Google Analytics braucht eine Einwilligung, weil sie Cookies setzt und Daten in die USA übermittelt. Es gibt datenschutzfreundlichere Alternativen wie Plausible oder Matomo, die ohne Cookies und ohne Personenbezug arbeiten können. Wenn du Google Analytics ohne Einwilligung nutzen willst, musst du die IP-Anonymisierung aktivieren, alle Datenfreigaben an Google deaktivieren,. die Speicherdauer auf das Minimum reduzieren und einen Auftragsverarbeitungsvertrag abschließen. Selbst dann ist nicht garantiert, dass die Aufsichtsbehörden das akzeptieren. Die sicherste Lösung ist, Analytics nur mit Einwilligung zu laden. Merksatz: Bei Cookie-Banner und Einwilligungsmanagement zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    }
+  ]
+}

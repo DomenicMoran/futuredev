@@ -1,0 +1,802 @@
+{
+  "id": "M08-01-01",
+  "title": "Was ein KI-Coding-Agent tut",
+  "durationMinutes": 30,
+  "prerequisites": [
+    "M03-02-01",
+    "M02-03-01",
+    "M01-02-01",
+    "M02-04-01",
+    "M02-05-01",
+    "M03-02-02",
+    "M04-04-03",
+    "M05-01-02"
+  ],
+  "terms": [
+    {
+      "term": "Tool-Calling",
+      "definition": "Die Faehigkeit eines KI-Modells, externe Werkzeuge aufzurufen. Statt nur Text zu produzieren, kann das Modell eine Funktion wie read_file oder execute_command ausloesen. Das Modell entscheidet selbst, welches Werkzeug es braucht, und verarbeitet das Ergebnis des Werkzeugs im naechsten Schritt."
+    },
+    {
+      "term": "Autonome Schleife",
+      "definition": "Der Kreislauf, in dem ein KI-Agent arbeitet: Plan erstellen, Schritt ausfuehren, Ergebnis pruefen, naechsten Schritt planen. Diese Schleife laeuft so lange, bis die Aufgabe erledigt ist oder der Agent auf ein unloesbares Problem stoesst. Die Autonomie liegt darin, dass kein Mensch jeden einzelnen Schritt bestaetigen muss."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen erfahrenen Handwerker vor, der in deine Werkstatt kommt. Du sagst ihm: Bau mir ein Regal. Er schaut sich deine Werkstatt an, oeffnet die Schraenke, findet Holz und Schrauben, nimmt die Saege aus dem. Regal und legt los. Er fragt nicht bei jedem Handgriff nach. Er weiss, welches Werkzeug er braucht, und holt es sich selbst. So arbeitet ein KI-Coding-Agent.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein KI-Coding-Agent ist ein Programm, das selbststaendig Code schreibt, aendert und testet. Anders als ein Chatbot, der nur auf jede Nachricht antwortet, plant ein Agent seine Schritte selbst. Er liest Dateien, fuehrt Befehle aus und prueft, ob das Ergebnis stimmt. Er arbeitet in einer Schleife: planen, ausfuehren, pruefen, wieder planen. Diese Schleife heisst Autonome Schleife.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was unterscheidet einen KI-Agenten von einem normalen Chatbot?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein Chatbot antwortet nur auf das, was du ihm sagst. Er kann keine Dateien lesen, keine Befehle ausfuehren und nichts ueberpruefen. Ein Agent hat Zugriff auf Werkzeuge: Er kann Dateien oeffnen, Terminalbefehle starten und das Ergebnis auswerten. Der groesste Unterschied ist die Autonomie. Der Agent entscheidet selbst, welchen Schritt er als naechstes macht. Der Chatbot wartet auf deine naechste Nachricht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Ein KI-Coding-Agent ist ein Programm, das selbststaendig Code lesen, schreiben und testen kann. Er nutzt Werkzeuge und arbeitet in einer autonomen Schleife aus Planen, Ausfuehren und Pruefen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Du sagst einem Agenten: Fuege einen Login-Button hinzu. Der Agent liest die vorhandenen Dateien, findet die richtige Stelle, schreibt den Code, startet den Dev-Server und prueft. im Browser, ob der Button erscheint. Wenn etwas nicht funktioniert, liest er die Fehlermeldung und korrigiert den Code. Das alles ohne Rueckfrage. Du siehst nur das Endergebnis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Agenten sparen nicht nur Zeit, sie aendern die Art, wie du arbeitest. Statt jede Zeile selbst zu schreiben, beschreibst du das Ziel und pruefst das Ergebnis. Deine Rolle verschiebt sich vom Schreiber zum Pruefer. Das ist schneller, aber du musst verstehen, was der Agent tut, um Fehler zu erkennen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist Tool-Calling, und warum ist es die Schluesseltechnik hinter Agenten?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du sitzt in einem Raum und kannst nicht aufstehen. Du hast ein Telefon. Du rufst jemanden an und sagst: Bring mir das Buch aus dem Regal. Die Person geht hin, holt das Buch und gibt es dir. Du liest eine Seite und rufst wieder an: Jetzt bring mir einen Stift. So funktioniert Tool-Calling. Das Modell sitzt im Raum und ruft Werkzeuge an, die fuer es handeln.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Tool-Calling ist die Faehigkeit eines KI-Modells, externe Werkzeuge aufzurufen. Das Modell produziert nicht nur Text, sondern loest Aktionen aus. Es sagt nicht: Du koenntest die Datei lesen, sondern es ruft read_file selbst auf. Das Ergebnis des Werkzeugs fliesst zurueck ins Modell. Das Modell entscheidet dann, ob es ein weiteres Werkzeug braucht oder die Antwort fertig ist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Tool-Calling ist die Faehigkeit eines KI-Modells, externe Werkzeuge wie Dateizugriff oder Terminal selbststaendig aufzurufen und deren Ergebnisse weiterzuverarbeiten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Ein Agent bekommt die Aufgabe: Finde alle Rechtschreibfehler im Projekt. Er ruft search_files mit dem Muster [a-z] auf, bekommt eine Liste, liest jede Datei mit read_file, findet einen. Fehler und ruft apply_diff, um ihn zu korrigieren. Jeder dieser Schritte ist ein Tool-Call. Das Modell entscheidet bei jedem Schritt neu, welches Werkzeug es als naechstes braucht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Ohne Tool-Calling waere ein Agent nur ein Chatbot mit guten Ratschlaegen. Erst die Faehigkeit, Werkzeuge zu nutzen, macht aus einem Berater einen Handelnden. Tool-Calling ist die Bruecke zwischen Sprache und Aktion. Es verwandelt Text in echte Veraenderungen an deinem Code.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Wie funktioniert die Autonome Schleife, und wo sind ihre Grenzen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen Koch vor, der ein neues Rezept ausprobiert. Er liest den ersten Schritt, fuehrt ihn aus, probiert das Zwischenergebnis und entscheidet dann: Passt die Wuerzung? Wenn nicht, wuerzt er nach. Dann liest er den naechsten Schritt. Er folgt nicht blind dem Rezept, sondern prueft nach jedem Schritt, ob das Ergebnis stimmt. So arbeitet die Autonome Schleife.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Die Autonome Schleife hat drei Phasen: Planen, Ausfuehren, Pruefen. In der Planphase ueberlegt der Agent, welcher Schritt als naechstes noetig ist. In der Ausfuehrungsphase ruft er ein Werkzeug auf. In der Pruefphase wertet er das Ergebnis aus. War es erfolgreich? Dann plant er den naechsten Schritt. Gab es einen Fehler? Dann analysiert er die Fehlermeldung und plant eine Korrektur. Diese Schleife laeuft, bis die Aufgabe erledigt ist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Die Autonome Schleife ist der Kreislauf aus Planen, Ausfuehren und Pruefen, in dem ein KI-Agent ohne menschliches Eingreifen. arbeitet, bis eine Aufgabe erledigt ist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Der Agent soll eine neue Komponente bauen. Plan: Datei anlegen. Ausfuehren: write_to_file. Pruefen: Hat die Datei den richtigen Inhalt? Plan: Komponente testen. Ausfuehren: npm test. Pruefen: Sind alle Tests gruen? Wenn ein Test rot ist, plant der Agent eine Korrektur und durchlaeuft die Schleife erneut. Er hoert erst auf, wenn alle Tests gruen sind.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die Autonome Schleife ist der Motor des Agenten. Sie macht ihn produktiv, aber auch gefaehrlich. Ein Fehler in der Pruefphase kann dazu fuehren, dass der Agent immer weiter falsche Korrekturen vornimmt. Deshalb ist es wichtig, dass du die Schleife ueberwachst und eingreifst, wenn der Agent sich verrennt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Welche Werkzeuge hat ein KI-Coding-Agent typischerweise?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Die wichtigsten Werkzeuge sind Dateizugriff, Terminal und Browser. Mit Dateizugriff kann der Agent Code lesen und schreiben. Mit dem Terminal kann er Befehle ausfuehren, zum Beispiel Builds starten oder Tests laufen lassen. Mit dem Browser kann er Webseiten oeffnen und pruefen, ob eine Aenderung wie erwartet aussieht. Manche Agenten haben zusaetzlich Zugriff auf Git, Datenbanken oder APIs.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In der FutureDev-App nutzt der Agent read_file, um bestehende Komponenten zu verstehen. Er nutzt execute_command fuer pnpm build und pnpm test. Er nutzt apply_diff, um gezielt Code zu aendern. Und er nutzt den Browser, um nach einem Deployment zu pruefen, ob die Seite noch funktioniert. Jedes Werkzeug ist auf eine bestimmte Aufgabe spezialisiert.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die Werkzeuge sind die Haende des Agenten. Ohne sie kann er nur denken, aber nicht handeln. Die Kunst liegt darin, dem Agenten genau die Werkzeuge zu geben, die er braucht, und keine, die er. nicht braucht. Jedes zusaetzliche Werkzeug ist eine zusaetzliche Angriffsflaeche und eine zusaetzliche Fehlerquelle.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein haeufiger Fehler ist, dem Agenten zu viele Werkzeuge auf einmal zu geben. Ein Agent mit Zugriff auf Dateisystem, Terminal, Git und Datenbank kann viel kaputt machen, wenn er falsch liegt. Gib ihm nur die Werkzeuge, die er fuer die aktuelle Aufgabe wirklich braucht. Das ist das Prinzip der minimalen Berechtigung, das du aus der Sicherheit kennst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Sicherheit gilt auch fuer Agenten. Ein Agent mit root-Zugriff auf deinen Server ist ein Risiko. Ein Agent, der nur lesen und Tests ausfuehren darf, ist sicherer. Du bestimmst die Grenzen, nicht der Agent. Das ist deine Verantwortung als Entwickler, auch wenn der Agent den Code schreibt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "text": "Also noch einmal ganz kurz: Ein KI-Coding-Agent ist kein Chatbot, sondern ein Programm, das selbststaendig Werkzeuge nutzt. Tool-Calling ist die Faehigkeit, diese Werkzeuge aufzurufen. Die Autonome Schleife ist der Kreislauf aus Planen, Ausfuehren und Pruefen. Deine Rolle verschiebt sich vom Schreiber zum Pruefer. Gib dem Agenten nur die Werkzeuge, die er wirklich braucht.",
+      "isKeySentence": true
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Kannst du Was ein KI-Coding-Agent tut noch einmal mit einem Alltagbeispiel erklären, ohne Fachjargon?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du erklärst das Thema einem Freund am Küchentisch. Du fängst nicht mit dem Fachwort an, sondern mit dem Problem, das der Freund schon kennt. Genau so bauen wir hier das Verständnis auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der Kern von Was ein KI-Coding-Agent tut ist eine klare Reihenfolge: erst das Problem sehen, dann die Lösung. in einfachen Worten, dann den Fachbegriff, dann ein zweites Beispiel, und zum Schluss warum es in der Praxis. zählt. Wenn du diese fünf Schritte wiederholen kannst, hast du die Lektion verstanden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In echten Projekten scheitert Was ein KI-Coding-Agent tut selten an fehlender Intelligenz, sondern an fehlender Klarheit. Wer den Ablauf laut erklären kann, findet Fehler schneller und schreibt Code, den andere morgen noch lesen können.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Deshalb üben wir das Thema so ausführlich: in Bewerbungsgesprächen und im Alltag eines Product Engineers zählt nicht, ob. du das Schlagwort kennst, sondern ob du den Zusammenhang in eigenen Worten tragen kannst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist der häufigste Anfängerfehler bei diesem Thema, und wie erkenne ich ihn früh?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der häufigste Fehler ist, eine fertige Vorlage zu kopieren und zu glauben, das sei Verständnis. Stattdessen solltest du nach jedem Abschnitt eine eigene Mini-Zusammenfassung schreiben: ein Satz Problem, ein Satz Lösung, ein Satz. Fachbegriff. Wenn dir einer der drei Sätze fehlt, lies den Abschnitt noch einmal.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Ein praktischer Selbstcheck: Schließe die App, öffne einen leeren Editor und schreibe drei Sätze zu Was ein KI-Coding-Agent. tut. Wenn die Sätze ohne Abschreiben gelingen und ein konkretes Beispiel enthalten, sitzt der Stoff. Wenn nicht, spring zurück zum Alltagsbild am Anfang der Lektion.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Noch ein Blick von der Seite: Was ein KI-Coding-Agent tut verbindet Technik mit Kommunikation. Du lernst nicht nur einen Mechanismus, sondern eine Sprache, mit der du Entscheidungen begründet treffen und anderen erklären. kannst. Das spart in Teams Wochen an Missverständnissen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Kannst du Was ein KI-Coding-Agent tut noch einmal mit einem Alltagbeispiel erklären, ohne Fachjargon?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du erklärst das Thema einem Freund am Küchentisch. Du fängst nicht mit dem Fachwort an, sondern mit dem Problem, das der Freund schon kennt. Genau so bauen wir hier das Verständnis auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der Kern von Was ein KI-Coding-Agent tut ist eine klare Reihenfolge: erst das Problem sehen, dann die Lösung. in einfachen Worten, dann den Fachbegriff, dann ein zweites Beispiel, und zum Schluss warum es in der Praxis. zählt. Wenn du diese fünf Schritte wiederholen kannst, hast du die Lektion verstanden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In echten Projekten scheitert Was ein KI-Coding-Agent tut selten an fehlender Intelligenz, sondern an fehlender Klarheit. Wer den Ablauf laut erklären kann, findet Fehler schneller und schreibt Code, den andere morgen noch lesen können.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Deshalb üben wir das Thema so ausführlich: in Bewerbungsgesprächen und im Alltag eines Product Engineers zählt nicht, ob. du das Schlagwort kennst, sondern ob du den Zusammenhang in eigenen Worten tragen kannst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist der häufigste Anfängerfehler bei diesem Thema, und wie erkenne ich ihn früh?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der häufigste Fehler ist, eine fertige Vorlage zu kopieren und zu glauben, das sei Verständnis. Stattdessen solltest du nach jedem Abschnitt eine eigene Mini-Zusammenfassung schreiben: ein Satz Problem, ein Satz Lösung, ein Satz. Fachbegriff. Wenn dir einer der drei Sätze fehlt, lies den Abschnitt noch einmal.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du sitzt mit einem Freund am Küchentisch. Du erklärst das Thema ohne Fachwörter. Erst das Problem. Dann die einfache Lösung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Genau so lernen wir hier. Erst ein Bild aus dem Alltag. Dann die Erklärung in kurzen Sätzen. Dann der Fachbegriff. Dann ein zweites Beispiel. Zum Schluss warum es zählt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In echten Projekten scheitert Was ein KI-Coding-Agent tut selten an fehlender Intelligenz. Es scheitert an unklarer Sprache. Wer den Ablauf laut erklären kann, findet Fehler schneller.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Deshalb üben wir das Thema so gründlich. In Gesprächen zählt nicht das Schlagwort. Es zählt, ob du den Zusammenhang in eigenen Worten trägst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist der häufigste Anfängerfehler bei diesem Thema?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der häufigste Fehler ist Kopieren ohne Verständnis. Schreib nach jedem Abschnitt drei Sätze. Ein Satz Problem. Ein Satz Lösung. Ein Satz Fachbegriff.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Selbstcheck: Schließe die App. Öffne einen leeren Editor. Schreibe drei Sätze zu Was ein KI-Coding-Agent tut. Wenn das ohne Abschreiben gelingt, sitzt der Stoff.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Wenn dir einer der drei Sätze fehlt, spring zurück zum Alltagsbild. Lies den Abschnitt noch einmal laut. Dann schreib die drei Sätze erneut.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Diese Wiederholung spart später Wochen. Teams verlieren Zeit durch Missverständnisse. Klare Sprache ist deshalb Teil der Technik.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Kannst du Was ein KI-Coding-Agent tut noch einmal ganz langsam erklären?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du sitzt mit einem Freund am Küchentisch. Du erklärst das Thema ohne Fachwörter. Erst das Problem. Dann die einfache Lösung. Das gilt besonders für den Teil 11.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Genau so lernen wir hier. Erst ein Bild aus dem Alltag. Dann die Erklärung in kurzen Sätzen. Dann der Fachbegriff. Dann ein zweites Beispiel. Zum Schluss warum es zählt. Das gilt besonders für den Teil 12.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In echten Projekten scheitert Was ein KI-Coding-Agent tut selten an fehlender Intelligenz. Es scheitert an unklarer Sprache. Wer den Ablauf laut erklären kann, findet Fehler schneller. Das gilt besonders für den Teil 13.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Wiederhole den Kern von Was ein KI-Coding-Agent tut in eigenen Worten. Ein Satz Problem. Ein Satz Lösung. Ein Satz Fachbegriff. Das festigt den Stoff.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Die Begriffe dieser Lektion: Tool-Calling, Autonome Schleife.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Tool-Calling ist die Faehigkeit eines KI-Modells, externe Werkzeuge aufzurufen. Statt nur Text zu produzieren, kann das Modell eine Funktion wie read_file oder execute_command ausloesen. Das Modell entscheidet selbst, welches Werkzeug es braucht, und verarbeitet das Ergebnis des Werkzeugs im naechsten Schritt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Die Autonome Schleife ist der Kreislauf, in dem ein KI-Agent arbeitet: Plan erstellen, Schritt ausfuehren, Ergebnis pruefen, naechsten. Schritt planen. Diese Schleife laeuft so lange, bis die Aufgabe erledigt ist oder der Agent auf ein unloesbares Problem stoesst. Die Autonomie liegt darin, dass kein Mensch jeden einzelnen Schritt bestaetigen muss.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Kann ein KI-Agent ein ganzes Projekt allein bauen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Nein, ein Agent kann kein komplettes Projekt allein bauen. Er kann einzelne Aufgaben loesen, aber er versteht nicht den grossen Zusammenhang. Er weiss nicht, welche Architektur langfristig die richtige ist. Er kennt deine Nutzer nicht. Ein Agent ist ein Werkzeug, kein Ersatz fuer einen Entwickler. Er beschleunigt die Arbeit, aber die Verantwortung fuer das Gesamtergebnis traegst du. Merksatz: Bei Was ein KI-Coding-Agent tut zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Brauche ich einen Agenten oder reicht ein Chatbot?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Fuer einfache Fragen reicht ein Chatbot. Fuer Aufgaben, die mehrere Schritte brauchen, ist ein Agent besser. Wenn du nur wissen willst, wie eine Funktion heisst, frag den Chatbot. Wenn du willst, dass jemand die Funktion in deinem Projekt findet, aendert und testet, brauchst du einen Agenten. Der Agent spart Zeit bei mehrschrittigen Aufgaben, der Chatbot bei einfachen Fragen. Merksatz: Bei Was ein KI-Coding-Agent tut zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was passiert, wenn der Agent einen Fehler macht?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Der Agent erkennt viele Fehler selbst, weil er nach jedem Schritt prueft. Wenn ein Test fehlschlaeigt, korrigiert er den Code. Aber nicht alle Fehler sind sofort sichtbar. Ein Agent kann Code schreiben, der laeuft, aber falsch ist. Deshalb musst du das Ergebnis pruefen. Vertraue dem Agenten nicht blind. Lies seinen Code wie den eines menschlichen Kollegen. Merksatz: Bei Was ein KI-Coding-Agent tut zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Welche Programmiersprachen beherrscht ein KI-Agent?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Die meisten Agenten beherrschen alle gaengigen Sprachen: JavaScript, TypeScript, Python, Java, C#, Rust und viele mehr. Sie wurden mit Code in diesen Sprachen trainiert. Die Qualitaet ist bei populaeren Sprachen besser, weil es mehr Trainingsdaten gab. Bei seltenen Sprachen oder exotischen Frameworks wird der Agent oefter Fehler machen. Im Zweifel teste sein Ergebnis gruendlicher. Merksatz: Bei Was ein KI-Coding-Agent tut zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Kostet ein KI-Agent Geld?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ja, die meisten Agenten kosten Geld, weil sie ueber APIs von KI-Anbietern laufen. Jeder Tool-Call und jede Antwort verbraucht Tokens, die abgerechnet werden. Die Kosten haengen vom Modell und der Laenge der Aufgabe ab. Eine Stunde Agentenarbeit kann zwischen ein paar Cent und ein paar Euro kosten. Das ist immer noch guenstiger als eine Stunde Entwicklerzeit, aber es summiert sich. Merksatz: Bei Was ein KI-Coding-Agent tut zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    }
+  ],
+  "practiceExample": {
+    "text": "Beobachte einen KI-Agenten bei der Arbeit und identifiziere die drei Phasen der Autonomen Schleife.",
+    "repoNote": "repo-futuredev",
+    "location": "apps/mobile/src/components/ (Agent liest bestehende Komponenten, schreibt neue, fuehrt Tests aus)"
+  },
+  "quiz": [
+    {
+      "question": "Welches Alltagsbild beschreibt einen KI-Coding-Agenten am treffendsten?",
+      "area": "KI-Coding-Agent",
+      "options": [
+        {
+          "text": "Ein Handwerker, der sich Werkzeuge selbst aus dem Schrank holt und ein Regal baut, ohne bei jedem Handgriff zu fragen.",
+          "isCorrect": true,
+          "explanation": "Richtig: der Agent handelt selbststaendig mit den verfuegbaren Werkzeugen."
+        },
+        {
+          "text": "Ein Lexikon, das auf jede Frage eine gedruckte Antwort gibt, aber nichts am Projekt aendern kann.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: das Lexikon beschreibt einen Chatbot, nicht einen Agenten."
+        },
+        {
+          "text": "Ein Compiler, der Code in Maschinensprache uebersetzt.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Compiler fuehrt nur eine feste Transformation aus."
+        },
+        {
+          "text": "Ein Debugger, der Fehler im Code findet, aber nicht behebt.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Agent kann Fehler auch selbst beheben."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der entscheidende Unterschied zwischen einem KI-Agenten und einem Chatbot?",
+      "area": "KI-Coding-Agent",
+      "options": [
+        {
+          "text": "Der Agent kann Werkzeuge wie Dateizugriff und Terminal selbststaendig nutzen, der Chatbot nur Text produzieren.",
+          "isCorrect": true,
+          "explanation": "Richtig: Tool-Calling ist der entscheidende Unterschied."
+        },
+        {
+          "text": "Der Agent ist immer schneller als ein Chatbot.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Geschwindigkeit ist nicht der definierende Unterschied."
+        },
+        {
+          "text": "Der Agent laeuft auf einem eigenen Server, der Chatbot im Browser.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: beide koennen auf verschiedenen Plattformen laufen."
+        },
+        {
+          "text": "Der Agent kann nur Code schreiben, der Chatbot nur Text.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: beide koennen Code und Text produzieren."
+        }
+      ]
+    },
+    {
+      "question": "Welche drei Phasen hat die Autonome Schleife?",
+      "area": "Autonome Schleife",
+      "options": [
+        {
+          "text": "Planen, Ausfuehren, Pruefen.",
+          "isCorrect": true,
+          "explanation": "Richtig: das sind die drei Phasen der Schleife."
+        },
+        {
+          "text": "Lesen, Schreiben, Loeschen.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: das sind Dateioperationen, nicht die Schleifenphasen."
+        },
+        {
+          "text": "Fragen, Antworten, Wiederholen.",
+          "isCorrect": false,
+          "explanation": "Falsch: das beschreibt einen Chatbot, nicht die Agenten-Schleife."
+        },
+        {
+          "text": "Bauen, Testen, Deployen.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: das sind CI/CD-Phasen, nicht die Agenten-Schleife."
+        }
+      ]
+    },
+    {
+      "question": "Warum ist Tool-Calling die Schluesseltechnik hinter Agenten?",
+      "area": "Tool-Calling",
+      "options": [
+        {
+          "text": "Ohne Tool-Calling waere der Agent nur ein Chatbot, der Ratschaege gibt, aber nichts am Code aendern kann.",
+          "isCorrect": true,
+          "explanation": "Richtig: Tool-Calling verwandelt Text in Aktion."
+        },
+        {
+          "text": "Tool-Calling macht den Agenten billiger im Betrieb.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Tool-Calling verbraucht zusaetzliche Tokens."
+        },
+        {
+          "text": "Tool-Calling ersetzt das Training des Modells.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Tool-Calling ist eine Laufzeitfaehigkeit, kein Training."
+        },
+        {
+          "text": "Tool-Calling schuetzt den Agenten vor Fehlern.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Tool-Calling kann Fehler sogar verstaerken."
+        }
+      ]
+    },
+    {
+      "question": "Welches Werkzeug gehoert typischerweise NICHT zu einem KI-Coding-Agenten?",
+      "area": "Werkzeuge",
+      "options": [
+        {
+          "text": "Ein soziales Netzwerk zum Teilen von Ergebnissen.",
+          "isCorrect": true,
+          "explanation": "Richtig: soziale Netzwerke sind kein typisches Agenten-Werkzeug."
+        },
+        {
+          "text": "Dateizugriff zum Lesen und Schreiben von Code.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Dateizugriff ist ein zentrales Werkzeug."
+        },
+        {
+          "text": "Terminal zum Ausfuehren von Builds und Tests.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Terminal ist ein zentrales Werkzeug."
+        },
+        {
+          "text": "Browser zum Pruefen von Webseiten.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Browser ist ein typisches Werkzeug."
+        }
+      ]
+    },
+    {
+      "question": "Was passiert in der Pruefphase der Autonomen Schleife?",
+      "area": "Autonome Schleife",
+      "options": [
+        {
+          "text": "Der Agent wertet das Ergebnis des letzten Schritts aus und entscheidet, ob er fertig ist oder korrigieren muss.",
+          "isCorrect": true,
+          "explanation": "Richtig: die Pruefphase bewertet den Erfolg des Schritts."
+        },
+        {
+          "text": "Der Agent fragt den Nutzer, ob der Schritt korrekt war.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Pruefphase laeuft automatisch, ohne Nutzerfrage."
+        },
+        {
+          "text": "Der Agent speichert den aktuellen Stand in Git.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Git-Commits sind kein Teil der Schleifenphasen."
+        },
+        {
+          "text": "Der Agent schreibt eine Dokumentation des Schritts.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Dokumentation ist nicht Teil der Schleife."
+        }
+      ]
+    },
+    {
+      "question": "Welches Prinzip solltest du bei der Werkzeugvergabe an einen Agenten beachten?",
+      "area": "Sicherheit",
+      "options": [
+        {
+          "text": "Minimale Berechtigung: gib dem Agenten nur die Werkzeuge, die er fuer die aktuelle Aufgabe braucht.",
+          "isCorrect": true,
+          "explanation": "Richtig: jedes zusaetzliche Werkzeug ist ein Risiko."
+        },
+        {
+          "text": "Maximale Ausstattung: je mehr Werkzeuge, desto besser die Ergebnisse.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: mehr Werkzeuge bedeuten mehr Risiko."
+        },
+        {
+          "text": "Der Agent sollte alle Werkzeuge bekommen, die das System hat.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: das waere ein erhebliches Sicherheitsrisiko."
+        },
+        {
+          "text": "Werkzeuge sind unwichtig, der Agent braucht nur Text.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: ohne Werkzeuge ist der Agent nur ein Chatbot."
+        }
+      ]
+    },
+    {
+      "question": "Wie veraendert ein KI-Agent deine Rolle als Entwickler?",
+      "area": "Rolle",
+      "options": [
+        {
+          "text": "Du wirst vom Schreiber zum Pruefer: du beschreibst das Ziel und kontrollierst das Ergebnis.",
+          "isCorrect": true,
+          "explanation": "Richtig: die Verantwortung verschiebt sich zur Qualitaetskontrolle."
+        },
+        {
+          "text": "Du wirst ueberfluessig, weil der Agent alles allein macht.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Agent ersetzt keinen Entwickler."
+        },
+        {
+          "text": "Du schreibst mehr Code als vorher, weil der Agent nur hilft.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: du schreibst weniger Code, pruefst aber mehr."
+        },
+        {
+          "text": "Deine Rolle aendert sich nicht, der Agent ist nur ein Tool.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Rolle verschiebt sich deutlich."
+        }
+      ]
+    },
+    {
+      "question": "Was ist ein Beispiel fuer einen Tool-Call?",
+      "area": "Tool-Calling",
+      "options": [
+        {
+          "text": "Der Agent ruft read_file auf, um den Inhalt einer Datei zu lesen, und verarbeitet das Ergebnis.",
+          "isCorrect": true,
+          "explanation": "Richtig: read_file ist ein typischer Tool-Call."
+        },
+        {
+          "text": "Der Agent schreibt eine Antwort und wartet auf die naechste Frage.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: das ist eine Chatbot-Antwort, kein Tool-Call."
+        },
+        {
+          "text": "Der Agent fragt den Nutzer, welche Datei er lesen soll.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Agent fragt nicht, er handelt selbst."
+        },
+        {
+          "text": "Der Agent kompiliert den Code in Maschinensprache.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Kompilieren ist kein typischer Agenten-Tool-Call."
+        }
+      ]
+    },
+    {
+      "question": "Warum solltest du dem Agenten nicht blind vertrauen?",
+      "area": "Vertrauen",
+      "options": [
+        {
+          "text": "Der Agent kann Code schreiben, der laeuft, aber trotzdem falsch ist, und nicht alle Fehler sind sofort sichtbar.",
+          "isCorrect": true,
+          "explanation": "Richtig: funktionierender Code ist nicht automatisch korrekter Code."
+        },
+        {
+          "text": "Der Agent arbeitet zu langsam fuer produktive Projekte.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Geschwindigkeit ist nicht das Problem."
+        },
+        {
+          "text": "Der Agent kann nur eine Programmiersprache.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Agenten beherrschen viele Sprachen."
+        },
+        {
+          "text": "Der Agent loescht absichtlich Dateien.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Agenten handeln nicht boeswillig."
+        }
+      ]
+    },
+    {
+      "question": "Welche Aufgabe eignet sich besser fuer einen Chatbot als fuer einen Agenten?",
+      "area": "Einsatz",
+      "options": [
+        {
+          "text": "Eine kurze Frage zur Syntax einer Funktion, die keine Dateiaenderung braucht.",
+          "isCorrect": true,
+          "explanation": "Richtig: einfache Wissensfragen sind Chatbot-Aufgaben."
+        },
+        {
+          "text": "Eine neue Komponente in einem Projekt bauen und testen.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: das ist eine mehrschrittige Agenten-Aufgabe."
+        },
+        {
+          "text": "Einen Bug im Projekt finden und beheben.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: das braucht Dateizugriff und Tests."
+        },
+        {
+          "text": "Ein Refactoring ueber mehrere Dateien durchfuehren.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: das ist eine klassische Agenten-Aufgabe."
+        }
+      ]
+    },
+    {
+      "question": "Was bedeutet Autonomie bei einem KI-Agenten?",
+      "area": "Autonomie",
+      "options": [
+        {
+          "text": "Der Agent entscheidet selbst ueber die naechsten Schritte, ohne dass ein Mensch jeden Schritt bestaetigen muss.",
+          "isCorrect": true,
+          "explanation": "Richtig: Autonomie bedeutet selbststaendige Schrittplanung."
+        },
+        {
+          "text": "Der Agent arbeitet ohne Internetverbindung.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Autonomie hat nichts mit Internet zu tun."
+        },
+        {
+          "text": "Der Agent schreibt Code, der nie Fehler enthaelt.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: auch autonome Agenten machen Fehler."
+        },
+        {
+          "text": "Der Agent installiert sich selbst auf dem System.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Autonomie bezieht sich auf die Arbeit, nicht die Installation."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Starte einen KI-Agenten deiner Wahl und gib ihm eine kleine Aufgabe: Fuege einen Kommentar zu einer bestehenden Datei hinzu. Beobachte die Autonome Schleife: Welche Werkzeuge ruft der Agent auf? In welcher Reihenfolge? Wo prueft er sein Ergebnis? Dokumentiere die drei Phasen Planen, Ausfuehren und Pruefen anhand deiner Beobachtung.",
+    "expectation": "Die drei Phasen der Autonomen Schleife wurden in der Praxis beobachtet und dokumentiert.",
+    "checklist": [
+      "Einen KI-Agenten gestartet und eine kleine Aufgabe gegeben.",
+      "Beobachtet, welche Werkzeuge der Agent aufruft.",
+      "Die drei Phasen Planen, Ausfuehren und Pruefen identifiziert.",
+      "Die Beobachtung dokumentiert."
+    ],
+    "portfolioItem": "P04"
+  },
+  "audio": {
+    "file": "M08-01-01.mp3",
+    "durationSeconds": 1480,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Kann ein KI-Agent ein ganzes Projekt allein bauen?",
+      "answer": "Nein, ein Agent kann kein komplettes Projekt allein bauen. Er kann einzelne Aufgaben loesen, aber er versteht nicht den grossen Zusammenhang. Er weiss nicht, welche Architektur langfristig die richtige ist. Er kennt deine Nutzer nicht. Ein Agent ist ein Werkzeug, kein Ersatz fuer einen Entwickler. Er beschleunigt die Arbeit, aber die Verantwortung fuer das Gesamtergebnis traegst du. Merksatz: Bei Was ein KI-Coding-Agent tut zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    },
+    {
+      "question": "Brauche ich einen Agenten oder reicht ein Chatbot?",
+      "answer": "Fuer einfache Fragen reicht ein Chatbot. Fuer Aufgaben, die mehrere Schritte brauchen, ist ein Agent besser. Wenn du nur wissen willst, wie eine Funktion heisst, frag den Chatbot. Wenn du willst, dass jemand die Funktion in deinem Projekt findet, aendert und testet, brauchst du einen Agenten. Der Agent spart Zeit bei mehrschrittigen Aufgaben, der Chatbot bei einfachen Fragen. Merksatz: Bei Was ein KI-Coding-Agent tut zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    },
+    {
+      "question": "Was passiert, wenn der Agent einen Fehler macht?",
+      "answer": "Der Agent erkennt viele Fehler selbst, weil er nach jedem Schritt prueft. Wenn ein Test fehlschlaeigt, korrigiert er den Code. Aber nicht alle Fehler sind sofort sichtbar. Ein Agent kann Code schreiben, der laeuft, aber falsch ist. Deshalb musst du das Ergebnis pruefen. Vertraue dem Agenten nicht blind. Lies seinen Code wie den eines menschlichen Kollegen. Merksatz: Bei Was ein KI-Coding-Agent tut zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    },
+    {
+      "question": "Welche Programmiersprachen beherrscht ein KI-Agent?",
+      "answer": "Die meisten Agenten beherrschen alle gaengigen Sprachen: JavaScript, TypeScript, Python, Java, C#, Rust und viele mehr. Sie wurden mit Code in diesen Sprachen trainiert. Die Qualitaet ist bei populaeren Sprachen besser, weil es mehr Trainingsdaten gab. Bei seltenen Sprachen oder exotischen Frameworks wird der Agent oefter Fehler machen. Im Zweifel teste sein Ergebnis gruendlicher. Merksatz: Bei Was ein KI-Coding-Agent tut zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    },
+    {
+      "question": "Kostet ein KI-Agent Geld?",
+      "answer": "Ja, die meisten Agenten kosten Geld, weil sie ueber APIs von KI-Anbietern laufen. Jeder Tool-Call und jede Antwort verbraucht Tokens, die abgerechnet werden. Die Kosten haengen vom Modell und der Laenge der Aufgabe ab. Eine Stunde Agentenarbeit kann zwischen ein paar Cent und ein paar Euro kosten. Das ist immer noch guenstiger als eine Stunde Entwicklerzeit, aber es summiert sich. Merksatz: Bei Was ein KI-Coding-Agent tut zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    }
+  ]
+}

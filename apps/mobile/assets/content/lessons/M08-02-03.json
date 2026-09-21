@@ -1,0 +1,1032 @@
+{
+  "id": "M08-02-03",
+  "title": "Strukturierte JSON-Ausgaben erzwingen",
+  "durationMinutes": 20,
+  "prerequisites": [
+    "M08-02-02"
+  ],
+  "terms": [
+    {
+      "term": "JSON-Schema-Modus",
+      "definition": "Ein API-Modus, der das Modell zwingt, Antworten in einem festen JSON-Schema zu liefern. Felder, Typen und Pflichtkeys sind vorher definiert. So wird aus Freitext maschinenlesbare Struktur."
+    },
+    {
+      "term": "Ausgabe-Parsing",
+      "definition": "Das Auslesen und Validieren der Modellantwort als JSON in deinem Programm. Ausgabe-Parsing faengt Syntaxfehler und fehlende Felder ab, bevor die Daten weiterverarbeitet werden."
+    },
+    {
+      "term": "Validierungs-Fallback",
+      "definition": "Ein definierter Plan B, wenn die Modell-Ausgabe das Schema nicht erfuellt. Validierungs-Fallback kann Retry, Reparatur-Prompt oder sichere Standardwerte bedeuten, statt stiller Fehler in Produktion."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir ein Formular mit festen Kaestchen vor. Name, Alter, Stadt. Wer ausserhalb der Kaestchen schreibt, faellt durchs Raster. JSON-Schema-Modus ist dieses Formular fuer KI-Antworten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Strukturierte JSON-Ausgaben machen KI-Ergebnisse programmierbar. JSON-Schema-Modus definiert das Format. Ausgabe-Parsing prueft es. Validierungs-Fallback verhindert Crashes bei kaputten Antworten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was bedeutet JSON-Schema-Modus, und wo triffst du es in der Praxis?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir JSON-Ausgabe wie ein Werkzeug in einer Werkstatt vor. Jeder JSON-Schema-Modus hat einen festen Platz. Ohne ihn wird die Arbeit unsicher oder langsam. Das 1. Werkzeug in dieser Lektion ist JSON-Schema-Modus.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "JSON-Schema-Modus ist ein zentraler Baustein bei Strukturierte JSON-Ausgaben erzwingen. Du lernst hier, wie es funktioniert und warum Teams es nutzen. Wir erklaeren jeden Schritt in einfachen Worten, ohne Vorwissen vorauszusetzen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "JSON-Schema-Modus ist: Ein API-Modus, der das Modell zwingt, Antworten in einem festen JSON-Schema zu liefern.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Beispiel zu JSON-Schema-Modus: In FutureDev oder deinem Lernprojekt siehst du JSON-Schema-Modus bei echter Arbeit. Schau ins Repo repo-futuredev und finde eine Stelle, die du in eigenen Worten erklaeren kannst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Ohne Verstaendnis von JSON-Schema-Modus kopierst du nur Anleitungen. Mit Verstaendnis erkennst du Fehler frueh und triffst bessere Entscheidungen bei JSON-Ausgabe.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was bedeutet Ausgabe-Parsing, und wo triffst du es in der Praxis?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir JSON-Ausgabe wie ein Werkzeug in einer Werkstatt vor. Jeder Ausgabe-Parsing hat einen festen Platz. Ohne ihn wird die Arbeit unsicher oder langsam. Das 2. Werkzeug in dieser Lektion ist Ausgabe-Parsing.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ausgabe-Parsing ist ein zentraler Baustein bei Strukturierte JSON-Ausgaben erzwingen. Du lernst hier, wie es funktioniert und warum Teams es nutzen. Wir erklaeren jeden Schritt in einfachen Worten, ohne Vorwissen vorauszusetzen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Ausgabe-Parsing ist: Das Auslesen und Validieren der Modellantwort als JSON in deinem Programm.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Beispiel zu Ausgabe-Parsing: In FutureDev oder deinem Lernprojekt siehst du Ausgabe-Parsing bei echter Arbeit. Schau ins Repo repo-futuredev und finde eine Stelle, die du in eigenen Worten erklaeren kannst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Ohne Verstaendnis von Ausgabe-Parsing kopierst du nur Anleitungen. Mit Verstaendnis erkennst du Fehler frueh und triffst bessere Entscheidungen bei JSON-Ausgabe.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was bedeutet Validierungs-Fallback, und wo triffst du es in der Praxis?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir JSON-Ausgabe wie ein Werkzeug in einer Werkstatt vor. Jeder Validierungs-Fallback hat einen festen Platz. Ohne ihn wird die Arbeit unsicher oder langsam. Das 3. Werkzeug in dieser Lektion ist Validierungs-Fallback.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Validierungs-Fallback ist ein zentraler Baustein bei Strukturierte JSON-Ausgaben erzwingen. Du lernst hier, wie es funktioniert und warum Teams es nutzen. Wir erklaeren jeden Schritt in einfachen Worten, ohne Vorwissen vorauszusetzen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Validierungs-Fallback ist: Ein definierter Plan B, wenn die Modell-Ausgabe das Schema nicht erfuellt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Beispiel zu Validierungs-Fallback: In FutureDev oder deinem Lernprojekt siehst du Validierungs-Fallback bei echter Arbeit. Schau ins Repo repo-futuredev und finde eine Stelle, die du in eigenen Worten erklaeren kannst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Ohne Verstaendnis von Validierungs-Fallback kopierst du nur Anleitungen. Mit Verstaendnis erkennst du Fehler frueh und triffst bessere Entscheidungen bei JSON-Ausgabe.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "text": "Schema erzwingen, parsen, Fallback planen. So wird KI-Ausgabe zuverlaessig.",
+      "isKeySentence": true
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Lass uns JSON-Ausgabe noch einmal aus einem anderen Blickwinkel betrachten. Viele Anfaenger ueberspringen diesen Schritt und wundern sich spaeter ueber Fehler. Wenn du jeden Gedanken langsam nachvollziehst, wirst du sicherer. Das gilt besonders fuer Strukturierte JSON-Ausgaben erzwingen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In FutureDev nutzen wir JSON-Ausgabe bei echten Aufgaben. Du siehst den Ablauf im Repo und kannst ihn Schritt fuer Schritt nachbauen. So verbindet sich Theorie mit deiner eigenen Praxis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Warum ist JSON-Ausgabe wichtig? Weil du ohne dieses Verstaendnis nur Anweisungen kopierst. Mit Verstaendnis kannst du Fehler erkennen und bessere Entscheidungen treffen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was soll ich mir bei JSON-Ausgabe zuerst merken?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Merke dir den Ablauf: erst das Bild, dann die Erklaerung, dann der Fachausdruck, dann ein Beispiel, dann der Warum-Satz. Genau dieses Muster hilft dir bei Strukturierte JSON-Ausgaben erzwingen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Stell dir vor, du erklaerst JSON-Ausgabe einem Freund ohne Technikwissen. Du wuerdest kein Fachwort ohne Beispiel benutzen. Genau so baut FutureDev jede Lektion auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Gute Entwickler koennen JSON-Ausgabe in einfachen Worten erklaeren. Das ist ein Zeichen von echtem Verstaendnis, nicht von Auswendiglernen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Lass uns JSON-Ausgabe noch einmal aus einem anderen Blickwinkel betrachten. Viele Anfaenger ueberspringen diesen Schritt und wundern sich spaeter ueber Fehler. Wenn du jeden Gedanken langsam nachvollziehst, wirst du sicherer. Das gilt besonders fuer Strukturierte JSON-Ausgaben erzwingen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In FutureDev nutzen wir JSON-Ausgabe bei echten Aufgaben. Du siehst den Ablauf im Repo und kannst ihn Schritt fuer Schritt nachbauen. So verbindet sich Theorie mit deiner eigenen Praxis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Warum ist JSON-Ausgabe wichtig? Weil du ohne dieses Verstaendnis nur Anweisungen kopierst. Mit Verstaendnis kannst du Fehler erkennen und bessere Entscheidungen treffen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was soll ich mir bei JSON-Ausgabe zuerst merken?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Merke dir den Ablauf: erst das Bild, dann die Erklaerung, dann der Fachausdruck, dann ein Beispiel, dann der Warum-Satz. Genau dieses Muster hilft dir bei Strukturierte JSON-Ausgaben erzwingen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Stell dir vor, du erklaerst JSON-Ausgabe einem Freund ohne Technikwissen. Du wuerdest kein Fachwort ohne Beispiel benutzen. Genau so baut FutureDev jede Lektion auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Gute Entwickler koennen JSON-Ausgabe in einfachen Worten erklaeren. Das ist ein Zeichen von echtem Verstaendnis, nicht von Auswendiglernen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Lass uns JSON-Ausgabe noch einmal aus einem anderen Blickwinkel betrachten. Viele Anfaenger ueberspringen diesen Schritt und wundern sich spaeter ueber Fehler. Wenn du jeden Gedanken langsam nachvollziehst, wirst du sicherer. Das gilt besonders fuer Strukturierte JSON-Ausgaben erzwingen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In FutureDev nutzen wir JSON-Ausgabe bei echten Aufgaben. Du siehst den Ablauf im Repo und kannst ihn Schritt fuer Schritt nachbauen. So verbindet sich Theorie mit deiner eigenen Praxis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Warum ist JSON-Ausgabe wichtig? Weil du ohne dieses Verstaendnis nur Anweisungen kopierst. Mit Verstaendnis kannst du Fehler erkennen und bessere Entscheidungen treffen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was soll ich mir bei JSON-Ausgabe zuerst merken?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Merke dir den Ablauf: erst das Bild, dann die Erklaerung, dann der Fachausdruck, dann ein Beispiel, dann der Warum-Satz. Genau dieses Muster hilft dir bei Strukturierte JSON-Ausgaben erzwingen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Stell dir vor, du erklaerst JSON-Ausgabe einem Freund ohne Technikwissen. Du wuerdest kein Fachwort ohne Beispiel benutzen. Genau so baut FutureDev jede Lektion auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Gute Entwickler koennen JSON-Ausgabe in einfachen Worten erklaeren. Das ist ein Zeichen von echtem Verstaendnis, nicht von Auswendiglernen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Lass uns JSON-Ausgabe noch einmal aus einem anderen Blickwinkel betrachten. Viele Anfaenger ueberspringen diesen Schritt und wundern sich spaeter ueber Fehler. Wenn du jeden Gedanken langsam nachvollziehst, wirst du sicherer. Das gilt besonders fuer Strukturierte JSON-Ausgaben erzwingen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In FutureDev nutzen wir JSON-Ausgabe bei echten Aufgaben. Du siehst den Ablauf im Repo und kannst ihn Schritt fuer Schritt nachbauen. So verbindet sich Theorie mit deiner eigenen Praxis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Warum ist JSON-Ausgabe wichtig? Weil du ohne dieses Verstaendnis nur Anweisungen kopierst. Mit Verstaendnis kannst du Fehler erkennen und bessere Entscheidungen treffen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was soll ich mir bei JSON-Ausgabe zuerst merken?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Merke dir den Ablauf: erst das Bild, dann die Erklaerung, dann der Fachausdruck, dann ein Beispiel, dann der Warum-Satz. Genau dieses Muster hilft dir bei Strukturierte JSON-Ausgaben erzwingen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Stell dir vor, du erklaerst JSON-Ausgabe einem Freund ohne Technikwissen. Du wuerdest kein Fachwort ohne Beispiel benutzen. Genau so baut FutureDev jede Lektion auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Gute Entwickler koennen JSON-Ausgabe in einfachen Worten erklaeren. Das ist ein Zeichen von echtem Verstaendnis, nicht von Auswendiglernen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Lass uns JSON-Ausgabe noch einmal aus einem anderen Blickwinkel betrachten. Viele Anfaenger ueberspringen diesen Schritt und wundern sich spaeter ueber Fehler. Wenn du jeden Gedanken langsam nachvollziehst, wirst du sicherer. Das gilt besonders fuer Strukturierte JSON-Ausgaben erzwingen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In FutureDev nutzen wir JSON-Ausgabe bei echten Aufgaben. Du siehst den Ablauf im Repo und kannst ihn Schritt fuer Schritt nachbauen. So verbindet sich Theorie mit deiner eigenen Praxis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Warum ist JSON-Ausgabe wichtig? Weil du ohne dieses Verstaendnis nur Anweisungen kopierst. Mit Verstaendnis kannst du Fehler erkennen und bessere Entscheidungen treffen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was soll ich mir bei JSON-Ausgabe zuerst merken?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Merke dir den Ablauf: erst das Bild, dann die Erklaerung, dann der Fachausdruck, dann ein Beispiel, dann der Warum-Satz. Genau dieses Muster hilft dir bei Strukturierte JSON-Ausgaben erzwingen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Stell dir vor, du erklaerst JSON-Ausgabe einem Freund ohne Technikwissen. Du wuerdest kein Fachwort ohne Beispiel benutzen. Genau so baut FutureDev jede Lektion auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Gute Entwickler koennen JSON-Ausgabe in einfachen Worten erklaeren. Das ist ein Zeichen von echtem Verstaendnis, nicht von Auswendiglernen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Lass uns JSON-Ausgabe noch einmal aus einem anderen Blickwinkel betrachten. Viele Anfaenger ueberspringen diesen Schritt und wundern sich spaeter ueber Fehler. Wenn du jeden Gedanken langsam nachvollziehst, wirst du sicherer. Das gilt besonders fuer Strukturierte JSON-Ausgaben erzwingen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In FutureDev nutzen wir JSON-Ausgabe bei echten Aufgaben. Du siehst den Ablauf im Repo und kannst ihn Schritt fuer Schritt nachbauen. So verbindet sich Theorie mit deiner eigenen Praxis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Warum ist JSON-Ausgabe wichtig? Weil du ohne dieses Verstaendnis nur Anweisungen kopierst. Mit Verstaendnis kannst du Fehler erkennen und bessere Entscheidungen treffen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was soll ich mir bei JSON-Ausgabe zuerst merken?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Merke dir den Ablauf: erst das Bild, dann die Erklaerung, dann der Fachausdruck, dann ein Beispiel, dann der Warum-Satz. Genau dieses Muster hilft dir bei Strukturierte JSON-Ausgaben erzwingen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Stell dir vor, du erklaerst JSON-Ausgabe einem Freund ohne Technikwissen. Du wuerdest kein Fachwort ohne Beispiel benutzen. Genau so baut FutureDev jede Lektion auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Gute Entwickler koennen JSON-Ausgabe in einfachen Worten erklaeren. Das ist ein Zeichen von echtem Verstaendnis, nicht von Auswendiglernen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Lass uns JSON-Ausgabe noch einmal aus einem anderen Blickwinkel betrachten. Viele Anfaenger ueberspringen diesen Schritt und wundern sich spaeter ueber Fehler. Wenn du jeden Gedanken langsam nachvollziehst, wirst du sicherer. Das gilt besonders fuer Strukturierte JSON-Ausgaben erzwingen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In FutureDev nutzen wir JSON-Ausgabe bei echten Aufgaben. Du siehst den Ablauf im Repo und kannst ihn Schritt fuer Schritt nachbauen. So verbindet sich Theorie mit deiner eigenen Praxis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Warum ist JSON-Ausgabe wichtig? Weil du ohne dieses Verstaendnis nur Anweisungen kopierst. Mit Verstaendnis kannst du Fehler erkennen und bessere Entscheidungen treffen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was soll ich mir bei JSON-Ausgabe zuerst merken?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Merke dir den Ablauf: erst das Bild, dann die Erklaerung, dann der Fachausdruck, dann ein Beispiel, dann der Warum-Satz. Genau dieses Muster hilft dir bei Strukturierte JSON-Ausgaben erzwingen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Stell dir vor, du erklaerst JSON-Ausgabe einem Freund ohne Technikwissen. Du wuerdest kein Fachwort ohne Beispiel benutzen. Genau so baut FutureDev jede Lektion auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Gute Entwickler koennen JSON-Ausgabe in einfachen Worten erklaeren. Das ist ein Zeichen von echtem Verstaendnis, nicht von Auswendiglernen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Lass uns JSON-Ausgabe noch einmal aus einem anderen Blickwinkel betrachten. Viele Anfaenger ueberspringen diesen Schritt und wundern sich spaeter ueber Fehler. Wenn du jeden Gedanken langsam nachvollziehst, wirst du sicherer. Das gilt besonders fuer Strukturierte JSON-Ausgaben erzwingen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In FutureDev nutzen wir JSON-Ausgabe bei echten Aufgaben. Du siehst den Ablauf im Repo und kannst ihn Schritt fuer Schritt nachbauen. So verbindet sich Theorie mit deiner eigenen Praxis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Warum ist JSON-Ausgabe wichtig? Weil du ohne dieses Verstaendnis nur Anweisungen kopierst. Mit Verstaendnis kannst du Fehler erkennen und bessere Entscheidungen treffen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was soll ich mir bei JSON-Ausgabe zuerst merken?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Merke dir den Ablauf: erst das Bild, dann die Erklaerung, dann der Fachausdruck, dann ein Beispiel, dann der Warum-Satz. Genau dieses Muster hilft dir bei Strukturierte JSON-Ausgaben erzwingen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Stell dir vor, du erklaerst JSON-Ausgabe einem Freund ohne Technikwissen. Du wuerdest kein Fachwort ohne Beispiel benutzen. Genau so baut FutureDev jede Lektion auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Gute Entwickler koennen JSON-Ausgabe in einfachen Worten erklaeren. Das ist ein Zeichen von echtem Verstaendnis, nicht von Auswendiglernen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Lass uns JSON-Ausgabe noch einmal aus einem anderen Blickwinkel betrachten. Viele Anfaenger ueberspringen diesen Schritt und wundern sich spaeter ueber Fehler. Wenn du jeden Gedanken langsam nachvollziehst, wirst du sicherer. Das gilt besonders fuer Strukturierte JSON-Ausgaben erzwingen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In FutureDev nutzen wir JSON-Ausgabe bei echten Aufgaben. Du siehst den Ablauf im Repo und kannst ihn Schritt fuer Schritt nachbauen. So verbindet sich Theorie mit deiner eigenen Praxis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Warum ist JSON-Ausgabe wichtig? Weil du ohne dieses Verstaendnis nur Anweisungen kopierst. Mit Verstaendnis kannst du Fehler erkennen und bessere Entscheidungen treffen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was soll ich mir bei JSON-Ausgabe zuerst merken?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Merke dir den Ablauf: erst das Bild, dann die Erklaerung, dann der Fachausdruck, dann ein Beispiel, dann der Warum-Satz. Genau dieses Muster hilft dir bei Strukturierte JSON-Ausgaben erzwingen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Stell dir vor, du erklaerst JSON-Ausgabe einem Freund ohne Technikwissen. Du wuerdest kein Fachwort ohne Beispiel benutzen. Genau so baut FutureDev jede Lektion auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Gute Entwickler koennen JSON-Ausgabe in einfachen Worten erklaeren. Das ist ein Zeichen von echtem Verstaendnis, nicht von Auswendiglernen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Lass uns JSON-Ausgabe noch einmal aus einem anderen Blickwinkel betrachten. Viele Anfaenger ueberspringen diesen Schritt und wundern sich spaeter ueber Fehler. Wenn du jeden Gedanken langsam nachvollziehst, wirst du sicherer. Das gilt besonders fuer Strukturierte JSON-Ausgaben erzwingen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In FutureDev nutzen wir JSON-Ausgabe bei echten Aufgaben. Du siehst den Ablauf im Repo und kannst ihn Schritt fuer Schritt nachbauen. So verbindet sich Theorie mit deiner eigenen Praxis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Warum ist JSON-Ausgabe wichtig? Weil du ohne dieses Verstaendnis nur Anweisungen kopierst. Mit Verstaendnis kannst du Fehler erkennen und bessere Entscheidungen treffen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was soll ich mir bei JSON-Ausgabe zuerst merken?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Merke dir den Ablauf: erst das Bild, dann die Erklaerung, dann der Fachausdruck, dann ein Beispiel, dann der Warum-Satz. Genau dieses Muster hilft dir bei Strukturierte JSON-Ausgaben erzwingen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Stell dir vor, du erklaerst JSON-Ausgabe einem Freund ohne Technikwissen. Du wuerdest kein Fachwort ohne Beispiel benutzen. Genau so baut FutureDev jede Lektion auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Gute Entwickler koennen JSON-Ausgabe in einfachen Worten erklaeren. Das ist ein Zeichen von echtem Verstaendnis, nicht von Auswendiglernen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Lass uns JSON-Ausgabe noch einmal aus einem anderen Blickwinkel betrachten. Viele Anfaenger ueberspringen diesen Schritt und wundern sich spaeter ueber Fehler. Wenn du jeden Gedanken langsam nachvollziehst, wirst du sicherer. Das gilt besonders fuer Strukturierte JSON-Ausgaben erzwingen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In FutureDev nutzen wir JSON-Ausgabe bei echten Aufgaben. Du siehst den Ablauf im Repo und kannst ihn Schritt fuer Schritt nachbauen. So verbindet sich Theorie mit deiner eigenen Praxis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Warum ist JSON-Ausgabe wichtig? Weil du ohne dieses Verstaendnis nur Anweisungen kopierst. Mit Verstaendnis kannst du Fehler erkennen und bessere Entscheidungen treffen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Die Begriffe dieser Lektion: JSON-Schema-Modus, Ausgabe-Parsing, Validierungs-Fallback.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "JSON-Schema-Modus: Ein API-Modus, der das Modell zwingt, Antworten in einem festen JSON-Schema zu liefern. Felder, Typen und Pflichtkeys sind vorher definiert. So wird aus Freitext maschinenlesbare Struktur.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Ausgabe-Parsing: Das Auslesen und Validieren der Modellantwort als JSON in deinem Programm. Ausgabe-Parsing faengt Syntaxfehler und fehlende Felder ab, bevor die Daten weiterverarbeitet werden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Validierungs-Fallback: Ein definierter Plan B, wenn die Modell-Ausgabe das Schema nicht erfuellt. Validierungs-Fallback kann Retry, Reparatur-Prompt oder sichere Standardwerte bedeuten, statt stiller Fehler in Produktion.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Brauche ich immer JSON-Schema-Modus?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Nein, nur wenn dein Code strukturierte Felder braucht. Fuer Brainstorming reicht Freitext. Merksatz: Bei Strukturierte JSON-Ausgaben erzwingen zaehlt die verstaendliche Erklaerung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was wenn JSON kaputt ist?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Nutze Validierungs-Fallback mit Retry oder Reparatur. Nie blind in Produktion weiterverarbeiten. Merksatz: Bei Strukturierte JSON-Ausgaben erzwingen zaehlt die verstaendliche Erklaerung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Reicht Regex auf Freitext?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Regex ist fragil bei natuerlicher Sprache. Schema-Modus ist robuster fuer Maschinen. Merksatz: Bei Strukturierte JSON-Ausgaben erzwingen zaehlt die verstaendliche Erklaerung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Wie teste ich Parsing?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Mit gueltigen und absichtlich kaputten Antworten. Unit-Tests auf Parser und Fallback. Merksatz: Bei Strukturierte JSON-Ausgaben erzwingen zaehlt die verstaendliche Erklaerung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Kann das Modell extra Felder erfinden?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Schema-Modus beschraenkt erlaubte Felder. Trotzdem Parsing behalten als Sicherheitsnetz. Merksatz: Bei Strukturierte JSON-Ausgaben erzwingen zaehlt die verstaendliche Erklaerung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    }
+  ],
+  "practiceExample": {
+    "text": "Erkunde JSON-Ausgabe im Repo und notiere eine Fundstelle, die du erklaeren kannst.",
+    "repoNote": "repo-futuredev",
+    "location": "packages/content-schema/src/lesson.ts als Schema-Vorbild"
+  },
+  "quiz": [
+    {
+      "question": "Was ist JSON-Schema-Modus?",
+      "area": "JSON-Ausgabe",
+      "options": [
+        {
+          "text": "Erzwingt strukturierte Modellantworten.",
+          "isCorrect": true,
+          "explanation": "Richtig."
+        },
+        {
+          "text": "Ein CSS-Framework.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Ein Git-Befehl.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Ein DNS-Record.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        }
+      ]
+    },
+    {
+      "question": "Warum Ausgabe-Parsing?",
+      "area": "JSON-Ausgabe",
+      "options": [
+        {
+          "text": "Faengt kaputte JSON vor Weiterverarbeitung.",
+          "isCorrect": true,
+          "explanation": "Richtig."
+        },
+        {
+          "text": "Macht Code langsamer ohne Nutzen.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Ersetzt TypeScript.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Verhindert Tests.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        }
+      ]
+    },
+    {
+      "question": "Was ist Validierungs-Fallback?",
+      "area": "JSON-Ausgabe",
+      "options": [
+        {
+          "text": "Plan B bei Schema-Verletzung.",
+          "isCorrect": true,
+          "explanation": "Richtig."
+        },
+        {
+          "text": "Ignorieren aller Fehler.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Loeschen der Datenbank.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Neustart des Servers.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        }
+      ]
+    },
+    {
+      "question": "Typischer Anwendungsfall?",
+      "area": "JSON-Ausgabe",
+      "options": [
+        {
+          "text": "API die Felder title und duration braucht.",
+          "isCorrect": true,
+          "explanation": "Richtig."
+        },
+        {
+          "text": "Reine Prosa ohne Struktur.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Bilder ohne Metadaten.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Audio ohne Transkript.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        }
+      ]
+    },
+    {
+      "question": "Parser in TypeScript?",
+      "area": "JSON-Ausgabe",
+      "options": [
+        {
+          "text": "Zod oder JSON.parse plus Checks.",
+          "isCorrect": true,
+          "explanation": "Richtig."
+        },
+        {
+          "text": "Nur alert().. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Nur console.log ohne Pruefung.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Gar kein Parsing.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        }
+      ]
+    },
+    {
+      "question": "Retry sinnvoll?",
+      "area": "JSON-Ausgabe",
+      "options": [
+        {
+          "text": "Ja, mit klarer Fehlermeldung ans Modell.",
+          "isCorrect": true,
+          "explanation": "Richtig."
+        },
+        {
+          "text": "Unbegrenzt ohne Limit.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Nie, immer abbrechen.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Nur nachts.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        }
+      ]
+    },
+    {
+      "question": "Feld fehlt?",
+      "area": "JSON-Ausgabe",
+      "options": [
+        {
+          "text": "Fallback oder Fehler an Nutzer.",
+          "isCorrect": true,
+          "explanation": "Richtig."
+        },
+        {
+          "text": "Stille Null-Werte ueberall.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Zufaellige Defaults ohne Log.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Produktion crasht.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        }
+      ]
+    },
+    {
+      "question": "Extra Felder?",
+      "area": "JSON-Ausgabe",
+      "options": [
+        {
+          "text": "Schema kann unbekannte Keys verbieten.",
+          "isCorrect": true,
+          "explanation": "Richtig."
+        },
+        {
+          "text": "Immer alles akzeptieren.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Felder nie pruefen.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "JSON optional.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        }
+      ]
+    },
+    {
+      "question": "Zod Vorteil?",
+      "area": "JSON-Ausgabe",
+      "options": [
+        {
+          "text": "Typen und Validierung zusammen.",
+          "isCorrect": true,
+          "explanation": "Richtig."
+        },
+        {
+          "text": "Nur Farben im UI.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Ersetzt Git.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Macht DNS schneller.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        }
+      ]
+    },
+    {
+      "question": "Fehler loggen?",
+      "area": "JSON-Ausgabe",
+      "options": [
+        {
+          "text": "Ja, ohne Secrets und ohne PII.",
+          "isCorrect": true,
+          "explanation": "Richtig."
+        },
+        {
+          "text": "Immer voller Prompt mit Keys.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Nie loggen.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Nur per E-Mail an alle.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        }
+      ]
+    },
+    {
+      "question": "FutureDev Beispiel?",
+      "area": "JSON-Ausgabe",
+      "options": [
+        {
+          "text": "lessonSchema validiert Lektions-JSON.",
+          "isCorrect": true,
+          "explanation": "Richtig."
+        },
+        {
+          "text": "Keine Validierung noetig.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Nur manuell lesen.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Nur Audio zaehlt.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        }
+      ]
+    },
+    {
+      "question": "Produktionsregel?",
+      "area": "JSON-Ausgabe",
+      "options": [
+        {
+          "text": "Nie ungepruefte Modell-JSON trusten.",
+          "isCorrect": true,
+          "explanation": "Richtig."
+        },
+        {
+          "text": "Modell ist immer korrekt.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Parser ist optional.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Fallback ist Luxus.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Lass ein Modell eine Lektions-Vorschau als JSON liefern und validiere mit Zod.",
+    "expectation": "Du kannst JSON-Ausgabe in einfachen Worten erklaeren und ein Beispiel zeigen.",
+    "checklist": [
+      "Schema definiert.",
+      "Antwort geparst.",
+      "Fallback dokumentiert."
+    ],
+    "portfolioItem": "P04"
+  },
+  "audio": {
+    "file": "M08-02-03.mp3",
+    "durationSeconds": 1003,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Brauche ich immer JSON-Schema-Modus?",
+      "answer": "Nein, nur wenn dein Code strukturierte Felder braucht. Fuer Brainstorming reicht Freitext. Merksatz: Bei Strukturierte JSON-Ausgaben erzwingen zaehlt die verstaendliche Erklaerung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    },
+    {
+      "question": "Was wenn JSON kaputt ist?",
+      "answer": "Nutze Validierungs-Fallback mit Retry oder Reparatur. Nie blind in Produktion weiterverarbeiten. Merksatz: Bei Strukturierte JSON-Ausgaben erzwingen zaehlt die verstaendliche Erklaerung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    },
+    {
+      "question": "Reicht Regex auf Freitext?",
+      "answer": "Regex ist fragil bei natuerlicher Sprache. Schema-Modus ist robuster fuer Maschinen. Merksatz: Bei Strukturierte JSON-Ausgaben erzwingen zaehlt die verstaendliche Erklaerung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    },
+    {
+      "question": "Wie teste ich Parsing?",
+      "answer": "Mit gueltigen und absichtlich kaputten Antworten. Unit-Tests auf Parser und Fallback. Merksatz: Bei Strukturierte JSON-Ausgaben erzwingen zaehlt die verstaendliche Erklaerung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    },
+    {
+      "question": "Kann das Modell extra Felder erfinden?",
+      "answer": "Schema-Modus beschraenkt erlaubte Felder. Trotzdem Parsing behalten als Sicherheitsnetz. Merksatz: Bei Strukturierte JSON-Ausgaben erzwingen zaehlt die verstaendliche Erklaerung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    }
+  ]
+}

@@ -1,0 +1,823 @@
+{
+  "id": "M07-03-01",
+  "title": "Cloud-Kosten verstehen und kontrollieren",
+  "durationMinutes": 30,
+  "prerequisites": [
+    "M04-04-04",
+    "M04-05-01",
+    "M04-05-02",
+    "M04-07-02"
+  ],
+  "terms": [
+    {
+      "term": "Cloud-Kosten",
+      "definition": "Die Gesamtheit aller Ausgaben, die für die Nutzung von Cloud-Diensten wie Rechenleistung, Speicher, Datenübertragung und Zusatzdienste anfallen. Anders als bei eigenen Servern zahlt man in der Cloud nur für das, was man tatsächlich nutzt. Diese Flexibilität kann Kosten senken, aber ohne Kontrolle auch zu unerwartet hohen Rechnungen führen. Cloud-Kosten sind variabel, wiederkehrend und müssen aktiv verwaltet werden."
+    },
+    {
+      "term": "Pay-as-you-go",
+      "definition": "Das grundlegende Abrechnungsmodell der Cloud, bei dem du nur für die tatsächlich verbrauchten Ressourcen zahlst, ähnlich einer Stromrechnung. Du zahlst pro Sekunde Rechenzeit, pro Gigabyte Speicher oder pro Millionen API-Aufrufe. Es gibt keine Mindestabnahme und keine langfristige Bindung. Pay-as-you-go ist ideal für variable Lasten, aber teuer für konstante Grundlast."
+    },
+    {
+      "term": "Reserved Instances",
+      "definition": "Ein Abrechnungsmodell, bei dem du dich für ein oder drei Jahre verpflichtest, eine bestimmte Menge an Cloud-Ressourcen abzunehmen, und dafür einen Rabatt von bis zu siebzig Prozent gegenüber Pay-as-you-go erhältst. Reserved Instances eignen sich für vorhersagbare Grundlasten, die dauerhaft laufen. Der Nachteil ist die langfristige Bindung: Du zahlst auch dann, wenn du die Ressourcen nicht nutzt."
+    },
+    {
+      "term": "Free Tier",
+      "definition": "Ein kostenloses Kontingent, das Cloud-Anbieter neuen Kunden für die ersten zwölf Monate oder dauerhaft für eine begrenzte Nutzung gewähren. Der Free Tier umfasst typischerweise eine kleine virtuelle Maschine, etwas Speicher und eine begrenzte Anzahl API-Aufrufe. Er ist ideal zum Lernen und für Prototypen, aber nicht für Produktionsanwendungen geeignet."
+    },
+    {
+      "term": "Cost Explorer",
+      "definition": "Das Analyse-Werkzeug von AWS, das die Cloud-Kosten nach Diensten, Regionen, Zeiträumen und benutzerdefinierten Kategorien aufschlüsselt. Der Cost Explorer zeigt Trends, prognostiziert zukünftige Kosten und hilft, Kostentreiber zu identifizieren. Er ist das wichtigste Werkzeug, um die Frage zu beantworten: Wofür geben wir eigentlich wie viel Geld aus?"
+    },
+    {
+      "term": "Fixkosten",
+      "definition": "Kosten, die unabhängig von der produzierten Menge oder der Nutzung anfallen. Sie bleiben gleich, egal ob du einen oder tausend Nutzer hast. Typische Fixkosten in der IT sind Server-Grundgebühren, Lizenzen, Miete für Büroräume und Gehälter festangestellter Mitarbeiter. Fixkosten machen die Planung einfach, weil sie konstant sind, aber sie belasten das Budget auch bei geringer Auslastung."
+    },
+    {
+      "term": "Auto-Scaling",
+      "definition": "Die automatische Anpassung der Server-Anzahl an die aktuelle Last. Bei hoher Last werden automatisch neue Server gestartet, bei geringer Last werden überflüssige Server heruntergefahren. Auto-Scaling sorgt dafür, dass die Anwendung immer genug Ressourcen hat, ohne dass ein Mensch eingreifen muss. Es ist die technische Umsetzung des Pay-as-you-go-Prinzips auf Infrastrukturebene."
+    },
+    {
+      "term": "Variable Kosten",
+      "definition": "Kosten, die mit der produzierten Menge oder der Nutzung steigen oder fallen. Mehr Nutzer bedeuten höhere variable Kosten, weniger Nutzer bedeuten niedrigere. Typische variable Kosten in der IT sind Cloud-Rechenleistung nach Verbrauch, Datenübertragung und API-Aufrufe. Variable Kosten sind flexibel und folgen dem Geschäftsverlauf, aber sie machen die monatliche Planung schwieriger."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du ziehst von einer Wohnung mit Pauschal-Warmmiete in ein Haus mit eigenen Zählern. In der Wohnung hast du einen festen Betrag gezahlt, egal wie viel Strom und Wasser du verbraucht hast. Im Haus zahlst du nur, was du verbrauchst. Das ist günstiger, wenn du sparsam bist. Aber wenn du vergisst, das Licht auszumachen, oder die Heizung aufdrehst und in den Urlaub fährst, kommt eine. böse Überraschung. Der Umzug von eigenen Servern in die Cloud ist genau dieser Wechsel.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Cloud-Kosten funktionieren grundlegend anders als die Kosten für eigene Server. Eigene Server sind Investitionen: Du kaufst sie einmal und schreibst sie über Jahre ab. Cloud-Kosten sind Betriebsausgaben: Du zahlst jeden Monat für das, was du verbrauchst. Das ist flexibel und skalierbar, aber es erfordert eine neue Art des Kostenmanagements. Ohne aktive Kontrolle können Cloud-Kosten ausser Kontrolle geraten. Die gute Nachricht ist: Mit den richtigen Werkzeugen und Strategien behältst du sie im Griff.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was bedeutet Pay-as-you-go, und wann ist es das richtige Modell?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Pay-as-you-go ist das grundlegende Abrechnungsmodell der Cloud. Du zahlst nur für das, was du tatsächlich nutzt, abgerechnet pro Sekunde, pro Gigabyte oder pro Aufruf. Es gibt keine Mindestabnahme und keine Kündigungsfrist. Du startest einen Server, er läuft eine Stunde, du zahlst eine Stunde. Du löschst ihn, die Kosten hören auf. Dieses Modell ist perfekt für variable Lasten, für Experimente und für den Einstieg. Aber es ist teuer für konstante Grundlasten, die immer laufen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Pay-as-you-go ist das grundlegende Cloud-Abrechnungsmodell, bei dem du nur für die tatsächlich verbrauchten Ressourcen zahlst, ohne Mindestabnahme oder. langfristige Bindung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Die FutureDev-App läuft auf einem Pay-as-you-go-Server bei AWS. In der Nacht, wenn niemand lernt, skaliert der Server auf null herunter und kostet nichts. Am Morgen, wenn die ersten Lernenden kommen, startet er automatisch. An einem Sonntag mit tausend Nutzern kostet der Tag mehr als an einem Dienstag mit hundert. Die Kosten folgen der Nutzung, nicht einem festen Tarif.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Pay-as-you-go ist der Grund, warum Startups heute mit wenigen hundert Euro im Monat globale Anwendungen betreiben können. Früher brauchtest du einen Kredit für Server-Hardware, bevor du die erste Zeile Code geschrieben hattest. Heute startest du mit null Kosten und skalierst mit deinem Erfolg. Aber dieser Vorteil wird zum Nachteil, wenn du nicht aufpasst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was sind Reserved Instances, und wann lohnen sie sich?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du kaufst eine Monatskarte für den Bus. Wenn du jeden Tag fährst, ist sie viel günstiger als Einzeltickets. Wenn du nur einmal pro Woche fährst, sind Einzeltickets günstiger. Reserved Instances sind die Monatskarte der Cloud. Du verpflichtest dich für ein oder drei Jahre und bekommst dafür einen hohen Rabatt. Aber wenn du die Monatskarte kaufst und dann doch mit dem Fahrrad fährst, hast du umsonst bezahlt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Reserved Instances sind ein Abrechnungsmodell, bei dem du dich für ein oder drei Jahre verpflichtest, eine bestimmte Menge. an Cloud-Ressourcen abzunehmen. Dafür erhältst du einen Rabatt von bis zu siebzig Prozent gegenüber Pay-as-you-go. Dieses Modell lohnt sich für vorhersagbare Grundlasten, die dauerhaft laufen, zum Beispiel eine Datenbank, die nie herunterfährt. Der Nachteil ist die langfristige Bindung: Du zahlst auch dann, wenn du die Ressourcen nicht nutzt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Reserved Instances sind ein Cloud-Abrechnungsmodell mit ein- oder dreijähriger Bindung und bis zu siebzig Prozent Rabatt gegenüber Pay-as-you-go,. geeignet für vorhersagbare Grundlasten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Die FutureDev-Datenbank läuft auf einer Reserved Instance. Das Team weiss, dass die Datenbank immer laufen muss, auch nachts für Backups. Statt monatlich vierhundert Euro Pay-as-you-go zu zahlen, hat es sich für ein Jahr verpflichtet und zahlt nur hundertzwanzig. Euro im Monat. Die Ersparnis von zweihundertachtzig Euro im Monat finanziert fast einen halben Entwickler-Arbeitsplatz.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Reserved Instances sind das wichtigste Werkzeug, um Cloud-Kosten planbar zu machen. Ohne sie ist deine Cloud-Rechnung jeden Monat eine Überraschung. Mit ihnen weisst du, dass deine Grundlast einen festen, reduzierten Betrag kostet. Die Kunst ist, die richtige Mischung aus Pay-as-you-go für variable Lasten und Reserved Instances für konstante Lasten zu. finden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist der Free Tier, und wo sind seine Grenzen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der Free Tier ist ein kostenloses Kontingent, das Cloud-Anbieter neuen Kunden gewähren. Bei AWS bekommst du zwölf Monate lang eine kleine virtuelle Maschine, etwas Speicher und eine begrenzte Anzahl API-Aufrufe. kostenlos. Einige Dienste sind sogar dauerhaft kostenlos, allerdings mit starken Einschränkungen. Der Free Tier ist ideal zum Lernen, für Prototypen und für kleine Hobbyprojekte. Aber er ist nicht für Produktionsanwendungen geeignet, weil die Limits schnell erreicht sind.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Der Free Tier ist ein kostenloses Kontingent, das Cloud-Anbieter neuen Kunden für die ersten zwölf Monate oder dauerhaft. für eine begrenzte Nutzung gewähren, ideal zum Lernen und für Prototypen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Ein Lernender baut seine erste Webanwendung im AWS Free Tier. Er nutzt eine EC2-Mikroinstanz, eine RDS-Datenbank mit zwanzig Gigabyte und einen S3-Bucket mit fünf Gigabyte. Alles kostenlos. Nach zwölf Monaten läuft der Free Tier aus. Wenn er vergisst, die Ressourcen zu löschen, zahlt er plötzlich fünfzig Euro im Monat. Deshalb richtet er eine Budget-Warnung ein, die ihn benachrichtigt, bevor Kosten entstehen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Der Free Tier ist ein geniales Marketing-Instrument der Cloud-Anbieter. Er senkt die Einstiegshürde auf null und macht dich mit der Plattform vertraut. Aber er ist auch eine Falle, wenn du die Fristen nicht im Blick hast. Viele unerwartete Cloud-Rechnungen entstehen, weil jemand vergessen hat, Free-Tier-Ressourcen nach Ablauf zu löschen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Wie behalte ich mit dem Cost Explorer den Überblick über meine Cloud-Kosten?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du bekommst eine Stromrechnung über tausend Euro, aber es steht nicht drauf, welches Gerät wie. viel verbraucht hat. War es der Kühlschrank? Die Heizung? Der Server im Keller? Ohne Aufschlüsselung weisst du nicht, wo du sparen sollst. Der Cost Explorer ist der detaillierte Zähler, der dir für jeden Cloud-Dienst einzeln zeigt, was er kostet.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der Cost Explorer ist das Analyse-Werkzeug von AWS, das deine Cloud-Kosten nach Diensten, Regionen und Zeiträumen aufschlüsselt. Du siehst auf einen Blick, welcher Dienst wie viel kostet und wie sich die Kosten über die Zeit. entwickeln. Der Cost Explorer kann auch Prognosen erstellen: Wenn deine Kosten so weitersteigen wie in den letzten drei Monaten,. zahlst du im Dezember voraussichtlich so viel. Diese Transparenz ist die Grundlage für jedes Kostenmanagement.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Der Cost Explorer ist das Analyse-Werkzeug von AWS, das Cloud-Kosten nach Diensten, Regionen und Zeiträumen aufschlüsselt, Trends zeigt. und zukünftige Kosten prognostiziert.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Das FutureDev-Team öffnet den Cost Explorer und sieht, dass die Datenübertragungskosten im letzten Monat um dreissig Prozent gestiegen. sind. Ein Klick zeigt: Ein neues Feature lädt bei jedem Seitenaufruf ein grosses Bild vom S3-Speicher, statt es im. CDN zwischenzuspeichern. Das Team aktiviert das CDN-Caching, und die Datenübertragungskosten fallen um achtzig Prozent. Ohne Cost Explorer hätte niemand diesen Kostentreiber bemerkt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Cloud-Kosten sind wie ein Wasserhahn: Wenn du nicht hinschaust, läuft er. Der Cost Explorer zwingt dich hinzuschauen. Er macht aus einer monatlichen Überraschungsrechnung eine nachvollziehbare, steuerbare Grösse. Die fünf Minuten pro Woche, die du in den Cost Explorer investierst, können hunderte Euro im Monat sparen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Welche Strategien gibt es, um Cloud-Kosten aktiv zu senken?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Es gibt fünf bewährte Strategien, um Cloud-Kosten zu senken. Erstens: Ressourcen abschalten, die nicht gebraucht werden, zum Beispiel Testserver am Wochenende. Zweitens: Die richtige Instanz-Grösse wählen, statt aus Bequemlichkeit die grösste zu nehmen. Drittens: Reserved Instances für konstante Grundlasten nutzen. Viertens: Datenübertragung minimieren, indem du ein CDN verwendest und grosse Dateien komprimierst. Fünftens: Budget-Warnungen einrichten, die dich benachrichtigen, bevor die Kosten ein Limit überschreiten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Das FutureDev-Team hat einen Lambda-Job, der jede Nacht Backups erstellt. Der Job läuft zwei Stunden und kostet zwanzig Cent pro Nacht. Ein Praktikant hatte vor sechs Monaten einen Test-Job eingerichtet, der jede Stunde läuft und nichts tut, aber fünfzehn. Euro im Monat kostet. Im Cost Explorer fällt dieser Posten auf. Das Team löscht den Test-Job und spart einhundertachtzig Euro im Jahr. Für fünf Minuten Arbeit.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Cloud-Kosten zu senken ist keine einmalige Aktion, sondern eine Gewohnheit. Jeden Monat zehn Minuten in den Cost Explorer schauen, ungewöhnliche Posten hinterfragen und ungenutzte Ressourcen löschen. Diese Disziplin unterscheidet Teams, die ihre Cloud-Rechnung im Griff haben, von denen, die jeden Monat erschrocken auf die. Rechnung starren.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein häufiger Fehler ist, Cloud-Kosten erst dann zu beachten, wenn die Rechnung zu hoch ist. Dann ist es zu spät für den laufenden Monat. Stattdessen solltest du Budget-Warnungen einrichten. AWS Budgets sendet dir eine E-Mail, wenn deine Kosten achtzig Prozent deines Monatsbudgets erreichen. So kannst du reagieren, bevor die Rechnung kommt. Diese Warnungen sind in fünf Minuten eingerichtet und können hunderte Euro sparen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Budget-Warnungen sind der Sicherheitsgurt der Cloud. Du hoffst, ihn nie zu brauchen. Aber wenn es knallt, ist er der Unterschied zwischen einem Schreck und einem Totalschaden. Jedes Cloud-Projekt, egal wie klein, sollte mindestens eine Budget-Warnung haben.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Ein greifbares Beispiel für Fixkosten: Kosten, die unabhängig von der produzierten Menge oder der Nutzung anfallen. Sie bleiben gleich, egal ob du einen oder tausend Nutzer hast.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Ein greifbares Beispiel für Auto-Scaling: Die automatische Anpassung der Server-Anzahl an die aktuelle Last. Bei hoher Last werden automatisch neue Server gestartet, bei geringer Last werden überflüssige Server heruntergefahren.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Ein greifbares Beispiel für Variable Kosten: Kosten, die mit der produzierten Menge oder der Nutzung steigen oder fallen. Mehr Nutzer bedeuten höhere variable Kosten, weniger Nutzer bedeuten niedrigere.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "text": "Also noch einmal ganz kurz: Cloud-Kosten sind Betriebsausgaben, die aktiv verwaltet werden müssen. Pay-as-you-go ist flexibel und ideal für variable Lasten. Reserved Instances geben Rabatt für langfristige Bindung und eignen sich für konstante Grundlasten. Der Free Tier ist kostenlos zum Lernen, aber zeitlich begrenzt. Der Cost Explorer schlüsselt die Kosten auf und zeigt Kostentreiber. Und Budget-Warnungen verhindern böse Überraschungen am Monatsende.",
+      "isKeySentence": true
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Kannst du Cloud-Kosten verstehen und kontrollieren noch einmal mit einem Alltagbeispiel erklären, ohne Fachjargon?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du erklärst das Thema einem Freund am Küchentisch. Du fängst nicht mit dem Fachwort an, sondern mit dem Problem, das der Freund schon kennt. Genau so bauen wir hier das Verständnis auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der Kern von Cloud-Kosten verstehen und kontrollieren ist eine klare Reihenfolge: erst das Problem sehen, dann die Lösung. in einfachen Worten, dann den Fachbegriff, dann ein zweites Beispiel, und zum Schluss warum es in der Praxis. zählt. Wenn du diese fünf Schritte wiederholen kannst, hast du die Lektion verstanden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In echten Projekten scheitert Cloud-Kosten verstehen und kontrollieren selten an fehlender Intelligenz, sondern an fehlender Klarheit. Wer den Ablauf laut erklären kann, findet Fehler schneller und schreibt Code, den andere morgen noch lesen können.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du sitzt mit einem Freund am Küchentisch. Du erklärst das Thema ohne Fachwörter. Erst das Problem. Dann die einfache Lösung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Genau so lernen wir hier. Erst ein Bild aus dem Alltag. Dann die Erklärung in kurzen Sätzen. Dann der Fachbegriff. Dann ein zweites Beispiel. Zum Schluss warum es zählt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In echten Projekten scheitert Cloud-Kosten verstehen und kontrollieren selten an fehlender Intelligenz. Es scheitert an unklarer Sprache. Wer den Ablauf laut erklären kann, findet Fehler schneller.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Deshalb üben wir das Thema so gründlich. In Gesprächen zählt nicht das Schlagwort. Es zählt, ob du den Zusammenhang in eigenen Worten trägst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist der häufigste Anfängerfehler bei diesem Thema?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der häufigste Fehler ist Kopieren ohne Verständnis. Schreib nach jedem Abschnitt drei Sätze. Ein Satz Problem. Ein Satz Lösung. Ein Satz Fachbegriff.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Selbstcheck: Schließe die App. Öffne einen leeren Editor. Schreibe drei Sätze zu Cloud-Kosten verstehen und kontrollieren. Wenn das ohne Abschreiben gelingt, sitzt der Stoff.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Wenn dir einer der drei Sätze fehlt, spring zurück zum Alltagsbild. Lies den Abschnitt noch einmal laut. Dann schreib die drei Sätze erneut.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Diese Wiederholung spart später Wochen. Teams verlieren Zeit durch Missverständnisse. Klare Sprache ist deshalb Teil der Technik.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Kannst du Cloud-Kosten verstehen und kontrollieren noch einmal ganz langsam erklären?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du sitzt mit einem Freund am Küchentisch. Du erklärst das Thema ohne Fachwörter. Erst das Problem. Dann die einfache Lösung. Das gilt besonders für den Teil 11.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Genau so lernen wir hier. Erst ein Bild aus dem Alltag. Dann die Erklärung in kurzen Sätzen. Dann der Fachbegriff. Dann ein zweites Beispiel. Zum Schluss warum es zählt. Das gilt besonders für den Teil 12.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In echten Projekten scheitert Cloud-Kosten verstehen und kontrollieren selten an fehlender Intelligenz. Es scheitert an unklarer Sprache. Wer den Ablauf laut erklären kann, findet Fehler schneller. Das gilt besonders für den Teil 13.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Deshalb üben wir das Thema so gründlich. In Gesprächen zählt nicht das Schlagwort. Es zählt, ob du den Zusammenhang in eigenen Worten trägst. Das gilt besonders für den Teil 14.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist der häufigste Anfängerfehler bei diesem Thema? Das gilt besonders für den Teil 15.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der häufigste Fehler ist Kopieren ohne Verständnis. Schreib nach jedem Abschnitt drei Sätze. Ein Satz Problem. Ein Satz Lösung. Ein Satz Fachbegriff. Das gilt besonders für den Teil 16.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Die Begriffe dieser Lektion: Cloud-Kosten, Pay-as-you-go, Reserved Instances, Free Tier, Cost Explorer, Fixkosten, Auto-Scaling, Variable Kosten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Pay-as-you-go: Das grundlegende Cloud-Abrechnungsmodell, bei dem du nur für tatsächlich verbrauchte Ressourcen zahlst, ohne Mindestabnahme. Beispiel: Der FutureDev-Server skaliert nachts auf null und kostet nichts. Stell dir eine Stromrechnung vor, die genau den Verbrauch abrechnet.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Reserved Instances: Ein Abrechnungsmodell mit ein- oder dreijähriger Bindung und bis zu siebzig Prozent Rabatt für vorhersagbare Grundlasten. Beispiel: Die FutureDev-Datenbank läuft auf einer Reserved Instance und spart zweihundertachtzig Euro im Monat. Stell dir eine Monatskarte für den Bus vor, die sich nur bei täglicher Nutzung lohnt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Free Tier: Ein kostenloses Kontingent für neue Kunden, ideal zum Lernen und für Prototypen, aber zeitlich oder mengenmässig. begrenzt. Beispiel: Ein Lernender baut seine erste App kostenlos im Free Tier, muss aber nach zwölf Monaten die Ressourcen. löschen. Stell dir ein Probemonat im Fitnessstudio vor, der automatisch endet.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Cost Explorer: Das Analyse-Werkzeug von AWS, das Cloud-Kosten nach Diensten, Regionen und Zeiträumen aufschlüsselt und Kostentreiber identifiziert. Beispiel: Das FutureDev-Team entdeckt im Cost Explorer einen vergessenen Test-Job, der fünfzehn Euro im Monat kostet. Stell dir einen detaillierten Stromzähler vor, der für jedes Gerät einzeln den Verbrauch zeigt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Wie vermeide ich eine hohe Cloud-Rechnung nach Ablauf des Free Tier?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Richte sofort nach der Kontoerstellung eine Budget-Warnung ein, die dich bei einem Euro benachrichtigt. So merkst du sofort, wenn Kosten entstehen. Zweitens: Notiere dir das Ablaufdatum des Free Tier in deinem Kalender, mit einer Erinnerung zwei Wochen vorher. Drittens: Lösche alle Ressourcen, die du nicht mehr brauchst, bevor der Free Tier abläuft. Viertens: Prüfe im Cost Explorer, ob noch Ressourcen laufen, die du vergessen hast. Die meisten bösen Überraschungen kommen von vergessenen Ressourcen, nicht von aktiv genutzten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Lohnen sich Reserved Instances auch für kleine Projekte?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Für sehr kleine Projekte mit wenigen hundert Euro Cloud-Kosten im Monat lohnen sich Reserved Instances meist nicht. Der Verwaltungsaufwand und die Bindung stehen in keinem Verhältnis zur Ersparnis. Reserved Instances lohnen sich ab etwa fünfhundert Euro monatlicher Cloud-Kosten für konstante Lasten. Darunter ist Pay-as-you-go mit gutem Kostenmanagement die bessere Wahl. Die Ersparnis durch Reserved Instances muss grösser sein als der Aufwand, sie zu verwalten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was ist der häufigste Grund für unerwartet hohe Cloud-Rechnungen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Vergessene Ressourcen. Ein Entwickler startet einen Testserver, probiert etwas aus und vergisst, ihn zu löschen. Der Server läuft wochenlang, ohne dass es jemand merkt. Oder eine Datenbank wird für ein Experiment angelegt und nie wieder angerührt. Diese vergessenen Ressourcen summieren sich. Der zweithäufigste Grund sind Datenübertragungskosten, die unterschätzt werden, besonders wenn grosse Dateien ohne CDN ausgeliefert werden. Beide Probleme löst der Cost Explorer, wenn du regelmässig hineinschaust.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Kann ich Cloud-Kosten komplett automatisieren?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Teilweise. Du kannst Skripte schreiben, die ungenutzte Ressourcen automatisch löschen, zum Beispiel Testserver, die länger als vierundzwanzig Stunden laufen. Du kannst Auto-Scaling so einrichten, dass es bei geringer Last Ressourcen abbaut. Aber die wichtigsten Entscheidungen, wie die Wahl zwischen Pay-as-you-go und Reserved Instances oder die Analyse von Kostentrends, brauchen. menschliches Urteilsvermögen. Automatisiere die Routine, aber behalte die Strategie in deiner Hand.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Welche Cloud-Kosten fallen bei der FutureDev-App typischerweise an?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Die FutureDev-App hat vier Hauptkostenposten. Erstens die Datenbank auf einer Reserved Instance für etwa hundertzwanzig Euro im Monat. Zweitens die Server für die Webanwendung im Pay-as-you-go-Modell, die je nach Nutzung zwischen fünfzig und zweihundert Euro im. Monat schwanken. Drittens der S3-Speicher für Lektionsinhalte und Bilder, etwa zwanzig Euro im Monat. Viertens die Datenübertragung, etwa dreissig Euro im Monat. Zusammen sind das zwischen zweihundertzwanzig und dreihundertsiebzig Euro im Monat, abhängig von der Nutzerzahl.",
+      "isKeySentence": false
+    }
+  ],
+  "practiceExample": {
+    "text": "Cloud-Kosten mit AWS Cost Explorer analysieren und Budget-Warnungen einrichten, wie im FutureDev-Projekt praktiziert.",
+    "repoNote": "repo-futuredev",
+    "location": "docs/cloud/cost-management.md (Kostenaufstellung, Budget-Warnungen und Cost-Explorer-Analysen)"
+  },
+  "quiz": [
+    {
+      "question": "Welches Alltagsbild beschreibt den Unterschied zwischen eigenen Servern und Cloud-Kosten am treffendsten?",
+      "area": "Cloud-Kosten",
+      "options": [
+        {
+          "text": "Der Umzug von einer Wohnung mit Pauschal-Warmmiete in ein Haus mit eigenen Zählern, wo du nur den tatsächlichen Verbrauch zahlst.",
+          "isCorrect": true,
+          "explanation": "Richtig: eigene Server sind Fixkosten, Cloud-Kosten sind verbrauchsabhängig."
+        },
+        {
+          "text": "Der Kauf eines Autos statt der Nutzung von öffentlichen Verkehrsmitteln.",
+          "isCorrect": false,
+          "explanation": "Falsch: das beschreibt Kaufen versus Mieten, nicht Fixkosten versus variable Kosten."
+        },
+        {
+          "text": "Der Wechsel von einem Festnetztelefon zu einem Mobiltelefon.",
+          "isCorrect": false,
+          "explanation": "Falsch: das beschreibt Mobilität, nicht das Abrechnungsmodell."
+        },
+        {
+          "text": "Die Umstellung von Bargeld auf Kreditkarte.",
+          "isCorrect": false,
+          "explanation": "Falsch: das beschreibt die Zahlungsart, nicht das Kostenmodell."
+        }
+      ]
+    },
+    {
+      "question": "Wann ist Pay-as-you-go das richtige Abrechnungsmodell?",
+      "area": "Pay-as-you-go",
+      "options": [
+        {
+          "text": "Für variable Lasten, Experimente und den Einstieg, wenn du keine langfristige Bindung eingehen willst.",
+          "isCorrect": true,
+          "explanation": "Richtig: Pay-as-you-go ist flexibel und bindet dich nicht."
+        },
+        {
+          "text": "Für eine Datenbank, die immer laufen muss. sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen",
+          "isCorrect": false,
+          "explanation": "Falsch: für konstante Lasten sind Reserved Instances günstiger."
+        },
+        {
+          "text": "Für Projekte mit festem Budget.",
+          "isCorrect": false,
+          "explanation": "Falsch: Pay-as-you-go kann bei fester Nutzung teurer sein."
+        },
+        {
+          "text": "Nur für den Free Tier.",
+          "isCorrect": false,
+          "explanation": "Falsch: Pay-as-you-go ist das Standardmodell, nicht nur für den Free Tier."
+        }
+      ]
+    },
+    {
+      "question": "Wie viel Rabatt können Reserved Instances gegenüber Pay-as-you-go bieten?",
+      "area": "Reserved Instances",
+      "options": [
+        {
+          "text": "Bis zu siebzig Prozent bei ein- oder dreijähriger Bindung.",
+          "isCorrect": true,
+          "explanation": "Richtig: Reserved Instances geben hohe Rabatte für langfristige Verpflichtungen."
+        },
+        {
+          "text": "Zehn Prozent bei monatlicher Zahlung. sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen",
+          "isCorrect": false,
+          "explanation": "Falsch: der Rabatt ist deutlich höher."
+        },
+        {
+          "text": "Fünfzig Prozent ohne Bindung.",
+          "isCorrect": false,
+          "explanation": "Falsch: ohne Bindung gibt es keinen Reserved-Instance-Rabatt."
+        },
+        {
+          "text": "Neunzig Prozent bei fünfjähriger Bindung.",
+          "isCorrect": false,
+          "explanation": "Falsch: die maximale Bindung beträgt drei Jahre."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der grösste Nachteil von Reserved Instances?",
+      "area": "Reserved Instances",
+      "options": [
+        {
+          "text": "Du zahlst auch dann, wenn du die Ressourcen nicht nutzt, weil du dich für ein oder drei Jahre gebunden hast.",
+          "isCorrect": true,
+          "explanation": "Richtig: die langfristige Bindung ist der Preis für den Rabatt."
+        },
+        {
+          "text": "Sie sind nur in einer Region verfügbar. sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen",
+          "isCorrect": false,
+          "explanation": "Falsch: Reserved Instances gibt es in allen Regionen."
+        },
+        {
+          "text": "Sie funktionieren nur mit Windows-Servern.",
+          "isCorrect": false,
+          "explanation": "Falsch: Reserved Instances sind betriebssystemunabhängig."
+        },
+        {
+          "text": "Sie sind teurer als Pay-as-you-go.",
+          "isCorrect": false,
+          "explanation": "Falsch: Reserved Instances sind günstiger, nicht teurer."
+        }
+      ]
+    },
+    {
+      "question": "Wie lange gilt der AWS Free Tier typischerweise?",
+      "area": "Free Tier",
+      "options": [
+        {
+          "text": "Zwölf Monate für die meisten Dienste, einige Dienste sind dauerhaft kostenlos mit starken Einschränkungen.",
+          "isCorrect": true,
+          "explanation": "Richtig: der Free Tier ist zeitlich begrenzt mit einigen dauerhaft kostenlosen Angeboten."
+        },
+        {
+          "text": "Unbegrenzt für alle Dienste. sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen",
+          "isCorrect": false,
+          "explanation": "Falsch: die meisten Free-Tier-Angebote laufen nach zwölf Monaten aus."
+        },
+        {
+          "text": "Einen Monat für alle Dienste.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Free Tier gilt länger als einen Monat."
+        },
+        {
+          "text": "Drei Jahre für Bildungseinrichtungen.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Free Tier gilt für alle neuen Kunden, nicht nur Bildungseinrichtungen."
+        }
+      ]
+    },
+    {
+      "question": "Was zeigt der AWS Cost Explorer?",
+      "area": "Cost Explorer",
+      "options": [
+        {
+          "text": "Die Aufschlüsselung der Cloud-Kosten nach Diensten, Regionen und Zeiträumen sowie Trends und Prognosen.",
+          "isCorrect": true,
+          "explanation": "Richtig: der Cost Explorer macht Cloud-Kosten transparent und analysierbar."
+        },
+        {
+          "text": "Die Anzahl der aktiven Nutzer einer Anwendung. sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen",
+          "isCorrect": false,
+          "explanation": "Falsch: Nutzerzahlen zeigt der Cost Explorer nicht."
+        },
+        {
+          "text": "Den Quellcode der laufenden Server.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Cost Explorer hat nichts mit Quellcode zu tun."
+        },
+        {
+          "text": "Die Sicherheitslücken der Infrastruktur.",
+          "isCorrect": false,
+          "explanation": "Falsch: Sicherheitslücken zeigt ein anderes Werkzeug."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der häufigste Grund für unerwartet hohe Cloud-Rechnungen?",
+      "area": "Cloud-Kosten",
+      "options": [
+        {
+          "text": "Vergessene Ressourcen wie Testserver oder Datenbanken, die nach einem Experiment nicht gelöscht wurden.",
+          "isCorrect": true,
+          "explanation": "Richtig: vergessene Ressourcen sind der häufigste Kostentreiber."
+        },
+        {
+          "text": "Zu viele Nutzer der Anwendung.",
+          "isCorrect": false,
+          "explanation": "Falsch: mehr Nutzer sind ein gutes Problem, kein Fehler."
+        },
+        {
+          "text": "Die Cloud-Anbieter erhöhen heimlich die Preise.",
+          "isCorrect": false,
+          "explanation": "Falsch: Preiserhöhungen werden angekündigt und sind selten die Ursache."
+        },
+        {
+          "text": "Hacker, die die Cloud-Infrastruktur kapern.",
+          "isCorrect": false,
+          "explanation": "Falsch: Sicherheitsvorfälle sind selten die Hauptursache für hohe Rechnungen."
+        }
+      ]
+    },
+    {
+      "question": "Welche Strategie senkt Cloud-Kosten NICHT?",
+      "area": "Cloud-Kosten",
+      "options": [
+        {
+          "text": "Immer die grösste verfügbare Instanz wählen, um sicherzugehen, dass die Anwendung nicht langsam wird.",
+          "isCorrect": true,
+          "explanation": "Richtig: überdimensionierte Instanzen sind eine Verschwendung, keine Sparstrategie."
+        },
+        {
+          "text": "Testserver am Wochenende abschalten. sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen",
+          "isCorrect": false,
+          "explanation": "Falsch: das Abschalten ungenutzter Ressourcen spart Kosten."
+        },
+        {
+          "text": "Ein CDN für statische Inhalte nutzen.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein CDN reduziert Datenübertragungskosten."
+        },
+        {
+          "text": "Reserved Instances für konstante Grundlasten nutzen.",
+          "isCorrect": false,
+          "explanation": "Falsch: Reserved Instances senken die Kosten für Grundlasten."
+        }
+      ]
+    },
+    {
+      "question": "Was bewirkt eine Budget-Warnung in AWS?",
+      "area": "Cloud-Kosten",
+      "options": [
+        {
+          "text": "Sie benachrichtigt dich per E-Mail, wenn deine Kosten einen festgelegten Schwellenwert erreichen, bevor die Rechnung kommt.",
+          "isCorrect": true,
+          "explanation": "Richtig: Budget-Warnungen sind Frühwarnsysteme, keine nachträglichen Benachrichtigungen."
+        },
+        {
+          "text": "Sie stoppt automatisch alle Server, wenn das Budget erreicht ist. sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen",
+          "isCorrect": false,
+          "explanation": "Falsch: Budget-Warnungen benachrichtigen nur, sie stoppen nichts automatisch."
+        },
+        {
+          "text": "Sie verhandelt mit AWS über niedrigere Preise.",
+          "isCorrect": false,
+          "explanation": "Falsch: Budget-Warnungen verhandeln nicht."
+        },
+        {
+          "text": "Sie erstellt automatisch Reserved Instances.",
+          "isCorrect": false,
+          "explanation": "Falsch: Reserved Instances müssen manuell eingerichtet werden."
+        }
+      ]
+    },
+    {
+      "question": "Ab welcher monatlichen Cloud-Rechnung lohnen sich Reserved Instances typischerweise?",
+      "area": "Reserved Instances",
+      "options": [
+        {
+          "text": "Ab etwa fünfhundert Euro für konstante Lasten, darunter ist Pay-as-you-go mit gutem Management die bessere Wahl.",
+          "isCorrect": true,
+          "explanation": "Richtig: unter fünfhundert Euro überwiegt der Verwaltungsaufwand die Ersparnis."
+        },
+        {
+          "text": "Ab einem Euro, sofort nach Kontoerstellung. sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen",
+          "isCorrect": false,
+          "explanation": "Falsch: bei Kleinstbeträgen lohnt sich die Bindung nicht."
+        },
+        {
+          "text": "Erst ab zehntausend Euro im Monat.",
+          "isCorrect": false,
+          "explanation": "Falsch: Reserved Instances lohnen sich schon bei deutlich niedrigeren Beträgen."
+        },
+        {
+          "text": "Nur für Unternehmen mit mehr als hundert Mitarbeitern.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Unternehmensgrösse ist nicht entscheidend."
+        }
+      ]
+    },
+    {
+      "question": "Welcher FutureDev-Kostenposten ist typischerweise der grösste?",
+      "area": "Cloud-Kosten",
+      "options": [
+        {
+          "text": "Die Datenbank auf einer Reserved Instance, etwa hundertzwanzig Euro im Monat.",
+          "isCorrect": true,
+          "explanation": "Richtig: die Datenbank ist die konstante Grundlast und der grösste Einzelposten."
+        },
+        {
+          "text": "Die Datenübertragung, etwa dreissig Euro im Monat. sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen",
+          "isCorrect": false,
+          "explanation": "Falsch: die Datenübertragung ist ein kleinerer Posten."
+        },
+        {
+          "text": "Der S3-Speicher, etwa zwanzig Euro im Monat.",
+          "isCorrect": false,
+          "explanation": "Falsch: Speicher ist günstiger als die Datenbank."
+        },
+        {
+          "text": "Die Domain-Gebühren.",
+          "isCorrect": false,
+          "explanation": "Falsch: Domain-Gebühren sind vernachlässigbar."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der wichtigste Grundsatz im Cloud-Kostenmanagement?",
+      "area": "Cloud-Kosten",
+      "options": [
+        {
+          "text": "Regelmässig in den Cost Explorer schauen, ungewöhnliche Posten hinterfragen und ungenutzte Ressourcen löschen.",
+          "isCorrect": true,
+          "explanation": "Richtig: aktives, regelmässiges Kostenmanagement ist die Grundlage."
+        },
+        {
+          "text": "Alle Ressourcen sofort als Reserved Instances buchen. sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen",
+          "isCorrect": false,
+          "explanation": "Falsch: nicht alle Ressourcen eignen sich für Reserved Instances."
+        },
+        {
+          "text": "Die Cloud-Rechnung ignorieren und auf das Beste hoffen.",
+          "isCorrect": false,
+          "explanation": "Falsch: Ignorieren führt zu bösen Überraschungen."
+        },
+        {
+          "text": "Nur den Free Tier nutzen.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Free Tier ist keine dauerhafte Strategie."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Öffne das repo-futuredev-cloud-costs und lies die Datei cost-management.md. Verstehe die Kostenaufstellung und die Budget-Warnungen. Erstelle dann in deinem eigenen AWS-Account eine Budget-Warnung, die dich bei zwanzig Euro benachrichtigt. Öffne den Cost Explorer und identifiziere deine drei grössten Kostenposten. Dokumentiere, welche Posten du für notwendig hältst und welche du optimieren könntest.",
+    "expectation": "Die Grundlagen des Cloud-Kostenmanagements wurden verstanden und praktisch angewendet.",
+    "checklist": [
+      "Das repo-futuredev-cloud-costs geöffnet und cost-management.md gelesen.",
+      "Eine Budget-Warnung im eigenen AWS-Account eingerichtet.",
+      "Den Cost Explorer geöffnet und die drei grössten Kostenposten identifiziert.",
+      "Eine kurze Dokumentation mit Optimierungsvorschlägen geschrieben.",
+      "Verstanden, dass Cloud-Kostenmanagement eine regelmässige Gewohnheit ist."
+    ],
+    "portfolioItem": "P04"
+  },
+  "audio": {
+    "file": "M07-03-01.mp3",
+    "durationSeconds": 1520,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Wie vermeide ich eine hohe Cloud-Rechnung nach Ablauf des Free Tier?",
+      "answer": "Richte sofort nach der Kontoerstellung eine Budget-Warnung ein, die dich bei einem Euro benachrichtigt. So merkst du sofort, wenn Kosten entstehen. Zweitens: Notiere dir das Ablaufdatum des Free Tier in deinem Kalender, mit einer Erinnerung zwei Wochen vorher. Drittens: Lösche alle Ressourcen, die du nicht mehr brauchst, bevor der Free Tier abläuft. Viertens: Prüfe im Cost Explorer, ob noch Ressourcen laufen, die du vergessen hast. Die meisten bösen Überraschungen kommen von vergessenen Ressourcen, nicht von aktiv genutzten."
+    },
+    {
+      "question": "Lohnen sich Reserved Instances auch für kleine Projekte?",
+      "answer": "Für sehr kleine Projekte mit wenigen hundert Euro Cloud-Kosten im Monat lohnen sich Reserved Instances meist nicht. Der Verwaltungsaufwand und die Bindung stehen in keinem Verhältnis zur Ersparnis. Reserved Instances lohnen sich ab etwa fünfhundert Euro monatlicher Cloud-Kosten für konstante Lasten. Darunter ist Pay-as-you-go mit gutem Kostenmanagement die bessere Wahl. Die Ersparnis durch Reserved Instances muss grösser sein als der Aufwand, sie zu verwalten."
+    },
+    {
+      "question": "Was ist der häufigste Grund für unerwartet hohe Cloud-Rechnungen?",
+      "answer": "Vergessene Ressourcen. Ein Entwickler startet einen Testserver, probiert etwas aus und vergisst, ihn zu löschen. Der Server läuft wochenlang, ohne dass es jemand merkt. Oder eine Datenbank wird für ein Experiment angelegt und nie wieder angerührt. Diese vergessenen Ressourcen summieren sich. Der zweithäufigste Grund sind Datenübertragungskosten, die unterschätzt werden, besonders wenn grosse Dateien ohne CDN ausgeliefert werden. Beide Probleme löst der Cost Explorer, wenn du regelmässig hineinschaust."
+    },
+    {
+      "question": "Kann ich Cloud-Kosten komplett automatisieren?",
+      "answer": "Teilweise. Du kannst Skripte schreiben, die ungenutzte Ressourcen automatisch löschen, zum Beispiel Testserver, die länger als vierundzwanzig Stunden laufen. Du kannst Auto-Scaling so einrichten, dass es bei geringer Last Ressourcen abbaut. Aber die wichtigsten Entscheidungen, wie die Wahl zwischen Pay-as-you-go und Reserved Instances oder die Analyse von Kostentrends, brauchen. menschliches Urteilsvermögen. Automatisiere die Routine, aber behalte die Strategie in deiner Hand."
+    },
+    {
+      "question": "Welche Cloud-Kosten fallen bei der FutureDev-App typischerweise an?",
+      "answer": "Die FutureDev-App hat vier Hauptkostenposten. Erstens die Datenbank auf einer Reserved Instance für etwa hundertzwanzig Euro im Monat. Zweitens die Server für die Webanwendung im Pay-as-you-go-Modell, die je nach Nutzung zwischen fünfzig und zweihundert Euro im. Monat schwanken. Drittens der S3-Speicher für Lektionsinhalte und Bilder, etwa zwanzig Euro im Monat. Viertens die Datenübertragung, etwa dreissig Euro im Monat. Zusammen sind das zwischen zweihundertzwanzig und dreihundertsiebzig Euro im Monat, abhängig von der Nutzerzahl."
+    }
+  ]
+}

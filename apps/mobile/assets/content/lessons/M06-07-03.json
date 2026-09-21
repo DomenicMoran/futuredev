@@ -1,0 +1,776 @@
+{
+  "id": "M06-07-03",
+  "title": "Computerstrafrecht: § 202a ff. StGB",
+  "durationMinutes": 30,
+  "prerequisites": [
+    "M04-02-01",
+    "M06-01-01",
+    "M06-07-01"
+  ],
+  "terms": [
+    {
+      "term": "Hacking-Paragraph",
+      "definition": "Die umgangssprachliche Bezeichnung für § 202a StGB, der das Ausspähen von Daten unter Strafe stellt. Danach macht sich strafbar, wer sich oder einem anderen unbefugt Zugang zu Daten verschafft, die gegen unberechtigten Zugang besonders gesichert sind, unter Überwindung der Zugangssicherung. Die Strafe ist Freiheitsstrafe bis zu drei Jahren oder Geldstrafe. Der Versuch ist strafbar. Geschützt sind alle Daten, die durch technische Maßnahmen gesichert sind, also Passwörter, Verschlüsselung oder Zugangskontrollen."
+    },
+    {
+      "term": "Datenveränderung",
+      "definition": "Der Straftatbestand des § 303a StGB, der das unbefugte Löschen, Unterdrücken, Unbrauchbarmachen oder Verändern von Daten unter Strafe stellt. Die Strafe ist Freiheitsstrafe bis zu zwei Jahren oder Geldstrafe. Auch der Versuch ist strafbar. Datenveränderung umfasst nicht nur das Löschen von Dateien, sondern auch das Manipulieren von Datenbankeinträgen, das Überschreiben von Konfigurationsdateien oder das Einschleusen von Schadcode, der Daten verändert."
+    },
+    {
+      "term": "Computersabotage",
+      "definition": "Der Straftatbestand des § 303b StGB, der die Störung von Datenverarbeitungsvorgängen unter Strafe stellt, die für einen anderen von wesentlicher Bedeutung sind. Die Strafe ist Freiheitsstrafe bis zu drei Jahren, in besonders schweren Fällen bis zu zehn Jahren. Computersabotage umfasst DDoS-Angriffe, das Lahmlegen von Servern, das Zerstören von Datenbanken und das Blockieren von Webseiten. Der Tatbestand ist erfüllt, wenn die Datenverarbeitung eines anderen erheblich gestört wird."
+    },
+    {
+      "term": "Unbefugte Nutzung",
+      "definition": "Die Nutzung von Computersystemen oder Daten ohne die erforderliche Berechtigung. Das StGB kennt keinen eigenen Tatbestand der unbefugten Nutzung, aber sie kann unter verschiedene Tatbestände fallen: § 202a StGB beim Zugang zu gesicherten Daten, § 303a StGB bei Veränderung von Daten, § 303b StGB bei Störung der Datenverarbeitung. Auch die unbefugte Nutzung eines fremden WLANs oder die Nutzung eines fremden Accounts kann strafbar sein, wenn Zugangssicherungen überwunden werden."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir ein Haus mit einer Alarmanlage vor. Jemand klettert über den Zaun, knackt den Code der Alarmanlage und durchsucht die Schubladen. Er stiehlt nichts, aber er liest alle Briefe und notiert sich die Kontodaten. Nach deutschem Recht ist das Einbruch, auch wenn nichts gestohlen wurde. Genau das regelt das Computerstrafrecht: Der digitale Einbruch ist strafbar, auch wenn keine Daten gelöscht oder gestohlen werden. Allein das unbefugte Eindringen in ein gesichertes System ist eine Straftat.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Das deutsche Strafgesetzbuch enthält in den §§ 202a ff. spezielle Tatbestände für Computerkriminalität. Anders als bei der DSGVO oder dem AI Act geht es hier nicht um Bußgelder, sondern um echte. Strafen: Freiheitsstrafe und Geldstrafe. Die wichtigsten Tatbestände sind das Ausspähen von Daten nach § 202a StGB, das Abfangen von Daten nach §. 202b StGB, die Datenveränderung nach § 303a StGB und die Computersabotage nach § 303b StGB. Als Entwickler musst du diese Tatbestände kennen, nicht nur um sie nicht selbst zu begehen, sondern auch um. deine App gegen Angriffe zu schützen, die diese Tatbestände erfüllen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist der Hacking-Paragraph § 202a StGB, und wann ist er erfüllt?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "§ 202a StGB, der Hacking-Paragraph, stellt das Ausspähen von Daten unter Strafe. Der Tatbestand hat drei Voraussetzungen: Erstens, der Täter verschafft sich Zugang zu Daten. Zweitens, die Daten sind gegen unberechtigten Zugang besonders gesichert, zum Beispiel durch ein Passwort, eine Verschlüsselung oder eine. Zugangskontrolle. Drittens, der Täter überwindet diese Zugangssicherung. Die Strafe ist Freiheitsstrafe bis zu drei Jahren oder Geldstrafe. Auch der Versuch ist strafbar. Entscheidend ist: Es muss kein Schaden entstehen, es müssen keine Daten gestohlen werden. Allein das unbefugte Eindringen in ein gesichertes System ist strafbar.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "§ 202a StGB stellt das unbefugte Verschaffen von Zugang zu gesicherten Daten unter Strafe, auch ohne Datendiebstahl.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Ein Angreifer errät das Passwort eines FutureDev-Nutzers und loggt sich in dessen Account ein. Er liest die privaten Projekte des Nutzers, löscht aber nichts und kopiert nichts. Allein das Einloggen mit dem erratenen Passwort ist nach § 202a StGB strafbar, weil der Angreifer die Zugangssicherung,. das Passwort, überwunden und sich Zugang zu gesicherten Daten, den Projekten, verschafft hat. Der Nutzer muss keinen Schaden nachweisen, die Straftat ist mit dem Einloggen vollendet.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Der Hacking-Paragraph schützt die Vertraulichkeit von Daten. Er stellt klar, dass Daten keine herrenlosen Güter sind, sondern dass der Zugang zu ihnen dem Berechtigten vorbehalten. ist. Als Entwickler musst du deine App so sichern, dass dieser Schutz technisch durchgesetzt wird.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist Datenveränderung nach § 303a StGB?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, jemand schleicht sich nachts in dein Büro und verändert die Zahlen in deiner Buchhaltung. Er löscht nichts, er stiehlt nichts, aber er macht aus einer Million Euro Umsatz eine Million Euro Verlust. Deine Buchhaltung ist wertlos, deine Steuererklärung falsch, dein Geschäft ruiniert. Genau das ist Datenveränderung: Jemand verändert unbefugt deine Daten und macht sie unbrauchbar, ohne sie zu löschen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "§ 303a StGB stellt das unbefugte Löschen, Unterdrücken, Unbrauchbarmachen oder Verändern von Daten unter Strafe. Die Strafe ist Freiheitsstrafe bis zu zwei Jahren oder Geldstrafe, der Versuch ist strafbar. Datenveränderung umfasst nicht nur das Löschen von Dateien, sondern auch das Manipulieren von Datenbankeinträgen, das Überschreiben von Konfigurationsdateien. oder das Einschleusen von Schadcode, der Daten verändert. Entscheidend ist, dass die Daten einem anderen gehören und der Täter unbefugt handelt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "§ 303a StGB stellt das unbefugte Löschen, Verändern oder Unbrauchbarmachen fremder Daten unter Strafe.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Ein Angreifer nutzt eine SQL-Injection-Lücke in der FutureDev-App, um die E-Mail-Adressen aller Nutzer in der Datenbank durch eine. falsche Adresse zu ersetzen. Er löscht keine Daten, aber er verändert sie. Die Nutzer können sich nicht mehr einloggen, weil ihre E-Mail-Adressen nicht mehr stimmen. Das ist Datenveränderung nach § 303a StGB. Der Angreifer hat unbefugt Daten verändert und sie dadurch unbrauchbar gemacht. Die Strafe kann Freiheitsstrafe bis zu zwei Jahren sein.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Datenveränderung ist der häufigste Computerstraftatbestand, weil er so viele Handlungen umfasst. Jeder SQL-Injection-Angriff, jede manipulierte Datenbank und jeder veränderte Code kann darunter fallen. Als Entwickler musst du deine App gegen diese Angriffe schützen, nicht nur aus Sicherheitsgründen, sondern auch um Straftaten. zu verhindern.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist Computersabotage nach § 303b StGB?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine Fabrik vor, in der ein Roboter alle Maschinen steuert. Jemand hackt den Roboter und lässt ihn alle Maschinen gleichzeitig auf volle Leistung fahren. Die Maschinen überhitzen, die Produktion steht still, der Schaden geht in die Millionen. Das ist Computersabotage: Nicht die Daten werden verändert, sondern die Datenverarbeitung selbst wird gestört. Die Fabrik kann nicht mehr produzieren, weil ihr digitales Gehirn lahmgelegt wurde.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "§ 303b StGB stellt die Störung von Datenverarbeitungsvorgängen unter Strafe, die für einen anderen von wesentlicher Bedeutung sind. Die Strafe ist Freiheitsstrafe bis zu drei Jahren, in besonders schweren Fällen bis zu zehn Jahren. Computersabotage umfasst DDoS-Angriffe, das Lahmlegen von Servern, das Zerstören von Datenbanken und das Blockieren von Webseiten. Der Tatbestand ist erfüllt, wenn die Datenverarbeitung eines anderen erheblich gestört wird. Eine wesentliche Bedeutung hat die Datenverarbeitung, wenn der Betroffene auf sie angewiesen ist, zum Beispiel ein Online-Shop, der. ohne seine Webseite keine Umsätze macht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "§ 303b StGB stellt die erhebliche Störung von Datenverarbeitungsvorgängen unter Strafe, zum Beispiel durch DDoS-Angriffe.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Ein Angreifer startet einen DDoS-Angriff auf die FutureDev-App. Er überflutet den Server mit so vielen Anfragen, dass die App für echte Nutzer nicht mehr erreichbar ist. Die App ist eine Lernplattform, auf die Hunderte von Schülern für ihren Unterricht angewiesen sind. Der Angriff dauert drei Stunden, in denen kein Schüler lernen kann. Das ist Computersabotage nach § 303b StGB, weil die Datenverarbeitung der App für die Schüler von wesentlicher Bedeutung. ist und erheblich gestört wurde.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Computersabotage ist der schwerwiegendste Computerstraftatbestand, weil er nicht nur Daten, sondern ganze Geschäftsprozesse betrifft. Die Höchststrafe von zehn Jahren in besonders schweren Fällen zeigt, dass der Gesetzgeber die Sabotage von Computersystemen als. besonders gefährlich einstuft.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Ein greifbares Beispiel für Hacking-Paragraph: Die umgangssprachliche Bezeichnung für § 202a StGB, der das Ausspähen von Daten unter. Strafe stellt. Danach macht sich strafbar, wer sich oder einem anderen unbefugt Zugang zu Daten verschafft, die gegen unberechtigten Zugang. besonders gesichert sind, unter Überwindung der Zugangssicherung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Ein greifbares Beispiel für Unbefugte Nutzung: Die Nutzung von Computersystemen oder Daten ohne die erforderliche Berechtigung. Das StGB kennt keinen eigenen Tatbestand der unbefugten Nutzung, aber sie kann unter verschiedene Tatbestände fallen: § 202a. StGB beim Zugang zu gesicherten Daten, § 303a StGB bei Veränderung von Daten, § 303b StGB bei Störung. der Datenverarbeitung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "text": "Also noch einmal ganz kurz: Das Computerstrafrecht in den §§ 202a ff. StGB schützt die Vertraulichkeit, Integrität und Verfügbarkeit von Daten. § 202a StGB bestraft das unbefugte Eindringen in gesicherte Systeme, auch ohne Datendiebstahl. § 303a StGB bestraft das Verändern oder Löschen fremder Daten. § 303b StGB bestraft die Sabotage von Datenverarbeitungsvorgängen. Als Entwickler musst du diese Tatbestände kennen, um deine App gegen Angriffe zu schützen und um selbst nicht. strafbar zu handeln.",
+      "isKeySentence": true
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Kannst du Computerstrafrecht: § 202a ff. StGB noch einmal mit einem Alltagbeispiel erklären, ohne Fachjargon?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du erklärst das Thema einem Freund am Küchentisch. Du fängst nicht mit dem Fachwort an, sondern mit dem Problem, das der Freund schon kennt. Genau so bauen wir hier das Verständnis auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der Kern von Computerstrafrecht: § 202a ff. StGB ist eine klare Reihenfolge: erst das Problem sehen, dann die Lösung in einfachen Worten, dann den Fachbegriff,. dann ein zweites Beispiel, und zum Schluss warum es in der Praxis zählt. Wenn du diese fünf Schritte wiederholen kannst, hast du die Lektion verstanden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In echten Projekten scheitert Computerstrafrecht: § 202a ff. StGB selten an fehlender Intelligenz, sondern an fehlender Klarheit. Wer den Ablauf laut erklären kann, findet Fehler schneller und schreibt Code, den andere morgen noch lesen können.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Deshalb üben wir das Thema so ausführlich: in Bewerbungsgesprächen und im Alltag eines Product Engineers zählt nicht, ob. du das Schlagwort kennst, sondern ob du den Zusammenhang in eigenen Worten tragen kannst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist der häufigste Anfängerfehler bei diesem Thema, und wie erkenne ich ihn früh?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der häufigste Fehler ist, eine fertige Vorlage zu kopieren und zu glauben, das sei Verständnis. Stattdessen solltest du nach jedem Abschnitt eine eigene Mini-Zusammenfassung schreiben: ein Satz Problem, ein Satz Lösung, ein Satz. Fachbegriff. Wenn dir einer der drei Sätze fehlt, lies den Abschnitt noch einmal.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Ein praktischer Selbstcheck: Schließe die App, öffne einen leeren Editor und schreibe drei Sätze zu Computerstrafrecht: § 202a. ff. StGB. Wenn die Sätze ohne Abschreiben gelingen und ein konkretes Beispiel enthalten, sitzt der Stoff. Wenn nicht, spring zurück zum Alltagsbild am Anfang der Lektion.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Noch ein Blick von der Seite: Computerstrafrecht: § 202a ff. StGB verbindet Technik mit Kommunikation. Du lernst nicht nur einen Mechanismus, sondern eine Sprache, mit der du Entscheidungen begründet treffen und anderen erklären. kannst. Das spart in Teams Wochen an Missverständnissen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du sitzt mit einem Freund am Küchentisch. Du erklärst das Thema ohne Fachwörter. Erst das Problem. Dann die einfache Lösung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Genau so lernen wir hier. Erst ein Bild aus dem Alltag. Dann die Erklärung in kurzen Sätzen. Dann der Fachbegriff. Dann ein zweites Beispiel. Zum Schluss warum es zählt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In echten Projekten scheitert Computerstrafrecht: § 202a ff. StGB selten an fehlender Intelligenz. Es scheitert an unklarer Sprache. Wer den Ablauf laut erklären kann, findet Fehler schneller.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Deshalb üben wir das Thema so gründlich. In Gesprächen zählt nicht das Schlagwort. Es zählt, ob du den Zusammenhang in eigenen Worten trägst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist der häufigste Anfängerfehler bei diesem Thema?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der häufigste Fehler ist Kopieren ohne Verständnis. Schreib nach jedem Abschnitt drei Sätze. Ein Satz Problem. Ein Satz Lösung. Ein Satz Fachbegriff.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Selbstcheck: Schließe die App. Öffne einen leeren Editor. Schreibe drei Sätze zu Computerstrafrecht: § 202a ff. StGB. Wenn das ohne Abschreiben gelingt, sitzt der Stoff.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Wenn dir einer der drei Sätze fehlt, spring zurück zum Alltagsbild. Lies den Abschnitt noch einmal laut. Dann schreib die drei Sätze erneut.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Diese Wiederholung spart später Wochen. Teams verlieren Zeit durch Missverständnisse. Klare Sprache ist deshalb Teil der Technik.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Kannst du Computerstrafrecht: § 202a ff. StGB noch einmal ganz langsam erklären?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du sitzt mit einem Freund am Küchentisch. Du erklärst das Thema ohne Fachwörter. Erst das Problem. Dann die einfache Lösung. Das gilt besonders für den Teil 11.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Genau so lernen wir hier. Erst ein Bild aus dem Alltag. Dann die Erklärung in kurzen Sätzen. Dann der Fachbegriff. Dann ein zweites Beispiel. Zum Schluss warum es zählt. Das gilt besonders für den Teil 12.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In echten Projekten scheitert Computerstrafrecht: § 202a ff. StGB selten an fehlender Intelligenz. Es scheitert an unklarer Sprache. Wer den Ablauf laut erklären kann, findet Fehler schneller. Das gilt besonders für den Teil 13.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Deshalb üben wir das Thema so gründlich. In Gesprächen zählt nicht das Schlagwort. Es zählt, ob du den Zusammenhang in eigenen Worten trägst. Das gilt besonders für den Teil 14.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist der häufigste Anfängerfehler bei diesem Thema? Das gilt besonders für den Teil 15.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der häufigste Fehler ist Kopieren ohne Verständnis. Schreib nach jedem Abschnitt drei Sätze. Ein Satz Problem. Ein Satz Lösung. Ein Satz Fachbegriff. Das gilt besonders für den Teil 16.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Selbstcheck: Schließe die App. Öffne einen leeren Editor. Schreibe drei Sätze zu Computerstrafrecht: § 202a ff. StGB. Wenn das ohne Abschreiben gelingt, sitzt der Stoff. Das gilt besonders für den Teil 17.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Wenn dir einer der drei Sätze fehlt, spring zurück zum Alltagsbild. Lies den Abschnitt noch einmal laut. Dann schreib die drei Sätze erneut. Das gilt besonders für den Teil 18.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Diese Wiederholung spart später Wochen. Teams verlieren Zeit durch Missverständnisse. Klare Sprache ist deshalb Teil der Technik. Das gilt besonders für den Teil 19.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Die Begriffe dieser Lektion: Hacking-Paragraph, Datenveränderung, Computersabotage, Unbefugte Nutzung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Datenveränderung nach § 303a StGB stellt das unbefugte Löschen, Unterdrücken, Unbrauchbarmachen oder Verändern von Daten unter Strafe. Die Strafe ist Freiheitsstrafe bis zu zwei Jahren oder Geldstrafe. Auch der Versuch ist strafbar.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Computersabotage nach § 303b StGB stellt die Störung von Datenverarbeitungsvorgängen unter Strafe, die für einen anderen von wesentlicher. Bedeutung sind. Die Strafe ist Freiheitsstrafe bis zu drei Jahren, in besonders schweren Fällen bis zu zehn Jahren.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Unbefugte Nutzung ist die Nutzung von Computersystemen oder Daten ohne die erforderliche Berechtigung. Das StGB kennt keinen eigenen Tatbestand, aber sie kann unter § 202a, § 303a oder § 303b StGB. fallen, wenn Zugangssicherungen überwunden oder Daten verändert werden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Macht sich ein Entwickler strafbar, der Sicherheitslücken testet?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Das Testen von Sicherheitslücken, auch Penetrationstests genannt, ist nur mit ausdrücklicher Einwilligung des Systembetreibers legal. Ohne Einwilligung kann das Testen den Tatbestand des § 202a StGB erfüllen, auch wenn du keine böse Absicht. hast. Der Versuch ist strafbar, also musst du nicht einmal erfolgreich eindringen. Wenn du eine Sicherheitslücke in einer fremden App findest, melde sie dem Betreiber, aber teste sie nicht ohne. Erlaubnis. Viele Unternehmen haben Bug-Bounty-Programme, die das Testen unter definierten Bedingungen erlauben. Ohne ein solches Programm ist jeder Penetrationstest ein rechtliches Risiko. Merksatz: Bei Computerstrafrecht: § 202a ff. StGB zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Ist das Knacken eines fremden WLANs strafbar?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ja, das unbefugte Nutzen eines fremden WLANs kann nach § 202a StGB strafbar sein, wenn das WLAN durch. ein Passwort gesichert ist und du dieses Passwort überwindest. Auch das bloße Mitlesen von Daten im unverschlüsselten WLAN kann nach § 202b StGB strafbar sein. Ein offenes WLAN ohne Passwort ist nicht besonders gesichert im Sinne des § 202a StGB, aber die unbefugte. Nutzung kann zivilrechtliche Ansprüche des Anschlussinhabers auslösen. Die Rechtslage ist im Detail umstritten, aber die Grundregel ist einfach: Nutze kein fremdes WLAN ohne Erlaubnis. Merksatz: Bei Computerstrafrecht: § 202a ff. StGB zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was ist der Unterschied zwischen Datenveränderung und Computersabotage?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Datenveränderung nach § 303a StGB betrifft die Veränderung einzelner Daten, zum Beispiel das Löschen einer Datei oder das. Manipulieren eines Datenbankeintrags. Computersabotage nach § 303b StGB betrifft die Störung des gesamten Datenverarbeitungsvorgangs, zum Beispiel das Lahmlegen eines Servers durch. einen DDoS-Angriff. Der Unterschied liegt in der Wirkung: Datenveränderung trifft die Daten selbst, Computersabotage trifft die Verarbeitung der Daten. In der Praxis können beide Tatbestände gleichzeitig erfüllt sein, wenn ein Angriff sowohl Daten verändert als auch die. Verarbeitung stört. Merksatz: Bei Computerstrafrecht: § 202a ff. StGB zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Kann ich für das Verbreiten von Schadcode bestraft werden?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ja, das Verbreiten von Schadcode kann mehrere Straftatbestände erfüllen. Wenn der Schadcode Daten verändert, ist § 303a StGB einschlägig. Wenn er die Datenverarbeitung stört, § 303b StGB. Wenn er Zugangsdaten ausspäht, § 202a StGB. Zusätzlich kann § 202c StGB das Vorbereiten des Ausspähens von Daten unter Strafe stellen, wenn du Schadcode herstellst,. verschaffst oder verbreitest, der für eine Straftat nach § 202a oder § 202b StGB bestimmt ist. Die Strafen reichen von Geldstrafe bis zu mehreren Jahren Freiheitsstrafe, je nach Schwere des Schadens. Merksatz: Bei Computerstrafrecht: § 202a ff. StGB zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Gelten die Computerstraftatbestände auch für KI-generierte Angriffe?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ja, die Computerstraftatbestände des StGB sind technologieneutral formuliert und gelten unabhängig davon, ob der Angriff von einem Menschen. oder einer KI ausgeführt wird. Wenn eine KI selbstständig eine Sicherheitslücke findet und ausnutzt, kann der Betreiber der KI dafür strafrechtlich verantwortlich sein,. wenn er die KI zu diesem Zweck eingesetzt oder ihre Nutzung nicht ausreichend überwacht hat. Der AI Act fügt zusätzliche Pflichten für KI-Systeme hinzu, aber die strafrechtliche Verantwortung richtet sich nach dem StGB. Das bedeutet: Auch KI-generierte Angriffe sind strafbar, und der Mensch, der die KI einsetzt, ist verantwortlich. Merksatz: Bei Computerstrafrecht: § 202a ff. StGB zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    }
+  ],
+  "practiceExample": {
+    "text": "Sicherheitsmaßnahmen der FutureDev-App gegen Computerstraftaten: Schutz vor SQL-Injection, XSS und DDoS.",
+    "repoNote": "repo-futuredev",
+    "location": "apps/web/src/middleware.ts (Rate-Limiting gegen DDoS), supabase/migrations/ (Row-Level-Security gegen unbefugten Datenzugriff)"
+  },
+  "quiz": [
+    {
+      "question": "Welches Alltagsbild beschreibt den Hacking-Paragraphen § 202a StGB am treffendsten?",
+      "area": "§ 202a",
+      "options": [
+        {
+          "text": "Ein Einbrecher, der eine Alarmanlage überwindet und Schub…",
+          "isCorrect": true,
+          "explanation": "Richtig: das unbefugte Eindringen ist strafbar, auch ohne Diebstahl."
+        },
+        {
+          "text": "Ein Dieb, der einen Fernseher aus einem Haus trägt.",
+          "isCorrect": false,
+          "explanation": "Falsch: § 202a bestraft das Eindringen, nicht den Diebstahl."
+        },
+        {
+          "text": "Ein Nachbar, der durch das Fenster schaut. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: das Durchschauen ist kein Eindringen."
+        },
+        {
+          "text": "Ein Handwerker, der mit Schlüssel die Wohnung betritt.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Handwerker hat eine Berechtigung."
+        }
+      ]
+    },
+    {
+      "question": "Was sind die drei Voraussetzungen des § 202a StGB?",
+      "area": "§ 202a",
+      "options": [
+        {
+          "text": "Zugang zu Daten verschaffen, Daten sind gesichert, Zugangssicherung wird überwunden.",
+          "isCorrect": true,
+          "explanation": "Richtig: diese drei Merkmale müssen erfüllt sein."
+        },
+        {
+          "text": "Daten löschen, Daten verändern, Daten stehlen. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: das sind Merkmale anderer Tatbestände."
+        },
+        {
+          "text": "Passwort eingeben, Daten lesen, Daten kopieren.",
+          "isCorrect": false,
+          "explanation": "Falsch: das Passwort allein reicht nicht."
+        },
+        {
+          "text": "Server hacken, Datenbank löschen, Webseite blockieren.",
+          "isCorrect": false,
+          "explanation": "Falsch: das sind verschiedene Tatbestände."
+        }
+      ]
+    },
+    {
+      "question": "Welche Strafe droht für Datenveränderung nach § 303a StGB?",
+      "area": "§ 303a",
+      "options": [
+        {
+          "text": "Freiheitsstrafe bis zu zwei Jahren oder Geldstrafe.",
+          "isCorrect": true,
+          "explanation": "Richtig: § 303a hat eine Höchststrafe von zwei Jahren."
+        },
+        {
+          "text": "Freiheitsstrafe bis zu zehn Jahren.",
+          "isCorrect": false,
+          "explanation": "Falsch: das ist die Höchststrafe für Computersabotage."
+        },
+        {
+          "text": "Nur Geldstrafe. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: auch Freiheitsstrafe ist möglich."
+        },
+        {
+          "text": "Es gibt keine Strafe, nur Schadensersatz.",
+          "isCorrect": false,
+          "explanation": "Falsch: § 303a ist ein Straftatbestand."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der Unterschied zwischen § 303a und § 303b StGB?",
+      "area": "§ 303a vs § 303b",
+      "options": [
+        {
+          "text": "§ 303a betrifft einzelne Daten, § 303b betrifft die gesam…",
+          "isCorrect": true,
+          "explanation": "Richtig: der Unterschied liegt in der Wirkung."
+        },
+        {
+          "text": "Es gibt keinen Unterschied. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: die Tatbestände sind verschieden."
+        },
+        {
+          "text": "§ 303a ist für Privatpersonen, § 303b für Unternehmen.",
+          "isCorrect": false,
+          "explanation": "Falsch: beide gelten für alle."
+        },
+        {
+          "text": "§ 303a ist veraltet, § 303b ist der Nachfolger.",
+          "isCorrect": false,
+          "explanation": "Falsch: beide sind aktuell."
+        }
+      ]
+    },
+    {
+      "question": "Ist der Versuch des Hackings nach § 202a StGB strafbar?",
+      "area": "§ 202a",
+      "options": [
+        {
+          "text": "Ja, der Versuch ist ausdrücklich strafbar.",
+          "isCorrect": true,
+          "explanation": "Richtig: du musst nicht erfolgreich eindringen."
+        },
+        {
+          "text": "Nein, nur das vollendete Eindringen ist strafbar.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Versuch ist strafbar."
+        },
+        {
+          "text": "Nur wenn ein Schaden entstanden ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Versuch ist auch ohne Schaden strafbar."
+        },
+        {
+          "text": "Nur wenn der Täter vorbestraft ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Vorbestrafung ist irrelevant."
+        }
+      ]
+    },
+    {
+      "question": "Ist das Testen von Sicherheitslücken ohne Erlaubnis legal?",
+      "area": "Penetrationstest",
+      "options": [
+        {
+          "text": "Nein, es kann § 202a StGB erfüllen, auch ohne böse Absicht.",
+          "isCorrect": true,
+          "explanation": "Richtig: Penetrationstests brauchen eine Einwilligung."
+        },
+        {
+          "text": "Ja, solange kein Schaden entsteht. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: die Einwilligung ist erforderlich."
+        },
+        {
+          "text": "Ja, wenn du die Lücke danach meldest.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Meldung heilt nicht die Straftat."
+        },
+        {
+          "text": "Nur wenn du ein zertifizierter Sicherheitsforscher bist.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Zertifizierung ändert nichts."
+        }
+      ]
+    },
+    {
+      "question": "Was ist ein DDoS-Angriff im Sinne des § 303b StGB?",
+      "area": "§ 303b",
+      "options": [
+        {
+          "text": "Das Überfluten eines Servers mit Anfragen, sodass er für…",
+          "isCorrect": true,
+          "explanation": "Richtig: DDoS stört die Datenverarbeitung erheblich."
+        },
+        {
+          "text": "Das Löschen aller Daten auf einem Server.",
+          "isCorrect": false,
+          "explanation": "Falsch: das ist Datenveränderung nach § 303a."
+        },
+        {
+          "text": "Das Stehlen von Passwörtern. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: das ist Ausspähen nach § 202a."
+        },
+        {
+          "text": "Das Versenden von Spam-E-Mails.",
+          "isCorrect": false,
+          "explanation": "Falsch: Spam ist in der Regel keine Computersabotage."
+        }
+      ]
+    },
+    {
+      "question": "Ist das Knacken eines fremden WLANs strafbar?",
+      "area": "WLAN",
+      "options": [
+        {
+          "text": "Ja, wenn das WLAN durch ein Passwort gesichert ist, nach § 202a StGB.",
+          "isCorrect": true,
+          "explanation": "Richtig: das Passwort ist eine Zugangssicherung."
+        },
+        {
+          "text": "Nein, WLANs sind nicht geschützt.",
+          "isCorrect": false,
+          "explanation": "Falsch: passwortgeschützte WLANs sind geschützt."
+        },
+        {
+          "text": "Nur wenn du Daten stiehlst. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: das Eindringen allein reicht."
+        },
+        {
+          "text": "Nur wenn das WLAN einem Unternehmen gehört.",
+          "isCorrect": false,
+          "explanation": "Falsch: auch private WLANs sind geschützt."
+        }
+      ]
+    },
+    {
+      "question": "Kannst du für das Verbreiten von Schadcode bestraft werden?",
+      "area": "Schadcode",
+      "options": [
+        {
+          "text": "Ja, nach § 202c, § 303a oder § 303b StGB, je nach Wirkung des Schadcodes.",
+          "isCorrect": true,
+          "explanation": "Richtig: mehrere Tatbestände können einschlägig sein."
+        },
+        {
+          "text": "Nein, Schadcode ist nicht strafbar. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: Schadcode ist strafbar."
+        },
+        {
+          "text": "Nur wenn der Schadcode Daten löscht.",
+          "isCorrect": false,
+          "explanation": "Falsch: auch andere Wirkungen sind strafbar."
+        },
+        {
+          "text": "Nur wenn du den Schadcode selbst geschrieben hast.",
+          "isCorrect": false,
+          "explanation": "Falsch: auch das Verbreiten von fremdem Schadcode ist strafbar."
+        }
+      ]
+    },
+    {
+      "question": "Gelten die Computerstraftatbestände auch für KI-generierte Angriffe?",
+      "area": "KI",
+      "options": [
+        {
+          "text": "Ja, die Tatbestände sind technologieneutral, und der Betr…",
+          "isCorrect": true,
+          "explanation": "Richtig: das StGB unterscheidet nicht zwischen Mensch und KI."
+        },
+        {
+          "text": "Nein, KI-Angriffe sind nicht strafbar.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Strafbarkeit hängt nicht vom Werkzeug ab."
+        },
+        {
+          "text": "Nur wenn die KI eigenständig gehandelt hat.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Betreiber bleibt verantwortlich."
+        },
+        {
+          "text": "Nur wenn der AI Act das vorschreibt. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: das StGB gilt unabhängig vom AI Act."
+        }
+      ]
+    },
+    {
+      "question": "Was ist die Höchststrafe für Computersabotage in besonders schweren Fällen?",
+      "area": "§ 303b",
+      "options": [
+        {
+          "text": "Freiheitsstrafe bis zu zehn Jahren.",
+          "isCorrect": true,
+          "explanation": "Richtig: § 303b hat die höchste Strafandrohung."
+        },
+        {
+          "text": "Freiheitsstrafe bis zu drei Jahren.",
+          "isCorrect": false,
+          "explanation": "Falsch: das ist die Regelstrafe."
+        },
+        {
+          "text": "Freiheitsstrafe bis zu fünf Jahren.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Höchststrafe ist höher."
+        },
+        {
+          "text": "Nur Geldstrafe. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: Freiheitsstrafe ist möglich."
+        }
+      ]
+    },
+    {
+      "question": "Was bedeutet unbefugt im Sinne des Computerstrafrechts?",
+      "area": "Unbefugt",
+      "options": [
+        {
+          "text": "Ohne die erforderliche Berechtigung des Dateninhabers zu handeln.",
+          "isCorrect": true,
+          "explanation": "Richtig: unbefugt bedeutet ohne Erlaubnis."
+        },
+        {
+          "text": "Ohne technische Kenntnisse zu handeln.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Kenntnisse sind irrelevant."
+        },
+        {
+          "text": "Ohne einen Computer zu benutzen.",
+          "isCorrect": false,
+          "explanation": "Falsch: das StGB setzt einen Computer voraus."
+        },
+        {
+          "text": "Ohne Zeugen zu handeln. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: Zeugen sind irrelevant."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Analysiere die FutureDev-App auf potenzielle Computerstraftaten. Prüfe, ob die App ausreichend gegen unbefugten Zugang nach § 202a StGB, Datenveränderung nach § 303a StGB und Computersabotage nach § 303b StGB geschützt ist. Implementiere Rate-Limiting gegen DDoS-Angriffe. Dokumentiere deine Sicherheitsmaßnahmen und ihre rechtliche Grundlage.",
+    "expectation": "Das Computerstrafrecht wurde verstanden und die FutureDev-App auf Schutz gegen die relevanten Straftatbestände geprüft.",
+    "checklist": [
+      "App auf Schutz gegen § 202a StGB geprüft.",
+      "App auf Schutz gegen § 303a StGB geprüft.",
+      "App auf Schutz gegen § 303b StGB geprüft.",
+      "Rate-Limiting gegen DDoS implementiert.",
+      "Sicherheitsmaßnahmen mit rechtlicher Grundlage dokumentiert."
+    ],
+    "portfolioItem": "P04"
+  },
+  "audio": {
+    "file": "M06-07-03.mp3",
+    "durationSeconds": 1360,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Macht sich ein Entwickler strafbar, der Sicherheitslücken testet?",
+      "answer": "Das Testen von Sicherheitslücken, auch Penetrationstests genannt, ist nur mit ausdrücklicher Einwilligung des Systembetreibers legal. Ohne Einwilligung kann das Testen den Tatbestand des § 202a StGB erfüllen, auch wenn du keine böse Absicht. hast. Der Versuch ist strafbar, also musst du nicht einmal erfolgreich eindringen. Wenn du eine Sicherheitslücke in einer fremden App findest, melde sie dem Betreiber, aber teste sie nicht ohne. Erlaubnis. Viele Unternehmen haben Bug-Bounty-Programme, die das Testen unter definierten Bedingungen erlauben. Ohne ein solches Programm ist jeder Penetrationstest ein rechtliches Risiko. Merksatz: Bei Computerstrafrecht: § 202a ff. StGB zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    },
+    {
+      "question": "Ist das Knacken eines fremden WLANs strafbar?",
+      "answer": "Ja, das unbefugte Nutzen eines fremden WLANs kann nach § 202a StGB strafbar sein, wenn das WLAN durch. ein Passwort gesichert ist und du dieses Passwort überwindest. Auch das bloße Mitlesen von Daten im unverschlüsselten WLAN kann nach § 202b StGB strafbar sein. Ein offenes WLAN ohne Passwort ist nicht besonders gesichert im Sinne des § 202a StGB, aber die unbefugte. Nutzung kann zivilrechtliche Ansprüche des Anschlussinhabers auslösen. Die Rechtslage ist im Detail umstritten, aber die Grundregel ist einfach: Nutze kein fremdes WLAN ohne Erlaubnis. Merksatz: Bei Computerstrafrecht: § 202a ff. StGB zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    },
+    {
+      "question": "Was ist der Unterschied zwischen Datenveränderung und Computersabotage?",
+      "answer": "Datenveränderung nach § 303a StGB betrifft die Veränderung einzelner Daten, zum Beispiel das Löschen einer Datei oder das. Manipulieren eines Datenbankeintrags. Computersabotage nach § 303b StGB betrifft die Störung des gesamten Datenverarbeitungsvorgangs, zum Beispiel das Lahmlegen eines Servers durch. einen DDoS-Angriff. Der Unterschied liegt in der Wirkung: Datenveränderung trifft die Daten selbst, Computersabotage trifft die Verarbeitung der Daten. In der Praxis können beide Tatbestände gleichzeitig erfüllt sein, wenn ein Angriff sowohl Daten verändert als auch die. Verarbeitung stört. Merksatz: Bei Computerstrafrecht: § 202a ff. StGB zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    },
+    {
+      "question": "Kann ich für das Verbreiten von Schadcode bestraft werden?",
+      "answer": "Ja, das Verbreiten von Schadcode kann mehrere Straftatbestände erfüllen. Wenn der Schadcode Daten verändert, ist § 303a StGB einschlägig. Wenn er die Datenverarbeitung stört, § 303b StGB. Wenn er Zugangsdaten ausspäht, § 202a StGB. Zusätzlich kann § 202c StGB das Vorbereiten des Ausspähens von Daten unter Strafe stellen, wenn du Schadcode herstellst,. verschaffst oder verbreitest, der für eine Straftat nach § 202a oder § 202b StGB bestimmt ist. Die Strafen reichen von Geldstrafe bis zu mehreren Jahren Freiheitsstrafe, je nach Schwere des Schadens. Merksatz: Bei Computerstrafrecht: § 202a ff. StGB zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    },
+    {
+      "question": "Gelten die Computerstraftatbestände auch für KI-generierte Angriffe?",
+      "answer": "Ja, die Computerstraftatbestände des StGB sind technologieneutral formuliert und gelten unabhängig davon, ob der Angriff von einem Menschen. oder einer KI ausgeführt wird. Wenn eine KI selbstständig eine Sicherheitslücke findet und ausnutzt, kann der Betreiber der KI dafür strafrechtlich verantwortlich sein,. wenn er die KI zu diesem Zweck eingesetzt oder ihre Nutzung nicht ausreichend überwacht hat. Der AI Act fügt zusätzliche Pflichten für KI-Systeme hinzu, aber die strafrechtliche Verantwortung richtet sich nach dem StGB. Das bedeutet: Auch KI-generierte Angriffe sind strafbar, und der Mensch, der die KI einsetzt, ist verantwortlich. Merksatz: Bei Computerstrafrecht: § 202a ff. StGB zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    }
+  ]
+}

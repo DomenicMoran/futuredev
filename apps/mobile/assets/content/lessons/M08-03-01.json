@@ -1,0 +1,1002 @@
+{
+  "id": "M08-03-01",
+  "title": "Wie ein API-Aufruf an ein Sprachmodell aussieht",
+  "durationMinutes": 20,
+  "prerequisites": [
+    "M08-02-03"
+  ],
+  "terms": [
+    {
+      "term": "Chat-Completion-Endpunkt",
+      "definition": "Die HTTP-Schnittstelle, ueber die du Nachrichten an ein Sprachmodell sendest und eine Antwort zurueckbekommst. Der Chat-Completion-Endpunkt erwartet typischerweise Rollen wie system, user und assistant in einem messages-Array."
+    },
+    {
+      "term": "Token-Budget",
+      "definition": "Die maximale Anzahl an Tokens, die Eingabe und Ausgabe zusammen verbrauchen duerfen. Das Token-Budget begrenzt Kosten und verhindert abgeschnittene Antworten, wenn es zu knapp gewaehlt ist."
+    },
+    {
+      "term": "API-Payload",
+      "definition": "Der JSON-Body eines API-Aufrufs mit Modellname, Nachrichten, Parametern und optionalen Tools. Ein sauberer API-Payload enthaelt nur noetige Felder und keine Geheimnisse im Klartext im Repo."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen Briefumschlag vor. Absender, Empfaenger, Betreff und Inhalt muessen stimmen. Der Chat-Completion-Endpunkt ist der Briefkasten. Token-Budget ist das Gewichtslimit. API-Payload ist der Brief selbst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein LLM-API-Aufruf sendet strukturierte Nachrichten an den Chat-Completion-Endpunkt. Du planst Token-Budget und baust einen sauberen API-Payload. So wird aus Prompt-Text eine technische Anfrage.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was bedeutet Chat-Completion-Endpunkt, und wo triffst du es in der Praxis?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir LLM-API wie ein Werkzeug in einer Werkstatt vor. Jeder Chat-Completion-Endpunkt hat einen festen Platz. Ohne ihn wird die Arbeit unsicher oder langsam. Das 1. Werkzeug in dieser Lektion ist Chat-Completion-Endpunkt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Chat-Completion-Endpunkt ist ein zentraler Baustein bei Wie ein API-Aufruf an ein Sprachmodell aussieht. Du lernst hier, wie es funktioniert und warum Teams es nutzen. Wir erklaeren jeden Schritt in einfachen Worten, ohne Vorwissen vorauszusetzen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Chat-Completion-Endpunkt ist: Die HTTP-Schnittstelle, ueber die du Nachrichten an ein Sprachmodell sendest und eine Antwort zurueckbekommst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Beispiel zu Chat-Completion-Endpunkt: In FutureDev oder deinem Lernprojekt siehst du Chat-Completion-Endpunkt bei echter Arbeit. Schau ins Repo repo-futuredev und finde eine Stelle, die du in eigenen Worten erklaeren kannst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Ohne Verstaendnis von Chat-Completion-Endpunkt kopierst du nur Anleitungen. Mit Verstaendnis erkennst du Fehler frueh und triffst bessere Entscheidungen bei LLM-API.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was bedeutet Token-Budget, und wo triffst du es in der Praxis?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir LLM-API wie ein Werkzeug in einer Werkstatt vor. Jeder Token-Budget hat einen festen Platz. Ohne ihn wird die Arbeit unsicher oder langsam. Das 2. Werkzeug in dieser Lektion ist Token-Budget.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Token-Budget ist ein zentraler Baustein bei Wie ein API-Aufruf an ein Sprachmodell aussieht. Du lernst hier, wie es funktioniert und warum Teams es nutzen. Wir erklaeren jeden Schritt in einfachen Worten, ohne Vorwissen vorauszusetzen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Token-Budget ist: Die maximale Anzahl an Tokens, die Eingabe und Ausgabe zusammen verbrauchen duerfen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Beispiel zu Token-Budget: In FutureDev oder deinem Lernprojekt siehst du Token-Budget bei echter Arbeit. Schau ins Repo repo-futuredev und finde eine Stelle, die du in eigenen Worten erklaeren kannst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Ohne Verstaendnis von Token-Budget kopierst du nur Anleitungen. Mit Verstaendnis erkennst du Fehler frueh und triffst bessere Entscheidungen bei LLM-API.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was bedeutet API-Payload, und wo triffst du es in der Praxis?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir LLM-API wie ein Werkzeug in einer Werkstatt vor. Jeder API-Payload hat einen festen Platz. Ohne ihn wird die Arbeit unsicher oder langsam. Das 3. Werkzeug in dieser Lektion ist API-Payload.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "API-Payload ist ein zentraler Baustein bei Wie ein API-Aufruf an ein Sprachmodell aussieht. Du lernst hier, wie es funktioniert und warum Teams es nutzen. Wir erklaeren jeden Schritt in einfachen Worten, ohne Vorwissen vorauszusetzen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "API-Payload ist: Der JSON-Body eines API-Aufrufs mit Modellname, Nachrichten, Parametern und optionalen Tools.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Beispiel zu API-Payload: In FutureDev oder deinem Lernprojekt siehst du API-Payload bei echter Arbeit. Schau ins Repo repo-futuredev und finde eine Stelle, die du in eigenen Worten erklaeren kannst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Ohne Verstaendnis von API-Payload kopierst du nur Anleitungen. Mit Verstaendnis erkennst du Fehler frueh und triffst bessere Entscheidungen bei LLM-API.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "text": "Endpunkt, Budget, Payload. Drei Bausteine fuer jeden LLM-Aufruf.",
+      "isKeySentence": true
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Lass uns LLM-API noch einmal aus einem anderen Blickwinkel betrachten. Viele Anfaenger ueberspringen diesen Schritt und wundern sich spaeter ueber Fehler. Wenn du jeden Gedanken langsam nachvollziehst, wirst du sicherer. Das gilt besonders fuer Wie ein API-Aufruf an ein Sprachmodell aussieht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In FutureDev nutzen wir LLM-API bei echten Aufgaben. Du siehst den Ablauf im Repo und kannst ihn Schritt fuer Schritt nachbauen. So verbindet sich Theorie mit deiner eigenen Praxis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Warum ist LLM-API wichtig? Weil du ohne dieses Verstaendnis nur Anweisungen kopierst. Mit Verstaendnis kannst du Fehler erkennen und bessere Entscheidungen treffen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was soll ich mir bei LLM-API zuerst merken?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Merke dir den Ablauf: erst das Bild, dann die Erklaerung, dann der Fachausdruck, dann ein Beispiel, dann der Warum-Satz. Genau dieses Muster hilft dir bei Wie ein API-Aufruf an ein Sprachmodell aussieht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Stell dir vor, du erklaerst LLM-API einem Freund ohne Technikwissen. Du wuerdest kein Fachwort ohne Beispiel benutzen. Genau so baut FutureDev jede Lektion auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Gute Entwickler koennen LLM-API in einfachen Worten erklaeren. Das ist ein Zeichen von echtem Verstaendnis, nicht von Auswendiglernen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Lass uns LLM-API noch einmal aus einem anderen Blickwinkel betrachten. Viele Anfaenger ueberspringen diesen Schritt und wundern sich spaeter ueber Fehler. Wenn du jeden Gedanken langsam nachvollziehst, wirst du sicherer. Das gilt besonders fuer Wie ein API-Aufruf an ein Sprachmodell aussieht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In FutureDev nutzen wir LLM-API bei echten Aufgaben. Du siehst den Ablauf im Repo und kannst ihn Schritt fuer Schritt nachbauen. So verbindet sich Theorie mit deiner eigenen Praxis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Warum ist LLM-API wichtig? Weil du ohne dieses Verstaendnis nur Anweisungen kopierst. Mit Verstaendnis kannst du Fehler erkennen und bessere Entscheidungen treffen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was soll ich mir bei LLM-API zuerst merken?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Merke dir den Ablauf: erst das Bild, dann die Erklaerung, dann der Fachausdruck, dann ein Beispiel, dann der Warum-Satz. Genau dieses Muster hilft dir bei Wie ein API-Aufruf an ein Sprachmodell aussieht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Stell dir vor, du erklaerst LLM-API einem Freund ohne Technikwissen. Du wuerdest kein Fachwort ohne Beispiel benutzen. Genau so baut FutureDev jede Lektion auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Gute Entwickler koennen LLM-API in einfachen Worten erklaeren. Das ist ein Zeichen von echtem Verstaendnis, nicht von Auswendiglernen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Lass uns LLM-API noch einmal aus einem anderen Blickwinkel betrachten. Viele Anfaenger ueberspringen diesen Schritt und wundern sich spaeter ueber Fehler. Wenn du jeden Gedanken langsam nachvollziehst, wirst du sicherer. Das gilt besonders fuer Wie ein API-Aufruf an ein Sprachmodell aussieht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In FutureDev nutzen wir LLM-API bei echten Aufgaben. Du siehst den Ablauf im Repo und kannst ihn Schritt fuer Schritt nachbauen. So verbindet sich Theorie mit deiner eigenen Praxis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Warum ist LLM-API wichtig? Weil du ohne dieses Verstaendnis nur Anweisungen kopierst. Mit Verstaendnis kannst du Fehler erkennen und bessere Entscheidungen treffen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was soll ich mir bei LLM-API zuerst merken?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Merke dir den Ablauf: erst das Bild, dann die Erklaerung, dann der Fachausdruck, dann ein Beispiel, dann der Warum-Satz. Genau dieses Muster hilft dir bei Wie ein API-Aufruf an ein Sprachmodell aussieht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Stell dir vor, du erklaerst LLM-API einem Freund ohne Technikwissen. Du wuerdest kein Fachwort ohne Beispiel benutzen. Genau so baut FutureDev jede Lektion auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Gute Entwickler koennen LLM-API in einfachen Worten erklaeren. Das ist ein Zeichen von echtem Verstaendnis, nicht von Auswendiglernen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Lass uns LLM-API noch einmal aus einem anderen Blickwinkel betrachten. Viele Anfaenger ueberspringen diesen Schritt und wundern sich spaeter ueber Fehler. Wenn du jeden Gedanken langsam nachvollziehst, wirst du sicherer. Das gilt besonders fuer Wie ein API-Aufruf an ein Sprachmodell aussieht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In FutureDev nutzen wir LLM-API bei echten Aufgaben. Du siehst den Ablauf im Repo und kannst ihn Schritt fuer Schritt nachbauen. So verbindet sich Theorie mit deiner eigenen Praxis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Warum ist LLM-API wichtig? Weil du ohne dieses Verstaendnis nur Anweisungen kopierst. Mit Verstaendnis kannst du Fehler erkennen und bessere Entscheidungen treffen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was soll ich mir bei LLM-API zuerst merken?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Merke dir den Ablauf: erst das Bild, dann die Erklaerung, dann der Fachausdruck, dann ein Beispiel, dann der Warum-Satz. Genau dieses Muster hilft dir bei Wie ein API-Aufruf an ein Sprachmodell aussieht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Stell dir vor, du erklaerst LLM-API einem Freund ohne Technikwissen. Du wuerdest kein Fachwort ohne Beispiel benutzen. Genau so baut FutureDev jede Lektion auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Gute Entwickler koennen LLM-API in einfachen Worten erklaeren. Das ist ein Zeichen von echtem Verstaendnis, nicht von Auswendiglernen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Lass uns LLM-API noch einmal aus einem anderen Blickwinkel betrachten. Viele Anfaenger ueberspringen diesen Schritt und wundern sich spaeter ueber Fehler. Wenn du jeden Gedanken langsam nachvollziehst, wirst du sicherer. Das gilt besonders fuer Wie ein API-Aufruf an ein Sprachmodell aussieht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In FutureDev nutzen wir LLM-API bei echten Aufgaben. Du siehst den Ablauf im Repo und kannst ihn Schritt fuer Schritt nachbauen. So verbindet sich Theorie mit deiner eigenen Praxis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Warum ist LLM-API wichtig? Weil du ohne dieses Verstaendnis nur Anweisungen kopierst. Mit Verstaendnis kannst du Fehler erkennen und bessere Entscheidungen treffen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was soll ich mir bei LLM-API zuerst merken?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Merke dir den Ablauf: erst das Bild, dann die Erklaerung, dann der Fachausdruck, dann ein Beispiel, dann der Warum-Satz. Genau dieses Muster hilft dir bei Wie ein API-Aufruf an ein Sprachmodell aussieht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Stell dir vor, du erklaerst LLM-API einem Freund ohne Technikwissen. Du wuerdest kein Fachwort ohne Beispiel benutzen. Genau so baut FutureDev jede Lektion auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Gute Entwickler koennen LLM-API in einfachen Worten erklaeren. Das ist ein Zeichen von echtem Verstaendnis, nicht von Auswendiglernen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Lass uns LLM-API noch einmal aus einem anderen Blickwinkel betrachten. Viele Anfaenger ueberspringen diesen Schritt und wundern sich spaeter ueber Fehler. Wenn du jeden Gedanken langsam nachvollziehst, wirst du sicherer. Das gilt besonders fuer Wie ein API-Aufruf an ein Sprachmodell aussieht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In FutureDev nutzen wir LLM-API bei echten Aufgaben. Du siehst den Ablauf im Repo und kannst ihn Schritt fuer Schritt nachbauen. So verbindet sich Theorie mit deiner eigenen Praxis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Warum ist LLM-API wichtig? Weil du ohne dieses Verstaendnis nur Anweisungen kopierst. Mit Verstaendnis kannst du Fehler erkennen und bessere Entscheidungen treffen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was soll ich mir bei LLM-API zuerst merken?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Merke dir den Ablauf: erst das Bild, dann die Erklaerung, dann der Fachausdruck, dann ein Beispiel, dann der Warum-Satz. Genau dieses Muster hilft dir bei Wie ein API-Aufruf an ein Sprachmodell aussieht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Stell dir vor, du erklaerst LLM-API einem Freund ohne Technikwissen. Du wuerdest kein Fachwort ohne Beispiel benutzen. Genau so baut FutureDev jede Lektion auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Gute Entwickler koennen LLM-API in einfachen Worten erklaeren. Das ist ein Zeichen von echtem Verstaendnis, nicht von Auswendiglernen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Lass uns LLM-API noch einmal aus einem anderen Blickwinkel betrachten. Viele Anfaenger ueberspringen diesen Schritt und wundern sich spaeter ueber Fehler. Wenn du jeden Gedanken langsam nachvollziehst, wirst du sicherer. Das gilt besonders fuer Wie ein API-Aufruf an ein Sprachmodell aussieht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In FutureDev nutzen wir LLM-API bei echten Aufgaben. Du siehst den Ablauf im Repo und kannst ihn Schritt fuer Schritt nachbauen. So verbindet sich Theorie mit deiner eigenen Praxis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Warum ist LLM-API wichtig? Weil du ohne dieses Verstaendnis nur Anweisungen kopierst. Mit Verstaendnis kannst du Fehler erkennen und bessere Entscheidungen treffen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was soll ich mir bei LLM-API zuerst merken?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Merke dir den Ablauf: erst das Bild, dann die Erklaerung, dann der Fachausdruck, dann ein Beispiel, dann der Warum-Satz. Genau dieses Muster hilft dir bei Wie ein API-Aufruf an ein Sprachmodell aussieht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Stell dir vor, du erklaerst LLM-API einem Freund ohne Technikwissen. Du wuerdest kein Fachwort ohne Beispiel benutzen. Genau so baut FutureDev jede Lektion auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Gute Entwickler koennen LLM-API in einfachen Worten erklaeren. Das ist ein Zeichen von echtem Verstaendnis, nicht von Auswendiglernen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Lass uns LLM-API noch einmal aus einem anderen Blickwinkel betrachten. Viele Anfaenger ueberspringen diesen Schritt und wundern sich spaeter ueber Fehler. Wenn du jeden Gedanken langsam nachvollziehst, wirst du sicherer. Das gilt besonders fuer Wie ein API-Aufruf an ein Sprachmodell aussieht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In FutureDev nutzen wir LLM-API bei echten Aufgaben. Du siehst den Ablauf im Repo und kannst ihn Schritt fuer Schritt nachbauen. So verbindet sich Theorie mit deiner eigenen Praxis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Warum ist LLM-API wichtig? Weil du ohne dieses Verstaendnis nur Anweisungen kopierst. Mit Verstaendnis kannst du Fehler erkennen und bessere Entscheidungen treffen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was soll ich mir bei LLM-API zuerst merken?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Merke dir den Ablauf: erst das Bild, dann die Erklaerung, dann der Fachausdruck, dann ein Beispiel, dann der Warum-Satz. Genau dieses Muster hilft dir bei Wie ein API-Aufruf an ein Sprachmodell aussieht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Stell dir vor, du erklaerst LLM-API einem Freund ohne Technikwissen. Du wuerdest kein Fachwort ohne Beispiel benutzen. Genau so baut FutureDev jede Lektion auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Gute Entwickler koennen LLM-API in einfachen Worten erklaeren. Das ist ein Zeichen von echtem Verstaendnis, nicht von Auswendiglernen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Lass uns LLM-API noch einmal aus einem anderen Blickwinkel betrachten. Viele Anfaenger ueberspringen diesen Schritt und wundern sich spaeter ueber Fehler. Wenn du jeden Gedanken langsam nachvollziehst, wirst du sicherer. Das gilt besonders fuer Wie ein API-Aufruf an ein Sprachmodell aussieht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In FutureDev nutzen wir LLM-API bei echten Aufgaben. Du siehst den Ablauf im Repo und kannst ihn Schritt fuer Schritt nachbauen. So verbindet sich Theorie mit deiner eigenen Praxis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Warum ist LLM-API wichtig? Weil du ohne dieses Verstaendnis nur Anweisungen kopierst. Mit Verstaendnis kannst du Fehler erkennen und bessere Entscheidungen treffen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was soll ich mir bei LLM-API zuerst merken?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Merke dir den Ablauf: erst das Bild, dann die Erklaerung, dann der Fachausdruck, dann ein Beispiel, dann der Warum-Satz. Genau dieses Muster hilft dir bei Wie ein API-Aufruf an ein Sprachmodell aussieht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Stell dir vor, du erklaerst LLM-API einem Freund ohne Technikwissen. Du wuerdest kein Fachwort ohne Beispiel benutzen. Genau so baut FutureDev jede Lektion auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Gute Entwickler koennen LLM-API in einfachen Worten erklaeren. Das ist ein Zeichen von echtem Verstaendnis, nicht von Auswendiglernen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Lass uns LLM-API noch einmal aus einem anderen Blickwinkel betrachten. Viele Anfaenger ueberspringen diesen Schritt und wundern sich spaeter ueber Fehler. Wenn du jeden Gedanken langsam nachvollziehst, wirst du sicherer. Das gilt besonders fuer Wie ein API-Aufruf an ein Sprachmodell aussieht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In FutureDev nutzen wir LLM-API bei echten Aufgaben. Du siehst den Ablauf im Repo und kannst ihn Schritt fuer Schritt nachbauen. So verbindet sich Theorie mit deiner eigenen Praxis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Warum ist LLM-API wichtig? Weil du ohne dieses Verstaendnis nur Anweisungen kopierst. Mit Verstaendnis kannst du Fehler erkennen und bessere Entscheidungen treffen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was soll ich mir bei LLM-API zuerst merken?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Merke dir den Ablauf: erst das Bild, dann die Erklaerung, dann der Fachausdruck, dann ein Beispiel, dann der Warum-Satz. Genau dieses Muster hilft dir bei Wie ein API-Aufruf an ein Sprachmodell aussieht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Die Begriffe dieser Lektion: Chat-Completion-Endpunkt, Token-Budget, API-Payload.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Chat-Completion-Endpunkt: Die HTTP-Schnittstelle, ueber die du Nachrichten an ein Sprachmodell sendest und eine Antwort zurueckbekommst. Der Chat-Completion-Endpunkt erwartet typischerweise Rollen wie system, user und assistant in einem messages-Array.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Token-Budget: Die maximale Anzahl an Tokens, die Eingabe und Ausgabe zusammen verbrauchen duerfen. Das Token-Budget begrenzt Kosten und verhindert abgeschnittene Antworten, wenn es zu knapp gewaehlt ist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "API-Payload: Der JSON-Body eines API-Aufrufs mit Modellname, Nachrichten, Parametern und optionalen Tools. Ein sauberer API-Payload enthaelt nur noetige Felder und keine Geheimnisse im Klartext im Repo.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Wo liegen API-Keys?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "In Umgebungsvariablen, nie im Git-Repo. Keys gehoeren nur auf den Server oder in lokale .env ohne Commit. Merksatz: Bei Wie ein API-Aufruf an ein Sprachmodell aussieht zaehlt die verstaendliche Erklaerung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was ist ein Token ungefaehr?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Etwa ein Wortteil in vielen Sprachen. Laenge variiert je Sprache und Modell. Merksatz: Bei Wie ein API-Aufruf an ein Sprachmodell aussieht zaehlt die verstaendliche Erklaerung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Kann ich streamen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ja, viele APIs unterstuetzen Streaming. Streaming zeigt Antworten Stueck fuer Stueck. Merksatz: Bei Wie ein API-Aufruf an ein Sprachmodell aussieht zaehlt die verstaendliche Erklaerung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was bei Rate Limits?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Backoff und Retry mit Limits einplanen. Nicht unendlich sofort wiederholen. Merksatz: Bei Wie ein API-Aufruf an ein Sprachmodell aussieht zaehlt die verstaendliche Erklaerung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Brauche ich immer Tools?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Nein, nur wenn der Agent handeln soll. Einfache Fragen brauchen kein Tool-Calling. Merksatz: Bei Wie ein API-Aufruf an ein Sprachmodell aussieht zaehlt die verstaendliche Erklaerung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    }
+  ],
+  "practiceExample": {
+    "text": "Erkunde LLM-API im Repo und notiere eine Fundstelle, die du erklaeren kannst.",
+    "repoNote": "repo-futuredev",
+    "location": "packages/ mit API-Beispielen"
+  },
+  "quiz": [
+    {
+      "question": "Chat-Completion-Endpunkt?",
+      "area": "LLM-API",
+      "options": [
+        {
+          "text": "HTTP-API fuer Modellantworten.",
+          "isCorrect": true,
+          "explanation": "Richtig."
+        },
+        {
+          "text": "FTP-Server fuer Bilder.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "SMTP fuer Mail.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "DNS-Resolver.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        }
+      ]
+    },
+    {
+      "question": "Token-Budget?",
+      "area": "LLM-API",
+      "options": [
+        {
+          "text": "Limit fuer Input plus Output.",
+          "isCorrect": true,
+          "explanation": "Richtig."
+        },
+        {
+          "text": "Festplattengroesse.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "CPU-Kerne.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "RAM-Takt.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        }
+      ]
+    },
+    {
+      "question": "API-Payload?",
+      "area": "LLM-API",
+      "options": [
+        {
+          "text": "JSON-Body der Anfrage.",
+          "isCorrect": true,
+          "explanation": "Richtig."
+        },
+        {
+          "text": "HTML-Seite.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "CSS-Datei.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Git-Branch.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        }
+      ]
+    },
+    {
+      "question": "Typische Rollen?",
+      "area": "LLM-API",
+      "options": [
+        {
+          "text": "system, user, assistant.",
+          "isCorrect": true,
+          "explanation": "Richtig."
+        },
+        {
+          "text": "admin, guest nur.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "root, wheel.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "GET, POST.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        }
+      ]
+    },
+    {
+      "question": "Key im Repo?",
+      "area": "LLM-API",
+      "options": [
+        {
+          "text": "Niemals.",
+          "isCorrect": true,
+          "explanation": "Richtig."
+        },
+        {
+          "text": "Immer in README.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "In jedem Commit.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "In Quiz-Optionen.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        }
+      ]
+    },
+    {
+      "question": "Streaming Nutzen?",
+      "area": "LLM-API",
+      "options": [
+        {
+          "text": "Fruehere sichtbare Antwortteile.",
+          "isCorrect": true,
+          "explanation": "Richtig."
+        },
+        {
+          "text": "Guenstigere Tokens immer.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Kein Parsing noetig ever.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Ersetzt Validierung.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        }
+      ]
+    },
+    {
+      "question": "Rate Limit Reaktion?",
+      "area": "LLM-API",
+      "options": [
+        {
+          "text": "Warten und begrenzt retry.",
+          "isCorrect": true,
+          "explanation": "Richtig."
+        },
+        {
+          "text": "Sofort tausend Requests.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Server neu installieren.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Keys oeffentlich posten.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        }
+      ]
+    },
+    {
+      "question": "Modell waehlen wo?",
+      "area": "LLM-API",
+      "options": [
+        {
+          "text": "Im Payload Feld model.",
+          "isCorrect": true,
+          "explanation": "Richtig."
+        },
+        {
+          "text": "Im DNS TXT Record.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Im Cookie Banner.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Im Favicon.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        }
+      ]
+    },
+    {
+      "question": "Temperature Parameter?",
+      "area": "LLM-API",
+      "options": [
+        {
+          "text": "Steuert Zufaelligkeit der Antwort.",
+          "isCorrect": true,
+          "explanation": "Richtig."
+        },
+        {
+          "text": "Festplatten-Temperatur.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "CPU-Luefter.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Netzwerk-Latenz.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        }
+      ]
+    },
+    {
+      "question": "Fehler 401 bedeutet?",
+      "area": "LLM-API",
+      "options": [
+        {
+          "text": "Auth-Problem mit Key.",
+          "isCorrect": true,
+          "explanation": "Richtig."
+        },
+        {
+          "text": "Erfolg.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Seite nicht gefunden.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Server voll automatisch OK.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        }
+      ]
+    },
+    {
+      "question": "Messages Array?",
+      "area": "LLM-API",
+      "options": [
+        {
+          "text": "Liste der Gespraechsrollen.",
+          "isCorrect": true,
+          "explanation": "Richtig."
+        },
+        {
+          "text": "Array von Bildern only.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Nur ein String immer.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Optional und nutzlos.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        }
+      ]
+    },
+    {
+      "question": "Produktionsregel?",
+      "area": "LLM-API",
+      "options": [
+        {
+          "text": "Keys aus Env, Payload validieren.",
+          "isCorrect": true,
+          "explanation": "Richtig."
+        },
+        {
+          "text": "Alles im Frontend hardcoden.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Keine Fehlerbehandlung.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Unbegrenzt teure Modelle.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Schreibe einen Pseudocode-Aufruf mit system und user Message und schaetze Tokens.",
+    "expectation": "Du kannst LLM-API in einfachen Worten erklaeren und ein Beispiel zeigen.",
+    "checklist": [
+      "Payload skizziert.",
+      "Token-Budget geschaetzt.",
+      "Rollen erklaert."
+    ],
+    "portfolioItem": "P04"
+  },
+  "audio": {
+    "file": "M08-03-01.mp3",
+    "durationSeconds": 1002,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Wo liegen API-Keys?",
+      "answer": "In Umgebungsvariablen, nie im Git-Repo. Keys gehoeren nur auf den Server oder in lokale .env ohne Commit. Merksatz: Bei Wie ein API-Aufruf an ein Sprachmodell aussieht zaehlt die verstaendliche Erklaerung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    },
+    {
+      "question": "Was ist ein Token ungefaehr?",
+      "answer": "Etwa ein Wortteil in vielen Sprachen. Laenge variiert je Sprache und Modell. Merksatz: Bei Wie ein API-Aufruf an ein Sprachmodell aussieht zaehlt die verstaendliche Erklaerung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    },
+    {
+      "question": "Kann ich streamen?",
+      "answer": "Ja, viele APIs unterstuetzen Streaming. Streaming zeigt Antworten Stueck fuer Stueck. Merksatz: Bei Wie ein API-Aufruf an ein Sprachmodell aussieht zaehlt die verstaendliche Erklaerung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    },
+    {
+      "question": "Was bei Rate Limits?",
+      "answer": "Backoff und Retry mit Limits einplanen. Nicht unendlich sofort wiederholen. Merksatz: Bei Wie ein API-Aufruf an ein Sprachmodell aussieht zaehlt die verstaendliche Erklaerung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    },
+    {
+      "question": "Brauche ich immer Tools?",
+      "answer": "Nein, nur wenn der Agent handeln soll. Einfache Fragen brauchen kein Tool-Calling. Merksatz: Bei Wie ein API-Aufruf an ein Sprachmodell aussieht zaehlt die verstaendliche Erklaerung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    }
+  ]
+}

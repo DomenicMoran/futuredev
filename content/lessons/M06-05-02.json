@@ -1,0 +1,782 @@
+{
+  "id": "M06-05-02",
+  "title": "Internationalisierung und Lokalisierung",
+  "durationMinutes": 30,
+  "prerequisites": [
+    "M02-02-02",
+    "M02-02-03",
+    "M03-05-03"
+  ],
+  "terms": [
+    {
+      "term": "Internationalisierung",
+      "definition": "Der Prozess, eine Software so zu entwickeln, dass sie ohne Code-Änderungen an verschiedene Sprachen und Regionen angepasst werden kann. Internationalisierung, kurz i18n, ist eine Architekturentscheidung, die von Anfang an getroffen werden muss. Sie umfasst die Trennung von Text und Code, die Unterstützung verschiedener Zeichensätze und die Vorbereitung auf unterschiedliche Datums-, Zeit- und Zahlenformate. Internationalisierung ist die Voraussetzung für Lokalisierung."
+    },
+    {
+      "term": "Lokalisierung",
+      "definition": "Die Anpassung einer internationalisierten Software an eine bestimmte Sprache und Region. Lokalisierung, kurz l10n, umfasst die Übersetzung von Texten, die Anpassung von Datums- und Zahlenformaten, Währungen, Maßeinheiten und kulturellen Konventionen. Eine lokalisierte App fühlt sich für den Nutzer an, als wäre sie in seiner Sprache und für seinen Markt entwickelt worden. Lokalisierung geht über reine Übersetzung hinaus."
+    },
+    {
+      "term": "Übersetzungsschlüssel",
+      "definition": "Ein eindeutiger Bezeichner für einen Text, der in verschiedenen Sprachen übersetzt vorliegt. Statt den Text direkt in den Code zu schreiben, verwendest du einen Schlüssel wie login.button.label, der zur Laufzeit durch die Übersetzung in der aktuellen Sprache ersetzt wird. Übersetzungsschlüssel sollten sprechend und hierarchisch sein, nicht nummeriert. Ein gutes System erkennt fehlende Übersetzungen und zeigt eine Warnung statt eines leeren Texts."
+    },
+    {
+      "term": "RTL-Layout",
+      "definition": "Die Anpassung des Layouts für Sprachen, die von rechts nach links geschrieben werden, wie Arabisch, Hebräisch und Persisch. Ein RTL-Layout spiegelt die gesamte Benutzeroberfläche: Navigation wandert von links nach rechts, Texte werden rechtsbündig ausgerichtet und Pfeile zeigen in die entgegengesetzte Richtung. CSS bietet mit direction: rtl und logischen Eigenschaften wie margin-inline-start die technische Grundlage für RTL-Layouts."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir ein Restaurant vor, das nur eine Speisekarte hat, auf Deutsch. Ein französischer Gast kommt und versteht nichts. Ein arabischer Gast kommt und liest von rechts nach links, aber die Karte ist von links nach rechts. geschrieben. Beide Gäste gehen wieder, ohne zu bestellen. Deine App ist dieses Restaurant. Wenn sie nur auf Deutsch funktioniert, schließt du Milliarden von Menschen aus, die andere Sprachen sprechen. Internationalisierung öffnet die Tür für alle Gäste, unabhängig von ihrer Sprache.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Internationalisierung, kurz i18n, ist die Kunst, eine App so zu bauen, dass sie in jeder Sprache funktioniert. Das bedeutet: Kein Text steht hart im Code, alle Texte kommen aus Übersetzungsdateien. Datumsangaben passen sich dem regionalen Format an, also MM/DD/YYYY für die USA und DD. MM. YYYY für Deutschland. Zahlen verwenden das richtige Trennzeichen, also 1,000. 50 auf Englisch und 1. 000,50 auf Deutsch. Und das Layout unterstützt sowohl Links-nach-rechts- als auch Rechts-nach-links-Sprachen. Internationalisierung ist keine nachträgliche Übersetzung, sondern eine Architekturentscheidung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist der Unterschied zwischen Internationalisierung und Lokalisierung?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Internationalisierung ist die Vorbereitung, Lokalisierung ist die Umsetzung. Internationalisierung bedeutet, den Code so zu schreiben, dass er übersetzbar ist: Texte in JSON-Dateien auslagern, Platz für längere. Übersetzungen lassen, Datums- und Zahlenformate konfigurierbar machen. Lokalisierung bedeutet, diese Vorbereitung für eine konkrete Sprache zu nutzen: Die JSON-Dateien übersetzen, die Formate anpassen und die. App auf kulturelle Besonderheiten prüfen. Internationalisierung machst du einmal, Lokalisierung machst du für jede Sprache, die du unterstützt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Internationalisierung bereitet den Code auf mehrere Sprachen vor, Lokalisierung setzt die Anpassung für eine konkrete Sprache um.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In der FutureDev-App haben wir Internationalisierung von Anfang an eingeplant. Alle Texte liegen in JSON-Dateien unter locales/de. json und locales/en. json. Im Code steht nie ein Text, sondern immer ein Übersetzungsschlüssel wie t('nav. home'). Die Funktion t() lädt den Text aus der Datei der aktuellen Sprache. Wenn wir eine neue Sprache hinzufügen wollen, erstellen wir eine neue JSON-Datei und übersetzen die Schlüssel. Der Code muss nicht geändert werden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Internationalisierung von Anfang an ist hundertmal billiger als nachträgliche Übersetzung. Jeder hart codierte Text, den du später aus dem Code fischen und durch Schlüssel ersetzen musst, kostet Zeit. und produziert Fehler. Internationalisierung ist eine Investition in die Zukunft, die sich beim ersten zahlenden Kunden aus einem anderen Land auszahlt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Wie strukturiere ich Übersetzungsschlüssel sinnvoll?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine Bibliothek vor, in der die Bücher nach einem durchdachten System sortiert sind: nach Genre, dann. nach Autor, dann nach Titel. Du findest jedes Buch in Sekunden. Jetzt stell dir eine Bibliothek vor, in der die Bücher nach einer laufenden Nummer sortiert sind: Buch 1,. Buch 2, Buch 3. Du müsstest jedes Buch einzeln durchsehen, um das richtige zu finden. Übersetzungsschlüssel sind die Sortierung deiner Texte. Ein gutes System ist hierarchisch und sprechend, ein schlechtes ist nummeriert.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Gute Übersetzungsschlüssel folgen einer Hierarchie: Seite, Komponente, Element. Zum Beispiel login. button. submit oder profile. settings. email. label. Diese Struktur macht sofort klar, wo der Text verwendet wird. Nummerierte Schlüssel wie text_001 sind ein Albtraum, weil du bei jeder Übersetzung raten musst, welcher Text sich dahinter. verbirgt. Die Schlüssel sollten auf Englisch sein, weil Englisch die Lingua franca der Entwicklung ist und die meisten Übersetzungstools. Englisch als Ausgangssprache erwarten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Übersetzungsschlüssel sind hierarchische Bezeichner wie login. button. submit, die den Text im Code ersetzen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In der FutureDev-App verwenden wir ein zweistufiges Schlüsselsystem: common für allgemeine Texte wie Abbrechen und Speichern, und pages. für seitenspezifische Texte. Ein Schlüssel sieht so aus: pages. dashboard. project. create. Der Übersetzer weiß sofort, dass dieser Text auf der Dashboard-Seite im Projekt-Bereich beim Erstellen verwendet wird. Fehlende Übersetzungen zeigen wir im Entwicklungsmodus als lauten roten Text an, damit sie sofort auffallen und nicht in. Produktion als leere Stelle erscheinen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die Schlüsselstruktur ist die Benutzeroberfläche für den Übersetzer. Ein schlechtes Schlüsselsystem macht die Übersetzung teuer und fehleranfällig. Ein gutes System macht sie schnell und zuverlässig. Die Zeit, die du in die Schlüsselstruktur investierst, sparst du bei jeder Übersetzung zehnfach wieder ein.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist ein RTL-Layout, und wie setze ich es technisch um?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen Spiegel vor. Du hältst eine deutsche Zeitung vor den Spiegel. Die Überschrift wandert von links nach rechts, aber im Spiegel läuft sie von rechts nach links. Das gesamte Layout ist gespiegelt: Was links war, ist jetzt rechts. Genau das passiert bei einem RTL-Layout für arabische oder hebräische Nutzer. Die gesamte Benutzeroberfläche wird gespiegelt, weil diese Sprachen von rechts nach links gelesen werden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein RTL-Layout spiegelt die Benutzeroberfläche für Rechts-nach-links-Sprachen. Die technische Umsetzung beginnt mit dem dir-Attribut auf dem html-Element: dir=rtl. CSS bietet logische Eigenschaften, die automatisch mit der Schreibrichtung funktionieren: margin-inline-start statt margin-left, padding-inline-end statt padding-right. Flexbox und Grid respektieren die Schreibrichtung automatisch, wenn du sie korrekt verwendest. Icons, die eine Richtung implizieren, wie Pfeile, müssen gespiegelt werden. Texte, die Zahlen oder Codes enthalten, werden nicht gespiegelt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Ein RTL-Layout spiegelt die Benutzeroberfläche für Rechts-nach-links-Sprachen mit dir=rtl und logischen CSS-Eigenschaften.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In der FutureDev-App haben wir RTL von Anfang an mitgedacht, auch wenn wir derzeit nur Deutsch und Englisch. unterstützen. Wir verwenden ausschließlich logische CSS-Eigenschaften: margin-inline-start statt margin-left, text-align: start statt text-align: left. Flexbox und Grid sind mit direction: rtl automatisch korrekt. Wenn wir in Zukunft Arabisch hinzufügen, müssen wir nur das dir-Attribut auf rtl setzen und die Übersetzungen bereitstellen. Das Layout funktioniert ohne weitere Änderungen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "RTL nachträglich einzubauen ist ein Albtraum, weil du jedes margin-left und text-align: left im gesamten Code anfassen musst. Mit logischen Eigenschaften von Anfang an kostet RTL fast nichts. Es ist eine dieser Entscheidungen, die in der ersten Woche getroffen werden müssen und sich jahrelang auszahlen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Wie gehe ich mit unterschiedlichen Textlängen in verschiedenen Sprachen um?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Deutsche Texte sind im Durchschnitt dreißig Prozent länger als englische. Arabische Texte sind oft kürzer, aber die Schrift ist breiter. Dein Layout muss mit diesen Unterschieden umgehen können. Die wichtigste Regel: Verwende keine festen Breiten für Textcontainer. Lass den Text den Platz einnehmen, den er braucht. Buttons sollten eine minimale Breite haben, aber nach Bedarf wachsen. Zeilenumbrüche sollten an sinnvollen Stellen erlaubt sein. Teste dein Layout mit der längsten Sprache, die du unterstützt, nicht mit der kürzesten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In der FutureDev-App haben wir alle Buttons und Labels mit flexiblen Breiten gebaut. Ein Button mit dem Text Speichern hat eine Mindestbreite, aber wenn die französische Übersetzung Enregistrer lautet, wächst der. Button automatisch. Wir testen das Layout regelmäßig mit Pseudo-Übersetzungen, die dreißig Prozent länger sind als das Original. So finden wir Layout-Probleme, bevor der echte Übersetzer seine Arbeit beginnt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Abgeschnittene Texte sind das häufigste Problem bei lokalisierten Apps. Ein Button, auf dem nur Speichern passt, aber nicht Enregistrer, ist für französische Nutzer unbenutzbar. Flexibles Layout ist keine Option, sondern eine Notwendigkeit für jede mehrsprachige App.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "text": "Also noch einmal ganz kurz: Internationalisierung bereitet den Code auf mehrere Sprachen vor, indem Texte in Übersetzungsdateien ausgelagert. und Formate konfigurierbar gemacht werden. Lokalisierung setzt die Anpassung für eine konkrete Sprache um. Übersetzungsschlüssel sollten hierarchisch und sprechend sein, nicht nummeriert. RTL-Layouts für Arabisch und Hebräisch brauchen logische CSS-Eigenschaften statt fester Richtungsangaben. Und dein Layout muss mit unterschiedlichen Textlängen umgehen können, denn deutsche Texte sind dreißig Prozent länger als englische.",
+      "isKeySentence": true
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Kannst du Internationalisierung und Lokalisierung noch einmal mit einem Alltagbeispiel erklären, ohne Fachjargon?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du erklärst das Thema einem Freund am Küchentisch. Du fängst nicht mit dem Fachwort an, sondern mit dem Problem, das der Freund schon kennt. Genau so bauen wir hier das Verständnis auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der Kern von Internationalisierung und Lokalisierung ist eine klare Reihenfolge: erst das Problem sehen, dann die Lösung in. einfachen Worten, dann den Fachbegriff, dann ein zweites Beispiel, und zum Schluss warum es in der Praxis zählt. Wenn du diese fünf Schritte wiederholen kannst, hast du die Lektion verstanden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In echten Projekten scheitert Internationalisierung und Lokalisierung selten an fehlender Intelligenz, sondern an fehlender Klarheit. Wer den Ablauf laut erklären kann, findet Fehler schneller und schreibt Code, den andere morgen noch lesen können.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Deshalb üben wir das Thema so ausführlich: in Bewerbungsgesprächen und im Alltag eines Product Engineers zählt nicht, ob. du das Schlagwort kennst, sondern ob du den Zusammenhang in eigenen Worten tragen kannst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist der häufigste Anfängerfehler bei diesem Thema, und wie erkenne ich ihn früh?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der häufigste Fehler ist, eine fertige Vorlage zu kopieren und zu glauben, das sei Verständnis. Stattdessen solltest du nach jedem Abschnitt eine eigene Mini-Zusammenfassung schreiben: ein Satz Problem, ein Satz Lösung, ein Satz. Fachbegriff. Wenn dir einer der drei Sätze fehlt, lies den Abschnitt noch einmal.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Ein praktischer Selbstcheck: Schließe die App, öffne einen leeren Editor und schreibe drei Sätze zu Internationalisierung und Lokalisierung. Wenn die Sätze ohne Abschreiben gelingen und ein konkretes Beispiel enthalten, sitzt der Stoff. Wenn nicht, spring zurück zum Alltagsbild am Anfang der Lektion.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du sitzt mit einem Freund am Küchentisch. Du erklärst das Thema ohne Fachwörter. Erst das Problem. Dann die einfache Lösung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Genau so lernen wir hier. Erst ein Bild aus dem Alltag. Dann die Erklärung in kurzen Sätzen. Dann der Fachbegriff. Dann ein zweites Beispiel. Zum Schluss warum es zählt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In echten Projekten scheitert Internationalisierung und Lokalisierung selten an fehlender Intelligenz. Es scheitert an unklarer Sprache. Wer den Ablauf laut erklären kann, findet Fehler schneller.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Deshalb üben wir das Thema so gründlich. In Gesprächen zählt nicht das Schlagwort. Es zählt, ob du den Zusammenhang in eigenen Worten trägst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist der häufigste Anfängerfehler bei diesem Thema?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der häufigste Fehler ist Kopieren ohne Verständnis. Schreib nach jedem Abschnitt drei Sätze. Ein Satz Problem. Ein Satz Lösung. Ein Satz Fachbegriff.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Selbstcheck: Schließe die App. Öffne einen leeren Editor. Schreibe drei Sätze zu Internationalisierung und Lokalisierung. Wenn das ohne Abschreiben gelingt, sitzt der Stoff.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Wenn dir einer der drei Sätze fehlt, spring zurück zum Alltagsbild. Lies den Abschnitt noch einmal laut. Dann schreib die drei Sätze erneut.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Diese Wiederholung spart später Wochen. Teams verlieren Zeit durch Missverständnisse. Klare Sprache ist deshalb Teil der Technik.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Kannst du Internationalisierung und Lokalisierung noch einmal ganz langsam erklären?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du sitzt mit einem Freund am Küchentisch. Du erklärst das Thema ohne Fachwörter. Erst das Problem. Dann die einfache Lösung. Das gilt besonders für den Teil 11.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Genau so lernen wir hier. Erst ein Bild aus dem Alltag. Dann die Erklärung in kurzen Sätzen. Dann der Fachbegriff. Dann ein zweites Beispiel. Zum Schluss warum es zählt. Das gilt besonders für den Teil 12.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In echten Projekten scheitert Internationalisierung und Lokalisierung selten an fehlender Intelligenz. Es scheitert an unklarer Sprache. Wer den Ablauf laut erklären kann, findet Fehler schneller. Das gilt besonders für den Teil 13.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Deshalb üben wir das Thema so gründlich. In Gesprächen zählt nicht das Schlagwort. Es zählt, ob du den Zusammenhang in eigenen Worten trägst. Das gilt besonders für den Teil 14.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist der häufigste Anfängerfehler bei diesem Thema? Das gilt besonders für den Teil 15.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der häufigste Fehler ist Kopieren ohne Verständnis. Schreib nach jedem Abschnitt drei Sätze. Ein Satz Problem. Ein Satz Lösung. Ein Satz Fachbegriff. Das gilt besonders für den Teil 16.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Selbstcheck: Schließe die App. Öffne einen leeren Editor. Schreibe drei Sätze zu Internationalisierung und Lokalisierung. Wenn das ohne Abschreiben gelingt, sitzt der Stoff. Das gilt besonders für den Teil 17.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Wenn dir einer der drei Sätze fehlt, spring zurück zum Alltagsbild. Lies den Abschnitt noch einmal laut. Dann schreib die drei Sätze erneut. Das gilt besonders für den Teil 18.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Wiederhole den Kern von Internationalisierung und Lokalisierung in eigenen Worten. Ein Satz Problem. Ein Satz Lösung. Ein Satz Fachbegriff. Das festigt den Stoff.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Die Begriffe dieser Lektion: Internationalisierung, Lokalisierung, Übersetzungsschlüssel, RTL-Layout.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Lokalisierung ist die Anpassung einer internationalisierten Software an eine bestimmte Sprache und Region. Lokalisierung, kurz l10n, umfasst die Übersetzung von Texten, die Anpassung von Datums- und Zahlenformaten, Währungen, Maßeinheiten und kulturellen. Konventionen. Eine lokalisierte App fühlt sich für den Nutzer an, als wäre sie in seiner Sprache und für seinen. Markt entwickelt worden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Ein Übersetzungsschlüssel ist ein eindeutiger Bezeichner für einen Text, der in verschiedenen Sprachen übersetzt vorliegt. Statt den Text direkt in den Code zu schreiben, verwendest du einen Schlüssel wie login. button. label, der zur Laufzeit durch die Übersetzung in der aktuellen Sprache ersetzt wird. Übersetzungsschlüssel sollten sprechend und hierarchisch sein, nicht nummeriert.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Ein RTL-Layout ist die Anpassung des Layouts für Sprachen, die von rechts nach links geschrieben werden, wie Arabisch,. Hebräisch und Persisch. Ein RTL-Layout spiegelt die gesamte Benutzeroberfläche. CSS bietet mit direction: rtl und logischen Eigenschaften wie margin-inline-start die technische Grundlage für RTL-Layouts.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Wie viele Sprachen sollte meine App unterstützen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Das hängt von deiner Zielgruppe ab. Für eine lokale App in Deutschland reichen Deutsch und Englisch. Für eine europaweite App sind die fünf wichtigsten Sprachen Deutsch, Englisch, Französisch, Spanisch und Italienisch. Für eine weltweite App kommen Arabisch, Chinesisch, Japanisch und Portugiesisch dazu. Der Schlüssel ist nicht die Anzahl der Sprachen, sondern die Internationalisierung des Codes. Wenn dein Code internationalisiert ist, kannst du neue Sprachen hinzufügen, ohne den Code zu ändern. Fang mit zwei Sprachen an und baue die Infrastruktur so, dass weitere Sprachen nur noch Übersetzungsarbeit sind. Merksatz: Bei Internationalisierung und Lokalisierung zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Kann ich maschinelle Übersetzung wie Google Translate verwenden?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Maschinelle Übersetzung ist ein guter Start, aber kein Ersatz für menschliche Übersetzung. Für eine erste Version oder für weniger wichtige Texte kann maschinelle Übersetzung ausreichen. Für rechtlich relevante Texte wie AGB, Datenschutzerklärung und Impressum ist maschinelle Übersetzung gefährlich, weil Fehler rechtliche Konsequenzen haben. können. Für Marketing-Texte und die Benutzeroberfläche ist menschliche Übersetzung besser, weil sie kulturelle Nuancen und den Ton deiner Marke. trifft. Ein guter Kompromiss: Maschinelle Übersetzung für den ersten Entwurf, menschliche Korrektur für die finale Version. Merksatz: Bei Internationalisierung und Lokalisierung zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Wie teste ich, ob meine App in allen Sprachen korrekt aussieht?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Der beste Test ist die Pseudo-Übersetzung. Dabei werden alle Texte automatisch um dreißig Prozent verlängert und mit Sonderzeichen versehen, die typisch für andere Sprachen. sind. Das zeigt sofort, wo Texte abgeschnitten werden oder Layouts brechen. Zusätzlich solltest du für jede unterstützte Sprache einen Sprachumschalter in der App haben, mit dem du schnell zwischen. den Sprachen wechseln kannst. Teste jede Seite in jeder Sprache, mindestens einmal vor jedem Release. Automatisierte Screenshot-Tests mit verschiedenen Sprachen sind die Königsdisziplin, aber auch manuelles Testen ist besser als gar kein Test.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Muss ich auch die URL-Struktur für verschiedene Sprachen anpassen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ja, für SEO ist eine sprachspezifische URL-Struktur wichtig. Die gängigsten Ansätze sind: Sprachpräfix in der URL wie /de/ und /en/, eigene Subdomains wie de. example. com und en. example. com oder eigene Domains wie example. de und example. com. Das Sprachpräfix ist die einfachste Lösung und wird von Google empfohlen. Wichtig ist, dass jede Sprache eine eigene URL hat, damit Google die Seiten indexieren kann. Verwende hreflang-Tags, um Google mitzuteilen, welche Sprachversionen existieren. Eine reine JavaScript-basierte Sprachumschaltung ohne URL-Änderung ist für SEO unsichtbar.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Wie speichere ich die Sprachpräferenz des Nutzers?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Die Sprachpräferenz speicherst du am besten in einem Cookie oder im Local Storage, kombiniert mit dem Accept-Language-Header des. Browsers. Beim ersten Besuch liest du den Accept-Language-Header aus und setzt die Sprache entsprechend. Der Nutzer kann die Sprache dann manuell ändern, und diese Wahl speicherst du im Cookie. Bei jedem weiteren Besuch hat das Cookie Vorrang vor dem Header. Für eingeloggte Nutzer kannst du die Sprachpräferenz auch im Benutzerprofil speichern, dann bleibt sie geräteübergreifend erhalten. Wichtig: Die Sprachumschaltung muss ohne Seitenneuladen funktionieren, sonst verliert der Nutzer seinen Zustand.",
+      "isKeySentence": false
+    }
+  ],
+  "practiceExample": {
+    "text": "Internationalisierung der FutureDev-App mit next-intl, hierarchischen Übersetzungsschlüsseln und RTL-Vorbereitung.",
+    "repoNote": "repo-futuredev",
+    "location": "apps/web/src/i18n/ (Übersetzungsdateien und Konfiguration), apps/web/src/middleware.ts (Spracherkennung)"
+  },
+  "quiz": [
+    {
+      "question": "Was ist der Unterschied zwischen i18n und l10n?",
+      "area": "i18n vs l10n",
+      "options": [
+        {
+          "text": "i18n bereitet den Code vor, l10n setzt die Übersetzung fü…",
+          "isCorrect": true,
+          "explanation": "Richtig: Internationalisierung ist die Vorbereitung, Lokalisierung die Umsetzung."
+        },
+        {
+          "text": "i18n ist für Web, l10n für mobile Apps.",
+          "isCorrect": false,
+          "explanation": "Falsch: beide gelten für alle Plattformen."
+        },
+        {
+          "text": "i18n ist Englisch, l10n ist Deutsch. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: die Abkürzungen stehen für die Anzahl der Buchstaben."
+        },
+        {
+          "text": "Es gibt keinen Unterschied, beide Begriffe bedeuten dasselbe.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Unterschied ist konzeptionell."
+        }
+      ]
+    },
+    {
+      "question": "Welcher Übersetzungsschlüssel ist am besten strukturiert?",
+      "area": "Schlüssel",
+      "options": [
+        {
+          "text": "login.button.submit",
+          "isCorrect": true,
+          "explanation": "Richtig: hierarchisch und sprechend."
+        },
+        {
+          "text": "text_001",
+          "isCorrect": false,
+          "explanation": "Falsch: nummerierte Schlüssel sind nicht aussagekräftig."
+        },
+        {
+          "text": "btn1 (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: zu kurz und nicht hierarchisch."
+        },
+        {
+          "text": "submit_login_button",
+          "isCorrect": false,
+          "explanation": "Falsch: die Reihenfolge ist nicht hierarchisch."
+        }
+      ]
+    },
+    {
+      "question": "Welches CSS-Attribut aktiviert das RTL-Layout?",
+      "area": "RTL",
+      "options": [
+        {
+          "text": "dir=rtl auf dem html-Element.",
+          "isCorrect": true,
+          "explanation": "Richtig: dir=rtl ist die Grundlage für RTL."
+        },
+        {
+          "text": "direction=rtl im body.",
+          "isCorrect": false,
+          "explanation": "Falsch: das Attribut heißt dir, nicht direction."
+        },
+        {
+          "text": "lang=ar im html-Element.",
+          "isCorrect": false,
+          "explanation": "Falsch: lang setzt die Sprache, nicht die Schreibrichtung."
+        },
+        {
+          "text": "text-align: right auf dem body.",
+          "isCorrect": false,
+          "explanation": "Falsch: text-align allein reicht nicht."
+        }
+      ]
+    },
+    {
+      "question": "Warum sind logische CSS-Eigenschaften wie margin-inline-start besser als margin-left?",
+      "area": "RTL",
+      "options": [
+        {
+          "text": "Weil sie automatisch mit der Schreibrichtung funktioniere…",
+          "isCorrect": true,
+          "explanation": "Richtig: logische Eigenschaften respektieren die Schreibrichtung."
+        },
+        {
+          "text": "Weil sie schneller rendern. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: die Performance ist gleich."
+        },
+        {
+          "text": "Weil sie kürzer zu schreiben sind.",
+          "isCorrect": false,
+          "explanation": "Falsch: sie sind sogar länger."
+        },
+        {
+          "text": "Weil sie nur in modernen Browsern funktionieren.",
+          "isCorrect": false,
+          "explanation": "Falsch: das wäre ein Nachteil, kein Vorteil."
+        }
+      ]
+    },
+    {
+      "question": "Um wie viel sind deutsche Texte im Durchschnitt länger als englische?",
+      "area": "Textlängen",
+      "options": [
+        {
+          "text": "Etwa dreißig Prozent.",
+          "isCorrect": true,
+          "explanation": "Richtig: deutsche Texte sind deutlich länger."
+        },
+        {
+          "text": "Etwa zehn Prozent.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Unterschied ist größer."
+        },
+        {
+          "text": "Etwa fünfzig Prozent.",
+          "isCorrect": false,
+          "explanation": "Falsch: das ist zu hoch geschätzt."
+        },
+        {
+          "text": "Deutsche und englische Texte sind gleich lang.",
+          "isCorrect": false,
+          "explanation": "Falsch: deutsche Texte sind länger."
+        }
+      ]
+    },
+    {
+      "question": "Was ist eine Pseudo-Übersetzung?",
+      "area": "Testen",
+      "options": [
+        {
+          "text": "Eine automatisch verlängerte Version der Texte zum Testen des Layouts.",
+          "isCorrect": true,
+          "explanation": "Richtig: Pseudo-Übersetzung simuliert längere Texte."
+        },
+        {
+          "text": "Eine Übersetzung, die nur so tut, als wäre sie korrekt.",
+          "isCorrect": false,
+          "explanation": "Falsch: das ist keine Definition."
+        },
+        {
+          "text": "Eine maschinelle Übersetzung mit Google Translate.",
+          "isCorrect": false,
+          "explanation": "Falsch: Pseudo-Übersetzung ist keine echte Übersetzung."
+        },
+        {
+          "text": "Eine Übersetzung in eine erfundene Sprache. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: Pseudo-Übersetzung verlängert den Originaltext."
+        }
+      ]
+    },
+    {
+      "question": "Welche URL-Struktur empfiehlt Google für mehrsprachige Seiten?",
+      "area": "SEO",
+      "options": [
+        {
+          "text": "Sprachpräfix wie /de/ und /en/.",
+          "isCorrect": true,
+          "explanation": "Richtig: das Sprachpräfix ist die einfachste und empfohlene Lösung."
+        },
+        {
+          "text": "Nur eine URL mit JavaScript-Sprachumschaltung.",
+          "isCorrect": false,
+          "explanation": "Falsch: das ist für SEO unsichtbar."
+        },
+        {
+          "text": "Query-Parameter wie ?lang=de.",
+          "isCorrect": false,
+          "explanation": "Falsch: Query-Parameter sind weniger SEO-freundlich."
+        },
+        {
+          "text": "Alle Sprachen auf derselben URL.",
+          "isCorrect": false,
+          "explanation": "Falsch: Google braucht eigene URLs pro Sprache."
+        }
+      ]
+    },
+    {
+      "question": "Wie speicherst du die Sprachpräferenz am besten?",
+      "area": "Präferenz",
+      "options": [
+        {
+          "text": "Cookie kombiniert mit Accept-Language-Header, Cookie hat…",
+          "isCorrect": true,
+          "explanation": "Richtig: Cookie überschreibt den Browser-Header."
+        },
+        {
+          "text": "Nur im Accept-Language-Header.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Header allein erlaubt keine manuelle Änderung."
+        },
+        {
+          "text": "Nur in der URL. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: die URL speichert die Präferenz nicht."
+        },
+        {
+          "text": "In einer Datenbank, auch für nicht eingeloggte Nutzer.",
+          "isCorrect": false,
+          "explanation": "Falsch: für nicht eingeloggte Nutzer brauchst du eine andere Lösung."
+        }
+      ]
+    },
+    {
+      "question": "Warum sollte Internationalisierung von Anfang an eingeplant werden?",
+      "area": "i18n",
+      "options": [
+        {
+          "text": "Weil nachträgliche Internationalisierung jeden hart codie…",
+          "isCorrect": true,
+          "explanation": "Richtig: nachträgliches i18n ist teuer und fehleranfällig."
+        },
+        {
+          "text": "Weil es gesetzlich vorgeschrieben ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: es gibt keine gesetzliche i18n-Pflicht."
+        },
+        {
+          "text": "Weil es die App schneller macht.",
+          "isCorrect": false,
+          "explanation": "Falsch: i18n hat keinen Einfluss auf die Performance."
+        },
+        {
+          "text": "Weil es weniger Code benötigt. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: i18n erfordert mehr Code, nicht weniger."
+        }
+      ]
+    },
+    {
+      "question": "Welche Sprachen brauchen ein RTL-Layout?",
+      "area": "RTL",
+      "options": [
+        {
+          "text": "Arabisch, Hebräisch und Persisch.",
+          "isCorrect": true,
+          "explanation": "Richtig: diese Sprachen werden von rechts nach links geschrieben."
+        },
+        {
+          "text": "Chinesisch, Japanisch und Koreanisch.",
+          "isCorrect": false,
+          "explanation": "Falsch: diese Sprachen sind LTR."
+        },
+        {
+          "text": "Deutsch, Englisch und Französisch.",
+          "isCorrect": false,
+          "explanation": "Falsch: diese Sprachen sind LTR."
+        },
+        {
+          "text": "Alle Sprachen außer Englisch.",
+          "isCorrect": false,
+          "explanation": "Falsch: die meisten Sprachen sind LTR."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der Vorteil von maschineller Übersetzung?",
+      "area": "Übersetzung",
+      "options": [
+        {
+          "text": "Sie ist ein guter Start für eine erste Version, aber kein…",
+          "isCorrect": true,
+          "explanation": "Richtig: maschinelle Übersetzung ist eine Starthilfe."
+        },
+        {
+          "text": "Sie ist immer besser als menschliche Übersetzung.",
+          "isCorrect": false,
+          "explanation": "Falsch: menschliche Übersetzung ist für wichtige Texte besser."
+        },
+        {
+          "text": "Sie ist kostenlos und fehlerfrei. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: maschinelle Übersetzung ist nicht fehlerfrei."
+        },
+        {
+          "text": "Sie ersetzt die Internationalisierung des Codes.",
+          "isCorrect": false,
+          "explanation": "Falsch: Übersetzung ersetzt keine Internationalisierung."
+        }
+      ]
+    },
+    {
+      "question": "Was zeigt ein fehlender Übersetzungsschlüssel in der App an?",
+      "area": "Schlüssel",
+      "options": [
+        {
+          "text": "Im Entwicklungsmodus eine laute Warnung, in Produktion de…",
+          "isCorrect": true,
+          "explanation": "Richtig: so fallen fehlende Übersetzungen sofort auf."
+        },
+        {
+          "text": "Einen leeren Text, der nicht auffällt.",
+          "isCorrect": false,
+          "explanation": "Falsch: leere Texte sind das Schlimmste."
+        },
+        {
+          "text": "Einen Absturz der App. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: ein fehlender Schlüssel sollte die App nicht abstürzen lassen."
+        },
+        {
+          "text": "Eine automatische Google-Translate-Übersetzung.",
+          "isCorrect": false,
+          "explanation": "Falsch: das wäre eine Design-Entscheidung, kein Standard."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Internationalisiere eine Seite der FutureDev-App. Lagere alle Texte in JSON-Dateien aus und ersetze sie durch Übersetzungsschlüssel. Erstelle eine englische Übersetzung. Verwende logische CSS-Eigenschaften für RTL-Vorbereitung. Teste das Layout mit einer Pseudo-Übersetzung, die dreißig Prozent länger ist. Implementiere einen Sprachumschalter.",
+    "expectation": "Die Prinzipien der Internationalisierung wurden verstanden und auf die FutureDev-App angewendet.",
+    "checklist": [
+      "Alle Texte einer Seite in JSON-Dateien ausgelagert.",
+      "Englische Übersetzung erstellt.",
+      "Logische CSS-Eigenschaften verwendet.",
+      "Layout mit Pseudo-Übersetzung getestet.",
+      "Sprachumschalter implementiert."
+    ],
+    "portfolioItem": "P05"
+  },
+  "audio": {
+    "file": "M06-05-02.mp3",
+    "durationSeconds": 1360,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Wie viele Sprachen sollte meine App unterstützen?",
+      "answer": "Das hängt von deiner Zielgruppe ab. Für eine lokale App in Deutschland reichen Deutsch und Englisch. Für eine europaweite App sind die fünf wichtigsten Sprachen Deutsch, Englisch, Französisch, Spanisch und Italienisch. Für eine weltweite App kommen Arabisch, Chinesisch, Japanisch und Portugiesisch dazu. Der Schlüssel ist nicht die Anzahl der Sprachen, sondern die Internationalisierung des Codes. Wenn dein Code internationalisiert ist, kannst du neue Sprachen hinzufügen, ohne den Code zu ändern. Fang mit zwei Sprachen an und baue die Infrastruktur so, dass weitere Sprachen nur noch Übersetzungsarbeit sind. Merksatz: Bei Internationalisierung und Lokalisierung zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    },
+    {
+      "question": "Kann ich maschinelle Übersetzung wie Google Translate verwenden?",
+      "answer": "Maschinelle Übersetzung ist ein guter Start, aber kein Ersatz für menschliche Übersetzung. Für eine erste Version oder für weniger wichtige Texte kann maschinelle Übersetzung ausreichen. Für rechtlich relevante Texte wie AGB, Datenschutzerklärung und Impressum ist maschinelle Übersetzung gefährlich, weil Fehler rechtliche Konsequenzen haben. können. Für Marketing-Texte und die Benutzeroberfläche ist menschliche Übersetzung besser, weil sie kulturelle Nuancen und den Ton deiner Marke. trifft. Ein guter Kompromiss: Maschinelle Übersetzung für den ersten Entwurf, menschliche Korrektur für die finale Version. Merksatz: Bei Internationalisierung und Lokalisierung zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    },
+    {
+      "question": "Wie teste ich, ob meine App in allen Sprachen korrekt aussieht?",
+      "answer": "Der beste Test ist die Pseudo-Übersetzung. Dabei werden alle Texte automatisch um dreißig Prozent verlängert und mit Sonderzeichen versehen, die typisch für andere Sprachen. sind. Das zeigt sofort, wo Texte abgeschnitten werden oder Layouts brechen. Zusätzlich solltest du für jede unterstützte Sprache einen Sprachumschalter in der App haben, mit dem du schnell zwischen. den Sprachen wechseln kannst. Teste jede Seite in jeder Sprache, mindestens einmal vor jedem Release. Automatisierte Screenshot-Tests mit verschiedenen Sprachen sind die Königsdisziplin, aber auch manuelles Testen ist besser als gar kein Test."
+    },
+    {
+      "question": "Muss ich auch die URL-Struktur für verschiedene Sprachen anpassen?",
+      "answer": "Ja, für SEO ist eine sprachspezifische URL-Struktur wichtig. Die gängigsten Ansätze sind: Sprachpräfix in der URL wie /de/ und /en/, eigene Subdomains wie de. example. com und en. example. com oder eigene Domains wie example. de und example. com. Das Sprachpräfix ist die einfachste Lösung und wird von Google empfohlen. Wichtig ist, dass jede Sprache eine eigene URL hat, damit Google die Seiten indexieren kann. Verwende hreflang-Tags, um Google mitzuteilen, welche Sprachversionen existieren. Eine reine JavaScript-basierte Sprachumschaltung ohne URL-Änderung ist für SEO unsichtbar."
+    },
+    {
+      "question": "Wie speichere ich die Sprachpräferenz des Nutzers?",
+      "answer": "Die Sprachpräferenz speicherst du am besten in einem Cookie oder im Local Storage, kombiniert mit dem Accept-Language-Header des. Browsers. Beim ersten Besuch liest du den Accept-Language-Header aus und setzt die Sprache entsprechend. Der Nutzer kann die Sprache dann manuell ändern, und diese Wahl speicherst du im Cookie. Bei jedem weiteren Besuch hat das Cookie Vorrang vor dem Header. Für eingeloggte Nutzer kannst du die Sprachpräferenz auch im Benutzerprofil speichern, dann bleibt sie geräteübergreifend erhalten. Wichtig: Die Sprachumschaltung muss ohne Seitenneuladen funktionieren, sonst verliert der Nutzer seinen Zustand."
+    }
+  ]
+}

@@ -30,8 +30,8 @@ export default function Impressum() {
       <h2>KI-Kennzeichnung</h2>
       <p>
         Die Audio-Inhalte dieser Website und der FutureDev-App wurden mit
-        KI-Stimmen (ElevenLabs) erzeugt. Diese Kennzeichnung erfolgt gemäß
-        Art. 50 EU AI Act.
+        KI-generierten Stimmen erzeugt (ElevenLabs und lokal Chatterbox).
+        Diese Kennzeichnung erfolgt gemäß Art. 50 EU AI Act.
       </p>
     </div>
   );

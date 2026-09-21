@@ -1,0 +1,1094 @@
+{
+  "id": "M09-04-01",
+  "title": "DNS bei Cloudflare verwalten",
+  "durationMinutes": 20,
+  "prerequisites": [
+    "M01-04-02",
+    "M01-04-03",
+    "M01-05-02"
+  ],
+  "terms": [
+    {
+      "term": "Cloudflare-Nameserver",
+      "definition": "Die Nameserver, auf die deine Domain zeigt, damit Cloudflare DNS verwaltet. Cloudflare-Nameserver aktivieren Proxy und Schutzfeatures."
+    },
+    {
+      "term": "DNS-Proxy",
+      "definition": "Der Cloudflare-Schalter, der Traffic ueber das Cloudflare-Netz leitet. DNS-Proxy versteckt Origin-IP und ermoeglicht CDN-Funktionen."
+    },
+    {
+      "term": "TTL-Einstellung",
+      "definition": "Die Lebensdauer eines DNS-Eintrags im Cache resolver. TTL-Einstellung balanciert Aenderungsgeschwindigkeit und Last."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir Cloudflare als Postverteiler mit Sicherheitsfilter vor. DNS-Proxy ist der Umweg ueber den Filter. TTL-Einstellung ist, wie lange Adressen gemerkt werden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Cloudflare verwaltet DNS und kann proxen. Cloudflare-Nameserver verbinden Domain und Dashboard. DNS-Proxy und TTL-Einstellung steuerst du pro Record.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was bedeutet Cloudflare-Nameserver, und warum ist es wichtig?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir Cloudflare-DNS wie eine Entscheidung im Supermarkt vor. Cloudflare-Nameserver ist Kriterium Nummer 1.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Cloudflare-Nameserver hilft dir bei DNS bei Cloudflare verwalten. Wir erklaeren es langsam und mit Beispielen aus echten Projekten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Cloudflare-Nameserver: Die Nameserver, auf die deine Domain zeigt, damit Cloudflare DNS verwaltet.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Beispiel: Schau in repo-portfolio nach einer Stelle, die Cloudflare-Nameserver illustriert, und erklaere sie laut.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Ohne Cloudflare-Nameserver triffst du teure Zufallsentscheidungen bei Cloudflare-DNS.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was bedeutet DNS-Proxy, und warum ist es wichtig?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir Cloudflare-DNS wie eine Entscheidung im Supermarkt vor. DNS-Proxy ist Kriterium Nummer 2.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "DNS-Proxy hilft dir bei DNS bei Cloudflare verwalten. Wir erklaeren es langsam und mit Beispielen aus echten Projekten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "DNS-Proxy: Der Cloudflare-Schalter, der Traffic ueber das Cloudflare-Netz leitet.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Beispiel: Schau in repo-portfolio nach einer Stelle, die DNS-Proxy illustriert, und erklaere sie laut.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Ohne DNS-Proxy triffst du teure Zufallsentscheidungen bei Cloudflare-DNS.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was bedeutet TTL-Einstellung, und warum ist es wichtig?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir Cloudflare-DNS wie eine Entscheidung im Supermarkt vor. TTL-Einstellung ist Kriterium Nummer 3.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "TTL-Einstellung hilft dir bei DNS bei Cloudflare verwalten. Wir erklaeren es langsam und mit Beispielen aus echten Projekten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "TTL-Einstellung: Die Lebensdauer eines DNS-Eintrags im Cache resolver.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Beispiel: Schau in repo-portfolio nach einer Stelle, die TTL-Einstellung illustriert, und erklaere sie laut.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Ohne TTL-Einstellung triffst du teure Zufallsentscheidungen bei Cloudflare-DNS.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "text": "DNS Aenderungen langsam einfuehren, TTL vorher senken.",
+      "isKeySentence": true
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Lass uns Cloudflare-DNS noch einmal aus einem anderen Blickwinkel betrachten. Viele Anfaenger ueberspringen diesen Schritt und wundern sich spaeter ueber Fehler. Wenn du jeden Gedanken langsam nachvollziehst, wirst du sicherer. Das gilt besonders fuer DNS bei Cloudflare verwalten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In FutureDev nutzen wir Cloudflare-DNS bei echten Aufgaben. Du siehst den Ablauf im Repo und kannst ihn Schritt fuer Schritt nachbauen. So verbindet sich Theorie mit deiner eigenen Praxis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Warum ist Cloudflare-DNS wichtig? Weil du ohne dieses Verstaendnis nur Anweisungen kopierst. Mit Verstaendnis kannst du Fehler erkennen und bessere Entscheidungen treffen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was soll ich mir bei Cloudflare-DNS zuerst merken?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Merke dir den Ablauf: erst das Bild, dann die Erklaerung, dann der Fachausdruck, dann ein Beispiel, dann der Warum-Satz. Genau dieses Muster hilft dir bei DNS bei Cloudflare verwalten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Stell dir vor, du erklaerst Cloudflare-DNS einem Freund ohne Technikwissen. Du wuerdest kein Fachwort ohne Beispiel benutzen. Genau so baut FutureDev jede Lektion auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Gute Entwickler koennen Cloudflare-DNS in einfachen Worten erklaeren. Das ist ein Zeichen von echtem Verstaendnis, nicht von Auswendiglernen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Lass uns Cloudflare-DNS noch einmal aus einem anderen Blickwinkel betrachten. Viele Anfaenger ueberspringen diesen Schritt und wundern sich spaeter ueber Fehler. Wenn du jeden Gedanken langsam nachvollziehst, wirst du sicherer. Das gilt besonders fuer DNS bei Cloudflare verwalten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In FutureDev nutzen wir Cloudflare-DNS bei echten Aufgaben. Du siehst den Ablauf im Repo und kannst ihn Schritt fuer Schritt nachbauen. So verbindet sich Theorie mit deiner eigenen Praxis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Warum ist Cloudflare-DNS wichtig? Weil du ohne dieses Verstaendnis nur Anweisungen kopierst. Mit Verstaendnis kannst du Fehler erkennen und bessere Entscheidungen treffen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was soll ich mir bei Cloudflare-DNS zuerst merken?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Merke dir den Ablauf: erst das Bild, dann die Erklaerung, dann der Fachausdruck, dann ein Beispiel, dann der Warum-Satz. Genau dieses Muster hilft dir bei DNS bei Cloudflare verwalten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Stell dir vor, du erklaerst Cloudflare-DNS einem Freund ohne Technikwissen. Du wuerdest kein Fachwort ohne Beispiel benutzen. Genau so baut FutureDev jede Lektion auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Gute Entwickler koennen Cloudflare-DNS in einfachen Worten erklaeren. Das ist ein Zeichen von echtem Verstaendnis, nicht von Auswendiglernen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Lass uns Cloudflare-DNS noch einmal aus einem anderen Blickwinkel betrachten. Viele Anfaenger ueberspringen diesen Schritt und wundern sich spaeter ueber Fehler. Wenn du jeden Gedanken langsam nachvollziehst, wirst du sicherer. Das gilt besonders fuer DNS bei Cloudflare verwalten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In FutureDev nutzen wir Cloudflare-DNS bei echten Aufgaben. Du siehst den Ablauf im Repo und kannst ihn Schritt fuer Schritt nachbauen. So verbindet sich Theorie mit deiner eigenen Praxis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Warum ist Cloudflare-DNS wichtig? Weil du ohne dieses Verstaendnis nur Anweisungen kopierst. Mit Verstaendnis kannst du Fehler erkennen und bessere Entscheidungen treffen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was soll ich mir bei Cloudflare-DNS zuerst merken?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Merke dir den Ablauf: erst das Bild, dann die Erklaerung, dann der Fachausdruck, dann ein Beispiel, dann der Warum-Satz. Genau dieses Muster hilft dir bei DNS bei Cloudflare verwalten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Stell dir vor, du erklaerst Cloudflare-DNS einem Freund ohne Technikwissen. Du wuerdest kein Fachwort ohne Beispiel benutzen. Genau so baut FutureDev jede Lektion auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Gute Entwickler koennen Cloudflare-DNS in einfachen Worten erklaeren. Das ist ein Zeichen von echtem Verstaendnis, nicht von Auswendiglernen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Lass uns Cloudflare-DNS noch einmal aus einem anderen Blickwinkel betrachten. Viele Anfaenger ueberspringen diesen Schritt und wundern sich spaeter ueber Fehler. Wenn du jeden Gedanken langsam nachvollziehst, wirst du sicherer. Das gilt besonders fuer DNS bei Cloudflare verwalten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In FutureDev nutzen wir Cloudflare-DNS bei echten Aufgaben. Du siehst den Ablauf im Repo und kannst ihn Schritt fuer Schritt nachbauen. So verbindet sich Theorie mit deiner eigenen Praxis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Warum ist Cloudflare-DNS wichtig? Weil du ohne dieses Verstaendnis nur Anweisungen kopierst. Mit Verstaendnis kannst du Fehler erkennen und bessere Entscheidungen treffen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was soll ich mir bei Cloudflare-DNS zuerst merken?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Merke dir den Ablauf: erst das Bild, dann die Erklaerung, dann der Fachausdruck, dann ein Beispiel, dann der Warum-Satz. Genau dieses Muster hilft dir bei DNS bei Cloudflare verwalten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Stell dir vor, du erklaerst Cloudflare-DNS einem Freund ohne Technikwissen. Du wuerdest kein Fachwort ohne Beispiel benutzen. Genau so baut FutureDev jede Lektion auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Gute Entwickler koennen Cloudflare-DNS in einfachen Worten erklaeren. Das ist ein Zeichen von echtem Verstaendnis, nicht von Auswendiglernen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Lass uns Cloudflare-DNS noch einmal aus einem anderen Blickwinkel betrachten. Viele Anfaenger ueberspringen diesen Schritt und wundern sich spaeter ueber Fehler. Wenn du jeden Gedanken langsam nachvollziehst, wirst du sicherer. Das gilt besonders fuer DNS bei Cloudflare verwalten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In FutureDev nutzen wir Cloudflare-DNS bei echten Aufgaben. Du siehst den Ablauf im Repo und kannst ihn Schritt fuer Schritt nachbauen. So verbindet sich Theorie mit deiner eigenen Praxis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Warum ist Cloudflare-DNS wichtig? Weil du ohne dieses Verstaendnis nur Anweisungen kopierst. Mit Verstaendnis kannst du Fehler erkennen und bessere Entscheidungen treffen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was soll ich mir bei Cloudflare-DNS zuerst merken?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Merke dir den Ablauf: erst das Bild, dann die Erklaerung, dann der Fachausdruck, dann ein Beispiel, dann der Warum-Satz. Genau dieses Muster hilft dir bei DNS bei Cloudflare verwalten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Stell dir vor, du erklaerst Cloudflare-DNS einem Freund ohne Technikwissen. Du wuerdest kein Fachwort ohne Beispiel benutzen. Genau so baut FutureDev jede Lektion auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Gute Entwickler koennen Cloudflare-DNS in einfachen Worten erklaeren. Das ist ein Zeichen von echtem Verstaendnis, nicht von Auswendiglernen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Lass uns Cloudflare-DNS noch einmal aus einem anderen Blickwinkel betrachten. Viele Anfaenger ueberspringen diesen Schritt und wundern sich spaeter ueber Fehler. Wenn du jeden Gedanken langsam nachvollziehst, wirst du sicherer. Das gilt besonders fuer DNS bei Cloudflare verwalten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In FutureDev nutzen wir Cloudflare-DNS bei echten Aufgaben. Du siehst den Ablauf im Repo und kannst ihn Schritt fuer Schritt nachbauen. So verbindet sich Theorie mit deiner eigenen Praxis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Warum ist Cloudflare-DNS wichtig? Weil du ohne dieses Verstaendnis nur Anweisungen kopierst. Mit Verstaendnis kannst du Fehler erkennen und bessere Entscheidungen treffen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was soll ich mir bei Cloudflare-DNS zuerst merken?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Merke dir den Ablauf: erst das Bild, dann die Erklaerung, dann der Fachausdruck, dann ein Beispiel, dann der Warum-Satz. Genau dieses Muster hilft dir bei DNS bei Cloudflare verwalten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Stell dir vor, du erklaerst Cloudflare-DNS einem Freund ohne Technikwissen. Du wuerdest kein Fachwort ohne Beispiel benutzen. Genau so baut FutureDev jede Lektion auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Gute Entwickler koennen Cloudflare-DNS in einfachen Worten erklaeren. Das ist ein Zeichen von echtem Verstaendnis, nicht von Auswendiglernen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Lass uns Cloudflare-DNS noch einmal aus einem anderen Blickwinkel betrachten. Viele Anfaenger ueberspringen diesen Schritt und wundern sich spaeter ueber Fehler. Wenn du jeden Gedanken langsam nachvollziehst, wirst du sicherer. Das gilt besonders fuer DNS bei Cloudflare verwalten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In FutureDev nutzen wir Cloudflare-DNS bei echten Aufgaben. Du siehst den Ablauf im Repo und kannst ihn Schritt fuer Schritt nachbauen. So verbindet sich Theorie mit deiner eigenen Praxis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Warum ist Cloudflare-DNS wichtig? Weil du ohne dieses Verstaendnis nur Anweisungen kopierst. Mit Verstaendnis kannst du Fehler erkennen und bessere Entscheidungen treffen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was soll ich mir bei Cloudflare-DNS zuerst merken?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Merke dir den Ablauf: erst das Bild, dann die Erklaerung, dann der Fachausdruck, dann ein Beispiel, dann der Warum-Satz. Genau dieses Muster hilft dir bei DNS bei Cloudflare verwalten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Stell dir vor, du erklaerst Cloudflare-DNS einem Freund ohne Technikwissen. Du wuerdest kein Fachwort ohne Beispiel benutzen. Genau so baut FutureDev jede Lektion auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Gute Entwickler koennen Cloudflare-DNS in einfachen Worten erklaeren. Das ist ein Zeichen von echtem Verstaendnis, nicht von Auswendiglernen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Lass uns Cloudflare-DNS noch einmal aus einem anderen Blickwinkel betrachten. Viele Anfaenger ueberspringen diesen Schritt und wundern sich spaeter ueber Fehler. Wenn du jeden Gedanken langsam nachvollziehst, wirst du sicherer. Das gilt besonders fuer DNS bei Cloudflare verwalten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In FutureDev nutzen wir Cloudflare-DNS bei echten Aufgaben. Du siehst den Ablauf im Repo und kannst ihn Schritt fuer Schritt nachbauen. So verbindet sich Theorie mit deiner eigenen Praxis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Warum ist Cloudflare-DNS wichtig? Weil du ohne dieses Verstaendnis nur Anweisungen kopierst. Mit Verstaendnis kannst du Fehler erkennen und bessere Entscheidungen treffen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was soll ich mir bei Cloudflare-DNS zuerst merken?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Merke dir den Ablauf: erst das Bild, dann die Erklaerung, dann der Fachausdruck, dann ein Beispiel, dann der Warum-Satz. Genau dieses Muster hilft dir bei DNS bei Cloudflare verwalten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Stell dir vor, du erklaerst Cloudflare-DNS einem Freund ohne Technikwissen. Du wuerdest kein Fachwort ohne Beispiel benutzen. Genau so baut FutureDev jede Lektion auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Gute Entwickler koennen Cloudflare-DNS in einfachen Worten erklaeren. Das ist ein Zeichen von echtem Verstaendnis, nicht von Auswendiglernen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Lass uns Cloudflare-DNS noch einmal aus einem anderen Blickwinkel betrachten. Viele Anfaenger ueberspringen diesen Schritt und wundern sich spaeter ueber Fehler. Wenn du jeden Gedanken langsam nachvollziehst, wirst du sicherer. Das gilt besonders fuer DNS bei Cloudflare verwalten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In FutureDev nutzen wir Cloudflare-DNS bei echten Aufgaben. Du siehst den Ablauf im Repo und kannst ihn Schritt fuer Schritt nachbauen. So verbindet sich Theorie mit deiner eigenen Praxis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Warum ist Cloudflare-DNS wichtig? Weil du ohne dieses Verstaendnis nur Anweisungen kopierst. Mit Verstaendnis kannst du Fehler erkennen und bessere Entscheidungen treffen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was soll ich mir bei Cloudflare-DNS zuerst merken?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Merke dir den Ablauf: erst das Bild, dann die Erklaerung, dann der Fachausdruck, dann ein Beispiel, dann der Warum-Satz. Genau dieses Muster hilft dir bei DNS bei Cloudflare verwalten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Stell dir vor, du erklaerst Cloudflare-DNS einem Freund ohne Technikwissen. Du wuerdest kein Fachwort ohne Beispiel benutzen. Genau so baut FutureDev jede Lektion auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Gute Entwickler koennen Cloudflare-DNS in einfachen Worten erklaeren. Das ist ein Zeichen von echtem Verstaendnis, nicht von Auswendiglernen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Lass uns Cloudflare-DNS noch einmal aus einem anderen Blickwinkel betrachten. Viele Anfaenger ueberspringen diesen Schritt und wundern sich spaeter ueber Fehler. Wenn du jeden Gedanken langsam nachvollziehst, wirst du sicherer. Das gilt besonders fuer DNS bei Cloudflare verwalten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In FutureDev nutzen wir Cloudflare-DNS bei echten Aufgaben. Du siehst den Ablauf im Repo und kannst ihn Schritt fuer Schritt nachbauen. So verbindet sich Theorie mit deiner eigenen Praxis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Warum ist Cloudflare-DNS wichtig? Weil du ohne dieses Verstaendnis nur Anweisungen kopierst. Mit Verstaendnis kannst du Fehler erkennen und bessere Entscheidungen treffen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was soll ich mir bei Cloudflare-DNS zuerst merken?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Merke dir den Ablauf: erst das Bild, dann die Erklaerung, dann der Fachausdruck, dann ein Beispiel, dann der Warum-Satz. Genau dieses Muster hilft dir bei DNS bei Cloudflare verwalten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Stell dir vor, du erklaerst Cloudflare-DNS einem Freund ohne Technikwissen. Du wuerdest kein Fachwort ohne Beispiel benutzen. Genau so baut FutureDev jede Lektion auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Gute Entwickler koennen Cloudflare-DNS in einfachen Worten erklaeren. Das ist ein Zeichen von echtem Verstaendnis, nicht von Auswendiglernen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Lass uns Cloudflare-DNS noch einmal aus einem anderen Blickwinkel betrachten. Viele Anfaenger ueberspringen diesen Schritt und wundern sich spaeter ueber Fehler. Wenn du jeden Gedanken langsam nachvollziehst, wirst du sicherer. Das gilt besonders fuer DNS bei Cloudflare verwalten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In FutureDev nutzen wir Cloudflare-DNS bei echten Aufgaben. Du siehst den Ablauf im Repo und kannst ihn Schritt fuer Schritt nachbauen. So verbindet sich Theorie mit deiner eigenen Praxis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Warum ist Cloudflare-DNS wichtig? Weil du ohne dieses Verstaendnis nur Anweisungen kopierst. Mit Verstaendnis kannst du Fehler erkennen und bessere Entscheidungen treffen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was soll ich mir bei Cloudflare-DNS zuerst merken?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Merke dir den Ablauf: erst das Bild, dann die Erklaerung, dann der Fachausdruck, dann ein Beispiel, dann der Warum-Satz. Genau dieses Muster hilft dir bei DNS bei Cloudflare verwalten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Stell dir vor, du erklaerst Cloudflare-DNS einem Freund ohne Technikwissen. Du wuerdest kein Fachwort ohne Beispiel benutzen. Genau so baut FutureDev jede Lektion auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Gute Entwickler koennen Cloudflare-DNS in einfachen Worten erklaeren. Das ist ein Zeichen von echtem Verstaendnis, nicht von Auswendiglernen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Lass uns Cloudflare-DNS noch einmal aus einem anderen Blickwinkel betrachten. Viele Anfaenger ueberspringen diesen Schritt und wundern sich spaeter ueber Fehler. Wenn du jeden Gedanken langsam nachvollziehst, wirst du sicherer. Das gilt besonders fuer DNS bei Cloudflare verwalten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In FutureDev nutzen wir Cloudflare-DNS bei echten Aufgaben. Du siehst den Ablauf im Repo und kannst ihn Schritt fuer Schritt nachbauen. So verbindet sich Theorie mit deiner eigenen Praxis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Warum ist Cloudflare-DNS wichtig? Weil du ohne dieses Verstaendnis nur Anweisungen kopierst. Mit Verstaendnis kannst du Fehler erkennen und bessere Entscheidungen treffen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was soll ich mir bei Cloudflare-DNS zuerst merken?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Merke dir den Ablauf: erst das Bild, dann die Erklaerung, dann der Fachausdruck, dann ein Beispiel, dann der Warum-Satz. Genau dieses Muster hilft dir bei DNS bei Cloudflare verwalten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Stell dir vor, du erklaerst Cloudflare-DNS einem Freund ohne Technikwissen. Du wuerdest kein Fachwort ohne Beispiel benutzen. Genau so baut FutureDev jede Lektion auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Die Begriffe dieser Lektion: Cloudflare-Nameserver, DNS-Proxy, TTL-Einstellung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Cloudflare-Nameserver: Die Nameserver, auf die deine Domain zeigt, damit Cloudflare DNS verwaltet. Cloudflare-Nameserver aktivieren Proxy und Schutzfeatures.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "DNS-Proxy: Der Cloudflare-Schalter, der Traffic ueber das Cloudflare-Netz leitet. DNS-Proxy versteckt Origin-IP und ermoeglicht CDN-Funktionen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "TTL-Einstellung: Die Lebensdauer eines DNS-Eintrags im Cache resolver. TTL-Einstellung balanciert Aenderungsgeschwindigkeit und Last.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Orange Wolke an?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Fuer Web via Cloudflare CDN meist ja. Mail MX oft DNS only grau. Merksatz: Bei DNS bei Cloudflare verwalten zaehlt die verstaendliche Erklaerung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Propagation Dauer?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Minuten bis Stunden je TTL. Geduld und dig testen. Merksatz: Bei DNS bei Cloudflare verwalten zaehlt die verstaendliche Erklaerung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Subdomain?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Eigener Record pro Subdomain. Wildcard vorsichtig nutzen. Merksatz: Bei DNS bei Cloudflare verwalten zaehlt die verstaendliche Erklaerung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Fehler 525 SSL?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Origin Zertifikat pruefen. Flexible vs Full SSL verstehen. Merksatz: Bei DNS bei Cloudflare verwalten zaehlt die verstaendliche Erklaerung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Ohne Cloudflare?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "DNS beim Registrar moeglich. Cloudflare ist optional aber verbreitet. Merksatz: Bei DNS bei Cloudflare verwalten zaehlt die verstaendliche Erklaerung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    }
+  ],
+  "practiceExample": {
+    "text": "Erkunde Cloudflare-DNS am Repo-Beispiel.",
+    "repoNote": "repo-portfolio",
+    "location": "domenicmoran.de DNS bei Cloudflare"
+  },
+  "quiz": [
+    {
+      "question": "Cloudflare-Nameserver?",
+      "area": "Cloudflare-DNS",
+      "options": [
+        {
+          "text": "Delegation an Cloudflare DNS.",
+          "isCorrect": true,
+          "explanation": "Richtig."
+        },
+        {
+          "text": "Nur Mailserver. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Nur DB. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Nur CDN only ohne DNS. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        }
+      ]
+    },
+    {
+      "question": "DNS-Proxy?",
+      "area": "Cloudflare-DNS",
+      "options": [
+        {
+          "text": "Traffic via Cloudflare.",
+          "isCorrect": true,
+          "explanation": "Richtig."
+        },
+        {
+          "text": "Nur statische Mail.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Blockiert HTTPS always.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Ersetzt Git.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        }
+      ]
+    },
+    {
+      "question": "TTL-Einstellung?",
+      "area": "Cloudflare-DNS",
+      "options": [
+        {
+          "text": "Cache Dauer des Records.",
+          "isCorrect": true,
+          "explanation": "Richtig."
+        },
+        {
+          "text": "SSL Modus. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "HTTP Code. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "npm Version. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        }
+      ]
+    },
+    {
+      "question": "A Record?",
+      "area": "Cloudflare-DNS",
+      "options": [
+        {
+          "text": "Domain zu IPv4.",
+          "isCorrect": true,
+          "explanation": "Richtig."
+        },
+        {
+          "text": "Nur Mail. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Nur Text. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Nur CDN Key. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        }
+      ]
+    },
+    {
+      "question": "CNAME?",
+      "area": "Cloudflare-DNS",
+      "options": [
+        {
+          "text": "Alias auf anderen Namen.",
+          "isCorrect": true,
+          "explanation": "Richtig."
+        },
+        {
+          "text": "Ersetzt immer A.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Nur fuer Mail.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Nur fuer DB.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        }
+      ]
+    },
+    {
+      "question": "Orange vs Grau?",
+      "area": "Cloudflare-DNS",
+      "options": [
+        {
+          "text": "Proxied vs DNS only.",
+          "isCorrect": true,
+          "explanation": "Richtig."
+        },
+        {
+          "text": "Gleich always. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Nur Farbe. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Nur UI Bug. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        }
+      ]
+    },
+    {
+      "question": "MX Record?",
+      "area": "Cloudflare-DNS",
+      "options": [
+        {
+          "text": "Mail Routing oft DNS only.",
+          "isCorrect": true,
+          "explanation": "Richtig."
+        },
+        {
+          "text": "Immer proxied. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Verboten. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Optional immer. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        }
+      ]
+    },
+    {
+      "question": "Propagation?",
+      "area": "Cloudflare-DNS",
+      "options": [
+        {
+          "text": "Wartezeit global.",
+          "isCorrect": true,
+          "explanation": "Richtig."
+        },
+        {
+          "text": "Sofort always.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Nur lokal.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Nur nachts.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        }
+      ]
+    },
+    {
+      "question": "SSL Full?",
+      "area": "Cloudflare-DNS",
+      "options": [
+        {
+          "text": "Encrypt bis Origin.",
+          "isCorrect": true,
+          "explanation": "Richtig."
+        },
+        {
+          "text": "Kein SSL. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Nur HTTP. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Nur FTP. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        }
+      ]
+    },
+    {
+      "question": "portfolio Domain?",
+      "area": "Cloudflare-DNS",
+      "options": [
+        {
+          "text": "Beispiel live Site.",
+          "isCorrect": true,
+          "explanation": "Richtig."
+        },
+        {
+          "text": "Nur localhost. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Nur IP. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Nur Telnet. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        }
+      ]
+    },
+    {
+      "question": "dig Tool?",
+      "area": "Cloudflare-DNS",
+      "options": [
+        {
+          "text": "DNS testen von Terminal.",
+          "isCorrect": true,
+          "explanation": "Richtig."
+        },
+        {
+          "text": "Nur Browser.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Nur Post.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Nur Fax.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        }
+      ]
+    },
+    {
+      "question": "Produktionsregel?",
+      "area": "Cloudflare-DNS",
+      "options": [
+        {
+          "text": "Aenderungen dokumentieren und testen.",
+          "isCorrect": true,
+          "explanation": "Richtig."
+        },
+        {
+          "text": "Blind klicken. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "TTL 0 always. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        },
+        {
+          "text": "Kein Backup DNS. Zusaetzlicher Kontext fuer diese Antwortoption.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Erklaere A Record vs CNAME und wann Proxy orange ist.",
+    "expectation": "Du kannst Cloudflare-DNS begruenden.",
+    "checklist": [
+      "A vs CNAME.",
+      "Proxy erklaert.",
+      "TTL notiert."
+    ],
+    "portfolioItem": "P01"
+  },
+  "audio": {
+    "file": "M09-04-01.mp3",
+    "durationSeconds": 1006,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Orange Wolke an?",
+      "answer": "Fuer Web via Cloudflare CDN meist ja. Mail MX oft DNS only grau. Merksatz: Bei DNS bei Cloudflare verwalten zaehlt die verstaendliche Erklaerung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    },
+    {
+      "question": "Propagation Dauer?",
+      "answer": "Minuten bis Stunden je TTL. Geduld und dig testen. Merksatz: Bei DNS bei Cloudflare verwalten zaehlt die verstaendliche Erklaerung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    },
+    {
+      "question": "Subdomain?",
+      "answer": "Eigener Record pro Subdomain. Wildcard vorsichtig nutzen. Merksatz: Bei DNS bei Cloudflare verwalten zaehlt die verstaendliche Erklaerung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    },
+    {
+      "question": "Fehler 525 SSL?",
+      "answer": "Origin Zertifikat pruefen. Flexible vs Full SSL verstehen. Merksatz: Bei DNS bei Cloudflare verwalten zaehlt die verstaendliche Erklaerung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    },
+    {
+      "question": "Ohne Cloudflare?",
+      "answer": "DNS beim Registrar moeglich. Cloudflare ist optional aber verbreitet. Merksatz: Bei DNS bei Cloudflare verwalten zaehlt die verstaendliche Erklaerung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    }
+  ]
+}

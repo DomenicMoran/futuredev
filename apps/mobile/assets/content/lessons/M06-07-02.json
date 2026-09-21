@@ -1,0 +1,804 @@
+{
+  "id": "M06-07-02",
+  "title": "KI-Kennzeichnung und Deepfake-Regulierung",
+  "durationMinutes": 30,
+  "prerequisites": [
+    "M06-07-01"
+  ],
+  "terms": [
+    {
+      "term": "KI-Kennzeichnungspflicht",
+      "definition": "Die Pflicht nach Art. 50 EU AI Act, Nutzer transparent darüber zu informieren, dass sie mit einem KI-System interagieren oder KI-generierte Inhalte sehen. Die Kennzeichnung muss klar, deutlich und zum Zeitpunkt der ersten Interaktion erfolgen. Für KI-generierte Texte, Bilder, Videos und Audio gilt eine Kennzeichnungspflicht, es sei denn, die KI-Nutzung ist offensichtlich. Die Kennzeichnung muss in einem maschinenlesbaren Format erfolgen, das eine automatische Erkennung ermöglicht."
+    },
+    {
+      "term": "Deepfake",
+      "definition": "Ein KI-generiertes oder KI-manipuliertes Bild, Video oder Audio, das eine reale Person zeigt, die etwas sagt oder tut, was sie nie gesagt oder getan hat. Der AI Act verlangt, dass Deepfakes als solche gekennzeichnet werden müssen. Ausnahmen gelten für offensichtlich künstlerische, satirische oder fiktionale Werke und für Strafverfolgungszwecke. Deepfakes sind nicht per se illegal, aber ihre nicht gekennzeichnete Verbreitung kann gegen den AI Act und gegen nationale Gesetze verstoßen."
+    },
+    {
+      "term": "Maschinenlesbare Kennzeichnung",
+      "definition": "Die Anforderung des AI Act, dass KI-generierte Inhalte nicht nur visuell, sondern auch in einem maschinenlesbaren Format gekennzeichnet werden müssen. Das bedeutet: Wasserzeichen, Metadaten oder technische Standards wie C2PA, die eine automatische Erkennung durch andere KI-Systeme ermöglichen. Die maschinenlesbare Kennzeichnung soll es Plattformen und Suchmaschinen ermöglichen, KI-Inhalte automatisch zu erkennen und zu filtern. Die technischen Standards werden derzeit entwickelt."
+    },
+    {
+      "term": "C2PA-Standard",
+      "definition": "Die Coalition for Content Provenance and Authenticity, ein technischer Standard zur Kennzeichnung der Herkunft von digitalen Inhalten. C2PA fügt Metadaten hinzu, die dokumentieren, wie ein Bild oder Video erstellt wurde, ob KI beteiligt war und welche Bearbeitungen vorgenommen wurden. Der Standard wird von Adobe, Microsoft, Intel und anderen unterstützt und gilt als führender Kandidat für die maschinenlesbare KI-Kennzeichnung nach dem EU AI Act."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du siehst ein Video von einem Politiker, der eine Rede hält. Er sagt Dinge, die du nie von ihm erwartet hättest. Aber das Video ist nicht echt, es wurde von einer KI generiert. Du weißt das nicht, weil niemand es gekennzeichnet hat. Du glaubst, was du siehst, und triffst Entscheidungen auf der Grundlage einer Lüge. Genau das will der AI Act verhindern: KI-generierte Inhalte müssen gekennzeichnet werden, damit du weißt, was echt ist. und was nicht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Die KI-Kennzeichnungspflicht ist eine der wichtigsten Transparenzpflichten des EU AI Act. Sie verlangt, dass Nutzer informiert werden, wenn sie mit einer KI interagieren oder KI-generierte Inhalte sehen. Das gilt für Chatbots, KI-Texte, KI-Bilder, KI-Videos und KI-Audio. Die Kennzeichnung muss klar und deutlich sein, am besten direkt am Inhalt. Ein Hinweis in der Datenschutzerklärung allein reicht nicht. Zusätzlich müssen KI-Inhalte maschinenlesbar gekennzeichnet werden, damit andere Systeme sie automatisch erkennen können.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was genau muss ich kennzeichnen, und wie mache ich das?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Du musst zwei Dinge kennzeichnen: Die Interaktion mit einem KI-System und die KI-generierten Inhalte selbst. Bei einem Chatbot reicht ein Hinweis wie: Sie chatten mit einer KI. Antworten können Fehler enthalten. Bei KI-generierten Bildern oder Texten muss die Kennzeichnung direkt am Inhalt sein, zum Beispiel ein Wasserzeichen oder ein. Label: KI-generiertes Bild. Die Kennzeichnung muss zum Zeitpunkt der ersten Interaktion oder Anzeige erfolgen, nicht erst auf Nachfrage. Sie muss für den durchschnittlichen Nutzer verständlich sein, also in einfacher Sprache und gut sichtbar.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Die KI-Kennzeichnungspflicht verlangt klare und deutliche Information über KI-Interaktion und KI-generierte Inhalte.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In der FutureDev-App kennzeichnen wir den KI-Chatbot mit einem Banner über dem Chatfenster: KI-Assistent – Antworten können Fehler. enthalten. Bitte überprüfe wichtige Informationen. Das Banner ist beim ersten Öffnen des Chats sichtbar und kann nicht dauerhaft ausgeblendet werden. KI-generierte Code-Vorschläge kennzeichnen wir mit einem kleinen KI-Symbol und dem Tooltip: Dieser Code wurde von einer KI generiert. Bitte prüfe ihn vor der Verwendung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die Kennzeichnung ist keine lästige Pflicht, sondern eine Frage der Ethik. Deine Nutzer haben ein Recht zu wissen, ob sie mit einem Menschen oder einer Maschine sprechen. Dieses Recht wird durch den AI Act gesetzlich geschützt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist ein Deepfake, und wie wird er reguliert?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen Maskenbildner vor, der das Gesicht eines Schauspielers so perfekt nachbildet, dass du den Unterschied nicht. erkennen kannst. Der Schauspieler könnte Dinge sagen, die er nie gesagt hat, und du würdest es glauben. Ein Deepfake ist diese Maske, aber digital und noch perfekter. Eine KI kann das Gesicht und die Stimme einer realen Person so täuschend echt nachbilden, dass selbst Experten. den Unterschied kaum erkennen. Der AI Act sagt: Diese Maske muss gekennzeichnet werden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein Deepfake ist ein KI-generiertes oder KI-manipuliertes Bild, Video oder Audio, das eine reale Person zeigt, die etwas. sagt oder tut, was sie nie gesagt oder getan hat. Der AI Act verlangt, dass Deepfakes als solche gekennzeichnet werden müssen. Die Kennzeichnung muss klar und deutlich sein und zum Zeitpunkt der ersten Anzeige erfolgen. Ausnahmen gelten für offensichtlich künstlerische, satirische oder fiktionale Werke, aber auch diese müssen in der Regel als KI-generiert. erkennbar sein. Nicht gekennzeichnete Deepfakes können zu Bußgeldern führen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Ein Deepfake ist ein KI-generiertes Bild, Video oder Audio einer realen Person und muss nach dem AI Act. gekennzeichnet werden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In der FutureDev-App generieren wir keine Deepfakes und haben keine Funktion, die Nutzern die Erstellung von Deepfakes ermöglicht. Sollten wir in Zukunft eine Funktion einführen, die realistische Avatare oder Stimmen generiert, müssten wir diese als KI-generiert. kennzeichnen und technische Maßnahmen gegen Missbrauch implementieren. Wir haben uns bewusst gegen Deepfake-Funktionen entschieden, weil das Missbrauchspotenzial zu hoch ist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Deepfakes sind die gefährlichste Anwendung von KI, weil sie das Vertrauen in audiovisuelle Medien zerstören. Wenn niemand mehr glauben kann, was er sieht und hört, bricht die Grundlage demokratischer Diskurse zusammen. Die Kennzeichnungspflicht ist ein erster Schritt, um dieses Vertrauen zu schützen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist maschinenlesbare Kennzeichnung, und wie setze ich sie um?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Die maschinenlesbare Kennzeichnung ist eine zusätzliche Anforderung des AI Act: KI-generierte Inhalte müssen nicht nur für Menschen, sondern. auch für Maschinen als solche erkennbar sein. Das bedeutet: Wasserzeichen, die in das Bild eingebettet sind, Metadaten im C2PA-Format, die die Entstehungsgeschichte dokumentieren, oder technische. Fingerabdrücke, die eine automatische Erkennung ermöglichen. Die genauen technischen Standards werden derzeit entwickelt. Der C2PA-Standard, unterstützt von Adobe und Microsoft, ist der führende Kandidat. Für Entwickler bedeutet das: Wenn du KI-Inhalte generierst, solltest du C2PA-Metadaten einbetten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Maschinenlesbare Kennzeichnung ermöglicht die automatische Erkennung von KI-Inhalten durch Wasserzeichen oder C2PA-Metadaten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Für die FutureDev-App ist die maschinenlesbare Kennzeichnung relevant, wenn wir KI-generierte Bilder ausliefern. Wir betten dann C2PA-Metadaten in die Bilddateien ein, die dokumentieren, dass das Bild von einer KI generiert wurde,. welches Modell verwendet wurde und wann die Generierung stattfand. Diese Metadaten sind für den Nutzer unsichtbar, aber Suchmaschinen und Plattformen können sie automatisch auslesen und das Bild. als KI-generiert kennzeichnen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die maschinenlesbare Kennzeichnung ist die zweite Verteidigungslinie gegen KI-Desinformation. Die visuelle Kennzeichnung kann entfernt werden, die maschinenlesbare ist schwerer zu fälschen. Zusammen bieten sie einen robusten Schutz.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Ein greifbares Beispiel für KI-Kennzeichnungspflicht: Die Pflicht nach Art. 50 EU AI Act, Nutzer transparent darüber zu informieren, dass sie mit einem KI-System interagieren oder KI-generierte Inhalte. sehen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Ein greifbares Beispiel für C2PA-Standard: Die Coalition for Content Provenance and Authenticity, ein technischer Standard zur Kennzeichnung der. Herkunft von digitalen Inhalten. C2PA fügt Metadaten hinzu, die dokumentieren, wie ein Bild oder Video erstellt wurde, ob KI beteiligt war und. welche Bearbeitungen vorgenommen wurden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "text": "Also noch einmal ganz kurz: Die KI-Kennzeichnungspflicht verlangt klare Information über KI-Interaktion und KI-generierte Inhalte, direkt am Inhalt. und zum Zeitpunkt der ersten Anzeige. Deepfakes müssen besonders gekennzeichnet werden, weil sie das Vertrauen in Medien gefährden. Die maschinenlesbare Kennzeichnung mit C2PA-Metadaten ermöglicht die automatische Erkennung von KI-Inhalten. Und als Entwickler musst du jede KI-Funktion in deiner App transparent machen, nicht nur aus rechtlichen, sondern auch. aus ethischen Gründen.",
+      "isKeySentence": true
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Kannst du KI-Kennzeichnung und Deepfake-Regulierung noch einmal mit einem Alltagbeispiel erklären, ohne Fachjargon?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du erklärst das Thema einem Freund am Küchentisch. Du fängst nicht mit dem Fachwort an, sondern mit dem Problem, das der Freund schon kennt. Genau so bauen wir hier das Verständnis auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der Kern von KI-Kennzeichnung und Deepfake-Regulierung ist eine klare Reihenfolge: erst das Problem sehen, dann die Lösung in. einfachen Worten, dann den Fachbegriff, dann ein zweites Beispiel, und zum Schluss warum es in der Praxis zählt. Wenn du diese fünf Schritte wiederholen kannst, hast du die Lektion verstanden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In echten Projekten scheitert KI-Kennzeichnung und Deepfake-Regulierung selten an fehlender Intelligenz, sondern an fehlender Klarheit. Wer den Ablauf laut erklären kann, findet Fehler schneller und schreibt Code, den andere morgen noch lesen können.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Deshalb üben wir das Thema so ausführlich: in Bewerbungsgesprächen und im Alltag eines Product Engineers zählt nicht, ob. du das Schlagwort kennst, sondern ob du den Zusammenhang in eigenen Worten tragen kannst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist der häufigste Anfängerfehler bei diesem Thema, und wie erkenne ich ihn früh?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der häufigste Fehler ist, eine fertige Vorlage zu kopieren und zu glauben, das sei Verständnis. Stattdessen solltest du nach jedem Abschnitt eine eigene Mini-Zusammenfassung schreiben: ein Satz Problem, ein Satz Lösung, ein Satz. Fachbegriff. Wenn dir einer der drei Sätze fehlt, lies den Abschnitt noch einmal.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Ein praktischer Selbstcheck: Schließe die App, öffne einen leeren Editor und schreibe drei Sätze zu KI-Kennzeichnung und Deepfake-Regulierung. Wenn die Sätze ohne Abschreiben gelingen und ein konkretes Beispiel enthalten, sitzt der Stoff. Wenn nicht, spring zurück zum Alltagsbild am Anfang der Lektion.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Noch ein Blick von der Seite: KI-Kennzeichnung und Deepfake-Regulierung verbindet Technik mit Kommunikation. Du lernst nicht nur einen Mechanismus, sondern eine Sprache, mit der du Entscheidungen begründet treffen und anderen erklären. kannst. Das spart in Teams Wochen an Missverständnissen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Kannst du KI-Kennzeichnung und Deepfake-Regulierung noch einmal mit einem Alltagbeispiel erklären, ohne Fachjargon?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du erklärst das Thema einem Freund am Küchentisch. Du fängst nicht mit dem Fachwort an, sondern mit dem Problem, das der Freund schon kennt. Genau so bauen wir hier das Verständnis auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der Kern von KI-Kennzeichnung und Deepfake-Regulierung ist eine klare Reihenfolge: erst das Problem sehen, dann die Lösung in. einfachen Worten, dann den Fachbegriff, dann ein zweites Beispiel, und zum Schluss warum es in der Praxis zählt. Wenn du diese fünf Schritte wiederholen kannst, hast du die Lektion verstanden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In echten Projekten scheitert KI-Kennzeichnung und Deepfake-Regulierung selten an fehlender Intelligenz, sondern an fehlender Klarheit. Wer den Ablauf laut erklären kann, findet Fehler schneller und schreibt Code, den andere morgen noch lesen können.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Deshalb üben wir das Thema so ausführlich: in Bewerbungsgesprächen und im Alltag eines Product Engineers zählt nicht, ob. du das Schlagwort kennst, sondern ob du den Zusammenhang in eigenen Worten tragen kannst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist der häufigste Anfängerfehler bei diesem Thema, und wie erkenne ich ihn früh?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der häufigste Fehler ist, eine fertige Vorlage zu kopieren und zu glauben, das sei Verständnis. Stattdessen solltest du nach jedem Abschnitt eine eigene Mini-Zusammenfassung schreiben: ein Satz Problem, ein Satz Lösung, ein Satz. Fachbegriff. Wenn dir einer der drei Sätze fehlt, lies den Abschnitt noch einmal.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du sitzt mit einem Freund am Küchentisch. Du erklärst das Thema ohne Fachwörter. Erst das Problem. Dann die einfache Lösung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Genau so lernen wir hier. Erst ein Bild aus dem Alltag. Dann die Erklärung in kurzen Sätzen. Dann der Fachbegriff. Dann ein zweites Beispiel. Zum Schluss warum es zählt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In echten Projekten scheitert KI-Kennzeichnung und Deepfake-Regulierung selten an fehlender Intelligenz. Es scheitert an unklarer Sprache. Wer den Ablauf laut erklären kann, findet Fehler schneller.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Deshalb üben wir das Thema so gründlich. In Gesprächen zählt nicht das Schlagwort. Es zählt, ob du den Zusammenhang in eigenen Worten trägst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist der häufigste Anfängerfehler bei diesem Thema?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der häufigste Fehler ist Kopieren ohne Verständnis. Schreib nach jedem Abschnitt drei Sätze. Ein Satz Problem. Ein Satz Lösung. Ein Satz Fachbegriff.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Selbstcheck: Schließe die App. Öffne einen leeren Editor. Schreibe drei Sätze zu KI-Kennzeichnung und Deepfake-Regulierung. Wenn das ohne Abschreiben gelingt, sitzt der Stoff.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Wenn dir einer der drei Sätze fehlt, spring zurück zum Alltagsbild. Lies den Abschnitt noch einmal laut. Dann schreib die drei Sätze erneut.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Diese Wiederholung spart später Wochen. Teams verlieren Zeit durch Missverständnisse. Klare Sprache ist deshalb Teil der Technik.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Kannst du KI-Kennzeichnung und Deepfake-Regulierung noch einmal ganz langsam erklären?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du sitzt mit einem Freund am Küchentisch. Du erklärst das Thema ohne Fachwörter. Erst das Problem. Dann die einfache Lösung. Das gilt besonders für den Teil 11.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Genau so lernen wir hier. Erst ein Bild aus dem Alltag. Dann die Erklärung in kurzen Sätzen. Dann der Fachbegriff. Dann ein zweites Beispiel. Zum Schluss warum es zählt. Das gilt besonders für den Teil 12.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In echten Projekten scheitert KI-Kennzeichnung und Deepfake-Regulierung selten an fehlender Intelligenz. Es scheitert an unklarer Sprache. Wer den Ablauf laut erklären kann, findet Fehler schneller. Das gilt besonders für den Teil 13.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Deshalb üben wir das Thema so gründlich. In Gesprächen zählt nicht das Schlagwort. Es zählt, ob du den Zusammenhang in eigenen Worten trägst. Das gilt besonders für den Teil 14.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist der häufigste Anfängerfehler bei diesem Thema? Das gilt besonders für den Teil 15.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der häufigste Fehler ist Kopieren ohne Verständnis. Schreib nach jedem Abschnitt drei Sätze. Ein Satz Problem. Ein Satz Lösung. Ein Satz Fachbegriff. Das gilt besonders für den Teil 16.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Selbstcheck: Schließe die App. Öffne einen leeren Editor. Schreibe drei Sätze zu KI-Kennzeichnung und Deepfake-Regulierung. Wenn das ohne Abschreiben gelingt, sitzt der Stoff. Das gilt besonders für den Teil 17.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Wenn dir einer der drei Sätze fehlt, spring zurück zum Alltagsbild. Lies den Abschnitt noch einmal laut. Dann schreib die drei Sätze erneut. Das gilt besonders für den Teil 18.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Die Begriffe dieser Lektion: KI-Kennzeichnungspflicht, Deepfake, Maschinenlesbare Kennzeichnung, C2PA-Standard.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Ein Deepfake ist ein KI-generiertes oder KI-manipuliertes Bild, Video oder Audio, das eine reale Person zeigt, die etwas. sagt oder tut, was sie nie gesagt oder getan hat. Der AI Act verlangt, dass Deepfakes als solche gekennzeichnet werden müssen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Die maschinenlesbare Kennzeichnung ist die Anforderung, dass KI-generierte Inhalte in einem maschinenlesbaren Format wie C2PA-Metadaten gekennzeichnet werden müssen,. um automatische Erkennung zu ermöglichen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Der C2PA-Standard ist ein technischer Standard zur Kennzeichnung der Herkunft von digitalen Inhalten, der von Adobe, Microsoft und. anderen unterstützt wird und als führender Kandidat für die maschinenlesbare KI-Kennzeichnung gilt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Reicht ein Hinweis in der Datenschutzerklärung für die KI-Kennzeichnung?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Nein, ein Hinweis in der Datenschutzerklärung allein reicht nicht aus. Der AI Act verlangt, dass die Kennzeichnung zum Zeitpunkt der ersten Interaktion und direkt am KI-generierten Inhalt erfolgt. Der Nutzer soll nicht suchen müssen, ob er mit einer KI spricht. Bei einem Chatbot muss die Kennzeichnung im Chatfenster sichtbar sein, nicht nur in den AGB. Bei einem KI-generierten Bild muss die Kennzeichnung am Bild selbst oder unmittelbar darunter sein. Die Datenschutzerklärung kann zusätzlich informieren, aber sie ersetzt nicht die direkte Kennzeichnung. Merksatz: Bei KI-Kennzeichnung und Deepfake-Regulierung zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Sind Deepfakes illegal?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Deepfakes sind nicht per se illegal, aber ihre nicht gekennzeichnete Verbreitung verstößt gegen den AI Act. Darüber hinaus können Deepfakes gegen andere Gesetze verstoßen: Das Recht am eigenen Bild nach dem Kunsturhebergesetz, das allgemeine. Persönlichkeitsrecht nach dem BGB, das Strafrecht bei übler Nachrede oder Verleumdung und das Urheberrecht, wenn geschütztes Material verwendet. wird. Ein Deepfake, der eine Person ohne ihre Zustimmung in einem pornografischen Kontext zeigt, ist in Deutschland nach §. 201a StGB strafbar. Die rechtlichen Risiken von Deepfakes gehen weit über den AI Act hinaus. Merksatz: Bei KI-Kennzeichnung und Deepfake-Regulierung zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Muss ich auch KI-generierten Code kennzeichnen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Der AI Act verlangt keine spezifische Kennzeichnung von KI-generiertem Code, weil Code in der Regel nicht für Endnutzer. sichtbar ist. Wenn du jedoch KI-generierten Code in einer Weise präsentierst, die Endnutzer sehen, zum Beispiel als Code-Vorschläge in einer. Lernplattform, solltest du ihn kennzeichnen. Das ist nicht nur eine Frage des AI Act, sondern auch der Transparenz gegenüber deinen Nutzern. Ein Hinweis wie Dieser Code wurde von einer KI generiert und kann Fehler enthalten ist fair und schützt. dich vor Haftung, wenn der Code nicht funktioniert. Merksatz: Bei KI-Kennzeichnung und Deepfake-Regulierung zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Wie lange muss ich KI-generierte Inhalte kennzeichnen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Die Kennzeichnung muss so lange sichtbar sein, wie der KI-generierte Inhalt öffentlich zugänglich ist. Wenn du ein KI-generiertes Bild auf deiner Webseite veröffentlichst, muss die Kennzeichnung dauerhaft sichtbar sein, solange das Bild. dort zu sehen ist. Wenn du das Bild später löschst, entfällt die Kennzeichnungspflicht. Wenn das Bild von anderen weiterverbreitet wird, bist du nicht für deren Kennzeichnung verantwortlich, aber du solltest durch. maschinenlesbare Metadaten sicherstellen, dass die Information über die KI-Herkunft mit dem Bild reist. Merksatz: Bei KI-Kennzeichnung und Deepfake-Regulierung zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was ist der Unterschied zwischen einem Deepfake und einem KI-generierten Bild?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ein Deepfake zeigt eine reale, identifizierbare Person in einer Situation, die nie stattgefunden hat. Ein KI-generiertes Bild zeigt eine fiktive Szene oder eine fiktive Person, die nicht real existiert. Der Unterschied ist rechtlich relevant: Deepfakes unterliegen strengeren Kennzeichnungspflichten und können zusätzliche Rechte der abgebildeten Person verletzen. Ein KI-generiertes Bild einer erfundenen Landschaft ist weniger problematisch als ein Deepfake-Video eines echten Politikers. Beide müssen gekennzeichnet werden, aber die rechtlichen Konsequenzen eines nicht gekennzeichneten Deepfakes sind schwerwiegender. Merksatz: Bei KI-Kennzeichnung und Deepfake-Regulierung zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    }
+  ],
+  "practiceExample": {
+    "text": "KI-Kennzeichnung in der FutureDev-App: Chatbot-Banner, KI-Symbol für Code-Vorschläge und C2PA-Metadaten für generierte Bilder.",
+    "repoNote": "repo-futuredev",
+    "location": "apps/web/src/components/KiBanner.tsx (Chatbot-Kennzeichnung), apps/web/src/lib/c2pa.ts (C2PA-Metadaten-Generator)"
+  },
+  "quiz": [
+    {
+      "question": "Welches Alltagsbild beschreibt die KI-Kennzeichnungspflicht am treffendsten?",
+      "area": "Kennzeichnung",
+      "options": [
+        {
+          "text": "Ein Schild an einem Automaten, das sagt: Hier spricht ein…",
+          "isCorrect": true,
+          "explanation": "Richtig: die Kennzeichnung informiert über die KI-Interaktion."
+        },
+        {
+          "text": "Ein Preisschild an einer Ware.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Kennzeichnung enthält keine Preise."
+        },
+        {
+          "text": "Eine Gebrauchsanweisung. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: die Kennzeichnung erklärt nicht die Bedienung."
+        },
+        {
+          "text": "Ein Warnschild vor einer Gefahr.",
+          "isCorrect": false,
+          "explanation": "Falsch: KI ist nicht per se gefährlich."
+        }
+      ]
+    },
+    {
+      "question": "Wann muss die KI-Kennzeichnung erfolgen?",
+      "area": "Kennzeichnung",
+      "options": [
+        {
+          "text": "Zum Zeitpunkt der ersten Interaktion oder Anzeige.",
+          "isCorrect": true,
+          "explanation": "Richtig: die Kennzeichnung muss sofort sichtbar sein."
+        },
+        {
+          "text": "In der Datenschutzerklärung, die der Nutzer später lesen kann.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Datenschutzerklärung allein reicht nicht."
+        },
+        {
+          "text": "Erst auf Nachfrage des Nutzers.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Kennzeichnung muss proaktiv erfolgen."
+        },
+        {
+          "text": "Einmal im Jahr in einem Update.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Kennzeichnung muss dauerhaft sein."
+        }
+      ]
+    },
+    {
+      "question": "Was ist ein Deepfake?",
+      "area": "Deepfake",
+      "options": [
+        {
+          "text": "Ein KI-generiertes Bild, Video oder Audio, das eine reale…",
+          "isCorrect": true,
+          "explanation": "Richtig: Deepfakes zeigen reale Personen in fiktiven Szenen."
+        },
+        {
+          "text": "Ein besonders tiefes neuronales Netz.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Name kommt von Deep Learning und Fake."
+        },
+        {
+          "text": "Ein gefälschter Internetanschluss. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: Deepfake hat nichts mit Internetanschlüssen zu tun."
+        },
+        {
+          "text": "Ein KI-Modell, das nur in der Tiefsee funktioniert.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Name ist metaphorisch."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der C2PA-Standard?",
+      "area": "C2PA",
+      "options": [
+        {
+          "text": "Ein technischer Standard zur Kennzeichnung der Herkunft v…",
+          "isCorrect": true,
+          "explanation": "Richtig: C2PA dokumentiert die Entstehungsgeschichte."
+        },
+        {
+          "text": "Ein Zertifikat für KI-Entwickler.",
+          "isCorrect": false,
+          "explanation": "Falsch: C2PA ist kein Entwickler-Zertifikat."
+        },
+        {
+          "text": "Ein Gesetz zur KI-Regulierung. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: C2PA ist ein technischer Standard, kein Gesetz."
+        },
+        {
+          "text": "Eine Programmiersprache für KI.",
+          "isCorrect": false,
+          "explanation": "Falsch: C2PA ist keine Programmiersprache."
+        }
+      ]
+    },
+    {
+      "question": "Reicht ein Hinweis in der Datenschutzerklärung für die KI-Kennzeichnung?",
+      "area": "Kennzeichnung",
+      "options": [
+        {
+          "text": "Nein, die Kennzeichnung muss direkt am KI-Inhalt oder bei der Interaktion erfolgen.",
+          "isCorrect": true,
+          "explanation": "Richtig: die Datenschutzerklärung allein reicht nicht."
+        },
+        {
+          "text": "Ja, die Datenschutzerklärung ist ausreichend. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: der AI Act verlangt direkte Kennzeichnung."
+        },
+        {
+          "text": "Nur wenn die Datenschutzerklärung auf der Startseite verlinkt ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Platzierung ändert nichts."
+        },
+        {
+          "text": "Nur wenn der Nutzer der Datenschutzerklärung zugestimmt hat.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Zustimmung ist irrelevant."
+        }
+      ]
+    },
+    {
+      "question": "Sind Deepfakes illegal?",
+      "area": "Deepfake",
+      "options": [
+        {
+          "text": "Nicht per se, aber nicht gekennzeichnete Deepfakes versto…",
+          "isCorrect": true,
+          "explanation": "Richtig: Deepfakes sind nicht grundsätzlich verboten."
+        },
+        {
+          "text": "Ja, alle Deepfakes sind illegal. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: nur nicht gekennzeichnete Deepfakes sind problematisch."
+        },
+        {
+          "text": "Nein, Deepfakes sind immer legal.",
+          "isCorrect": false,
+          "explanation": "Falsch: nicht gekennzeichnete Deepfakes sind rechtswidrig."
+        },
+        {
+          "text": "Nur wenn sie zu Werbezwecken verwendet werden.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Verwendungszweck ist nicht allein entscheidend."
+        }
+      ]
+    },
+    {
+      "question": "Was ist maschinenlesbare Kennzeichnung?",
+      "area": "Maschinenlesbar",
+      "options": [
+        {
+          "text": "Wasserzeichen oder Metadaten, die eine automatische Erken…",
+          "isCorrect": true,
+          "explanation": "Richtig: maschinenlesbare Kennzeichnung ist für Computer, nicht für Menschen."
+        },
+        {
+          "text": "Eine Kennzeichnung, die nur von Robotern gelesen werden kann.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Kennzeichnung ist zusätzlich zur visuellen."
+        },
+        {
+          "text": "Eine Kennzeichnung in Brailleschrift. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: Braille ist für blinde Menschen, nicht für Maschinen."
+        },
+        {
+          "text": "Eine Kennzeichnung, die mit der Maus angeklickt werden kann.",
+          "isCorrect": false,
+          "explanation": "Falsch: maschinenlesbar bedeutet automatisch auslesbar."
+        }
+      ]
+    },
+    {
+      "question": "Muss ich KI-generierten Code kennzeichnen?",
+      "area": "Code",
+      "options": [
+        {
+          "text": "Nicht zwingend, aber es ist fair und schützt vor Haftung.",
+          "isCorrect": true,
+          "explanation": "Richtig: Code ist meist nicht für Endnutzer sichtbar."
+        },
+        {
+          "text": "Ja, jeder KI-generierte Code muss gekennzeichnet werden.",
+          "isCorrect": false,
+          "explanation": "Falsch: der AI Act verlangt das nicht spezifisch."
+        },
+        {
+          "text": "Nein, Code ist von der Kennzeichnungspflicht ausgenommen.",
+          "isCorrect": false,
+          "explanation": "Falsch: sichtbarer Code sollte gekennzeichnet werden."
+        },
+        {
+          "text": "Nur wenn der Code mehr als hundert Zeilen lang ist. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: die Länge ist irrelevant."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der Unterschied zwischen einem Deepfake und einem KI-generierten Bild?",
+      "area": "Deepfake vs KI-Bild",
+      "options": [
+        {
+          "text": "Ein Deepfake zeigt eine reale Person, ein KI-Bild zeigt f…",
+          "isCorrect": true,
+          "explanation": "Richtig: die abgebildete Person ist der Unterschied."
+        },
+        {
+          "text": "Es gibt keinen Unterschied. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: der Unterschied ist rechtlich relevant."
+        },
+        {
+          "text": "Ein Deepfake ist immer illegal, ein KI-Bild nicht.",
+          "isCorrect": false,
+          "explanation": "Falsch: beide können legal sein."
+        },
+        {
+          "text": "Ein KI-Bild ist immer besser als ein Deepfake.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Qualität ist nicht der Unterschied."
+        }
+      ]
+    },
+    {
+      "question": "Wie lange muss die KI-Kennzeichnung sichtbar sein?",
+      "area": "Dauer",
+      "options": [
+        {
+          "text": "So lange, wie der KI-generierte Inhalt öffentlich zugänglich ist.",
+          "isCorrect": true,
+          "explanation": "Richtig: die Kennzeichnung muss dauerhaft sein."
+        },
+        {
+          "text": "Nur beim ersten Aufruf der Seite.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Kennzeichnung muss bei jedem Aufruf sichtbar sein."
+        },
+        {
+          "text": "Sieben Tage nach Veröffentlichung.",
+          "isCorrect": false,
+          "explanation": "Falsch: es gibt keine feste Frist."
+        },
+        {
+          "text": "Bis der Nutzer sie wegklickt. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: der Nutzer soll die Kennzeichnung nicht dauerhaft ausblenden können."
+        }
+      ]
+    },
+    {
+      "question": "Welche Unternehmen unterstützen den C2PA-Standard?",
+      "area": "C2PA",
+      "options": [
+        {
+          "text": "Adobe, Microsoft und Intel.",
+          "isCorrect": true,
+          "explanation": "Richtig: diese Unternehmen sind Gründungsmitglieder."
+        },
+        {
+          "text": "Google, Apple und Meta.",
+          "isCorrect": false,
+          "explanation": "Falsch: diese sind nicht Gründungsmitglieder."
+        },
+        {
+          "text": "Nur europäische Unternehmen.",
+          "isCorrect": false,
+          "explanation": "Falsch: C2PA ist eine internationale Initiative."
+        },
+        {
+          "text": "Nur Start-ups.",
+          "isCorrect": false,
+          "explanation": "Falsch: große Unternehmen sind führend."
+        }
+      ]
+    },
+    {
+      "question": "Warum ist die Deepfake-Kennzeichnung besonders wichtig?",
+      "area": "Deepfake",
+      "options": [
+        {
+          "text": "Weil Deepfakes das Vertrauen in audiovisuelle Medien zerstören können.",
+          "isCorrect": true,
+          "explanation": "Richtig: Deepfakes gefährden die demokratische Diskussion."
+        },
+        {
+          "text": "Weil Deepfakes die Ladezeit von Webseiten verlängern.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Performance ist nicht das Problem."
+        },
+        {
+          "text": "Weil Deepfakes nur in der EU reguliert sind.",
+          "isCorrect": false,
+          "explanation": "Falsch: Deepfakes sind weltweit ein Problem."
+        },
+        {
+          "text": "Weil Deepfakes immer illegal sind. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: Deepfakes sind nicht per se illegal."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Implementiere die KI-Kennzeichnung für den Chatbot der FutureDev-App. Erstelle ein Banner, das beim ersten Öffnen des Chats erscheint und auf die KI-Interaktion hinweist. Füge ein KI-Symbol für KI-generierte Code-Vorschläge hinzu. Recherchiere, wie du C2PA-Metadaten in generierte Bilder einbetten kannst. Dokumentiere deine Kennzeichnungsstrategie.",
+    "expectation": "Die KI-Kennzeichnungspflicht wurde verstanden und für die FutureDev-App umgesetzt.",
+    "checklist": [
+      "KI-Banner für den Chatbot implementiert.",
+      "KI-Symbol für Code-Vorschläge hinzugefügt.",
+      "C2PA-Metadaten recherchiert.",
+      "Kennzeichnungsstrategie dokumentiert.",
+      "Geprüft, dass keine Deepfake-Funktionen existieren."
+    ],
+    "portfolioItem": "P04"
+  },
+  "audio": {
+    "file": "M06-07-02.mp3",
+    "durationSeconds": 1320,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Reicht ein Hinweis in der Datenschutzerklärung für die KI-Kennzeichnung?",
+      "answer": "Nein, ein Hinweis in der Datenschutzerklärung allein reicht nicht aus. Der AI Act verlangt, dass die Kennzeichnung zum Zeitpunkt der ersten Interaktion und direkt am KI-generierten Inhalt erfolgt. Der Nutzer soll nicht suchen müssen, ob er mit einer KI spricht. Bei einem Chatbot muss die Kennzeichnung im Chatfenster sichtbar sein, nicht nur in den AGB. Bei einem KI-generierten Bild muss die Kennzeichnung am Bild selbst oder unmittelbar darunter sein. Die Datenschutzerklärung kann zusätzlich informieren, aber sie ersetzt nicht die direkte Kennzeichnung. Merksatz: Bei KI-Kennzeichnung und Deepfake-Regulierung zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    },
+    {
+      "question": "Sind Deepfakes illegal?",
+      "answer": "Deepfakes sind nicht per se illegal, aber ihre nicht gekennzeichnete Verbreitung verstößt gegen den AI Act. Darüber hinaus können Deepfakes gegen andere Gesetze verstoßen: Das Recht am eigenen Bild nach dem Kunsturhebergesetz, das allgemeine. Persönlichkeitsrecht nach dem BGB, das Strafrecht bei übler Nachrede oder Verleumdung und das Urheberrecht, wenn geschütztes Material verwendet. wird. Ein Deepfake, der eine Person ohne ihre Zustimmung in einem pornografischen Kontext zeigt, ist in Deutschland nach §. 201a StGB strafbar. Die rechtlichen Risiken von Deepfakes gehen weit über den AI Act hinaus. Merksatz: Bei KI-Kennzeichnung und Deepfake-Regulierung zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    },
+    {
+      "question": "Muss ich auch KI-generierten Code kennzeichnen?",
+      "answer": "Der AI Act verlangt keine spezifische Kennzeichnung von KI-generiertem Code, weil Code in der Regel nicht für Endnutzer. sichtbar ist. Wenn du jedoch KI-generierten Code in einer Weise präsentierst, die Endnutzer sehen, zum Beispiel als Code-Vorschläge in einer. Lernplattform, solltest du ihn kennzeichnen. Das ist nicht nur eine Frage des AI Act, sondern auch der Transparenz gegenüber deinen Nutzern. Ein Hinweis wie Dieser Code wurde von einer KI generiert und kann Fehler enthalten ist fair und schützt. dich vor Haftung, wenn der Code nicht funktioniert. Merksatz: Bei KI-Kennzeichnung und Deepfake-Regulierung zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    },
+    {
+      "question": "Wie lange muss ich KI-generierte Inhalte kennzeichnen?",
+      "answer": "Die Kennzeichnung muss so lange sichtbar sein, wie der KI-generierte Inhalt öffentlich zugänglich ist. Wenn du ein KI-generiertes Bild auf deiner Webseite veröffentlichst, muss die Kennzeichnung dauerhaft sichtbar sein, solange das Bild. dort zu sehen ist. Wenn du das Bild später löschst, entfällt die Kennzeichnungspflicht. Wenn das Bild von anderen weiterverbreitet wird, bist du nicht für deren Kennzeichnung verantwortlich, aber du solltest durch. maschinenlesbare Metadaten sicherstellen, dass die Information über die KI-Herkunft mit dem Bild reist. Merksatz: Bei KI-Kennzeichnung und Deepfake-Regulierung zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    },
+    {
+      "question": "Was ist der Unterschied zwischen einem Deepfake und einem KI-generierten Bild?",
+      "answer": "Ein Deepfake zeigt eine reale, identifizierbare Person in einer Situation, die nie stattgefunden hat. Ein KI-generiertes Bild zeigt eine fiktive Szene oder eine fiktive Person, die nicht real existiert. Der Unterschied ist rechtlich relevant: Deepfakes unterliegen strengeren Kennzeichnungspflichten und können zusätzliche Rechte der abgebildeten Person verletzen. Ein KI-generiertes Bild einer erfundenen Landschaft ist weniger problematisch als ein Deepfake-Video eines echten Politikers. Beide müssen gekennzeichnet werden, aber die rechtlichen Konsequenzen eines nicht gekennzeichneten Deepfakes sind schwerwiegender. Merksatz: Bei KI-Kennzeichnung und Deepfake-Regulierung zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    }
+  ]
+}

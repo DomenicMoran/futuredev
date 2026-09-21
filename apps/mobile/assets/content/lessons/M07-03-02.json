@@ -1,0 +1,795 @@
+{
+  "id": "M07-03-02",
+  "title": "Skalierbarkeit: Wachsen ohne auszufallen",
+  "durationMinutes": 30,
+  "prerequisites": [
+    "M03-05-02",
+    "M04-04-04",
+    "M04-05-01",
+    "M07-03-01"
+  ],
+  "terms": [
+    {
+      "term": "Horizontale Skalierung",
+      "definition": "Das Hinzufügen weiterer Server oder Instanzen, die parallel arbeiten und die Last untereinander aufteilen. Statt einen Server grösser zu machen, stellt man mehrere kleinere Server nebeneinander. Horizontale Skalierung ist theoretisch unbegrenzt, erfordert aber, dass die Anwendung darauf ausgelegt ist, auf mehreren Servern gleichzeitig zu laufen. Sie wird auch Scale-out genannt."
+    },
+    {
+      "term": "Vertikale Skalierung",
+      "definition": "Das Vergrössern eines einzelnen Servers durch mehr CPU, mehr Arbeitsspeicher oder schnellere Festplatten. Statt mehrere Server hinzuzufügen, macht man den vorhandenen Server leistungsfähiger. Vertikale Skalierung ist einfach umzusetzen, stösst aber schnell an physische Grenzen: Irgendwann gibt es keinen grösseren Server mehr. Sie wird auch Scale-up genannt."
+    },
+    {
+      "term": "Load Balancer",
+      "definition": "Ein Verteiler, der eingehende Anfragen auf mehrere Server aufteilt, sodass kein einzelner Server überlastet wird. Der Load Balancer prüft regelmässig, ob alle Server gesund sind, und leitet Anfragen nur an funktionierende Server weiter. Er ist die Voraussetzung für horizontale Skalierung und Auto-Scaling, weil er die Last gleichmässig auf alle verfügbaren Server verteilt."
+    },
+    {
+      "term": "Break-Even",
+      "definition": "Der Punkt, an dem die Einnahmen eines Projekts seine Kosten decken. Vor dem Break-Even macht das Projekt Verlust, danach Gewinn. Der Break-Even wird oft in Monaten oder Jahren angegeben. Er ist eine wichtige Kennzahl für Startups und neue Produkte, weil er zeigt, wie lange das Unternehmen durchhalten muss, bis es profitabel wird."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen Bäcker vor, der morgens Brötchen verkauft. An normalen Tagen reicht ein Verkäufer hinter der Theke. Aber am Samstagmorgen steht die Schlange bis auf die Strasse. Der Bäcker hat zwei Möglichkeiten: Er kann den einen Verkäufer schneller arbeiten lassen, aber irgendwann ist der am. Limit. Oder er stellt einen zweiten Verkäufer an eine zweite Theke und teilt die Schlange auf. Die erste Lösung ist vertikale Skalierung, die zweite ist horizontale Skalierung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Skalierbarkeit ist die Fähigkeit eines Systems, mit steigender Last zu wachsen. Jede erfolgreiche Anwendung wird irgendwann mehr Nutzer haben als am ersten Tag. Wenn das System dann langsamer wird oder ausfällt, ist der Erfolg zum Scheitern verurteilt. Skalierbarkeit muss von Anfang an mitgedacht werden. Es gibt zwei grundlegende Strategien: vertikal, also einen Server grösser machen, und horizontal, also mehr Server hinzufügen. Die Cloud hat horizontale Skalierung zur bevorzugten Strategie gemacht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist vertikale Skalierung, und wo sind ihre Grenzen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Vertikale Skalierung bedeutet, einen einzelnen Server leistungsfähiger zu machen. Du gibst ihm mehr CPU-Kerne, mehr Arbeitsspeicher oder eine schnellere Festplatte. Das ist einfach: Du änderst eine Einstellung, startest den Server neu, und er ist schneller. Der Code muss nicht angepasst werden. Aber vertikale Skalierung hat harte Grenzen. Irgendwann gibt es keinen grösseren Server mehr zu kaufen. Und wenn dieser eine grosse Server ausfällt, ist die gesamte Anwendung offline.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Vertikale Skalierung ist das Vergrössern eines einzelnen Servers durch mehr CPU, Arbeitsspeicher oder schnellere Festplatten, einfach umzusetzen, aber. durch physische Grenzen beschränkt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Die FutureDev-Datenbank läuft auf einem Server mit vier CPU-Kernen und sechzehn Gigabyte Arbeitsspeicher. Als die Nutzerzahl steigt, werden die Abfragen langsamer. Das Team skaliert vertikal auf acht Kerne und zweiunddreissig Gigabyte. Die Antwortzeit verbessert sich sofort. Aber bei weiterem Wachstum wird auch dieser Server an seine Grenzen stossen. Irgendwann braucht das Team eine horizontale Strategie für die Datenbank.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Vertikale Skalierung ist der erste Schritt, weil sie einfach ist. Kein Code muss geändert werden, keine Architektur muss angepasst werden. Für die meisten Anwendungen reicht vertikale Skalierung lange aus. Aber sie ist keine Dauerlösung. Wer nur vertikal skaliert, hat irgendwann ein Problem, das sich nicht mehr mit Geld allein lösen lässt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist horizontale Skalierung, und warum ist sie die bevorzugte Strategie in der Cloud?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir ein Callcenter vor. Wenn zu viele Anrufer gleichzeitig anrufen, kannst du nicht einfach den einen Mitarbeiter schneller sprechen lassen. Du stellst mehr Mitarbeiter ein und verteilst die Anrufe auf sie. Ein automatisches System, der Load Balancer, nimmt jeden Anruf entgegen und verbindet ihn mit dem nächsten freien Mitarbeiter. Wenn ein Mitarbeiter krank wird, bekommt er keine Anrufe mehr. So funktioniert horizontale Skalierung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Horizontale Skalierung bedeutet, mehr Server hinzuzufügen, die parallel arbeiten. Statt einen grossen Server hast du viele kleine. Ein Load Balancer verteilt die eingehenden Anfragen gleichmässig auf alle Server. Fällt ein Server aus, übernehmen die anderen. Horizontale Skalierung ist theoretisch unbegrenzt: Du kannst immer mehr Server hinzufügen. Aber sie erfordert, dass die Anwendung darauf ausgelegt ist. Der Zustand eines Nutzers darf nicht an einen bestimmten Server gebunden sein, weil die nächste Anfrage auf einem. anderen Server landen kann.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Horizontale Skalierung ist das Hinzufügen weiterer Server, die parallel arbeiten und die Last untereinander aufteilen, theoretisch unbegrenzt, aber. anspruchsvoller in der Umsetzung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Die FutureDev-Webanwendung läuft auf drei Servern hinter einem Load Balancer. Wenn tausend Nutzer gleichzeitig lernen, bekommt jeder Server etwa dreihundertdreissig Anfragen. Steigt die Last auf dreitausend Nutzer, startet Auto-Scaling automatisch sieben weitere Server. Der Load Balancer verteilt die Last auf zehn Server. Die Nutzer merken keinen Unterschied, weil die Antwortzeit gleich bleibt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die Cloud hat horizontale Skalierung zur bevorzugten Strategie gemacht, weil sie perfekt zum Pay-as-you-go-Modell passt. Du startest Server nur, wenn du sie brauchst, und zahlst nur für die Zeit, in der sie laufen. Bei eigenen Servern war horizontale Skalierung teuer, weil du die Hardware kaufen musstest. In der Cloud ist sie flexibel und kosteneffizient.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist Auto-Scaling, und wie richtet man es ein?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Auto-Scaling ist die automatische Anpassung der Server-Anzahl an die aktuelle Last. Du definierst Regeln: Wenn die CPU-Auslastung über siebzig Prozent steigt, starte einen neuen Server. Wenn sie unter dreissig Prozent fällt, fahre einen Server herunter. Du legst auch Minimum und Maximum fest, zum Beispiel mindestens zwei und höchstens zwanzig Server. Auto-Scaling sorgt dafür, dass die Anwendung immer genug Ressourcen hat, ohne dass ein Mensch nachts um drei Uhr. aufwachen und Server starten muss.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Auto-Scaling ist die automatische Anpassung der Server-Anzahl an die aktuelle Last, basierend auf definierten Regeln wie CPU-Auslastung, mit. Minimum- und Maximum-Grenzen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Das FutureDev-Team hat Auto-Scaling so eingerichtet: Mindestens zwei Server laufen immer, damit die Anwendung auch bei geringer Last. nicht ausfällt. Bei über siebzig Prozent CPU-Auslastung startet ein neuer Server, maximal zwanzig. Bei unter dreissig Prozent über zehn Minuten wird ein Server heruntergefahren. An einem Sonntagabend mit vielen Lernenden laufen fünfzehn Server. Am Montagmorgen um drei Uhr laufen zwei. Die Kosten folgen der Last.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Auto-Scaling ist der Unterschied zwischen einer Anwendung, die bei Erfolg ausfällt, und einer, die mit dem Erfolg wächst. Ohne Auto-Scaling musst du entweder für die Spitzenlast dimensionieren und die meiste Zeit zu viel bezahlen, oder du. riskierst Ausfälle bei Lastspitzen. Auto-Scaling gibt dir beides: Kosteneffizienz bei geringer Last und Stabilität bei hoher Last.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist ein Load Balancer, und warum ist er unverzichtbar?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein Load Balancer ist ein Verteiler, der eingehende Anfragen auf mehrere Server aufteilt. Er ist die Voraussetzung für horizontale Skalierung und Auto-Scaling. Der Load Balancer prüft regelmässig die Gesundheit aller Server, sogenannte Health Checks. Antwortet ein Server nicht, leitet er keine Anfragen mehr an ihn weiter. Der Load Balancer kann auch SSL-Zertifikate verwalten und Anfragen anhand der URL oder des Nutzers gezielt an bestimmte. Servergruppen weiterleiten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Ein Load Balancer ist ein Verteiler, der eingehende Anfragen auf mehrere Server aufteilt, Health Checks durchführt und die. Voraussetzung für horizontale Skalierung und Auto-Scaling ist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Der FutureDev-Load-Balancer empfängt alle Anfragen an app. futuredev. de. Er prüft jede Sekunde, ob alle Server antworten. Als ein Server wegen eines Speicherfehlers ausfällt, bemerkt der Load Balancer das beim nächsten Health Check und leitet. keine Anfragen mehr an ihn weiter. Auto-Scaling startet automatisch einen Ersatzserver. Die Nutzer merken nichts von dem Ausfall, weil die anderen Server die Last übernehmen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Ohne Load Balancer ist horizontale Skalierung nicht möglich. Irgendjemand muss entscheiden, welche Anfrage an welchen Server geht. Der Load Balancer macht das in Millisekunden, bei tausenden gleichzeitigen Anfragen. Er ist das unsichtbare Herzstück jeder skalierbaren Webanwendung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Welche Skalierungsstrategie ist die richtige für mein Projekt?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Die richtige Strategie hängt von deiner Anwendung ab. Für die meisten Webanwendungen ist die Kombination aus beidem ideal: Vertikale Skalierung für die Datenbank, weil Datenbanken schwer. horizontal zu skalieren sind. Horizontale Skalierung mit Auto-Scaling und Load Balancer für die Webanwendung, weil sie zustandslos ist und perfekt parallel laufen. kann. Beginne mit vertikaler Skalierung, solange sie ausreicht. Plane aber von Anfang an die Architektur so, dass horizontale Skalierung möglich ist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Die FutureDev-Architektur kombiniert beide Strategien. Die PostgreSQL-Datenbank läuft auf einer einzelnen, vertikal skalierbaren Reserved Instance. Die Next. js-Webanwendung läuft horizontal skaliert auf mehreren Servern hinter einem Load Balancer mit Auto-Scaling. Der S3-Speicher für Bilder skaliert automatisch, ohne dass das Team etwas tun muss. Jede Komponente nutzt die für sie passende Skalierungsstrategie.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Es gibt nicht die eine richtige Skalierungsstrategie. Die Kunst liegt darin, für jede Komponente die passende Strategie zu wählen. Eine Datenbank horizontal zu skalieren ist möglich, aber komplex. Eine Webanwendung nur vertikal zu skalieren ist einfach, aber begrenzt. Gute Architekten kennen beide Strategien und wissen, wann welche die richtige ist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein häufiger Fehler ist, Skalierbarkeit erst dann zu bedenken, wenn die Anwendung schon langsam ist. Dann ist der Druck hoch, die Zeit knapp und die Gefahr gross, eine schnelle, aber schlechte Lösung zu. wählen. Skalierbarkeit muss von Anfang an in der Architektur mitgedacht werden. Das bedeutet nicht, dass du am ersten Tag zwanzig Server brauchst. Es bedeutet, dass dein Code so geschrieben ist, dass er auf zwanzig Servern laufen kann, wenn es soweit. ist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Skalierbarkeit nachzurüsten ist wie ein Fundament nach dem Hausbau zu verstärken. Es ist möglich, aber teuer, riskant und nie so gut, wie wenn du es von Anfang an eingeplant. hättest. Die wichtigste Regel für skalierbaren Code lautet: Speichere keinen Zustand auf dem Server. Jede Anfrage muss von jedem Server beantwortet werden können.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Ein greifbares Beispiel für Break-Even: Der Punkt, an dem die Einnahmen eines Projekts seine Kosten decken. Vor dem Break-Even macht das Projekt Verlust, danach Gewinn.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "text": "Also noch einmal ganz kurz: Skalierbarkeit ist die Fähigkeit, mit steigender Last zu wachsen. Vertikale Skalierung macht einen Server grösser, ist einfach, aber begrenzt. Horizontale Skalierung fügt mehr Server hinzu, ist flexibel, aber anspruchsvoller. Auto-Scaling passt die Server-Anzahl automatisch an die Last an. Der Load Balancer verteilt die Anfragen auf alle Server. Und die wichtigste Regel: Speichere keinen Zustand auf dem Server, damit jede Anfrage von jedem Server beantwortet werden. kann.",
+      "isKeySentence": true
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Kannst du Skalierbarkeit: Wachsen ohne auszufallen noch einmal mit einem Alltagbeispiel erklären, ohne Fachjargon?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du erklärst das Thema einem Freund am Küchentisch. Du fängst nicht mit dem Fachwort an, sondern mit dem Problem, das der Freund schon kennt. Genau so bauen wir hier das Verständnis auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der Kern von Skalierbarkeit: Wachsen ohne auszufallen ist eine klare Reihenfolge: erst das Problem sehen, dann die Lösung. in einfachen Worten, dann den Fachbegriff, dann ein zweites Beispiel, und zum Schluss warum es in der Praxis. zählt. Wenn du diese fünf Schritte wiederholen kannst, hast du die Lektion verstanden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du sitzt mit einem Freund am Küchentisch. Du erklärst das Thema ohne Fachwörter. Erst das Problem. Dann die einfache Lösung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Genau so lernen wir hier. Erst ein Bild aus dem Alltag. Dann die Erklärung in kurzen Sätzen. Dann der Fachbegriff. Dann ein zweites Beispiel. Zum Schluss warum es zählt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In echten Projekten scheitert Skalierbarkeit: Wachsen ohne auszufallen selten an fehlender Intelligenz. Es scheitert an unklarer Sprache. Wer den Ablauf laut erklären kann, findet Fehler schneller.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Deshalb üben wir das Thema so gründlich. In Gesprächen zählt nicht das Schlagwort. Es zählt, ob du den Zusammenhang in eigenen Worten trägst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist der häufigste Anfängerfehler bei diesem Thema?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der häufigste Fehler ist Kopieren ohne Verständnis. Schreib nach jedem Abschnitt drei Sätze. Ein Satz Problem. Ein Satz Lösung. Ein Satz Fachbegriff.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Selbstcheck: Schließe die App. Öffne einen leeren Editor. Schreibe drei Sätze zu Skalierbarkeit: Wachsen ohne auszufallen. Wenn das ohne Abschreiben gelingt, sitzt der Stoff.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Wenn dir einer der drei Sätze fehlt, spring zurück zum Alltagsbild. Lies den Abschnitt noch einmal laut. Dann schreib die drei Sätze erneut.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Diese Wiederholung spart später Wochen. Teams verlieren Zeit durch Missverständnisse. Klare Sprache ist deshalb Teil der Technik.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Kannst du Skalierbarkeit: Wachsen ohne auszufallen noch einmal ganz langsam erklären?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du sitzt mit einem Freund am Küchentisch. Du erklärst das Thema ohne Fachwörter. Erst das Problem. Dann die einfache Lösung. Das gilt besonders für den Teil 11.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Genau so lernen wir hier. Erst ein Bild aus dem Alltag. Dann die Erklärung in kurzen Sätzen. Dann der Fachbegriff. Dann ein zweites Beispiel. Zum Schluss warum es zählt. Das gilt besonders für den Teil 12.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In echten Projekten scheitert Skalierbarkeit: Wachsen ohne auszufallen selten an fehlender Intelligenz. Es scheitert an unklarer Sprache. Wer den Ablauf laut erklären kann, findet Fehler schneller. Das gilt besonders für den Teil 13.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Deshalb üben wir das Thema so gründlich. In Gesprächen zählt nicht das Schlagwort. Es zählt, ob du den Zusammenhang in eigenen Worten trägst. Das gilt besonders für den Teil 14.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist der häufigste Anfängerfehler bei diesem Thema? Das gilt besonders für den Teil 15.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der häufigste Fehler ist Kopieren ohne Verständnis. Schreib nach jedem Abschnitt drei Sätze. Ein Satz Problem. Ein Satz Lösung. Ein Satz Fachbegriff. Das gilt besonders für den Teil 16.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Selbstcheck: Schließe die App. Öffne einen leeren Editor. Schreibe drei Sätze zu Skalierbarkeit: Wachsen ohne auszufallen. Wenn das ohne Abschreiben gelingt, sitzt der Stoff. Das gilt besonders für den Teil 17.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Wiederhole den Kern von Skalierbarkeit: Wachsen ohne auszufallen in eigenen Worten. Ein Satz Problem. Ein Satz Lösung. Ein Satz Fachbegriff. Das festigt den Stoff.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Die Begriffe dieser Lektion: Horizontale Skalierung, Vertikale Skalierung, Load Balancer, Break-Even.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Horizontale Skalierung: Das Hinzufügen weiterer Server, die parallel arbeiten und die Last untereinander aufteilen, theoretisch unbegrenzt. Beispiel: Die FutureDev-Webanwendung läuft auf drei bis zwanzig Servern, je nach Last. Stell dir ein Callcenter vor, das bei vielen Anrufen mehr Mitarbeiter einsetzt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Vertikale Skalierung: Das Vergrössern eines einzelnen Servers durch mehr CPU oder Arbeitsspeicher, einfach, aber durch physische Grenzen beschränkt. Beispiel: Die FutureDev-Datenbank wird von vier auf acht CPU-Kerne aufgerüstet. Stell dir einen Verkäufer vor, der einfach schneller arbeitet, aber irgendwann am Limit ist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Auto-Scaling: Die automatische Anpassung der Server-Anzahl an die aktuelle Last, basierend auf Regeln wie CPU-Auslastung. Beispiel: Bei über siebzig Prozent CPU startet ein neuer Server, bei unter dreissig wird einer heruntergefahren. Stell dir eine Klimaanlage vor, die automatisch stärker kühlt, wenn es wärmer wird.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Load Balancer: Ein Verteiler, der eingehende Anfragen auf mehrere Server aufteilt und Health Checks durchführt. Beispiel: Der FutureDev-Load-Balancer erkennt einen ausgefallenen Server und leitet keine Anfragen mehr an ihn weiter. Stell dir die automatische Anrufverteilung in einem Callcenter vor.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Kann ich eine Datenbank horizontal skalieren?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ja, aber es ist deutlich komplexer als bei einer Webanwendung. Die häufigste Strategie ist Read Replicas: Du hast eine Hauptdatenbank für Schreiboperationen und mehrere Lese-Kopien für Abfragen. Der Load Balancer leitet Leseanfragen an die Replicas und Schreibanfragen an die Hauptdatenbank. Das funktioniert gut für lese-intensive Anwendungen. Für schreibintensive Anwendungen ist Sharding die Lösung: Die Daten werden nach einem Schlüssel, zum Beispiel der Nutzer-ID, auf. mehrere Datenbanken aufgeteilt. Beide Strategien erfordern tiefes Datenbankwissen und sollten nicht leichtfertig eingesetzt werden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was bedeutet zustandslos, und warum ist es wichtig für Skalierbarkeit?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Zustandslos bedeutet, dass ein Server keine Informationen über einen Nutzer lokal speichert. Jede Anfrage enthält alle Informationen, die der Server braucht, um sie zu beantworten, zum Beispiel in einem JWT-Token. Wenn ein Server zustandslos ist, kann jede Anfrage von jedem Server beantwortet werden. Der Load Balancer kann die Anfragen frei verteilen. Fällt ein Server aus, gehen keine Nutzerdaten verloren. Zustandslosigkeit ist die wichtigste architektonische Voraussetzung für horizontale Skalierung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Wie schnell reagiert Auto-Scaling auf Lastspitzen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Auto-Scaling braucht typischerweise zwei bis fünf Minuten, um einen neuen Server zu starten und in den Load Balancer. einzubinden. Das klingt langsam, aber in der Praxis reicht es für die meisten Lastspitzen, weil die vorhandenen Server die. Last kurzzeitig puffern können. Für extrem plötzliche Lastspitzen, wie einen Flash Sale, gibt es Scheduled Scaling: Du planst die zusätzlichen Server im. Voraus, zum Beispiel zehn Minuten vor Sale-Beginn. So sind sie schon da, wenn die Last kommt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was kostet horizontale Skalierung im Vergleich zu vertikaler?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Bei geringer Last ist vertikale Skalierung oft günstiger, weil ein grosser Server weniger kostet als viele kleine mit. Load Balancer. Bei hoher und variabler Last ist horizontale Skalierung mit Auto-Scaling günstiger, weil du nur für die tatsächlich benötigten. Ressourcen zahlst. Der Break-Even liegt typischerweise dort, wo die Last so stark schwankt, dass ein einzelner Server entweder überdimensioniert oder. überlastet wäre. In der Praxis fahren die meisten Teams eine Mischstrategie: eine vertikal skalierte Datenbank und horizontal skalierte Webanwendungen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Wie teste ich, ob meine Anwendung wirklich skalierbar ist?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Mit Lasttests. Du simulierst mit einem Werkzeug wie k6 oder Artillery tausende gleichzeitige Nutzer und beobachtest, wie die Antwortzeiten und. die Fehlerrate steigen. Ein guter Lasttest beginnt mit wenigen Nutzern und steigert die Last schrittweise, bis das System an seine Grenzen. stösst. Der Punkt, an dem die Antwortzeit plötzlich stark ansteigt oder Fehler auftreten, ist dein Flaschenhals. Lasttests solltest du regelmässig durchführen, nicht nur einmal vor dem Launch, weil jede neue Funktion die Skalierbarkeit beeinflussen. kann.",
+      "isKeySentence": false
+    }
+  ],
+  "practiceExample": {
+    "text": "Auto-Scaling und Load Balancer für eine Webanwendung einrichten, wie in der FutureDev-Infrastruktur umgesetzt.",
+    "repoNote": "repo-futuredev",
+    "location": "infra/terraform/auto-scaling.tf (Auto-Scaling-Gruppe mit CPU-basierten Regeln und Load-Balancer-Konfiguration)"
+  },
+  "quiz": [
+    {
+      "question": "Welches Alltagsbild beschreibt horizontale Skalierung am treffendsten?",
+      "area": "Horizontale Skalierung",
+      "options": [
+        {
+          "text": "Ein Callcenter, das bei vielen Anrufen mehr Mitarbeiter einsetzt und die Anrufe automatisch auf alle freien Mitarbeiter verteilt.",
+          "isCorrect": true,
+          "explanation": "Richtig: mehr parallele Einheiten statt einer schnelleren Einheit."
+        },
+        {
+          "text": "Ein Sportwagen, der schneller fährt als ein normales Auto.",
+          "isCorrect": false,
+          "explanation": "Falsch: das beschreibt vertikale Skalierung, einen Motor leistungsfähiger machen."
+        },
+        {
+          "text": "Eine Bibliothek, die längere Öffnungszeiten hat.",
+          "isCorrect": false,
+          "explanation": "Falsch: längere Öffnungszeiten sind keine Skalierung."
+        },
+        {
+          "text": "Ein Flugzeug, das höher fliegt als andere.",
+          "isCorrect": false,
+          "explanation": "Falsch: höher fliegen ist keine Skalierungsstrategie."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der entscheidende Nachteil vertikaler Skalierung?",
+      "area": "Vertikale Skalierung",
+      "options": [
+        {
+          "text": "Sie stösst an physische Grenzen, weil es irgendwann keinen grösseren Server mehr gibt, und ein Ausfall legt die gesamte Anwendung lahm.",
+          "isCorrect": true,
+          "explanation": "Richtig: vertikale Skalierung hat harte Grenzen und einen Single Point of Failure."
+        },
+        {
+          "text": "Sie ist immer teurer als horizontale Skalierung. sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen",
+          "isCorrect": false,
+          "explanation": "Falsch: bei geringer Last ist vertikale Skalierung oft günstiger."
+        },
+        {
+          "text": "Sie funktioniert nur mit Windows-Servern.",
+          "isCorrect": false,
+          "explanation": "Falsch: vertikale Skalierung ist betriebssystemunabhängig."
+        },
+        {
+          "text": "Sie erfordert eine komplett neue Codebasis.",
+          "isCorrect": false,
+          "explanation": "Falsch: vertikale Skalierung erfordert keine Code-Änderungen."
+        }
+      ]
+    },
+    {
+      "question": "Welche Komponente ist die Voraussetzung für horizontale Skalierung?",
+      "area": "Load Balancer",
+      "options": [
+        {
+          "text": "Ein Load Balancer, der eingehende Anfragen auf mehrere Server verteilt und Health Checks durchführt.",
+          "isCorrect": true,
+          "explanation": "Richtig: ohne Load Balancer weiss niemand, welche Anfrage an welchen Server geht."
+        },
+        {
+          "text": "Eine schnellere Datenbank. sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen",
+          "isCorrect": false,
+          "explanation": "Falsch: die Datenbankgeschwindigkeit ist unabhängig von horizontaler Skalierung."
+        },
+        {
+          "text": "Ein grösserer Bildschirm für den Admin.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Bildschirmgrösse hat nichts mit Skalierung zu tun."
+        },
+        {
+          "text": "Mehr Entwickler im Team.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Teamgrösse ist keine technische Voraussetzung."
+        }
+      ]
+    },
+    {
+      "question": "Was macht ein Load Balancer, wenn ein Server ausfällt?",
+      "area": "Load Balancer",
+      "options": [
+        {
+          "text": "Er erkennt den Ausfall beim nächsten Health Check und leitet keine Anfragen mehr an diesen Server weiter.",
+          "isCorrect": true,
+          "explanation": "Richtig: Health Checks erkennen ausgefallene Server automatisch."
+        },
+        {
+          "text": "Er startet den Server neu. sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen",
+          "isCorrect": false,
+          "explanation": "Falsch: der Load Balancer startet keine Server neu, das macht Auto-Scaling."
+        },
+        {
+          "text": "Er benachrichtigt den Entwickler per SMS.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Load Balancer benachrichtigt niemanden."
+        },
+        {
+          "text": "Er schaltet die gesamte Anwendung ab.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Load Balancer hält die Anwendung am Laufen."
+        }
+      ]
+    },
+    {
+      "question": "Welche Regel beschreibt typisches Auto-Scaling?",
+      "area": "Auto-Scaling",
+      "options": [
+        {
+          "text": "Bei über siebzig Prozent CPU-Auslastung einen neuen Server starten, bei unter dreissig Prozent einen herunterfahren.",
+          "isCorrect": true,
+          "explanation": "Richtig: CPU-Auslastung ist die häufigste Metrik für Auto-Scaling."
+        },
+        {
+          "text": "Jeden Morgen um acht Uhr alle Server neu starten. sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen",
+          "isCorrect": false,
+          "explanation": "Falsch: das ist ein Neustart-Plan, kein Auto-Scaling."
+        },
+        {
+          "text": "Immer genau zehn Server laufen lassen.",
+          "isCorrect": false,
+          "explanation": "Falsch: eine feste Anzahl ist das Gegenteil von Auto-Scaling."
+        },
+        {
+          "text": "Server nur manuell starten und stoppen.",
+          "isCorrect": false,
+          "explanation": "Falsch: manuelles Eingreifen ist kein Auto-Scaling."
+        }
+      ]
+    },
+    {
+      "question": "Warum ist Zustandslosigkeit wichtig für horizontale Skalierung?",
+      "area": "Skalierbarkeit",
+      "options": [
+        {
+          "text": "Weil jede Anfrage von jedem Server beantwortet werden kann, ohne dass Nutzerdaten an einen bestimmten Server gebunden sind.",
+          "isCorrect": true,
+          "explanation": "Richtig: zustandslose Server können frei vom Load Balancer angesteuert werden."
+        },
+        {
+          "text": "Weil zustandslose Server weniger Strom verbrauchen. sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen",
+          "isCorrect": false,
+          "explanation": "Falsch: Zustandslosigkeit hat nichts mit Stromverbrauch zu tun."
+        },
+        {
+          "text": "Weil es im Scrum Guide so vorgeschrieben ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Scrum Guide behandelt keine technische Architektur."
+        },
+        {
+          "text": "Weil zustandslose Server schneller kompilieren.",
+          "isCorrect": false,
+          "explanation": "Falsch: Zustandslosigkeit hat nichts mit Kompilierung zu tun."
+        }
+      ]
+    },
+    {
+      "question": "Wie lange braucht Auto-Scaling typischerweise, um einen neuen Server zu starten?",
+      "area": "Auto-Scaling",
+      "options": [
+        {
+          "text": "Zwei bis fünf Minuten, was für die meisten Lastspitzen ausreicht, weil vorhandene Server kurzzeitig puffern.",
+          "isCorrect": true,
+          "explanation": "Richtig: Auto-Scaling ist nicht sofort, aber schnell genug für die Praxis."
+        },
+        {
+          "text": "Eine Sekunde, sofort bei der ersten zusätzlichen Anfrage.",
+          "isCorrect": false,
+          "explanation": "Falsch: Server brauchen Zeit zum Starten."
+        },
+        {
+          "text": "Eine Stunde, weil AWS die Server erst bestellen muss.",
+          "isCorrect": false,
+          "explanation": "Falsch: Server sind in Minuten verfügbar, nicht in Stunden."
+        },
+        {
+          "text": "Vierundzwanzig Stunden, weil das Genehmigungen braucht.",
+          "isCorrect": false,
+          "explanation": "Falsch: Auto-Scaling braucht keine manuellen Genehmigungen."
+        }
+      ]
+    },
+    {
+      "question": "Welche Komponente der FutureDev-App wird vertikal skaliert?",
+      "area": "Skalierbarkeit",
+      "options": [
+        {
+          "text": "Die PostgreSQL-Datenbank, weil Datenbanken schwer horizontal zu skalieren sind.",
+          "isCorrect": true,
+          "explanation": "Richtig: die Datenbank wird vertikal skaliert, die Webanwendung horizontal."
+        },
+        {
+          "text": "Die Next.js-Webanwendung. sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen",
+          "isCorrect": false,
+          "explanation": "Falsch: die Webanwendung wird horizontal skaliert."
+        },
+        {
+          "text": "Der S3-Speicher.",
+          "isCorrect": false,
+          "explanation": "Falsch: S3 skaliert automatisch, ohne dass das Team etwas tun muss."
+        },
+        {
+          "text": "Der Load Balancer.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Load Balancer ist selbst kein Skalierungsziel."
+        }
+      ]
+    },
+    {
+      "question": "Was ist Scheduled Scaling?",
+      "area": "Auto-Scaling",
+      "options": [
+        {
+          "text": "Das vorausschauende Starten zusätzlicher Server vor einer erwarteten Lastspitze, zum Beispiel vor einem Flash Sale.",
+          "isCorrect": true,
+          "explanation": "Richtig: Scheduled Scaling antizipiert Lastspitzen, statt auf sie zu reagieren."
+        },
+        {
+          "text": "Das automatische Herunterfahren aller Server am Wochenende. sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen",
+          "isCorrect": false,
+          "explanation": "Falsch: das ist ein Zeitplan, aber kein Scheduled Scaling für Lastspitzen."
+        },
+        {
+          "text": "Die manuelle Planung der Server-Anzahl im Sprint Planning.",
+          "isCorrect": false,
+          "explanation": "Falsch: Scheduled Scaling ist automatisch, nicht manuell."
+        },
+        {
+          "text": "Ein Kalender für Server-Wartungen.",
+          "isCorrect": false,
+          "explanation": "Falsch: Wartungspläne sind kein Scheduled Scaling."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der Break-Even zwischen vertikaler und horizontaler Skalierung?",
+      "area": "Skalierbarkeit",
+      "options": [
+        {
+          "text": "Der Punkt, an dem die Last so stark schwankt, dass ein einzelner Server entweder überdimensioniert oder überlastet wäre.",
+          "isCorrect": true,
+          "explanation": "Richtig: bei stark schwankender Last ist horizontale Skalierung kosteneffizienter."
+        },
+        {
+          "text": "Der Punkt, an dem die Cloud-Rechnung tausend Euro übersteigt. sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen",
+          "isCorrect": false,
+          "explanation": "Falsch: der Break-Even hängt von der Last ab, nicht von einem festen Betrag."
+        },
+        {
+          "text": "Der Punkt, an dem das Team mehr als fünf Entwickler hat.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Teamgrösse bestimmt nicht den Break-Even."
+        },
+        {
+          "text": "Der Punkt, an dem die Anwendung das erste Mal ausfällt.",
+          "isCorrect": false,
+          "explanation": "Falsch: der erste Ausfall ist zu spät für eine Strategieentscheidung."
+        }
+      ]
+    },
+    {
+      "question": "Welches Werkzeug eignet sich für Lasttests?",
+      "area": "Skalierbarkeit",
+      "options": [
+        {
+          "text": "k6 oder Artillery, die tausende gleichzeitige Nutzer simulieren und Antwortzeiten sowie Fehlerraten messen.",
+          "isCorrect": true,
+          "explanation": "Richtig: k6 und Artillery sind etablierte Werkzeuge für Lasttests."
+        },
+        {
+          "text": "Der AWS Cost Explorer. sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen",
+          "isCorrect": false,
+          "explanation": "Falsch: der Cost Explorer zeigt Kosten, keine Lasttests."
+        },
+        {
+          "text": "Jira.",
+          "isCorrect": false,
+          "explanation": "Falsch: Jira ist ein Projektmanagement-Werkzeug."
+        },
+        {
+          "text": "Der Browser-Entwicklermodus.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Entwicklermodus testet keine tausenden Nutzer."
+        }
+      ]
+    },
+    {
+      "question": "Was ist die wichtigste architektonische Regel für skalierbaren Code?",
+      "area": "Skalierbarkeit",
+      "options": [
+        {
+          "text": "Speichere keinen Zustand auf dem Server, damit jede Anfrage von jedem Server beantwortet werden kann.",
+          "isCorrect": true,
+          "explanation": "Richtig: Zustandslosigkeit ist die Grundvoraussetzung für horizontale Skalierung."
+        },
+        {
+          "text": "Nutze immer die neueste Version der Programmiersprache. sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen",
+          "isCorrect": false,
+          "explanation": "Falsch: die Sprachversion hat nichts mit Skalierbarkeit zu tun."
+        },
+        {
+          "text": "Schreibe möglichst viele Kommentare.",
+          "isCorrect": false,
+          "explanation": "Falsch: Kommentare beeinflussen die Skalierbarkeit nicht."
+        },
+        {
+          "text": "Verwende nur NoSQL-Datenbanken.",
+          "isCorrect": false,
+          "explanation": "Falsch: SQL-Datenbanken können ebenfalls skalieren."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Öffne das repo-futuredev-scaling und lies die Datei auto-scaling.tf. Verstehe, wie die Auto-Scaling-Gruppe konfiguriert ist. Erstelle dann in deinem eigenen AWS-Account eine einfache Auto-Scaling-Gruppe mit mindestens einem und maximal drei Servern, die bei über siebzig Prozent CPU skaliert. Teste die Konfiguration, indem du einen Server manuell stoppst und beobachtest, ob Auto-Scaling einen Ersatz startet.",
+    "expectation": "Die Grundlagen von Auto-Scaling und Load Balancing wurden verstanden und praktisch angewendet.",
+    "checklist": [
+      "Das repo-futuredev-scaling geöffnet und auto-scaling.tf gelesen.",
+      "Eine Auto-Scaling-Gruppe mit Minimum eins und Maximum drei eingerichtet.",
+      "Die CPU-basierte Skalierungsregel konfiguriert.",
+      "Einen manuellen Stopp-Test durchgeführt und die automatische Ersatzstellung beobachtet.",
+      "Verstanden, dass Skalierbarkeit von Anfang an mitgedacht werden muss."
+    ],
+    "portfolioItem": "P04"
+  },
+  "audio": {
+    "file": "M07-03-02.mp3",
+    "durationSeconds": 1520,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Kann ich eine Datenbank horizontal skalieren?",
+      "answer": "Ja, aber es ist deutlich komplexer als bei einer Webanwendung. Die häufigste Strategie ist Read Replicas: Du hast eine Hauptdatenbank für Schreiboperationen und mehrere Lese-Kopien für Abfragen. Der Load Balancer leitet Leseanfragen an die Replicas und Schreibanfragen an die Hauptdatenbank. Das funktioniert gut für lese-intensive Anwendungen. Für schreibintensive Anwendungen ist Sharding die Lösung: Die Daten werden nach einem Schlüssel, zum Beispiel der Nutzer-ID, auf. mehrere Datenbanken aufgeteilt. Beide Strategien erfordern tiefes Datenbankwissen und sollten nicht leichtfertig eingesetzt werden."
+    },
+    {
+      "question": "Was bedeutet zustandslos, und warum ist es wichtig für Skalierbarkeit?",
+      "answer": "Zustandslos bedeutet, dass ein Server keine Informationen über einen Nutzer lokal speichert. Jede Anfrage enthält alle Informationen, die der Server braucht, um sie zu beantworten, zum Beispiel in einem JWT-Token. Wenn ein Server zustandslos ist, kann jede Anfrage von jedem Server beantwortet werden. Der Load Balancer kann die Anfragen frei verteilen. Fällt ein Server aus, gehen keine Nutzerdaten verloren. Zustandslosigkeit ist die wichtigste architektonische Voraussetzung für horizontale Skalierung."
+    },
+    {
+      "question": "Wie schnell reagiert Auto-Scaling auf Lastspitzen?",
+      "answer": "Auto-Scaling braucht typischerweise zwei bis fünf Minuten, um einen neuen Server zu starten und in den Load Balancer. einzubinden. Das klingt langsam, aber in der Praxis reicht es für die meisten Lastspitzen, weil die vorhandenen Server die. Last kurzzeitig puffern können. Für extrem plötzliche Lastspitzen, wie einen Flash Sale, gibt es Scheduled Scaling: Du planst die zusätzlichen Server im. Voraus, zum Beispiel zehn Minuten vor Sale-Beginn. So sind sie schon da, wenn die Last kommt."
+    },
+    {
+      "question": "Was kostet horizontale Skalierung im Vergleich zu vertikaler?",
+      "answer": "Bei geringer Last ist vertikale Skalierung oft günstiger, weil ein grosser Server weniger kostet als viele kleine mit. Load Balancer. Bei hoher und variabler Last ist horizontale Skalierung mit Auto-Scaling günstiger, weil du nur für die tatsächlich benötigten. Ressourcen zahlst. Der Break-Even liegt typischerweise dort, wo die Last so stark schwankt, dass ein einzelner Server entweder überdimensioniert oder. überlastet wäre. In der Praxis fahren die meisten Teams eine Mischstrategie: eine vertikal skalierte Datenbank und horizontal skalierte Webanwendungen."
+    },
+    {
+      "question": "Wie teste ich, ob meine Anwendung wirklich skalierbar ist?",
+      "answer": "Mit Lasttests. Du simulierst mit einem Werkzeug wie k6 oder Artillery tausende gleichzeitige Nutzer und beobachtest, wie die Antwortzeiten und. die Fehlerrate steigen. Ein guter Lasttest beginnt mit wenigen Nutzern und steigert die Last schrittweise, bis das System an seine Grenzen. stösst. Der Punkt, an dem die Antwortzeit plötzlich stark ansteigt oder Fehler auftreten, ist dein Flaschenhals. Lasttests solltest du regelmässig durchführen, nicht nur einmal vor dem Launch, weil jede neue Funktion die Skalierbarkeit beeinflussen. kann."
+    }
+  ]
+}

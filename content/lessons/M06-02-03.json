@@ -1,0 +1,802 @@
+{
+  "id": "M06-02-03",
+  "title": "Auftragsverarbeitung und gemeinsame Verantwortlichkeit",
+  "durationMinutes": 30,
+  "prerequisites": [
+    "M04-05-03",
+    "M04-06-03",
+    "M06-02-02"
+  ],
+  "terms": [
+    {
+      "term": "Gemeinsam Verantwortliche",
+      "definition": "Zwei oder mehr Verantwortliche, die gemeinsam über die Zwecke und Mittel der Datenverarbeitung entscheiden. Sie müssen in einer transparenten Vereinbarung festlegen, wer welche Pflichten aus der DSGVO erfüllt. Die betroffene Person kann ihre Rechte bei jedem der gemeinsam Verantwortlichen geltend machen. Typisches Beispiel: Eine App und ein eingebetteter Analyse-Dienst, die beide über die Datenerhebung entscheiden."
+    },
+    {
+      "term": "Auftragsverarbeitungsvertrag",
+      "definition": "Ein schriftlicher Vertrag zwischen Verantwortlichem und Auftragsverarbeiter, der die Datenverarbeitung im Auftrag regelt. Der Vertrag muss Gegenstand, Dauer, Art und Zweck der Verarbeitung, die Art der personenbezogenen Daten und die Kategorien betroffener Personen festlegen. Er verpflichtet den Auftragsverarbeiter zur Vertraulichkeit, zur Unterstützung bei Betroffenenrechten und zur Löschung der Daten nach Vertragsende."
+    },
+    {
+      "term": "Drittlandübermittlung",
+      "definition": "Die Übermittlung personenbezogener Daten an ein Land außerhalb der Europäischen Union oder des Europäischen Wirtschaftsraums. Sie ist nur zulässig, wenn ein Angemessenheitsbeschluss der EU-Kommission vorliegt, geeignete Garantien wie Standardvertragsklauseln bestehen oder eine Ausnahme wie die ausdrückliche Einwilligung greift. Viele Cloud-Dienste wie Supabase oder AWS verarbeiten Daten in den USA, was eine Drittlandübermittlung darstellt."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du gibst dein Auto in die Werkstatt. Du bist der Halter, die Werkstatt ist der Auftragsverarbeiter. Die Werkstatt darf dein Auto reparieren, aber nicht damit in den Urlaub fahren. Sie darf es nicht an Dritte verleihen. Und wenn du das Auto zurückhaben willst, muss sie es herausgeben. Genau so funktioniert die Auftragsverarbeitung nach der DSGVO: Du bleibst für die Daten verantwortlich, aber jemand anderes verarbeitet. sie in deinem Auftrag.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "In der modernen App-Entwicklung verarbeitest du Daten fast nie selbst. Du nutzt Cloud-Dienste wie Supabase für die Datenbank, Resend für E-Mails und Vercel für das Hosting. All diese Dienste sind Auftragsverarbeiter. Sie verarbeiten personenbezogene Daten in deinem Auftrag. Du als Entwickler bleibst der Verantwortliche. Das bedeutet: Du trägst die rechtliche Verantwortung für das, was deine Auftragsverarbeiter mit den Daten tun.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist ein Auftragsverarbeiter, und welche Pflichten habe ich als Verantwortlicher?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein Auftragsverarbeiter ist jeder Dienstleister, der in deinem Auftrag personenbezogene Daten verarbeitet. Das ist nicht nur der Cloud-Datenbank-Anbieter. Auch der E-Mail-Versanddienst, der Analyse-Dienst, der CDN-Anbieter und der Fehler-Tracking-Dienst sind Auftragsverarbeiter, sobald sie personenbezogene Daten sehen können. Deine Pflicht als Verantwortlicher: Du musst mit jedem Auftragsverarbeiter einen schriftlichen Vertrag nach Art. 28 DSGVO abschließen. Du musst prüfen, ob der Auftragsverarbeiter ausreichende Sicherheitsmaßnahmen bietet. Und du haftest für Fehler deiner Auftragsverarbeiter.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Ein Auftragsverarbeiter ist ein Dienstleister, der personenbezogene Daten im Auftrag und nach Weisung des Verantwortlichen verarbeitet.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In der FutureDev-App haben wir mehrere Auftragsverarbeiter. Supabase verarbeitet die Nutzerdaten in der Datenbank und die Profilbilder im Storage. Resend verarbeitet E-Mail-Adressen für den Versand von Bestätigungsmails. Vercel verarbeitet IP-Adressen in den Server-Logs. Für jeden dieser Dienste haben wir einen Auftragsverarbeitungsvertrag abgeschlossen oder uns vergewissert, dass ihre Standard-AVB die Anforderungen des. Art. 28 DSGVO erfüllen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die Auftragsverarbeitung ist das rechtliche Fundament der Cloud-Entwicklung. Ohne sie dürftest du keine Cloud-Dienste nutzen, die personenbezogene Daten verarbeiten. Jeder Cloud-Dienst, den du in deine App einbindest, ist ein potenzielles Datenschutzrisiko, das du vertraglich absichern musst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was muss in einem Auftragsverarbeitungsvertrag stehen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen Werkvertrag für einen Handwerker vor. Der Vertrag legt fest: Welche Arbeit wird gemacht? Wie lange dauert sie? Welches Material wird verwendet? Wer haftet für Fehler? Ein Auftragsverarbeitungsvertrag ist ähnlich, nur dass es nicht um Fliesen, sondern um Daten geht. Er legt fest, was mit den Daten passiert, wie lange und zu welchem Zweck.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein Auftragsverarbeitungsvertrag muss mindestens enthalten: Gegenstand und Dauer der Verarbeitung, Art und Zweck der Verarbeitung, die Art der. personenbezogenen Daten und die Kategorien betroffener Personen. Außerdem die Pflichten des Auftragsverarbeiters: Vertraulichkeit, technische und organisatorische Maßnahmen, Unterstützung bei Betroffenenrechten, Meldung von Datenpannen und Löschung. der Daten nach Vertragsende. Der Auftragsverarbeiter darf keine weiteren Auftragsverarbeiter ohne deine Zustimmung einsetzen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Der Auftragsverarbeitungsvertrag ist ein schriftlicher Vertrag, der die Datenverarbeitung im Auftrag nach Art. 28 DSGVO regelt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Für Supabase nutzen wir den Data-Processing-Agreement, den Supabase als Standard-AVB bereitstellt. Dieses DPA legt fest, dass Supabase die Daten nur zum Betrieb der Datenbank verarbeitet, sie nach Vertragsende löscht. und uns bei der Erfüllung von Betroffenenrechten unterstützt. Wir mussten das DPA nicht selbst schreiben, aber wir mussten prüfen, ob es den Anforderungen des Art. 28 DSGVO genügt. Das hat unser Datenschutz-Team bestätigt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Der Auftragsverarbeitungsvertrag ist kein optionales Papier, sondern eine gesetzliche Pflicht. Ohne ihn ist die Datenweitergabe an den Auftragsverarbeiter illegal. Die Aufsichtsbehörden prüfen bei Beschwerden zuerst, ob für alle Auftragsverarbeiter gültige Verträge vorliegen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist der Unterschied zwischen Auftragsverarbeitung und gemeinsamer Verantwortlichkeit?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir zwei Köche in einer Küche vor. Bei der Auftragsverarbeitung gibt der Chefkoch die Anweisungen, und der Hilfskoch führt sie aus. Der Hilfskoch entscheidet nichts selbst. Bei der gemeinsamen Verantwortlichkeit entscheiden beide Köche gemeinsam über das Menü. Sie tragen beide die Verantwortung, und wenn etwas schiefgeht, haften beide. Der Unterschied ist, wer die Entscheidungen über die Datenverarbeitung trifft.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Gemeinsam Verantwortliche entscheiden gemeinsam über die Zwecke und Mittel der Datenverarbeitung. Das ist mehr als nur Auftragsverarbeitung. Ein typisches Beispiel: Du bindest Facebook-Like-Buttons in deine App ein. Facebook entscheidet mit, welche Daten erhoben werden und wie sie genutzt werden. Ihr seid gemeinsam Verantwortliche. Ihr müsst in einer transparenten Vereinbarung festlegen, wer welche Pflichten erfüllt. Die betroffene Person kann ihre Rechte bei jedem von euch geltend machen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Gemeinsam Verantwortliche entscheiden gemeinsam über Zwecke und Mittel der Datenverarbeitung und müssen ihre Pflichten in einer transparenten Vereinbarung. festlegen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In der FutureDev-App vermeiden wir gemeinsame Verantwortlichkeit, wo es geht. Wir nutzen keine Social-Media-Plugins, die Daten an Dritte senden. Unsere Analyse beschränkt sich auf anonyme Nutzungsstatistiken ohne Personenbezug. Wenn wir in Zukunft einen Dienst einbinden, der mit uns gemeinsam über die Datenverarbeitung entscheidet, werden wir eine. Vereinbarung zur gemeinsamen Verantwortlichkeit abschließen und die Nutzer transparent informieren.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die gemeinsame Verantwortlichkeit ist gefährlich, weil du die Kontrolle teilst. Du haftest für die Fehler deines Partners, auch wenn du sie nicht verursacht hast. Deshalb ist es sicherer, Dienste als Auftragsverarbeiter zu führen, bei denen du die volle Kontrolle behältst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist eine Drittlandübermittlung, und wann ist sie erlaubt?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du schickst ein Paket ins Ausland. Innerhalb der EU gelten die gleichen Regeln für alle Pakete. Aber wenn du ein Paket in die USA schickst, gelten dort andere Regeln. Der Zoll kann das Paket öffnen, die amerikanischen Behörden können es beschlagnahmen. Du musst sicherstellen, dass das Zielland ein Schutzniveau bietet, das mit dem europäischen vergleichbar ist. Genau so funktioniert die Drittlandübermittlung: Daten, die die EU verlassen, brauchen besonderen Schutz.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Eine Drittlandübermittlung liegt vor, wenn personenbezogene Daten in ein Land außerhalb der EU oder des EWR übermittelt werden. Das passiert ständig in der Cloud-Entwicklung: Supabase speichert Daten in den USA, AWS hostet in Virginia, Google Analytics. verarbeitet in Kalifornien. Die Übermittlung ist nur erlaubt, wenn ein Angemessenheitsbeschluss der EU-Kommission vorliegt, geeignete Garantien wie Standardvertragsklauseln bestehen oder eine. Ausnahme wie die ausdrückliche Einwilligung greift.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Die Drittlandübermittlung ist die Übermittlung personenbezogener Daten in ein Land außerhalb der EU und braucht besondere Garantien.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Für Supabase gilt seit Juli 2023 das EU-US Data Privacy Framework. Supabase ist nach diesem Framework zertifiziert, was die Drittlandübermittlung in die USA erlaubt. Wir haben die Zertifizierung auf der Supabase-Webseite geprüft und in unserem Verarbeitungsverzeichnis dokumentiert. Für andere Dienste, die nicht zertifiziert sind, schließen wir Standardvertragsklauseln ab oder holen eine ausdrückliche Einwilligung der Nutzer. ein.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die Drittlandübermittlung ist der rechtlich komplexeste Teil der Cloud-Entwicklung. Fast jeder Cloud-Dienst verarbeitet Daten außerhalb der EU. Wenn du die Drittlandübermittlung nicht korrekt absicherst, ist deine gesamte Datenverarbeitung illegal, egal wie gut deine übrigen Datenschutzmaßnahmen. sind.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Wie prüfe ich, ob ein Cloud-Dienst als Auftragsverarbeiter geeignet ist?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Die Prüfung eines Auftragsverarbeiters folgt einem klaren Schema. Erstens: Bietet der Dienst ein Data-Processing-Agreement an, das Art. 28 DSGVO erfüllt? Zweitens: Hat der Dienst angemessene technische und organisatorische Maßnahmen, dokumentiert in einem Sicherheitskonzept oder Zertifikaten wie ISO 27001? Drittens: Wo werden die Daten gespeichert, und ist die Drittlandübermittlung abgesichert? Viertens: Setzt der Dienst weitere Unterauftragsverarbeiter ein, und hast du diesen zugestimmt? Fünftens: Unterstützt der Dienst dich bei der Erfüllung von Betroffenenrechten?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Unsere Prüfung von Supabase als Auftragsverarbeiter ergab: Supabase bietet ein DPA nach Art. 28 DSGVO an. Supabase ist ISO 27001 zertifiziert und dokumentiert seine Sicherheitsmaßnahmen öffentlich. Die Daten werden in den USA gespeichert, aber Supabase ist unter dem EU-US Data Privacy Framework zertifiziert. Supabase setzt AWS als Unterauftragsverarbeiter ein, was im DPA offengelegt ist. Supabase bietet APIs für den Datenexport, die wir für Betroffenenrechte nutzen können. Die Prüfung ist dokumentiert und wird jährlich wiederholt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die Prüfung des Auftragsverarbeiters ist deine Pflicht als Verantwortlicher. Du kannst die Verantwortung nicht auf den Auftragsverarbeiter abwälzen. Wenn der Auftragsverarbeiter die Daten unsicher verarbeitet, haftest du mit. Deshalb ist die sorgfältige Auswahl und regelmäßige Überprüfung deiner Cloud-Dienste eine zentrale Entwickleraufgabe.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Ein greifbares Beispiel für Gemeinsam Verantwortliche: Zwei oder mehr Verantwortliche, die gemeinsam über die Zwecke und Mittel der. Datenverarbeitung entscheiden. Sie müssen in einer transparenten Vereinbarung festlegen, wer welche Pflichten aus der DSGVO erfüllt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "text": "Also noch einmal ganz kurz: Als Entwickler bist du Verantwortlicher für die Daten deiner Nutzer, auch wenn du. Cloud-Dienste nutzt. Jeder Cloud-Dienst, der personenbezogene Daten sieht, ist ein Auftragsverarbeiter und braucht einen Vertrag nach Art. 28 DSGVO. Gemeinsame Verantwortlichkeit entsteht, wenn du und ein Dritter gemeinsam über die Datenverarbeitung entscheiden. Und jede Datenübermittlung außerhalb der EU braucht eine zusätzliche Garantie wie das EU-US Data Privacy Framework oder Standardvertragsklauseln. Prüfe deine Auftragsverarbeiter sorgfältig, denn du haftest für ihre Fehler.",
+      "isKeySentence": true
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Kannst du Auftragsverarbeitung und gemeinsame Verantwortlichkeit noch einmal mit einem Alltagbeispiel erklären, ohne Fachjargon?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du erklärst das Thema einem Freund am Küchentisch. Du fängst nicht mit dem Fachwort an, sondern mit dem Problem, das der Freund schon kennt. Genau so bauen wir hier das Verständnis auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der Kern von Auftragsverarbeitung und gemeinsame Verantwortlichkeit ist eine klare Reihenfolge: erst das Problem sehen, dann die Lösung. in einfachen Worten, dann den Fachbegriff, dann ein zweites Beispiel, und zum Schluss warum es in der Praxis. zählt. Wenn du diese fünf Schritte wiederholen kannst, hast du die Lektion verstanden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In echten Projekten scheitert Auftragsverarbeitung und gemeinsame Verantwortlichkeit selten an fehlender Intelligenz, sondern an fehlender Klarheit. Wer den Ablauf laut erklären kann, findet Fehler schneller und schreibt Code, den andere morgen noch lesen können.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Deshalb üben wir das Thema so ausführlich: in Bewerbungsgesprächen und im Alltag eines Product Engineers zählt nicht, ob. du das Schlagwort kennst, sondern ob du den Zusammenhang in eigenen Worten tragen kannst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist der häufigste Anfängerfehler bei diesem Thema, und wie erkenne ich ihn früh?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der häufigste Fehler ist, eine fertige Vorlage zu kopieren und zu glauben, das sei Verständnis. Stattdessen solltest du nach jedem Abschnitt eine eigene Mini-Zusammenfassung schreiben: ein Satz Problem, ein Satz Lösung, ein Satz. Fachbegriff. Wenn dir einer der drei Sätze fehlt, lies den Abschnitt noch einmal.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du sitzt mit einem Freund am Küchentisch. Du erklärst das Thema ohne Fachwörter. Erst das Problem. Dann die einfache Lösung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Genau so lernen wir hier. Erst ein Bild aus dem Alltag. Dann die Erklärung in kurzen Sätzen. Dann der Fachbegriff. Dann ein zweites Beispiel. Zum Schluss warum es zählt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In echten Projekten scheitert Auftragsverarbeitung und gemeinsame Verantwortlichkeit selten an fehlender Intelligenz. Es scheitert an unklarer Sprache. Wer den Ablauf laut erklären kann, findet Fehler schneller.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Deshalb üben wir das Thema so gründlich. In Gesprächen zählt nicht das Schlagwort. Es zählt, ob du den Zusammenhang in eigenen Worten trägst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist der häufigste Anfängerfehler bei diesem Thema?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der häufigste Fehler ist Kopieren ohne Verständnis. Schreib nach jedem Abschnitt drei Sätze. Ein Satz Problem. Ein Satz Lösung. Ein Satz Fachbegriff.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Selbstcheck: Schließe die App. Öffne einen leeren Editor. Schreibe drei Sätze zu Auftragsverarbeitung und gemeinsame Verantwortlichkeit. Wenn das ohne Abschreiben gelingt, sitzt der Stoff.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Wenn dir einer der drei Sätze fehlt, spring zurück zum Alltagsbild. Lies den Abschnitt noch einmal laut. Dann schreib die drei Sätze erneut.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Diese Wiederholung spart später Wochen. Teams verlieren Zeit durch Missverständnisse. Klare Sprache ist deshalb Teil der Technik.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Kannst du Auftragsverarbeitung und gemeinsame Verantwortlichkeit noch einmal ganz langsam erklären?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du sitzt mit einem Freund am Küchentisch. Du erklärst das Thema ohne Fachwörter. Erst das Problem. Dann die einfache Lösung. Das gilt besonders für den Teil 11.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Genau so lernen wir hier. Erst ein Bild aus dem Alltag. Dann die Erklärung in kurzen Sätzen. Dann der Fachbegriff. Dann ein zweites Beispiel. Zum Schluss warum es zählt. Das gilt besonders für den Teil 12.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In echten Projekten scheitert Auftragsverarbeitung und gemeinsame Verantwortlichkeit selten an fehlender Intelligenz. Es scheitert an unklarer Sprache. Wer den Ablauf laut erklären kann, findet Fehler schneller. Das gilt besonders für den Teil 13.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Deshalb üben wir das Thema so gründlich. In Gesprächen zählt nicht das Schlagwort. Es zählt, ob du den Zusammenhang in eigenen Worten trägst. Das gilt besonders für den Teil 14.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist der häufigste Anfängerfehler bei diesem Thema? Das gilt besonders für den Teil 15.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der häufigste Fehler ist Kopieren ohne Verständnis. Schreib nach jedem Abschnitt drei Sätze. Ein Satz Problem. Ein Satz Lösung. Ein Satz Fachbegriff. Das gilt besonders für den Teil 16.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Selbstcheck: Schließe die App. Öffne einen leeren Editor. Schreibe drei Sätze zu Auftragsverarbeitung und gemeinsame Verantwortlichkeit. Wenn das ohne Abschreiben gelingt, sitzt der Stoff. Das gilt besonders für den Teil 17.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Die Begriffe dieser Lektion: Gemeinsam Verantwortliche, Auftragsverarbeitungsvertrag, Drittlandübermittlung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Gemeinsam Verantwortliche sind zwei oder mehr Verantwortliche, die gemeinsam über die Zwecke und Mittel der Datenverarbeitung entscheiden. Sie müssen in einer transparenten Vereinbarung festlegen, wer welche Pflichten aus der DSGVO erfüllt. Die betroffene Person kann ihre Rechte bei jedem der gemeinsam Verantwortlichen geltend machen. Typisches Beispiel: Eine App und ein eingebetteter Analyse-Dienst, die beide über die Datenerhebung entscheiden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Der Auftragsverarbeitungsvertrag ist ein schriftlicher Vertrag zwischen Verantwortlichem und Auftragsverarbeiter, der die Datenverarbeitung im Auftrag regelt. Der Vertrag muss Gegenstand, Dauer, Art und Zweck der Verarbeitung, die Art der personenbezogenen Daten und die Kategorien. betroffener Personen festlegen. Er verpflichtet den Auftragsverarbeiter zur Vertraulichkeit, zur Unterstützung bei Betroffenenrechten und zur Löschung der Daten nach Vertragsende.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Die Drittlandübermittlung ist die Übermittlung personenbezogener Daten an ein Land außerhalb der Europäischen Union oder des Europäischen Wirtschaftsraums. Sie ist nur zulässig, wenn ein Angemessenheitsbeschluss der EU-Kommission vorliegt, geeignete Garantien wie Standardvertragsklauseln bestehen oder eine Ausnahme. wie die ausdrückliche Einwilligung greift. Viele Cloud-Dienste wie Supabase oder AWS verarbeiten Daten in den USA, was eine Drittlandübermittlung darstellt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Brauche ich für jeden Cloud-Dienst einen Auftragsverarbeitungsvertrag?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ja, für jeden Dienstleister, der personenbezogene Daten in deinem Auftrag verarbeitet, brauchst du einen Auftragsverarbeitungsvertrag nach Art. 28 DSGVO. Das gilt für Datenbank-Anbieter, E-Mail-Dienste, Analyse-Tools, CDN-Anbieter und Fehler-Tracking-Dienste. Nicht erforderlich ist ein AVV für Dienste, die keine personenbezogenen Daten sehen, etwa weil sie nur anonyme Daten. verarbeiten oder weil die Verarbeitung vollständig im Browser des Nutzers stattfindet. Die meisten Cloud-Dienste bieten ihre AVV als Standard-DPA an, das du akzeptieren kannst, statt selbst einen Vertrag zu. schreiben.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was passiert, wenn mein Auftragsverarbeiter eine Datenpanne hat?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Der Auftragsverarbeiter muss dich unverzüglich über eine Datenpanne informieren. Du als Verantwortlicher musst dann prüfen, ob ein Risiko für die betroffenen Personen besteht. Wenn ja, musst du die Aufsichtsbehörde innerhalb von 72 Stunden benachrichtigen. Wenn ein hohes Risiko besteht, musst du auch die betroffenen Personen informieren. Der Auftragsverarbeiter unterstützt dich dabei, aber die Meldepflicht liegt bei dir. Deshalb ist es wichtig, dass dein AVV klare Regelungen zur Pannenmeldung enthält und du einen Ansprechpartner beim Auftragsverarbeiter. hast.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Kann ich einen Auftragsverarbeiter außerhalb der EU nutzen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ja, aber du brauchst eine zusätzliche Garantie für die Drittlandübermittlung. Die einfachste Garantie ist ein Angemessenheitsbeschluss der EU-Kommission für das Zielland. Für die USA gilt seit Juli 2023 das EU-US Data Privacy Framework, unter dem viele Anbieter zertifiziert sind. Alternativ kannst du Standardvertragsklauseln mit dem Anbieter abschließen. In jedem Fall musst du die Drittlandübermittlung in deinem Verarbeitungsverzeichnis dokumentieren und die betroffenen Personen in der Datenschutzerklärung. informieren.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was ist der Unterschied zwischen einem Auftragsverarbeiter und einem Dritten?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ein Auftragsverarbeiter verarbeitet Daten in deinem Auftrag und nach deiner Weisung. Ein Dritter ist jeder, der weder Verantwortlicher noch Auftragsverarbeiter ist und Daten für eigene Zwecke erhält. Wenn du Daten an einen Dritten weitergibst, brauchst du dafür eine eigene Rechtsgrundlage, zum Beispiel eine Einwilligung. Ein Auftragsverarbeiter braucht keine eigene Rechtsgrundlage, weil er nicht für eigene Zwecke verarbeitet. Der Unterschied ist entscheidend: Eine Weitergabe an Dritte ist eine Zweckänderung, die besonderen Regeln unterliegt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Muss ich meine Auftragsverarbeiter regelmäßig überprüfen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ja, die DSGVO verlangt, dass du nur Auftragsverarbeiter einsetzt, die hinreichende Garantien für die Sicherheit der Verarbeitung bieten. Diese Garantien musst du regelmäßig überprüfen, mindestens einmal jährlich. Die Überprüfung umfasst: Ist die Zertifizierung noch gültig? Hat der Anbieter seine Sicherheitsmaßnahmen geändert? Gibt es neue Unterauftragsverarbeiter? Wurden Datenpannen gemeldet? Dokumentiere deine Überprüfungen, damit du im Fall einer Prüfung durch die Aufsichtsbehörde nachweisen kannst, dass du deiner Pflicht. nachgekommen bist.",
+      "isKeySentence": false
+    }
+  ],
+  "practiceExample": {
+    "text": "Prüfung und Dokumentation der Auftragsverarbeiter der FutureDev-App, inklusive AVV und Drittlandübermittlung.",
+    "repoNote": "repo-futuredev",
+    "location": "docs/datenschutz/auftragsverarbeiter.md (Tabelle mit Dienst, AVV-Status, Drittlandgarantie und letzter Prüfung)"
+  },
+  "quiz": [
+    {
+      "question": "Welches Alltagsbild beschreibt die Auftragsverarbeitung am treffendsten?",
+      "area": "Auftragsverarbeitung",
+      "options": [
+        {
+          "text": "Du gibst dein Auto in die Werkstatt: Die Werkstatt repariert es, aber du bleibst der Halter.",
+          "isCorrect": true,
+          "explanation": "Richtig: der Auftragsverarbeiter handelt in deinem Auftrag, du bleibst verantwortlich."
+        },
+        {
+          "text": "Du verkaufst dein Auto an einen Händler: Der Händler wird neuer Halter.",
+          "isCorrect": false,
+          "explanation": "Falsch: bei der Auftragsverarbeitung gibst du die Verantwortung nicht ab."
+        },
+        {
+          "text": "Du verleihst dein Auto an einen Freund: Der Freund darf frei entscheiden.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Auftragsverarbeiter handelt nach Weisung, nicht frei."
+        },
+        {
+          "text": "Du verschrottest dein Auto: Die Daten werden gelöscht. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: die Auftragsverarbeitung umfasst mehr als nur Löschung."
+        }
+      ]
+    },
+    {
+      "question": "Welcher Dienst ist KEIN Auftragsverarbeiter in einer typischen App?",
+      "area": "Auftragsverarbeitung",
+      "options": [
+        {
+          "text": "Der Browser des Nutzers, der Daten nur lokal im Cache speichert.",
+          "isCorrect": true,
+          "explanation": "Richtig: der Browser des Nutzers ist kein Auftragsverarbeiter."
+        },
+        {
+          "text": "Der Cloud-Datenbank-Anbieter, der Nutzerprofile speichert.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Datenbank-Anbieter ist ein Auftragsverarbeiter."
+        },
+        {
+          "text": "Der E-Mail-Versanddienst, der Bestätigungsmails sendet. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: der E-Mail-Dienst ist ein Auftragsverarbeiter."
+        },
+        {
+          "text": "Der Hosting-Anbieter, der Server-Logs mit IP-Adressen schreibt.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Hosting-Anbieter ist ein Auftragsverarbeiter."
+        }
+      ]
+    },
+    {
+      "question": "Was muss ein Auftragsverarbeitungsvertrag mindestens enthalten?",
+      "area": "AVV",
+      "options": [
+        {
+          "text": "Gegenstand, Dauer, Art und Zweck der Verarbeitung sowie die Pflichten des Auftragsverarbeiters.",
+          "isCorrect": true,
+          "explanation": "Richtig: diese Inhalte schreibt Art. 28 DSGVO vor."
+        },
+        {
+          "text": "Den Preis für die Datenverarbeitung und die Zahlungsbedingungen.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Preis ist nicht Teil des AVV nach Art. 28."
+        },
+        {
+          "text": "Die Namen aller Nutzer, deren Daten verarbeitet werden.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Kategorien betroffener Personen reichen, nicht einzelne Namen."
+        },
+        {
+          "text": "Eine Garantie, dass niemals eine Datenpanne passiert. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: eine solche Garantie kann niemand geben."
+        }
+      ]
+    },
+    {
+      "question": "Wann liegt gemeinsame Verantwortlichkeit vor?",
+      "area": "Gemeinsame Verantwortlichkeit",
+      "options": [
+        {
+          "text": "Wenn zwei Parteien gemeinsam über Zwecke und Mittel der D…",
+          "isCorrect": true,
+          "explanation": "Richtig: die gemeinsame Entscheidung ist das entscheidende Kriterium."
+        },
+        {
+          "text": "Wenn zwei Parteien einen Vertrag miteinander haben.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Vertrag allein begründet keine gemeinsame Verantwortlichkeit."
+        },
+        {
+          "text": "Wenn zwei Parteien im selben Büro sitzen. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: der Ort ist irrelevant."
+        },
+        {
+          "text": "Wenn zwei Parteien dieselbe Software nutzen.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Nutzung derselben Software ist nicht entscheidend."
+        }
+      ]
+    },
+    {
+      "question": "Welche Garantie erlaubt die Datenübermittlung in die USA?",
+      "area": "Drittlandübermittlung",
+      "options": [
+        {
+          "text": "Das EU-US Data Privacy Framework, unter dem US-Unternehmen zertifiziert sein können.",
+          "isCorrect": true,
+          "explanation": "Richtig: das DPF ist der aktuelle Angemessenheitsbeschluss für die USA."
+        },
+        {
+          "text": "Eine einfache E-Mail des US-Anbieters, dass er die DSGVO einhält.",
+          "isCorrect": false,
+          "explanation": "Falsch: eine E-Mail reicht nicht als Garantie."
+        },
+        {
+          "text": "Die Tatsache, dass der Anbieter einen Sitz in den USA hat.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Sitz allein ist keine Garantie."
+        },
+        {
+          "text": "Eine mündliche Zusage des Anbieters auf einer Konferenz. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: mündliche Zusagen sind keine geeignete Garantie."
+        }
+      ]
+    },
+    {
+      "question": "Wer haftet, wenn der Auftragsverarbeiter eine Datenpanne verursacht?",
+      "area": "Haftung",
+      "options": [
+        {
+          "text": "Du als Verantwortlicher haftest gegenüber den betroffenen…",
+          "isCorrect": true,
+          "explanation": "Richtig: die Außenhaftung liegt beim Verantwortlichen."
+        },
+        {
+          "text": "Nur der Auftragsverarbeiter haftet, weil er die Panne verursacht hat.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Verantwortliche haftet mit."
+        },
+        {
+          "text": "Niemand haftet, weil es höhere Gewalt ist. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: Datenpannen sind keine höhere Gewalt."
+        },
+        {
+          "text": "Die Aufsichtsbehörde haftet, weil sie die Panne nicht verhindert hat.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Aufsichtsbehörde haftet nicht für Datenpannen."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der Unterschied zwischen einem Auftragsverarbeiter und einem Dritten?",
+      "area": "Abgrenzung",
+      "options": [
+        {
+          "text": "Der Auftragsverarbeiter handelt nach Weisung, der Dritte verarbeitet für eigene Zwecke.",
+          "isCorrect": true,
+          "explanation": "Richtig: der Zweck der Verarbeitung unterscheidet beide."
+        },
+        {
+          "text": "Der Auftragsverarbeiter ist teurer als der Dritte. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: der Preis ist kein rechtliches Kriterium."
+        },
+        {
+          "text": "Der Auftragsverarbeiter sitzt in der EU, der Dritte außerhalb.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Sitz ist nicht entscheidend."
+        },
+        {
+          "text": "Es gibt keinen Unterschied, beide Begriffe bedeuten dasselbe.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Unterschied ist rechtlich erheblich."
+        }
+      ]
+    },
+    {
+      "question": "Wie oft musst du deine Auftragsverarbeiter überprüfen?",
+      "area": "Prüfpflicht",
+      "options": [
+        {
+          "text": "Regelmäßig, mindestens einmal jährlich, und bei jeder Vertragsänderung.",
+          "isCorrect": true,
+          "explanation": "Richtig: die DSGVO verlangt eine regelmäßige Überprüfung."
+        },
+        {
+          "text": "Einmal bei Vertragsschluss, danach nie wieder.",
+          "isCorrect": false,
+          "explanation": "Falsch: eine einmalige Prüfung reicht nicht."
+        },
+        {
+          "text": "Nur wenn die Aufsichtsbehörde es verlangt. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: die Prüfpflicht besteht unabhängig von der Behörde."
+        },
+        {
+          "text": "Gar nicht, das ist Aufgabe des Auftragsverarbeiters.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Prüfpflicht liegt beim Verantwortlichen."
+        }
+      ]
+    },
+    {
+      "question": "Welche Pflicht hat der Auftragsverarbeiter nach Vertragsende?",
+      "area": "AVV",
+      "options": [
+        {
+          "text": "Er muss alle personenbezogenen Daten löschen oder an dich zurückgeben.",
+          "isCorrect": true,
+          "explanation": "Richtig: die Lösch- oder Rückgabepflicht steht in Art. 28 DSGVO."
+        },
+        {
+          "text": "Er darf die Daten für eigene Zwecke weiterverwenden.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Auftragsverarbeiter hat keine eigenen Zwecke."
+        },
+        {
+          "text": "Er muss die Daten an die Aufsichtsbehörde übermitteln.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Übermittlung an die Behörde ist keine Pflicht nach Vertragsende."
+        },
+        {
+          "text": "Er muss die Daten veröffentlichen. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: eine Veröffentlichungspflicht besteht nicht."
+        }
+      ]
+    },
+    {
+      "question": "Warum ist gemeinsame Verantwortlichkeit gefährlicher als Auftragsverarbeitung?",
+      "area": "Gemeinsame Verantwortlichkeit",
+      "options": [
+        {
+          "text": "Weil du die Kontrolle teilst und für Fehler des Partners…",
+          "isCorrect": true,
+          "explanation": "Richtig: die geteilte Kontrolle bedeutet geteilte Haftung."
+        },
+        {
+          "text": "Weil sie mehr kostet als Auftragsverarbeitung.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Kosten sind nicht der Grund."
+        },
+        {
+          "text": "Weil sie nur für große Konzerne erlaubt ist. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: gemeinsame Verantwortlichkeit ist für alle möglich."
+        },
+        {
+          "text": "Weil sie technisch schwieriger umzusetzen ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: die technische Umsetzung ist nicht der Hauptgrund."
+        }
+      ]
+    },
+    {
+      "question": "Welche Information gehört in die Datenschutzerklärung bezüglich Auftragsverarbeitern?",
+      "area": "Transparenz",
+      "options": [
+        {
+          "text": "Die Namen der Auftragsverarbeiter und die Tatsache der Drittlandübermittlung.",
+          "isCorrect": true,
+          "explanation": "Richtig: die DSGVO verlangt Transparenz über Empfänger und Drittlandübermittlung."
+        },
+        {
+          "text": "Die privaten Telefonnummern der Geschäftsführer der Auftragsverarbeiter.",
+          "isCorrect": false,
+          "explanation": "Falsch: private Kontaktdaten sind nicht erforderlich."
+        },
+        {
+          "text": "Die genauen Server-Standorte mit GPS-Koordinaten. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: das Land reicht, nicht die genauen Koordinaten."
+        },
+        {
+          "text": "Die internen Gehälter der Mitarbeiter der Auftragsverarbeiter.",
+          "isCorrect": false,
+          "explanation": "Falsch: Gehälter sind nicht Teil der Datenschutzerklärung."
+        }
+      ]
+    },
+    {
+      "question": "Was prüfst du bei der Auswahl eines Auftragsverarbeiters zuerst?",
+      "area": "Prüfpflicht",
+      "options": [
+        {
+          "text": "Ob der Dienst ein Data-Processing-Agreement anbietet, das Art. 28 DSGVO erfüllt.",
+          "isCorrect": true,
+          "explanation": "Richtig: das DPA ist die rechtliche Grundvoraussetzung."
+        },
+        {
+          "text": "Ob der Dienst das günstigste Angebot hat.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Preis ist nicht das erste Kriterium."
+        },
+        {
+          "text": "Ob der Dienst eine schöne Webseite hat. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: das Design ist irrelevant."
+        },
+        {
+          "text": "Ob der Dienst von einem bekannten Influencer empfohlen wurde.",
+          "isCorrect": false,
+          "explanation": "Falsch: Empfehlungen ersetzen keine eigene Prüfung."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Erstelle eine Übersicht aller Auftragsverarbeiter der FutureDev-App. Liste für jeden Dienst auf: Name, welche Daten er verarbeitet, ob ein AVV vorliegt, wo die Daten gespeichert werden und welche Drittlandgarantie besteht. Prüfe für einen Dienst deiner Wahl, ob sein DPA die Anforderungen des Art. 28 DSGVO erfüllt. Dokumentiere das Ergebnis deiner Prüfung.",
+    "expectation": "Das Konzept der Auftragsverarbeitung wurde verstanden und auf die Cloud-Dienste der FutureDev-App angewendet.",
+    "checklist": [
+      "Alle Auftragsverarbeiter der FutureDev-App identifiziert.",
+      "Für jeden Dienst Datenkategorie, AVV-Status und Drittlandgarantie dokumentiert.",
+      "Ein DPA auf Erfüllung des Art. 28 DSGVO geprüft.",
+      "Verstanden, warum die Prüfung der Auftragsverarbeiter eine Entwicklerpflicht ist.",
+      "Die Übersicht als Dokument abgelegt."
+    ],
+    "portfolioItem": "P04"
+  },
+  "audio": {
+    "file": "M06-02-03.mp3",
+    "durationSeconds": 1460,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Brauche ich für jeden Cloud-Dienst einen Auftragsverarbeitungsvertrag?",
+      "answer": "Ja, für jeden Dienstleister, der personenbezogene Daten in deinem Auftrag verarbeitet, brauchst du einen Auftragsverarbeitungsvertrag nach Art. 28 DSGVO. Das gilt für Datenbank-Anbieter, E-Mail-Dienste, Analyse-Tools, CDN-Anbieter und Fehler-Tracking-Dienste. Nicht erforderlich ist ein AVV für Dienste, die keine personenbezogenen Daten sehen, etwa weil sie nur anonyme Daten. verarbeiten oder weil die Verarbeitung vollständig im Browser des Nutzers stattfindet. Die meisten Cloud-Dienste bieten ihre AVV als Standard-DPA an, das du akzeptieren kannst, statt selbst einen Vertrag zu. schreiben."
+    },
+    {
+      "question": "Was passiert, wenn mein Auftragsverarbeiter eine Datenpanne hat?",
+      "answer": "Der Auftragsverarbeiter muss dich unverzüglich über eine Datenpanne informieren. Du als Verantwortlicher musst dann prüfen, ob ein Risiko für die betroffenen Personen besteht. Wenn ja, musst du die Aufsichtsbehörde innerhalb von 72 Stunden benachrichtigen. Wenn ein hohes Risiko besteht, musst du auch die betroffenen Personen informieren. Der Auftragsverarbeiter unterstützt dich dabei, aber die Meldepflicht liegt bei dir. Deshalb ist es wichtig, dass dein AVV klare Regelungen zur Pannenmeldung enthält und du einen Ansprechpartner beim Auftragsverarbeiter. hast."
+    },
+    {
+      "question": "Kann ich einen Auftragsverarbeiter außerhalb der EU nutzen?",
+      "answer": "Ja, aber du brauchst eine zusätzliche Garantie für die Drittlandübermittlung. Die einfachste Garantie ist ein Angemessenheitsbeschluss der EU-Kommission für das Zielland. Für die USA gilt seit Juli 2023 das EU-US Data Privacy Framework, unter dem viele Anbieter zertifiziert sind. Alternativ kannst du Standardvertragsklauseln mit dem Anbieter abschließen. In jedem Fall musst du die Drittlandübermittlung in deinem Verarbeitungsverzeichnis dokumentieren und die betroffenen Personen in der Datenschutzerklärung. informieren."
+    },
+    {
+      "question": "Was ist der Unterschied zwischen einem Auftragsverarbeiter und einem Dritten?",
+      "answer": "Ein Auftragsverarbeiter verarbeitet Daten in deinem Auftrag und nach deiner Weisung. Ein Dritter ist jeder, der weder Verantwortlicher noch Auftragsverarbeiter ist und Daten für eigene Zwecke erhält. Wenn du Daten an einen Dritten weitergibst, brauchst du dafür eine eigene Rechtsgrundlage, zum Beispiel eine Einwilligung. Ein Auftragsverarbeiter braucht keine eigene Rechtsgrundlage, weil er nicht für eigene Zwecke verarbeitet. Der Unterschied ist entscheidend: Eine Weitergabe an Dritte ist eine Zweckänderung, die besonderen Regeln unterliegt."
+    },
+    {
+      "question": "Muss ich meine Auftragsverarbeiter regelmäßig überprüfen?",
+      "answer": "Ja, die DSGVO verlangt, dass du nur Auftragsverarbeiter einsetzt, die hinreichende Garantien für die Sicherheit der Verarbeitung bieten. Diese Garantien musst du regelmäßig überprüfen, mindestens einmal jährlich. Die Überprüfung umfasst: Ist die Zertifizierung noch gültig? Hat der Anbieter seine Sicherheitsmaßnahmen geändert? Gibt es neue Unterauftragsverarbeiter? Wurden Datenpannen gemeldet? Dokumentiere deine Überprüfungen, damit du im Fall einer Prüfung durch die Aufsichtsbehörde nachweisen kannst, dass du deiner Pflicht. nachgekommen bist."
+    }
+  ]
+}

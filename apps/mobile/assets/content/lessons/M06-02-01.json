@@ -1,0 +1,806 @@
+{
+  "id": "M06-02-01",
+  "title": "Personenbezogene Daten",
+  "durationMinutes": 30,
+  "prerequisites": [
+    "M04-05-03",
+    "M04-06-03",
+    "M06-01-03"
+  ],
+  "terms": [
+    {
+      "term": "Verarbeitungsverzeichnis",
+      "definition": "Ein internes Dokument, das alle Verarbeitungstätigkeiten personenbezogener Daten im Unternehmen auflistet. Es ist Pflicht nach Art. 30 DSGVO für Unternehmen mit mehr als 250 Mitarbeitern oder bei risikoreicher Verarbeitung. Das Verarbeitungsverzeichnis dient als Grundlage für die Datenschutzerklärung und als Nachweis der DSGVO-Compliance gegenüber der Aufsichtsbehörde. Es muss Name und Kontaktdaten des Verantwortlichen, Zwecke der Verarbeitung, Kategorien betroffener Personen und Daten, Empfänger und Löschfristen enthalten."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir ein Tagebuch vor, das auf einer Parkbank liegt. Jeder, der vorbeikommt, kann es aufschlagen und lesen. Dein Name steht darin, deine Adresse, deine Gedanken, deine Geheimnisse. Du würdest dieses Tagebuch niemals auf einer Parkbank liegen lassen. Aber genau das passiert, wenn eine App personenbezogene Daten sammelt und nicht ausreichend schützt. Die Daten liegen dann wie ein offenes Tagebuch im Internet.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Personenbezogene Daten sind alle Informationen, die sich auf dich als Person beziehen. Dein Name, deine E-Mail-Adresse, deine IP-Adresse, dein Standort, sogar deine Cookie-ID. Die DSGVO, die Datenschutz-Grundverordnung der Europäischen Union, schützt diese Daten. Sie sagt: Jede Verarbeitung dieser Daten braucht eine Rechtsgrundlage. Und du als Entwickler musst sicherstellen, dass deine App diese Regeln einhält.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was genau sind personenbezogene Daten, und warum ist der Begriff so weit gefasst?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der Begriff personenbezogene Daten ist absichtlich weit gefasst. Es geht nicht nur um offensichtliche Daten wie Name und Adresse. Auch eine IP-Adresse ist personenbezogen, weil sie mit vertretbarem Aufwand einer Person zugeordnet werden kann. Eine Kundennummer ist personenbezogen, weil sie auf eine Person verweist. Sogar eine Cookie-ID ist personenbezogen, weil sie ein Nutzerprofil identifiziert. Die DSGVO will verhindern, dass Daten durch eine enge Definition durchs Raster fallen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Personenbezogene Daten sind alle Informationen, die sich auf eine identifizierte oder identifizierbare natürliche Person beziehen, von Name und. E-Mail bis zu IP-Adresse und Cookie-ID.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In der FutureDev-App speichern wir den Benutzernamen, die E-Mail-Adresse und das Profilbild der Nutzer. All das sind personenbezogene Daten. Aber auch die Supabase-Session-ID ist personenbezogen, weil sie einen Nutzer eindeutig identifiziert. Selbst die IP-Adresse, die in den Server-Logs auftaucht, ist personenbezogen. Wir müssen für jede dieser Daten wissen, auf welcher Rechtsgrundlage wir sie verarbeiten und wie lange wir sie. speichern.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Der weite Begriff ist kein bürokratischer Selbstzweck. Er stellt sicher, dass kein Datum ungeschützt bleibt, nur weil es nicht Name oder Adresse heißt. In einer digitalen Welt sind IP-Adressen und Cookie-IDs oft aussagekräftiger als ein Name. Der Schutz muss dem technischen Wandel standhalten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was bedeutet Verarbeitung im Sinne der DSGVO, und wann verarbeite ich Daten?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine Bibliothek vor. Jemand gibt ein Buch ab, das ist Erheben. Die Bibliothekarin stellt es ins Regal, das ist Speichern. Ein Leser leiht es aus, das ist Übermitteln. Die Bibliothekarin sortiert alte Bücher aus, das ist Löschen. All diese Vorgänge sind Verarbeitung. Die DSGVO interessiert sich für jeden einzelnen Schritt, nicht nur für das Endergebnis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Verarbeitung ist jeder Vorgang im Zusammenhang mit personenbezogenen Daten. Erheben, Speichern, Auslesen, Übermitteln, Löschen – all das ist Verarbeitung. Der Begriff ist bewusst weit. Sobald deine App eine E-Mail-Adresse in einer Datenbank speichert, verarbeitest du personenbezogene Daten. Sobald du ein Logfile schreibst, das IP-Adressen enthält, verarbeitest du personenbezogene Daten. Es gibt kaum eine App, die keine personenbezogenen Daten verarbeitet.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Verarbeitung ist jeder Vorgang im Zusammenhang mit personenbezogenen Daten, vom Erheben über das Speichern bis zum Löschen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In der FutureDev-App passiert Verarbeitung ständig. Wenn ein Nutzer sich registriert, erheben wir seine E-Mail-Adresse. Wenn er sein Profilbild hochlädt, speichern wir es in Supabase Storage. Wenn er die App öffnet, lesen wir seine Profildaten aus der Datenbank. Wenn er seinen Account löscht, löschen wir seine Daten. Jeder dieser Schritte ist Verarbeitung und braucht eine Rechtsgrundlage.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Der weite Verarbeitungsbegriff verhindert Schlupflöcher. Früher haben Unternehmen argumentiert, sie würden Daten ja nur speichern, nicht verarbeiten. Die DSGVO macht klar: Auch Speichern ist Verarbeiten. Es gibt keinen datenschutzfreien Raum mehr.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Welche Rechte hat die betroffene Person, und wie setze ich sie technisch um?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du gibst jemandem dein Telefon zur Aufbewahrung. Du hast das Recht, es jederzeit zurückzufordern. Du hast das Recht zu erfahren, wo es liegt. Du hast das Recht, es an jemand anderen weitergeben zu lassen. Und du hast das Recht, dass es gelöscht wird, wenn du es nicht mehr brauchst. Genau diese Rechte hast du auch an deinen personenbezogenen Daten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Die betroffene Person hat acht Rechte nach der DSGVO: Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Datenübertragbarkeit, Widerspruch, keine. automatisierte Entscheidungsfindung und Benachrichtigung bei Datenpannen. Als Entwickler musst du diese Rechte technisch umsetzen. Das bedeutet: Deine App muss Daten exportieren können, sie muss Daten löschen können und sie muss Nutzer informieren. können, wenn etwas schiefgeht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Die betroffene Person ist die natürliche Person, deren Daten verarbeitet werden, und sie hat umfangreiche Rechte wie Auskunft,. Löschung und Datenübertragbarkeit.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In der FutureDev-App setzen wir die Betroffenenrechte so um: Für die Auskunft gibt es eine API, die alle. gespeicherten Daten eines Nutzers als JSON zurückgibt. Für die Löschung gibt es einen Account-Löschen-Button, der alle Daten in Supabase kaskadiert löscht. Für die Datenübertragbarkeit exportieren wir die Daten in einem strukturierten Format. Jede dieser Funktionen ist nicht nur ein Feature, sondern eine gesetzliche Pflicht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die Betroffenenrechte sind das Herzstück der DSGVO. Sie geben den Menschen die Kontrolle über ihre Daten zurück. Als Entwickler bist du derjenige, der diese Kontrolle technisch ermöglicht. Ohne deinen Code bleiben die Rechte Papier.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Wann brauche ich eine Datenschutz-Folgenabschätzung, und wie führe ich sie durch?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Eine Datenschutz-Folgenabschätzung, kurz DSFA, ist eine systematische Risikoanalyse. Du brauchst sie immer dann, wenn deine Verarbeitung voraussichtlich ein hohes Risiko für die Rechte und Freiheiten von. Personen birgt. Das ist der Fall bei automatisierten Einzelentscheidungen, bei umfangreicher Verarbeitung sensibler Daten oder bei systematischer Überwachung öffentlicher Räume. Die DSFA dokumentiert, welche Daten du verarbeitest, welche Risiken das birgt und wie du diese Risiken minimierst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Die Datenschutz-Folgenabschätzung ist eine systematische Risikoanalyse, die vor risikoreicher Datenverarbeitung durchgeführt werden muss.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Für die FutureDev-App ist eine DSFA relevant, wenn wir neue Funktionen wie Standort-Tracking oder automatische Profilanalyse einführen. Wir dokumentieren dann: Welche Daten werden erhoben? Wer hat Zugriff? Wie lange werden sie gespeichert? Welche Risiken gibt es für die Nutzer? Und welche technischen Maßnahmen reduzieren diese Risiken? Die DSFA ist kein einmaliges Dokument, sondern wird bei jeder neuen Funktion aktualisiert.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die DSFA zwingt dich, vor dem Coden über Risiken nachzudenken. Das ist unbequem, aber effektiv. Die meisten Datenpannen passieren, weil niemand vorher über die Risiken nachgedacht hat. Die DSFA ist deine Chance, Probleme zu finden, bevor sie zu echten Schäden werden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was sind besondere Kategorien personenbezogener Daten, und warum sind sie strenger geschützt?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen Safe in einer Bank vor. Normale Wertgegenstände liegen im Schließfach. Aber besonders wertvolle Gegenstände, Familienerbstücke oder geheime Dokumente, liegen in einem Extrasafe mit zusätzlicher Sicherung. So ähnlich behandelt die DSGVO besondere Kategorien personenbezogener Daten: Sie bekommen eine Extraschicht Schutz, weil ein Missbrauch besonders. schwerwiegende Folgen hätte.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Besondere Kategorien sind Daten über rassische oder ethnische Herkunft, politische Meinungen, religiöse Überzeugungen, Gewerkschaftszugehörigkeit, genetische Daten, biometrische Daten. zur Identifizierung, Gesundheitsdaten und Daten zum Sexualleben. Diese Daten sind grundsätzlich verboten zu verarbeiten, es sei denn, eine von zehn Ausnahmen greift. Die wichtigste Ausnahme ist die ausdrückliche Einwilligung der betroffenen Person.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In der FutureDev-App verarbeiten wir keine besonderen Kategorien personenbezogener Daten. Aber wir müssen trotzdem darauf achten: Wenn ein Nutzer in seinem Profiltext seine politische Meinung oder seine Gesundheit. erwähnt, verarbeiten wir plötzlich besondere Kategorien. Deshalb müssen wir entweder solche Freitextfelder vermeiden oder eine ausdrückliche Einwilligung einholen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die strengeren Regeln für besondere Kategorien sind eine Lehre aus der Geschichte. Gesundheitsdaten wurden missbraucht, um Menschen zu diskriminieren. Politische Überzeugungen wurden genutzt, um Menschen zu verfolgen. Die DSGVO zieht hier eine rote Linie: Diese Daten sind tabu, außer die betroffene Person stimmt ausdrücklich zu.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Wie unterscheide ich zwischen personenbezogenen und anonymen Daten?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Anonyme Daten sind Daten, die sich nicht mehr einer Person zuordnen lassen. Der Unterschied ist entscheidend: Die DSGVO gilt nur für personenbezogene Daten, nicht für anonyme. Aber Vorsicht: Pseudonyme Daten, bei denen der Name durch eine ID ersetzt wurde, sind immer noch personenbezogen, weil. die ID mit Zusatzwissen wieder einer Person zugeordnet werden kann. Echte Anonymisierung ist schwer und oft nicht vollständig möglich.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Ein Beispiel aus der FutureDev-App: Wenn wir Nutzungsstatistiken erheben, zählen wir, wie viele Nutzer eine Funktion verwenden. Diese Zahl ist anonym, weil sie sich nicht auf einzelne Personen bezieht. Aber wenn wir speichern, welcher Nutzer welche Funktion wann verwendet hat, ist das personenbezogen, auch wenn wir statt. des Namens eine User-ID speichern. Die User-ID ist pseudonym, nicht anonym.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die Grenze zwischen anonym und personenbezogen ist fließend und kontextabhängig. Ein Datum, das heute anonym ist, kann morgen durch neue Technologien oder zusätzliche Datenquellen wieder personenbezogen werden. Deshalb ist der sicherste Ansatz, Daten gar nicht erst zu erheben, wenn du sie nicht brauchst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein häufiger Fehler ist, Daten zu erheben, weil sie vielleicht irgendwann nützlich sein könnten. Die DSGVO verbietet das mit dem Grundsatz der Datenminimierung: Du darfst nur die Daten erheben, die du für. deinen Zweck wirklich brauchst. Jedes zusätzliche Feld im Registrierungsformular ist ein zusätzliches Risiko. Jeder zusätzliche Logeintrag ist eine zusätzliche Angriffsfläche. Weniger Daten bedeuten weniger Risiko.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Datenminimierung ist nicht nur eine gesetzliche Pflicht, sondern auch eine technische Tugend. Weniger Daten bedeuten weniger Speicherplatz, weniger Backup-Aufwand und weniger Angriffsfläche. Jedes Datum, das du nicht hast, kannst du nicht verlieren und nicht missbrauchen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Ein greifbares Beispiel für Verarbeitungsverzeichnis: Ein internes Dokument, das alle Verarbeitungstätigkeiten personenbezogener Daten im Unternehmen auflistet. Es ist Pflicht nach Art.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "text": "Also noch einmal ganz kurz: Personenbezogene Daten sind alle Informationen, die sich auf eine identifizierbare Person beziehen, von. Name und E-Mail bis zu IP-Adresse und Cookie-ID. Jede Verarbeitung dieser Daten braucht eine Rechtsgrundlage. Die betroffene Person hat umfangreiche Rechte wie Auskunft und Löschung, die du technisch umsetzen musst. Und bei risikoreicher Verarbeitung ist eine Datenschutz-Folgenabschätzung Pflicht. Der Grundsatz der Datenminimierung hilft dir, Risiken von vornherein zu vermeiden.",
+      "isKeySentence": true
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Kannst du Personenbezogene Daten noch einmal mit einem Alltagbeispiel erklären, ohne Fachjargon?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du erklärst das Thema einem Freund am Küchentisch. Du fängst nicht mit dem Fachwort an, sondern mit dem Problem, das der Freund schon kennt. Genau so bauen wir hier das Verständnis auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der Kern von Personenbezogene Daten ist eine klare Reihenfolge: erst das Problem sehen, dann die Lösung in einfachen. Worten, dann den Fachbegriff, dann ein zweites Beispiel, und zum Schluss warum es in der Praxis zählt. Wenn du diese fünf Schritte wiederholen kannst, hast du die Lektion verstanden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du sitzt mit einem Freund am Küchentisch. Du erklärst das Thema ohne Fachwörter. Erst das Problem. Dann die einfache Lösung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Genau so lernen wir hier. Erst ein Bild aus dem Alltag. Dann die Erklärung in kurzen Sätzen. Dann der Fachbegriff. Dann ein zweites Beispiel. Zum Schluss warum es zählt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In echten Projekten scheitert Personenbezogene Daten selten an fehlender Intelligenz. Es scheitert an unklarer Sprache. Wer den Ablauf laut erklären kann, findet Fehler schneller.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Deshalb üben wir das Thema so gründlich. In Gesprächen zählt nicht das Schlagwort. Es zählt, ob du den Zusammenhang in eigenen Worten trägst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist der häufigste Anfängerfehler bei diesem Thema?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der häufigste Fehler ist Kopieren ohne Verständnis. Schreib nach jedem Abschnitt drei Sätze. Ein Satz Problem. Ein Satz Lösung. Ein Satz Fachbegriff.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Selbstcheck: Schließe die App. Öffne einen leeren Editor. Schreibe drei Sätze zu Personenbezogene Daten. Wenn das ohne Abschreiben gelingt, sitzt der Stoff.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Wenn dir einer der drei Sätze fehlt, spring zurück zum Alltagsbild. Lies den Abschnitt noch einmal laut. Dann schreib die drei Sätze erneut.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Diese Wiederholung spart später Wochen. Teams verlieren Zeit durch Missverständnisse. Klare Sprache ist deshalb Teil der Technik.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Kannst du Personenbezogene Daten noch einmal ganz langsam erklären?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du sitzt mit einem Freund am Küchentisch. Du erklärst das Thema ohne Fachwörter. Erst das Problem. Dann die einfache Lösung. Das gilt besonders für den Teil 11.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Genau so lernen wir hier. Erst ein Bild aus dem Alltag. Dann die Erklärung in kurzen Sätzen. Dann der Fachbegriff. Dann ein zweites Beispiel. Zum Schluss warum es zählt. Das gilt besonders für den Teil 12.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In echten Projekten scheitert Personenbezogene Daten selten an fehlender Intelligenz. Es scheitert an unklarer Sprache. Wer den Ablauf laut erklären kann, findet Fehler schneller. Das gilt besonders für den Teil 13.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Deshalb üben wir das Thema so gründlich. In Gesprächen zählt nicht das Schlagwort. Es zählt, ob du den Zusammenhang in eigenen Worten trägst. Das gilt besonders für den Teil 14.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist der häufigste Anfängerfehler bei diesem Thema? Das gilt besonders für den Teil 15.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der häufigste Fehler ist Kopieren ohne Verständnis. Schreib nach jedem Abschnitt drei Sätze. Ein Satz Problem. Ein Satz Lösung. Ein Satz Fachbegriff. Das gilt besonders für den Teil 16.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Wiederhole den Kern von Personenbezogene Daten in eigenen Worten. Ein Satz Problem. Ein Satz Lösung. Ein Satz Fachbegriff. Das festigt den Stoff.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Die Begriffe dieser Lektion: Verarbeitungsverzeichnis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Verarbeitung ist jeder Vorgang im Zusammenhang mit personenbezogenen Daten, egal ob automatisiert oder manuell. Erheben, Speichern, Auslesen, Übermitteln, Löschen – all das ist Verarbeitung. Der Begriff ist bewusst weit gefasst, damit keine datenschutzrechtlich relevante Tätigkeit durchs Raster fällt. Sobald deine App auch nur eine E-Mail-Adresse in einer Datenbank speichert, verarbeitest du personenbezogene Daten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Die betroffene Person ist die natürliche Person, deren personenbezogene Daten verarbeitet werden. Das sind deine Nutzer, aber auch Besucher deiner Webseite oder Empfänger deines Newsletters. Die betroffene Person hat umfangreiche Rechte: Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Datenübertragbarkeit und Widerspruch. Diese Rechte musst du als Entwickler technisch umsetzen können.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Die Datenschutz-Folgenabschätzung ist eine systematische Risikoanalyse, die vor der Verarbeitung personenbezogener Daten durchgeführt werden muss, wenn die Verarbeitung. voraussichtlich ein hohes Risiko für die Rechte und Freiheiten natürlicher Personen birgt. Sie dokumentiert die geplanten Verarbeitungsvorgänge, bewertet die Risiken und beschreibt die Maßnahmen zur Risikominderung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Ist eine IP-Adresse wirklich ein personenbezogenes Datum?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ja, eine IP-Adresse ist nach der DSGVO ein personenbezogenes Datum. Der Europäische Gerichtshof hat das 2016 ausdrücklich bestätigt. Eine dynamische IP-Adresse, die der Internetanbieter bei jeder Einwahl neu vergibt, kann mit vertretbarem Aufwand einer Person zugeordnet. werden. Der Anbieter weiß, welcher Kunde zu welchem Zeitpunkt welche IP-Adresse hatte. Deshalb musst du auch IP-Adressen in Logdateien datenschutzkonform behandeln, also eine Rechtsgrundlage haben und sie nach angemessener Zeit. löschen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Darf ich personenbezogene Daten in die USA übertragen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Die Übermittlung personenbezogener Daten in Drittländer wie die USA ist nur unter bestimmten Bedingungen erlaubt. Seit Juli 2023 gilt das EU-US Data Privacy Framework, das US-Unternehmen zertifiziert, die ein angemessenes Datenschutzniveau bieten. Supabase, das wir in der FutureDev-App nutzen, ist nach diesem Framework zertifiziert. Alternativ kannst du Standardvertragsklauseln verwenden oder eine ausdrückliche Einwilligung der betroffenen Person einholen. Ohne eine dieser Grundlagen ist die Datenübermittlung in die USA rechtswidrig.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was passiert, wenn ich gegen die DSGVO verstoße?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Verstöße gegen die DSGVO können mit Bußgeldern von bis zu zwanzig Millionen Euro oder vier Prozent des weltweiten. Jahresumsatzes geahndet werden, je nachdem, welcher Betrag höher ist. Das gilt nicht nur für große Konzerne, sondern für jedes Unternehmen, auch für Einzelentwickler und Start-ups. Neben den Bußgeldern drohen Schadensersatzforderungen von betroffenen Personen und eine erhebliche Rufschädigung. Die Aufsichtsbehörden werden zunehmend aktiver und verhängen regelmäßig Bußgelder, auch gegen kleinere Unternehmen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Muss ich einen Datenschutzbeauftragten benennen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Einen Datenschutzbeauftragten musst du benennen, wenn dein Unternehmen mehr als zwanzig Personen ständig mit der automatisierten Verarbeitung personenbezogener. Daten beschäftigt. Auch wenn du besondere Kategorien personenbezogener Daten in großem Umfang verarbeitest, ist ein Datenschutzbeauftragter Pflicht. Für die meisten kleinen Entwicklerteams und Start-ups gilt diese Pflicht nicht. Trotzdem ist es ratsam, eine Person zu benennen, die für Datenschutz zuständig ist, auch wenn sie nicht offiziell. als Datenschutzbeauftragter bestellt wird.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Wie lange darf ich personenbezogene Daten speichern?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Die DSGVO verlangt, dass du personenbezogene Daten nur so lange speicherst, wie es für den Zweck der Verarbeitung. erforderlich ist. Das ist der Grundsatz der Speicherbegrenzung. Für jede Datenkategorie musst du eine konkrete Löschfrist festlegen. Bei der FutureDev-App löschen wir Logdateien nach dreißig Tagen, inaktive Accounts nach einem Jahr und alle Daten sofort,. wenn ein Nutzer seinen Account löscht. Du musst diese Fristen in deinem Verarbeitungsverzeichnis dokumentieren und technisch durchsetzen.",
+      "isKeySentence": false
+    }
+  ],
+  "practiceExample": {
+    "text": "Datenminimierung und Löschfristen in der FutureDev-App, wie im Verarbeitungsverzeichnis dokumentiert.",
+    "repoNote": "repo-futuredev",
+    "location": "supabase/migrations/ (Row-Level-Security-Policies, Löschfristen in der Datenbank-Konfiguration)"
+  },
+  "quiz": [
+    {
+      "question": "Welches Alltagsbild beschreibt personenbezogene Daten am treffendsten?",
+      "area": "Personenbezogene Daten",
+      "options": [
+        {
+          "text": "Ein Tagebuch, das auf einer Parkbank liegt und von jedem gelesen werden kann.",
+          "isCorrect": true,
+          "explanation": "Richtig: ungeschützte personenbezogene Daten sind wie ein offenes Tagebuch."
+        },
+        {
+          "text": "Ein Tresor, der nur mit einem Zahlencode geöffnet werden kann.",
+          "isCorrect": false,
+          "explanation": "Falsch: das Bild passt eher zu verschlüsselten Daten."
+        },
+        {
+          "text": "Ein Brief, der mit der Post verschickt wird.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Brief ist unterwegs geschützt, personenbezogene Daten sind es oft nicht."
+        },
+        {
+          "text": "Ein Telefonbuch, das öffentlich ausliegt. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Telefonbuch enthält nur freiwillig veröffentlichte Daten."
+        }
+      ]
+    },
+    {
+      "question": "Welches der folgenden ist KEIN personenbezogenes Datum?",
+      "area": "Personenbezogene Daten",
+      "options": [
+        {
+          "text": "Die aggregierte Anzahl der täglichen App-Besuche ohne Einzelnachweis.",
+          "isCorrect": true,
+          "explanation": "Richtig: aggregierte Zahlen ohne Personenbezug sind anonym."
+        },
+        {
+          "text": "Die IP-Adresse eines Webseitenbesuchers.",
+          "isCorrect": false,
+          "explanation": "Falsch: IP-Adressen sind personenbezogen."
+        },
+        {
+          "text": "Eine Cookie-ID, die ein Nutzerprofil identifiziert.",
+          "isCorrect": false,
+          "explanation": "Falsch: Cookie-IDs sind personenbezogen."
+        },
+        {
+          "text": "Eine Kundennummer aus einem Onlineshop. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: Kundennummern sind personenbezogen."
+        }
+      ]
+    },
+    {
+      "question": "Warum ist der Begriff Verarbeitung in der DSGVO so weit gefasst?",
+      "area": "Verarbeitung",
+      "options": [
+        {
+          "text": "Damit keine datenschutzrelevante Tätigkeit durch eine eng…",
+          "isCorrect": true,
+          "explanation": "Richtig: der weite Begriff schließt Schlupflöcher aus."
+        },
+        {
+          "text": "Damit möglichst viele Unternehmen Bußgelder zahlen müssen.",
+          "isCorrect": false,
+          "explanation": "Falsch: es geht um Schutz, nicht um Bußgelder."
+        },
+        {
+          "text": "Damit die DSGVO nur für große Konzerne gilt. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: die DSGVO gilt für alle, unabhängig von der Größe."
+        },
+        {
+          "text": "Damit Verarbeitung und Speicherung unterschieden werden können.",
+          "isCorrect": false,
+          "explanation": "Falsch: Speicherung ist eine Form der Verarbeitung."
+        }
+      ]
+    },
+    {
+      "question": "Welches Betroffenenrecht verlangt, dass du alle Daten eines Nutzers in einem strukturierten Format exportieren kannst?",
+      "area": "Betroffenenrechte",
+      "options": [
+        {
+          "text": "Das Recht auf Datenübertragbarkeit.",
+          "isCorrect": true,
+          "explanation": "Richtig: Datenübertragbarkeit verlangt Export in einem gängigen Format."
+        },
+        {
+          "text": "Das Recht auf Auskunft. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: Auskunft ist die Information über die Daten, nicht der Export."
+        },
+        {
+          "text": "Das Recht auf Löschung.",
+          "isCorrect": false,
+          "explanation": "Falsch: Löschung ist das Gegenteil von Export."
+        },
+        {
+          "text": "Das Recht auf Berichtigung.",
+          "isCorrect": false,
+          "explanation": "Falsch: Berichtigung ändert falsche Daten, exportiert sie nicht."
+        }
+      ]
+    },
+    {
+      "question": "Wann ist eine Datenschutz-Folgenabschätzung Pflicht?",
+      "area": "DSFA",
+      "options": [
+        {
+          "text": "Wenn die Verarbeitung voraussichtlich ein hohes Risiko fü…",
+          "isCorrect": true,
+          "explanation": "Richtig: die DSFA ist bei hohem Risiko gesetzlich vorgeschrieben."
+        },
+        {
+          "text": "Bei jeder Verarbeitung personenbezogener Daten, unabhängig vom Risiko.",
+          "isCorrect": false,
+          "explanation": "Falsch: nicht jede Verarbeitung braucht eine DSFA."
+        },
+        {
+          "text": "Nur wenn die Aufsichtsbehörde sie anfordert. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: die DSFA muss vor der Verarbeitung durchgeführt werden."
+        },
+        {
+          "text": "Nur für Unternehmen mit mehr als 250 Mitarbeitern.",
+          "isCorrect": false,
+          "explanation": "Falsch: die DSFA-Pflicht hängt vom Risiko ab, nicht von der Unternehmensgröße."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der Unterschied zwischen anonymen und pseudonymen Daten?",
+      "area": "Anonymisierung",
+      "options": [
+        {
+          "text": "Pseudonyme Daten können mit Zusatzwissen wieder einer Per…",
+          "isCorrect": true,
+          "explanation": "Richtig: Pseudonymisierung ist umkehrbar, Anonymisierung nicht."
+        },
+        {
+          "text": "Anonyme Daten sind immer verschlüsselt, pseudonyme nicht.",
+          "isCorrect": false,
+          "explanation": "Falsch: Anonymisierung und Verschlüsselung sind verschiedene Dinge."
+        },
+        {
+          "text": "Pseudonyme Daten fallen nicht unter die DSGVO. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: pseudonyme Daten sind personenbezogen und fallen unter die DSGVO."
+        },
+        {
+          "text": "Es gibt keinen Unterschied, beide Begriffe bedeuten dasselbe.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Unterschied ist rechtlich und technisch erheblich."
+        }
+      ]
+    },
+    {
+      "question": "Welche Daten gehören zu den besonderen Kategorien personenbezogener Daten?",
+      "area": "Besondere Kategorien",
+      "options": [
+        {
+          "text": "Gesundheitsdaten, politische Meinungen und religiöse Überzeugungen.",
+          "isCorrect": true,
+          "explanation": "Richtig: diese drei sind explizit als besondere Kategorien genannt."
+        },
+        {
+          "text": "Name, Adresse und E-Mail-Adresse. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: das sind normale personenbezogene Daten."
+        },
+        {
+          "text": "IP-Adresse, Cookie-ID und Standortdaten.",
+          "isCorrect": false,
+          "explanation": "Falsch: das sind normale personenbezogene Daten."
+        },
+        {
+          "text": "Kundennummer, Rechnungsadresse und Bestellhistorie.",
+          "isCorrect": false,
+          "explanation": "Falsch: das sind normale personenbezogene Daten."
+        }
+      ]
+    },
+    {
+      "question": "Was besagt der Grundsatz der Datenminimierung?",
+      "area": "Datenminimierung",
+      "options": [
+        {
+          "text": "Du darfst nur die Daten erheben, die für den Zweck der Ve…",
+          "isCorrect": true,
+          "explanation": "Richtig: Datenminimierung verbietet Vorratsdatenspeicherung."
+        },
+        {
+          "text": "Du musst alle verfügbaren Daten erheben, um spätere Analysen zu ermöglichen.",
+          "isCorrect": false,
+          "explanation": "Falsch: das ist das Gegenteil von Datenminimierung."
+        },
+        {
+          "text": "Du darfst Daten nur in minimaler Qualität speichern.",
+          "isCorrect": false,
+          "explanation": "Falsch: es geht um die Menge, nicht um die Qualität."
+        },
+        {
+          "text": "Du musst Daten nach der Erhebung sofort löschen. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: Datenminimierung betrifft die Erhebung, nicht die Löschung."
+        }
+      ]
+    },
+    {
+      "question": "Welche Rechtsgrundlage ist die häufigste für die Verarbeitung personenbezogener Daten in Apps?",
+      "area": "Rechtsgrundlagen",
+      "options": [
+        {
+          "text": "Die Einwilligung der betroffenen Person.",
+          "isCorrect": true,
+          "explanation": "Richtig: die meisten Apps holen eine Einwilligung ein."
+        },
+        {
+          "text": "Die Erfüllung eines Vertrags.",
+          "isCorrect": false,
+          "explanation": "Falsch: Vertragserfüllung ist eine andere Rechtsgrundlage."
+        },
+        {
+          "text": "Das berechtigte Interesse des Verantwortlichen.",
+          "isCorrect": false,
+          "explanation": "Falsch: berechtigtes Interesse ist seltener als Einwilligung."
+        },
+        {
+          "text": "Die gesetzliche Verpflichtung.",
+          "isCorrect": false,
+          "explanation": "Falsch: gesetzliche Verpflichtung betrifft nur bestimmte Daten."
+        }
+      ]
+    },
+    {
+      "question": "Wie lange darfst du IP-Adressen in Server-Logs speichern?",
+      "area": "Speicherbegrenzung",
+      "options": [
+        {
+          "text": "Nur so lange, wie es für den Zweck der Verarbeitung erfor…",
+          "isCorrect": true,
+          "explanation": "Richtig: die Speicherbegrenzung verlangt eine konkrete Frist."
+        },
+        {
+          "text": "Unbegrenzt, weil IP-Adressen keine personenbezogenen Daten sind.",
+          "isCorrect": false,
+          "explanation": "Falsch: IP-Adressen sind personenbezogen."
+        },
+        {
+          "text": "Genau sieben Tage, wie von der DSGVO vorgeschrieben.",
+          "isCorrect": false,
+          "explanation": "Falsch: die DSGVO schreibt keine feste Frist vor."
+        },
+        {
+          "text": "So lange, wie der Nutzer die App verwendet. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: die Frist hängt vom Zweck ab, nicht von der Nutzungsdauer."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der Unterschied zwischen einem Datenschutzbeauftragten und einer für Datenschutz zuständigen Person?",
+      "area": "Datenschutzbeauftragter",
+      "options": [
+        {
+          "text": "Der Datenschutzbeauftragte ist gesetzlich vorgeschrieben, die zuständige Person ist freiwillig.",
+          "isCorrect": true,
+          "explanation": "Richtig: der Datenschutzbeauftragte ist eine gesetzliche Rolle mit besonderen Pflichten."
+        },
+        {
+          "text": "Es gibt keinen Unterschied, beide Begriffe bedeuten dasselbe. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: der Datenschutzbeauftragte hat eine gesetzlich definierte Rolle."
+        },
+        {
+          "text": "Die zuständige Person hat mehr Befugnisse als der Datenschutzbeauftragte.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Datenschutzbeauftragte hat gesetzlich garantierte Befugnisse."
+        },
+        {
+          "text": "Der Datenschutzbeauftragte ist nur für große Konzerne relevant.",
+          "isCorrect": false,
+          "explanation": "Falsch: auch kleinere Unternehmen können einen brauchen."
+        }
+      ]
+    },
+    {
+      "question": "Warum ist Datenminimierung auch eine technische Tugend?",
+      "area": "Datenminimierung",
+      "options": [
+        {
+          "text": "Weniger Daten bedeuten weniger Speicherplatz, weniger Bac…",
+          "isCorrect": true,
+          "explanation": "Richtig: Datenminimierung hat technische und sicherheitstechnische Vorteile."
+        },
+        {
+          "text": "Weil die DSGVO es so vorschreibt. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: das ist der rechtliche, nicht der technische Grund."
+        },
+        {
+          "text": "Weil Nutzer weniger Daten eingeben müssen.",
+          "isCorrect": false,
+          "explanation": "Falsch: das ist ein UX-Vorteil, kein technischer."
+        },
+        {
+          "text": "Weil weniger Daten schneller geladen werden.",
+          "isCorrect": false,
+          "explanation": "Falsch: das ist ein Performance-Vorteil, aber nicht der Kern."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Erstelle ein Verarbeitungsverzeichnis für die FutureDev-App. Liste alle personenbezogenen Daten auf, die die App verarbeitet: Benutzername, E-Mail, Profilbild, Session-ID, IP-Adresse in Logs. Gib für jedes Datum den Zweck, die Rechtsgrundlage und die Löschfrist an. Überlege, ob du Daten minimieren kannst, indem du Felder streichst, die nicht zwingend nötig sind.",
+    "expectation": "Das Konzept der personenbezogenen Daten und der Datenminimierung wurde verstanden und auf die FutureDev-App angewendet.",
+    "checklist": [
+      "Alle personenbezogenen Daten der FutureDev-App identifiziert.",
+      "Für jedes Datum Zweck, Rechtsgrundlage und Löschfrist dokumentiert.",
+      "Geprüft, ob jedes Feld wirklich nötig ist.",
+      "Mindestens ein Feld gefunden, das gestrichen werden kann.",
+      "Das Verarbeitungsverzeichnis als Dokument abgelegt."
+    ],
+    "portfolioItem": "P04"
+  },
+  "audio": {
+    "file": "M06-02-01.mp3",
+    "durationSeconds": 1480,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Ist eine IP-Adresse wirklich ein personenbezogenes Datum?",
+      "answer": "Ja, eine IP-Adresse ist nach der DSGVO ein personenbezogenes Datum. Der Europäische Gerichtshof hat das 2016 ausdrücklich bestätigt. Eine dynamische IP-Adresse, die der Internetanbieter bei jeder Einwahl neu vergibt, kann mit vertretbarem Aufwand einer Person zugeordnet. werden. Der Anbieter weiß, welcher Kunde zu welchem Zeitpunkt welche IP-Adresse hatte. Deshalb musst du auch IP-Adressen in Logdateien datenschutzkonform behandeln, also eine Rechtsgrundlage haben und sie nach angemessener Zeit. löschen."
+    },
+    {
+      "question": "Darf ich personenbezogene Daten in die USA übertragen?",
+      "answer": "Die Übermittlung personenbezogener Daten in Drittländer wie die USA ist nur unter bestimmten Bedingungen erlaubt. Seit Juli 2023 gilt das EU-US Data Privacy Framework, das US-Unternehmen zertifiziert, die ein angemessenes Datenschutzniveau bieten. Supabase, das wir in der FutureDev-App nutzen, ist nach diesem Framework zertifiziert. Alternativ kannst du Standardvertragsklauseln verwenden oder eine ausdrückliche Einwilligung der betroffenen Person einholen. Ohne eine dieser Grundlagen ist die Datenübermittlung in die USA rechtswidrig."
+    },
+    {
+      "question": "Was passiert, wenn ich gegen die DSGVO verstoße?",
+      "answer": "Verstöße gegen die DSGVO können mit Bußgeldern von bis zu zwanzig Millionen Euro oder vier Prozent des weltweiten. Jahresumsatzes geahndet werden, je nachdem, welcher Betrag höher ist. Das gilt nicht nur für große Konzerne, sondern für jedes Unternehmen, auch für Einzelentwickler und Start-ups. Neben den Bußgeldern drohen Schadensersatzforderungen von betroffenen Personen und eine erhebliche Rufschädigung. Die Aufsichtsbehörden werden zunehmend aktiver und verhängen regelmäßig Bußgelder, auch gegen kleinere Unternehmen."
+    },
+    {
+      "question": "Muss ich einen Datenschutzbeauftragten benennen?",
+      "answer": "Einen Datenschutzbeauftragten musst du benennen, wenn dein Unternehmen mehr als zwanzig Personen ständig mit der automatisierten Verarbeitung personenbezogener. Daten beschäftigt. Auch wenn du besondere Kategorien personenbezogener Daten in großem Umfang verarbeitest, ist ein Datenschutzbeauftragter Pflicht. Für die meisten kleinen Entwicklerteams und Start-ups gilt diese Pflicht nicht. Trotzdem ist es ratsam, eine Person zu benennen, die für Datenschutz zuständig ist, auch wenn sie nicht offiziell. als Datenschutzbeauftragter bestellt wird."
+    },
+    {
+      "question": "Wie lange darf ich personenbezogene Daten speichern?",
+      "answer": "Die DSGVO verlangt, dass du personenbezogene Daten nur so lange speicherst, wie es für den Zweck der Verarbeitung. erforderlich ist. Das ist der Grundsatz der Speicherbegrenzung. Für jede Datenkategorie musst du eine konkrete Löschfrist festlegen. Bei der FutureDev-App löschen wir Logdateien nach dreißig Tagen, inaktive Accounts nach einem Jahr und alle Daten sofort,. wenn ein Nutzer seinen Account löscht. Du musst diese Fristen in deinem Verarbeitungsverzeichnis dokumentieren und technisch durchsetzen."
+    }
+  ]
+}

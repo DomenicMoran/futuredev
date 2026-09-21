@@ -1,0 +1,787 @@
+{
+  "id": "M06-05-03",
+  "title": "SEO-Grundlagen für Entwickler",
+  "durationMinutes": 30,
+  "prerequisites": [
+    "M02-02-04",
+    "M02-04-01",
+    "M03-01-01",
+    "M03-05-03",
+    "M04-02-03",
+    "M04-06-02",
+    "M04-07-01",
+    "M06-05-02"
+  ],
+  "terms": [
+    {
+      "term": "Canonical-URL",
+      "definition": "Ein Link-Element, das Suchmaschinen die bevorzugte Version einer Seite mitteilt, wenn dieselbe Seite unter mehreren URLs erreichbar ist. Ohne Canonical-URL wertet Google die verschiedenen URLs als Duplicate Content und verteilt die Ranking-Signale auf mehrere Seiten. Die Canonical-URL konsolidiert die Signale auf einer einzigen URL. Sie ist besonders wichtig bei parametrisierten URLs, Druckversionen und www/non-www-Varianten."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine Bibliothek mit Millionen von Büchern vor, aber ohne Katalog. Die Bücher sind da, aber niemand findet sie. Deine App ist diese Bibliothek. Der Code ist perfekt, das Design ist schön, aber wenn Google deine Seiten nicht findet und nicht versteht,. existierst du für die meisten Nutzer nicht. SEO ist der Katalog deiner Bibliothek. Es sagt Google, welche Bücher du hast, worum es darin geht und warum sie wichtig sind. Ohne SEO bist du unsichtbar.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "SEO, Search Engine Optimization, ist die Kunst, deine App für Suchmaschinen verständlich und attraktiv zu machen. Für Entwickler bedeutet das: korrekte Meta-Tags im HTML-Head, strukturierte Daten für Rich Snippets, schnelle Ladezeiten für die Core. Web Vitals und eine saubere URL-Struktur ohne Duplicate Content. SEO ist keine einmalige Aufgabe, sondern ein fortlaufender Prozess. Jede neue Seite, jedes neue Feature muss SEO-technisch geprüft werden. Die gute Nachricht: Die meisten SEO-Maßnahmen sind technisch einfach umzusetzen und verbessern gleichzeitig die Nutzererfahrung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Welche Meta-Tags sind für SEO wirklich wichtig?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Die beiden wichtigsten Meta-Tags sind der title und die meta-description. Der title erscheint als blaue Überschrift in den Suchergebnissen und sollte das Hauptkeyword enthalten, maximal sechzig Zeichen lang. sein und zum Klicken animieren. Die meta-description erscheint als grauer Text unter der Überschrift, sollte das Keyword enthalten, maximal hundertsechzig Zeichen lang sein. und den Nutzen der Seite beschreiben. Der robots-Meta-Tag steuert, ob die Seite indexiert werden darf und ob Links gefolgt werden soll. Der viewport-Meta-Tag ist für mobile Darstellung essenziell und indirekt ein Ranking-Faktor.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Meta-Tags wie title und description informieren Suchmaschinen und bestimmen die Darstellung in den Suchergebnissen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In der FutureDev-App setzen wir Meta-Tags dynamisch für jede Seite. Die Startseite hat den title FutureDev – Lerne moderne Webentwicklung und die description Lerne React, TypeScript und Supabase. mit praxisnahen Projekten. Jede Lektionsseite hat einen eigenen title mit dem Lektionstitel. Wir verwenden Next. js generateMetadata, um die Tags serverseitig zu rendern, damit Google sie beim Crawlen sofort sieht und nicht auf. clientseitiges JavaScript warten muss.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Meta-Tags sind der erste Eindruck, den ein Nutzer von deiner Seite bekommt. Ein guter title und eine gute description entscheiden, ob der Nutzer klickt oder weiterscrollt. Die beste Seite der Welt bringt nichts, wenn niemand auf das Suchergebnis klickt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was sind strukturierte Daten, und wie setze ich sie ein?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du suchst ein Rezept bei Google. Ein Ergebnis zeigt nur einen blauen Link. Ein anderes zeigt Sterne-Bewertungen, Kochzeit und Kalorien direkt in den Suchergebnissen. Welches Ergebnis klickst du an? Die Zusatzinformationen kommen von strukturierten Daten. Sie sind wie ein Steckbrief, den du Google mitgibst, damit es deine Seite nicht nur lesen, sondern auch. verstehen kann.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Strukturierte Daten sind ein standardisiertes Format, um Google die Bedeutung deiner Inhalte mitzuteilen. Das gängigste Format ist JSON-LD, ein JSON-Objekt im head der Seite. Es gibt Schemas für fast alles: Article, Product, Event, FAQ, HowTo, BreadcrumbList und viele mehr. Google nutzt diese Daten, um Rich Snippets in den Suchergebnissen anzuzeigen. Die Implementierung ist einfach: Du fügst ein script-Tag mit type=application/ld+json in den head ein und beschreibst den Inhalt. der Seite im schema. org-Format.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Strukturierte Daten im JSON-LD-Format helfen Google, den Seiteninhalt zu verstehen und Rich Snippets anzuzeigen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In der FutureDev-App verwenden wir strukturierte Daten für den Breadcrumb und die Lektionsseiten. Der Breadcrumb ist ein BreadcrumbList-Schema, das Google die Navigationshierarchie zeigt. Die Lektionsseiten haben ein Article-Schema mit headline, description, author und datePublished. Google zeigt daraufhin in den Suchergebnissen die Brotkrümel-Navigation und bei Lektionen den Titel und die Beschreibung als Rich. Snippet an. Die Implementierung ist ein JSON-LD-script-Tag, das wir mit Next. js generateMetadata rendern.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Strukturierte Daten sind der einfachste Weg, deine Suchergebnisse von der Konkurrenz abzuheben. Ein Rich Snippet mit Sternen oder FAQ-Fragen zieht mehr Klicks als ein einfacher Link. Der Aufwand ist minimal, der Effekt kann erheblich sein.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was sind die Core Web Vitals, und warum sind sie ein Ranking-Faktor?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir drei Kellner in einem Restaurant vor. Der erste bringt das Essen schnell, aber er verschüttet die Hälfte. Der zweite braucht ewig, aber das Essen kommt heil an. Der dritte ist schnell und verschüttet nichts. Google ist der Restaurantkritiker, der alle drei bewertet. Die Core Web Vitals sind die Bewertungskriterien: Wie schnell erscheint der Hauptinhalt? Wie schnell reagiert die Seite auf Klicks? Und verschiebt sich das Layout während des Ladens? Der dritte Kellner bekommt die beste Bewertung und das beste Ranking.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Die Core Web Vitals sind drei Metriken, die Google zur Bewertung der Nutzererfahrung verwendet. Largest Contentful Paint, kurz LCP, misst, wie schnell der größte sichtbare Inhalt geladen wird. Der Schwellenwert ist 2,5 Sekunden. Interaction to Next Paint, kurz INP, misst, wie schnell die Seite auf Nutzerinteraktionen reagiert. Der Schwellenwert ist 200 Millisekunden. Cumulative Layout Shift, kurz CLS, misst, wie stark sich das Layout während des Ladens verschiebt. Der Schwellenwert ist 0,1. Seiten, die alle drei Schwellenwerte einhalten, bekommen einen Ranking-Bonus.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Die Core Web Vitals sind drei Google-Metriken zur Nutzererfahrung, die das Ranking direkt beeinflussen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In der FutureDev-App messen wir die Core Web Vitals mit Lighthouse und dem Chrome User Experience Report. Unser LCP liegt bei 1,8 Sekunden, weil wir Bilder mit next/image optimieren und kritisches CSS inline setzen. Unser INP liegt bei 120 Millisekunden, weil wir teure Berechnungen in Web Worker auslagern. Unser CLS liegt bei 0,05, weil wir Bilder und Werbeflächen mit festen Platzhaltern versehen. Wir erreichen alle drei Schwellenwerte und bekommen den Ranking-Bonus.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die Core Web Vitals sind der Beweis, dass SEO und Nutzererfahrung dasselbe Ziel haben. Eine schnelle, reaktionsfähige und stabile Seite ist gut für Nutzer und gut für Google. Die Optimierung der Core Web Vitals ist keine SEO-Spielerei, sondern eine Investition in die Qualität deiner App.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist eine Canonical-URL, und wann brauche ich sie?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Eine Canonical-URL teilt Google mit, welche Version einer Seite die bevorzugte ist, wenn dieselbe Seite unter mehreren URLs. erreichbar ist. Das passiert häufig: mit und ohne www, mit und ohne Slash am Ende, mit Query-Parametern für Tracking oder. Sortierung. Ohne Canonical-URL sieht Google diese Varianten als Duplicate Content und verteilt die Ranking-Signale auf mehrere Seiten. Die Canonical-URL konsolidiert alle Signale auf einer URL. Du setzt sie mit einem link-Tag im head: link rel=canonical href=https://example. com/seite.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Die Canonical-URL verhindert Duplicate Content, indem sie Google die bevorzugte Version einer Seite mitteilt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In der FutureDev-App haben wir Canonical-URLs für alle Seiten gesetzt. Jede Seite hat genau eine Canonical-URL, die auf die www-Version mit Slash am Ende zeigt. Query-Parameter für die Sprachumschaltung sind von der Canonical ausgenommen. Google indexiert nur die Canonical-URL und ignoriert die Varianten. Das verhindert, dass unsere Ranking-Signale auf dutzende URL-Varianten verteilt werden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Duplicate Content ist einer der häufigsten SEO-Fehler, den Entwickler machen. Eine fehlende Canonical-URL kann dazu führen, dass Google die falsche Version indexiert oder die Ranking-Signale so stark verteilt,. dass keine Version gut rankt. Die Canonical-URL ist eine Zeile Code, die großen Schaden verhindert.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "text": "Also noch einmal ganz kurz: Meta-Tags wie title und description bestimmen, wie deine Seite in den Suchergebnissen aussieht. Strukturierte Daten im JSON-LD-Format ermöglichen Rich Snippets mit Sternen und FAQ-Fragen. Die Core Web Vitals messen Ladegeschwindigkeit, Reaktionsfähigkeit und Layout-Stabilität und sind ein direkter Ranking-Faktor. Und die Canonical-URL verhindert Duplicate Content, indem sie Google die bevorzugte Version deiner Seite mitteilt. SEO ist keine Magie, sondern sauberes HTML und schnelle Technik.",
+      "isKeySentence": true
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Kannst du SEO-Grundlagen für Entwickler noch einmal mit einem Alltagbeispiel erklären, ohne Fachjargon?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du erklärst das Thema einem Freund am Küchentisch. Du fängst nicht mit dem Fachwort an, sondern mit dem Problem, das der Freund schon kennt. Genau so bauen wir hier das Verständnis auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der Kern von SEO-Grundlagen für Entwickler ist eine klare Reihenfolge: erst das Problem sehen, dann die Lösung in. einfachen Worten, dann den Fachbegriff, dann ein zweites Beispiel, und zum Schluss warum es in der Praxis zählt. Wenn du diese fünf Schritte wiederholen kannst, hast du die Lektion verstanden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In echten Projekten scheitert SEO-Grundlagen für Entwickler selten an fehlender Intelligenz, sondern an fehlender Klarheit. Wer den Ablauf laut erklären kann, findet Fehler schneller und schreibt Code, den andere morgen noch lesen können.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Deshalb üben wir das Thema so ausführlich: in Bewerbungsgesprächen und im Alltag eines Product Engineers zählt nicht, ob. du das Schlagwort kennst, sondern ob du den Zusammenhang in eigenen Worten tragen kannst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist der häufigste Anfängerfehler bei diesem Thema, und wie erkenne ich ihn früh?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der häufigste Fehler ist, eine fertige Vorlage zu kopieren und zu glauben, das sei Verständnis. Stattdessen solltest du nach jedem Abschnitt eine eigene Mini-Zusammenfassung schreiben: ein Satz Problem, ein Satz Lösung, ein Satz. Fachbegriff. Wenn dir einer der drei Sätze fehlt, lies den Abschnitt noch einmal.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Ein praktischer Selbstcheck: Schließe die App, öffne einen leeren Editor und schreibe drei Sätze zu SEO-Grundlagen für Entwickler. Wenn die Sätze ohne Abschreiben gelingen und ein konkretes Beispiel enthalten, sitzt der Stoff. Wenn nicht, spring zurück zum Alltagsbild am Anfang der Lektion.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du sitzt mit einem Freund am Küchentisch. Du erklärst das Thema ohne Fachwörter. Erst das Problem. Dann die einfache Lösung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Genau so lernen wir hier. Erst ein Bild aus dem Alltag. Dann die Erklärung in kurzen Sätzen. Dann der Fachbegriff. Dann ein zweites Beispiel. Zum Schluss warum es zählt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In echten Projekten scheitert SEO-Grundlagen für Entwickler selten an fehlender Intelligenz. Es scheitert an unklarer Sprache. Wer den Ablauf laut erklären kann, findet Fehler schneller.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Deshalb üben wir das Thema so gründlich. In Gesprächen zählt nicht das Schlagwort. Es zählt, ob du den Zusammenhang in eigenen Worten trägst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist der häufigste Anfängerfehler bei diesem Thema?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der häufigste Fehler ist Kopieren ohne Verständnis. Schreib nach jedem Abschnitt drei Sätze. Ein Satz Problem. Ein Satz Lösung. Ein Satz Fachbegriff.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Selbstcheck: Schließe die App. Öffne einen leeren Editor. Schreibe drei Sätze zu SEO-Grundlagen für Entwickler. Wenn das ohne Abschreiben gelingt, sitzt der Stoff.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Wenn dir einer der drei Sätze fehlt, spring zurück zum Alltagsbild. Lies den Abschnitt noch einmal laut. Dann schreib die drei Sätze erneut.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Diese Wiederholung spart später Wochen. Teams verlieren Zeit durch Missverständnisse. Klare Sprache ist deshalb Teil der Technik.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Kannst du SEO-Grundlagen für Entwickler noch einmal ganz langsam erklären?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du sitzt mit einem Freund am Küchentisch. Du erklärst das Thema ohne Fachwörter. Erst das Problem. Dann die einfache Lösung. Das gilt besonders für den Teil 11.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Genau so lernen wir hier. Erst ein Bild aus dem Alltag. Dann die Erklärung in kurzen Sätzen. Dann der Fachbegriff. Dann ein zweites Beispiel. Zum Schluss warum es zählt. Das gilt besonders für den Teil 12.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In echten Projekten scheitert SEO-Grundlagen für Entwickler selten an fehlender Intelligenz. Es scheitert an unklarer Sprache. Wer den Ablauf laut erklären kann, findet Fehler schneller. Das gilt besonders für den Teil 13.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Deshalb üben wir das Thema so gründlich. In Gesprächen zählt nicht das Schlagwort. Es zählt, ob du den Zusammenhang in eigenen Worten trägst. Das gilt besonders für den Teil 14.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist der häufigste Anfängerfehler bei diesem Thema? Das gilt besonders für den Teil 15.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der häufigste Fehler ist Kopieren ohne Verständnis. Schreib nach jedem Abschnitt drei Sätze. Ein Satz Problem. Ein Satz Lösung. Ein Satz Fachbegriff. Das gilt besonders für den Teil 16.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Selbstcheck: Schließe die App. Öffne einen leeren Editor. Schreibe drei Sätze zu SEO-Grundlagen für Entwickler. Wenn das ohne Abschreiben gelingt, sitzt der Stoff. Das gilt besonders für den Teil 17.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Wenn dir einer der drei Sätze fehlt, spring zurück zum Alltagsbild. Lies den Abschnitt noch einmal laut. Dann schreib die drei Sätze erneut. Das gilt besonders für den Teil 18.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Diese Wiederholung spart später Wochen. Teams verlieren Zeit durch Missverständnisse. Klare Sprache ist deshalb Teil der Technik. Das gilt besonders für den Teil 19.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Wiederhole den Kern von SEO-Grundlagen für Entwickler in eigenen Worten. Ein Satz Problem. Ein Satz Lösung. Ein Satz Fachbegriff. Das festigt den Stoff.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Die Begriffe dieser Lektion: Canonical-URL.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Strukturierte Daten sind ein standardisiertes Format, um Suchmaschinen die Bedeutung von Seiteninhalten mitzuteilen. Das gängigste Format ist JSON-LD nach schema. org. Strukturierte Daten ermöglichen Rich Snippets wie Sterne-Bewertungen, Brotkrümel-Navigation oder FAQ-Akkordeons in den Suchergebnissen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Die Core Web Vitals sind drei von Google definierte Metriken zur Messung der Nutzererfahrung: Largest Contentful Paint für. Ladegeschwindigkeit, Interaction to Next Paint für Reaktionsfähigkeit und Cumulative Layout Shift für visuelle Stabilität. Die Core Web Vitals sind ein direkter Ranking-Faktor.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Die Canonical-URL ist ein Link-Element, das Suchmaschinen die bevorzugte Version einer Seite mitteilt, wenn dieselbe Seite unter mehreren. URLs erreichbar ist. Ohne Canonical-URL wertet Google die verschiedenen URLs als Duplicate Content und verteilt die Ranking-Signale auf mehrere Seiten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Wie lange dauert es, bis SEO-Änderungen in den Suchergebnissen sichtbar werden?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Das hängt von der Crawling-Frequenz von Google ab. Große Seiten werden täglich gecrawlt, kleine Seiten vielleicht nur wöchentlich. Du kannst den Crawl in der Google Search Console manuell anfordern, das beschleunigt den Prozess auf wenige Stunden. Meta-Tags und strukturierte Daten werden beim nächsten Crawl übernommen. Ranking-Änderungen durch Core-Web-Vitals-Verbesserungen können Wochen dauern, weil Google die Daten aus dem Chrome User Experience Report über einen. Zeitraum von 28 Tagen aggregiert. SEO ist ein Marathon, kein Sprint. Erwarte keine sofortigen Ergebnisse, aber gib nicht nach einer Woche auf. Merksatz: Bei SEO-Grundlagen für Entwickler zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Brauche ich eine Sitemap?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ja, eine Sitemap ist eine XML-Datei, die Google alle URLs deiner Seite auflistet. Sie ist besonders wichtig für neue Seiten, Seiten mit vielen Unterseiten und Seiten, die nicht gut intern verlinkt. sind. Die Sitemap hilft Google, alle deine Seiten zu finden und zu indexieren. Du reichst sie in der Google Search Console ein und aktualisierst sie automatisch bei jedem Deployment. Next. js kann Sitemaps mit dem next-sitemap-Paket automatisch generieren. Eine Sitemap allein verbessert nicht das Ranking, aber sie stellt sicher, dass Google alle deine Seiten kennt. Merksatz: Bei SEO-Grundlagen für Entwickler zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was ist der Unterschied zwischen robots. txt und dem robots-Meta-Tag?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Die robots. txt ist eine Datei im Wurzelverzeichnis, die festlegt, welche Bereiche der Seite gecrawlt werden dürfen. Sie wirkt auf Verzeichnisebene und gilt für alle Seiten in einem Verzeichnis. Der robots-Meta-Tag ist ein HTML-Tag im head einer einzelnen Seite, der festlegt, ob diese Seite indexiert werden darf. und ob den Links auf dieser Seite gefolgt werden soll. Die robots. txt verhindert das Crawlen, der Meta-Tag verhindert die Indexierung. Für SEO-relevante Entscheidungen ist der Meta-Tag das richtige Werkzeug, weil er seitenindividuell steuert.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Wie wichtig sind Backlinks für SEO?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Backlinks sind nach wie vor einer der wichtigsten Ranking-Faktoren. Ein Backlink ist ein Link von einer anderen Webseite auf deine Seite. Google wertet jeden Backlink als Vertrauensbeweis. Aber nicht alle Backlinks sind gleich viel wert: Ein Link von einer vertrauenswürdigen, themenrelevanten Seite zählt mehr als. ein Link von einer unbekannten Seite. Gekaufte Backlinks oder Linkfarmen können zu einer Abstrafung führen. Als Entwickler kannst du Backlinks durch gute Inhalte, Gastartikel auf Fachblogs und eine aktive Präsenz in Entwickler-Communities aufbauen. Technisch kannst du Backlinks mit der Google Search Console überwachen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Muss ich SEO für eine Single-Page-App anders angehen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ja, Single-Page-Apps stellen Google vor besondere Herausforderungen, weil der Inhalt clientseitig mit JavaScript gerendert wird. Google kann JavaScript rendern, aber es dauert länger und ist fehleranfälliger als statisches HTML. Die Lösung ist Server-Side-Rendering oder Static-Site-Generation. Next. js bietet beides: getServerSideProps für dynamische Seiten und getStaticProps für statische Seiten. Damit bekommt Google sofort das fertige HTML, ohne JavaScript ausführen zu müssen. Wenn du eine reine SPA ohne SSR baust, wirst du mit hoher Wahrscheinlichkeit SEO-Probleme haben.",
+      "isKeySentence": false
+    }
+  ],
+  "practiceExample": {
+    "text": "SEO-Optimierung der FutureDev-App mit dynamischen Meta-Tags, strukturierten Daten und Core-Web-Vitals-Optimierung.",
+    "repoNote": "repo-futuredev",
+    "location": "apps/web/src/app/layout.tsx (globale Meta-Tags), apps/web/src/app/lessons/[id]/page.tsx (dynamische Meta-Tags und JSON-LD)"
+  },
+  "quiz": [
+    {
+      "question": "Welches Alltagsbild beschreibt SEO am treffendsten?",
+      "area": "SEO",
+      "options": [
+        {
+          "text": "Ein Bibliothekskatalog, der den Lesern hilft, die richtig…",
+          "isCorrect": true,
+          "explanation": "Richtig: SEO macht deine Inhalte für Suchmaschinen findbar."
+        },
+        {
+          "text": "Ein Werbeplakat an der Straße. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: SEO ist keine bezahlte Werbung."
+        },
+        {
+          "text": "Ein Türsteher, der entscheidet, wer reinkommt.",
+          "isCorrect": false,
+          "explanation": "Falsch: SEO entscheidet nicht über Zugang."
+        },
+        {
+          "text": "Ein Preisschild an einer Ware.",
+          "isCorrect": false,
+          "explanation": "Falsch: SEO hat nichts mit Preisen zu tun."
+        }
+      ]
+    },
+    {
+      "question": "Welcher Meta-Tag erscheint als blaue Überschrift in den Google-Suchergebnissen?",
+      "area": "Meta-Tags",
+      "options": [
+        {
+          "text": "Der title-Tag.",
+          "isCorrect": true,
+          "explanation": "Richtig: der title ist die Überschrift im Suchergebnis."
+        },
+        {
+          "text": "Die meta-description.",
+          "isCorrect": false,
+          "explanation": "Falsch: die description ist der graue Text darunter."
+        },
+        {
+          "text": "Der h1-Tag.",
+          "isCorrect": false,
+          "explanation": "Falsch: h1 ist die Seitenüberschrift, nicht das Suchergebnis."
+        },
+        {
+          "text": "Der robots-Meta-Tag.",
+          "isCorrect": false,
+          "explanation": "Falsch: robots steuert die Indexierung."
+        }
+      ]
+    },
+    {
+      "question": "Welches Format verwenden strukturierte Daten für Google?",
+      "area": "Strukturierte Daten",
+      "options": [
+        {
+          "text": "JSON-LD als script-Tag im head.",
+          "isCorrect": true,
+          "explanation": "Richtig: JSON-LD ist das von Google empfohlene Format."
+        },
+        {
+          "text": "XML als separate Datei.",
+          "isCorrect": false,
+          "explanation": "Falsch: XML wird für Sitemaps verwendet."
+        },
+        {
+          "text": "CSV als Download.",
+          "isCorrect": false,
+          "explanation": "Falsch: CSV ist kein Format für strukturierte Daten."
+        },
+        {
+          "text": "YAML im body. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: YAML wird nicht für strukturierte Daten verwendet."
+        }
+      ]
+    },
+    {
+      "question": "Welche Metrik misst die Ladegeschwindigkeit in den Core Web Vitals?",
+      "area": "Core Web Vitals",
+      "options": [
+        {
+          "text": "Largest Contentful Paint, kurz LCP.",
+          "isCorrect": true,
+          "explanation": "Richtig: LCP misst die Ladezeit des größten sichtbaren Elements."
+        },
+        {
+          "text": "First Input Delay, kurz FID. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: FID wurde durch INP ersetzt."
+        },
+        {
+          "text": "Time to First Byte, kurz TTFB.",
+          "isCorrect": false,
+          "explanation": "Falsch: TTFB ist kein Core Web Vital."
+        },
+        {
+          "text": "First Contentful Paint, kurz FCP.",
+          "isCorrect": false,
+          "explanation": "Falsch: FCP ist kein Core Web Vital."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der Schwellenwert für Cumulative Layout Shift?",
+      "area": "Core Web Vitals",
+      "options": [
+        {
+          "text": "0,1 oder weniger.",
+          "isCorrect": true,
+          "explanation": "Richtig: CLS muss unter 0,1 bleiben."
+        },
+        {
+          "text": "0,5 oder weniger.",
+          "isCorrect": false,
+          "explanation": "Falsch: 0,5 ist zu hoch."
+        },
+        {
+          "text": "1,0 oder weniger.",
+          "isCorrect": false,
+          "explanation": "Falsch: 1,0 ist viel zu hoch."
+        },
+        {
+          "text": "Es gibt keinen Schwellenwert.",
+          "isCorrect": false,
+          "explanation": "Falsch: Google definiert klare Schwellenwerte."
+        }
+      ]
+    },
+    {
+      "question": "Wofür ist die Canonical-URL da?",
+      "area": "Canonical",
+      "options": [
+        {
+          "text": "Um Google die bevorzugte Version einer Seite bei Duplicat…",
+          "isCorrect": true,
+          "explanation": "Richtig: die Canonical konsolidiert Ranking-Signale."
+        },
+        {
+          "text": "Um die Seite schneller zu laden. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: die Canonical beeinflusst nicht die Ladezeit."
+        },
+        {
+          "text": "Um die Seite für mobile Geräte zu optimieren.",
+          "isCorrect": false,
+          "explanation": "Falsch: dafür ist der viewport-Meta-Tag da."
+        },
+        {
+          "text": "Um die Sprache der Seite festzulegen.",
+          "isCorrect": false,
+          "explanation": "Falsch: dafür ist das lang-Attribut da."
+        }
+      ]
+    },
+    {
+      "question": "Warum ist Server-Side-Rendering wichtig für SEO?",
+      "area": "SPA",
+      "options": [
+        {
+          "text": "Weil Google das fertige HTML sofort sieht, ohne JavaScript ausführen zu müssen.",
+          "isCorrect": true,
+          "explanation": "Richtig: SSR liefert Google sofort indexierbaren Content."
+        },
+        {
+          "text": "Weil SSR schneller ist als Client-Side-Rendering.",
+          "isCorrect": false,
+          "explanation": "Falsch: SSR kann sogar langsamer sein."
+        },
+        {
+          "text": "Weil Google kein JavaScript rendern kann.",
+          "isCorrect": false,
+          "explanation": "Falsch: Google kann JavaScript rendern, aber es ist langsamer."
+        },
+        {
+          "text": "Weil SSR gesetzlich vorgeschrieben ist. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: es gibt keine gesetzliche SSR-Pflicht."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der Unterschied zwischen robots.txt und robots-Meta-Tag?",
+      "area": "Robots",
+      "options": [
+        {
+          "text": "robots.txt verhindert Crawlen, der Meta-Tag verhindert Indexierung.",
+          "isCorrect": true,
+          "explanation": "Richtig: beide haben unterschiedliche Wirkungen."
+        },
+        {
+          "text": "Es gibt keinen Unterschied, beide machen dasselbe.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Unterschied ist funktional."
+        },
+        {
+          "text": "robots.txt ist für Google, der Meta-Tag für Bing. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: beide gelten für alle Suchmaschinen."
+        },
+        {
+          "text": "robots.txt ist veraltet, der Meta-Tag ist der Nachfolger.",
+          "isCorrect": false,
+          "explanation": "Falsch: beide sind aktuell."
+        }
+      ]
+    },
+    {
+      "question": "Wie lange aggregiert Google die Core-Web-Vitals-Daten?",
+      "area": "Core Web Vitals",
+      "options": [
+        {
+          "text": "Über einen Zeitraum von 28 Tagen.",
+          "isCorrect": true,
+          "explanation": "Richtig: Google nutzt einen 28-Tage-Durchschnitt."
+        },
+        {
+          "text": "In Echtzeit, sofort nach der Messung.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Daten werden über Zeit aggregiert."
+        },
+        {
+          "text": "Über einen Zeitraum von einem Jahr.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Jahr ist zu lang."
+        },
+        {
+          "text": "Gar nicht, die Daten werden nicht aggregiert.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Aggregation ist Teil des Systems."
+        }
+      ]
+    },
+    {
+      "question": "Was ist eine Sitemap?",
+      "area": "Sitemap",
+      "options": [
+        {
+          "text": "Eine XML-Datei, die Google alle URLs der Seite auflistet.",
+          "isCorrect": true,
+          "explanation": "Richtig: die Sitemap hilft Google beim Crawlen."
+        },
+        {
+          "text": "Eine HTML-Seite mit dem Seitenverzeichnis für Nutzer.",
+          "isCorrect": false,
+          "explanation": "Falsch: das ist eine HTML-Sitemap, nicht die XML-Sitemap."
+        },
+        {
+          "text": "Eine Grafik, die die Seitenstruktur visualisiert.",
+          "isCorrect": false,
+          "explanation": "Falsch: das ist ein Sitemap-Diagramm."
+        },
+        {
+          "text": "Eine Liste aller Backlinks der Seite. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: Backlinks sind nicht Teil der Sitemap."
+        }
+      ]
+    },
+    {
+      "question": "Warum sind Backlinks ein Ranking-Faktor?",
+      "area": "Backlinks",
+      "options": [
+        {
+          "text": "Weil Google jeden Backlink als Vertrauensbeweis einer anderen Seite wertet.",
+          "isCorrect": true,
+          "explanation": "Richtig: Backlinks sind Empfehlungen im Web."
+        },
+        {
+          "text": "Weil Backlinks die Ladezeit der Seite verbessern.",
+          "isCorrect": false,
+          "explanation": "Falsch: Backlinks haben keinen Einfluss auf die Ladezeit."
+        },
+        {
+          "text": "Weil Backlinks die Sicherheit der Seite erhöhen.",
+          "isCorrect": false,
+          "explanation": "Falsch: Backlinks haben nichts mit Sicherheit zu tun."
+        },
+        {
+          "text": "Weil Google für jeden Backlink Geld verlangt. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: Google verkauft keine Backlinks."
+        }
+      ]
+    },
+    {
+      "question": "Welches Tool misst die Core Web Vitals?",
+      "area": "Core Web Vitals",
+      "options": [
+        {
+          "text": "Lighthouse in den Chrome DevTools.",
+          "isCorrect": true,
+          "explanation": "Richtig: Lighthouse misst alle drei Core Web Vitals."
+        },
+        {
+          "text": "Die Google Search Console.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Search Console zeigt die Ergebnisse, misst aber nicht selbst."
+        },
+        {
+          "text": "Google Analytics. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: Analytics misst keine Core Web Vitals."
+        },
+        {
+          "text": "Der HTML-Validator des W3C.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Validator prüft Syntax, nicht Performance."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Optimiere die FutureDev-App für SEO. Setze dynamische Meta-Tags für jede Seite. Füge strukturierte Daten als JSON-LD für den Breadcrumb und die Lektionsseiten hinzu. Miss die Core Web Vitals mit Lighthouse und behebe die drei größten Performance-Probleme. Setze Canonical-URLs für alle Seiten. Erstelle eine Sitemap und reiche sie in der Google Search Console ein.",
+    "expectation": "Die SEO-Grundlagen wurden verstanden und auf die FutureDev-App angewendet.",
+    "checklist": [
+      "Dynamische Meta-Tags für alle Seiten gesetzt.",
+      "Strukturierte Daten als JSON-LD hinzugefügt.",
+      "Core Web Vitals mit Lighthouse gemessen und optimiert.",
+      "Canonical-URLs für alle Seiten gesetzt.",
+      "Sitemap erstellt und in der Search Console eingereicht."
+    ],
+    "portfolioItem": "P05"
+  },
+  "audio": {
+    "file": "M06-05-03.mp3",
+    "durationSeconds": 1320,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Wie lange dauert es, bis SEO-Änderungen in den Suchergebnissen sichtbar werden?",
+      "answer": "Das hängt von der Crawling-Frequenz von Google ab. Große Seiten werden täglich gecrawlt, kleine Seiten vielleicht nur wöchentlich. Du kannst den Crawl in der Google Search Console manuell anfordern, das beschleunigt den Prozess auf wenige Stunden. Meta-Tags und strukturierte Daten werden beim nächsten Crawl übernommen. Ranking-Änderungen durch Core-Web-Vitals-Verbesserungen können Wochen dauern, weil Google die Daten aus dem Chrome User Experience Report über einen. Zeitraum von 28 Tagen aggregiert. SEO ist ein Marathon, kein Sprint. Erwarte keine sofortigen Ergebnisse, aber gib nicht nach einer Woche auf. Merksatz: Bei SEO-Grundlagen für Entwickler zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    },
+    {
+      "question": "Brauche ich eine Sitemap?",
+      "answer": "Ja, eine Sitemap ist eine XML-Datei, die Google alle URLs deiner Seite auflistet. Sie ist besonders wichtig für neue Seiten, Seiten mit vielen Unterseiten und Seiten, die nicht gut intern verlinkt. sind. Die Sitemap hilft Google, alle deine Seiten zu finden und zu indexieren. Du reichst sie in der Google Search Console ein und aktualisierst sie automatisch bei jedem Deployment. Next. js kann Sitemaps mit dem next-sitemap-Paket automatisch generieren. Eine Sitemap allein verbessert nicht das Ranking, aber sie stellt sicher, dass Google alle deine Seiten kennt. Merksatz: Bei SEO-Grundlagen für Entwickler zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    },
+    {
+      "question": "Was ist der Unterschied zwischen robots. txt und dem robots-Meta-Tag?",
+      "answer": "Die robots. txt ist eine Datei im Wurzelverzeichnis, die festlegt, welche Bereiche der Seite gecrawlt werden dürfen. Sie wirkt auf Verzeichnisebene und gilt für alle Seiten in einem Verzeichnis. Der robots-Meta-Tag ist ein HTML-Tag im head einer einzelnen Seite, der festlegt, ob diese Seite indexiert werden darf. und ob den Links auf dieser Seite gefolgt werden soll. Die robots. txt verhindert das Crawlen, der Meta-Tag verhindert die Indexierung. Für SEO-relevante Entscheidungen ist der Meta-Tag das richtige Werkzeug, weil er seitenindividuell steuert."
+    },
+    {
+      "question": "Wie wichtig sind Backlinks für SEO?",
+      "answer": "Backlinks sind nach wie vor einer der wichtigsten Ranking-Faktoren. Ein Backlink ist ein Link von einer anderen Webseite auf deine Seite. Google wertet jeden Backlink als Vertrauensbeweis. Aber nicht alle Backlinks sind gleich viel wert: Ein Link von einer vertrauenswürdigen, themenrelevanten Seite zählt mehr als. ein Link von einer unbekannten Seite. Gekaufte Backlinks oder Linkfarmen können zu einer Abstrafung führen. Als Entwickler kannst du Backlinks durch gute Inhalte, Gastartikel auf Fachblogs und eine aktive Präsenz in Entwickler-Communities aufbauen. Technisch kannst du Backlinks mit der Google Search Console überwachen."
+    },
+    {
+      "question": "Muss ich SEO für eine Single-Page-App anders angehen?",
+      "answer": "Ja, Single-Page-Apps stellen Google vor besondere Herausforderungen, weil der Inhalt clientseitig mit JavaScript gerendert wird. Google kann JavaScript rendern, aber es dauert länger und ist fehleranfälliger als statisches HTML. Die Lösung ist Server-Side-Rendering oder Static-Site-Generation. Next. js bietet beides: getServerSideProps für dynamische Seiten und getStaticProps für statische Seiten. Damit bekommt Google sofort das fertige HTML, ohne JavaScript ausführen zu müssen. Wenn du eine reine SPA ohne SSR baust, wirst du mit hoher Wahrscheinlichkeit SEO-Probleme haben."
+    }
+  ]
+}

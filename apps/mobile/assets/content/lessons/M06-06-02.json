@@ -1,0 +1,785 @@
+{
+  "id": "M06-06-02",
+  "title": "PolyForm und Business-Source-Lizenzen",
+  "durationMinutes": 30,
+  "prerequisites": [
+    "M01-01-03",
+    "M01-03-02",
+    "M02-01-01",
+    "M03-04-01",
+    "M04-06-01",
+    "M06-06-01"
+  ],
+  "terms": [
+    {
+      "term": "PolyForm-Lizenz",
+      "definition": "Eine Familie von restriktiven Lizenzen, die die Nutzung von Software für bestimmte Zwecke einschränken, meist für kommerzielle Nutzung. Anders als Open-Source-Lizenzen wie MIT erlauben PolyForm-Lizenzen die kostenlose Nutzung nur für nicht-kommerzielle Zwecke, für Entwicklung und Test oder für kleine Unternehmen. Für kommerzielle Nutzung ist eine separate Lizenzvereinbarung mit dem Autor erforderlich. PolyForm ist eine Antwort auf das Problem, dass Open-Source-Software von großen Cloud-Anbietern genutzt wird, ohne dass die ursprünglichen Entwickler davon profitieren."
+    },
+    {
+      "term": "Business-Source-Lizenz",
+      "definition": "Eine Lizenz, die den Quellcode öffentlich zugänglich macht, aber die kommerzielle Nutzung einschränkt und nach einer bestimmten Zeit in eine Open-Source-Lizenz umwandelt. Die Business-Source-Lizenz, kurz BUSL, wurde von MariaDB entwickelt und wird von Unternehmen wie Sentry und CockroachDB verwendet. Typische Bedingungen: Keine Nutzung in Konkurrenzprodukten, keine Nutzung als gehosteter Dienst und automatische Umwandlung in Apache 2.0 oder MIT nach drei bis vier Jahren."
+    },
+    {
+      "term": "Source-Available",
+      "definition": "Ein Lizenzmodell, bei dem der Quellcode öffentlich einsehbar ist, aber nicht unter einer Open-Source-Lizenz steht. Source-Available-Lizenzen erlauben das Lesen und Lernen aus dem Code, aber nicht die freie Nutzung, Veränderung oder Weiterverbreitung. Sie sind ein Mittelweg zwischen proprietärer Software und Open Source. Viele Unternehmen wählen Source-Available, um Transparenz zu bieten, ohne ihr Geschäftsmodell zu gefährden. Die Open-Source-Definition der OSI erkennt Source-Available nicht als Open Source an."
+    },
+    {
+      "term": "Fair-Source-Lizenz",
+      "definition": "Eine neuere Lizenzkategorie, die versucht, die Vorteile von Open Source mit dem Schutz vor kommerzieller Ausbeutung zu verbinden. Fair-Source-Lizenzen erlauben Nutzung, Veränderung und Weiterverbreitung, aber nur für nicht-kommerzielle Zwecke oder für Unternehmen unter einer bestimmten Größe. Sie sind eine Reaktion auf die zunehmende Kommerzialisierung von Open Source durch große Cloud-Anbieter. Der Begriff wurde von Heather Meeker geprägt und wird von Unternehmen wie GitButler verwendet."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen Koch vor, der sein Rezeptbuch öffentlich auslegt. Jeder darf die Rezepte lesen, zu Hause nachkochen und für Freunde kochen. Aber wenn ein Restaurant die Rezepte nutzt, um Geld zu verdienen, muss es den Koch bezahlen. Das ist das Prinzip der PolyForm-Lizenz: Der Code ist öffentlich, du darfst ihn lesen und für private Zwecke. nutzen, aber wenn du damit Geld verdienen willst, brauchst du eine kommerzielle Lizenz. Es ist ein Mittelweg zwischen völlig offen und völlig geschlossen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "PolyForm-Lizenzen sind eine Familie von restriktiven Lizenzen, die die kommerzielle Nutzung von Software einschränken. Sie sind eine Antwort auf ein echtes Problem: Open-Source-Entwickler schreiben Code, und große Cloud-Anbieter wie Amazon nehmen diesen. Code, hosten ihn als Dienst und verdienen Millionen damit, ohne dass die Entwickler etwas davon sehen. PolyForm sagt: Du darfst den Code nutzen, aber nicht, um mit ihm als Dienst Geld zu verdienen. Für kommerzielle Nutzung brauchst du eine separate Lizenz. Das schützt das Geschäftsmodell der Entwickler, während der Code öffentlich bleibt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist die PolyForm-Lizenz, und für wen ist sie geeignet?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "PolyForm ist keine einzelne Lizenz, sondern eine Familie von Lizenzen für verschiedene Einschränkungen. PolyForm Noncommercial verbietet jegliche kommerzielle Nutzung. PolyForm Free-Trial erlaubt Nutzung für dreißig Tage, danach ist eine Lizenz erforderlich. PolyForm Small-Business erlaubt Nutzung für Unternehmen mit weniger als hundert Mitarbeitern und weniger als einer Million Dollar Umsatz. PolyForm Shield verbietet die Nutzung in Konkurrenzprodukten. Alle PolyForm-Lizenzen sind Source-Available, aber nicht Open Source nach der OSI-Definition. Sie sind geeignet für Entwickler, die ihren Code teilen, aber ihr Geschäftsmodell schützen wollen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "PolyForm-Lizenzen schränken die kommerzielle Nutzung ein und schützen das Geschäftsmodell der Entwickler.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Ein Beispiel für PolyForm in der Praxis: Ein Entwickler baut eine Datenbank-Bibliothek und veröffentlicht sie unter PolyForm Shield. Jeder darf die Bibliothek nutzen, aber niemand darf einen konkurrierenden Datenbank-Dienst damit betreiben. Amazon kann die Bibliothek nicht nehmen, als AWS-Dienst hosten und dem Entwickler die Kunden wegnehmen. Wenn Amazon die Bibliothek als Dienst anbieten will, muss es eine kommerzielle Lizenz vom Entwickler kaufen. So schützt PolyForm das Geschäftsmodell des Entwicklers.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "PolyForm ist die Antwort auf die Frage: Wie kann ich meinen Code teilen, ohne dass andere damit mein. Geschäft zerstören? Es ist nicht die richtige Lizenz für jedes Projekt, aber für Projekte, die ein Geschäftsmodell schützen müssen, ist. es eine wichtige Option.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist die Business-Source-Lizenz, und wie unterscheidet sie sich von PolyForm?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir ein Buch vor, das heute nur privat gelesen werden darf, aber in drei Jahren automatisch gemeinfrei. wird. Du kannst es heute nicht für kommerzielle Zwecke nutzen, aber in drei Jahren darfst du damit machen, was. du willst. Das ist die Business-Source-Lizenz: Sie schränkt die kommerzielle Nutzung heute ein, aber sie hat ein eingebautes Verfallsdatum. Nach drei oder vier Jahren verwandelt sie sich automatisch in eine vollständige Open-Source-Lizenz wie Apache 2. 0 oder MIT.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Die Business-Source-Lizenz, kurz BUSL, wurde von MariaDB entwickelt. Sie erlaubt Nutzung, Veränderung und Weiterverbreitung für nicht-kommerzielle Zwecke, aber sie verbietet die Nutzung in Konkurrenzprodukten. Der entscheidende Unterschied zu PolyForm: Die BUSL hat ein eingebautes Verfallsdatum. Nach einer festgelegten Zeit, typischerweise drei oder vier Jahre, verwandelt sich der Code automatisch in eine Open-Source-Lizenz. Das bedeutet: Der Entwickler bekommt einen zeitlichen Vorsprung, um sein Geschäftsmodell aufzubauen, aber der Code wird langfristig Open. Source.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Die Business-Source-Lizenz schränkt kommerzielle Nutzung ein, verwandelt sich aber nach einigen Jahren automatisch in Open Source.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Sentry, der Fehler-Tracking-Dienst, verwendet die BUSL. Der Code ist öffentlich, du kannst ihn lesen, verändern und für nicht-kommerzielle Zwecke nutzen. Aber du darfst keinen konkurrierenden Fehler-Tracking-Dienst damit betreiben. Nach drei Jahren verwandelt sich jede Version des Codes automatisch in Apache 2. 0. Das gibt Sentry einen Drei-Jahres-Vorsprung vor Konkurrenten, die den Code kopieren wollen. Nach drei Jahren ist der Code vollständig Open Source und kann von jedem genutzt werden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die BUSL ist ein cleverer Kompromiss: Sie schützt das Geschäftsmodell in der kritischen Anfangsphase, aber sie verhindert nicht,. dass der Code langfristig Open Source wird. Für viele Unternehmen ist das die ideale Balance zwischen Schutz und Offenheit.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was bedeutet Source-Available, und ist das dasselbe wie Open Source?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Source-Available bedeutet, dass der Quellcode öffentlich einsehbar ist, aber nicht unter einer Open-Source-Lizenz steht. Du darfst den Code lesen, daraus lernen und ihn für private Zwecke nutzen, aber du darfst ihn nicht. frei verändern, weiterverbreiten oder für kommerzielle Zwecke nutzen. Source-Available ist nicht dasselbe wie Open Source. Die Open Source Initiative definiert Open Source durch zehn Kriterien, darunter die freie Weiterverbreitung und die Erlaubnis für. abgeleitete Werke. Source-Available-Lizenzen erfüllen diese Kriterien nicht. Sie sind ein Mittelweg zwischen proprietär und Open Source.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Source-Available bedeutet, dass der Code einsehbar, aber nicht frei nutzbar ist, und ist nicht dasselbe wie Open Source.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Die FutureDev-App selbst ist unter MIT lizenziert, also vollständig Open Source. Aber wir verwenden einige Source-Available-Tools für die Entwicklung, zum Beispiel bestimmte VS-Code-Erweiterungen. Deren Code ist auf GitHub einsehbar, aber wir dürfen sie nicht verändern oder weiterverbreiten. Wir können den Code lesen, um zu verstehen, wie sie funktionieren, aber wir können keine eigene Version davon. bauen und verkaufen. Das ist der Unterschied zwischen Source-Available und Open Source.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Source-Available ist ein wachsender Trend, weil viele Unternehmen die Vorteile von Open Source wollen, aber nicht das Risiko. eingehen wollen, dass Konkurrenten ihren Code kopieren. Es ist wichtig, den Unterschied zu kennen, damit du nicht versehentlich eine Source-Available-Bibliothek wie Open Source behandelst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Ein greifbares Beispiel für Fair-Source-Lizenz: Eine neuere Lizenzkategorie, die versucht, die Vorteile von Open Source mit dem Schutz. vor kommerzieller Ausbeutung zu verbinden. Fair-Source-Lizenzen erlauben Nutzung, Veränderung und Weiterverbreitung, aber nur für nicht-kommerzielle Zwecke oder für Unternehmen unter einer bestimmten Größe.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "text": "Also noch einmal ganz kurz: PolyForm-Lizenzen schränken die kommerzielle Nutzung ein und schützen das Geschäftsmodell der Entwickler. Die Business-Source-Lizenz fügt ein Verfallsdatum hinzu, nach dem der Code automatisch Open Source wird. Source-Available bedeutet, dass der Code einsehbar, aber nicht frei nutzbar ist, und ist nicht dasselbe wie Open Source. Und Fair-Source-Lizenzen versuchen, die Vorteile von Open Source mit dem Schutz vor kommerzieller Ausbeutung zu verbinden. Die Lizenzlandschaft ist vielfältiger geworden, und du musst die Unterschiede kennen, um die richtige Lizenz für dein Projekt. zu wählen.",
+      "isKeySentence": true
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Kannst du PolyForm und Business-Source-Lizenzen noch einmal mit einem Alltagbeispiel erklären, ohne Fachjargon?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du erklärst das Thema einem Freund am Küchentisch. Du fängst nicht mit dem Fachwort an, sondern mit dem Problem, das der Freund schon kennt. Genau so bauen wir hier das Verständnis auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der Kern von PolyForm und Business-Source-Lizenzen ist eine klare Reihenfolge: erst das Problem sehen, dann die Lösung in. einfachen Worten, dann den Fachbegriff, dann ein zweites Beispiel, und zum Schluss warum es in der Praxis zählt. Wenn du diese fünf Schritte wiederholen kannst, hast du die Lektion verstanden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In echten Projekten scheitert PolyForm und Business-Source-Lizenzen selten an fehlender Intelligenz, sondern an fehlender Klarheit. Wer den Ablauf laut erklären kann, findet Fehler schneller und schreibt Code, den andere morgen noch lesen können.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Deshalb üben wir das Thema so ausführlich: in Bewerbungsgesprächen und im Alltag eines Product Engineers zählt nicht, ob. du das Schlagwort kennst, sondern ob du den Zusammenhang in eigenen Worten tragen kannst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist der häufigste Anfängerfehler bei diesem Thema, und wie erkenne ich ihn früh?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der häufigste Fehler ist, eine fertige Vorlage zu kopieren und zu glauben, das sei Verständnis. Stattdessen solltest du nach jedem Abschnitt eine eigene Mini-Zusammenfassung schreiben: ein Satz Problem, ein Satz Lösung, ein Satz. Fachbegriff. Wenn dir einer der drei Sätze fehlt, lies den Abschnitt noch einmal.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Ein praktischer Selbstcheck: Schließe die App, öffne einen leeren Editor und schreibe drei Sätze zu PolyForm und Business-Source-Lizenzen. Wenn die Sätze ohne Abschreiben gelingen und ein konkretes Beispiel enthalten, sitzt der Stoff. Wenn nicht, spring zurück zum Alltagsbild am Anfang der Lektion.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Noch ein Blick von der Seite: PolyForm und Business-Source-Lizenzen verbindet Technik mit Kommunikation. Du lernst nicht nur einen Mechanismus, sondern eine Sprache, mit der du Entscheidungen begründet treffen und anderen erklären. kannst. Das spart in Teams Wochen an Missverständnissen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Kannst du PolyForm und Business-Source-Lizenzen noch einmal mit einem Alltagbeispiel erklären, ohne Fachjargon?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du erklärst das Thema einem Freund am Küchentisch. Du fängst nicht mit dem Fachwort an, sondern mit dem Problem, das der Freund schon kennt. Genau so bauen wir hier das Verständnis auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der Kern von PolyForm und Business-Source-Lizenzen ist eine klare Reihenfolge: erst das Problem sehen, dann die Lösung in. einfachen Worten, dann den Fachbegriff, dann ein zweites Beispiel, und zum Schluss warum es in der Praxis zählt. Wenn du diese fünf Schritte wiederholen kannst, hast du die Lektion verstanden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du sitzt mit einem Freund am Küchentisch. Du erklärst das Thema ohne Fachwörter. Erst das Problem. Dann die einfache Lösung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Genau so lernen wir hier. Erst ein Bild aus dem Alltag. Dann die Erklärung in kurzen Sätzen. Dann der Fachbegriff. Dann ein zweites Beispiel. Zum Schluss warum es zählt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In echten Projekten scheitert PolyForm und Business-Source-Lizenzen selten an fehlender Intelligenz. Es scheitert an unklarer Sprache. Wer den Ablauf laut erklären kann, findet Fehler schneller.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Deshalb üben wir das Thema so gründlich. In Gesprächen zählt nicht das Schlagwort. Es zählt, ob du den Zusammenhang in eigenen Worten trägst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist der häufigste Anfängerfehler bei diesem Thema?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der häufigste Fehler ist Kopieren ohne Verständnis. Schreib nach jedem Abschnitt drei Sätze. Ein Satz Problem. Ein Satz Lösung. Ein Satz Fachbegriff.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Selbstcheck: Schließe die App. Öffne einen leeren Editor. Schreibe drei Sätze zu PolyForm und Business-Source-Lizenzen. Wenn das ohne Abschreiben gelingt, sitzt der Stoff.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Wenn dir einer der drei Sätze fehlt, spring zurück zum Alltagsbild. Lies den Abschnitt noch einmal laut. Dann schreib die drei Sätze erneut.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Diese Wiederholung spart später Wochen. Teams verlieren Zeit durch Missverständnisse. Klare Sprache ist deshalb Teil der Technik.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Kannst du PolyForm und Business-Source-Lizenzen noch einmal ganz langsam erklären?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du sitzt mit einem Freund am Küchentisch. Du erklärst das Thema ohne Fachwörter. Erst das Problem. Dann die einfache Lösung. Das gilt besonders für den Teil 11.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Genau so lernen wir hier. Erst ein Bild aus dem Alltag. Dann die Erklärung in kurzen Sätzen. Dann der Fachbegriff. Dann ein zweites Beispiel. Zum Schluss warum es zählt. Das gilt besonders für den Teil 12.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In echten Projekten scheitert PolyForm und Business-Source-Lizenzen selten an fehlender Intelligenz. Es scheitert an unklarer Sprache. Wer den Ablauf laut erklären kann, findet Fehler schneller. Das gilt besonders für den Teil 13.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Deshalb üben wir das Thema so gründlich. In Gesprächen zählt nicht das Schlagwort. Es zählt, ob du den Zusammenhang in eigenen Worten trägst. Das gilt besonders für den Teil 14.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist der häufigste Anfängerfehler bei diesem Thema? Das gilt besonders für den Teil 15.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der häufigste Fehler ist Kopieren ohne Verständnis. Schreib nach jedem Abschnitt drei Sätze. Ein Satz Problem. Ein Satz Lösung. Ein Satz Fachbegriff. Das gilt besonders für den Teil 16.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Selbstcheck: Schließe die App. Öffne einen leeren Editor. Schreibe drei Sätze zu PolyForm und Business-Source-Lizenzen. Wenn das ohne Abschreiben gelingt, sitzt der Stoff. Das gilt besonders für den Teil 17.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Wenn dir einer der drei Sätze fehlt, spring zurück zum Alltagsbild. Lies den Abschnitt noch einmal laut. Dann schreib die drei Sätze erneut. Das gilt besonders für den Teil 18.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Diese Wiederholung spart später Wochen. Teams verlieren Zeit durch Missverständnisse. Klare Sprache ist deshalb Teil der Technik. Das gilt besonders für den Teil 19.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Die Begriffe dieser Lektion: PolyForm-Lizenz, Business-Source-Lizenz, Source-Available, Fair-Source-Lizenz.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Die Business-Source-Lizenz macht den Quellcode öffentlich zugänglich, schränkt aber die kommerzielle Nutzung ein und wandelt sich nach einer. bestimmten Zeit in eine Open-Source-Lizenz um. Die BUSL wurde von MariaDB entwickelt und wird von Unternehmen wie Sentry und CockroachDB verwendet.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Source-Available ist ein Lizenzmodell, bei dem der Quellcode öffentlich einsehbar ist, aber nicht unter einer Open-Source-Lizenz steht. Source-Available-Lizenzen erlauben das Lesen und Lernen aus dem Code, aber nicht die freie Nutzung, Veränderung oder Weiterverbreitung. Die Open-Source-Definition der OSI erkennt Source-Available nicht als Open Source an.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Fair-Source-Lizenzen versuchen, die Vorteile von Open Source mit dem Schutz vor kommerzieller Ausbeutung zu verbinden. Sie erlauben Nutzung, Veränderung und Weiterverbreitung, aber nur für nicht-kommerzielle Zwecke oder für Unternehmen unter einer bestimmten Größe.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Ist PolyForm Open Source?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Nein, PolyForm-Lizenzen sind nicht Open Source nach der Definition der Open Source Initiative. Die OSI verlangt, dass eine Open-Source-Lizenz die freie Nutzung für jeden Zweck erlaubt, auch für kommerzielle Zwecke. PolyForm schränkt die kommerzielle Nutzung ein und erfüllt damit nicht die OSI-Kriterien. PolyForm ist Source-Available, nicht Open Source. Das ist kein Werturteil, sondern eine Klassifikation. PolyForm verfolgt ein anderes Ziel als Open Source: Es will den Code teilen, aber das Geschäftsmodell schützen. Beide Ansätze sind legitim, aber du musst den Unterschied kennen. Merksatz: Bei PolyForm und Business-Source-Lizenzen zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Kann ich PolyForm-Code in meinem MIT-Projekt verwenden?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Das hängt von der spezifischen PolyForm-Lizenz ab. PolyForm Noncommercial erlaubt keine Nutzung in kommerziellen Projekten, auch nicht als Teil eines größeren Projekts. PolyForm Shield erlaubt Nutzung, solange du kein Konkurrenzprodukt baust. In jedem Fall musst du die Bedingungen der PolyForm-Lizenz einhalten, die restriktiver sind als die MIT-Lizenz. Du kannst nicht einfach PolyForm-Code in dein MIT-Projekt einbauen und hoffen, dass die MIT-Lizenz die PolyForm-Bedingungen überschreibt. Die restriktivere Lizenz setzt sich durch. Prüfe die genauen Bedingungen der PolyForm-Lizenz, bevor du sie in dein Projekt aufnimmst. Merksatz: Bei PolyForm und Business-Source-Lizenzen zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Warum verwenden Unternehmen wie Sentry die BUSL statt MIT?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Unternehmen wie Sentry verwenden die BUSL, weil sie verhindern wollen, dass große Cloud-Anbieter ihren Code als Dienst hosten. und ihnen die Kunden wegnehmen. Wenn Sentry unter MIT lizenzieren würde, könnte Amazon den Sentry-Code nehmen, als AWS Sentry Service hosten und mit. seinem Marketing-Budget Sentry aus dem Markt drängen. Die BUSL verhindert das, weil sie die Nutzung in Konkurrenzprodukten verbietet. Gleichzeitig bleibt der Code öffentlich, und nach drei Jahren wird er Open Source. Das ist ein Kompromiss, der das Geschäftsmodell schützt, ohne den Code für immer zu verschließen. Merksatz: Bei PolyForm und Business-Source-Lizenzen zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was ist der Unterschied zwischen Source-Available und proprietär?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Bei proprietärer Software ist der Quellcode nicht öffentlich. Du bekommst nur die kompilierte Software, und du darfst nicht sehen, wie sie funktioniert. Bei Source-Available-Software ist der Quellcode öffentlich, du darfst ihn lesen und daraus lernen, aber du darfst ihn nicht. frei nutzen oder verändern. Source-Available ist transparenter als proprietär, aber restriktiver als Open Source. Es ist ein Mittelweg, der in den letzten Jahren an Popularität gewonnen hat, weil er die Vorteile von. Transparenz bietet, ohne die Nachteile der vollständigen Offenheit. Merksatz: Bei PolyForm und Business-Source-Lizenzen zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Welche Lizenz soll ich für mein kommerzielles Projekt wählen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Das hängt von deinem Geschäftsmodell ab. Wenn du keine Konkurrenz durch Cloud-Anbieter fürchtest, wähle MIT oder Apache 2. 0. Wenn du verhindern willst, dass andere deinen Code als Dienst hosten, wähle PolyForm Shield oder BUSL. Wenn du nur nicht-kommerzielle Nutzung erlauben willst, wähle PolyForm Noncommercial. Wenn du deinen Code gar nicht teilen willst, wähle gar keine Lizenz und behalte alle Rechte. Die Lizenzwahl ist eine strategische Entscheidung, die du mit deinem Team und idealerweise mit einem Anwalt treffen solltest. Es gibt keine Universallizenz, die für alle Projekte passt. Merksatz: Bei PolyForm und Business-Source-Lizenzen zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    }
+  ],
+  "practiceExample": {
+    "text": "Lizenzwahl für die FutureDev-App: Analyse der Geschäftsmodell-Anforderungen und Entscheidung für MIT.",
+    "repoNote": "repo-futuredev",
+    "location": "LICENSE (MIT-Lizenztext mit Begründung der Wahl im README)"
+  },
+  "quiz": [
+    {
+      "question": "Welches Alltagsbild beschreibt die PolyForm-Lizenz am treffendsten?",
+      "area": "PolyForm",
+      "options": [
+        {
+          "text": "Ein Kochbuch, das jeder lesen und privat nutzen darf, abe…",
+          "isCorrect": true,
+          "explanation": "Richtig: PolyForm erlaubt private Nutzung, schränkt kommerzielle ein."
+        },
+        {
+          "text": "Ein offenes Buch, das jeder kopieren und verkaufen darf.",
+          "isCorrect": false,
+          "explanation": "Falsch: das wäre MIT, nicht PolyForm."
+        },
+        {
+          "text": "Ein verschlossenes Buch, das niemand lesen darf. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: PolyForm-Code ist öffentlich einsehbar."
+        },
+        {
+          "text": "Ein Buch, das nur in Bibliotheken gelesen werden darf.",
+          "isCorrect": false,
+          "explanation": "Falsch: PolyForm schränkt nicht den Lesezugriff ein."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der entscheidende Unterschied zwischen BUSL und PolyForm?",
+      "area": "BUSL",
+      "options": [
+        {
+          "text": "Die BUSL hat ein eingebautes Verfallsdatum, nach dem der…",
+          "isCorrect": true,
+          "explanation": "Richtig: die BUSL verwandelt sich nach einigen Jahren in Open Source."
+        },
+        {
+          "text": "Die BUSL ist kostenlos, PolyForm kostet Geld.",
+          "isCorrect": false,
+          "explanation": "Falsch: beide sind für nicht-kommerzielle Nutzung kostenlos."
+        },
+        {
+          "text": "Die BUSL ist Open Source, PolyForm nicht.",
+          "isCorrect": false,
+          "explanation": "Falsch: beide sind nicht Open Source."
+        },
+        {
+          "text": "Es gibt keinen Unterschied. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: das Verfallsdatum ist der entscheidende Unterschied."
+        }
+      ]
+    },
+    {
+      "question": "Ist Source-Available dasselbe wie Open Source?",
+      "area": "Source-Available",
+      "options": [
+        {
+          "text": "Nein, Source-Available erlaubt nicht die freie Nutzung un…",
+          "isCorrect": true,
+          "explanation": "Richtig: Source-Available ist restriktiver als Open Source."
+        },
+        {
+          "text": "Ja, beide Begriffe bedeuten dasselbe. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: der Unterschied ist rechtlich und konzeptionell."
+        },
+        {
+          "text": "Source-Available ist eine Unterkategorie von Open Source.",
+          "isCorrect": false,
+          "explanation": "Falsch: die OSI erkennt Source-Available nicht als Open Source an."
+        },
+        {
+          "text": "Source-Available ist offener als Open Source.",
+          "isCorrect": false,
+          "explanation": "Falsch: Source-Available ist restriktiver."
+        }
+      ]
+    },
+    {
+      "question": "Warum verwenden Unternehmen wie Sentry die BUSL?",
+      "area": "BUSL",
+      "options": [
+        {
+          "text": "Um zu verhindern, dass Cloud-Anbieter ihren Code als Dien…",
+          "isCorrect": true,
+          "explanation": "Richtig: die BUSL schützt vor Konkurrenz durch Cloud-Anbieter."
+        },
+        {
+          "text": "Weil die BUSL die einzige kostenlose Lizenz ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: es gibt viele kostenlose Lizenzen."
+        },
+        {
+          "text": "Weil die BUSL von der EU vorgeschrieben ist. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: es gibt keine gesetzliche BUSL-Pflicht."
+        },
+        {
+          "text": "Weil die BUSL mehr Freiheiten bietet als MIT.",
+          "isCorrect": false,
+          "explanation": "Falsch: die BUSL ist restriktiver als MIT."
+        }
+      ]
+    },
+    {
+      "question": "Was ist Fair-Source?",
+      "area": "Fair-Source",
+      "options": [
+        {
+          "text": "Eine Lizenzkategorie, die Open-Source-Vorteile mit Schutz…",
+          "isCorrect": true,
+          "explanation": "Richtig: Fair-Source ist ein Mittelweg."
+        },
+        {
+          "text": "Eine Lizenz, die nur für gemeinnützige Organisationen gilt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Fair-Source ist nicht auf Non-Profits beschränkt."
+        },
+        {
+          "text": "Eine Lizenz, die keine Bedingungen hat. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: Fair-Source hat Bedingungen."
+        },
+        {
+          "text": "Eine Lizenz, die nur in Entwicklungsländern gilt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Fair-Source gilt weltweit."
+        }
+      ]
+    },
+    {
+      "question": "Kannst du PolyForm-Code in einem MIT-Projekt verwenden?",
+      "area": "Kompatibilität",
+      "options": [
+        {
+          "text": "Nur wenn du die restriktiveren PolyForm-Bedingungen einhältst.",
+          "isCorrect": true,
+          "explanation": "Richtig: die restriktivere Lizenz setzt sich durch."
+        },
+        {
+          "text": "Ja, die MIT-Lizenz überschreibt alle anderen Lizenzen.",
+          "isCorrect": false,
+          "explanation": "Falsch: die MIT-Lizenz ist nicht stärker als PolyForm."
+        },
+        {
+          "text": "Nein, PolyForm und MIT sind inkompatibel.",
+          "isCorrect": false,
+          "explanation": "Falsch: sie können kombiniert werden, aber die PolyForm-Bedingungen gelten."
+        },
+        {
+          "text": "Ja, weil PolyForm Open Source ist. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: PolyForm ist nicht Open Source."
+        }
+      ]
+    },
+    {
+      "question": "Nach wie vielen Jahren wird BUSL-Code typischerweise Open Source?",
+      "area": "BUSL",
+      "options": [
+        {
+          "text": "Nach drei bis vier Jahren.",
+          "isCorrect": true,
+          "explanation": "Richtig: die typische BUSL-Frist ist drei oder vier Jahre."
+        },
+        {
+          "text": "Nach einem Jahr.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Jahr ist zu kurz."
+        },
+        {
+          "text": "Nach zehn Jahren.",
+          "isCorrect": false,
+          "explanation": "Falsch: zehn Jahre sind zu lang."
+        },
+        {
+          "text": "Nie, BUSL-Code bleibt immer restriktiv.",
+          "isCorrect": false,
+          "explanation": "Falsch: das Verfallsdatum ist das Kernmerkmal der BUSL."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der Unterschied zwischen Source-Available und proprietär?",
+      "area": "Source-Available",
+      "options": [
+        {
+          "text": "Source-Available macht den Quellcode öffentlich, proprietär nicht.",
+          "isCorrect": true,
+          "explanation": "Richtig: der Quellcode-Zugang ist der Unterschied."
+        },
+        {
+          "text": "Es gibt keinen Unterschied. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: der Quellcode-Zugang ist der Unterschied."
+        },
+        {
+          "text": "Source-Available ist teurer als proprietär.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Preis ist nicht das Unterscheidungsmerkmal."
+        },
+        {
+          "text": "Source-Available ist immer Open Source.",
+          "isCorrect": false,
+          "explanation": "Falsch: Source-Available ist nicht Open Source."
+        }
+      ]
+    },
+    {
+      "question": "Welche PolyForm-Variante verbietet jegliche kommerzielle Nutzung?",
+      "area": "PolyForm",
+      "options": [
+        {
+          "text": "PolyForm Noncommercial.",
+          "isCorrect": true,
+          "explanation": "Richtig: Noncommercial verbietet kommerzielle Nutzung."
+        },
+        {
+          "text": "PolyForm Shield.",
+          "isCorrect": false,
+          "explanation": "Falsch: Shield verbietet nur Konkurrenzprodukte."
+        },
+        {
+          "text": "PolyForm Free-Trial.",
+          "isCorrect": false,
+          "explanation": "Falsch: Free-Trial erlaubt zeitlich begrenzte Nutzung."
+        },
+        {
+          "text": "PolyForm Small-Business.",
+          "isCorrect": false,
+          "explanation": "Falsch: Small-Business erlaubt Nutzung durch kleine Unternehmen."
+        }
+      ]
+    },
+    {
+      "question": "Warum ist PolyForm nicht Open Source nach OSI-Definition?",
+      "area": "OSI",
+      "options": [
+        {
+          "text": "Weil es die kommerzielle Nutzung einschränkt, was die OSI…",
+          "isCorrect": true,
+          "explanation": "Richtig: die OSI verlangt Nutzungsfreiheit für jeden Zweck."
+        },
+        {
+          "text": "Weil es Geld kostet. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: PolyForm ist für nicht-kommerzielle Nutzung kostenlos."
+        },
+        {
+          "text": "Weil es nur in den USA gilt.",
+          "isCorrect": false,
+          "explanation": "Falsch: PolyForm gilt weltweit."
+        },
+        {
+          "text": "Weil die OSI PolyForm nicht mag.",
+          "isCorrect": false,
+          "explanation": "Falsch: die OSI hat sachliche Kriterien."
+        }
+      ]
+    },
+    {
+      "question": "Welches Unternehmen hat die BUSL entwickelt?",
+      "area": "BUSL",
+      "options": [
+        {
+          "text": "MariaDB.",
+          "isCorrect": true,
+          "explanation": "Richtig: MariaDB hat die BUSL entwickelt."
+        },
+        {
+          "text": "Google.",
+          "isCorrect": false,
+          "explanation": "Falsch: Google verwendet meist Apache 2.0."
+        },
+        {
+          "text": "Microsoft.",
+          "isCorrect": false,
+          "explanation": "Falsch: Microsoft verwendet meist MIT."
+        },
+        {
+          "text": "Amazon.",
+          "isCorrect": false,
+          "explanation": "Falsch: Amazon verwendet meist Apache 2.0."
+        }
+      ]
+    },
+    {
+      "question": "Welche Lizenz solltest du für ein kommerzielles Projekt wählen, das du vor Cloud-Konkurrenz schützen willst?",
+      "area": "Wahl",
+      "options": [
+        {
+          "text": "PolyForm Shield oder BUSL.",
+          "isCorrect": true,
+          "explanation": "Richtig: diese Lizenzen schützen vor Konkurrenzprodukten."
+        },
+        {
+          "text": "MIT. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: MIT schützt nicht vor Konkurrenz."
+        },
+        {
+          "text": "GPL.",
+          "isCorrect": false,
+          "explanation": "Falsch: die GPL schützt nicht vor kommerzieller Nutzung."
+        },
+        {
+          "text": "Gar keine Lizenz.",
+          "isCorrect": false,
+          "explanation": "Falsch: ohne Lizenz ist der Code gar nicht nutzbar."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Analysiere das Geschäftsmodell der FutureDev-App und entscheide, ob MIT, PolyForm oder BUSL die richtige Lizenz ist. Begründe deine Entscheidung schriftlich. Recherchiere, welche Lizenzen ähnliche Projekte wie Supabase, Sentry und CockroachDB verwenden, und vergleiche sie mit deiner Entscheidung. Dokumentiere das Ergebnis im README.",
+    "expectation": "Die Unterschiede zwischen MIT, PolyForm und BUSL wurden verstanden und eine begründete Lizenzentscheidung für die FutureDev-App getroffen.",
+    "checklist": [
+      "Geschäftsmodell der FutureDev-App analysiert.",
+      "Vor- und Nachteile von MIT, PolyForm und BUSL abgewogen.",
+      "Lizenzentscheidung getroffen und schriftlich begründet.",
+      "Lizenzen ähnlicher Projekte recherchiert und verglichen.",
+      "Ergebnis im README dokumentiert."
+    ],
+    "portfolioItem": "P04"
+  },
+  "audio": {
+    "file": "M06-06-02.mp3",
+    "durationSeconds": 1320,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Ist PolyForm Open Source?",
+      "answer": "Nein, PolyForm-Lizenzen sind nicht Open Source nach der Definition der Open Source Initiative. Die OSI verlangt, dass eine Open-Source-Lizenz die freie Nutzung für jeden Zweck erlaubt, auch für kommerzielle Zwecke. PolyForm schränkt die kommerzielle Nutzung ein und erfüllt damit nicht die OSI-Kriterien. PolyForm ist Source-Available, nicht Open Source. Das ist kein Werturteil, sondern eine Klassifikation. PolyForm verfolgt ein anderes Ziel als Open Source: Es will den Code teilen, aber das Geschäftsmodell schützen. Beide Ansätze sind legitim, aber du musst den Unterschied kennen. Merksatz: Bei PolyForm und Business-Source-Lizenzen zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    },
+    {
+      "question": "Kann ich PolyForm-Code in meinem MIT-Projekt verwenden?",
+      "answer": "Das hängt von der spezifischen PolyForm-Lizenz ab. PolyForm Noncommercial erlaubt keine Nutzung in kommerziellen Projekten, auch nicht als Teil eines größeren Projekts. PolyForm Shield erlaubt Nutzung, solange du kein Konkurrenzprodukt baust. In jedem Fall musst du die Bedingungen der PolyForm-Lizenz einhalten, die restriktiver sind als die MIT-Lizenz. Du kannst nicht einfach PolyForm-Code in dein MIT-Projekt einbauen und hoffen, dass die MIT-Lizenz die PolyForm-Bedingungen überschreibt. Die restriktivere Lizenz setzt sich durch. Prüfe die genauen Bedingungen der PolyForm-Lizenz, bevor du sie in dein Projekt aufnimmst. Merksatz: Bei PolyForm und Business-Source-Lizenzen zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    },
+    {
+      "question": "Warum verwenden Unternehmen wie Sentry die BUSL statt MIT?",
+      "answer": "Unternehmen wie Sentry verwenden die BUSL, weil sie verhindern wollen, dass große Cloud-Anbieter ihren Code als Dienst hosten. und ihnen die Kunden wegnehmen. Wenn Sentry unter MIT lizenzieren würde, könnte Amazon den Sentry-Code nehmen, als AWS Sentry Service hosten und mit. seinem Marketing-Budget Sentry aus dem Markt drängen. Die BUSL verhindert das, weil sie die Nutzung in Konkurrenzprodukten verbietet. Gleichzeitig bleibt der Code öffentlich, und nach drei Jahren wird er Open Source. Das ist ein Kompromiss, der das Geschäftsmodell schützt, ohne den Code für immer zu verschließen. Merksatz: Bei PolyForm und Business-Source-Lizenzen zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    },
+    {
+      "question": "Was ist der Unterschied zwischen Source-Available und proprietär?",
+      "answer": "Bei proprietärer Software ist der Quellcode nicht öffentlich. Du bekommst nur die kompilierte Software, und du darfst nicht sehen, wie sie funktioniert. Bei Source-Available-Software ist der Quellcode öffentlich, du darfst ihn lesen und daraus lernen, aber du darfst ihn nicht. frei nutzen oder verändern. Source-Available ist transparenter als proprietär, aber restriktiver als Open Source. Es ist ein Mittelweg, der in den letzten Jahren an Popularität gewonnen hat, weil er die Vorteile von. Transparenz bietet, ohne die Nachteile der vollständigen Offenheit. Merksatz: Bei PolyForm und Business-Source-Lizenzen zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    },
+    {
+      "question": "Welche Lizenz soll ich für mein kommerzielles Projekt wählen?",
+      "answer": "Das hängt von deinem Geschäftsmodell ab. Wenn du keine Konkurrenz durch Cloud-Anbieter fürchtest, wähle MIT oder Apache 2. 0. Wenn du verhindern willst, dass andere deinen Code als Dienst hosten, wähle PolyForm Shield oder BUSL. Wenn du nur nicht-kommerzielle Nutzung erlauben willst, wähle PolyForm Noncommercial. Wenn du deinen Code gar nicht teilen willst, wähle gar keine Lizenz und behalte alle Rechte. Die Lizenzwahl ist eine strategische Entscheidung, die du mit deinem Team und idealerweise mit einem Anwalt treffen solltest. Es gibt keine Universallizenz, die für alle Projekte passt. Merksatz: Bei PolyForm und Business-Source-Lizenzen zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    }
+  ]
+}

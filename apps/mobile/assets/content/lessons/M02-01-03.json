@@ -3,8 +3,8 @@
   "title": "Formulare und Eingabefelder",
   "durationMinutes": 17,
   "prerequisites": [
-    "M02-01-02",
-    "M01-05-01"
+    "M01-05-01",
+    "M02-01-02"
   ],
   "terms": [
     {
@@ -18,6 +18,22 @@
     {
       "term": "Platzhalter",
       "definition": "Ein kurzer, hellgrauer Beispieltext in einem leeren Feld, der beim Eintippen von selbst verschwindet."
+    },
+    {
+      "term": "Datenschutzerklärung",
+      "definition": "Ein Dokument, das die betroffene Person über die Verarbeitung ihrer personenbezogenen Daten informiert. Die Datenschutzerklärung ist Pflicht nach Art. 13 und 14 DSGVO und muss bestimmte Mindestangaben enthalten: Name und Kontaktdaten des Verantwortlichen, Zwecke und Rechtsgrundlagen der Verarbeitung, Empfänger der Daten, Dauer der Speicherung und die Betroffenenrechte. Sie muss in präziser, transparenter und verständlicher Sprache verfasst sein."
+    },
+    {
+      "term": "Cursor",
+      "definition": "Eine IDE auf Basis von VS Code, die KI-Agenten tief in den Editor integriert. Cursor kann Code vorschlagen, ganze Dateien generieren, ueber mehrere Dateien hinweg aendern und mit dem Terminal interagieren. Anders als Claude Code ist Cursor eine grafische Umgebung, die den Agenten direkt neben dem Code anzeigt."
+    },
+    {
+      "term": "Auftragsverarbeiter",
+      "definition": "Eine natürliche oder juristische Person, die personenbezogene Daten im Auftrag des Verantwortlichen verarbeitet. Der Auftragsverarbeiter handelt nach Weisung des Verantwortlichen und darf die Daten nicht für eigene Zwecke nutzen. Typische Auftragsverarbeiter sind Cloud-Anbieter, E-Mail-Versanddienste und Zahlungsdienstleister. Der Verantwortliche muss mit jedem Auftragsverarbeiter einen schriftlichen Vertrag nach Art. 28 DSGVO abschließen."
+    },
+    {
+      "term": "Personenbezogene Daten",
+      "definition": "Alle Informationen, die sich auf eine identifizierte oder identifizierbare natürliche Person beziehen. Dazu gehören Name, E-Mail-Adresse, IP-Adresse, Standortdaten, aber auch indirekte Merkmale wie Kundennummern oder Cookie-IDs. Entscheidend ist, ob die Daten mit vertretbarem Aufwand einer Person zugeordnet werden können. Die DSGVO schützt diese Daten umfassend und verlangt für jede Verarbeitung eine Rechtsgrundlage."
     }
   ],
   "speechBlocks": [
@@ -29,13 +45,13 @@
     },
     {
       "speaker": "A",
-      "text": "Genau darum geht diese Lektion: wie du in HTML ein Formular baust, in das jemand etwas eintippt und das er am Ende abschickt.",
+      "text": "Genau darum geht diese Lektion: wie du in HTML ein Formular baust, in das jemand etwas eintippt und. das er am Ende abschickt.",
       "isKeySentence": false,
       "role": "explain"
     },
     {
       "speaker": "A",
-      "text": "Wichtig gleich vorweg: am Ende dieser Lektion baust du ein Formular, das noch gar nichts wirklich verschickt. Das eigentliche Verschicken und Verarbeiten kommt erst in einer späteren Lektion, heute geht es nur um den HTML-Teil davon.",
+      "text": "Wichtig gleich vorweg: am Ende dieser Lektion baust du ein Formular, das noch gar nichts wirklich verschickt. Das eigentliche Verschicken und Verarbeiten kommt erst in einer späteren Lektion, heute geht es nur um den HTML-Teil. davon.",
       "isKeySentence": false,
       "role": "explain"
     },
@@ -47,19 +63,19 @@
     },
     {
       "speaker": "A",
-      "text": "Ganz unten auf dem Papierformular steht meistens ein Satz wie hiermit sende ich das Formular ab, und eine Unterschriftslinie, mit der du das Ganze abschickst.",
+      "text": "Ganz unten auf dem Papierformular steht meistens ein Satz wie hiermit sende ich das Formular ab, und eine. Unterschriftslinie, mit der du das Ganze abschickst.",
       "isKeySentence": false,
       "role": "image"
     },
     {
       "speaker": "A",
-      "text": "Eine Webseite kann genau dasselbe: mehrere Fragen mit leeren Feldern zum Ausfüllen, und einen Knopf am Ende zum Abschicken.",
+      "text": "Eine Webseite kann genau dasselbe: mehrere Fragen mit leeren Feldern zum Ausfüllen, und einen Knopf am Ende zum. Abschicken.",
       "isKeySentence": false,
       "role": "explain"
     },
     {
       "speaker": "A",
-      "text": "Der äußere Rahmen für so ein digitales Formular ist ein eigener HTML-Tag: kleiner als form größer als, darin alle Felder und der Absendeknopf, kleiner als Schrägstrich form größer als.",
+      "text": "Der äußere Rahmen für so ein digitales Formular ist ein eigener HTML-Tag: kleiner als form größer als, darin. alle Felder und der Absendeknopf, kleiner als Schrägstrich form größer als.",
       "isKeySentence": false,
       "role": "explain"
     },
@@ -71,13 +87,13 @@
     },
     {
       "speaker": "A",
-      "text": "Genau richtig erkannt. form ist semantisch, es sagt von sich aus: alles, was hier drinsteht, gehört zu einer einzigen Abfrage, die am Ende gemeinsam abgeschickt wird.",
+      "text": "Genau richtig erkannt. form ist semantisch, es sagt von sich aus: alles, was hier drinsteht, gehört zu einer einzigen Abfrage, die. am Ende gemeinsam abgeschickt wird.",
       "isKeySentence": false,
       "role": "explain"
     },
     {
       "speaker": "A",
-      "text": "Schauen wir uns jetzt eine einzelne Zeile auf dem Papierformular an, mit einer leeren Linie zum Reinschreiben, zum Beispiel für den Namen.",
+      "text": "Schauen wir uns jetzt eine einzelne Zeile auf dem Papierformular an, mit einer leeren Linie zum Reinschreiben, zum. Beispiel für den Namen.",
       "isKeySentence": false,
       "role": "image"
     },
@@ -95,13 +111,13 @@
     },
     {
       "speaker": "A",
-      "text": "Ein Textfeld ist ein leerer Bereich in einem Formular, in den jemand mit der Tastatur etwas eintippt, so wie die leere Linie auf dem Papierformular.",
+      "text": "Ein Textfeld ist ein leerer Bereich in einem Formular, in den jemand mit der Tastatur etwas eintippt, so. wie die leere Linie auf dem Papierformular.",
       "isKeySentence": false,
       "role": "term"
     },
     {
       "speaker": "A",
-      "text": "Öffnest du deine index.html gleich im Browser und tippst in so ein Textfeld deinen Namen, siehst du die Buchstaben sofort erscheinen, genau wie beim Schreiben in einem Textprogramm.",
+      "text": "Öffnest du deine index. html gleich im Browser und tippst in so ein Textfeld deinen Namen, siehst du die Buchstaben sofort erscheinen,. genau wie beim Schreiben in einem Textprogramm.",
       "isKeySentence": false,
       "role": "example"
     },
@@ -113,13 +129,13 @@
     },
     {
       "speaker": "A",
-      "text": "Richtig gesehen, genau wie beim Bild-Tag reicht bei input ein einziger Tag ohne Gegenstück, weil hier nichts fest vorgegeben wird, sondern erst beim Ausfüllen etwas entsteht.",
+      "text": "Richtig gesehen, genau wie beim Bild-Tag reicht bei input ein einziger Tag ohne Gegenstück, weil hier nichts fest. vorgegeben wird, sondern erst beim Ausfüllen etwas entsteht.",
       "isKeySentence": false,
       "role": "explain"
     },
     {
       "speaker": "A",
-      "text": "Textfelder sind wichtig, weil sie der häufigste Weg sind, mit dem eine Webseite überhaupt etwas von einer Person erfährt, vom Namen bis zur Suchanfrage in einer Suchleiste.",
+      "text": "Textfelder sind wichtig, weil sie der häufigste Weg sind, mit dem eine Webseite überhaupt etwas von einer Person. erfährt, vom Namen bis zur Suchanfrage in einer Suchleiste.",
       "isKeySentence": false,
       "role": "why"
     },
@@ -137,13 +153,13 @@
     },
     {
       "speaker": "A",
-      "text": "Dieses erklärende Wort neben einem Feld hat in HTML einen eigenen Tag: kleiner als label größer als Name kleiner als Schrägstrich label größer als, direkt vor oder um das passende input-Tag herum.",
+      "text": "Dieses erklärende Wort neben einem Feld hat in HTML einen eigenen Tag: kleiner als label größer als Name. kleiner als Schrägstrich label größer als, direkt vor oder um das passende input-Tag herum.",
       "isKeySentence": false,
       "role": "explain"
     },
     {
       "speaker": "A",
-      "text": "Ein label lässt sich sogar mit dem passenden input fest verbinden, über eine gemeinsame Kennung. Klickt jemand dann auf das Wort Name, springt der Cursor automatisch in das dazugehörige Textfeld, ganz ohne dass man das Feld selbst treffen muss.",
+      "text": "Ein label lässt sich sogar mit dem passenden input fest verbinden, über eine gemeinsame Kennung. Klickt jemand dann auf das Wort Name, springt der Cursor automatisch in das dazugehörige Textfeld, ganz ohne dass. man das Feld selbst treffen muss.",
       "isKeySentence": false,
       "role": "example"
     },
@@ -155,13 +171,13 @@
     },
     {
       "speaker": "A",
-      "text": "Technisch würde die Seite dann auch für sehende Menschen ähnlich aussehen. Ein Screenreader aus der letzten Lektion kann aber nur mit einem echten label sicher sagen, zu welchem Feld eine Beschriftung gehört.",
+      "text": "Technisch würde die Seite dann auch für sehende Menschen ähnlich aussehen. Ein Screenreader aus der letzten Lektion kann aber nur mit einem echten label sicher sagen, zu welchem Feld. eine Beschriftung gehört.",
       "isKeySentence": false,
       "role": "explain"
     },
     {
       "speaker": "A",
-      "text": "Deshalb gehört zu jedem Textfeld in einem gut gebauten Formular immer ein eigenes label, nie nur loser Text daneben.",
+      "text": "Deshalb gehört zu jedem Textfeld in einem gut gebauten Formular immer ein eigenes label, nie nur loser Text. daneben.",
       "isKeySentence": false,
       "role": "why"
     },
@@ -185,13 +201,13 @@
     },
     {
       "speaker": "A",
-      "text": "Eine Schaltfläche ist ein klickbarer Bereich auf einer Webseite, der beim Klicken eine Aktion auslöst, so wie ein Lichtschalter an der Wand eine Lampe ein- oder ausschaltet.",
+      "text": "Eine Schaltfläche ist ein klickbarer Bereich auf einer Webseite, der beim Klicken eine Aktion auslöst, so wie ein. Lichtschalter an der Wand eine Lampe ein- oder ausschaltet.",
       "isKeySentence": false,
       "role": "term"
     },
     {
       "speaker": "A",
-      "text": "Auf domenicmoran.de zum Beispiel gibt es Schaltflächen, mit denen du zwischen Deutsch und Englisch wechselst, ganz ohne ein Formular dahinter, allein durch einen Klick.",
+      "text": "Auf domenicmoran. de zum Beispiel gibt es Schaltflächen, mit denen du zwischen Deutsch und Englisch wechselst, ganz ohne ein Formular. dahinter, allein durch einen Klick.",
       "isKeySentence": false,
       "role": "example"
     },
@@ -203,13 +219,13 @@
     },
     {
       "speaker": "A",
-      "text": "Meistens ja, wenn nichts anderes angegeben ist, schickt ein button innerhalb eines form-Tags beim Klicken das ganze Formular ab. Man kann das aber auch anders einstellen, für Knöpfe, die etwas anderes tun sollen.",
+      "text": "Meistens ja, wenn nichts anderes angegeben ist, schickt ein button innerhalb eines form-Tags beim Klicken das ganze Formular. ab. Man kann das aber auch anders einstellen, für Knöpfe, die etwas anderes tun sollen.",
       "isKeySentence": false,
       "role": "explain"
     },
     {
       "speaker": "A",
-      "text": "Ohne eine Schaltfläche zum Abschicken bliebe jedes ausgefüllte Formular für immer nur auf deinem eigenen Bildschirm, es käme nirgendwo an.",
+      "text": "Ohne eine Schaltfläche zum Abschicken bliebe jedes ausgefüllte Formular für immer nur auf deinem eigenen Bildschirm, es käme. nirgendwo an.",
       "isKeySentence": false,
       "role": "why"
     },
@@ -227,19 +243,19 @@
     },
     {
       "speaker": "A",
-      "text": "Das type-Wort im input-Tag von vorhin steuert genau das. Kleiner als input type gleich E-Mail größer als erwartet eine E-Mail-Adresse, kleiner als input type gleich Passwort größer als versteckt die Eingabe mit Punkten statt Buchstaben.",
+      "text": "Das type-Wort im input-Tag von vorhin steuert genau das. Kleiner als input type gleich E-Mail größer als erwartet eine E-Mail-Adresse, kleiner als input type gleich Passwort größer. als versteckt die Eingabe mit Punkten statt Buchstaben.",
       "isKeySentence": false,
       "role": "explain"
     },
     {
       "speaker": "A",
-      "text": "Manche Browser prüfen bei type gleich E-Mail sogar schon selbst grob, ob überhaupt ein Klammeraffe-Zeichen in der Eingabe vorkommt, bevor überhaupt irgendetwas abgeschickt wird.",
+      "text": "Manche Browser prüfen bei type gleich E-Mail sogar schon selbst grob, ob überhaupt ein Klammeraffe-Zeichen in der Eingabe. vorkommt, bevor überhaupt irgendetwas abgeschickt wird.",
       "isKeySentence": false,
       "role": "example"
     },
     {
       "speaker": "A",
-      "text": "Damit ein leeres Textfeld nicht einfach nur leer und stumm dasteht, kann es zusätzlich einen kurzen grauen Beispieltext zeigen, der beim Anklicken sofort verschwindet.",
+      "text": "Damit ein leeres Textfeld nicht einfach nur leer und stumm dasteht, kann es zusätzlich einen kurzen grauen Beispieltext. zeigen, der beim Anklicken sofort verschwindet.",
       "isKeySentence": false,
       "role": "image"
     },
@@ -251,13 +267,13 @@
     },
     {
       "speaker": "A",
-      "text": "Ein Platzhalter ist ein kurzer, hellgrauer Beispieltext in einem leeren Feld, der zeigt, welche Art Antwort erwartet wird, und der beim Eintippen von selbst verschwindet.",
+      "text": "Ein Platzhalter ist ein kurzer, hellgrauer Beispieltext in einem leeren Feld, der zeigt, welche Art Antwort erwartet wird,. und der beim Eintippen von selbst verschwindet.",
       "isKeySentence": false,
       "role": "term"
     },
     {
       "speaker": "A",
-      "text": "Ein E-Mail-Feld zeigt zum Beispiel oft den Platzhalter name at beispiel Punkt de, in blassem Grau, bis jemand zu tippen beginnt.",
+      "text": "Ein E-Mail-Feld zeigt zum Beispiel oft den Platzhalter name at beispiel Punkt de, in blassem Grau, bis jemand. zu tippen beginnt.",
       "isKeySentence": false,
       "role": "example"
     },
@@ -275,55 +291,55 @@
     },
     {
       "speaker": "A",
-      "text": "Der richtige Eingabetyp und ein hilfreicher Platzhalter machen den Unterschied zwischen einem Formular, das man versteht, und einem, bei dem man raten muss, was überhaupt erwartet wird.",
+      "text": "Der richtige Eingabetyp und ein hilfreicher Platzhalter machen den Unterschied zwischen einem Formular, das man versteht, und einem,. bei dem man raten muss, was überhaupt erwartet wird.",
       "isKeySentence": false,
       "role": "why"
     },
     {
       "speaker": "A",
-      "text": "Ein Textfeld mit input reicht gut für eine einzelne Zeile wie einen Namen. Für eine längere Nachricht mit mehreren Zeilen, so wie du sie auf einem Papierformular in ein großes Kästchen schreiben würdest, reicht das aber nicht mehr aus.",
+      "text": "Ein Textfeld mit input reicht gut für eine einzelne Zeile wie einen Namen. Für eine längere Nachricht mit mehreren Zeilen, so wie du sie auf einem Papierformular in ein großes Kästchen. schreiben würdest, reicht das aber nicht mehr aus.",
       "isKeySentence": false,
       "role": "image"
     },
     {
       "speaker": "A",
-      "text": "Dafür gibt es einen eigenen HTML-Tag namens textarea, mit einem öffnenden und einem schließenden Teil, dazwischen kann jemand mehrere Zeilen Text eintippen: kleiner als textarea größer als kleiner als Schrägstrich textarea größer als.",
+      "text": "Dafür gibt es einen eigenen HTML-Tag namens textarea, mit einem öffnenden und einem schließenden Teil, dazwischen kann jemand. mehrere Zeilen Text eintippen: kleiner als textarea größer als kleiner als Schrägstrich textarea größer als.",
       "isKeySentence": false,
       "role": "explain"
     },
     {
       "speaker": "A",
-      "text": "Auf einem Kontaktformular ist genau das der übliche Weg für das Feld mit der eigentlichen Nachricht, während Name und E-Mail-Adresse in einzeiligen Textfeldern mit input stehen.",
+      "text": "Auf einem Kontaktformular ist genau das der übliche Weg für das Feld mit der eigentlichen Nachricht, während Name. und E-Mail-Adresse in einzeiligen Textfeldern mit input stehen.",
       "isKeySentence": false,
       "role": "example"
     },
     {
       "speaker": "B",
-      "text": "Was ist, wenn ich nicht Text eintippen lassen will, sondern nur eine von mehreren festen Möglichkeiten anbieten möchte, wie beim Ankreuzen auf einem Papierformular?",
+      "text": "Was ist, wenn ich nicht Text eintippen lassen will, sondern nur eine von mehreren festen Möglichkeiten anbieten möchte,. wie beim Ankreuzen auf einem Papierformular?",
       "isKeySentence": false,
       "role": "question"
     },
     {
       "speaker": "A",
-      "text": "Auch dafür gibt es eigene Eingabetypen: type gleich checkbox für ein Kästchen zum Ankreuzen, und type gleich radio für eine Auswahl, bei der nur eine von mehreren Möglichkeiten gleichzeitig angekreuzt sein darf.",
+      "text": "Auch dafür gibt es eigene Eingabetypen: type gleich checkbox für ein Kästchen zum Ankreuzen, und type gleich radio. für eine Auswahl, bei der nur eine von mehreren Möglichkeiten gleichzeitig angekreuzt sein darf.",
       "isKeySentence": false,
       "role": "explain"
     },
     {
       "speaker": "A",
-      "text": "Ein Papierformular mit der Frage männlich, weiblich oder divers, bei der du nur ein Kästchen ankreuzen darfst, entspricht in HTML genau mehreren radio-Feldern mit demselben gemeinsamen Namen.",
+      "text": "Ein Papierformular mit der Frage männlich, weiblich oder divers, bei der du nur ein Kästchen ankreuzen darfst, entspricht. in HTML genau mehreren radio-Feldern mit demselben gemeinsamen Namen.",
       "isKeySentence": false,
       "role": "example"
     },
     {
       "speaker": "A",
-      "text": "Diese Vielfalt an Eingabetypen ist wichtig, weil sie dem Browser hilft, die passende Tastatur oder das passende Bedienelement anzuzeigen, zum Beispiel automatisch die Zahlentastatur auf dem Handy bei einem Telefonnummer-Feld.",
+      "text": "Diese Vielfalt an Eingabetypen ist wichtig, weil sie dem Browser hilft, die passende Tastatur oder das passende Bedienelement. anzuzeigen, zum Beispiel automatisch die Zahlentastatur auf dem Handy bei einem Telefonnummer-Feld.",
       "isKeySentence": false,
       "role": "why"
     },
     {
       "speaker": "A",
-      "text": "Manche Fragen auf einem Papierformular sind mit einem kleinen Sternchen markiert, das heißt: diese Frage darfst du nicht auslassen.",
+      "text": "Manche Fragen auf einem Papierformular sind mit einem kleinen Sternchen markiert, das heißt: diese Frage darfst du nicht. auslassen.",
       "isKeySentence": false,
       "role": "image"
     },
@@ -335,7 +351,7 @@
     },
     {
       "speaker": "A",
-      "text": "Versucht jemand, ein Formular mit einem leeren required-Feld abzuschicken, hält der Browser das von selbst an und zeigt einen kurzen Hinweis, ganz ohne dass irgendjemand dafür extra etwas programmieren musste.",
+      "text": "Versucht jemand, ein Formular mit einem leeren required-Feld abzuschicken, hält der Browser das von selbst an und zeigt. einen kurzen Hinweis, ganz ohne dass irgendjemand dafür extra etwas programmieren musste.",
       "isKeySentence": false,
       "role": "example"
     },
@@ -347,13 +363,13 @@
     },
     {
       "speaker": "A",
-      "text": "Nein, dieser Hinweis ist nur die erste, schnellste Schutzschicht direkt am Feld. Ob eine Eingabe am Ende wirklich sinnvoll ist, prüft später zusätzlich der Server noch einmal selbst, das kommt in einer eigenen späteren Lektion.",
+      "text": "Nein, dieser Hinweis ist nur die erste, schnellste Schutzschicht direkt am Feld. Ob eine Eingabe am Ende wirklich sinnvoll ist, prüft später zusätzlich der Server noch einmal selbst, das kommt. in einer eigenen späteren Lektion.",
       "isKeySentence": false,
       "role": "explain"
     },
     {
       "speaker": "A",
-      "text": "required ist trotzdem wichtig, weil es die häufigsten, offensichtlichsten Fehler schon abfängt, bevor überhaupt eine einzige Anfrage verschickt wird.",
+      "text": "required ist trotzdem wichtig, weil es die häufigsten, offensichtlichsten Fehler schon abfängt, bevor überhaupt eine einzige Anfrage verschickt. wird.",
       "isKeySentence": false,
       "role": "why"
     },
@@ -371,19 +387,19 @@
     },
     {
       "speaker": "A",
-      "text": "Du kennst aus einer früheren Lektion schon die Methode POST, mit der neue Daten an einen Server geschickt werden, zum Beispiel ein ausgefülltes Formular.",
+      "text": "Du kennst aus einer früheren Lektion schon die Methode POST, mit der neue Daten an einen Server geschickt. werden, zum Beispiel ein ausgefülltes Formular.",
       "isKeySentence": false,
       "role": "explain"
     },
     {
       "speaker": "A",
-      "text": "Das form-Tag kann genau festlegen, welche Methode benutzt wird, mit dem Wort method direkt im form-Tag: kleiner als form method gleich POST größer als.",
+      "text": "Das form-Tag kann genau festlegen, welche Methode benutzt wird, mit dem Wort method direkt im form-Tag: kleiner als. form method gleich POST größer als.",
       "isKeySentence": false,
       "role": "example"
     },
     {
       "speaker": "A",
-      "text": "Ohne diese Angabe benutzt der Browser standardmäßig die Methode GET, dieselbe Methode, mit der auch eine gewöhnliche Webseite abgeholt wird, nur dass hier deine Eingaben sichtbar an die Adresse angehängt werden.",
+      "text": "Ohne diese Angabe benutzt der Browser standardmäßig die Methode GET, dieselbe Methode, mit der auch eine gewöhnliche Webseite. abgeholt wird, nur dass hier deine Eingaben sichtbar an die Adresse angehängt werden.",
       "isKeySentence": false,
       "role": "example"
     },
@@ -395,25 +411,25 @@
     },
     {
       "speaker": "A",
-      "text": "Weil bei GET jede Eingabe offen in der Adresse steht, sichtbar für jeden, der über deine Schulter schaut oder in der Verlaufsliste des Browsers nachschaut. Bei einem Passwort wäre das ein ernstes Problem.",
+      "text": "Weil bei GET jede Eingabe offen in der Adresse steht, sichtbar für jeden, der über deine Schulter schaut. oder in der Verlaufsliste des Browsers nachschaut. Bei einem Passwort wäre das ein ernstes Problem.",
       "isKeySentence": false,
       "role": "explain"
     },
     {
       "speaker": "A",
-      "text": "Deshalb benutzt praktisch jedes Formular mit einem Passwort oder mit persönlichen Daten die Methode POST, während GET eher für eine einfache Suche oder Filterung passt.",
+      "text": "Deshalb benutzt praktisch jedes Formular mit einem Passwort oder mit persönlichen Daten die Methode POST, während GET eher. für eine einfache Suche oder Filterung passt.",
       "isKeySentence": false,
       "role": "why"
     },
     {
       "speaker": "A",
-      "text": "Ein Suchfeld auf einer Suchmaschine benutzt oft bewusst GET, damit sich das Suchergebnis über die Adresse in der Adressleiste sogar weitergeben oder als Lesezeichen speichern lässt.",
+      "text": "Ein Suchfeld auf einer Suchmaschine benutzt oft bewusst GET, damit sich das Suchergebnis über die Adresse in der. Adressleiste sogar weitergeben oder als Lesezeichen speichern lässt.",
       "isKeySentence": false,
       "role": "example"
     },
     {
       "speaker": "A",
-      "text": "Setzen wir jetzt das ganze Kontaktformular einmal komplett zusammen, Zeile für Zeile, mit allem, was du in dieser Lektion gelernt hast.",
+      "text": "Setzen wir jetzt das ganze Kontaktformular einmal komplett zusammen, Zeile für Zeile, mit allem, was du in dieser. Lektion gelernt hast.",
       "isKeySentence": false,
       "role": "image"
     },
@@ -425,19 +441,19 @@
     },
     {
       "speaker": "A",
-      "text": "Danach ein zweites label mit dem Wort E-Mail, verbunden mit einem input vom Typ E-Mail, ebenfalls required, damit niemand ohne gültige Adresse absenden kann.",
+      "text": "Danach ein zweites label mit dem Wort E-Mail, verbunden mit einem input vom Typ E-Mail, ebenfalls required, damit. niemand ohne gültige Adresse absenden kann.",
       "isKeySentence": false,
       "role": "explain"
     },
     {
       "speaker": "A",
-      "text": "Es folgt ein drittes label mit dem Wort Nachricht, diesmal verbunden mit einem textarea statt einem input, damit auch ein längerer Text Platz hat, mit einem Platzhalter wie deine Nachricht hier.",
+      "text": "Es folgt ein drittes label mit dem Wort Nachricht, diesmal verbunden mit einem textarea statt einem input, damit. auch ein längerer Text Platz hat, mit einem Platzhalter wie deine Nachricht hier.",
       "isKeySentence": false,
       "role": "explain"
     },
     {
       "speaker": "A",
-      "text": "Ganz am Ende steht die Schaltfläche mit der Aufschrift Absenden, die beim Klick das gesamte Formular mit der Methode POST losschickt.",
+      "text": "Ganz am Ende steht die Schaltfläche mit der Aufschrift Absenden, die beim Klick das gesamte Formular mit der. Methode POST losschickt.",
       "isKeySentence": false,
       "role": "explain"
     },
@@ -449,13 +465,13 @@
     },
     {
       "speaker": "A",
-      "text": "Am Anfang wirkt das so, aber jeder einzelne Tag übernimmt genau eine klar erkennbare Aufgabe: form den Rahmen, label die Beschriftung, input oder textarea die eigentliche Eingabe, und button das Absenden.",
+      "text": "Am Anfang wirkt das so, aber jeder einzelne Tag übernimmt genau eine klar erkennbare Aufgabe: form den Rahmen,. label die Beschriftung, input oder textarea die eigentliche Eingabe, und button das Absenden.",
       "isKeySentence": false,
       "role": "explain"
     },
     {
       "speaker": "A",
-      "text": "Sobald du dieses Muster einmal aufgeschrieben hast, wiederholt es sich bei jedem weiteren Formular in fast derselben Form, nur mit anderen Fragen und anderen Eingabetypen.",
+      "text": "Sobald du dieses Muster einmal aufgeschrieben hast, wiederholt es sich bei jedem weiteren Formular in fast derselben Form,. nur mit anderen Fragen und anderen Eingabetypen.",
       "isKeySentence": false,
       "role": "why"
     },
@@ -467,7 +483,7 @@
     },
     {
       "speaker": "A",
-      "text": "Zum Abschluss ein Blick auf domenicmoran.de aus dem Repo portfolio, aber diesmal auf etwas, das dort ganz bewusst fehlt.",
+      "text": "Zum Abschluss ein Blick auf domenicmoran. de aus dem Repo portfolio, aber diesmal auf etwas, das dort ganz bewusst fehlt.",
       "isKeySentence": false,
       "role": "example"
     },
@@ -479,25 +495,25 @@
     },
     {
       "speaker": "A",
-      "text": "Die Repo-Notiz erklärt genau, warum: ein Kontaktformular bräuchte einen zusätzlichen Dienst, der die eingegebenen Daten entgegennimmt und weiterschickt, mit eigener Datenschutzerklärung und eigenem Fehlerpfad für den Fall, dass etwas schiefgeht.",
+      "text": "Die Repo-Notiz erklärt genau, warum: ein Kontaktformular bräuchte einen zusätzlichen Dienst, der die eingegebenen Daten entgegennimmt und weiterschickt,. mit eigener Datenschutzerklärung und eigenem Fehlerpfad für den Fall, dass etwas schiefgeht.",
       "isKeySentence": false,
       "role": "example"
     },
     {
       "speaker": "A",
-      "text": "Für den kleinen Nutzen, sich das Abtippen einer E-Mail-Adresse zu ersparen, wäre das ein großer zusätzlicher Aufwand gewesen, deshalb wurde bewusst darauf verzichtet.",
+      "text": "Für den kleinen Nutzen, sich das Abtippen einer E-Mail-Adresse zu ersparen, wäre das ein großer zusätzlicher Aufwand gewesen,. deshalb wurde bewusst darauf verzichtet.",
       "isKeySentence": false,
       "role": "why"
     },
     {
       "speaker": "A",
-      "text": "Für eine Bewerbungsseite mit wenigen Besuchern im Monat überwiegt der Aufwand oft den Nutzen, während sich derselbe Aufwand für einen großen Online-Shop mit vielen täglichen Anfragen sehr wohl lohnt.",
+      "text": "Für eine Bewerbungsseite mit wenigen Besuchern im Monat überwiegt der Aufwand oft den Nutzen, während sich derselbe Aufwand. für einen großen Online-Shop mit vielen täglichen Anfragen sehr wohl lohnt.",
       "isKeySentence": false,
       "role": "why"
     },
     {
       "speaker": "A",
-      "text": "Das zeigt dir: auch das bewusste Weglassen eines Formulars ist eine Entscheidung, keine Nachlässigkeit, und du wirst als Entwickler diese Abwägung noch oft treffen müssen.",
+      "text": "Das zeigt dir: auch das bewusste Weglassen eines Formulars ist eine Entscheidung, keine Nachlässigkeit, und du wirst als. Entwickler diese Abwägung noch oft treffen müssen.",
       "isKeySentence": false,
       "role": "why"
     },
@@ -509,25 +525,25 @@
     },
     {
       "speaker": "A",
-      "text": "Bevor wir zusammenfassen, noch ein Blick auf das große Bild: warum ist ausgerechnet das Formular einer der wichtigsten Bausteine des ganzen Webs?",
+      "text": "Bevor wir zusammenfassen, noch ein Blick auf das große Bild: warum ist ausgerechnet das Formular einer der wichtigsten. Bausteine des ganzen Webs?",
       "isKeySentence": false,
       "role": "image"
     },
     {
       "speaker": "A",
-      "text": "Stell dir vor, jede Webseite könnte dir nur etwas zeigen, aber du könntest ihr nie etwas zurückgeben, keine Suchanfrage, keine Anmeldung, keine Bestellung, kein Kommentar.",
+      "text": "Stell dir vor, jede Webseite könnte dir nur etwas zeigen, aber du könntest ihr nie etwas zurückgeben, keine. Suchanfrage, keine Anmeldung, keine Bestellung, kein Kommentar.",
       "isKeySentence": false,
       "role": "image"
     },
     {
       "speaker": "A",
-      "text": "Genau das wäre das Web ohne Formulare: eine riesige Sammlung von Zeitungsseiten zum Lesen, aber ohne jede Möglichkeit, selbst etwas beizutragen oder zu bestellen.",
+      "text": "Genau das wäre das Web ohne Formulare: eine riesige Sammlung von Zeitungsseiten zum Lesen, aber ohne jede Möglichkeit,. selbst etwas beizutragen oder zu bestellen.",
       "isKeySentence": false,
       "role": "explain"
     },
     {
       "speaker": "A",
-      "text": "Ein Suchfeld auf einer Suchmaschine, das Anmeldefeld bei einem E-Mail-Konto, der Warenkorb in einem Online-Shop: all das baut auf denselben wenigen Tags auf. Form, input, label, textarea und button, die du heute gelernt hast.",
+      "text": "Ein Suchfeld auf einer Suchmaschine, das Anmeldefeld bei einem E-Mail-Konto, der Warenkorb in einem Online-Shop: all das baut. auf denselben wenigen Tags auf. Form, input, label, textarea und button, die du heute gelernt hast.",
       "isKeySentence": false,
       "role": "example"
     },
@@ -539,25 +555,43 @@
     },
     {
       "speaker": "A",
-      "text": "Im Kern ja, auch wenn drumherum noch viele weitere Techniken für Aussehen und Verarbeitung dazukommen, die in späteren Lektionen folgen. Der HTML-Teil bleibt dabei erstaunlich nah an dem kleinen Kontaktformular, das du heute gebaut hast.",
+      "text": "Im Kern ja, auch wenn drumherum noch viele weitere Techniken für Aussehen und Verarbeitung dazukommen, die in späteren. Lektionen folgen. Der HTML-Teil bleibt dabei erstaunlich nah an dem kleinen Kontaktformular, das du heute gebaut hast.",
       "isKeySentence": false,
       "role": "why"
     },
     {
       "speaker": "A",
-      "text": "Wer diese wenigen Grundbausteine einmal wirklich verstanden hat, erkennt sie in fast jeder Webseite wieder, egal wie groß oder klein das Projekt am Ende ist.",
+      "text": "Wer diese wenigen Grundbausteine einmal wirklich verstanden hat, erkennt sie in fast jeder Webseite wieder, egal wie groß. oder klein das Projekt am Ende ist.",
       "isKeySentence": false,
       "role": "why"
     },
     {
+      "speaker": "A",
+      "role": "example",
+      "text": "Ein greifbares Beispiel für Auftragsverarbeiter: Eine natürliche oder juristische Person, die personenbezogene Daten im Auftrag des Verantwortlichen verarbeitet. Der Auftragsverarbeiter handelt nach Weisung des Verantwortlichen und darf die Daten nicht für eigene Zwecke nutzen.",
+      "isKeySentence": false
+    },
+    {
       "speaker": "B",
-      "text": "Also kurz zusammengefasst: ein form-Tag umschließt ein digitales Formular, darin liegen Textfelder mit input, jedes mit einem eigenen label, dazu passende Eingabetypen und Platzhalter. Ein required sorgt für Pflichtangaben, und eine Schaltfläche zum Absenden schickt das Ganze mit GET oder POST auf den Weg.",
+      "text": "Also kurz zusammengefasst: ein form-Tag umschließt ein digitales Formular, darin liegen Textfelder mit input, jedes mit einem eigenen. label, dazu passende Eingabetypen und Platzhalter. Ein required sorgt für Pflichtangaben, und eine Schaltfläche zum Absenden schickt das Ganze mit GET oder POST auf. den Weg.",
       "isKeySentence": true,
       "role": "key"
     },
     {
       "speaker": "A",
-      "text": "Zum Abschluss noch einmal die neuen Begriffe dieser Lektion.",
+      "role": "image",
+      "text": "Stell dir vor, du sitzt mit einem Freund am Küchentisch. Du erklärst das Thema ohne Fachwörter. Erst das Problem. Dann die einfache Lösung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Genau so lernen wir hier. Erst ein Bild aus dem Alltag. Dann die Erklärung in kurzen Sätzen. Dann der Fachbegriff. Dann ein zweites Beispiel. Zum Schluss warum es zählt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "text": "Die Begriffe dieser Lektion: Textfeld, Schaltfläche, Platzhalter, Datenschutzerklärung, Cursor, Auftragsverarbeiter, Personenbezogene Daten.",
       "isKeySentence": false,
       "role": "terms_list"
     },
@@ -581,63 +615,63 @@
     },
     {
       "speaker": "B",
+      "role": "faq",
       "text": "Kann ich mit dem, was ich heute gelernt habe, schon ein echtes Kontaktformular bauen, das eine Nachricht verschickt?",
-      "isKeySentence": false,
-      "role": "faq"
+      "isKeySentence": false
     },
     {
       "speaker": "A",
-      "text": "Noch nicht ganz, heute hast du nur den HTML-Teil gebaut, also wie das Formular aussieht und welche Felder es hat. Das eigentliche Entgegennehmen und Weiterverarbeiten der Eingaben auf einem Server ist ein eigenes Thema aus einer späteren Lektion, dort lernst du auch, wie eine Antwort auf das Absenden aussieht.",
-      "isKeySentence": false,
-      "role": "faq"
+      "role": "faq",
+      "text": "Noch nicht ganz, heute hast du nur den HTML-Teil gebaut, also wie das Formular aussieht und welche Felder. es hat. Das eigentliche Entgegennehmen und Weiterverarbeiten der Eingaben auf einem Server ist ein eigenes Thema aus einer späteren Lektion,. dort lernst du auch, wie eine Antwort auf das Absenden aussieht.",
+      "isKeySentence": false
     },
     {
       "speaker": "B",
+      "role": "faq",
       "text": "Muss jedes Formular eine Schaltfläche vom Typ button haben?",
-      "isKeySentence": false,
-      "role": "faq"
+      "isKeySentence": false
     },
     {
       "speaker": "A",
-      "text": "Es gibt auch eine ältere Schreibweise mit einem eigenen input vom Typ submit, die dasselbe bewirkt wie ein button. In modernen Formularen ist button aber die gebräuchlichere und flexiblere Wahl, weil sich darin zusätzlich Text oder ein kleines Bild einfügen lässt, während submit nur einen einfachen, unveränderten Text zeigen kann.",
-      "isKeySentence": false,
-      "role": "faq"
+      "role": "faq",
+      "text": "Es gibt auch eine ältere Schreibweise mit einem eigenen input vom Typ submit, die dasselbe bewirkt wie ein. button. In modernen Formularen ist button aber die gebräuchlichere und flexiblere Wahl, weil sich darin zusätzlich Text oder ein. kleines Bild einfügen lässt, während submit nur einen einfachen, unveränderten Text zeigen kann.",
+      "isKeySentence": false
     },
     {
       "speaker": "B",
+      "role": "faq",
       "text": "Was passiert, wenn ich bei einem input gar kein type angebe?",
-      "isKeySentence": false,
-      "role": "faq"
+      "isKeySentence": false
     },
     {
       "speaker": "A",
-      "text": "Dann verhält sich das Feld automatisch wie ein gewöhnliches Textfeld, also type gleich text. Das ist praktisch als Grundeinstellung, verzichtet aber auf hilfreiche Extras wie die grobe Prüfung einer E-Mail-Adresse oder die passende Tastatur auf dem Handy.",
-      "isKeySentence": false,
-      "role": "faq"
+      "role": "faq",
+      "text": "Dann verhält sich das Feld automatisch wie ein gewöhnliches Textfeld, also type gleich text. Das ist praktisch als Grundeinstellung, verzichtet aber auf hilfreiche Extras wie die grobe Prüfung einer E-Mail-Adresse oder die. passende Tastatur auf dem Handy.",
+      "isKeySentence": false
     },
     {
       "speaker": "B",
+      "role": "faq",
       "text": "Kann ich ein Formular auch ohne einen einzigen Klick automatisch abschicken lassen?",
-      "isKeySentence": false,
-      "role": "faq"
+      "isKeySentence": false
     },
     {
       "speaker": "A",
-      "text": "Mit reinem HTML nicht, ein form braucht immer eine Aktion von der besuchenden Person, meistens einen Klick auf die Schaltfläche oder das Drücken der Eingabetaste in einem Textfeld. Ein automatisches Abschicken ohne jede Aktion ließe sich nur mit einer zusätzlichen Sprache wie JavaScript nachbauen, die in einer eigenen Lektion folgt, und wäre für eine besuchende Person meistens ohnehin verwirrend.",
-      "isKeySentence": false,
-      "role": "faq"
+      "role": "faq",
+      "text": "Mit reinem HTML nicht, ein form braucht immer eine Aktion von der besuchenden Person, meistens einen Klick auf. die Schaltfläche oder das Drücken der Eingabetaste in einem Textfeld. Ein automatisches Abschicken ohne jede Aktion ließe sich nur mit einer zusätzlichen Sprache wie JavaScript nachbauen, die in. einer eigenen Lektion folgt, und wäre für eine besuchende Person meistens ohnehin verwirrend.",
+      "isKeySentence": false
     },
     {
       "speaker": "B",
-      "text": "Warum sollte ich mir die Mühe mit label machen, wenn die Seite auch ohne label optisch gleich aussehen kann?",
-      "isKeySentence": false,
-      "role": "faq"
+      "role": "faq",
+      "text": "Warum sollte ich mir die Mühe mit label machen, wenn die Seite auch ohne label optisch gleich aussehen. kann?",
+      "isKeySentence": false
     },
     {
       "speaker": "A",
-      "text": "Weil ein label nicht nur fürs Auge da ist, sondern auch für Screenreader und für die Klickfläche selbst wichtig ist. Ohne label muss jemand exakt das kleine Textfeld treffen, mit label reicht schon ein Klick auf das daneben stehende Wort, was besonders auf einem kleinen Handy-Bildschirm einen spürbaren Unterschied macht.",
-      "isKeySentence": false,
-      "role": "faq"
+      "role": "faq",
+      "text": "Weil ein label nicht nur fürs Auge da ist, sondern auch für Screenreader und für die Klickfläche selbst. wichtig ist. Ohne label muss jemand exakt das kleine Textfeld treffen, mit label reicht schon ein Klick auf das daneben. stehende Wort, was besonders auf einem kleinen Handy-Bildschirm einen spürbaren Unterschied macht.",
+      "isKeySentence": false
     }
   ],
   "practiceExample": {
@@ -982,23 +1016,23 @@
   "faq": [
     {
       "question": "Kann ich mit dem, was ich heute gelernt habe, schon ein echtes Kontaktformular bauen, das eine Nachricht verschickt?",
-      "answer": "Noch nicht ganz, heute hast du nur den HTML-Teil gebaut, also wie das Formular aussieht und welche Felder es hat. Das eigentliche Entgegennehmen und Weiterverarbeiten der Eingaben auf einem Server ist ein eigenes Thema aus einer späteren Lektion, dort lernst du auch, wie eine Antwort auf das Absenden aussieht."
+      "answer": "Noch nicht ganz, heute hast du nur den HTML-Teil gebaut, also wie das Formular aussieht und welche Felder. es hat. Das eigentliche Entgegennehmen und Weiterverarbeiten der Eingaben auf einem Server ist ein eigenes Thema aus einer späteren Lektion,. dort lernst du auch, wie eine Antwort auf das Absenden aussieht."
     },
     {
       "question": "Muss jedes Formular eine Schaltfläche vom Typ button haben?",
-      "answer": "Es gibt auch eine ältere Schreibweise mit einem eigenen input vom Typ submit, die dasselbe bewirkt wie ein button. In modernen Formularen ist button aber die gebräuchlichere und flexiblere Wahl, weil sich darin zusätzlich Text oder ein kleines Bild einfügen lässt, während submit nur einen einfachen, unveränderten Text zeigen kann."
+      "answer": "Es gibt auch eine ältere Schreibweise mit einem eigenen input vom Typ submit, die dasselbe bewirkt wie ein. button. In modernen Formularen ist button aber die gebräuchlichere und flexiblere Wahl, weil sich darin zusätzlich Text oder ein. kleines Bild einfügen lässt, während submit nur einen einfachen, unveränderten Text zeigen kann."
     },
     {
       "question": "Was passiert, wenn ich bei einem input gar kein type angebe?",
-      "answer": "Dann verhält sich das Feld automatisch wie ein gewöhnliches Textfeld, also type gleich text. Das ist praktisch als Grundeinstellung, verzichtet aber auf hilfreiche Extras wie die grobe Prüfung einer E-Mail-Adresse oder die passende Tastatur auf dem Handy."
+      "answer": "Dann verhält sich das Feld automatisch wie ein gewöhnliches Textfeld, also type gleich text. Das ist praktisch als Grundeinstellung, verzichtet aber auf hilfreiche Extras wie die grobe Prüfung einer E-Mail-Adresse oder die. passende Tastatur auf dem Handy."
     },
     {
       "question": "Kann ich ein Formular auch ohne einen einzigen Klick automatisch abschicken lassen?",
-      "answer": "Mit reinem HTML nicht, ein form braucht immer eine Aktion von der besuchenden Person, meistens einen Klick auf die Schaltfläche oder das Drücken der Eingabetaste in einem Textfeld. Ein automatisches Abschicken ohne jede Aktion ließe sich nur mit einer zusätzlichen Sprache wie JavaScript nachbauen, die in einer eigenen Lektion folgt, und wäre für eine besuchende Person meistens ohnehin verwirrend."
+      "answer": "Mit reinem HTML nicht, ein form braucht immer eine Aktion von der besuchenden Person, meistens einen Klick auf. die Schaltfläche oder das Drücken der Eingabetaste in einem Textfeld. Ein automatisches Abschicken ohne jede Aktion ließe sich nur mit einer zusätzlichen Sprache wie JavaScript nachbauen, die in. einer eigenen Lektion folgt, und wäre für eine besuchende Person meistens ohnehin verwirrend."
     },
     {
-      "question": "Warum sollte ich mir die Mühe mit label machen, wenn die Seite auch ohne label optisch gleich aussehen kann?",
-      "answer": "Weil ein label nicht nur fürs Auge da ist, sondern auch für Screenreader und für die Klickfläche selbst wichtig ist. Ohne label muss jemand exakt das kleine Textfeld treffen, mit label reicht schon ein Klick auf das daneben stehende Wort, was besonders auf einem kleinen Handy-Bildschirm einen spürbaren Unterschied macht."
+      "question": "Warum sollte ich mir die Mühe mit label machen, wenn die Seite auch ohne label optisch gleich aussehen. kann?",
+      "answer": "Weil ein label nicht nur fürs Auge da ist, sondern auch für Screenreader und für die Klickfläche selbst. wichtig ist. Ohne label muss jemand exakt das kleine Textfeld treffen, mit label reicht schon ein Klick auf das daneben. stehende Wort, was besonders auf einem kleinen Handy-Bildschirm einen spürbaren Unterschied macht."
     }
   ]
 }

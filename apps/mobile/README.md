@@ -30,6 +30,10 @@ Pfadlänge beim C++-Codegen läuft der Bau über die Junction `C:\rnb\FutureDev`
 
 ### Bauen auf Windows
 
+Die React-Native New Architecture ist in `app.json` (`newArchEnabled: false`)
+absichtlich deaktiviert, um C++-Codegen und damit die Windows-Pfadlänge beim
+Release-Build zu reduzieren; der Wert überlebt `expo prebuild`.
+
 Drei Dinge zusammen, sonst scheitert der native Bau an der Windows-Pfadlänge
 (`ninja: error: manifest 'build.ninja' still dirty after 100 tries` in einem
 `.cxx`-Ordner eines nativen Moduls wie `react-native-screens`):

@@ -1,0 +1,774 @@
+{
+  "id": "M06-04-02",
+  "title": "Farbkontrast und visuelle Barrierefreiheit",
+  "durationMinutes": 30,
+  "prerequisites": [
+    "M06-04-01"
+  ],
+  "terms": [
+    {
+      "term": "Kontrastverhältnis",
+      "definition": "Das messbare Verhältnis der Helligkeit zwischen zwei Farben, meist zwischen Text und Hintergrund. Die WCAG 2.1 schreibt ein Mindestkontrastverhältnis von 4,5:1 für normalen Text und 3:1 für großen Text ab 18px oder 14px fett vor. Das Verhältnis wird nach einer standardisierten Formel aus den relativen Luminanzwerten der Farben berechnet. Ein Kontrastverhältnis von 21:1 ist das Maximum und entspricht schwarz auf weiß."
+    },
+    {
+      "term": "Farbenblindheit",
+      "definition": "Eine Sehschwäche, bei der bestimmte Farben nicht oder nur eingeschränkt wahrgenommen werden. Die häufigste Form ist die Rot-Grün-Schwäche, die etwa acht Prozent aller Männer betrifft. Informationen dürfen niemals allein durch Farbe vermittelt werden. Ein roter Rahmen um ein Fehlerfeld muss durch ein Fehlersymbol oder einen Fehlertext ergänzt werden. Ein Diagramm, das Daten nur durch Farben unterscheidet, ist für farbenblinde Nutzer unlesbar."
+    },
+    {
+      "term": "Fokus-Indikator",
+      "definition": "Eine sichtbare Markierung, die anzeigt, welches Element gerade den Tastaturfokus hat. Der Standard-Fokus-Indikator des Browsers ist ein blauer oder schwarzer gestrichelter Rahmen. Viele Entwickler entfernen diesen mit outline: none, was die Tastaturnavigation unmöglich macht. Ein guter Fokus-Indikator hat ein Kontrastverhältnis von mindestens 3:1 zum Hintergrund und ist mindestens zwei Pixel dick. Er darf niemals vollständig entfernt werden."
+    },
+    {
+      "term": "Label-Element",
+      "definition": "Das HTML-Element, das eine Beschriftung mit einem Formularfeld verknüpft. Die Verknüpfung erfolgt über das for-Attribut des Labels, das der id des Eingabefelds entspricht. Ein korrekt verknüpftes Label macht das Formular für Screenreader zugänglich und vergrößert die Klickfläche, weil ein Klick auf das Label das Eingabefeld fokussiert. Platzhalter im placeholder-Attribut ersetzen kein Label, weil sie verschwinden, sobald der Nutzer tippt."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir ein Straßenschild vor, das mit hellgrauer Schrift auf weißem Grund beschriftet ist. Du kneifst die Augen zusammen, aber du kannst den Text kaum lesen. Jetzt stell dir vor, du hast eine Sehschwäche und siehst von Natur aus weniger Kontrast. Für dich ist dieses Schild nicht nur schwer lesbar, sondern komplett unsichtbar. Genau so ergeht es Millionen von Menschen mit schlechten Augen, wenn deine App zu wenig Kontrast zwischen Text. und Hintergrund hat.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Farbkontrast ist einer der am häufigsten verletzten Aspekte der Barrierefreiheit. Die WCAG 2. 1 schreibt ein Mindestkontrastverhältnis von 4,5:1 für normalen Text und 3:1 für großen Text vor. Das klingt technisch, ist aber einfach zu prüfen: Ein Kontrast-Checker zeigt dir, ob deine Farbkombination die Anforderungen erfüllt. Grauer Text auf weißem Grund ist der häufigste Verstoß. Designer lieben dezente Farben, aber was dezent aussieht, ist für viele Nutzer unsichtbar.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist das Kontrastverhältnis, und wie messe ich es?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Das Kontrastverhältnis ist eine Zahl, die angibt, wie stark sich zwei Farben in ihrer Helligkeit unterscheiden. Ein Verhältnis von 1:1 bedeutet, dass beide Farben gleich hell sind, also kein Kontrast besteht. Ein Verhältnis von 21:1 ist das Maximum und entspricht schwarz auf weiß. Die WCAG verlangt 4,5:1 für normalen Text und 3:1 für großen Text. Du misst das Kontrastverhältnis mit einem Online-Tool wie dem WebAIM Contrast Checker oder direkt in den Chrome DevTools. im Accessibility-Tab.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Das Kontrastverhältnis misst den Helligkeitsunterschied zwischen zwei Farben und muss nach WCAG mindestens 4,5:1 für normalen Text betragen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In der FutureDev-App haben wir unsere Farbpalette mit einem Kontrast-Checker geprüft. Unser Standardtext ist #333333 auf #FFFFFF, das ergibt ein Kontrastverhältnis von 12,6:1 und erfüllt die Anforderungen problemlos. Unser grauer Hilfetext war #999999 auf #FFFFFF mit einem Verhältnis von nur 2,8:1, das ist zu wenig. Wir haben ihn auf #767676 geändert, was 4,6:1 ergibt und die Anforderungen erfüllt. Der Unterschied ist für Normalsichtige kaum sichtbar, für Sehbehinderte ist er der Unterschied zwischen lesbar und unsichtbar.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Kontrast ist kein Design-Feature, sondern eine Grundvoraussetzung für Lesbarkeit. Wenn dein Text nicht lesbar ist, ist deine gesamte App nutzlos. Kontrast ist die erste Hürde, die deine App nehmen muss, bevor irgendetwas anderes zählt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was sind die WCAG, und welche Stufe muss ich einhalten?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir ein Gebäude mit drei Eingängen vor. Der erste Eingang hat eine Stufe, die für Rollstuhlfahrer unüberwindbar ist. Der zweite Eingang hat eine Rampe, die für die meisten Rollstuhlfahrer benutzbar ist. Der dritte Eingang ist ebenerdig und für jeden zugänglich. Die WCAG-Stufen A, AA und AAA sind diese drei Eingänge. Stufe A ist das Minimum, Stufe AA ist der empfohlene Standard und Stufe AAA ist das Optimum. Das Gesetz verlangt Stufe AA.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Die Web Content Accessibility Guidelines, kurz WCAG, sind der internationale Standard für Barrierefreiheit im Web. Sie sind in vier Prinzipien gegliedert: Wahrnehmbarkeit, Bedienbarkeit, Verständlichkeit und Robustheit. Jedes Prinzip enthält Erfolgskriterien auf drei Stufen. Stufe A umfasst die grundlegendsten Anforderungen, ohne die eine Nutzung unmöglich ist. Stufe AA ist der empfohlene Standard, den die meisten Gesetze fordern. Stufe AAA ist die höchste Stufe, die nicht für alle Inhalte erreichbar ist. Das Barrierefreiheitsstärkungsgesetz verlangt WCAG 2. 1 Level AA.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Die WCAG sind der internationale Standard für Barrierefreiheit mit drei Stufen A, AA und AAA, wobei AA gesetzlich. gefordert ist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Für die FutureDev-App orientieren wir uns an WCAG 2. 1 Level AA. Das bedeutet konkret: Kontrastverhältnis mindestens 4,5:1 für Text, alle Funktionen mit der Tastatur bedienbar, keine Informationen allein durch. Farbe, sichtbarer Fokus-Indikator, aussagekräftige Überschriften und Alternativtexte für Bilder. Wir haben eine Checkliste mit den 50 Erfolgskriterien der Stufen A und AA und prüfen jedes neue Feature. gegen diese Liste. AAA-Kriterien setzen wir um, wo es ohne unverhältnismäßigen Aufwand möglich ist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die WCAG sind kein theoretischer Wunschzettel, sondern ein praktischer Leitfaden. Jedes Erfolgskriterium beschreibt ein konkretes Problem und eine konkrete Lösung. Wenn du die WCAG einhältst, ist deine App für die allermeisten Nutzer bedienbar, unabhängig von ihren Einschränkungen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Warum darf ich Informationen nicht allein durch Farbe vermitteln?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine Ampel vor, die nur aus farbigen Lichtern besteht. Für die meisten Menschen ist das ausreichend: Rot bedeutet Stopp, Grün bedeutet Gehen. Aber für einen farbenblinden Menschen sehen Rot und Grün gleich aus. Er kann die Ampel nicht lesen. Deshalb haben moderne Ampeln zusätzlich zur Farbe eine Form: Das rote Licht ist oben, das grüne unten. Oder sie zeigen ein Männchen, das steht oder geht. Die Information wird nicht allein durch Farbe vermittelt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Etwa acht Prozent aller Männer haben eine Rot-Grün-Sehschwäche. Sie können den Unterschied zwischen Rot und Grün nicht oder nur schlecht erkennen. Wenn deine App Fehler rot und Erfolgsmeldungen grün markiert, ohne zusätzliche Symbole oder Texte, sind diese Meldungen für. farbenblinde Nutzer unsichtbar. Die WCAG schreibt vor: Farbe darf nicht das einzige Mittel sein, um Informationen zu vermitteln. Ergänze Farben immer durch Symbole, Texte oder Muster. Ein Fehlerfeld braucht nicht nur einen roten Rahmen, sondern auch ein Warnsymbol und einen Fehlertext.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Farbenblindheit betrifft etwa acht Prozent aller Männer und bedeutet, dass Informationen niemals allein durch Farbe vermittelt werden dürfen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In der FutureDev-App zeigen wir Fehler nicht nur mit rotem Text an, sondern mit einem roten Warnsymbol, einem. roten Rahmen um das Eingabefeld und einem erklärenden Fehlertext unter dem Feld. Erfolgsmeldungen haben ein grünes Häkchen-Symbol und einen Text. Der Nutzer kann die Bedeutung auch dann erkennen, wenn er die Farben nicht unterscheiden kann. Das Warnsymbol und der Text sind die primären Informationsträger, die Farbe ist nur eine Verstärkung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Farbe als alleiniger Informationsträger ist eine der häufigsten Barrieren und eine der einfachsten zu beheben. Ein zusätzliches Symbol oder ein Text kostet fast nichts und macht den Unterschied zwischen einer nutzbaren und einer. unnutzbaren App für Millionen von Menschen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist ein Fokus-Indikator, und warum darf ich outline: none nicht verwenden?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du gehst durch ein dunkles Gebäude. Der einzige Lichtstrahl kommt von deiner Taschenlampe. Du siehst immer nur den kleinen Kreis, den die Lampe beleuchtet. Wenn die Lampe ausgeht, stehst du im Dunkeln und weißt nicht, wo du bist. Der Fokus-Indikator ist diese Taschenlampe für Tastaturnutzer. Er zeigt, welches Element gerade aktiv ist. Wenn du ihn mit outline: none ausschaltest, löscht du das Licht und lässt den Nutzer im Dunkeln stehen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der Fokus-Indikator ist die sichtbare Markierung des Elements, das gerade den Tastaturfokus hat. Der Browser zeigt standardmäßig einen blauen oder schwarzen Rahmen um das fokussierte Element. Viele Entwickler entfernen diesen Rahmen mit outline: none, weil sie ihn hässlich finden. Das ist einer der schwerwiegendsten Fehler in der Barrierefreiheit. Ohne Fokus-Indikator weiß der Tastaturnutzer nicht, wo er sich auf der Seite befindet. Er kann nicht navigieren, nicht klicken und nicht interagieren. Die App ist für ihn unbenutzbar.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Der Fokus-Indikator zeigt das aktive Element bei Tastaturnavigation und darf niemals mit outline: none entfernt werden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In der FutureDev-App haben wir den Standard-Fokus-Indikator durch einen eigenen ersetzt, der besser zum Design passt. Statt outline: none verwenden wir einen box-shadow mit 0 0 0 3px in unserer Markenfarbe. Dieser Schatten ist dick genug, um sichtbar zu sein, hat ein Kontrastverhältnis von mindestens 3:1 zum Hintergrund und. ist mit CSS-Transitions animiert. Der Nutzer sieht immer, wo er ist, und das Design leidet nicht. outline: none kommt in unserem gesamten Code nicht vor.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Der Fokus-Indikator ist die Lebensader des Tastaturnutzers. Ihn zu entfernen ist, als würdest du einem Blinden den Blindenstock wegnehmen. Es gibt keine Rechtfertigung für outline: none ohne gleichwertigen Ersatz. Jedes Mal, wenn du outline: none schreibst, machst du deine App für eine ganze Gruppe von Nutzern unbenutzbar.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Wie teste ich den Kontrast und die visuelle Barrierefreiheit meiner App?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der einfachste Test ist der Accessibility-Tab in den Chrome DevTools. Er zeigt dir das Kontrastverhältnis jedes Textelements an und warnt, wenn es zu niedrig ist. Für einen umfassenden Test nutzt du Lighthouse in Chrome, das einen Accessibility-Score von 0 bis 100 vergibt und. jedes verletzte WCAG-Kriterium auflistet. Für Farbenblindheit gibt es Browser-Erweiterungen, die die Seite so darstellen, wie ein farbenblinder Mensch sie sieht. Und der beste Test ist immer noch: Lass einen echten Nutzer mit Sehbehinderung deine App testen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Unser Lighthouse-Test der FutureDev-App ergab einen Accessibility-Score von 97. Die drei fehlenden Punkte waren: Ein Link hatte nur eine Farbänderung beim Hover ohne zusätzliche Unterstreichung, ein Formularfeld. hatte kein zugehöriges label-Element und eine Überschriftensprung von h1 zu h3 ohne h2. Wir haben alle drei Probleme behoben und erreichen jetzt 100. Der Test dauert dreißig Sekunden und findet die häufigsten Barrieren automatisch.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Automatisierte Tests finden nicht alle Barrieren, aber sie finden die häufigsten. Ein Lighthouse-Score unter 100 ist ein klares Signal, dass du noch Arbeit vor dir hast. Der Test ist kostenlos, schnell und gibt dir eine priorisierte Liste der Probleme. Es gibt keine Ausrede, ihn nicht zu nutzen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Ein greifbares Beispiel für Farbenblindheit: Eine Sehschwäche, bei der bestimmte Farben nicht oder nur eingeschränkt wahrgenommen werden. Die häufigste Form ist die Rot-Grün-Schwäche, die etwa acht Prozent aller Männer betrifft.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "text": "Also noch einmal ganz kurz: Der Farbkontrast zwischen Text und Hintergrund muss mindestens 4,5:1 betragen, messbar mit jedem. Kontrast-Checker. Die WCAG 2. 1 Level AA ist der gesetzlich geforderte Standard für Barrierefreiheit. Informationen dürfen niemals allein durch Farbe vermittelt werden, ergänze sie durch Symbole oder Text. Der Fokus-Indikator ist die Lebensader der Tastaturnavigation und darf niemals mit outline: none entfernt werden. Und ein Lighthouse-Test findet die häufigsten Barrieren in dreißig Sekunden.",
+      "isKeySentence": true
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du sitzt mit einem Freund am Küchentisch. Du erklärst das Thema ohne Fachwörter. Erst das Problem. Dann die einfache Lösung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Genau so lernen wir hier. Erst ein Bild aus dem Alltag. Dann die Erklärung in kurzen Sätzen. Dann der Fachbegriff. Dann ein zweites Beispiel. Zum Schluss warum es zählt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In echten Projekten scheitert Farbkontrast und visuelle Barrierefreiheit selten an fehlender Intelligenz. Es scheitert an unklarer Sprache. Wer den Ablauf laut erklären kann, findet Fehler schneller.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Deshalb üben wir das Thema so gründlich. In Gesprächen zählt nicht das Schlagwort. Es zählt, ob du den Zusammenhang in eigenen Worten trägst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist der häufigste Anfängerfehler bei diesem Thema?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der häufigste Fehler ist Kopieren ohne Verständnis. Schreib nach jedem Abschnitt drei Sätze. Ein Satz Problem. Ein Satz Lösung. Ein Satz Fachbegriff.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Selbstcheck: Schließe die App. Öffne einen leeren Editor. Schreibe drei Sätze zu Farbkontrast und visuelle Barrierefreiheit. Wenn das ohne Abschreiben gelingt, sitzt der Stoff.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Wenn dir einer der drei Sätze fehlt, spring zurück zum Alltagsbild. Lies den Abschnitt noch einmal laut. Dann schreib die drei Sätze erneut.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Diese Wiederholung spart später Wochen. Teams verlieren Zeit durch Missverständnisse. Klare Sprache ist deshalb Teil der Technik.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Kannst du Farbkontrast und visuelle Barrierefreiheit noch einmal ganz langsam erklären?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du sitzt mit einem Freund am Küchentisch. Du erklärst das Thema ohne Fachwörter. Erst das Problem. Dann die einfache Lösung. Das gilt besonders für den Teil 11.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Genau so lernen wir hier. Erst ein Bild aus dem Alltag. Dann die Erklärung in kurzen Sätzen. Dann der Fachbegriff. Dann ein zweites Beispiel. Zum Schluss warum es zählt. Das gilt besonders für den Teil 12.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In echten Projekten scheitert Farbkontrast und visuelle Barrierefreiheit selten an fehlender Intelligenz. Es scheitert an unklarer Sprache. Wer den Ablauf laut erklären kann, findet Fehler schneller. Das gilt besonders für den Teil 13.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Deshalb üben wir das Thema so gründlich. In Gesprächen zählt nicht das Schlagwort. Es zählt, ob du den Zusammenhang in eigenen Worten trägst. Das gilt besonders für den Teil 14.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist der häufigste Anfängerfehler bei diesem Thema? Das gilt besonders für den Teil 15.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der häufigste Fehler ist Kopieren ohne Verständnis. Schreib nach jedem Abschnitt drei Sätze. Ein Satz Problem. Ein Satz Lösung. Ein Satz Fachbegriff. Das gilt besonders für den Teil 16.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Selbstcheck: Schließe die App. Öffne einen leeren Editor. Schreibe drei Sätze zu Farbkontrast und visuelle Barrierefreiheit. Wenn das ohne Abschreiben gelingt, sitzt der Stoff. Das gilt besonders für den Teil 17.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Wenn dir einer der drei Sätze fehlt, spring zurück zum Alltagsbild. Lies den Abschnitt noch einmal laut. Dann schreib die drei Sätze erneut. Das gilt besonders für den Teil 18.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Diese Wiederholung spart später Wochen. Teams verlieren Zeit durch Missverständnisse. Klare Sprache ist deshalb Teil der Technik. Das gilt besonders für den Teil 19.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Die Begriffe dieser Lektion: Kontrastverhältnis, Farbenblindheit, Fokus-Indikator, Label-Element.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Die WCAG sind die Web Content Accessibility Guidelines, der internationale Standard für barrierefreie Webinhalte. Die WCAG sind in drei Konformitätsstufen unterteilt: A für die grundlegendsten Anforderungen, AA für den empfohlenen Standard und. AAA für die höchsten Anforderungen. Das Barrierefreiheitsstärkungsgesetz verlangt WCAG 2. 1 Level AA.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Farbenblindheit ist eine Sehschwäche, bei der bestimmte Farben nicht oder nur eingeschränkt wahrgenommen werden. Die häufigste Form ist die Rot-Grün-Schwäche, die etwa acht Prozent aller Männer betrifft. Informationen dürfen niemals allein durch Farbe vermittelt werden. Ein roter Rahmen um ein Fehlerfeld muss durch ein Fehlersymbol oder einen Fehlertext ergänzt werden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Der Fokus-Indikator ist eine sichtbare Markierung, die anzeigt, welches Element gerade den Tastaturfokus hat. Der Standard-Fokus-Indikator des Browsers ist ein blauer oder schwarzer gestrichelter Rahmen. Viele Entwickler entfernen diesen mit outline: none, was die Tastaturnavigation unmöglich macht. Ein guter Fokus-Indikator hat ein Kontrastverhältnis von mindestens 3:1 zum Hintergrund.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Reicht ein Kontrastverhältnis von 3:1 für allen Text?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Nein, 3:1 gilt nur für großen Text ab 18px oder 14px fett. Für normalen Text gilt 4,5:1. Der Grund ist, dass größere Buchstaben mehr Fläche haben und daher auch bei geringerem Kontrast besser erkennbar sind. Für AAA, die höchste WCAG-Stufe, gelten sogar 7:1 für normalen Text und 4,5:1 für großen Text. In der Praxis solltest du für den Fließtext immer 4,5:1 oder mehr anstreben. Alles darunter ist für viele Nutzer anstrengend zu lesen, auch wenn es die Mindestanforderung formal erfüllt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Kann ich outline: none verwenden, wenn ich einen eigenen Fokus-Stil definiere?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ja, du kannst outline: none verwenden, wenn du gleichzeitig einen eigenen, gleichwertigen Fokus-Indikator definierst. Der eigene Indikator muss mindestens genauso gut sichtbar sein wie der Standard-Indikator des Browsers. Das bedeutet: Kontrastverhältnis von mindestens 3:1 zum Hintergrund, mindestens zwei Pixel dick und auf allen Hintergründen sichtbar. Ein box-shadow oder eine outline mit anderen Farben und Dicken ist ein guter Ersatz. Wichtig ist, dass du den Fokus-Indikator nicht nur entfernst, sondern ersetzt. outline: none ohne Ersatz ist ein WCAG-Verstoß.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Wie mache ich Diagramme für farbenblinde Nutzer zugänglich?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Diagramme brauchen mehr als nur unterschiedliche Farben für unterschiedliche Datenreihen. Ergänze die Farben durch Muster wie Schraffuren oder Punkte, durch direkte Beschriftung der Datenpunkte oder durch verschiedene Formen. für verschiedene Reihen. Ein Liniendiagramm kann durchgezogene, gestrichelte und gepunktete Linien verwenden. Ein Balkendiagramm kann die Werte direkt auf die Balken schreiben. Teste dein Diagramm mit einem Farbenblindheit-Simulator, um sicherzustellen, dass alle Datenreihen unterscheidbar bleiben.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Muss ich auch den Kontrast von Icons und Buttons prüfen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ja, die WCAG verlangen ein Kontrastverhältnis von mindestens 3:1 für grafische Objekte wie Icons und Button-Ränder, die für. das Verständnis der Benutzeroberfläche notwendig sind. Ein graues Icon auf weißem Grund, das eine wichtige Aktion symbolisiert, muss ausreichend Kontrast haben. Ein dekoratives Icon, das keine Information trägt, braucht keinen Mindestkontrast. Auch der Rand eines Eingabefelds muss 3:1 Kontrast zum Hintergrund haben, damit der Nutzer erkennt, wo er tippen. kann. Prüfe alle UI-Elemente, nicht nur Text.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was ist der Unterschied zwischen WCAG 2. 1 und 2. 2?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "WCAG 2. 2 ist die aktuellste Version und erweitert WCAG 2. 1 um neun neue Erfolgskriterien. Die wichtigsten Neuerungen betreffen den Fokus-Indikator, der jetzt strengere Anforderungen an Größe und Kontrast hat, die Konsistenz der. Navigation und die Vermeidung von Eingabefehlern durch bessere Hilfestellungen. Das Barrierefreiheitsstärkungsgesetz bezieht sich derzeit auf WCAG 2. 1, aber es ist absehbar, dass zukünftige Regelungen auf WCAG 2. 2 verweisen werden. Als Entwickler solltest du dich an WCAG 2. 2 orientieren, weil sie die neueren und strengeren Anforderungen enthält.",
+      "isKeySentence": false
+    }
+  ],
+  "practiceExample": {
+    "text": "Kontrast-Analyse der FutureDev-App mit Lighthouse und manueller Prüfung aller Texte und UI-Elemente.",
+    "repoNote": "repo-futuredev",
+    "location": "apps/web/src/styles/theme.ts (Farbpalette mit dokumentierten Kontrastverhältnissen), apps/web/src/styles/globals.css (Fokus-Indikator-Styling)"
+  },
+  "quiz": [
+    {
+      "question": "Welches Alltagsbild beschreibt das Kontrastverhältnis am treffendsten?",
+      "area": "Kontrast",
+      "options": [
+        {
+          "text": "Ein Straßenschild mit hellgrauer Schrift auf weißem Grund, das kaum lesbar ist.",
+          "isCorrect": true,
+          "explanation": "Richtig: zu wenig Kontrast macht Text unsichtbar."
+        },
+        {
+          "text": "Eine Brille, die die Sehschärfe korrigiert. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: Kontrast ist keine Sehkorrektur."
+        },
+        {
+          "text": "Ein Fernglas, das entfernte Dinge näher bringt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Kontrast vergrößert nichts."
+        },
+        {
+          "text": "Eine Taschenlampe, die einen dunklen Raum beleuchtet.",
+          "isCorrect": false,
+          "explanation": "Falsch: das Bild passt besser zum Fokus-Indikator."
+        }
+      ]
+    },
+    {
+      "question": "Welches Kontrastverhältnis verlangt die WCAG 2.1 Level AA für normalen Text?",
+      "area": "Kontrast",
+      "options": [
+        {
+          "text": "Mindestens 4,5:1.",
+          "isCorrect": true,
+          "explanation": "Richtig: 4,5:1 ist die Mindestanforderung für normalen Text."
+        },
+        {
+          "text": "Mindestens 3:1. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: 3:1 gilt nur für großen Text."
+        },
+        {
+          "text": "Mindestens 7:1.",
+          "isCorrect": false,
+          "explanation": "Falsch: 7:1 ist die AAA-Anforderung."
+        },
+        {
+          "text": "Mindestens 21:1.",
+          "isCorrect": false,
+          "explanation": "Falsch: 21:1 ist das Maximum, nicht das Minimum."
+        }
+      ]
+    },
+    {
+      "question": "Warum darfst du Informationen nicht allein durch Farbe vermitteln?",
+      "area": "Farbenblindheit",
+      "options": [
+        {
+          "text": "Weil etwa acht Prozent aller Männer farbenblind sind und…",
+          "isCorrect": true,
+          "explanation": "Richtig: farbenblinde Nutzer können die Information sonst nicht wahrnehmen."
+        },
+        {
+          "text": "Weil Farbe auf Schwarz-Weiß-Bildschirmen nicht dargestellt wird.",
+          "isCorrect": false,
+          "explanation": "Falsch: Schwarz-Weiß-Bildschirme sind heute selten."
+        },
+        {
+          "text": "Weil Farbe die Ladezeit der Seite verlängert.",
+          "isCorrect": false,
+          "explanation": "Falsch: Farbe hat keinen Einfluss auf die Ladezeit."
+        },
+        {
+          "text": "Weil die DSGVO es verbietet. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: die DSGVO regelt Datenschutz, nicht Farbgestaltung."
+        }
+      ]
+    },
+    {
+      "question": "Was passiert, wenn du outline: none ohne Ersatz verwendest?",
+      "area": "Fokus-Indikator",
+      "options": [
+        {
+          "text": "Tastaturnutzer wissen nicht, wo sie sich auf der Seite be…",
+          "isCorrect": true,
+          "explanation": "Richtig: ohne Fokus-Indikator ist die Tastaturnavigation unmöglich."
+        },
+        {
+          "text": "Die Seite lädt schneller. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: outline: none hat keinen Einfluss auf die Ladezeit."
+        },
+        {
+          "text": "Das Design sieht besser aus.",
+          "isCorrect": false,
+          "explanation": "Falsch: das ist subjektiv und rechtfertigt nicht den Verlust der Barrierefreiheit."
+        },
+        {
+          "text": "Nichts, der Browser verwendet automatisch einen Ersatz.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Browser ersetzt outline: none nicht automatisch."
+        }
+      ]
+    },
+    {
+      "question": "Welche WCAG-Stufe verlangt das Barrierefreiheitsstärkungsgesetz?",
+      "area": "WCAG",
+      "options": [
+        {
+          "text": "WCAG 2.1 Level AA.",
+          "isCorrect": true,
+          "explanation": "Richtig: Level AA ist der gesetzlich geforderte Standard."
+        },
+        {
+          "text": "WCAG 2.1 Level A.",
+          "isCorrect": false,
+          "explanation": "Falsch: Level A ist das Minimum, aber nicht ausreichend."
+        },
+        {
+          "text": "WCAG 2.1 Level AAA.",
+          "isCorrect": false,
+          "explanation": "Falsch: Level AAA ist die höchste, aber nicht gesetzlich geforderte Stufe."
+        },
+        {
+          "text": "Es gibt keine gesetzlichen Anforderungen.",
+          "isCorrect": false,
+          "explanation": "Falsch: das Barrierefreiheitsstärkungsgesetz verlangt WCAG AA."
+        }
+      ]
+    },
+    {
+      "question": "Welches Kontrastverhältnis brauchen grafische Objekte wie Icons?",
+      "area": "Kontrast",
+      "options": [
+        {
+          "text": "Mindestens 3:1 zum Hintergrund.",
+          "isCorrect": true,
+          "explanation": "Richtig: 3:1 gilt für grafische Objekte und UI-Komponenten."
+        },
+        {
+          "text": "Mindestens 4,5:1 zum Hintergrund.",
+          "isCorrect": false,
+          "explanation": "Falsch: 4,5:1 gilt für Text, nicht für grafische Objekte."
+        },
+        {
+          "text": "Mindestens 7:1 zum Hintergrund.",
+          "isCorrect": false,
+          "explanation": "Falsch: 7:1 ist die AAA-Anforderung für Text."
+        },
+        {
+          "text": "Icons brauchen keinen Mindestkontrast.",
+          "isCorrect": false,
+          "explanation": "Falsch: informative Icons brauchen 3:1 Kontrast."
+        }
+      ]
+    },
+    {
+      "question": "Wie kannst du den Kontrast deiner App am einfachsten testen?",
+      "area": "Testen",
+      "options": [
+        {
+          "text": "Mit dem Accessibility-Tab in den Chrome DevTools oder einem Lighthouse-Test.",
+          "isCorrect": true,
+          "explanation": "Richtig: beide Tools messen das Kontrastverhältnis automatisch."
+        },
+        {
+          "text": "Indem du die Seite ausdruckst und mit einem Lineal nachmisst.",
+          "isCorrect": false,
+          "explanation": "Falsch: Kontrast wird nicht mit einem Lineal gemessen."
+        },
+        {
+          "text": "Indem du einen Designer fragst, ob es gut aussieht.",
+          "isCorrect": false,
+          "explanation": "Falsch: subjektive Einschätzung ersetzt keine Messung."
+        },
+        {
+          "text": "Indem du die Helligkeit des Bildschirms erhöhst. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: die Bildschirmhelligkeit ändert nicht das Kontrastverhältnis."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der Unterschied zwischen WCAG 2.1 und 2.2?",
+      "area": "WCAG",
+      "options": [
+        {
+          "text": "WCAG 2.2 erweitert 2.1 um neun neue Erfolgskriterien, bes…",
+          "isCorrect": true,
+          "explanation": "Richtig: WCAG 2.2 ist die aktuellere Version mit strengeren Anforderungen."
+        },
+        {
+          "text": "WCAG 2.2 ist eine komplett neue Richtlinie ohne Bezug zu 2.1.",
+          "isCorrect": false,
+          "explanation": "Falsch: WCAG 2.2 baut auf 2.1 auf."
+        },
+        {
+          "text": "WCAG 2.2 gilt nur für mobile Apps. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: WCAG gilt für alle Webinhalte."
+        },
+        {
+          "text": "Es gibt keinen Unterschied, die Versionsnummer ist nur Marketing.",
+          "isCorrect": false,
+          "explanation": "Falsch: die neuen Erfolgskriterien sind substanziell."
+        }
+      ]
+    },
+    {
+      "question": "Wie machst du ein Diagramm für farbenblinde Nutzer zugänglich?",
+      "area": "Farbenblindheit",
+      "options": [
+        {
+          "text": "Ergänze Farben durch Muster, direkte Beschriftung oder ve…",
+          "isCorrect": true,
+          "explanation": "Richtig: mehrere Unterscheidungsmerkmale machen das Diagramm universell lesbar."
+        },
+        {
+          "text": "Verwende nur Schwarz-Weiß. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: Schwarz-Weiß ist nicht die einzige Lösung."
+        },
+        {
+          "text": "Verzichte ganz auf Diagramme.",
+          "isCorrect": false,
+          "explanation": "Falsch: Diagramme sind nicht grundsätzlich unzugänglich."
+        },
+        {
+          "text": "Schreibe einen erklärenden Text unter das Diagramm.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Text allein macht das Diagramm selbst nicht zugänglich."
+        }
+      ]
+    },
+    {
+      "question": "Welcher Fokus-Indikator ist ein guter Ersatz für outline: none?",
+      "area": "Fokus-Indikator",
+      "options": [
+        {
+          "text": "Ein box-shadow mit 3px Dicke und 3:1 Kontrast zum Hintergrund.",
+          "isCorrect": true,
+          "explanation": "Richtig: ein angepasster Fokus-Indikator muss sichtbar und kontrastreich sein."
+        },
+        {
+          "text": "Eine Änderung der Textfarbe beim Fokus. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: eine Farbänderung allein reicht nicht."
+        },
+        {
+          "text": "Gar kein Indikator, der Nutzer merkt schon, wo er ist.",
+          "isCorrect": false,
+          "explanation": "Falsch: ohne Indikator ist die Navigation unmöglich."
+        },
+        {
+          "text": "Ein Unterstrich unter dem fokussierten Text.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Unterstrich ist zu dezent."
+        }
+      ]
+    },
+    {
+      "question": "Warum ist ein Lighthouse-Score unter 100 ein Warnsignal?",
+      "area": "Testen",
+      "options": [
+        {
+          "text": "Weil jeder fehlende Punkt ein potenzielles Barrierefreiheitsproblem anzeigt.",
+          "isCorrect": true,
+          "explanation": "Richtig: Lighthouse listet konkrete WCAG-Verstöße auf."
+        },
+        {
+          "text": "Weil Google Seiten mit niedrigem Score nicht indexiert.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Accessibility-Score beeinflusst nicht das Ranking."
+        },
+        {
+          "text": "Weil der Score die Ladezeit der Seite beeinflusst.",
+          "isCorrect": false,
+          "explanation": "Falsch: Accessibility und Performance sind getrennte Scores."
+        },
+        {
+          "text": "Weil ein Score unter 100 illegal ist. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: der Score ist ein Werkzeug, kein Gesetz."
+        }
+      ]
+    },
+    {
+      "question": "Welches Kontrastverhältnis hat schwarz auf weiß?",
+      "area": "Kontrast",
+      "options": [
+        {
+          "text": "21:1, das maximal mögliche Verhältnis.",
+          "isCorrect": true,
+          "explanation": "Richtig: schwarz auf weiß erreicht das Maximum."
+        },
+        {
+          "text": "4,5:1, das gesetzliche Minimum.",
+          "isCorrect": false,
+          "explanation": "Falsch: schwarz auf weiß ist viel kontrastreicher."
+        },
+        {
+          "text": "1:1, weil beide Farben gleich hell sind.",
+          "isCorrect": false,
+          "explanation": "Falsch: schwarz und weiß sind maximal unterschiedlich."
+        },
+        {
+          "text": "10:1, ein guter Mittelwert.",
+          "isCorrect": false,
+          "explanation": "Falsch: schwarz auf weiß ist höher als 10:1."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Führe einen Lighthouse-Test für die FutureDev-App durch. Notiere den Accessibility-Score und alle gefundenen Probleme. Behebe die drei häufigsten Verstöße: zu geringer Kontrast, fehlende Alt-Texte und fehlende Formular-Labels. Prüfe mit einem Kontrast-Checker alle Textfarben gegen ihren Hintergrund. Ersetze outline: none durch einen eigenen, gut sichtbaren Fokus-Indikator.",
+    "expectation": "Die Anforderungen an Farbkontrast und visuelle Barrierefreiheit wurden verstanden und auf die FutureDev-App angewendet.",
+    "checklist": [
+      "Lighthouse-Test durchgeführt und Score notiert.",
+      "Alle Kontrast-Verstöße identifiziert und behoben.",
+      "Alle Bilder auf aussagekräftige Alt-Texte geprüft.",
+      "Alle Formularfelder mit label-Elementen versehen.",
+      "Einen eigenen Fokus-Indikator als Ersatz für outline: none implementiert."
+    ],
+    "portfolioItem": "P05"
+  },
+  "audio": {
+    "file": "M06-04-02.mp3",
+    "durationSeconds": 1360,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Reicht ein Kontrastverhältnis von 3:1 für allen Text?",
+      "answer": "Nein, 3:1 gilt nur für großen Text ab 18px oder 14px fett. Für normalen Text gilt 4,5:1. Der Grund ist, dass größere Buchstaben mehr Fläche haben und daher auch bei geringerem Kontrast besser erkennbar sind. Für AAA, die höchste WCAG-Stufe, gelten sogar 7:1 für normalen Text und 4,5:1 für großen Text. In der Praxis solltest du für den Fließtext immer 4,5:1 oder mehr anstreben. Alles darunter ist für viele Nutzer anstrengend zu lesen, auch wenn es die Mindestanforderung formal erfüllt."
+    },
+    {
+      "question": "Kann ich outline: none verwenden, wenn ich einen eigenen Fokus-Stil definiere?",
+      "answer": "Ja, du kannst outline: none verwenden, wenn du gleichzeitig einen eigenen, gleichwertigen Fokus-Indikator definierst. Der eigene Indikator muss mindestens genauso gut sichtbar sein wie der Standard-Indikator des Browsers. Das bedeutet: Kontrastverhältnis von mindestens 3:1 zum Hintergrund, mindestens zwei Pixel dick und auf allen Hintergründen sichtbar. Ein box-shadow oder eine outline mit anderen Farben und Dicken ist ein guter Ersatz. Wichtig ist, dass du den Fokus-Indikator nicht nur entfernst, sondern ersetzt. outline: none ohne Ersatz ist ein WCAG-Verstoß."
+    },
+    {
+      "question": "Wie mache ich Diagramme für farbenblinde Nutzer zugänglich?",
+      "answer": "Diagramme brauchen mehr als nur unterschiedliche Farben für unterschiedliche Datenreihen. Ergänze die Farben durch Muster wie Schraffuren oder Punkte, durch direkte Beschriftung der Datenpunkte oder durch verschiedene Formen. für verschiedene Reihen. Ein Liniendiagramm kann durchgezogene, gestrichelte und gepunktete Linien verwenden. Ein Balkendiagramm kann die Werte direkt auf die Balken schreiben. Teste dein Diagramm mit einem Farbenblindheit-Simulator, um sicherzustellen, dass alle Datenreihen unterscheidbar bleiben."
+    },
+    {
+      "question": "Muss ich auch den Kontrast von Icons und Buttons prüfen?",
+      "answer": "Ja, die WCAG verlangen ein Kontrastverhältnis von mindestens 3:1 für grafische Objekte wie Icons und Button-Ränder, die für. das Verständnis der Benutzeroberfläche notwendig sind. Ein graues Icon auf weißem Grund, das eine wichtige Aktion symbolisiert, muss ausreichend Kontrast haben. Ein dekoratives Icon, das keine Information trägt, braucht keinen Mindestkontrast. Auch der Rand eines Eingabefelds muss 3:1 Kontrast zum Hintergrund haben, damit der Nutzer erkennt, wo er tippen. kann. Prüfe alle UI-Elemente, nicht nur Text."
+    },
+    {
+      "question": "Was ist der Unterschied zwischen WCAG 2. 1 und 2. 2?",
+      "answer": "WCAG 2. 2 ist die aktuellste Version und erweitert WCAG 2. 1 um neun neue Erfolgskriterien. Die wichtigsten Neuerungen betreffen den Fokus-Indikator, der jetzt strengere Anforderungen an Größe und Kontrast hat, die Konsistenz der. Navigation und die Vermeidung von Eingabefehlern durch bessere Hilfestellungen. Das Barrierefreiheitsstärkungsgesetz bezieht sich derzeit auf WCAG 2. 1, aber es ist absehbar, dass zukünftige Regelungen auf WCAG 2. 2 verweisen werden. Als Entwickler solltest du dich an WCAG 2. 2 orientieren, weil sie die neueren und strengeren Anforderungen enthält."
+    }
+  ]
+}

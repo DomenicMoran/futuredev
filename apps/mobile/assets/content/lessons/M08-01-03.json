@@ -1,0 +1,809 @@
+{
+  "id": "M08-01-03",
+  "title": "Wann man dem Agenten vertraut und wann nicht",
+  "durationMinutes": 30,
+  "prerequisites": [
+    "M03-02-05",
+    "M04-08-02",
+    "M04-08-03",
+    "M06-01-01",
+    "M08-01-01"
+  ],
+  "terms": [
+    {
+      "term": "Halluzination",
+      "definition": "Eine falsche oder erfundene Antwort eines KI-Modells, die selbstbewusst und ueberzeugend klingt, aber keinen Bezug zur Realitaet hat. Halluzinationen entstehen, weil das Modell statistisch das wahrscheinlichste naechste Wort vorhersagt, nicht weil es Fakten prueft. Ein Modell kann eine nicht existierende Funktion erfinden oder eine falsche Versionsnummer nennen, ohne zu zoegern."
+    },
+    {
+      "term": "Vertrauensbereich",
+      "definition": "Der klar definierte Rahmen, in dem du einem KI-Agenten Aufgaben uebergibst, ohne jedes Ergebnis manuell zu pruefen. Innerhalb des Vertrauensbereichs hat der Agent bewiesen, dass er zuverlaessig arbeitet. Ausserhalb pruefst du jedes Ergebnis. Der Vertrauensbereich waechst mit der Erfahrung, aber er sollte nie das gesamte Projekt umfassen."
+    },
+    {
+      "term": "Sicherheitskritischer Code",
+      "definition": "Code, dessen Versagen zu Datenverlust, Sicherheitsluecken oder finanziellen Schaeden fuehren kann. Dazu gehoeren Authentifizierung, Autorisierung, Zahlungslogik, Passwort-Hashing und Datenbankzugriffe. Sicherheitskritischer Code muss immer von einem Menschen geprueft werden, auch wenn ein Agent ihn geschrieben hat."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen neuen Kollegen vor, der seit einer Woche im Team ist. Er ist schnell, freundlich und selbstbewusst. Aber du weisst noch nicht, wann er Recht hat und wann er blufft. Bei einer einfachen Aufgabe vertraust du ihm. Bei einer sicherheitskritischen Aenderung schaust du ihm genau ueber die Schulter. Genau so solltest du mit einem KI-Agenten umgehen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein KI-Agent ist wie ein neuer Kollege: schnell und hilfreich, aber nicht unfehlbar. Er kann halluzinieren, also ueberzeugend falsche Antworten geben. Er kann Sicherheitsluecken uebersehen. Er kann Code schreiben, der funktioniert, aber falsch ist. Deine Aufgabe ist, zu wissen, wann du ihm vertraust und wann du jedes Ergebnis pruefst. Diese Grenze heisst Vertrauensbereich.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist eine Halluzination, und warum ist sie so gefaehrlich?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Eine Halluzination ist eine Antwort, die falsch ist, aber ueberzeugend klingt. Das Modell erfindet eine Funktion, die es nicht gibt. Es nennt eine Versionsnummer, die nie existiert hat. Es beschreibt eine API, die anders funktioniert. Das Gefaehrliche ist nicht die Falschheit, sondern die Selbstsicherheit. Das Modell zoegert nicht, es klingt genauso ueberzeugt wie bei einer richtigen Antwort.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Halluzination in der Praxis: Du fragst den Agenten nach der besten React-Bibliothek fuer Formulare. Der Agent antwortet: react-form-pro in Version 5 ist der Standard. Diese Bibliothek existiert nicht. Der Agent hat Namen und Version erfunden. Sie klingen plausibel, aber sie sind frei erfunden. Eine kurze Suche auf npm zeigt: kein Treffer. Das ist eine klassische Halluzination.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Eine Halluzination ist eine selbstbewusst vorgetragene, aber falsche oder erfundene Antwort eines KI-Modells, die keinen Bezug zur Realitaet. hat.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Du fragst den Agenten: Welche Funktion in React rendert eine Liste? Der Agent antwortet: renderList, so wird sie verwendet: renderList(items, callback). Diese Funktion gibt es nicht. Der Agent hat sie erfunden. Sie klingt plausibel, hat einen logischen Namen und eine nachvollziehbare Signatur. Aber sie existiert nicht. Wenn du sie verwendest, bricht dein Code zusammen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Halluzinationen sind die gefaehrlichste Fehlerart, weil sie schwer zu erkennen sind. Ein Syntaxfehler faellt sofort auf. Eine Halluzination klingt richtig. Du musst jede Antwort, die du nicht selbst ueberpruefen kannst, anzweifeln. Besonders bei Bibliotheken, APIs und Versionsnummern ist Skepsis angebracht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist der Vertrauensbereich, und wie definiere ich ihn?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen Garten mit einem Zaun vor. Innerhalb des Zauns laesst du deinen Hund frei laufen, weil du weisst, dass er dort nichts kaputt machen. kann. Ausserhalb des Zauns nimmst du ihn an die Leine. Der Zaun ist dein Vertrauensbereich. Innerhalb vertraust du dem Agenten. Ausserhalb pruefst du jedes Ergebnis.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der Vertrauensbereich ist der Teil deines Projekts, in dem du dem Agenten Aufgaben uebergibst, ohne jedes Ergebnis manuell. zu pruefen. Du definierst ihn durch Erfahrung: Welche Aufgaben hat der Agent schon oft richtig geloest? Bei welchen Aufgaben hat er Fehler gemacht? Der Vertrauensbereich waechst mit der Zeit, aber er sollte nie das gesamte Projekt umfassen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Der Vertrauensbereich ist der definierte Rahmen, in dem ein KI-Agent zuverlaessig arbeitet und du Ergebnisse nicht manuell pruefen. musst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In der FutureDev-App hat der Agent bewiesen, dass er zuverlaessig neue Komponenten nach bestehendem Muster bauen kann. Das liegt im Vertrauensbereich. Aber bei der Authentifizierungslogik hat er einmal einen Fehler gemacht. Das liegt ausserhalb. Also pruefst du jede Aenderung an der Auth-Logik manuell, auch wenn der Agent sie geschrieben hat.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Ohne Vertrauensbereich muesstest du jede Zeile pruefen, die der Agent schreibt. Das wuerde den Zeitvorteil zunichte machen. Mit einem klar definierten Vertrauensbereich weisst du, wo du Zeit sparst und wo du genau hinschaust. Das ist effizient und sicher zugleich.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist sicherheitskritischer Code, und warum darf ihm der Agent nie allein ueberlassen werden?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du laesst einen Handwerker dein Haus renovieren. Er darf die Waende streichen und Regale aufhaengen. Aber wenn er an den Sicherungskasten geht, stehst du daneben. Wenn er die Haustuerschloesser austauscht, pruefst du jedes Schloss selbst. Es gibt Teile des Hauses, bei denen ein Fehler keine Schramme, sondern eine Katastrophe bedeutet. So ist es mit sicherheitskritischem Code.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Sicherheitskritischer Code ist Code, dessen Versagen schwerwiegende Folgen hat. Dazu gehoeren Authentifizierung, Autorisierung, Passwort-Hashing, Zahlungslogik und Datenbankzugriffe. Ein Fehler in diesen Bereichen kann Datenverlust, Sicherheitsluecken oder finanzielle Schaeden verursachen. Deshalb darfst du dich hier nie allein auf den Agenten verlassen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Sicherheitskritischer Code ist Code, dessen Versagen zu Datenverlust, Sicherheitsluecken oder finanziellen Schaeden fuehren kann und der immer manuell. geprueft werden muss.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Der Agent schreibt eine Login-Funktion. Sie funktioniert, der Test ist gruen. Aber der Agent hat das Passwort im Klartext gespeichert, statt es zu hashen. Der Code laeuft, aber er ist eine Sicherheitskatastrophe. Haettest du nicht manuell geprueft, waere jedes Passwort deiner Nutzer kompromittiert. Sicherheitskritischer Code braucht immer ein menschliches Review.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Der Agent versteht Sicherheit nicht. Er weiss, wie man Code schreibt, der funktioniert. Aber er weiss nicht, warum ein Passwort gehasht werden muss. Er kennt die OWASP Top Ten, aber er wendet sie nicht zuverlaessig an. Sicherheit ist deine Verantwortung, nicht die des Agenten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Wie erkenne ich, ob der Agent halluziniert?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Es gibt Warnsignale. Wenn der Agent eine Funktion oder Bibliothek nennt, die du nicht kennst, suche sie in der offiziellen Dokumentation. Wenn er eine Versionsnummer angibt, pruefe sie. Wenn er Code schreibt, der zu perfekt aussieht, teste ihn. Die beste Verteidigung gegen Halluzinationen ist, den Code sofort auszufuehren. Ein Test, der fehlschlaeigt, entlarvt eine Halluzination schneller als stundenlanges Lesen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Der Agent schlaegt vor: Nutze die Bibliothek xyz-validator in Version 3. 2. 1. Du suchst auf npm und findest: Die Bibliothek gibt es, aber die aktuelle Version ist 2. 0. 4. Version 3. 2. 1 existiert nicht. Der Agent hat sie erfunden. Haettest du sie blind installiert, waere die Installation fehlgeschlagen. Eine Minute Recherche hat dir eine Stunde Fehlersuche erspart.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Halluzinationen sind kein Zeichen von Dummheit, sondern ein Nebenprodukt der Funktionsweise. Das Modell sagt das wahrscheinlichste naechste Wort vorher, nicht die Wahrheit. Solange du das weisst und jede unbekannte Information pruefst, sind Halluzinationen aergerlich, aber nicht gefaehrlich.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Eine gute Strategie ist, den Agenten nach Quellen zu fragen. Sage: Nenne mir die offizielle Dokumentation fuer diese Funktion. Wenn der Agent keine Quelle nennen kann oder eine erfundene URL angibt, ist das ein starkes Halluzinationssignal. Ein Agent, der seine Quellen kennt, ist vertrauenswuerdiger als einer, der nur behauptet.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Quellenangaben sind kein Garant, aber sie erhoehen die Wahrscheinlichkeit, dass die Antwort stimmt. Ein Agent, der sagt Laut React-Dokumentation, ist vertrauenswuerdiger als einer, der sagt Du kannst das so machen. Bestehe auf Quellen, wenn du unsicher bist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "text": "Also noch einmal ganz kurz: Vertraue dem Agenten nur innerhalb deines definierten Vertrauensbereichs. Sicherheitskritischen Code musst du immer manuell pruefen. Halluzinationen erkennst du, indem du unbekannte Informationen in der offiziellen Dokumentation gegenpruefst und Code sofort ausfuehrst. Der Agent ist ein Werkzeug, kein Ersatz fuer dein Urteil.",
+      "isKeySentence": true
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Kannst du Wann man dem Agenten vertraut und wann nicht noch einmal mit einem Alltagbeispiel erklären, ohne Fachjargon?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du erklärst das Thema einem Freund am Küchentisch. Du fängst nicht mit dem Fachwort an, sondern mit dem Problem, das der Freund schon kennt. Genau so bauen wir hier das Verständnis auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der Kern von Wann man dem Agenten vertraut und wann nicht ist eine klare Reihenfolge: erst das Problem. sehen, dann die Lösung in einfachen Worten, dann den Fachbegriff, dann ein zweites Beispiel, und zum Schluss warum. es in der Praxis zählt. Wenn du diese fünf Schritte wiederholen kannst, hast du die Lektion verstanden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In echten Projekten scheitert Wann man dem Agenten vertraut und wann nicht selten an fehlender Intelligenz, sondern an. fehlender Klarheit. Wer den Ablauf laut erklären kann, findet Fehler schneller und schreibt Code, den andere morgen noch lesen können.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Deshalb üben wir das Thema so ausführlich: in Bewerbungsgesprächen und im Alltag eines Product Engineers zählt nicht, ob. du das Schlagwort kennst, sondern ob du den Zusammenhang in eigenen Worten tragen kannst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist der häufigste Anfängerfehler bei diesem Thema, und wie erkenne ich ihn früh?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der häufigste Fehler ist, eine fertige Vorlage zu kopieren und zu glauben, das sei Verständnis. Stattdessen solltest du nach jedem Abschnitt eine eigene Mini-Zusammenfassung schreiben: ein Satz Problem, ein Satz Lösung, ein Satz. Fachbegriff. Wenn dir einer der drei Sätze fehlt, lies den Abschnitt noch einmal.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Ein praktischer Selbstcheck: Schließe die App, öffne einen leeren Editor und schreibe drei Sätze zu Wann man dem. Agenten vertraut und wann nicht. Wenn die Sätze ohne Abschreiben gelingen und ein konkretes Beispiel enthalten, sitzt der Stoff. Wenn nicht, spring zurück zum Alltagsbild am Anfang der Lektion.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Noch ein Blick von der Seite: Wann man dem Agenten vertraut und wann nicht verbindet Technik mit Kommunikation. Du lernst nicht nur einen Mechanismus, sondern eine Sprache, mit der du Entscheidungen begründet treffen und anderen erklären. kannst. Das spart in Teams Wochen an Missverständnissen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Kannst du Wann man dem Agenten vertraut und wann nicht noch einmal mit einem Alltagbeispiel erklären, ohne Fachjargon?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du erklärst das Thema einem Freund am Küchentisch. Du fängst nicht mit dem Fachwort an, sondern mit dem Problem, das der Freund schon kennt. Genau so bauen wir hier das Verständnis auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der Kern von Wann man dem Agenten vertraut und wann nicht ist eine klare Reihenfolge: erst das Problem. sehen, dann die Lösung in einfachen Worten, dann den Fachbegriff, dann ein zweites Beispiel, und zum Schluss warum. es in der Praxis zählt. Wenn du diese fünf Schritte wiederholen kannst, hast du die Lektion verstanden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In echten Projekten scheitert Wann man dem Agenten vertraut und wann nicht selten an fehlender Intelligenz, sondern an. fehlender Klarheit. Wer den Ablauf laut erklären kann, findet Fehler schneller und schreibt Code, den andere morgen noch lesen können.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Deshalb üben wir das Thema so ausführlich: in Bewerbungsgesprächen und im Alltag eines Product Engineers zählt nicht, ob. du das Schlagwort kennst, sondern ob du den Zusammenhang in eigenen Worten tragen kannst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist der häufigste Anfängerfehler bei diesem Thema, und wie erkenne ich ihn früh?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der häufigste Fehler ist, eine fertige Vorlage zu kopieren und zu glauben, das sei Verständnis. Stattdessen solltest du nach jedem Abschnitt eine eigene Mini-Zusammenfassung schreiben: ein Satz Problem, ein Satz Lösung, ein Satz. Fachbegriff. Wenn dir einer der drei Sätze fehlt, lies den Abschnitt noch einmal.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Ein praktischer Selbstcheck: Schließe die App, öffne einen leeren Editor und schreibe drei Sätze zu Wann man dem. Agenten vertraut und wann nicht. Wenn die Sätze ohne Abschreiben gelingen und ein konkretes Beispiel enthalten, sitzt der Stoff. Wenn nicht, spring zurück zum Alltagsbild am Anfang der Lektion.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du sitzt mit einem Freund am Küchentisch. Du erklärst das Thema ohne Fachwörter. Erst das Problem. Dann die einfache Lösung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Genau so lernen wir hier. Erst ein Bild aus dem Alltag. Dann die Erklärung in kurzen Sätzen. Dann der Fachbegriff. Dann ein zweites Beispiel. Zum Schluss warum es zählt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In echten Projekten scheitert Wann man dem Agenten vertraut und wann nicht selten an fehlender Intelligenz. Es scheitert an unklarer Sprache. Wer den Ablauf laut erklären kann, findet Fehler schneller.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Deshalb üben wir das Thema so gründlich. In Gesprächen zählt nicht das Schlagwort. Es zählt, ob du den Zusammenhang in eigenen Worten trägst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist der häufigste Anfängerfehler bei diesem Thema?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der häufigste Fehler ist Kopieren ohne Verständnis. Schreib nach jedem Abschnitt drei Sätze. Ein Satz Problem. Ein Satz Lösung. Ein Satz Fachbegriff.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Selbstcheck: Schließe die App. Öffne einen leeren Editor. Schreibe drei Sätze zu Wann man dem Agenten vertraut und wann nicht. Wenn das ohne Abschreiben gelingt, sitzt der Stoff.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Wenn dir einer der drei Sätze fehlt, spring zurück zum Alltagsbild. Lies den Abschnitt noch einmal laut. Dann schreib die drei Sätze erneut.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Diese Wiederholung spart später Wochen. Teams verlieren Zeit durch Missverständnisse. Klare Sprache ist deshalb Teil der Technik.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Kannst du Wann man dem Agenten vertraut und wann nicht noch einmal ganz langsam erklären?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du sitzt mit einem Freund am Küchentisch. Du erklärst das Thema ohne Fachwörter. Erst das Problem. Dann die einfache Lösung. Das gilt besonders für den Teil 11.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Genau so lernen wir hier. Erst ein Bild aus dem Alltag. Dann die Erklärung in kurzen Sätzen. Dann der Fachbegriff. Dann ein zweites Beispiel. Zum Schluss warum es zählt. Das gilt besonders für den Teil 12.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Wiederhole den Kern von Wann man dem Agenten vertraut und wann nicht in eigenen Worten. Ein Satz Problem. Ein Satz Lösung. Ein Satz Fachbegriff. Das festigt den Stoff.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Die Begriffe dieser Lektion: Halluzination, Vertrauensbereich, Sicherheitskritischer Code.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Der Vertrauensbereich ist der klar definierte Rahmen, in dem du einem KI-Agenten Aufgaben uebergibst, ohne jedes Ergebnis manuell. zu pruefen. Innerhalb des Vertrauensbereichs hat der Agent bewiesen, dass er zuverlaessig arbeitet. Ausserhalb pruefst du jedes Ergebnis. Der Vertrauensbereich waechst mit der Erfahrung, aber er sollte nie das gesamte Projekt umfassen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Sicherheitskritischer Code ist Code, dessen Versagen zu Datenverlust, Sicherheitsluecken oder finanziellen Schaeden fuehren kann. Dazu gehoeren Authentifizierung, Autorisierung, Zahlungslogik, Passwort-Hashing und Datenbankzugriffe. Sicherheitskritischer Code muss immer von einem Menschen geprueft werden, auch wenn ein Agent ihn geschrieben hat.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Kann ich Halluzinationen komplett verhindern?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Nein, Halluzinationen lassen sich nicht komplett verhindern. Sie sind ein grundlegendes Merkmal der Technologie. Du kannst sie reduzieren, indem du praezise Fragen stellst und Quellen verlangst. Aber du kannst sie nicht eliminieren. Die beste Strategie ist, sie zu erwarten und deine Arbeitsweise darauf einzustellen: pruefen, testen, dokumentieren. Merksatz: Bei Wann man dem Agenten vertraut und wann nicht zählt die verständliche Erklärung mehr als das Auswendiglernen. einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Wie gross sollte mein Vertrauensbereich sein?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Fang klein an. Vertraue dem Agenten zunaechst nur bei Aufgaben, die du selbst schnell pruefen kannst: Kommentare, Formatierung, einfache Refactorings. Wenn er sich bezaehrt, erweiterst du den Bereich. Ein guter Vertrauensbereich umfasst Routineaufgaben, aber niemals Sicherheitskritisches. Die Groesse ist weniger wichtig als die Klarheit der Grenzen. Merksatz: Bei Wann man dem Agenten vertraut und wann nicht zählt die verständliche Erklärung mehr als das Auswendiglernen. einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was mache ich, wenn der Agent einen sicherheitskritischen Fehler macht?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Erstens: Korrigiere den Fehler sofort. Zweitens: Ueberpruefe, ob der Fehler schon in Produktion ist. Drittens: Verkleinere deinen Vertrauensbereich. Der Agent hat gezeigt, dass er in diesem Bereich nicht zuverlaessig ist. Viertens: Dokumentiere den Fehler, damit du beim naechsten Mal weisst, worauf du achten musst. Fehler sind Lerngelegenheiten, auch fuer den Umgang mit Agenten. Merksatz: Bei Wann man dem Agenten vertraut und wann nicht zählt die verständliche Erklärung mehr als das Auswendiglernen. einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Darf der Agent ueberhaupt sicherheitskritischen Code schreiben?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ja, der Agent darf sicherheitskritischen Code schreiben, aber du musst ihn pruefen. Der Agent kann dir Arbeit abnehmen, indem er den ersten Entwurf schreibt. Aber die Verantwortung fuer die Sicherheit traegst du. Sieh den Agenten als Junior-Entwickler: Er darf alles schreiben, aber nichts ohne Review in Produktion gehen. Merksatz: Bei Wann man dem Agenten vertraut und wann nicht zählt die verständliche Erklärung mehr als das Auswendiglernen. einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Wie pruefe ich am schnellsten, ob der Agent halluziniert?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Fuehre den Code aus. Ein Test, der fehlschlaeigt, ist der schnellste Halluzinationscheck. Wenn der Agent eine Funktion nennt, die du nicht kennst, suche sie in der offiziellen Dokumentation. Wenn er eine Bibliothek vorschlaegt, pruefe sie auf npm. Wenn er eine Versionsnummer angibt, vergleiche sie mit der aktuellen. Zehn Sekunden Recherche ersparen dir Stunden Fehlersuche. Merksatz: Bei Wann man dem Agenten vertraut und wann nicht zählt die verständliche Erklärung mehr als das Auswendiglernen. einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    }
+  ],
+  "practiceExample": {
+    "text": "Definiere deinen persoenlichen Vertrauensbereich fuer einen KI-Agenten und dokumentiere eine Halluzination, die du beobachtet hast.",
+    "repoNote": "repo-futuredev",
+    "location": "apps/mobile/src/ (Lass den Agenten eine Funktion schreiben und pruefe das Ergebnis auf Halluzinationen)"
+  },
+  "quiz": [
+    {
+      "question": "Welches Alltagsbild beschreibt eine Halluzination am treffendsten?",
+      "area": "Halluzination",
+      "options": [
+        {
+          "text": "Ein selbstbewusster Kollege erzaehlt eine Geschichte, die voellig erfunden ist, aber so ueberzeugend klingt, dass du sie zunaechst glaubst.",
+          "isCorrect": true,
+          "explanation": "Richtig: Halluzinationen sind ueberzeugend falsch."
+        },
+        {
+          "text": "Ein Kollege macht einen Tippfehler in einer E-Mail.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Tippfehler ist offensichtlich, eine Halluzination nicht."
+        },
+        {
+          "text": "Ein Kollege schweigt, wenn er die Antwort nicht weiss.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: das Modell schweigt nicht, es erfindet."
+        },
+        {
+          "text": "Ein Kollege wiederholt, was du gesagt hast.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Halluzinationen sind Neuerfindungen, keine Wiederholungen."
+        }
+      ]
+    },
+    {
+      "question": "Warum sind Halluzinationen so schwer zu erkennen?",
+      "area": "Halluzination",
+      "options": [
+        {
+          "text": "Sie klingen genauso ueberzeugend und selbstbewusst wie richtige Antworten.",
+          "isCorrect": true,
+          "explanation": "Richtig: das Modell zoegert nie, auch wenn es falsch liegt."
+        },
+        {
+          "text": "Sie sind immer in einer anderen Sprache geschrieben.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Halluzinationen sind in derselben Sprache."
+        },
+        {
+          "text": "Sie enthalten immer Rechtschreibfehler.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Halluzinationen sind oft grammatikalisch perfekt."
+        },
+        {
+          "text": "Sie werden farblich markiert.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: nichts markiert eine Halluzination."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der schnellste Weg, eine Halluzination zu entlarven?",
+      "area": "Halluzination",
+      "options": [
+        {
+          "text": "Den vorgeschlagenen Code sofort ausfuehren und sehen, ob er funktioniert.",
+          "isCorrect": true,
+          "explanation": "Richtig: ein fehlschlagender Test entlarvt Halluzinationen sofort."
+        },
+        {
+          "text": "Den Code ausdrucken und von Hand lesen.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Lesen ist langsamer als Ausfuehren."
+        },
+        {
+          "text": "Den Agenten fragen, ob er sicher ist.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Agent ist sich immer sicher."
+        },
+        {
+          "text": "Eine Stunde warten und dann nochmal fragen.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Warten aendert nichts an der Halluzination."
+        }
+      ]
+    },
+    {
+      "question": "Was gehoert NICHT zum sicherheitskritischen Code?",
+      "area": "Sicherheitskritischer Code",
+      "options": [
+        {
+          "text": "Eine CSS-Datei, die die Farbe eines Buttons aendert.",
+          "isCorrect": true,
+          "explanation": "Richtig: CSS-Farben sind nicht sicherheitskritisch."
+        },
+        {
+          "text": "Eine Funktion zum Hashen von Passwoertern.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Passwort-Hashing ist sicherheitskritisch."
+        },
+        {
+          "text": "Eine Authentifizierungslogik.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Authentifizierung ist sicherheitskritisch."
+        },
+        {
+          "text": "Eine Zahlungslogik.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Zahlungslogik ist sicherheitskritisch."
+        }
+      ]
+    },
+    {
+      "question": "Warum darf sicherheitskritischer Code nie allein dem Agenten ueberlassen werden?",
+      "area": "Sicherheitskritischer Code",
+      "options": [
+        {
+          "text": "Der Agent versteht nicht, warum Sicherheitsmassnahmen noetig sind, und kann funktionierenden, aber unsicheren Code schreiben.",
+          "isCorrect": true,
+          "explanation": "Richtig: funktionierender Code ist nicht automatisch sicher."
+        },
+        {
+          "text": "Der Agent weigert sich, sicherheitskritischen Code zu schreiben.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Agent schreibt ihn, aber ohne Sicherheitsverstaendnis."
+        },
+        {
+          "text": "Sicherheitskritischer Code ist zu komplex fuer Agenten.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Agenten koennen komplexen Code schreiben."
+        },
+        {
+          "text": "Der Agent braucht dafuer eine spezielle Lizenz.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: es gibt keine solche Lizenz."
+        }
+      ]
+    },
+    {
+      "question": "Wie definierst du deinen Vertrauensbereich am besten?",
+      "area": "Vertrauensbereich",
+      "options": [
+        {
+          "text": "Fang klein an und erweitere den Bereich nur, wenn der Agent sich in einer Aufgabenart bewaehrt hat.",
+          "isCorrect": true,
+          "explanation": "Richtig: Vertrauen waechst durch bewiesene Zuverlaessigkeit."
+        },
+        {
+          "text": "Vertraue dem Agenten von Anfang an bei allen Aufgaben.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: blindes Vertrauen ist gefaehrlich."
+        },
+        {
+          "text": "Vertraue dem Agenten nie, pruefe immer alles.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: dann sparst du keine Zeit."
+        },
+        {
+          "text": "Der Vertrauensbereich wird vom Agenten selbst definiert.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: du definierst den Bereich, nicht der Agent."
+        }
+      ]
+    },
+    {
+      "question": "Welches Warnsignal deutet auf eine Halluzination hin?",
+      "area": "Halluzination",
+      "options": [
+        {
+          "text": "Der Agent nennt eine Funktion oder Bibliothek, die du nicht kennst und nicht in der offiziellen Dokumentation findest.",
+          "isCorrect": true,
+          "explanation": "Richtig: unbekannte, nicht dokumentierte Namen sind verdaechtig."
+        },
+        {
+          "text": "Der Agent schreibt Code mit korrekter Syntax.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: korrekte Syntax ist normal."
+        },
+        {
+          "text": "Der Agent antwortet schnell.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Geschwindigkeit ist kein Halluzinationssignal."
+        },
+        {
+          "text": "Der Agent verwendet bekannte Bibliotheken.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: bekannte Bibliotheken sind ein gutes Zeichen."
+        }
+      ]
+    },
+    {
+      "question": "Was solltest du tun, wenn der Agent einen sicherheitskritischen Fehler macht?",
+      "area": "Fehler",
+      "options": [
+        {
+          "text": "Fehler korrigieren, Produktion pruefen, Vertrauensbereich verkleinern und den Fehler dokumentieren.",
+          "isCorrect": true,
+          "explanation": "Richtig: aus Fehlern lernen und Konsequenzen ziehen."
+        },
+        {
+          "text": "Den Agenten sofort deinstallieren.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: das ist uebertrieben, aus Fehlern lernt man."
+        },
+        {
+          "text": "Den Fehler ignorieren, es war nur ein Versehen.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: sicherheitskritische Fehler darf man nie ignorieren."
+        },
+        {
+          "text": "Dem Agenten die Schuld geben und weitermachen.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Verantwortung traegst du, nicht der Agent."
+        }
+      ]
+    },
+    {
+      "question": "Warum ist die Frage nach Quellen ein guter Halluzinationscheck?",
+      "area": "Halluzination",
+      "options": [
+        {
+          "text": "Ein Agent, der keine Quelle nennen kann oder eine erfundene URL angibt, halluziniert wahrscheinlich.",
+          "isCorrect": true,
+          "explanation": "Richtig: fehlende oder falsche Quellen sind ein starkes Signal."
+        },
+        {
+          "text": "Quellen machen den Code schneller.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Quellen haben nichts mit Geschwindigkeit zu tun."
+        },
+        {
+          "text": "Quellen ersetzen das Testen des Codes.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Quellen ersetzen keine Tests."
+        },
+        {
+          "text": "Der Agent verweigert die Antwort, wenn er keine Quelle hat.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Agent erfindet notfalls eine Quelle."
+        }
+      ]
+    },
+    {
+      "question": "Welcher Code gehoert in den Vertrauensbereich eines bewaehrten Agenten?",
+      "area": "Vertrauensbereich",
+      "options": [
+        {
+          "text": "Eine neue Komponente nach bestehendem Muster, die der Agent schon oft richtig gebaut hat.",
+          "isCorrect": true,
+          "explanation": "Richtig: bewaehrte Routineaufgaben gehoeren in den Vertrauensbereich."
+        },
+        {
+          "text": "Die Passwort-Hashing-Funktion der App.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: das ist sicherheitskritisch."
+        },
+        {
+          "text": "Die Zahlungslogik des Shops.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: das ist sicherheitskritisch."
+        },
+        {
+          "text": "Die Authentifizierungs-Middleware.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: das ist sicherheitskritisch."
+        }
+      ]
+    },
+    {
+      "question": "Wie verhaelt sich der Agent bei einer Halluzination?",
+      "area": "Halluzination",
+      "options": [
+        {
+          "text": "Er praesentiert die falsche Antwort mit derselben Selbstsicherheit wie eine richtige.",
+          "isCorrect": true,
+          "explanation": "Richtig: das Modell unterscheidet nicht zwischen richtig und falsch."
+        },
+        {
+          "text": "Er markiert die Antwort als unsicher.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Agent markiert nichts als unsicher."
+        },
+        {
+          "text": "Er verweigert die Antwort.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Agent verweigert selten eine Antwort."
+        },
+        {
+          "text": "Er fragt nach Bestaetigung.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Agent fragt nicht nach Bestaetigung."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der wichtigste Grundsatz im Umgang mit KI-Agenten?",
+      "area": "Grundsatz",
+      "options": [
+        {
+          "text": "Der Agent ist ein Werkzeug, kein Ersatz fuer dein Urteil. Die Verantwortung traegst immer du.",
+          "isCorrect": true,
+          "explanation": "Richtig: das ist der zentrale Grundsatz."
+        },
+        {
+          "text": "Der Agent ist schneller als du, also vertraue ihm.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Geschwindigkeit ist kein Grund fuer blindes Vertrauen."
+        },
+        {
+          "text": "Der Agent macht keine Fehler.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Agenten machen viele Fehler."
+        },
+        {
+          "text": "Der Agent ersetzt irgendwann alle Entwickler.. Weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen, werden in den nachfolgenden Lektionen behandelt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Agenten ersetzen keine Entwickler."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Definiere deinen persoenlichen Vertrauensbereich. Lass den Agenten dann eine Aufgabe ausserhalb dieses Bereichs loesen, zum Beispiel eine sicherheitskritische Funktion schreiben. Pruefe das Ergebnis manuell. Dokumentiere, welche Fehler du gefunden hast und wie du deinen Vertrauensbereich anpassen wuerdest.",
+    "expectation": "Der Unterschied zwischen Aufgaben innerhalb und ausserhalb des Vertrauensbereichs wurde praktisch erfahren.",
+    "checklist": [
+      "Vertrauensbereich schriftlich definiert.",
+      "Agenten eine Aufgabe ausserhalb des Vertrauensbereichs gegeben.",
+      "Ergebnis manuell geprueft und Fehler dokumentiert.",
+      "Vertrauensbereich basierend auf der Erfahrung angepasst."
+    ],
+    "portfolioItem": "P04"
+  },
+  "audio": {
+    "file": "M08-01-03.mp3",
+    "durationSeconds": 1500,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Kann ich Halluzinationen komplett verhindern?",
+      "answer": "Nein, Halluzinationen lassen sich nicht komplett verhindern. Sie sind ein grundlegendes Merkmal der Technologie. Du kannst sie reduzieren, indem du praezise Fragen stellst und Quellen verlangst. Aber du kannst sie nicht eliminieren. Die beste Strategie ist, sie zu erwarten und deine Arbeitsweise darauf einzustellen: pruefen, testen, dokumentieren. Merksatz: Bei Wann man dem Agenten vertraut und wann nicht zählt die verständliche Erklärung mehr als das Auswendiglernen. einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    },
+    {
+      "question": "Wie gross sollte mein Vertrauensbereich sein?",
+      "answer": "Fang klein an. Vertraue dem Agenten zunaechst nur bei Aufgaben, die du selbst schnell pruefen kannst: Kommentare, Formatierung, einfache Refactorings. Wenn er sich bezaehrt, erweiterst du den Bereich. Ein guter Vertrauensbereich umfasst Routineaufgaben, aber niemals Sicherheitskritisches. Die Groesse ist weniger wichtig als die Klarheit der Grenzen. Merksatz: Bei Wann man dem Agenten vertraut und wann nicht zählt die verständliche Erklärung mehr als das Auswendiglernen. einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    },
+    {
+      "question": "Was mache ich, wenn der Agent einen sicherheitskritischen Fehler macht?",
+      "answer": "Erstens: Korrigiere den Fehler sofort. Zweitens: Ueberpruefe, ob der Fehler schon in Produktion ist. Drittens: Verkleinere deinen Vertrauensbereich. Der Agent hat gezeigt, dass er in diesem Bereich nicht zuverlaessig ist. Viertens: Dokumentiere den Fehler, damit du beim naechsten Mal weisst, worauf du achten musst. Fehler sind Lerngelegenheiten, auch fuer den Umgang mit Agenten. Merksatz: Bei Wann man dem Agenten vertraut und wann nicht zählt die verständliche Erklärung mehr als das Auswendiglernen. einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    },
+    {
+      "question": "Darf der Agent ueberhaupt sicherheitskritischen Code schreiben?",
+      "answer": "Ja, der Agent darf sicherheitskritischen Code schreiben, aber du musst ihn pruefen. Der Agent kann dir Arbeit abnehmen, indem er den ersten Entwurf schreibt. Aber die Verantwortung fuer die Sicherheit traegst du. Sieh den Agenten als Junior-Entwickler: Er darf alles schreiben, aber nichts ohne Review in Produktion gehen. Merksatz: Bei Wann man dem Agenten vertraut und wann nicht zählt die verständliche Erklärung mehr als das Auswendiglernen. einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    },
+    {
+      "question": "Wie pruefe ich am schnellsten, ob der Agent halluziniert?",
+      "answer": "Fuehre den Code aus. Ein Test, der fehlschlaeigt, ist der schnellste Halluzinationscheck. Wenn der Agent eine Funktion nennt, die du nicht kennst, suche sie in der offiziellen Dokumentation. Wenn er eine Bibliothek vorschlaegt, pruefe sie auf npm. Wenn er eine Versionsnummer angibt, vergleiche sie mit der aktuellen. Zehn Sekunden Recherche ersparen dir Stunden Fehlersuche. Merksatz: Bei Wann man dem Agenten vertraut und wann nicht zählt die verständliche Erklärung mehr als das Auswendiglernen. einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    }
+  ]
+}

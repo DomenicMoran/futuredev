@@ -199,7 +199,7 @@ export default function Home() {
         </div>
         <p className="footer-copy">
           &copy; {new Date().getFullYear()} Domenic Moran. Die Audio-Inhalte wurden
-          mit KI-Stimmen (ElevenLabs) erzeugt (EU AI Act Art.&nbsp;50).
+          mit KI-generierten Stimmen erzeugt (EU AI Act Art.&nbsp;50).
         </p>
       </footer>
     </>

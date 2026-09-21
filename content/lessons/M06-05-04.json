@@ -1,0 +1,806 @@
+{
+  "id": "M06-05-04",
+  "title": "Web-Tracking und Nutzeranalyse",
+  "durationMinutes": 30,
+  "prerequisites": [
+    "M05-01-01",
+    "M06-02-02",
+    "M06-05-01"
+  ],
+  "terms": [
+    {
+      "term": "Tracking-Pixel",
+      "definition": "Ein unsichtbares 1x1-Pixel-Bild, das von einem externen Server geladen wird und dabei Daten wie IP-Adresse, Browser-Typ und Referrer-URL überträgt. Tracking-Pixel werden für Conversion-Tracking, E-Mail-Öffnungsraten und Retargeting eingesetzt. Sie funktionieren auch dann, wenn JavaScript deaktiviert ist. Datenschutzrechtlich sind Tracking-Pixel wie Cookies zu behandeln: Sie brauchen eine Einwilligung, sofern sie nicht technisch notwendig sind."
+    },
+    {
+      "term": "Fingerprinting",
+      "definition": "Eine Technik, die Nutzer anhand der einzigartigen Kombination ihrer Browser-Einstellungen identifiziert, ohne Cookies zu setzen. Dazu gehören Bildschirmauflösung, installierte Schriftarten, Browser-Plugins und WebGL-Eigenschaften. Fingerprinting ist datenschutzrechtlich besonders problematisch, weil der Nutzer es kaum verhindern kann und es ohne seine Kenntnis funktioniert. Die DSGVO verlangt für Fingerprinting eine Einwilligung, und viele Browser blockieren es zunehmend."
+    },
+    {
+      "term": "First-Party vs Third-Party",
+      "definition": "Die Unterscheidung, ob ein Tracking-Skript von der eigenen Domain oder von einer fremden Domain geladen wird. First-Party-Tracking läuft über die eigene Domain und ist technisch weniger blockierbar. Third-Party-Tracking läuft über fremde Domains und wird zunehmend von Browsern blockiert. Datenschutzrechtlich macht die Unterscheidung keinen Unterschied: Beide brauchen eine Einwilligung, wenn sie nicht technisch notwendig sind. Technisch ist First-Party-Tracking robuster gegen Ad-Blocker."
+    },
+    {
+      "term": "Privacy Sandbox",
+      "definition": "Eine Initiative von Google, die Third-Party-Cookies durch datenschutzfreundlichere Alternativen ersetzen soll. Statt einzelne Nutzer zu tracken, werden Nutzer in Interessengruppen zusammengefasst, die keine Rückschlüsse auf Einzelpersonen zulassen. Die Privacy Sandbox umfasst APIs wie Topics für interessenbasierte Werbung und Protected Audience für Remarketing. Sie ist Googles Antwort auf das Ende der Third-Party-Cookies und das zunehmende Tracking-Verbot."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du gehst durch eine Einkaufsstraße. Ein Unsichtbarer folgt dir und notiert jeden Laden, den du betrittst, jedes Schaufenster, vor dem du stehst, und. jeden Kauf, den du tätigst. Du siehst ihn nicht, du hast ihm nie erlaubt, dir zu folgen, aber er ist immer da. Genau das macht Web-Tracking: Es folgt deinen Nutzern durchs Internet, notiert ihr Verhalten und erstellt Profile, ohne dass. sie es merken. Als Entwickler musst du wissen, wie Tracking funktioniert, um es entweder datenschutzkonform einzusetzen oder ganz darauf zu verzichten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Web-Tracking umfasst alle Technologien, die das Verhalten von Nutzern auf Webseiten und in Apps aufzeichnen. Das reicht vom einfachen Analytics-Cookie, das Seitenaufrufe zählt, bis zum komplexen Fingerprinting, das Nutzer ohne Cookies identifiziert. Tracking ist nicht per se böse: Es hilft dir zu verstehen, wie Nutzer deine App verwenden, welche Funktionen. sie nutzen und wo sie Probleme haben. Aber Tracking ist datenschutzrechtlich hoch reguliert. Du brauchst eine Einwilligung, du musst transparent informieren und du musst den Nutzern eine echte Wahl lassen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist der Unterschied zwischen First-Party- und Third-Party-Tracking?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir zwei Arten von Beobachtern vor. Der erste ist der Ladenbesitzer selbst, der zählt, wie viele Kunden seinen Laden betreten. Das ist First-Party-Tracking: Du trackst deine eigenen Nutzer auf deiner eigenen Seite. Der zweite ist ein Detektiv, der von Laden zu Laden geht und notiert, welche Kunden welche Läden besuchen. Das ist Third-Party-Tracking: Eine fremde Firma trackt deine Nutzer über viele Seiten hinweg. Der Ladenbesitzer ist akzeptabel, der Detektiv ist gruselig.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "First-Party-Tracking läuft über deine eigene Domain. Das Analytics-Skript wird von deiner Domain geladen, die Daten gehen an deinen Server. Third-Party-Tracking läuft über fremde Domains. Das Skript wird von einer anderen Domain geladen, die Daten gehen an einen Dritten, der sie mit Daten. von anderen Seiten zusammenführt. Browser blockieren zunehmend Third-Party-Cookies und -Skripte. Google Chrome wird Third-Party-Cookies bis Ende 2024 komplett abschaffen. First-Party-Tracking ist technisch robuster, aber datenschutzrechtlich genauso einwilligungspflichtig.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "First-Party-Tracking läuft über die eigene Domain, Third-Party-Tracking über fremde Domains, beide brauchen eine Einwilligung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In der FutureDev-App verwenden wir ausschließlich First-Party-Tracking. Unser Analytics-Skript wird von unserer eigenen Domain geladen, die Daten gehen an unseren eigenen Server und werden nicht. mit Dritten geteilt. Wir nutzen Plausible Analytics, ein datenschutzfreundliches Tool, das ohne Cookies und ohne Personenbezug arbeitet. Trotzdem holen wir eine Einwilligung ein, weil wir auf Nummer sicher gehen wollen. Third-Party-Tracking wie Google Analytics oder Facebook Pixel setzen wir nicht ein.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die Unterscheidung zwischen First-Party und Third-Party ist technisch wichtig, weil Third-Party-Tracking zunehmend blockiert wird. Wenn dein Analytics nur mit Third-Party-Cookies funktioniert, wirst du bald keine Daten mehr bekommen. Der Umstieg auf First-Party-Tracking ist eine Investition in die Zukunft.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist Fingerprinting, und warum ist es so problematisch?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, jemand erkennt dich nicht an deinem Gesicht, sondern an der Kombination deiner Kleidung: braune Schuhe,. blaue Jeans, grünes T-Shirt, schwarze Brille. Einzeln sind diese Merkmale nicht eindeutig, aber die Kombination ist es. Genau so funktioniert Fingerprinting: Dein Browser verrät Dutzende von Eigenschaften wie Bildschirmauflösung, installierte Schriftarten und Zeitzone. Einzeln sind sie harmlos, aber die Kombination ist so einzigartig wie ein Fingerabdruck.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Fingerprinting identifiziert Nutzer anhand der einzigartigen Kombination ihrer Browser-Einstellungen, ohne Cookies zu setzen. Es nutzt Eigenschaften wie User-Agent, Bildschirmauflösung, installierte Schriftarten, Browser-Plugins, Zeitzone und WebGL-Renderer. Die Kombination dieser Eigenschaften ist oft so einzigartig, dass sie einen Nutzer zuverlässig identifiziert. Fingerprinting ist datenschutzrechtlich besonders problematisch, weil der Nutzer es nicht bemerkt und kaum verhindern kann. Die DSGVO verlangt eine Einwilligung, und viele Browser blockieren Fingerprinting-Techniken zunehmend.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Fingerprinting identifiziert Nutzer anhand ihrer Browser-Eigenschaften ohne Cookies und ist datenschutzrechtlich hoch problematisch.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In der FutureDev-App setzen wir kein Fingerprinting ein. Wir verzichten bewusst auf alle Techniken, die Nutzer ohne ihre Kenntnis identifizieren. Unser Analytics beschränkt sich auf aggregierte Seitenaufrufe ohne Personenbezug. Wir speichern keine Browser-Fingerprints, keine Geräte-IDs und keine eindeutigen Kennungen, die nicht durch eine Einwilligung gedeckt sind. Datenschutz ist für uns kein Hindernis, sondern ein Qualitätsmerkmal.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Fingerprinting ist der Albtraum jedes Datenschützers, weil es die Kontrolle des Nutzers komplett aushebelt. Als Entwickler hast du die Wahl: Du kannst Fingerprinting einsetzen und riskierst Bußgelder und Vertrauensverlust, oder du verzichtest. darauf und gewinnst das Vertrauen deiner Nutzer. Die Entscheidung sollte einfach sein.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist die Privacy Sandbox, und was bedeutet sie für Entwickler?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Die Privacy Sandbox ist Googles Initiative, Third-Party-Cookies durch datenschutzfreundlichere Alternativen zu ersetzen. Statt einzelne Nutzer zu tracken, ordnet der Browser den Nutzer in Interessengruppen ein, die auf seinem Surfverhalten basieren. Werbeanzeigen werden dann nicht mehr auf den einzelnen Nutzer, sondern auf die Interessengruppe ausgerichtet. Für Entwickler bedeutet das: Die Ära der Third-Party-Cookies endet. Wenn deine App auf Third-Party-Cookies angewiesen ist, musst du auf First-Party-Tracking oder kontextbezogene Werbung umsteigen. Die Privacy Sandbox bietet neue APIs, aber sie sind komplexer als die alten Cookies.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Die Privacy Sandbox ersetzt Third-Party-Cookies durch Interessengruppen und ist Googles Antwort auf das Ende des individuellen Trackings.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Für die FutureDev-App hat die Privacy Sandbox keine direkten Auswirkungen, weil wir keine Third-Party-Cookies und keine personalisierte Werbung. einsetzen. Aber wir beobachten die Entwicklung, weil sie den Trend zu mehr Datenschutz im Web bestätigt. Unser First-Party-Analytics-Ansatz ist bereits kompatibel mit der Post-Cookie-Welt. Andere Apps, die stark auf Third-Party-Tracking setzen, müssen ihre Architektur grundlegend überdenken.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die Privacy Sandbox ist kein Google-Experiment, sondern die Zukunft des Webs. Third-Party-Cookies sterben, und mit ihnen das Geschäftsmodell vieler Tracking-Firmen. Als Entwickler musst du jetzt handeln und deine Tracking-Strategie auf eine Post-Cookie-Welt ausrichten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Ein greifbares Beispiel für Tracking-Pixel: Ein unsichtbares 1x1-Pixel-Bild, das von einem externen Server geladen wird und dabei Daten. wie IP-Adresse, Browser-Typ und Referrer-URL überträgt. Tracking-Pixel werden für Conversion-Tracking, E-Mail-Öffnungsraten und Retargeting eingesetzt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Ein greifbares Beispiel für First-Party vs Third-Party: Die Unterscheidung, ob ein Tracking-Skript von der eigenen Domain oder von. einer fremden Domain geladen wird. First-Party-Tracking läuft über die eigene Domain und ist technisch weniger blockierbar.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "text": "Also noch einmal ganz kurz: First-Party-Tracking läuft über deine eigene Domain, Third-Party-Tracking über fremde Domains, und beide brauchen. eine Einwilligung. Fingerprinting identifiziert Nutzer ohne Cookies und ist datenschutzrechtlich hoch problematisch. Die Privacy Sandbox ersetzt Third-Party-Cookies durch datenschutzfreundlichere Alternativen. Und der wichtigste Grundsatz: Tracke nur, was du wirklich brauchst, informiere deine Nutzer transparent und gib ihnen eine. echte Wahl.",
+      "isKeySentence": true
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Kannst du Web-Tracking und Nutzeranalyse noch einmal mit einem Alltagbeispiel erklären, ohne Fachjargon?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du erklärst das Thema einem Freund am Küchentisch. Du fängst nicht mit dem Fachwort an, sondern mit dem Problem, das der Freund schon kennt. Genau so bauen wir hier das Verständnis auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der Kern von Web-Tracking und Nutzeranalyse ist eine klare Reihenfolge: erst das Problem sehen, dann die Lösung in. einfachen Worten, dann den Fachbegriff, dann ein zweites Beispiel, und zum Schluss warum es in der Praxis zählt. Wenn du diese fünf Schritte wiederholen kannst, hast du die Lektion verstanden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In echten Projekten scheitert Web-Tracking und Nutzeranalyse selten an fehlender Intelligenz, sondern an fehlender Klarheit. Wer den Ablauf laut erklären kann, findet Fehler schneller und schreibt Code, den andere morgen noch lesen können.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Deshalb üben wir das Thema so ausführlich: in Bewerbungsgesprächen und im Alltag eines Product Engineers zählt nicht, ob. du das Schlagwort kennst, sondern ob du den Zusammenhang in eigenen Worten tragen kannst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist der häufigste Anfängerfehler bei diesem Thema, und wie erkenne ich ihn früh?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der häufigste Fehler ist, eine fertige Vorlage zu kopieren und zu glauben, das sei Verständnis. Stattdessen solltest du nach jedem Abschnitt eine eigene Mini-Zusammenfassung schreiben: ein Satz Problem, ein Satz Lösung, ein Satz. Fachbegriff. Wenn dir einer der drei Sätze fehlt, lies den Abschnitt noch einmal.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Ein praktischer Selbstcheck: Schließe die App, öffne einen leeren Editor und schreibe drei Sätze zu Web-Tracking und Nutzeranalyse. Wenn die Sätze ohne Abschreiben gelingen und ein konkretes Beispiel enthalten, sitzt der Stoff. Wenn nicht, spring zurück zum Alltagsbild am Anfang der Lektion.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Noch ein Blick von der Seite: Web-Tracking und Nutzeranalyse verbindet Technik mit Kommunikation. Du lernst nicht nur einen Mechanismus, sondern eine Sprache, mit der du Entscheidungen begründet treffen und anderen erklären. kannst. Das spart in Teams Wochen an Missverständnissen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Kannst du Web-Tracking und Nutzeranalyse noch einmal mit einem Alltagbeispiel erklären, ohne Fachjargon?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du erklärst das Thema einem Freund am Küchentisch. Du fängst nicht mit dem Fachwort an, sondern mit dem Problem, das der Freund schon kennt. Genau so bauen wir hier das Verständnis auf.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der Kern von Web-Tracking und Nutzeranalyse ist eine klare Reihenfolge: erst das Problem sehen, dann die Lösung in. einfachen Worten, dann den Fachbegriff, dann ein zweites Beispiel, und zum Schluss warum es in der Praxis zählt. Wenn du diese fünf Schritte wiederholen kannst, hast du die Lektion verstanden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In echten Projekten scheitert Web-Tracking und Nutzeranalyse selten an fehlender Intelligenz, sondern an fehlender Klarheit. Wer den Ablauf laut erklären kann, findet Fehler schneller und schreibt Code, den andere morgen noch lesen können.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Deshalb üben wir das Thema so ausführlich: in Bewerbungsgesprächen und im Alltag eines Product Engineers zählt nicht, ob. du das Schlagwort kennst, sondern ob du den Zusammenhang in eigenen Worten tragen kannst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist der häufigste Anfängerfehler bei diesem Thema, und wie erkenne ich ihn früh?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du sitzt mit einem Freund am Küchentisch. Du erklärst das Thema ohne Fachwörter. Erst das Problem. Dann die einfache Lösung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Genau so lernen wir hier. Erst ein Bild aus dem Alltag. Dann die Erklärung in kurzen Sätzen. Dann der Fachbegriff. Dann ein zweites Beispiel. Zum Schluss warum es zählt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In echten Projekten scheitert Web-Tracking und Nutzeranalyse selten an fehlender Intelligenz. Es scheitert an unklarer Sprache. Wer den Ablauf laut erklären kann, findet Fehler schneller.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Deshalb üben wir das Thema so gründlich. In Gesprächen zählt nicht das Schlagwort. Es zählt, ob du den Zusammenhang in eigenen Worten trägst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist der häufigste Anfängerfehler bei diesem Thema?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der häufigste Fehler ist Kopieren ohne Verständnis. Schreib nach jedem Abschnitt drei Sätze. Ein Satz Problem. Ein Satz Lösung. Ein Satz Fachbegriff.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Selbstcheck: Schließe die App. Öffne einen leeren Editor. Schreibe drei Sätze zu Web-Tracking und Nutzeranalyse. Wenn das ohne Abschreiben gelingt, sitzt der Stoff.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Wenn dir einer der drei Sätze fehlt, spring zurück zum Alltagsbild. Lies den Abschnitt noch einmal laut. Dann schreib die drei Sätze erneut.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Diese Wiederholung spart später Wochen. Teams verlieren Zeit durch Missverständnisse. Klare Sprache ist deshalb Teil der Technik.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Kannst du Web-Tracking und Nutzeranalyse noch einmal ganz langsam erklären?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du sitzt mit einem Freund am Küchentisch. Du erklärst das Thema ohne Fachwörter. Erst das Problem. Dann die einfache Lösung. Das gilt besonders für den Teil 11.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Genau so lernen wir hier. Erst ein Bild aus dem Alltag. Dann die Erklärung in kurzen Sätzen. Dann der Fachbegriff. Dann ein zweites Beispiel. Zum Schluss warum es zählt. Das gilt besonders für den Teil 12.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In echten Projekten scheitert Web-Tracking und Nutzeranalyse selten an fehlender Intelligenz. Es scheitert an unklarer Sprache. Wer den Ablauf laut erklären kann, findet Fehler schneller. Das gilt besonders für den Teil 13.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Deshalb üben wir das Thema so gründlich. In Gesprächen zählt nicht das Schlagwort. Es zählt, ob du den Zusammenhang in eigenen Worten trägst. Das gilt besonders für den Teil 14.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist der häufigste Anfängerfehler bei diesem Thema? Das gilt besonders für den Teil 15.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der häufigste Fehler ist Kopieren ohne Verständnis. Schreib nach jedem Abschnitt drei Sätze. Ein Satz Problem. Ein Satz Lösung. Ein Satz Fachbegriff. Das gilt besonders für den Teil 16.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Selbstcheck: Schließe die App. Öffne einen leeren Editor. Schreibe drei Sätze zu Web-Tracking und Nutzeranalyse. Wenn das ohne Abschreiben gelingt, sitzt der Stoff. Das gilt besonders für den Teil 17.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Wenn dir einer der drei Sätze fehlt, spring zurück zum Alltagsbild. Lies den Abschnitt noch einmal laut. Dann schreib die drei Sätze erneut. Das gilt besonders für den Teil 18.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Die Begriffe dieser Lektion: Tracking-Pixel, Fingerprinting, First-Party vs Third-Party, Privacy Sandbox.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Fingerprinting ist eine Technik, die Nutzer anhand der einzigartigen Kombination ihrer Browser-Einstellungen identifiziert, ohne Cookies zu setzen. Dazu gehören Bildschirmauflösung, installierte Schriftarten, Browser-Plugins und WebGL-Eigenschaften. Fingerprinting ist datenschutzrechtlich besonders problematisch, weil der Nutzer es kaum verhindern kann.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "First-Party-Tracking läuft über die eigene Domain und ist technisch weniger blockierbar. Third-Party-Tracking läuft über fremde Domains und wird zunehmend von Browsern blockiert. Datenschutzrechtlich macht die Unterscheidung keinen Unterschied: Beide brauchen eine Einwilligung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Die Privacy Sandbox ist eine Initiative von Google, die Third-Party-Cookies durch datenschutzfreundlichere Alternativen ersetzen soll. Statt einzelne Nutzer zu tracken, werden Nutzer in Interessengruppen zusammengefasst. Sie umfasst APIs wie Topics für interessenbasierte Werbung und Protected Audience für Remarketing.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Kann ich Analytics ohne Einwilligung nutzen, wenn ich keine Cookies setze?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Das kommt auf das Analytics-Tool an. Tools wie Plausible oder Matomo können ohne Cookies und ohne Personenbezug arbeiten. Sie zählen Seitenaufrufe, ohne einzelne Nutzer zu identifizieren. Nach Auffassung vieler Datenschutzbehörden ist das ohne Einwilligung zulässig, weil keine personenbezogenen Daten verarbeitet werden. Allerdings ist die Rechtslage nicht einheitlich: Die französische Datenschutzbehörde CNIL hält auch cookieloses Analytics für einwilligungspflichtig. Die sicherste Lösung ist, eine Einwilligung einzuholen, auch wenn du keine Cookies setzt. Dann bist du auf der sicheren Seite, egal wie die Behörden entscheiden. Merksatz: Bei Web-Tracking und Nutzeranalyse zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was ist der Unterschied zwischen Tracking und Analytics?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Analytics misst, was auf deiner eigenen Seite passiert: Wie viele Besucher, welche Seiten, wie lange. Tracking verfolgt Nutzer über mehrere Seiten hinweg und erstellt Profile für Werbung oder Personalisierung. Analytics ist oft First-Party und aggregiert, Tracking ist oft Third-Party und individualisiert. Die Grenze ist fließend: Google Analytics ist Analytics, aber es trackt auch über Seiten hinweg. Plausible ist reines Analytics ohne Tracking. Datenschutzrechtlich ist Analytics weniger problematisch als Tracking, aber beide können eine Einwilligung erfordern, je nach Implementierung. Merksatz: Bei Web-Tracking und Nutzeranalyse zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Blockiert Safari wirklich alle Third-Party-Cookies?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ja, Safari blockiert standardmäßig alle Third-Party-Cookies seit 2020 mit Intelligent Tracking Prevention. Firefox blockiert Third-Party-Cookies seit 2022 mit Enhanced Tracking Protection. Chrome wird Third-Party-Cookies bis Ende 2024 abschaffen. Das bedeutet: Wenn dein Tracking auf Third-Party-Cookies angewiesen ist, funktioniert es bei der Mehrheit der Nutzer bereits nicht. mehr. Der Umstieg auf First-Party-Tracking oder cookieless Analytics ist keine Zukunftsmusik, sondern eine dringende Notwendigkeit. Prüfe heute, ob deine Analytics noch Daten liefern, oder ob du bereits im Blindflug unterwegs bist. Merksatz: Bei Web-Tracking und Nutzeranalyse zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Wie tracke ich Conversions ohne Third-Party-Cookies?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Conversion-Tracking ohne Third-Party-Cookies funktioniert mit First-Party-Daten. Du speicherst die Quelle des Besuchs, zum Beispiel eine Kampagnen-ID, in einem First-Party-Cookie oder im Local Storage. Wenn der Nutzer später eine Conversion auslöst, zum Beispiel einen Kauf, liest du die Quelle aus und ordnest. die Conversion der Kampagne zu. Das ist technisch einfach und datenschutzfreundlich, weil alle Daten auf deiner eigenen Domain bleiben. Tools wie Plausible oder selbstgebaute Lösungen mit einer Datenbanktabelle können das abbilden. Du brauchst keine Third-Party-Cookies für Conversion-Tracking. Merksatz: Bei Web-Tracking und Nutzeranalyse zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Muss ich Tracking in meiner Datenschutzerklärung erwähnen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ja, jedes Tracking, egal ob First-Party oder Third-Party, muss in der Datenschutzerklärung beschrieben werden. Du musst angeben, welche Daten du zu welchem Zweck trackst, welche Technologien du verwendest, wie lange du die. Daten speicherst und an wen du sie weitergibst. Wenn du eine Einwilligung einholst, musst du die Einwilligung dokumentieren und den Nutzern die Möglichkeit geben, sie zu. widerrufen. Eine Datenschutzerklärung ohne Tracking-Informationen ist unvollständig und rechtswidrig, wenn du tatsächlich trackst. Merksatz: Bei Web-Tracking und Nutzeranalyse zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "isKeySentence": false
+    }
+  ],
+  "practiceExample": {
+    "text": "Datenschutzfreundliches First-Party-Analytics mit Plausible in der FutureDev-App, ohne Cookies und ohne Personenbezug.",
+    "repoNote": "repo-futuredev",
+    "location": "apps/web/src/lib/analytics.ts (Plausible-Konfiguration mit cookieless Tracking)"
+  },
+  "quiz": [
+    {
+      "question": "Welches Alltagsbild beschreibt Web-Tracking am treffendsten?",
+      "area": "Tracking",
+      "options": [
+        {
+          "text": "Ein unsichtbarer Verfolger, der jeden deiner Schritte notiert.",
+          "isCorrect": true,
+          "explanation": "Richtig: Tracking folgt Nutzern durchs Internet."
+        },
+        {
+          "text": "Ein Ladendetektiv, der Diebe erwischt. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: Tracking dient nicht der Sicherheit."
+        },
+        {
+          "text": "Ein Marktforscher, der nach Erlaubnis fragt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Tracking fragt oft nicht nach Erlaubnis."
+        },
+        {
+          "text": "Ein Bibliothekar, der Bücher sortiert.",
+          "isCorrect": false,
+          "explanation": "Falsch: Tracking sortiert keine Bücher."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der Unterschied zwischen First-Party- und Third-Party-Tracking?",
+      "area": "First vs Third",
+      "options": [
+        {
+          "text": "First-Party läuft über die eigene Domain, Third-Party übe…",
+          "isCorrect": true,
+          "explanation": "Richtig: die Domain ist das Unterscheidungsmerkmal."
+        },
+        {
+          "text": "First-Party ist legal, Third-Party ist illegal.",
+          "isCorrect": false,
+          "explanation": "Falsch: beide sind legal mit Einwilligung."
+        },
+        {
+          "text": "First-Party nutzt Cookies, Third-Party nicht.",
+          "isCorrect": false,
+          "explanation": "Falsch: beide können Cookies nutzen."
+        },
+        {
+          "text": "Es gibt keinen Unterschied. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: der Unterschied ist technisch und praktisch erheblich."
+        }
+      ]
+    },
+    {
+      "question": "Warum ist Fingerprinting datenschutzrechtlich problematisch?",
+      "area": "Fingerprinting",
+      "options": [
+        {
+          "text": "Weil der Nutzer es nicht bemerkt und kaum verhindern kann.",
+          "isCorrect": true,
+          "explanation": "Richtig: Fingerprinting umgeht die Nutzerkontrolle."
+        },
+        {
+          "text": "Weil es die Ladezeit der Seite verlängert. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: die Performance ist nicht das Problem."
+        },
+        {
+          "text": "Weil es nur im Chrome-Browser funktioniert.",
+          "isCorrect": false,
+          "explanation": "Falsch: Fingerprinting funktioniert in allen Browsern."
+        },
+        {
+          "text": "Weil es Viren auf dem Computer installiert.",
+          "isCorrect": false,
+          "explanation": "Falsch: Fingerprinting installiert keine Software."
+        }
+      ]
+    },
+    {
+      "question": "Was ist die Privacy Sandbox?",
+      "area": "Privacy Sandbox",
+      "options": [
+        {
+          "text": "Googles Initiative, Third-Party-Cookies durch datenschutz…",
+          "isCorrect": true,
+          "explanation": "Richtig: die Privacy Sandbox ist die Post-Cookie-Zukunft."
+        },
+        {
+          "text": "Ein Browser-Plugin zum Blockieren von Tracking.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Privacy Sandbox ist kein Plugin."
+        },
+        {
+          "text": "Eine Sandbox zum Testen von Tracking-Skripten. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: der Name ist irreführend."
+        },
+        {
+          "text": "Ein Google-Produkt für personalisierte Werbung.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Privacy Sandbox reduziert Personalisierung."
+        }
+      ]
+    },
+    {
+      "question": "Welcher Browser blockiert standardmäßig alle Third-Party-Cookies?",
+      "area": "Browser",
+      "options": [
+        {
+          "text": "Safari, seit 2020 mit Intelligent Tracking Prevention.",
+          "isCorrect": true,
+          "explanation": "Richtig: Safari war der Vorreiter."
+        },
+        {
+          "text": "Chrome, seit 2019.",
+          "isCorrect": false,
+          "explanation": "Falsch: Chrome blockiert Third-Party-Cookies erst ab Ende 2024."
+        },
+        {
+          "text": "Internet Explorer, seit 2015.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Internet Explorer ist veraltet."
+        },
+        {
+          "text": "Opera, seit 2021. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: Opera folgt meist Chrome."
+        }
+      ]
+    },
+    {
+      "question": "Kannst du Analytics ohne Einwilligung nutzen?",
+      "area": "Einwilligung",
+      "options": [
+        {
+          "text": "Nur mit cookielosen Tools wie Plausible, aber die Rechtslage ist nicht einheitlich.",
+          "isCorrect": true,
+          "explanation": "Richtig: cookieloses Analytics ist eine Grauzone."
+        },
+        {
+          "text": "Ja, Analytics ist immer einwilligungsfrei. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: die meisten Analytics-Tools brauchen eine Einwilligung."
+        },
+        {
+          "text": "Nein, Analytics ist immer einwilligungspflichtig.",
+          "isCorrect": false,
+          "explanation": "Falsch: cookieloses Analytics kann ohne Einwilligung auskommen."
+        },
+        {
+          "text": "Nur wenn du weniger als tausend Besucher pro Monat hast.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Besucherzahl ist irrelevant."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der Unterschied zwischen Tracking und Analytics?",
+      "area": "Tracking vs Analytics",
+      "options": [
+        {
+          "text": "Analytics misst die eigene Seite, Tracking verfolgt Nutze…",
+          "isCorrect": true,
+          "explanation": "Richtig: Analytics ist First-Party, Tracking oft Third-Party."
+        },
+        {
+          "text": "Es gibt keinen Unterschied. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: der Unterschied ist konzeptionell."
+        },
+        {
+          "text": "Analytics ist illegal, Tracking ist legal.",
+          "isCorrect": false,
+          "explanation": "Falsch: beide können legal sein."
+        },
+        {
+          "text": "Analytics nutzt Cookies, Tracking nicht.",
+          "isCorrect": false,
+          "explanation": "Falsch: beide können Cookies nutzen."
+        }
+      ]
+    },
+    {
+      "question": "Wie trackst du Conversions ohne Third-Party-Cookies?",
+      "area": "Conversion",
+      "options": [
+        {
+          "text": "Mit First-Party-Cookies oder Local Storage, die die Quell…",
+          "isCorrect": true,
+          "explanation": "Richtig: First-Party-Daten reichen für Conversion-Tracking."
+        },
+        {
+          "text": "Gar nicht, Conversion-Tracking ist ohne Third-Party-Cookies unmöglich.",
+          "isCorrect": false,
+          "explanation": "Falsch: First-Party-Tracking funktioniert."
+        },
+        {
+          "text": "Mit Fingerprinting. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: Fingerprinting ist datenschutzrechtlich problematisch."
+        },
+        {
+          "text": "Mit dem Facebook Pixel.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Facebook Pixel ist Third-Party."
+        }
+      ]
+    },
+    {
+      "question": "Was muss in der Datenschutzerklärung zum Tracking stehen?",
+      "area": "Transparenz",
+      "options": [
+        {
+          "text": "Welche Daten zu welchem Zweck getrackt werden, welche Tec…",
+          "isCorrect": true,
+          "explanation": "Richtig: Transparenz ist Pflicht."
+        },
+        {
+          "text": "Nur der Name des Tracking-Tools. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: der Name allein reicht nicht."
+        },
+        {
+          "text": "Nichts, Tracking muss nicht erwähnt werden.",
+          "isCorrect": false,
+          "explanation": "Falsch: Tracking muss transparent gemacht werden."
+        },
+        {
+          "text": "Nur wenn ein Nutzer danach fragt.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Information muss proaktiv erfolgen."
+        }
+      ]
+    },
+    {
+      "question": "Was ist ein Tracking-Pixel?",
+      "area": "Tracking-Pixel",
+      "options": [
+        {
+          "text": "Ein unsichtbares 1x1-Bild, das Daten an einen externen Server überträgt.",
+          "isCorrect": true,
+          "explanation": "Richtig: Tracking-Pixel sind unsichtbare Bilder."
+        },
+        {
+          "text": "Ein sichtbares Icon, das den Tracking-Status anzeigt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Tracking-Pixel sind unsichtbar."
+        },
+        {
+          "text": "Ein Cookie, das die Bildschirmauflösung speichert.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Pixel ist kein Cookie."
+        },
+        {
+          "text": "Ein JavaScript-Skript für Animationen. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: Tracking-Pixel sind keine Animationen."
+        }
+      ]
+    },
+    {
+      "question": "Warum ist der Umstieg auf First-Party-Tracking dringend?",
+      "area": "First-Party",
+      "options": [
+        {
+          "text": "Weil alle großen Browser Third-Party-Cookies blockieren o…",
+          "isCorrect": true,
+          "explanation": "Richtig: Third-Party-Cookies sterben aus."
+        },
+        {
+          "text": "Weil First-Party-Tracking billiger ist. (häufige Verwechslung in diesem Themenfeld)",
+          "isCorrect": false,
+          "explanation": "Falsch: die Kosten sind nicht der Hauptgrund."
+        },
+        {
+          "text": "Weil die DSGVO Third-Party-Tracking verbietet.",
+          "isCorrect": false,
+          "explanation": "Falsch: Third-Party-Tracking ist nicht verboten, nur einwilligungspflichtig."
+        },
+        {
+          "text": "Weil First-Party-Tracking mehr Daten liefert.",
+          "isCorrect": false,
+          "explanation": "Falsch: First-Party liefert weniger Daten."
+        }
+      ]
+    },
+    {
+      "question": "Welches Analytics-Tool arbeitet ohne Cookies und ohne Personenbezug?",
+      "area": "Tools",
+      "options": [
+        {
+          "text": "Plausible Analytics.",
+          "isCorrect": true,
+          "explanation": "Richtig: Plausible ist cookieless und datenschutzfreundlich."
+        },
+        {
+          "text": "Google Analytics Standard.",
+          "isCorrect": false,
+          "explanation": "Falsch: Google Analytics setzt Cookies."
+        },
+        {
+          "text": "Facebook Pixel.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Facebook Pixel ist ein Tracking-Tool."
+        },
+        {
+          "text": "Hotjar.",
+          "isCorrect": false,
+          "explanation": "Falsch: Hotjar setzt Cookies und nimmt Bildschirmaufnahmen."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Überprüfe die Tracking-Strategie der FutureDev-App. Stelle sicher, dass kein Third-Party-Tracking und kein Fingerprinting eingesetzt wird. Konfiguriere Plausible Analytics für cookieless Tracking. Dokumentiere das Tracking in der Datenschutzerklärung. Implementiere einen Einwilligungsdialog für Analytics, auch wenn er rechtlich nicht zwingend erforderlich ist.",
+    "expectation": "Die Tracking-Grundlagen wurden verstanden und eine datenschutzfreundliche Tracking-Strategie für die FutureDev-App umgesetzt.",
+    "checklist": [
+      "Tracking-Strategie auf Third-Party-Tracking und Fingerprinting überprüft.",
+      "Plausible Analytics für cookieless Tracking konfiguriert.",
+      "Tracking in der Datenschutzerklärung dokumentiert.",
+      "Einwilligungsdialog für Analytics implementiert.",
+      "Conversion-Tracking auf First-Party umgestellt."
+    ],
+    "portfolioItem": "P04"
+  },
+  "audio": {
+    "file": "M06-05-04.mp3",
+    "durationSeconds": 1360,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Kann ich Analytics ohne Einwilligung nutzen, wenn ich keine Cookies setze?",
+      "answer": "Das kommt auf das Analytics-Tool an. Tools wie Plausible oder Matomo können ohne Cookies und ohne Personenbezug arbeiten. Sie zählen Seitenaufrufe, ohne einzelne Nutzer zu identifizieren. Nach Auffassung vieler Datenschutzbehörden ist das ohne Einwilligung zulässig, weil keine personenbezogenen Daten verarbeitet werden. Allerdings ist die Rechtslage nicht einheitlich: Die französische Datenschutzbehörde CNIL hält auch cookieloses Analytics für einwilligungspflichtig. Die sicherste Lösung ist, eine Einwilligung einzuholen, auch wenn du keine Cookies setzt. Dann bist du auf der sicheren Seite, egal wie die Behörden entscheiden. Merksatz: Bei Web-Tracking und Nutzeranalyse zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    },
+    {
+      "question": "Was ist der Unterschied zwischen Tracking und Analytics?",
+      "answer": "Analytics misst, was auf deiner eigenen Seite passiert: Wie viele Besucher, welche Seiten, wie lange. Tracking verfolgt Nutzer über mehrere Seiten hinweg und erstellt Profile für Werbung oder Personalisierung. Analytics ist oft First-Party und aggregiert, Tracking ist oft Third-Party und individualisiert. Die Grenze ist fließend: Google Analytics ist Analytics, aber es trackt auch über Seiten hinweg. Plausible ist reines Analytics ohne Tracking. Datenschutzrechtlich ist Analytics weniger problematisch als Tracking, aber beide können eine Einwilligung erfordern, je nach Implementierung. Merksatz: Bei Web-Tracking und Nutzeranalyse zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    },
+    {
+      "question": "Blockiert Safari wirklich alle Third-Party-Cookies?",
+      "answer": "Ja, Safari blockiert standardmäßig alle Third-Party-Cookies seit 2020 mit Intelligent Tracking Prevention. Firefox blockiert Third-Party-Cookies seit 2022 mit Enhanced Tracking Protection. Chrome wird Third-Party-Cookies bis Ende 2024 abschaffen. Das bedeutet: Wenn dein Tracking auf Third-Party-Cookies angewiesen ist, funktioniert es bei der Mehrheit der Nutzer bereits nicht. mehr. Der Umstieg auf First-Party-Tracking oder cookieless Analytics ist keine Zukunftsmusik, sondern eine dringende Notwendigkeit. Prüfe heute, ob deine Analytics noch Daten liefern, oder ob du bereits im Blindflug unterwegs bist. Merksatz: Bei Web-Tracking und Nutzeranalyse zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    },
+    {
+      "question": "Wie tracke ich Conversions ohne Third-Party-Cookies?",
+      "answer": "Conversion-Tracking ohne Third-Party-Cookies funktioniert mit First-Party-Daten. Du speicherst die Quelle des Besuchs, zum Beispiel eine Kampagnen-ID, in einem First-Party-Cookie oder im Local Storage. Wenn der Nutzer später eine Conversion auslöst, zum Beispiel einen Kauf, liest du die Quelle aus und ordnest. die Conversion der Kampagne zu. Das ist technisch einfach und datenschutzfreundlich, weil alle Daten auf deiner eigenen Domain bleiben. Tools wie Plausible oder selbstgebaute Lösungen mit einer Datenbanktabelle können das abbilden. Du brauchst keine Third-Party-Cookies für Conversion-Tracking. Merksatz: Bei Web-Tracking und Nutzeranalyse zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    },
+    {
+      "question": "Muss ich Tracking in meiner Datenschutzerklärung erwähnen?",
+      "answer": "Ja, jedes Tracking, egal ob First-Party oder Third-Party, muss in der Datenschutzerklärung beschrieben werden. Du musst angeben, welche Daten du zu welchem Zweck trackst, welche Technologien du verwendest, wie lange du die. Daten speicherst und an wen du sie weitergibst. Wenn du eine Einwilligung einholst, musst du die Einwilligung dokumentieren und den Nutzern die Möglichkeit geben, sie zu. widerrufen. Eine Datenschutzerklärung ohne Tracking-Informationen ist unvollständig und rechtswidrig, wenn du tatsächlich trackst. Merksatz: Bei Web-Tracking und Nutzeranalyse zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+    }
+  ]
+}

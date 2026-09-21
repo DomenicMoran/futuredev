@@ -1,0 +1,752 @@
+{
+  "id": "M07-02-03",
+  "title": "Backlog Refinement und User Stories",
+  "durationMinutes": 30,
+  "prerequisites": [
+    "M02-05-05",
+    "M04-01-03",
+    "M07-02-01"
+  ],
+  "terms": [
+    {
+      "term": "Backlog Refinement",
+      "definition": "Der fortlaufende Prozess, bei dem das Product-Owner-Team gemeinsam mit Entwicklern die Einträge im Product Backlog prüft, schärft und priorisiert. Beim Refinement werden grosse, vage Einträge in kleinere, konkrete User Stories zerlegt. Akzeptanzkriterien werden ergänzt, Abhängigkeiten identifiziert und Schätzungen vorgenommen. Das Refinement ist kein einmaliges Meeting, sondern eine kontinuierliche Aktivität."
+    },
+    {
+      "term": "Akzeptanzkriterien",
+      "definition": "Eine Liste von Bedingungen, die eine User Story erfüllen muss, damit der Product Owner sie abnimmt. Sie sind binär formuliert: entweder erfüllt oder nicht erfüllt. Gute Akzeptanzkriterien sind konkret, testbar und aus Nutzersicht geschrieben. Sie verhindern Missverständnisse zwischen Product Owner und Entwicklern und dienen als Grundlage für automatisierte Tests."
+    },
+    {
+      "term": "INVEST",
+      "definition": "Ein Akronym für die Qualitätskriterien guter User Stories: Independent (unabhängig), Negotiable (verhandelbar), Valuable (wertvoll), Estimable (schätzbar), Small (klein), Testable (testbar). Jede User Story sollte alle sechs Kriterien erfüllen. Das INVEST-Prinzip verhindert zu grosse, zu vage oder voneinander abhängige Stories, die in der Sprint-Planung nicht handhabbar wären."
+    },
+    {
+      "term": "Epic",
+      "definition": "Ein grosses Vorhaben, das mehrere Issues oder User Stories zusammenfasst und über mehrere Sprints hinweg umgesetzt wird. Ein Epic hat ein übergeordnetes Ziel und wird erst als erledigt markiert, wenn alle darin enthaltenen Issues abgeschlossen sind. Epics helfen, den Überblick über grosse Features zu behalten, die nicht in einen einzelnen Sprint passen."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen Kleiderschrank vor, der völlig chaotisch ist. Pullover liegen neben Socken, Sommerkleidung mischt sich mit Winterjacken, und du findest nie, was du suchst. Einmal im Monat nimmst du dir Zeit, den Schrank zu ordnen: Du sortierst aus, was du nicht mehr. brauchst, faltest alles ordentlich und legst die Sachen so hin, dass du sie schnell findest. Genau das ist Backlog Refinement für ein Entwicklungsteam.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Das Product Backlog ist die zentrale Liste aller gewünschten Funktionen eines Produkts. Ohne regelmässige Pflege wird es zum chaotischen Kleiderschrank. Backlog Refinement ist der Prozess, bei dem das Team gemeinsam mit dem Product Owner diese Liste ordnet. Vage Ideen werden zu konkreten User Stories. Grosse Brocken werden in kleine, umsetzbare Teile zerlegt. Alte Einträge, die niemand mehr braucht, werden aussortiert. Das Ziel ist ein Backlog, bei dem die obersten Einträge so klar sind, dass das Team sie im. nächsten Sprint sofort umsetzen kann.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist eine User Story, und warum schreiben wir sie aus Nutzersicht?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Eine User Story ist eine kurze Beschreibung einer Funktion aus der Sicht des Nutzers. Sie folgt einem einfachen Schema: Als welche Rolle möchte ich welches Ziel, um welchen Nutzen zu erreichen. Zum Beispiel: Als registrierter Nutzer möchte ich mein Passwort zurücksetzen können, damit ich mich wieder einloggen kann, wenn. ich es vergessen habe. Die Nutzerperspektive zwingt uns, über den tatsächlichen Mehrwert nachzudenken, statt einfach Technik zu beschreiben.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Eine User Story ist eine kurze, aus Nutzersicht formulierte Beschreibung einer gewünschten Funktion nach dem Schema: Als [Rolle]. möchte ich [Ziel], damit [Nutzen].",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Eine User Story für die FutureDev-App: Als Lernender möchte ich meinen Lernfortschritt in Prozent sehen, damit ich weiss,. wie weit ich im aktuellen Modul bin. Diese Story sagt klar, wer der Nutzer ist, was er will und warum. Sie enthält keine technischen Details wie Datenbanktabellen oder API-Endpunkte. Diese Details klärt das Team im Refinement gemeinsam mit dem Product Owner.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die Nutzerperspektive verhindert den häufigsten Fehler der Softwareentwicklung: Funktionen zu bauen, die technisch beeindruckend sind, aber kein echtes. Problem lösen. Eine User Story ohne Nutzen-Teil ist eine Warnlampe. Wenn du den Nutzen nicht in einem Satz erklären kannst, weisst du nicht, warum du die Funktion baust.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was sind Akzeptanzkriterien, und wie formuliere ich sie richtig?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du bestellst einen Tisch beim Schreiner. Du sagst nicht nur: Bau mir einen Tisch. Du sagst: Der Tisch soll einen Meter breit, zwei Meter lang und aus Eichenholz sein. Er muss mindestens hundert Kilo tragen können. Die Oberfläche soll wasserfest lackiert sein. Diese Bedingungen sind die Akzeptanzkriterien. Erst wenn alle erfüllt sind, nimmst du den Tisch ab und bezahlst ihn.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Akzeptanzkriterien sind die konkreten Bedingungen, die eine User Story erfüllen muss, damit sie als fertig gilt. Sie sind binär: entweder erfüllt oder nicht. Gute Akzeptanzkriterien sind testbar. Du musst ohne technisches Wissen prüfen können, ob sie erfüllt sind. Sie werden vor der Umsetzung gemeinsam von Product Owner und Team festgelegt. Das verhindert die böse Überraschung am Ende des Sprints, wenn der Product Owner sagt: So hatte ich mir. das nicht vorgestellt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Akzeptanzkriterien sind eine Liste binärer Bedingungen, die eine User Story erfüllen muss, damit der Product Owner sie abnimmt. Sie sind konkret, testbar und aus Nutzersicht formuliert.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Akzeptanzkriterien für die Passwort-Reset-Story: Erstens, der Nutzer gibt seine E-Mail-Adresse ein und erhält eine E-Mail mit einem Reset-Link. Zweitens, der Link ist genau eine Stunde gültig. Drittens, nach dem Zurücksetzen wird das alte Passwort sofort ungültig. Viertens, der Nutzer sieht eine Bestätigungsseite. Jedes dieser Kriterien kann ein Tester mit Ja oder Nein beantworten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Ohne Akzeptanzkriterien ist eine User Story eine Wundertüte. Der Entwickler denkt, er ist fertig. Der Product Owner denkt, es fehlt die Hälfte. Akzeptanzkriterien machen die Erwartungen explizit. Sie sind der Vertrag zwischen dem, der bestellt, und dem, der baut.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was sind Story Points, und warum schätzen wir nicht einfach in Stunden?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du willst wissen, wie lange eine Wanderung dauert. Du könntest in Stunden schätzen. Aber die Dauer hängt vom Gelände ab, vom Wetter, von deiner Kondition. Ein erfahrener Wanderer braucht für dieselbe Strecke weniger Zeit als ein Anfänger. Deshalb geben Wanderkarten die Schwierigkeit in einer Skala an, nicht in Stunden. Genau das sind Story Points für Softwareentwicklung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Story Points sind eine relative Masseinheit für den Aufwand einer User Story. Sie messen nicht Zeit, sondern Komplexität, Unsicherheit und Umfang zusammen. Das Team wählt eine einfache Referenz-Story und gibt ihr zum Beispiel zwei Punkte. Alle anderen Stories werden relativ dazu geschätzt: Ist diese Story doppelt so aufwändig? Dann bekommt sie vier Punkte. Story Points sind team-spezifisch. Die Punkte eines Teams sind nicht mit denen eines anderen Teams vergleichbar.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Story Points sind eine relative Masseinheit, mit der ein Team den Aufwand einer User Story schätzt. Sie messen Komplexität, Unsicherheit und Umfang gemeinsam, nicht Zeit.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In der FutureDev-App schätzt das Team eine einfache Textänderung mit einem Punkt. Eine neue Filterfunktion mit Datenbankabfrage bekommt fünf Punkte. Die Integration eines Zahlungsdienstleisters bekommt dreizehn Punkte. Nach einigen Sprints weiss das Team, dass es pro Sprint etwa zwanzig Punkte schafft. Diese Geschwindigkeit hilft dem Product Owner, realistische Release-Pläne zu machen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Schätzungen in Stunden sind trügerisch. Ein Senior-Entwickler braucht zwei Stunden, ein Junior acht. Welche Zahl ist richtig? Story Points umgehen dieses Problem, indem sie den Aufwand relativ zum Team messen. Ausserdem berücksichtigen sie, dass eine Stunde Programmieren nicht gleich eine Stunde Programmieren ist. Eine Stunde mit vielen Unterbrechungen ist weniger produktiv als eine Stunde im Flow.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was bedeutet INVEST, und wie hilft es mir, bessere User Stories zu schreiben?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "INVEST ist ein Akronym für sechs Qualitätskriterien guter User Stories. Independent bedeutet, dass eine Story unabhängig von anderen umsetzbar sein soll. Negotiable heisst, dass die Details verhandelbar sind und nicht als starre Spezifikation festgeschrieben werden. Valuable bedeutet, dass die Story einen echten Nutzen für den Anwender oder das Geschäft bringt. Estimable heisst, dass das Team den Aufwand schätzen kann. Small bedeutet, dass die Story klein genug für einen Sprint ist. Testable heisst, dass die Akzeptanzkriterien prüfbar sind.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "INVEST ist ein Akronym für die Qualitätskriterien guter User Stories: Independent, Negotiable, Valuable, Estimable, Small, Testable.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Eine User Story, die INVEST verletzt: Als Nutzer möchte ich das gesamte Zahlungssystem, damit ich bezahlen kann. Diese Story ist nicht small, nicht estimable und vermutlich nicht independent. Die INVEST-konforme Version: Als Nutzer möchte ich per Kreditkarte bezahlen können, damit ich nicht auf Rechnung warten muss. Diese Story ist klein genug für einen Sprint, schätzbar und unabhängig von anderen Zahlungsmethoden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "INVEST ist kein Selbstzweck, sondern eine Checkliste gegen die häufigsten Fehler. Eine Story, die nicht independent ist, blockiert andere Stories. Eine Story, die nicht valuable ist, verschwendet Zeit. Eine Story, die nicht small ist, passt in keinen Sprint. Wenn du jede Story vor dem Refinement gegen INVEST prüfst, sparst du dir endlose Diskussionen im Sprint Planning.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Wie läuft ein Backlog Refinement in der Praxis ab?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein Backlog Refinement ist kein starres Meeting mit fester Agenda. Es ist eine kontinuierliche Aktivität, die das Team typischerweise einmal pro Woche für ein bis zwei Stunden einplant. Der Product Owner bringt die obersten Einträge des Backlogs mit, die für die nächsten Sprints relevant sind. Das Team liest jede Story, stellt Fragen und schlägt Verbesserungen vor. Gemeinsam werden Akzeptanzkriterien ergänzt, Abhängigkeiten notiert und Story Points geschätzt. Am Ende sind die obersten Stories bereit für das nächste Sprint Planning.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Im FutureDev-Team läuft das Refinement jeden Mittwoch. Der Product Owner hat fünf Stories vorbereitet. Bei der ersten Story fehlen die Akzeptanzkriterien. Das Team ergänzt sie gemeinsam. Bei der zweiten Story ist unklar, ob sie von einer anderen Story abhängt. Ein Entwickler klärt das mit dem Backend-Team. Bei der dritten Story ist die Schätzung uneinheitlich. Das Team diskutiert, bis es einen Konsens findet. Nach neunzig Minuten sind alle fünf Stories bereit für den nächsten Sprint.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Ohne regelmässiges Refinement wird das Sprint Planning zur Qual. Das Team sitzt stundenlang und versucht, unklare Stories zu verstehen, während die Zeit davonläuft. Refinement entkoppelt das Verstehen vom Planen. Wenn das Planning beginnt, sind die Stories bereits klar. Das Team kann sich auf die Frage konzentrieren: Was schaffen wir in diesem Sprint?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein häufiger Fehler ist, das Refinement als reine Product-Owner-Aufgabe zu sehen. Der Product Owner bereitet Stories vor, das Team nickt sie nur ab. Das ist falsch. Das Team muss die Stories verstehen und hinterfragen. Nur die Entwickler wissen, ob eine Story technisch umsetzbar ist. Nur sie können Abhängigkeiten erkennen. Das Refinement ist eine gemeinsame Aktivität, bei der Product Owner und Team ihr unterschiedliches Wissen zusammenbringen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Das Backlog Refinement ist der Ort, an dem die Qualität des Produkts entsteht. Nicht beim Programmieren, nicht beim Testen, sondern beim Verstehen. Eine Story, die im Refinement nicht richtig verstanden wurde, führt zu Nacharbeit, Frust und verpassten Deadlines. Die Zeit, die du ins Refinement investierst, sparst du während des Sprints mehrfach wieder ein.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Zum Abschluss noch ein praktischer Tipp: Das beste Werkzeug für User Stories ist ein Stapel Karteikarten. Auf die Vorderseite schreibst du die Story, auf die Rückseite die Akzeptanzkriterien. Die physische Begrenzung einer Karteikarte zwingt dich, dich kurz zu fassen. Wenn deine Story nicht auf eine Karteikarte passt, ist sie zu gross. Digitale Tools wie ein Projektmanagement-Werkzeug oder ein modernes Werkzeug bilden dieses Prinzip nach, aber die Karteikarte erinnert dich. an das Wesentliche: Eine User Story ist eine Gesprächseinladung, keine Spezifikation.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die Karteikarte ist mehr als ein Werkzeug. Sie ist eine Denkhilfe. Sie zwingt dich, den Kern einer Funktion in wenige Sätze zu fassen. Alles, was nicht auf die Karte passt, ist Diskussionsstoff für das Refinement. Die Karteikarte erinnert dich daran, dass eine User Story kein Pflichtenheft ist, sondern der Startpunkt eines Gesprächs.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Ein greifbares Beispiel für Epic: Ein grosses Vorhaben, das mehrere Issues oder User Stories zusammenfasst und über mehrere. Sprints hinweg umgesetzt wird. Ein Epic hat ein übergeordnetes Ziel und wird erst als erledigt markiert, wenn alle darin enthaltenen Issues abgeschlossen. sind.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "text": "Also noch einmal ganz kurz: Eine User Story beschreibt eine Funktion aus Nutzersicht mit dem Schema Als Rolle. möchte ich Ziel, damit Nutzen. Akzeptanzkriterien legen fest, wann die Story fertig ist. Story Points schätzen den relativen Aufwand, nicht die Zeit. INVEST prüft die Qualität jeder Story. Und Backlog Refinement ist der fortlaufende Prozess, bei dem das Team gemeinsam mit dem Product Owner das Backlog. pflegt, Stories schärft und für den nächsten Sprint vorbereitet.",
+      "isKeySentence": true
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du sitzt mit einem Freund am Küchentisch. Du erklärst das Thema ohne Fachwörter. Erst das Problem. Dann die einfache Lösung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Genau so lernen wir hier. Erst ein Bild aus dem Alltag. Dann die Erklärung in kurzen Sätzen. Dann der Fachbegriff. Dann ein zweites Beispiel. Zum Schluss warum es zählt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In echten Projekten scheitert Backlog Refinement und User Stories selten an fehlender Intelligenz. Es scheitert an unklarer Sprache. Wer den Ablauf laut erklären kann, findet Fehler schneller.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Deshalb üben wir das Thema so gründlich. In Gesprächen zählt nicht das Schlagwort. Es zählt, ob du den Zusammenhang in eigenen Worten trägst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist der häufigste Anfängerfehler bei diesem Thema?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der häufigste Fehler ist Kopieren ohne Verständnis. Schreib nach jedem Abschnitt drei Sätze. Ein Satz Problem. Ein Satz Lösung. Ein Satz Fachbegriff.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Selbstcheck: Schließe die App. Öffne einen leeren Editor. Schreibe drei Sätze zu Backlog Refinement und User Stories. Wenn das ohne Abschreiben gelingt, sitzt der Stoff.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Wenn dir einer der drei Sätze fehlt, spring zurück zum Alltagsbild. Lies den Abschnitt noch einmal laut. Dann schreib die drei Sätze erneut.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Diese Wiederholung spart später Wochen. Teams verlieren Zeit durch Missverständnisse. Klare Sprache ist deshalb Teil der Technik.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Kannst du Backlog Refinement und User Stories noch einmal ganz langsam erklären?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du sitzt mit einem Freund am Küchentisch. Du erklärst das Thema ohne Fachwörter. Erst das Problem. Dann die einfache Lösung. Das gilt besonders für den Teil 11.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Die Begriffe dieser Lektion: Backlog Refinement, Akzeptanzkriterien, Story Points, INVEST, Epic.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Backlog Refinement: Der fortlaufende Prozess, bei dem das Team gemeinsam mit dem Product Owner die Einträge im Product. Backlog prüft, schärft und priorisiert. Beispiel: Jeden Mittwoch nimmt sich das FutureDev-Team neunzig Minuten Zeit, um die obersten Stories für den nächsten Sprint. vorzubereiten. Stell dir vor, du sortierst regelmässig deinen Kleiderschrank, damit du immer findest, was du brauchst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Akzeptanzkriterien: Eine Liste binärer Bedingungen, die eine User Story erfüllen muss, damit der Product Owner sie abnimmt. Beispiel: Der Reset-Link ist genau eine Stunde gültig, und das alte Passwort wird sofort ungültig. Stell dir die Abnahmekriterien für einen handgefertigten Tisch vor: Masse, Material, Tragkraft, Oberfläche.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Story Points: Eine relative Masseinheit, mit der ein Team den Aufwand einer User Story schätzt. Sie messen Komplexität, Unsicherheit und Umfang gemeinsam, nicht Zeit. Beispiel: Eine einfache Textänderung bekommt einen Punkt, eine Zahlungsintegration dreizehn. Stell dir die Schwierigkeitsskala einer Wanderkarte vor, die für jeden Wanderer anders ist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "INVEST: Ein Akronym für die Qualitätskriterien guter User Stories: Independent, Negotiable, Valuable, Estimable, Small, Testable. Beispiel: Eine Story, die das gesamte Zahlungssystem auf einmal bauen will, verletzt Small und Estimable. Stell dir eine Checkliste vor, die du vor jeder Story durchgehst, um spätere Probleme zu vermeiden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Wie viele User Stories sollte ein Team pro Sprint einplanen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Das hängt von der Team-Geschwindigkeit ab, die sich aus den Story Points der letzten Sprints ergibt. Ein Team, das konstant zwanzig Punkte pro Sprint schafft, plant Stories im Umfang von etwa zwanzig Punkten ein. Wichtiger als die Anzahl ist, dass die Stories wirklich fertig werden. Lieber weniger Stories einplanen und alle fertig bekommen, als zu viele einplanen und keine einzige abschliessen. Ein unfertiges Inkrement ist wertlos, fünf fertige Stories sind ein Fortschritt. Die Geschwindigkeit ist ein Planungswert, kein Leistungsziel.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was mache ich, wenn eine User Story zu gross für einen Sprint ist?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Zu grosse Stories heissen Epics. Du zerlegst sie im Refinement in kleinere User Stories, die jeweils einen eigenständigen Nutzen haben. Eine Epic wie Zahlungssystem wird zu den Stories: per Kreditkarte bezahlen, per PayPal bezahlen, Rechnungskauf anbieten. Jede dieser Stories ist unabhängig umsetzbar und liefert für sich genommen einen Mehrwert. Die Kunst des Zerlegens liegt darin, vertikale Schnitte zu machen, die alle Schichten der Anwendung durchdringen, statt horizontale. Schnitte wie zuerst die Datenbank, dann das Backend, dann das Frontend.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Wer schreibt die User Stories, der Product Owner oder das Team?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Der Product Owner ist für den Inhalt des Backlogs verantwortlich und schreibt die meisten Stories. Aber das Team kann und soll Stories beisteuern, besonders technische Stories wie Datenbank-Migrationen oder Refactoring. Wichtig ist, dass jede Story einen Nutzen formuliert, auch technische Stories. Statt die Datenbank migrieren heisst es dann: Die Antwortzeit der Suchanfrage von zwei Sekunden auf zweihundert Millisekunden reduzieren. Der Nutzen macht aus einer technischen Aufgabe eine User Story.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Muss ich Story Points verwenden, oder kann ich auch in Stunden schätzen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Du kannst in Stunden schätzen, aber Story Points haben sich aus gutem Grund durchgesetzt. Stundenschätzungen suggerieren eine Genauigkeit, die es nicht gibt. Sie setzen voraus, dass alle Teammitglieder gleich schnell arbeiten, was nie der Fall ist. Story Points sind ehrlicher: Sie geben eine relative Grösse an, keine absolute Zeit. Ausserdem bleiben Story Points über die Zeit stabil, während Stundenschätzungen ständig angepasst werden müssten, wenn das Team schneller. oder langsamer wird. Der einzige Nachteil von Story Points ist die anfängliche Gewöhnung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Wie oft sollte ein Team Backlog Refinement machen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Die meisten Teams planen einmal pro Woche ein bis zwei Stunden für Refinement ein. Bei einem zweiwöchigen Sprint sind das zwei Refinement-Termine. Der erste bereitet die Stories grob vor, der zweite finalisiert sie für das nächste Sprint Planning. Wichtiger als die Häufigkeit ist die Regelmässigkeit. Ein fester Termin im Kalender stellt sicher, dass das Refinement nicht unter den Tisch fällt, wenn es mal. hektisch wird. Manche Teams machen Refinement auch kontinuierlich, indem sie zum Beispiel jeden Tag dreissig Minuten dafür reservieren.",
+      "isKeySentence": false
+    }
+  ],
+  "practiceExample": {
+    "text": "User Stories mit Akzeptanzkriterien und INVEST-Prüfung schreiben, wie im FutureDev-Backlog praktiziert.",
+    "repoNote": "repo-futuredev",
+    "location": "docs/backlog/user-stories.md (Beispiele für User Stories mit Akzeptanzkriterien und Story-Point-Schätzungen)"
+  },
+  "quiz": [
+    {
+      "question": "Welches Alltagsbild beschreibt Backlog Refinement am treffendsten?",
+      "area": "Backlog Refinement",
+      "options": [
+        {
+          "text": "Einen chaotischen Kleiderschrank regelmässig ausmisten, falten und so ordnen, dass du alles schnell findest.",
+          "isCorrect": true,
+          "explanation": "Richtig: das Backlog wird regelmässig gepflegt, aussortiert und priorisiert wie der Kleiderschrank."
+        },
+        {
+          "text": "Einen Einkaufszettel schreiben.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Einkaufszettel wird einmal geschrieben und dann abgearbeitet, das Backlog lebt kontinuierlich weiter."
+        },
+        {
+          "text": "Einen Kalender führen.",
+          "isCorrect": false,
+          "explanation": "Falsch: ein Kalender plant Termine, das Backlog priorisiert Funktionen."
+        },
+        {
+          "text": "Eine Steuererklärung machen.",
+          "isCorrect": false,
+          "explanation": "Falsch: eine Steuererklärung ist eine einmalige, pflichtbewusste Aufgabe ohne kontinuierlichen Charakter."
+        }
+      ]
+    },
+    {
+      "question": "Welches Schema beschreibt eine User Story korrekt?",
+      "area": "User Story",
+      "options": [
+        {
+          "text": "Als [Rolle] möchte ich [Ziel], damit [Nutzen].",
+          "isCorrect": true,
+          "explanation": "Richtig: dieses dreiteilige Schema aus Rolle, Ziel und Nutzen ist der Standard für User Stories."
+        },
+        {
+          "text": "Das System soll [Funktion] können. sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen",
+          "isCorrect": false,
+          "explanation": "Falsch: das ist eine technische Anforderung, keine User Story aus Nutzersicht."
+        },
+        {
+          "text": "Wir müssen [Aufgabe] erledigen.",
+          "isCorrect": false,
+          "explanation": "Falsch: das ist eine Aufgabe, keine User Story mit Nutzerperspektive."
+        },
+        {
+          "text": "Der Kunde wünscht sich [Feature].",
+          "isCorrect": false,
+          "explanation": "Falsch: das ist ein Wunsch, aber keine vollständige User Story mit Nutzen."
+        }
+      ]
+    },
+    {
+      "question": "Warum ist der Nutzen-Teil einer User Story so wichtig?",
+      "area": "User Story",
+      "options": [
+        {
+          "text": "Er zwingt dich, den tatsächlichen Mehrwert zu benennen, und zeigt, ob die Funktion ein echtes Problem löst.",
+          "isCorrect": true,
+          "explanation": "Richtig: ohne Nutzen weisst du nicht, warum du die Funktion baust."
+        },
+        {
+          "text": "Er macht die Story länger. sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen",
+          "isCorrect": false,
+          "explanation": "Falsch: Länge ist kein Selbstzweck."
+        },
+        {
+          "text": "Er ist eine formale Anforderung des Scrum Guides.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Scrum Guide schreibt kein bestimmtes Story-Format vor."
+        },
+        {
+          "text": "Er hilft dem Designer beim Layout.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Nutzen-Teil ist für das Verständnis, nicht für das Design."
+        }
+      ]
+    },
+    {
+      "question": "Welche Eigenschaft haben gute Akzeptanzkriterien?",
+      "area": "Akzeptanzkriterien",
+      "options": [
+        {
+          "text": "Sie sind binär formuliert, konkret, testbar und werden vor der Umsetzung gemeinsam festgelegt.",
+          "isCorrect": true,
+          "explanation": "Richtig: gute Akzeptanzkriterien sind eindeutig mit Ja oder Nein beantwortbar."
+        },
+        {
+          "text": "Sie beschreiben die technische Umsetzung. sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen",
+          "isCorrect": false,
+          "explanation": "Falsch: Akzeptanzkriterien beschreiben das Was, nicht das Wie."
+        },
+        {
+          "text": "Sie werden erst nach der Umsetzung geschrieben.",
+          "isCorrect": false,
+          "explanation": "Falsch: sie müssen vorher feststehen, sonst weiss niemand, wann die Story fertig ist."
+        },
+        {
+          "text": "Sie sind möglichst vage, um Spielraum zu lassen.",
+          "isCorrect": false,
+          "explanation": "Falsch: vage Kriterien führen zu Missverständnissen."
+        }
+      ]
+    },
+    {
+      "question": "Was messen Story Points?",
+      "area": "Story Points",
+      "options": [
+        {
+          "text": "Komplexität, Unsicherheit und Umfang einer User Story gemeinsam, relativ zu anderen Stories im selben Team.",
+          "isCorrect": true,
+          "explanation": "Richtig: Story Points sind eine relative, team-spezifische Masseinheit."
+        },
+        {
+          "text": "Die Anzahl Stunden, die ein Senior-Entwickler braucht. sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen",
+          "isCorrect": false,
+          "explanation": "Falsch: Story Points messen keine Zeit."
+        },
+        {
+          "text": "Die Anzahl Codezeilen, die geschrieben werden müssen.",
+          "isCorrect": false,
+          "explanation": "Falsch: Codezeilen sind kein Mass für Aufwand."
+        },
+        {
+          "text": "Die Anzahl beteiligter Entwickler.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Teamgrösse ist unabhängig von Story Points."
+        }
+      ]
+    },
+    {
+      "question": "Warum sind Story Points team-spezifisch und nicht zwischen Teams vergleichbar?",
+      "area": "Story Points",
+      "options": [
+        {
+          "text": "Jedes Team hat eine eigene Referenz-Story und eine eigene Geschwindigkeit, sodass dreizehn Punkte in Team A nicht dasselbe bedeuten wie in Team B.",
+          "isCorrect": true,
+          "explanation": "Richtig: die Punkte sind relativ zur Referenz-Story des jeweiligen Teams."
+        },
+        {
+          "text": "Weil der Scrum Guide das verbietet. sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen",
+          "isCorrect": false,
+          "explanation": "Falsch: der Scrum Guide verbietet das nicht, es ergibt sich aus der Natur relativer Schätzungen."
+        },
+        {
+          "text": "Weil jedes Team eine andere Programmiersprache nutzt.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Sprache hat keinen Einfluss auf die relative Schätzung."
+        },
+        {
+          "text": "Weil Story Points in jedem Land anders definiert sind.",
+          "isCorrect": false,
+          "explanation": "Falsch: Story Points sind nicht länderspezifisch."
+        }
+      ]
+    },
+    {
+      "question": "Wofür steht das I in INVEST?",
+      "area": "INVEST",
+      "options": [
+        {
+          "text": "Independent, also unabhängig von anderen Stories umsetzbar.",
+          "isCorrect": true,
+          "explanation": "Richtig: eine gute Story sollte nicht auf die Fertigstellung einer anderen warten müssen."
+        },
+        {
+          "text": "Important, also wichtig für das Produkt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Wichtigkeit ist nicht Teil von INVEST, sondern der Priorisierung."
+        },
+        {
+          "text": "Integrated, also in das System integriert.",
+          "isCorrect": false,
+          "explanation": "Falsch: Integration ist eine technische Eigenschaft, kein INVEST-Kriterium."
+        },
+        {
+          "text": "Incremental, also schrittweise aufbauend.",
+          "isCorrect": false,
+          "explanation": "Falsch: inkrementell ist ein allgemeines agiles Prinzip, nicht das I in INVEST."
+        }
+      ]
+    },
+    {
+      "question": "Welche User Story verletzt das INVEST-Prinzip am deutlichsten?",
+      "area": "INVEST",
+      "options": [
+        {
+          "text": "Als Nutzer möchte ich das gesamte Zahlungssystem, damit ich bezahlen kann.",
+          "isCorrect": true,
+          "explanation": "Richtig: diese Story ist nicht small, nicht estimable und vermutlich nicht independent."
+        },
+        {
+          "text": "Als Nutzer möchte ich per Kreditkarte bezahlen, damit ich nicht auf Rechnung warten muss. sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen",
+          "isCorrect": false,
+          "explanation": "Falsch: diese Story ist klein, schätzbar und unabhängig."
+        },
+        {
+          "text": "Als Admin möchte ich gelöschte Nutzer wiederherstellen, damit ich versehentliche Löschungen rückgängig machen kann.",
+          "isCorrect": false,
+          "explanation": "Falsch: diese Story erfüllt INVEST."
+        },
+        {
+          "text": "Als Lernender möchte ich meine Lektionen nach Thema filtern, damit ich gezielt lernen kann.",
+          "isCorrect": false,
+          "explanation": "Falsch: diese Story erfüllt INVEST."
+        }
+      ]
+    },
+    {
+      "question": "Was passiert, wenn ein Team kein Backlog Refinement macht?",
+      "area": "Backlog Refinement",
+      "options": [
+        {
+          "text": "Das Sprint Planning wird zur Qual, weil unklare Stories erst während des Plannings verstanden werden müssen.",
+          "isCorrect": true,
+          "explanation": "Richtig: ohne Refinement verschiebt sich die Klärungsarbeit ins Planning."
+        },
+        {
+          "text": "Das Team wird automatisch schneller. sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen",
+          "isCorrect": false,
+          "explanation": "Falsch: fehlendes Refinement macht das Team langsamer, nicht schneller."
+        },
+        {
+          "text": "Der Product Owner wird überflüssig.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Product Owner bleibt zentral, auch ohne Refinement."
+        },
+        {
+          "text": "Die Qualität des Codes verbessert sich.",
+          "isCorrect": false,
+          "explanation": "Falsch: Code-Qualität und Refinement haben wenig miteinander zu tun."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der Unterschied zwischen einem Epic und einer User Story?",
+      "area": "User Story",
+      "options": [
+        {
+          "text": "Ein Epic ist zu gross für einen Sprint und wird im Refinement in mehrere unabhängige User Stories zerlegt.",
+          "isCorrect": true,
+          "explanation": "Richtig: Epics sind grosse Vorhaben, die in sprint-grosse Stories zerlegt werden."
+        },
+        {
+          "text": "Ein Epic ist eine User Story mit mehr als fünf Akzeptanzkriterien. sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen",
+          "isCorrect": false,
+          "explanation": "Falsch: die Anzahl der Akzeptanzkriterien definiert kein Epic."
+        },
+        {
+          "text": "Ein Epic ist eine User Story, die der Product Owner selbst umsetzt.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Product Owner setzt keine Stories um."
+        },
+        {
+          "text": "Ein Epic ist dasselbe wie eine User Story, nur in Englisch.",
+          "isCorrect": false,
+          "explanation": "Falsch: Epic und User Story sind unterschiedliche Konzepte."
+        }
+      ]
+    },
+    {
+      "question": "Warum sollte das Team beim Backlog Refinement mitwirken und nicht nur der Product Owner?",
+      "area": "Backlog Refinement",
+      "options": [
+        {
+          "text": "Nur die Entwickler können technische Machbarkeit und Abhängigkeiten beurteilen, die der Product Owner nicht kennt.",
+          "isCorrect": true,
+          "explanation": "Richtig: das Team bringt technisches Wissen ein, das der Product Owner nicht hat."
+        },
+        {
+          "text": "Weil der Product Owner zu faul ist. sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen",
+          "isCorrect": false,
+          "explanation": "Falsch: das ist eine respektlose Unterstellung."
+        },
+        {
+          "text": "Weil der Scrum Guide genau drei Teilnehmer vorschreibt.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Scrum Guide schreibt keine feste Teilnehmerzahl vor."
+        },
+        {
+          "text": "Weil das Team sonst nichts zu tun hat.",
+          "isCorrect": false,
+          "explanation": "Falsch: das Team hat immer etwas zu tun."
+        }
+      ]
+    },
+    {
+      "question": "Welcher Satz beschreibt den Zweck von Story Points am besten?",
+      "area": "Story Points",
+      "options": [
+        {
+          "text": "Story Points helfen dem Team, realistische Sprint-Ziele zu setzen, indem sie die Geschwindigkeit aus vergangenen Sprints nutzen.",
+          "isCorrect": true,
+          "explanation": "Richtig: Story Points dienen der Planung auf Basis historischer Daten."
+        },
+        {
+          "text": "Story Points messen die Leistung einzelner Entwickler. sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen",
+          "isCorrect": false,
+          "explanation": "Falsch: Story Points sind ein Team-Mass, kein individuelles."
+        },
+        {
+          "text": "Story Points ersetzen die Daily Scrums.",
+          "isCorrect": false,
+          "explanation": "Falsch: Story Points haben nichts mit dem Daily zu tun."
+        },
+        {
+          "text": "Story Points bestimmen das Gehalt der Entwickler.",
+          "isCorrect": false,
+          "explanation": "Falsch: Story Points haben keinen Einfluss auf Gehälter."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Öffne das repo-futuredev-backlog und lies die Datei user-stories.md. Verstehe, wie User Stories mit Akzeptanzkriterien formuliert sind. Schreibe dann drei eigene User Stories für eine App deiner Wahl, jede mit mindestens drei Akzeptanzkriterien. Prüfe jede Story gegen INVEST. Tausche deine Stories mit einem Lernpartner und lasst euch gegenseitig raten, welche Akzeptanzkriterien fehlen könnten.",
+    "expectation": "Das Prinzip von User Stories, Akzeptanzkriterien und INVEST wurde verstanden und in eigenen Stories umgesetzt.",
+    "checklist": [
+      "Das repo-futuredev-backlog geöffnet und user-stories.md gelesen.",
+      "Drei eigene User Stories mit je mindestens drei Akzeptanzkriterien geschrieben.",
+      "Jede Story gegen INVEST geprüft und Verletzungen notiert.",
+      "Die Stories mit einem Lernpartner getauscht und Feedback eingeholt.",
+      "Verstanden, dass eine User Story eine Gesprächseinladung ist, keine Spezifikation."
+    ],
+    "portfolioItem": "P04"
+  },
+  "audio": {
+    "file": "M07-02-03.mp3",
+    "durationSeconds": 1520,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Wie viele User Stories sollte ein Team pro Sprint einplanen?",
+      "answer": "Das hängt von der Team-Geschwindigkeit ab, die sich aus den Story Points der letzten Sprints ergibt. Ein Team, das konstant zwanzig Punkte pro Sprint schafft, plant Stories im Umfang von etwa zwanzig Punkten ein. Wichtiger als die Anzahl ist, dass die Stories wirklich fertig werden. Lieber weniger Stories einplanen und alle fertig bekommen, als zu viele einplanen und keine einzige abschliessen. Ein unfertiges Inkrement ist wertlos, fünf fertige Stories sind ein Fortschritt. Die Geschwindigkeit ist ein Planungswert, kein Leistungsziel."
+    },
+    {
+      "question": "Was mache ich, wenn eine User Story zu gross für einen Sprint ist?",
+      "answer": "Zu grosse Stories heissen Epics. Du zerlegst sie im Refinement in kleinere User Stories, die jeweils einen eigenständigen Nutzen haben. Eine Epic wie Zahlungssystem wird zu den Stories: per Kreditkarte bezahlen, per PayPal bezahlen, Rechnungskauf anbieten. Jede dieser Stories ist unabhängig umsetzbar und liefert für sich genommen einen Mehrwert. Die Kunst des Zerlegens liegt darin, vertikale Schnitte zu machen, die alle Schichten der Anwendung durchdringen, statt horizontale. Schnitte wie zuerst die Datenbank, dann das Backend, dann das Frontend."
+    },
+    {
+      "question": "Wer schreibt die User Stories, der Product Owner oder das Team?",
+      "answer": "Der Product Owner ist für den Inhalt des Backlogs verantwortlich und schreibt die meisten Stories. Aber das Team kann und soll Stories beisteuern, besonders technische Stories wie Datenbank-Migrationen oder Refactoring. Wichtig ist, dass jede Story einen Nutzen formuliert, auch technische Stories. Statt die Datenbank migrieren heisst es dann: Die Antwortzeit der Suchanfrage von zwei Sekunden auf zweihundert Millisekunden reduzieren. Der Nutzen macht aus einer technischen Aufgabe eine User Story."
+    },
+    {
+      "question": "Muss ich Story Points verwenden, oder kann ich auch in Stunden schätzen?",
+      "answer": "Du kannst in Stunden schätzen, aber Story Points haben sich aus gutem Grund durchgesetzt. Stundenschätzungen suggerieren eine Genauigkeit, die es nicht gibt. Sie setzen voraus, dass alle Teammitglieder gleich schnell arbeiten, was nie der Fall ist. Story Points sind ehrlicher: Sie geben eine relative Grösse an, keine absolute Zeit. Ausserdem bleiben Story Points über die Zeit stabil, während Stundenschätzungen ständig angepasst werden müssten, wenn das Team schneller. oder langsamer wird. Der einzige Nachteil von Story Points ist die anfängliche Gewöhnung."
+    },
+    {
+      "question": "Wie oft sollte ein Team Backlog Refinement machen?",
+      "answer": "Die meisten Teams planen einmal pro Woche ein bis zwei Stunden für Refinement ein. Bei einem zweiwöchigen Sprint sind das zwei Refinement-Termine. Der erste bereitet die Stories grob vor, der zweite finalisiert sie für das nächste Sprint Planning. Wichtiger als die Häufigkeit ist die Regelmässigkeit. Ein fester Termin im Kalender stellt sicher, dass das Refinement nicht unter den Tisch fällt, wenn es mal. hektisch wird. Manche Teams machen Refinement auch kontinuierlich, indem sie zum Beispiel jeden Tag dreissig Minuten dafür reservieren."
+    }
+  ]
+}
