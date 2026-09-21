@@ -16,6 +16,7 @@ export default tseslint.config(
       '**/.turbo/**',
       '**/coverage/**',
       'tools/audio/out/**',
+      'apps/web/out/**',
     ],
   },
   js.configs.recommended,
