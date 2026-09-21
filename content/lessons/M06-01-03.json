@@ -1,0 +1,663 @@
+{
+  "id": "M06-01-03",
+  "title": "Warum jede Eingabe verdächtig ist",
+  "durationMinutes": 32,
+  "prerequisites": [
+    "M06-01-01",
+    "M06-01-02"
+  ],
+  "terms": [
+    {
+      "term": "Zero-Trust-Prinzip",
+      "definition": "Ein Sicherheitsmodell, das grundsätzlich keiner Eingabe vertraut, egal ob sie von einem Nutzer, einem anderen Dienst oder einer internen Komponente kommt. Jede Eingabe wird validiert, authentifiziert und autorisiert, bevor sie verarbeitet wird. Zero Trust ersetzt das veraltete Modell, bei dem alles innerhalb des Netzwerks als vertrauenswürdig galt."
+    },
+    {
+      "term": "Eingabevalidierung",
+      "definition": "Der Prozess, jede Benutzereingabe auf Typ, Länge, Format und Wertebereich zu prüfen, bevor sie verarbeitet wird. Die Validierung erfolgt an der Systemgrenze und lehnt ungültige Eingaben ab, statt zu versuchen, sie zu bereinigen. Eine Allow-List ist dabei sicherer als eine Blacklist, weil sie nur explizit Erlaubtes durchlässt."
+    },
+    {
+      "term": "Defense in Depth",
+      "definition": "Das Prinzip, Sicherheit in mehreren Schichten aufzubauen, sodass der Ausfall einer Schicht nicht zum Gesamtversagen führt. Jede Schicht validiert Eingaben unabhängig, sodass ein Angreifer mehrere Hürden überwinden muss. Typische Schichten sind Eingabevalidierung, parametrisierte Queries, Ausgabe-Escaping und Least-Privilege-Berechtigungen."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen Nachtclub mit einem Türsteher vor. Der Türsteher kennt alle Stammgäste und winkt sie durch, ohne ihre Ausweise zu prüfen. Eines Abends kommt jemand, der genauso aussieht wie ein Stammgast, aber in Wirklichkeit ein Dieb ist. Der Türsteher lässt ihn durch, weil er dem vertrauten Gesicht vertraut. Am nächsten Morgen fehlt die Tageseinnahme. Das ist das alte Sicherheitsmodell: Vertrauen aufgrund von Bekanntheit.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Jetzt stell dir denselben Club mit einem neuen Türsteher vor. Dieser Türsteher prüft jeden Ausweis, egal ob er das Gesicht kennt oder nicht. Stammgast, Promi, der Chef persönlich, jeder muss den Ausweis zeigen. Das ist das Zero-Trust-Prinzip: Vertraue niemandem, nur weil er von innen kommt oder bekannt aussieht. Jede Eingabe, jede Anfrage und jede Person wird geprüft, als käme sie von einem potenziellen Angreifer.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist das Zero-Trust-Prinzip, und warum ist es die Grundlage aller Eingabevalidierung?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Das Zero-Trust-Prinzip besagt: Vertraue keiner Eingabe, egal woher sie kommt. Nicht von Nutzern, nicht von anderen Diensten, nicht von der Datenbank und nicht einmal von deinem eigenen Frontend. Jede Eingabe könnte von einem Angreifer manipuliert worden sein. Das klingt paranoid, aber in der Sicherheit ist Paranoia die einzig rationale Haltung. Ein Angreifer kann überall sitzen: im Netzwerk, im Browser, in einer kompromittierten Bibliothek oder in einem anderen Dienst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Das Zero-Trust-Prinzip ist ein Sicherheitsmodell, das grundsätzlich keiner Eingabe vertraut und jede Eingabe validiert, authentifiziert und autorisiert, bevor sie verarbeitet wird.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Zero-Trust-Prinzip in der Praxis: Dein Frontend sendet eine Benutzer-ID an das Backend. Du könntest denken, das Frontend ist dein eigener Code, also ist die ID vertrauenswürdig. Aber ein Angreifer könnte die Anfrage mit den Browser-Entwicklertools abfangen und die ID ändern. Oder er könnte die API direkt aufrufen, ohne das Frontend zu benutzen. Deshalb prüft das Backend bei jeder Anfrage: Ist dieser Nutzer authentifiziert? Darf er auf diese Ressource zugreifen? Gehört ihm die angeforderte ID?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Zero Trust ist nicht paranoid, sondern realistisch. In einer vernetzten Welt kannst du nie sicher sein, wo eine Anfrage wirklich herkommt. Jede Komponente deines Systems könnte kompromittiert sein. Die einzige sichere Annahme ist, dass jede Eingabe potenziell bösartig ist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist Eingabevalidierung, und wie setze ich sie richtig um?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen Sicherheitscheck am Flughafen vor. Jeder Passagier muss durch den Scanner. Der Scanner prüft nicht, ob der Passagier etwas Verbotenes dabei hat, indem er eine Liste aller verbotenen Gegenstände abgleicht. Das wäre unmöglich, weil es zu viele verschiedene Waffen gibt. Stattdessen prüft der Scanner, ob der Passagier nur erlaubte Gegenstände dabei hat: Kleidung, Schuhe, Laptop in der Schale. Alles andere ist verdächtig. Das ist der Unterschied zwischen Blacklist und Allow-List.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Eingabevalidierung prüft jede Benutzereingabe auf Typ, Länge, Format und Wertebereich. Der sicherste Ansatz ist eine Allow-List: Du definierst, was erlaubt ist, und lehnst alles andere ab. Für eine E-Mail-Adresse prüfst du, ob sie dem E-Mail-Format entspricht. Für eine Zahl prüfst du, ob sie im erlaubten Bereich liegt. Für einen Namen prüfst du, ob er nur Buchstaben enthält. Was nicht explizit erlaubt ist, wird abgelehnt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Eingabevalidierung ist der Prozess, jede Benutzereingabe auf Typ, Länge, Format und Wertebereich zu prüfen, bevor sie verarbeitet wird, wobei eine Allow-List sicherer ist als eine Blacklist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Eingabevalidierung mit einer Allow-List: Ein Formular fragt nach einem Benutzernamen. Die Allow-List erlaubt nur Buchstaben, Ziffern und Unterstriche, maximal dreißig Zeichen. Ein Angreifer gibt admin'; DROP TABLE users;-- ein. Die Validierung lehnt die Eingabe ab, weil Semikolon, Anführungszeichen und Bindestriche nicht auf der Allow-List stehen. Der Angriff scheitert, bevor er die Datenbank erreicht. Hättest du stattdessen eine Blacklist mit verbotenen Zeichen genutzt, hätte der Angreifer vielleicht ein Zeichen gefunden, das du vergessen hast.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Eine Allow-List ist sicherer als eine Blacklist, weil sie nur explizit Erlaubtes durchlässt. Eine Blacklist muss jedes einzelne gefährliche Zeichen kennen, und Angreifer sind kreativ darin, neue zu finden. Die Allow-List sagt: Was ich nicht kenne, lasse ich nicht durch. Die Blacklist sagt: Was ich nicht kenne, lasse ich durch. Der Unterschied ist der zwischen Sicherheit und Katastrophe.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist Defense in Depth, und warum reicht eine Schutzschicht nicht aus?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir eine Burg vor. Die Burg hat eine äußere Mauer, einen Wassergraben, eine Zugbrücke, eine innere Mauer und ganz innen den Bergfried. Ein Angreifer muss alle fünf Verteidigungslinien überwinden, um zum Schatz zu gelangen. Wenn eine Linie fällt, hält die nächste. Eine Burg mit nur einer Mauer wäre beim ersten Sturmangriff verloren. Genauso funktioniert Defense in Depth in der IT-Sicherheit.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Defense in Depth bedeutet, Sicherheit in mehreren unabhängigen Schichten aufzubauen. Die erste Schicht ist die Eingabevalidierung an der Systemgrenze. Die zweite Schicht sind parametrisierte Queries in der Datenbankschicht. Die dritte Schicht ist das Escapen aller Ausgaben. Die vierte Schicht sind minimale Berechtigungen für jeden Dienst. Wenn eine Schicht versagt, fängt die nächste den Angriff ab. Kein einzelner Fehler führt zur Kompromittierung des gesamten Systems.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Defense in Depth ist das Prinzip, Sicherheit in mehreren unabhängigen Schichten aufzubauen, sodass der Ausfall einer Schicht nicht zum Gesamtversagen führt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Defense in Depth in der FutureDev-App: Schicht eins validiert alle Eingaben gegen Allow-Lists. Schicht zwei nutzt parametrisierte Queries mit Supabase. Schicht drei escapt alle Ausgaben mit Reacts JSX. Schicht vier setzt Row-Level-Security in der Datenbank. Selbst wenn ein Angreifer die Eingabevalidierung umgeht, scheitert er an den parametrisierten Queries. Selbst wenn er die umgeht, kann er nur auf die Daten zugreifen, für die er berechtigt ist. Kein einzelner Fehler öffnet die gesamte App.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Defense in Depth ist das Eingeständnis, dass keine Schutzmaßnahme perfekt ist. Jede Schicht kann Fehler haben. Aber die Wahrscheinlichkeit, dass alle Schichten gleichzeitig versagen, ist verschwindend gering. Dieses Prinzip macht den Unterschied zwischen einer Anwendung, die einem Angriff standhält, und einer, die beim ersten Treffer fällt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Welche Eingaben werden am häufigsten übersehen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Die am häufigsten übersehenen Eingaben sind nicht die offensichtlichen Formularfelder, sondern die versteckten. HTTP-Header wie User-Agent oder Referer können vom Angreifer gesetzt werden. Cookies können manipuliert werden. URL-Parameter, die nicht in einem Formular stehen, sondern in Links. JSON-Bodies, die das Frontend angeblich nie so senden würde. Dateinamen von Uploads. Sogar die Reihenfolge von HTTP-Headern kann ein Angriffsvektor sein. Jedes einzelne Byte, das dein Server empfängt, ist eine potenzielle Waffe.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Ein oft übersehener Angriffsvektor: Der Accept-Language-Header. Eine Anwendung nutzt ihn, um die Sprache der Antwort zu bestimmen, und baut damit einen Dateipfad: include './lang/' + header + '.php'. Ein Angreifer setzt den Header auf ../../.env und liest die Umgebungsvariablen. Der Entwickler hat an Formularfelder gedacht, aber nicht an HTTP-Header. Jede Eingabe, wirklich jede, muss validiert werden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die unsichtbaren Eingaben sind die gefährlichsten, weil niemand an sie denkt. Jeder Entwickler validiert das Login-Formular. Aber wer validiert den User-Agent-Header? Wer prüft, ob die Content-Type-Header zum Body passen? Diese Übersehenen sind die Einfallstore, die Angreifer suchen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein wichtiger Punkt, den viele Entwickler übersehen: Die hier besprochenen Konzepte sind nicht nur für große Unternehmen relevant. Auch deine kleine Projektwebseite, dein Hobbyprojekt oder deine Portfolio-App kann angegriffen werden. Automatisierte Scanner durchsuchen das Internet nach verwundbaren Anwendungen, ohne Ansehen der Person oder des Projekts. Deine App muss nicht interessant sein, um angegriffen zu werden. Sie muss nur erreichbar sein.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Sicherheit ist keine Frage der Projektgröße. Ein Angreifer sucht nicht nach dem interessantesten Ziel, sondern nach dem einfachsten. Eine kleine, ungeschützte App ist ein viel attraktiveres Ziel als eine große, gut geschützte. Deshalb musst du die Sicherheitsprinzipien aus dieser Lektion in jedem Projekt anwenden, egal wie unbedeutend es dir erscheint.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Zum Abschluss noch ein praktischer Tipp: Die beste Verteidigung gegen alle diese Angriffe ist, sie einmal selbst ausprobiert zu haben. Es gibt dafür spezielle Trainingsplattformen wie OWASP WebGoat oder PortSwigger Web Security Academy. Dort kannst du in einer sicheren Umgebung Angriffe selbst durchführen und verstehen, wie einfach sie sind, wenn eine Anwendung nicht geschützt ist. Nach einer Stunde auf so einer Plattform wirst du Sicherheit mit anderen Augen sehen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Selbst einen Angriff durchzuführen ist die effektivste Art, Sicherheit zu lernen. Wenn du einmal gesehen hast, wie einfach es ist, eine ungeschützte Anwendung zu kompromittieren, wirst du die Schutzmaßnahmen nie wieder vergessen. Theorie allein reicht nicht, um Sicherheit zu verinnerlichen. Du musst die Perspektive des Angreifers verstehen, um dich wirksam zu verteidigen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Denk immer daran: Der Angreifer muss nur eine einzige Lücke finden, um erfolgreich zu sein. Du als Entwickler musst jede einzelne Lücke schließen. Das klingt unfair, und das ist es auch. Aber genau deshalb ist Sicherheit kein einmaliges Projekt, sondern ein fortlaufender Prozess. Jede neue Funktion, jede neue Bibliothek und jede neue Schnittstelle kann neue Angriffsflächen schaffen. Bleib wachsam, bleib skeptisch und vertraue niemals einer Eingabe.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die Konzepte, die du heute gelernt hast, sind das Fundament für alles Weitere. Jede Sicherheitsmaßnahme, jede Architekturentscheidung und jede Code-Prüfung sollte diese Grundlagen im Hinterkopf haben. Wer sie versteht, versteht das Fundament der IT-Sicherheit und kann das Gelernte auf jede neue Technologie übertragen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein häufiger Fehler ist, Sicherheit als nachträgliches Feature zu betrachten. Du baust die ganze Anwendung fertig und denkst dann: Jetzt mache ich sie noch sicher. Das funktioniert nicht. Sicherheit muss von der ersten Zeile Code an mitgedacht werden. Jede Funktion, die du schreibst, muss die Frage beantworten: Was passiert, wenn diese Eingabe bösartig ist? Diese Frage zu stellen, bevor du den Code schreibst, ist der Unterschied zwischen sicherer und unsicherer Entwicklung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Sicherheit nachträglich einzubauen ist wie ein Fundament nach dem Hausbau zu gießen. Es ist teuer, ineffektiv und in den meisten Fällen unmöglich. Die Sicherheitsprinzipien aus dieser Lektion müssen Teil deines täglichen Denkens sein, nicht eine Checkliste, die du am Ende abhakst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Die wichtigste Lektion aus dieser Einheit: Es gibt keine harmlosen Eingaben. Jedes Byte, das dein Server empfängt, könnte der Anfang eines Angriffs sein. Diese Haltung ist nicht paranoid, sondern professionell. Ein guter Entwickler denkt bei jeder Eingabe: Was ist das Schlimmste, was mit dieser Eingabe passieren könnte? Und dann schreibt er Code, der genau das verhindert.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "text": "Also noch einmal ganz kurz: Das Zero-Trust-Prinzip sagt, vertraue keiner Eingabe, egal woher sie kommt. Eingabevalidierung prüft jede Eingabe mit einer Allow-List, nicht mit einer Blacklist. Und Defense in Depth baut mehrere unabhängige Schutzschichten auf, sodass kein einzelner Fehler das ganze System kompromittiert. Diese drei Prinzipien sind die Grundlage jeder sicheren Anwendung.",
+      "isKeySentence": true
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Das Zero-Trust-Prinzip ist ein Sicherheitsmodell, das grundsätzlich keiner Eingabe vertraut, egal ob sie von einem Nutzer, einem anderen Dienst oder einer internen Komponente kommt. Jede Eingabe wird validiert, authentifiziert und autorisiert, bevor sie verarbeitet wird. Zero Trust ersetzt das veraltete Modell, bei dem alles innerhalb des Netzwerks als vertrauenswürdig galt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Eingabevalidierung ist der Prozess, jede Benutzereingabe auf Typ, Länge, Format und Wertebereich zu prüfen, bevor sie verarbeitet wird. Die Validierung erfolgt an der Systemgrenze und lehnt ungültige Eingaben ab, statt zu versuchen, sie zu bereinigen. Eine Allow-List ist dabei sicherer als eine Blacklist, weil sie nur explizit Erlaubtes durchlässt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Defense in Depth ist das Prinzip, Sicherheit in mehreren Schichten aufzubauen, sodass der Ausfall einer Schicht nicht zum Gesamtversagen führt. Jede Schicht validiert Eingaben unabhängig, sodass ein Angreifer mehrere Hürden überwinden muss. Typische Schichten sind Eingabevalidierung, parametrisierte Queries, Ausgabe-Escaping und Least-Privilege-Berechtigungen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Muss ich wirklich jeden HTTP-Header validieren?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Nicht jeden Header einzeln, aber jeden Header, den deine Anwendung auswertet. Wenn du den User-Agent nur loggst, musst du ihn nicht validieren, aber du solltest ihn beim Loggen escapen. Wenn du den Accept-Language-Header für die Sprachauswahl nutzt, musst du ihn validieren. Die Regel ist einfach: Jede Eingabe, die das Verhalten deiner Anwendung beeinflusst, muss validiert werden. Eingaben, die nur durchgereicht werden, müssen beim Ausgeben escapt werden. Und Eingaben, die du gar nicht brauchst, solltest du ignorieren.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Ist eine Allow-List nicht zu restriktiv für reale Anwendungen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Eine Allow-List kann restriktiv sein, aber das ist genau der Punkt. Sicherheit bedeutet, nur das durchzulassen, was du wirklich brauchst. Für die meisten Felder ist die Allow-List einfach: Ein Benutzername braucht nur Buchstaben und Ziffern. Eine E-Mail-Adresse folgt einem definierten Format. Eine URL beginnt mit https://. Schwieriger wird es bei Freitextfeldern wie Kommentaren. Dort kannst du keine einfache Allow-List nutzen, aber du kannst die Eingabe auf eine maximale Länge beschränken und beim Ausgeben escapen. Die Allow-List ist das Ideal, und wo sie nicht praktikabel ist, kombinierst du sie mit anderen Schutzschichten.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Wie viele Schutzschichten brauche ich mindestens?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Es gibt keine feste Zahl, aber als Minimum solltest du drei Schichten haben: Eingabevalidierung an der Systemgrenze, parametrisierte Queries oder sicheres Escaping in der Verarbeitungsschicht und Ausgabe-Escaping in der Präsentationsschicht. Dazu kommen je nach Anwendung weitere Schichten wie Authentifizierung, Autorisierung, Rate-Limiting und Audit-Logging. Jede zusätzliche Schicht erhöht die Sicherheit, aber sie erhöht auch die Komplexität. Finde die Balance zwischen Sicherheit und Wartbarkeit für deine spezielle Anwendung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Kann ich die Eingabevalidierung nicht einfach an eine Bibliothek delegieren?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Bibliotheken wie Zod, Yup oder Joi können die technische Validierung übernehmen und sind dafür auch zu empfehlen. Aber sie können nicht die fachliche Validierung ersetzen. Eine Bibliothek kann prüfen, ob eine Eingabe eine gültige E-Mail-Adresse ist. Aber sie kann nicht wissen, ob diese E-Mail-Adresse zu einem existierenden Nutzer gehören darf oder ob der Nutzer das Recht hat, diese Aktion auszuführen. Die fachliche Validierung, also die Frage was darf dieser Nutzer mit dieser Eingabe tun, musst du selbst implementieren. Die Bibliothek ist ein Werkzeug, nicht die Lösung.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Was ist der häufigste Fehler bei der Eingabevalidierung?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Der häufigste Fehler ist, nur auf der Client-Seite zu validieren und dem Server zu vertrauen, dass die Daten schon in Ordnung sind. Client-seitige Validierung ist eine Komfortfunktion für den Nutzer, keine Sicherheitsmaßnahme. Ein Angreifer umgeht sie mit einem einzigen Klick in den Entwicklertools. Jede Validierung, die sicherheitsrelevant ist, muss auf dem Server wiederholt werden. Der Server ist die letzte Instanz, die eine Eingabe ablehnen kann, bevor sie Schaden anrichtet. Vertraue niemals darauf, dass das Frontend seine Arbeit gemacht hat.",
+      "isKeySentence": false
+    }
+  ],
+  "practiceExample": {
+    "text": "Zero-Trust-Prinzip, Eingabevalidierung mit Allow-Lists und Defense in Depth, wie in der FutureDev-App auf allen Ebenen umgesetzt.",
+    "repoNote": "repo-futuredev",
+    "location": "apps/server (Zod-Validierung an API-Grenzen, parametrisierte Queries, Row-Level-Security, Ausgabe-Escaping durch React)"
+  },
+  "quiz": [
+    {
+      "question": "Welches Alltagsbild beschreibt das Zero-Trust-Prinzip am treffendsten?",
+      "area": "Zero-Trust",
+      "options": [
+        {
+          "text": "Ein Türsteher, der jeden Ausweis prüft, auch den des Chefs.",
+          "isCorrect": true,
+          "explanation": "Richtig: Zero Trust prüft jede Eingabe, unabhängig von ihrer Herkunft."
+        },
+        {
+          "text": "Ein Türsteher, der nur Fremde kontrolliert, aber Stammgäste durchwinkt. sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen",
+          "isCorrect": false,
+          "explanation": "Falsch: das ist das alte Vertrauensmodell, nicht Zero Trust."
+        },
+        {
+          "text": "Ein Türsteher, der niemanden hineinlässt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Zero Trust lehnt nicht alles ab, sondern prüft alles."
+        },
+        {
+          "text": "Ein Türsteher, der nur auf die Kleidung achtet.",
+          "isCorrect": false,
+          "explanation": "Falsch: Zero Trust prüft die Identität, nicht das Aussehen."
+        }
+      ]
+    },
+    {
+      "question": "Warum ist eine Allow-List sicherer als eine Blacklist?",
+      "area": "Eingabevalidierung",
+      "options": [
+        {
+          "text": "Eine Allow-List lässt nur explizit Erlaubtes durch, eine Blacklist muss jedes gefährliche Zeichen kennen.",
+          "isCorrect": true,
+          "explanation": "Richtig: die Allow-List blockiert alles Unbekannte, die Blacklist lässt es durch."
+        },
+        {
+          "text": "Eine Allow-List ist schneller zu programmieren. sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen",
+          "isCorrect": false,
+          "explanation": "Falsch: Geschwindigkeit der Implementierung ist nicht der Grund."
+        },
+        {
+          "text": "Eine Blacklist funktioniert nur auf Windows-Servern.",
+          "isCorrect": false,
+          "explanation": "Falsch: Blacklists funktionieren auf allen Plattformen."
+        },
+        {
+          "text": "Eine Allow-List wird von allen Browsern unterstützt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Allow-Lists sind serverseitig, nicht browserabhängig."
+        }
+      ]
+    },
+    {
+      "question": "Welche Eingabe wird am häufigsten bei der Validierung übersehen?",
+      "area": "Eingabevalidierung",
+      "options": [
+        {
+          "text": "HTTP-Header wie User-Agent oder Accept-Language.",
+          "isCorrect": true,
+          "explanation": "Richtig: Header sind unsichtbare Eingaben, an die viele nicht denken."
+        },
+        {
+          "text": "Das Passwortfeld im Login-Formular. sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen",
+          "isCorrect": false,
+          "explanation": "Falsch: Login-Formulare werden fast immer validiert."
+        },
+        {
+          "text": "Der Submit-Button.",
+          "isCorrect": false,
+          "explanation": "Falsch: Buttons sind keine Eingaben im Sicherheitssinn."
+        },
+        {
+          "text": "Die CSS-Dateien der Anwendung.",
+          "isCorrect": false,
+          "explanation": "Falsch: CSS-Dateien sind keine Benutzereingaben."
+        }
+      ]
+    },
+    {
+      "question": "Was bedeutet Defense in Depth?",
+      "area": "Defense-in-Depth",
+      "options": [
+        {
+          "text": "Mehrere unabhängige Schutzschichten, sodass der Ausfall einer Schicht nicht zum Gesamtversagen führt.",
+          "isCorrect": true,
+          "explanation": "Richtig: wie eine Burg mit mehreren Mauern."
+        },
+        {
+          "text": "Eine besonders tiefe Firewall, die alle Angriffe blockiert. sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen",
+          "isCorrect": false,
+          "explanation": "Falsch: Defense in Depth ist mehr als nur eine Firewall."
+        },
+        {
+          "text": "Die Verschlüsselung aller Daten mit einem besonders langen Schlüssel.",
+          "isCorrect": false,
+          "explanation": "Falsch: Verschlüsselung ist nur eine mögliche Schicht."
+        },
+        {
+          "text": "Das Verstecken des Servers in einem unterirdischen Bunker.",
+          "isCorrect": false,
+          "explanation": "Falsch: physische Sicherheit ist nicht gemeint."
+        }
+      ]
+    },
+    {
+      "question": "Warum reicht client-seitige Validierung nicht aus?",
+      "area": "Eingabevalidierung",
+      "options": [
+        {
+          "text": "Ein Angreifer kann sie mit den Entwicklertools umgehen oder die API direkt aufrufen.",
+          "isCorrect": true,
+          "explanation": "Richtig: client-seitige Validierung ist nur Komfort, keine Sicherheit."
+        },
+        {
+          "text": "Client-seitige Validierung ist zu langsam. sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen",
+          "isCorrect": false,
+          "explanation": "Falsch: sie ist im Gegenteil sehr schnell."
+        },
+        {
+          "text": "Browser unterstützen keine Validierung.",
+          "isCorrect": false,
+          "explanation": "Falsch: Browser haben eingebaute Validierungsfunktionen."
+        },
+        {
+          "text": "Client-seitige Validierung verbraucht zu viel Bandbreite.",
+          "isCorrect": false,
+          "explanation": "Falsch: Bandbreite ist nicht das Problem."
+        }
+      ]
+    },
+    {
+      "question": "Welche drei Schutzschichten sind das Minimum für Defense in Depth?",
+      "area": "Defense-in-Depth",
+      "options": [
+        {
+          "text": "Eingabevalidierung, parametrisierte Queries und Ausgabe-Escaping.",
+          "isCorrect": true,
+          "explanation": "Richtig: diese drei Schichten decken die häufigsten Angriffsvektoren ab."
+        },
+        {
+          "text": "Firewall, Virenscanner und Passwortschutz. sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen",
+          "isCorrect": false,
+          "explanation": "Falsch: das sind Infrastrukturmaßnahmen, nicht Anwendungsschichten."
+        },
+        {
+          "text": "HTML, CSS und JavaScript.",
+          "isCorrect": false,
+          "explanation": "Falsch: das sind Technologien, keine Sicherheitsschichten."
+        },
+        {
+          "text": "Entwicklung, Test und Produktion.",
+          "isCorrect": false,
+          "explanation": "Falsch: das sind Umgebungen, keine Sicherheitsschichten."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der Unterschied zwischen fachlicher und technischer Validierung?",
+      "area": "Eingabevalidierung",
+      "options": [
+        {
+          "text": "Technische Validierung prüft das Format, fachliche Validierung prüft die Berechtigung.",
+          "isCorrect": true,
+          "explanation": "Richtig: Format kann eine Bibliothek prüfen, Berechtigung nur der Entwickler."
+        },
+        {
+          "text": "Technische Validierung ist schneller als fachliche. sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen",
+          "isCorrect": false,
+          "explanation": "Falsch: Geschwindigkeit ist nicht der Unterschied."
+        },
+        {
+          "text": "Fachliche Validierung wird im Frontend gemacht, technische im Backend.",
+          "isCorrect": false,
+          "explanation": "Falsch: beide gehören ins Backend."
+        },
+        {
+          "text": "Es gibt keinen Unterschied, beides meint dasselbe.",
+          "isCorrect": false,
+          "explanation": "Falsch: es sind zwei verschiedene Aspekte der Validierung."
+        }
+      ]
+    },
+    {
+      "question": "Welche Bibliotheken eignen sich für Eingabevalidierung in TypeScript?",
+      "area": "Eingabevalidierung",
+      "options": [
+        {
+          "text": "Zod, Yup oder Joi.",
+          "isCorrect": true,
+          "explanation": "Richtig: diese Bibliotheken bieten Schema-basierte Validierung."
+        },
+        {
+          "text": "React, Vue oder Angular. sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen",
+          "isCorrect": false,
+          "explanation": "Falsch: das sind Frontend-Frameworks, keine Validierungsbibliotheken."
+        },
+        {
+          "text": "Express, Koa oder Fastify.",
+          "isCorrect": false,
+          "explanation": "Falsch: das sind Server-Frameworks."
+        },
+        {
+          "text": "Jest, Vitest oder Mocha.",
+          "isCorrect": false,
+          "explanation": "Falsch: das sind Test-Frameworks."
+        }
+      ]
+    },
+    {
+      "question": "Warum muss auch der Content-Type-Header validiert werden?",
+      "area": "Eingabevalidierung",
+      "options": [
+        {
+          "text": "Ein Angreifer könnte einen anderen Content-Type senden, um die Validierung zu umgehen.",
+          "isCorrect": true,
+          "explanation": "Richtig: der Server muss prüfen, ob der Body zum deklarierten Typ passt."
+        },
+        {
+          "text": "Der Content-Type-Header enthält das Passwort des Nutzers.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Content-Type enthält keine Passwörter."
+        },
+        {
+          "text": "Ohne Content-Type-Header funktioniert die Anwendung nicht.",
+          "isCorrect": false,
+          "explanation": "Falsch: viele Anwendungen funktionieren auch ohne."
+        },
+        {
+          "text": "Der Content-Type-Header bestimmt die Farbe der Webseite.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Content-Type hat nichts mit Farben zu tun."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der wichtigste Grundsatz des Zero-Trust-Prinzips?",
+      "area": "Zero-Trust",
+      "options": [
+        {
+          "text": "Vertraue keiner Eingabe, authentifiziere und autorisiere jede Anfrage.",
+          "isCorrect": true,
+          "explanation": "Richtig: das ist der Kern von Zero Trust."
+        },
+        {
+          "text": "Nutze immer die neueste Version aller Bibliotheken.",
+          "isCorrect": false,
+          "explanation": "Falsch: Updates sind wichtig, aber nicht der Kern von Zero Trust."
+        },
+        {
+          "text": "Speichere alle Daten verschlüsselt.",
+          "isCorrect": false,
+          "explanation": "Falsch: Verschlüsselung ist eine Schutzschicht, nicht Zero Trust."
+        },
+        {
+          "text": "Erlaube nur zahlenden Nutzern den Zugriff.",
+          "isCorrect": false,
+          "explanation": "Falsch: auch zahlende Nutzer können Angreifer sein."
+        }
+      ]
+    },
+    {
+      "question": "Welche Aussage zur Eingabevalidierung ist richtig?",
+      "area": "Eingabevalidierung",
+      "options": [
+        {
+          "text": "Sie muss an der Systemgrenze erfolgen und ungültige Eingaben ablehnen, nicht bereinigen.",
+          "isCorrect": true,
+          "explanation": "Richtig: ablehnen ist sicherer als bereinigen."
+        },
+        {
+          "text": "Sie sollte nur auf dem Client durchgeführt werden, um den Server zu entlasten.",
+          "isCorrect": false,
+          "explanation": "Falsch: client-seitige Validierung ist keine Sicherheitsmaßnahme."
+        },
+        {
+          "text": "Sie ist nur bei Formularen mit Passwortfeldern nötig.",
+          "isCorrect": false,
+          "explanation": "Falsch: jede Eingabe muss validiert werden."
+        },
+        {
+          "text": "Sie kann durch eine einzige Funktion am Anfang der Anwendung erledigt werden.",
+          "isCorrect": false,
+          "explanation": "Falsch: verschiedene Eingaben brauchen verschiedene Validierungen."
+        }
+      ]
+    },
+    {
+      "question": "Was passiert, wenn du eine Eingabe bereinigst statt sie abzulehnen?",
+      "area": "Eingabevalidierung",
+      "options": [
+        {
+          "text": "Du riskierst, dass der Angreifer einen Weg findet, die Bereinigung zu umgehen.",
+          "isCorrect": true,
+          "explanation": "Richtig: Bereinigung ist ein Katz-und-Maus-Spiel, das der Verteidiger verliert."
+        },
+        {
+          "text": "Die Eingabe wird automatisch sicher.",
+          "isCorrect": false,
+          "explanation": "Falsch: Bereinigung kann nie alle Angriffsvektoren abdecken."
+        },
+        {
+          "text": "Die Anwendung wird schneller.",
+          "isCorrect": false,
+          "explanation": "Falsch: Bereinigung ist oft langsamer als einfaches Ablehnen."
+        },
+        {
+          "text": "Der Nutzer bekommt eine bessere Fehlermeldung.",
+          "isCorrect": false,
+          "explanation": "Falsch: Bereinigung gibt dem Nutzer kein Feedback."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Schreibe eine Validierungsfunktion mit Zod, die eine Benutzereingabe für ein Registrierungsformular prüft. Validiere Benutzername nur alphanumerisch, drei bis dreißig Zeichen, E-Mail mit Zod-E-Mail-Validator und Passwort mindestens acht Zeichen mit einem Sonderzeichen. Teste die Validierung mit gültigen und ungültigen Eingaben, einschließlich Injection-Versuchen wie admin'; DROP TABLE users;--.",
+    "expectation": "Die Prinzipien der Eingabevalidierung mit Allow-List wurden praktisch umgesetzt und getestet.",
+    "checklist": [
+      "Eine Zod-Validierungsfunktion für ein Registrierungsformular geschrieben.",
+      "Benutzername, E-Mail und Passwort mit Allow-Lists validiert.",
+      "Die Validierung mit gültigen Eingaben getestet.",
+      "Die Validierung mit Injection-Versuchen getestet und die Ablehnung bestätigt.",
+      "Die Erkenntnisse dokumentiert."
+    ],
+    "portfolioItem": "P04"
+  },
+  "audio": {
+    "file": "M06-01-03.mp3",
+    "durationSeconds": 1280,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Muss ich wirklich jeden HTTP-Header validieren?",
+      "answer": "Nicht jeden Header einzeln, aber jeden Header, den deine Anwendung auswertet. Wenn du den User-Agent nur loggst, musst du ihn nicht validieren, aber du solltest ihn beim Loggen escapen. Wenn du den Accept-Language-Header für die Sprachauswahl nutzt, musst du ihn validieren. Die Regel ist einfach: Jede Eingabe, die das Verhalten deiner Anwendung beeinflusst, muss validiert werden. Eingaben, die nur durchgereicht werden, müssen beim Ausgeben escapt werden. Und Eingaben, die du gar nicht brauchst, solltest du ignorieren."
+    },
+    {
+      "question": "Ist eine Allow-List nicht zu restriktiv für reale Anwendungen?",
+      "answer": "Eine Allow-List kann restriktiv sein, aber das ist genau der Punkt. Sicherheit bedeutet, nur das durchzulassen, was du wirklich brauchst. Für die meisten Felder ist die Allow-List einfach: Ein Benutzername braucht nur Buchstaben und Ziffern. Eine E-Mail-Adresse folgt einem definierten Format. Eine URL beginnt mit https://. Schwieriger wird es bei Freitextfeldern wie Kommentaren. Dort kannst du keine einfache Allow-List nutzen, aber du kannst die Eingabe auf eine maximale Länge beschränken und beim Ausgeben escapen. Die Allow-List ist das Ideal, und wo sie nicht praktikabel ist, kombinierst du sie mit anderen Schutzschichten."
+    },
+    {
+      "question": "Wie viele Schutzschichten brauche ich mindestens?",
+      "answer": "Es gibt keine feste Zahl, aber als Minimum solltest du drei Schichten haben: Eingabevalidierung an der Systemgrenze, parametrisierte Queries oder sicheres Escaping in der Verarbeitungsschicht und Ausgabe-Escaping in der Präsentationsschicht. Dazu kommen je nach Anwendung weitere Schichten wie Authentifizierung, Autorisierung, Rate-Limiting und Audit-Logging. Jede zusätzliche Schicht erhöht die Sicherheit, aber sie erhöht auch die Komplexität. Finde die Balance zwischen Sicherheit und Wartbarkeit für deine spezielle Anwendung."
+    },
+    {
+      "question": "Kann ich die Eingabevalidierung nicht einfach an eine Bibliothek delegieren?",
+      "answer": "Bibliotheken wie Zod, Yup oder Joi können die technische Validierung übernehmen und sind dafür auch zu empfehlen. Aber sie können nicht die fachliche Validierung ersetzen. Eine Bibliothek kann prüfen, ob eine Eingabe eine gültige E-Mail-Adresse ist. Aber sie kann nicht wissen, ob diese E-Mail-Adresse zu einem existierenden Nutzer gehören darf oder ob der Nutzer das Recht hat, diese Aktion auszuführen. Die fachliche Validierung, also die Frage was darf dieser Nutzer mit dieser Eingabe tun, musst du selbst implementieren. Die Bibliothek ist ein Werkzeug, nicht die Lösung."
+    },
+    {
+      "question": "Was ist der häufigste Fehler bei der Eingabevalidierung?",
+      "answer": "Der häufigste Fehler ist, nur auf der Client-Seite zu validieren und dem Server zu vertrauen, dass die Daten schon in Ordnung sind. Client-seitige Validierung ist eine Komfortfunktion für den Nutzer, keine Sicherheitsmaßnahme. Ein Angreifer umgeht sie mit einem einzigen Klick in den Entwicklertools. Jede Validierung, die sicherheitsrelevant ist, muss auf dem Server wiederholt werden. Der Server ist die letzte Instanz, die eine Eingabe ablehnen kann, bevor sie Schaden anrichtet. Vertraue niemals darauf, dass das Frontend seine Arbeit gemacht hat."
+    }
+  ]
+}

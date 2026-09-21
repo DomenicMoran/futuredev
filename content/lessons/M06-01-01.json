@@ -1,0 +1,718 @@
+{
+  "id": "M06-01-01",
+  "title": "Häufigste Angriffsarten",
+  "durationMinutes": 40,
+  "prerequisites": [
+    "M03-02-04",
+    "M03-05-03",
+    "M03-05-05",
+    "M04-01-01",
+    "M04-03-03"
+  ],
+  "terms": [
+    {
+      "term": "SQL-Injection",
+      "definition": "Eine Angriffstechnik, bei der ein Angreifer schädliche SQL-Befehle in Eingabefelder einer Anwendung einschleust. Die Datenbank führt diese Befehle dann aus und gibt dem Angreifer Zugriff auf Daten, die er nicht sehen dürfte. Schutz bieten parametrisierte Queries und Prepared Statements, die Benutzereingaben strikt von SQL-Code trennen."
+    },
+    {
+      "term": "Cross-Site-Scripting",
+      "definition": "Ein Angriff, bei dem ein Angreifer fremdes JavaScript in eine Webseite einschleust, das dann im Browser anderer Nutzer ausgeführt wird. Das eingeschleuste Skript kann Cookies stehlen, Tastatureingaben mitschneiden oder die Seite komplett umleiten. XSS wird durch konsequentes Escapen aller Ausgaben und Content-Security-Policy-Header verhindert."
+    },
+    {
+      "term": "Cross-Site-Request-Forgery",
+      "definition": "Ein Angriff, bei dem ein Angreifer einen authentifizierten Nutzer dazu bringt, ungewollt eine Aktion in einer Webanwendung auszuführen. Der Angreifer nutzt aus, dass der Browser des Opfers gültige Session-Cookies mitschickt. Schutz bieten CSRF-Tokens, SameSite-Cookies und die Prüfung des Origin-Headers."
+    },
+    {
+      "term": "Server-Side-Request-Forgery",
+      "definition": "Ein Angriff, bei dem ein Angreifer den Server dazu bringt, HTTP-Anfragen an interne oder externe Ziele zu senden, die der Angreifer selbst nicht erreichen kann. Der Server wird als Proxy missbraucht, um Firewalls zu umgehen oder interne Dienste wie Cloud-Metadaten-Endpunkte anzugreifen. Schutz bieten strikte URL-Validierung, Allow-Lists und das Blockieren interner IP-Bereiche."
+    }
+  ],
+  "speechBlocks": [
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir ein Haus mit einer Eingangstür vor. Die Tür hat ein Schloss, und nur wer den richtigen Schlüssel hat, kommt rein. Aber was ist mit den Fenstern? Was ist mit dem Keller? Was ist mit dem Briefkasten, durch den jemand einen Dietrich schieben könnte? Ein Haus hat viele Wege, auf denen jemand eindringen kann, und nicht alle sind auf den ersten Blick sichtbar.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Eine Webanwendung ist wie dieses Haus. Die Eingangstür ist der Login. Aber es gibt Fenster wie Eingabefelder, Keller wie Datei-Uploads und Briefkästen wie API-Endpunkte. Jede dieser Öffnungen kann ein Angreifer nutzen, wenn sie nicht richtig gesichert ist. Die häufigsten Angriffsarten nutzen genau diese scheinbar harmlosen Öffnungen. Sie heißen SQL-Injection, Cross-Site-Scripting, Cross-Site-Request-Forgery und Server-Side-Request-Forgery.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist SQL-Injection, und warum ist sie so gefährlich?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "SQL-Injection ist eine der ältesten und gefährlichsten Angriffstechniken. Ein Angreifer schreibt SQL-Code in ein Eingabefeld, zum Beispiel in ein Login-Formular. Wenn die Anwendung diesen Code ungeprüft an die Datenbank weitergibt, führt die Datenbank ihn aus. Der Angreifer kann dann alle Daten lesen, verändern oder löschen. Im schlimmsten Fall übernimmt er die komplette Kontrolle über die Datenbank. Der Angriff funktioniert, weil die Anwendung Benutzereingaben und SQL-Code vermischt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "SQL-Injection ist eine Angriffstechnik, bei der ein Angreifer schädliche SQL-Befehle in Eingabefelder einschleust und die Datenbank diese ungewollt ausführt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "SQL-Injection in einem Login-Formular: Der Server baut aus den Eingaben ein SQL-Statement. SELECT * FROM users WHERE name='eingabe' AND password='eingabe'. Ein Angreifer gibt als Benutzernamen admin'-- ein. Der Bindestrich ist in SQL ein Kommentar. Die Datenbank führt aus: SELECT * FROM users WHERE name='admin'--' AND password='...'. Der Rest nach dem Kommentar wird ignoriert. Der Angreifer ist als admin eingeloggt, ohne das Passwort zu kennen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "SQL-Injection ist so gefährlich, weil sie direkt die Datenbank angreift. Die Datenbank ist das Herz jeder Anwendung. Wer sie kontrolliert, kontrolliert alle Daten. Und SQL-Injection ist erschreckend einfach: Ein einziger ungeschützter Parameter reicht für einen kompletten Datenverlust.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist Cross-Site-Scripting, und wie unterscheidet es sich von SQL-Injection?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir ein schwarzes Brett in einer Schule vor. Jeder darf Zettel anheften. Ein Schüler heftet keinen normalen Zettel an, sondern eine Anweisung: Wer das liest, soll sein Pausenbrot dalassen. Die anderen Schüler lesen die Anweisung und führen sie aus. Das schwarze Brett selbst ist nicht das Ziel, sondern die Leser. Genau so funktioniert Cross-Site-Scripting.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Cross-Site-Scripting, kurz XSS, funktioniert ähnlich wie das schwarze Brett. Der Angreifer schleust JavaScript-Code in eine Webseite ein, zum Beispiel über ein Kommentarfeld. Wenn andere Nutzer die Seite aufrufen, führt ihr Browser das eingeschleuste Skript aus. Das Skript kann Cookies stehlen, Tastatureingaben aufzeichnen oder die Seite auf eine gefälschte Login-Seite umleiten. Anders als bei SQL-Injection trifft XSS nicht den Server, sondern die anderen Nutzer der Seite.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Cross-Site-Scripting ist ein Angriff, bei dem ein Angreifer fremdes JavaScript in eine Webseite einschleust, das dann im Browser anderer Nutzer ausgeführt wird.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Cross-Site-Scripting in einem Blog: Die Seite erlaubt HTML in Kommentaren. Ein Angreifer schreibt statt eines Textes ein Script-Tag. Jeder Besucher, der die Kommentare liest, schickt unbemerkt seine Session-Cookies an den Server des Angreifers. Der Angreifer kann diese Cookies nutzen, um die Sitzung zu übernehmen und als der Nutzer eingeloggt zu sein. Der Server merkt davon nichts.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "XSS ist besonders tückisch, weil der Angriff nicht den Server trifft, sondern die Nutzer. Der Server merkt oft nicht einmal, dass er kompromittiert wurde. Und weil das Skript im Kontext der vertrauenswürdigen Seite läuft, hat es Zugriff auf alle Daten, die die Seite im Browser speichert.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist Cross-Site-Request-Forgery, und wie funktioniert der Angriff?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir vor, du hast in deiner Bank einen Dauerauftrag eingerichtet. Die Bank prüft bei jeder Überweisung deine Unterschrift. Ein Betrüger legt dir ein harmloses Dokument vor, und während du unterschreibst, schiebt er blitzschnell einen Überweisungsträger darunter. Deine Unterschrift ist echt, die Bank führt die Überweisung aus, aber du hast nie zugestimmt. So funktioniert Cross-Site-Request-Forgery.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Cross-Site-Request-Forgery, kurz CSRF, ist ein Angriff, bei dem ein Angreifer einen authentifizierten Nutzer dazu bringt, ungewollt eine Aktion auszuführen. Der Trick: Der Browser des Opfers schickt bei jeder Anfrage an eine Seite automatisch die gespeicherten Cookies mit, auch das Session-Cookie. Der Angreifer platziert einen Link oder ein Formular auf seiner eigenen Seite, das eine Anfrage an die Zielseite sendet. Der Browser des Opfers schickt das Session-Cookie mit, und die Zielseite denkt, der Nutzer hätte die Aktion selbst ausgelöst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Cross-Site-Request-Forgery ist ein Angriff, bei dem ein Angreifer einen authentifizierten Nutzer dazu bringt, ungewollt eine Aktion in einer Webanwendung auszuführen, indem er dessen Session-Cookie ausnutzt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Cross-Site-Request-Forgery in einer Banking-App: Ein Nutzer ist eingeloggt. Der Angreifer schickt ihm eine E-Mail mit einem scheinbar harmlosen Link. Der Link führt zu einer Seite des Angreifers, die ein verstecktes Formular enthält. Dieses Formular sendet eine POST-Anfrage an die Banking-App: Überweise tausend Euro an Konto XY. Der Browser des Nutzers schickt das gültige Session-Cookie mit. Die Banking-App führt die Überweisung aus.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "CSRF nutzt das Vertrauen aus, das eine Webanwendung in den Browser eines authentifizierten Nutzers hat. Der Angreifer muss weder das Passwort kennen noch die Session stehlen. Er muss das Opfer nur dazu bringen, eine präparierte Seite zu besuchen, während es eingeloggt ist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Was ist Server-Side-Request-Forgery, und warum ist sie so schwer zu erkennen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Stell dir einen Butler vor, der für seinen Chef Besorgungen macht. Der Chef sagt: Hol mir das Paket von dieser Adresse ab. Ein Angreifer gibt dem Butler eine gefälschte Adresse: Hol das Paket aus dem Tresorraum der Bank. Der Butler hat Zugang zum Tresorraum, weil er dem Chef gehört. Er holt das Paket und gibt es dem Angreifer, ohne zu merken, dass er hereingelegt wurde. So funktioniert Server-Side-Request-Forgery.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Server-Side-Request-Forgery, kurz SSRF, funktioniert genauso wie der Butler. Der Server ist der Butler. Der Angreifer gibt eine URL ein, die der Server abrufen soll. Aber statt einer harmlosen externen URL gibt der Angreifer eine interne Adresse an, zum Beispiel den Cloud-Metadaten-Endpunkt. Der Server ruft diese interne Adresse ab, weil er im internen Netzwerk ist, und gibt die Antwort an den Angreifer zurück. Der Angreifer bekommt so Zugriff auf Dienste, die nie für das Internet gedacht waren.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "term",
+      "text": "Server-Side-Request-Forgery ist ein Angriff, bei dem ein Angreifer den Server dazu bringt, HTTP-Anfragen an interne Ziele zu senden und so Firewalls zu umgehen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Server-Side-Request-Forgery in einer Bildvorschau: Eine Anwendung hat eine Funktion, die eine URL als Parameter nimmt und ein Vorschaubild der Seite erzeugt. Ein Angreifer gibt statt einer normalen URL die Adresse des AWS-Metadaten-Endpunkts ein. Der Server ruft diese Adresse ab und gibt die Antwort zurück. Der Angreifer bekommt Zugangsdaten, die der Server für andere AWS-Dienste nutzt. Die Firewall hilft nicht, weil die Anfrage von innen kommt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "SSRF ist so schwer zu erkennen, weil der Angriff aus Sicht des Servers völlig legitim aussieht. Der Server ruft eine URL ab, was er oft tun soll. Der Unterschied zwischen einer harmlosen und einer gefährlichen URL ist nur am Ziel zu erkennen. Und weil der Angriff von innen kommt, helfen Firewalls nicht.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Wie schütze ich meine Anwendung vor diesen vier Angriffsarten?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Der Schutz vor diesen Angriffen folgt einem gemeinsamen Prinzip: Vertraue keiner Eingabe. Bei SQL-Injection nutzt du parametrisierte Queries, die Benutzereingaben strikt von SQL-Code trennen. Bei XSS escapst du alle Ausgaben, sodass HTML-Tags als Text angezeigt und nicht ausgeführt werden. Bei CSRF setzt du CSRF-Tokens ein, die bei jedem Formular neu generiert und geprüft werden. Bei SSRF validierst du URLs gegen eine Allow-List und blockierst interne IP-Bereiche. Jede dieser Maßnahmen ist einfach umzusetzen, aber du musst sie konsequent anwenden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "In der FutureDev-App nutzen wir für Datenbankabfragen Supabase mit Row-Level-Security und parametrisierten Queries. Für XSS-Schutz escapt React standardmäßig alle Ausgaben in JSX. Für CSRF setzt Supabase auf Token-basierte Authentifizierung statt Cookies. Und für SSRF-Schutz validiert unser Backend alle externen URLs gegen eine Allow-List und blockiert private IP-Bereiche. Diese vier Schutzschichten sind in jeder Komponente der App aktiv.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Sicherheit ist keine einzelne Maßnahme, sondern eine Schicht aus mehreren Schutzmechanismen. Wenn eine Schicht versagt, fängt die nächste den Angriff ab. Dieses Prinzip der Verteidigung in der Tiefe ist der Grund, warum du alle vier Angriffsarten gleichzeitig absichern musst und dich nicht auf eine einzelne verlassen darfst.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Gibt es noch andere häufige Angriffsarten, die ich kennen sollte?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Neben den vier großen gibt es weitere Angriffsarten, die du kennen solltest. Verzeichnisausbruch nutzt unsichere Dateipfade, um auf Dateien außerhalb des Webroots zuzugreifen. Ein Angreifer gibt zum Beispiel ../../etc/passwd als Dateinamen ein und liest die Passwortdatei des Servers. Clickjacking versteckt eine legitime Seite in einem unsichtbaren Frame und bringt den Nutzer dazu, auf versteckte Buttons zu klicken. Und Denial-of-Service-Angriffe überfluten den Server mit so vielen Anfragen, dass er für echte Nutzer nicht mehr erreichbar ist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "example",
+      "text": "Verzeichnisausbruch in einer Datei-Download-Funktion: Die Anwendung lädt Dateien aus einem Upload-Ordner. Der Pfad wird aus einem URL-Parameter gebildet: /download?file=report.pdf. Ein Angreifer ändert den Parameter zu ../../.env und bekommt die Umgebungsvariablen des Servers mit allen Zugangsdaten. Der Schutz ist einfach: Normalisiere alle Pfade und prüfe, ob der normalisierte Pfad im erlaubten Verzeichnis liegt.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Diese zusätzlichen Angriffsarten zeigen, dass das Prinzip immer dasselbe ist: Jede Eingabe kann missbraucht werden. Ob es ein Dateiname, eine URL oder ein HTTP-Header ist, du musst jede Eingabe validieren, bevor du sie verarbeitest. Es gibt keine harmlosen Eingaben.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein häufiger Fehler ist, sich nur auf eine Schutzschicht zu verlassen. Manche Entwickler denken, eine Web Application Firewall reicht aus. Andere verlassen sich blind darauf, dass ihr Framework schon alles richtig macht. Beides ist gefährlich. Eine Firewall kann umgangen werden. Ein Framework kann eine Lücke haben. Die einzige sichere Strategie ist, jede Eingabe selbst zu validieren, jede Ausgabe selbst zu escapen und jeden Request selbst zu autorisieren.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Sicherheit ist deine Verantwortung als Entwickler. Kein Tool, keine Bibliothek und kein Framework kann dir diese Verantwortung abnehmen. Sie können dir helfen, aber die letzte Entscheidung, ob eine Eingabe sicher ist, triffst du. Deshalb musst du die Angriffsarten nicht nur kennen, sondern auch verstehen, wie der Schutz auf der untersten Ebene funktioniert.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Zum Abschluss noch ein praktischer Tipp: Die beste Verteidigung gegen alle diese Angriffe ist, sie einmal selbst ausprobiert zu haben. Es gibt dafür spezielle Trainingsplattformen wie OWASP WebGoat oder PortSwigger Web Security Academy. Dort kannst du in einer sicheren Umgebung SQL-Injection, XSS, CSRF und SSRF selbst durchführen und verstehen, wie einfach diese Angriffe sind, wenn eine Anwendung nicht geschützt ist. Nach einer Stunde auf so einer Plattform wirst du nie wieder eine Benutzereingabe unvalidiert lassen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Selbst einen Angriff durchzuführen ist die effektivste Art, Sicherheit zu lernen. Wenn du einmal gesehen hast, wie einfach es ist, mit einem einzigen Kommentarzeichen eine ganze Datenbank zu übernehmen, wirst du parametrisierte Queries nie wieder vergessen. Theorie allein reicht nicht, um Sicherheit zu verinnerlichen. Du musst die Perspektive des Angreifers verstehen, um dich wirksam zu verteidigen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Denk immer daran: Der Angreifer muss nur eine einzige Lücke finden, um erfolgreich zu sein. Du als Entwickler musst jede einzelne Lücke schließen. Das klingt unfair, und das ist es auch. Aber genau deshalb ist Sicherheit kein einmaliges Projekt, sondern ein fortlaufender Prozess. Jede neue Funktion, jede neue Bibliothek und jede neue API kann neue Angriffsflächen schaffen. Bleib wachsam, bleib skeptisch und vertraue niemals einer Eingabe.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die vier Angriffsarten, die du heute kennengelernt hast, sind die Grundlage für alles Weitere. Jede Sicherheitsmaßnahme, jede Architekturentscheidung und jede Code-Prüfung sollte diese vier Angriffe im Hinterkopf haben. Wer sie versteht, versteht das Fundament der IT-Sicherheit.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "key",
+      "text": "Also noch einmal ganz kurz: SQL-Injection greift die Datenbank an, Cross-Site-Scripting trifft andere Nutzer im Browser, Cross-Site-Request-Forgery missbraucht die Session eines Opfers, und Server-Side-Request-Forgery lässt den Server interne Dienste angreifen. Der Schutz gegen alle vier folgt demselben Prinzip: Vertraue keiner Eingabe, trenne Code von Daten, und setze auf mehrere Schutzschichten statt auf eine einzelne.",
+      "isKeySentence": true
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "SQL-Injection ist eine Angriffstechnik, bei der ein Angreifer schädliche SQL-Befehle in Eingabefelder einer Anwendung einschleust. Die Datenbank führt diese Befehle dann aus und gibt dem Angreifer Zugriff auf Daten, die er nicht sehen dürfte. Schutz bieten parametrisierte Queries und Prepared Statements, die Benutzereingaben strikt von SQL-Code trennen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Cross-Site-Scripting ist ein Angriff, bei dem ein Angreifer fremdes JavaScript in eine Webseite einschleust, das dann im Browser anderer Nutzer ausgeführt wird. Das eingeschleuste Skript kann Cookies stehlen, Tastatureingaben mitschneiden oder die Seite komplett umleiten. XSS wird durch konsequentes Escapen aller Ausgaben und Content-Security-Policy-Header verhindert.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Cross-Site-Request-Forgery ist ein Angriff, bei dem ein Angreifer einen authentifizierten Nutzer dazu bringt, ungewollt eine Aktion in einer Webanwendung auszuführen. Der Angreifer nutzt aus, dass der Browser des Opfers gültige Session-Cookies mitschickt. Schutz bieten CSRF-Tokens, SameSite-Cookies und die Prüfung des Origin-Headers.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "terms_list",
+      "text": "Server-Side-Request-Forgery ist ein Angriff, bei dem ein Angreifer den Server dazu bringt, HTTP-Anfragen an interne oder externe Ziele zu senden, die der Angreifer selbst nicht erreichen kann. Der Server wird als Proxy missbraucht, um Firewalls zu umgehen oder interne Dienste wie Cloud-Metadaten-Endpunkte anzugreifen. Schutz bieten strikte URL-Validierung, Allow-Lists und das Blockieren interner IP-Bereiche.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Ist SQL-Injection heute noch ein Problem?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Ja, SQL-Injection ist immer noch eine der häufigsten Sicherheitslücken. Obwohl die Schutzmaßnahmen seit über zwanzig Jahren bekannt sind, finden sich immer wieder neue Instanzen. Der Grund ist fast immer derselbe: Entwickler bauen SQL-Strings mit String-Verkettung zusammen, statt parametrisierte Queries zu nutzen. Besonders in Legacy-Code und bei schnellen Prototypen wird dieser Fehler gemacht. Moderne ORMs wie Drizzle oder Prisma verhindern SQL-Injection automatisch, aber sobald du rohes SQL schreibst, bist du wieder selbst verantwortlich.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Reicht es, Benutzereingaben mit strip_tags zu bereinigen?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Nein, das reicht nicht. Angreifer finden immer Wege, Filter zu umgehen. Sie nutzen verschiedene Zeichenkodierungen, verschachtelte Tags oder exotische HTML-Features, die der Filter nicht kennt. Der einzig sichere Weg ist, Ausgaben zu escapen, nicht Eingaben zu filtern. Beim Escapen wird aus dem Kleiner-als-Zeichen die HTML-Entität und aus dem Anführungszeichen die entsprechende Entität. Der Browser zeigt die Zeichen dann als Text an, statt sie als HTML zu interpretieren. React macht das automatisch in JSX, aber bei dangerouslySetInnerHTML oder serverseitigem Rendering musst du selbst escapen.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Warum reichen SameSite-Cookies nicht als alleiniger CSRF-Schutz?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "SameSite-Cookies sind eine gute erste Verteidigungslinie, aber sie haben Lücken. Erstens unterstützen nicht alle Browser SameSite-Cookies, besonders ältere Versionen. Zweitens schützt das SameSite-Attribut nur gegen Cross-Site-Anfragen, nicht gegen andere CSRF-Varianten wie Clickjacking. Drittens gibt es Angriffstechniken, die SameSite-Cookies umgehen können, zum Beispiel über Popup-Fenster oder Weiterleitungen. Ein CSRF-Token, der bei jedem Formular neu generiert und serverseitig geprüft wird, ist die sicherere Lösung und sollte zusätzlich zu SameSite-Cookies eingesetzt werden.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Wie erkenne ich, ob meine Anwendung für SSRF anfällig ist?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Jede Funktion, die eine URL als Eingabe nimmt und diese vom Server aus abruft, ist potenziell anfällig. Das betrifft Vorschaubild-Generatoren, Webhooks, URL-Shortener, Import-Funktionen und Proxy-Endpunkte. Du solltest jede dieser Funktionen darauf prüfen, ob die eingegebene URL validiert wird. Eine einfache Prüfung ist: Kann ein Angreifer eine interne Adresse wie localhost oder eine private IP wie 10.0.0.1 eingeben? Wenn ja, ist die Funktion anfällig. Die Lösung ist eine strikte Allow-List, die nur bestimmte Domains oder URL-Schemata erlaubt, und das Blockieren aller privaten und reservierten IP-Bereiche.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "faq",
+      "text": "Muss ich alle vier Angriffsarten selbst absichern, oder gibt es Bibliotheken dafür?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "faq",
+      "text": "Moderne Frameworks und Bibliotheken übernehmen einen großen Teil der Absicherung. React escapt standardmäßig alle Ausgaben in JSX und schützt so vor XSS. Supabase und andere Backend-as-a-Service-Anbieter nutzen parametrisierte Queries und Token-basierte Authentifizierung, die SQL-Injection und CSRF erschweren. Aber keine Bibliothek kann alle Fälle abdecken. Sobald du rohes SQL schreibst, dangerouslySetInnerHTML verwendest oder eigene HTTP-Clients baust, bist du wieder selbst verantwortlich. Die Bibliotheken sind ein Sicherheitsnetz, aber du musst trotzdem verstehen, wovor sie dich schützen und wo ihre Grenzen liegen.",
+      "isKeySentence": false
+    }
+  ],
+  "practiceExample": {
+    "text": "SSRF-Schutz durch URL-Validierung mit Allow-List und Blockierung interner IP-Bereiche, wie im repo-ssrf-guarded-fetch umgesetzt.",
+    "repoNote": "repo-ssrf-guarded-fetch",
+    "location": "src/guarded-fetch.ts (URL-Validierung gegen Allow-List, Blockierung privater IP-Bereiche wie 10.0.0.0/8 und 169.254.169.254)"
+  },
+  "quiz": [
+    {
+      "question": "Welches Alltagsbild beschreibt SQL-Injection am treffendsten?",
+      "area": "SQL-Injection",
+      "options": [
+        {
+          "text": "Jemand schreibt eine gefälschte Anweisung auf einen Bestellschein, und der Lagerist führt sie aus, ohne zu prüfen, ob sie echt ist.",
+          "isCorrect": true,
+          "explanation": "Richtig: die Datenbank führt den eingeschleusten Befehl aus wie der Lagerist die gefälschte Anweisung."
+        },
+        {
+          "text": "Jemand bricht die Eingangstür mit einem Brecheisen auf. sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen",
+          "isCorrect": false,
+          "explanation": "Falsch: SQL-Injection umgeht die Tür, statt sie aufzubrechen."
+        },
+        {
+          "text": "Jemand liest die Post des Nachbarn mit.",
+          "isCorrect": false,
+          "explanation": "Falsch: SQL-Injection ist aktiver als passives Mitlesen."
+        },
+        {
+          "text": "Jemand klaut den Hausschlüssel aus der Tasche des Besitzers.",
+          "isCorrect": false,
+          "explanation": "Falsch: SQL-Injection stiehlt keine Schlüssel, sondern gibt gefälschte Anweisungen."
+        }
+      ]
+    },
+    {
+      "question": "Was passiert bei einer SQL-Injection mit dem Kommentarzeichen --?",
+      "area": "SQL-Injection",
+      "options": [
+        {
+          "text": "Der Rest des SQL-Statements wird ignoriert, sodass die Passwortprüfung umgangen wird.",
+          "isCorrect": true,
+          "explanation": "Richtig: der Kommentar blendet den Rest des Statements aus."
+        },
+        {
+          "text": "Die Datenbank wird komplett gelöscht. sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen",
+          "isCorrect": false,
+          "explanation": "Falsch: das Kommentarzeichen löscht nichts."
+        },
+        {
+          "text": "Der Angreifer wird automatisch als Administrator eingeloggt.",
+          "isCorrect": false,
+          "explanation": "Falsch: der Angreifer muss den Benutzernamen kennen."
+        },
+        {
+          "text": "Die Eingabe wird als Text gespeichert, nicht als Code.",
+          "isCorrect": false,
+          "explanation": "Falsch: genau das Gegenteil passiert."
+        }
+      ]
+    },
+    {
+      "question": "Welcher Schutz verhindert SQL-Injection am zuverlässigsten?",
+      "area": "SQL-Injection",
+      "options": [
+        {
+          "text": "Parametrisierte Queries, die Benutzereingaben strikt von SQL-Code trennen.",
+          "isCorrect": true,
+          "explanation": "Richtig: parametrisierte Queries verhindern, dass Eingaben als Code interpretiert werden."
+        },
+        {
+          "text": "Benutzereingaben auf das Wort SELECT prüfen. sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen",
+          "isCorrect": false,
+          "explanation": "Falsch: Filter auf Schlüsselwörter sind leicht zu umgehen."
+        },
+        {
+          "text": "Die Datenbank mit einem starken Passwort schützen.",
+          "isCorrect": false,
+          "explanation": "Falsch: das Passwort schützt nicht vor Injection."
+        },
+        {
+          "text": "Alle Eingaben in Großbuchstaben umwandeln.",
+          "isCorrect": false,
+          "explanation": "Falsch: SQL ist nicht case-sensitiv."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der entscheidende Unterschied zwischen XSS und SQL-Injection?",
+      "area": "XSS",
+      "options": [
+        {
+          "text": "XSS trifft andere Nutzer im Browser, SQL-Injection trifft die Datenbank auf dem Server.",
+          "isCorrect": true,
+          "explanation": "Richtig: XSS läuft im Browser der Opfer, SQL-Injection auf dem Datenbankserver."
+        },
+        {
+          "text": "XSS ist immer gefährlicher als SQL-Injection. sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen",
+          "isCorrect": false,
+          "explanation": "Falsch: beide sind auf ihre Weise gefährlich, keine ist pauschal schlimmer."
+        },
+        {
+          "text": "XSS nutzt SQL, SQL-Injection nutzt JavaScript.",
+          "isCorrect": false,
+          "explanation": "Falsch: genau umgekehrt."
+        },
+        {
+          "text": "Es gibt keinen Unterschied, beides sind Injection-Angriffe.",
+          "isCorrect": false,
+          "explanation": "Falsch: das Ziel und die Technik sind verschieden."
+        }
+      ]
+    },
+    {
+      "question": "Warum ist XSS besonders tückisch?",
+      "area": "XSS",
+      "options": [
+        {
+          "text": "Der Server merkt oft nicht, dass er kompromittiert wurde, und das Skript läuft im vertrauenswürdigen Kontext der Seite.",
+          "isCorrect": true,
+          "explanation": "Richtig: der Angriff ist für den Server unsichtbar und hat vollen Zugriff auf die Seite."
+        },
+        {
+          "text": "XSS kann die Festplatte des Servers löschen. sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen",
+          "isCorrect": false,
+          "explanation": "Falsch: XSS läuft im Browser, nicht auf dem Server."
+        },
+        {
+          "text": "XSS ist nicht erkennbar, weil es keine Spuren hinterlässt.",
+          "isCorrect": false,
+          "explanation": "Falsch: XSS hinterlässt Spuren in Logs und im Traffic."
+        },
+        {
+          "text": "XSS funktioniert nur, wenn der Nutzer JavaScript deaktiviert hat.",
+          "isCorrect": false,
+          "explanation": "Falsch: XSS braucht aktives JavaScript."
+        }
+      ]
+    },
+    {
+      "question": "Wie verhindert React standardmäßig XSS?",
+      "area": "XSS",
+      "options": [
+        {
+          "text": "React escapt alle Ausgaben in JSX automatisch, sodass HTML-Tags als Text angezeigt werden.",
+          "isCorrect": true,
+          "explanation": "Richtig: JSX escapt standardmäßig alle eingebetteten Werte."
+        },
+        {
+          "text": "React blockiert alle externen Skripte. sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen",
+          "isCorrect": false,
+          "explanation": "Falsch: React blockiert keine Skripte."
+        },
+        {
+          "text": "React deaktiviert JavaScript im Browser.",
+          "isCorrect": false,
+          "explanation": "Falsch: React ist selbst in JavaScript geschrieben."
+        },
+        {
+          "text": "React prüft alle Eingaben auf script-Tags.",
+          "isCorrect": false,
+          "explanation": "Falsch: React filtert keine Eingaben, sondern escapt Ausgaben."
+        }
+      ]
+    },
+    {
+      "question": "Was ist die Voraussetzung für einen CSRF-Angriff?",
+      "area": "CSRF",
+      "options": [
+        {
+          "text": "Das Opfer muss in der Zielanwendung eingeloggt sein und eine präparierte Seite des Angreifers besuchen.",
+          "isCorrect": true,
+          "explanation": "Richtig: der Angreifer braucht ein eingeloggtes Opfer und einen Weg, eine Anfrage auszulösen."
+        },
+        {
+          "text": "Der Angreifer muss das Passwort des Opfers kennen. sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen",
+          "isCorrect": false,
+          "explanation": "Falsch: CSRF nutzt die bestehende Session, nicht das Passwort."
+        },
+        {
+          "text": "Der Server muss eine veraltete Software-Version nutzen.",
+          "isCorrect": false,
+          "explanation": "Falsch: CSRF funktioniert unabhängig von der Software-Version."
+        },
+        {
+          "text": "Der Angreifer muss physischen Zugriff auf den Server haben.",
+          "isCorrect": false,
+          "explanation": "Falsch: CSRF läuft komplett remote."
+        }
+      ]
+    },
+    {
+      "question": "Welcher Schutzmechanismus ist am wirksamsten gegen CSRF?",
+      "area": "CSRF",
+      "options": [
+        {
+          "text": "Ein CSRF-Token, der bei jedem Formular neu generiert und serverseitig geprüft wird.",
+          "isCorrect": true,
+          "explanation": "Richtig: der Token stellt sicher, dass die Anfrage vom echten Formular stammt."
+        },
+        {
+          "text": "Ein starkes Passwort für jeden Nutzer. sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen",
+          "isCorrect": false,
+          "explanation": "Falsch: das Passwort schützt nicht vor CSRF."
+        },
+        {
+          "text": "HTTPS für alle Verbindungen.",
+          "isCorrect": false,
+          "explanation": "Falsch: HTTPS schützt vor Abhören, nicht vor CSRF."
+        },
+        {
+          "text": "Eine Firewall vor dem Server.",
+          "isCorrect": false,
+          "explanation": "Falsch: die Anfrage kommt vom Browser des Opfers, nicht vom Angreifer."
+        }
+      ]
+    },
+    {
+      "question": "Welches Alltagsbild beschreibt SSRF am treffendsten?",
+      "area": "SSRF",
+      "options": [
+        {
+          "text": "Ein Butler holt ein Paket aus dem Tresorraum der Bank, weil ihm jemand eine gefälschte Adresse gegeben hat.",
+          "isCorrect": true,
+          "explanation": "Richtig: der Server wird als vertrauenswürdiger Mittelsmann missbraucht."
+        },
+        {
+          "text": "Ein Dieb bricht nachts in ein Haus ein.",
+          "isCorrect": false,
+          "explanation": "Falsch: SSRF ist kein direkter Einbruch."
+        },
+        {
+          "text": "Ein Spion fotografiert geheime Dokumente.",
+          "isCorrect": false,
+          "explanation": "Falsch: SSRF ist aktiver als passives Fotografieren."
+        },
+        {
+          "text": "Ein Betrüger gibt sich am Telefon als jemand anderes aus.",
+          "isCorrect": false,
+          "explanation": "Falsch: SSRF gibt sich nicht als Person aus, sondern nutzt die Identität des Servers."
+        }
+      ]
+    },
+    {
+      "question": "Warum ist die AWS-Metadaten-IP ein beliebtes SSRF-Ziel?",
+      "area": "SSRF",
+      "options": [
+        {
+          "text": "Sie ist nur aus dem internen Netzwerk erreichbar und liefert Zugangsdaten für andere AWS-Dienste.",
+          "isCorrect": true,
+          "explanation": "Richtig: der Metadaten-Endpunkt enthält hochsensible Informationen."
+        },
+        {
+          "text": "Sie ist die Standard-IP für alle AWS-Datenbanken.",
+          "isCorrect": false,
+          "explanation": "Falsch: die IP gehört zum Metadaten-Dienst, nicht zu Datenbanken."
+        },
+        {
+          "text": "Sie ist die IP-Adresse des AWS-Login-Portals.",
+          "isCorrect": false,
+          "explanation": "Falsch: das Login-Portal hat eine andere Adresse."
+        },
+        {
+          "text": "Sie ist eine öffentliche IP, die jeder erreichen kann.",
+          "isCorrect": false,
+          "explanation": "Falsch: die IP ist nur intern erreichbar, das macht sie ja zum SSRF-Ziel."
+        }
+      ]
+    },
+    {
+      "question": "Welches Prinzip liegt dem Schutz gegen alle vier Angriffsarten zugrunde?",
+      "area": "Schutz",
+      "options": [
+        {
+          "text": "Vertraue keiner Eingabe, trenne Code von Daten, und setze auf mehrere Schutzschichten.",
+          "isCorrect": true,
+          "explanation": "Richtig: dieses Prinzip zieht sich durch alle Schutzmaßnahmen."
+        },
+        {
+          "text": "Nutze immer die neueste Version aller Bibliotheken.",
+          "isCorrect": false,
+          "explanation": "Falsch: Updates sind wichtig, aber nicht das Grundprinzip."
+        },
+        {
+          "text": "Verlange von jedem Nutzer eine Zwei-Faktor-Authentifizierung.",
+          "isCorrect": false,
+          "explanation": "Falsch: 2FA schützt vor Account-Übernahme, nicht vor Injection."
+        },
+        {
+          "text": "Setze eine Web Application Firewall ein.",
+          "isCorrect": false,
+          "explanation": "Falsch: eine WAF ist eine Schutzschicht, aber nicht das Grundprinzip."
+        }
+      ]
+    },
+    {
+      "question": "Was ist Verzeichnisausbruch?",
+      "area": "Schutz",
+      "options": [
+        {
+          "text": "Ein Angriff, der unsichere Dateipfade nutzt, um auf Dateien außerhalb des Webroots zuzugreifen.",
+          "isCorrect": true,
+          "explanation": "Richtig: mit ../ wird das erlaubte Verzeichnis verlassen."
+        },
+        {
+          "text": "Ein Angriff, der den Netzwerkpfad zwischen Client und Server abhört.",
+          "isCorrect": false,
+          "explanation": "Falsch: Path-Traversal hat nichts mit Netzwerkpfaden zu tun."
+        },
+        {
+          "text": "Ein Angriff, der die Ordnerstruktur des Servers physisch zerstört.",
+          "isCorrect": false,
+          "explanation": "Falsch: Path-Traversal liest nur Dateien, zerstört nichts."
+        },
+        {
+          "text": "Ein Angriff, der den Browserverlauf des Nutzers ausliest.",
+          "isCorrect": false,
+          "explanation": "Falsch: Path-Traversal zielt auf den Server, nicht auf den Browser."
+        }
+      ]
+    }
+  ],
+  "practiceTask": {
+    "task": "Öffne das repo-ssrf-guarded-fetch und lies die Datei guarded-fetch.ts. Verstehe, wie die URL-Validierung funktioniert: Welche URL-Schemata sind erlaubt? Welche IP-Bereiche werden blockiert? Schreibe dann eine eigene vereinfachte Version einer URL-Validierungsfunktion, die HTTPS erzwingt und private IPs blockiert. Teste sie mit einer harmlosen URL wie https://example.com und einer gefährlichen wie http://169.254.169.254/latest/meta-data/.",
+    "expectation": "Das Prinzip der SSRF-Abwehr durch URL-Validierung wurde verstanden und in einer eigenen Funktion umgesetzt.",
+    "checklist": [
+      "Das repo-ssrf-guarded-fetch geöffnet und guarded-fetch.ts gelesen.",
+      "Verstanden, welche URL-Schemata erlaubt sind und welche IP-Bereiche blockiert werden.",
+      "Eine eigene URL-Validierungsfunktion geschrieben, die HTTPS erzwingt und private IPs blockiert.",
+      "Die Funktion mit einer harmlosen URL getestet.",
+      "Die Funktion mit einer gefährlichen URL getestet und den Blockier-Mechanismus bestätigt."
+    ],
+    "portfolioItem": "P04"
+  },
+  "audio": {
+    "file": "M06-01-01.mp3",
+    "durationSeconds": 1520,
+    "voices": [
+      "A",
+      "B"
+    ],
+    "aiGenerated": true
+  },
+  "faq": [
+    {
+      "question": "Ist SQL-Injection heute noch ein Problem?",
+      "answer": "Ja, SQL-Injection ist immer noch eine der häufigsten Sicherheitslücken. Obwohl die Schutzmaßnahmen seit über zwanzig Jahren bekannt sind, finden sich immer wieder neue Instanzen. Der Grund ist fast immer derselbe: Entwickler bauen SQL-Strings mit String-Verkettung zusammen, statt parametrisierte Queries zu nutzen. Besonders in Legacy-Code und bei schnellen Prototypen wird dieser Fehler gemacht. Moderne ORMs wie Drizzle oder Prisma verhindern SQL-Injection automatisch, aber sobald du rohes SQL schreibst, bist du wieder selbst verantwortlich."
+    },
+    {
+      "question": "Reicht es, Benutzereingaben mit strip_tags zu bereinigen?",
+      "answer": "Nein, das reicht nicht. Angreifer finden immer Wege, Filter zu umgehen. Sie nutzen verschiedene Zeichenkodierungen, verschachtelte Tags oder exotische HTML-Features, die der Filter nicht kennt. Der einzig sichere Weg ist, Ausgaben zu escapen, nicht Eingaben zu filtern. Beim Escapen wird aus dem Kleiner-als-Zeichen die HTML-Entität und aus dem Anführungszeichen die entsprechende Entität. Der Browser zeigt die Zeichen dann als Text an, statt sie als HTML zu interpretieren. React macht das automatisch in JSX, aber bei dangerouslySetInnerHTML oder serverseitigem Rendering musst du selbst escapen."
+    },
+    {
+      "question": "Warum reichen SameSite-Cookies nicht als alleiniger CSRF-Schutz?",
+      "answer": "SameSite-Cookies sind eine gute erste Verteidigungslinie, aber sie haben Lücken. Erstens unterstützen nicht alle Browser SameSite-Cookies, besonders ältere Versionen. Zweitens schützt das SameSite-Attribut nur gegen Cross-Site-Anfragen, nicht gegen andere CSRF-Varianten wie Clickjacking. Drittens gibt es Angriffstechniken, die SameSite-Cookies umgehen können, zum Beispiel über Popup-Fenster oder Weiterleitungen. Ein CSRF-Token, der bei jedem Formular neu generiert und serverseitig geprüft wird, ist die sicherere Lösung und sollte zusätzlich zu SameSite-Cookies eingesetzt werden."
+    },
+    {
+      "question": "Wie erkenne ich, ob meine Anwendung für SSRF anfällig ist?",
+      "answer": "Jede Funktion, die eine URL als Eingabe nimmt und diese vom Server aus abruft, ist potenziell anfällig. Das betrifft Vorschaubild-Generatoren, Webhooks, URL-Shortener, Import-Funktionen und Proxy-Endpunkte. Du solltest jede dieser Funktionen darauf prüfen, ob die eingegebene URL validiert wird. Eine einfache Prüfung ist: Kann ein Angreifer eine interne Adresse wie localhost oder eine private IP wie 10.0.0.1 eingeben? Wenn ja, ist die Funktion anfällig. Die Lösung ist eine strikte Allow-List, die nur bestimmte Domains oder URL-Schemata erlaubt, und das Blockieren aller privaten und reservierten IP-Bereiche."
+    },
+    {
+      "question": "Muss ich alle vier Angriffsarten selbst absichern, oder gibt es Bibliotheken dafür?",
+      "answer": "Moderne Frameworks und Bibliotheken übernehmen einen großen Teil der Absicherung. React escapt standardmäßig alle Ausgaben in JSX und schützt so vor XSS. Supabase und andere Backend-as-a-Service-Anbieter nutzen parametrisierte Queries und Token-basierte Authentifizierung, die SQL-Injection und CSRF erschweren. Aber keine Bibliothek kann alle Fälle abdecken. Sobald du rohes SQL schreibst, dangerouslySetInnerHTML verwendest oder eigene HTTP-Clients baust, bist du wieder selbst verantwortlich. Die Bibliotheken sind ein Sicherheitsnetz, aber du musst trotzdem verstehen, wovor sie dich schützen und wo ihre Grenzen liegen."
+    }
+  ]
+}
