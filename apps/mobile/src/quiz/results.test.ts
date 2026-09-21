@@ -10,7 +10,7 @@ describe('recordQuizRound (AP-3.5, Punkt 1: Ergebnis nach exam_results/progress,
     resetToMemoryDatabase();
   });
 
-  it('trägt ein bestandenes Lektionsquiz als quiz_passed in progress ein und legt exam_results an', async () => {
+  it('trägt ein bestandenes Lektionsquiz als completed in progress ein und legt exam_results an', async () => {
     // Core erlaubt "quiz_passed" nur nach "read" oder "listened" (progress.ts,
     // ALLOWED_TRANSITIONS): erst die Lektion wie beim normalen Durchgang lesen.
     await markLessonState('M01-01-01', 'started');
@@ -28,7 +28,7 @@ describe('recordQuizRound (AP-3.5, Punkt 1: Ergebnis nach exam_results/progress,
     await recordQuizRound({ scope: { type: 'lesson', lessonId: 'M01-01-01' }, round, answers, result });
 
     const progress = await getProgress('M01-01-01');
-    expect(progress?.state).toBe('quiz_passed');
+    expect(progress?.state).toBe('completed');
     expect(progress?.quizPassed).toBe(true);
 
     const db = await getDatabase();

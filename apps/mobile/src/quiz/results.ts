@@ -40,7 +40,7 @@ export interface RecordQuizRoundInput {
 
 /**
  * Speichert das Ergebnis einer Runde: exam_results immer, bei einer Lektionsrunde
- * zusätzlich den Fortschritt (`quiz_passed` ab 80 Prozent) und je Frage die
+ * zusätzlich den Fortschritt (`quiz_passed` und `completed` ab 80 Prozent) und je Frage die
  * Leitner-Karte (richtig beantwortet rückt vor, falsch fällt zurück).
  */
 export async function recordQuizRound(input: RecordQuizRoundInput): Promise<void> {
@@ -64,9 +64,11 @@ export async function recordQuizRound(input: RecordQuizRoundInput): Promise<void
   }
 
   if (input.scope.type === 'lesson' && input.result.scorePercent >= PASS_THRESHOLD_PERCENT) {
-    await markLessonState(input.scope.lessonId, 'quiz_passed', {
+    const lessonId = input.scope.lessonId;
+    await markLessonState(lessonId, 'quiz_passed', {
       quizScore: Math.round(input.result.scorePercent),
       quizPassed: true,
     });
+    await markLessonState(lessonId, 'completed');
   }
 }
