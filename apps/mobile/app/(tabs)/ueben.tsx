@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import { Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
-import { Dumbbell, Headphones } from 'lucide-react-native';
+import { Dumbbell, Headphones, MessageCircleQuestion } from 'lucide-react-native';
 import { useTheme } from '../../src/theme/useTheme.js';
 import { EmptyState } from '../../src/components/EmptyState.js';
 import { de } from '../../src/i18n/de.js';
@@ -120,6 +120,33 @@ export default function UebenScreen() {
         ))}
         <Tile label={de.ueben.allExamTile} onPress={() => router.push('/quiz/exam?scope=all')} theme={theme} />
       </View>
+
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel={de.ueben.explainExamAction}
+        onPress={() => router.push('/erklaer')}
+        style={[
+          styles.card,
+          {
+            backgroundColor: theme.colors.surface,
+            borderColor: theme.colors.border,
+            borderRadius: theme.radius.lg,
+            padding: theme.spacing.base,
+            marginTop: theme.spacing.lg,
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: theme.spacing.sm,
+          },
+        ]}
+      >
+        <MessageCircleQuestion color={theme.colors.accent} size={28} strokeWidth={1.75} />
+        <View style={{ flex: 1 }}>
+          <Text style={[styles.cardTitle, { color: theme.colors.text }]}>{de.ueben.explainExamTitle}</Text>
+          <Text style={[styles.cardBody, { color: theme.colors.textWeak, marginTop: theme.spacing.xs }]}>
+            {de.ueben.explainExamBody}
+          </Text>
+        </View>
+      </Pressable>
 
       <Pressable
         accessibilityRole="button"
