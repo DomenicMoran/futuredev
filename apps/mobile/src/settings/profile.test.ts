@@ -10,6 +10,24 @@ import { loadProfileData } from './profile.js';
 // Fake-Dateisystem mit demselben Manifest wie content/manifest.json (nur
 // M01-01-01 veröffentlicht), ohne expo-file-system (Vitest/Node, siehe
 // src/content/contentFs.ts).
+function emptyContentFs(): ContentFs {
+  const documentDirectory = 'memory://';
+  return {
+    documentDirectory,
+    async ensureDirectory() {},
+    async writeFile() {},
+    async readFile() {
+      throw new Error('nicht gefunden');
+    },
+    async exists() {
+      return false;
+    },
+    async listDirectory() {
+      return [];
+    },
+  };
+}
+
 function fakeContentFs(): ContentFs {
   const store = new Map<string, string>();
   const documentDirectory = 'memory://';
@@ -77,6 +95,18 @@ describe('loadProfileData: Jobreife-Anzeige aus progress, exam_results, portfoli
     const m01 = data.moduleProgress.find((m) => m.moduleId === 'M01');
     expect(m01?.totalLessons).toBe(1);
     expect(m01?.completedLessons).toBe(0);
+  });
+
+  it('zählt completed in M01 auch ohne lokales Manifest (Bundled-Fallback für Lektions-IDs)', async () => {
+    setContentFs(emptyContentFs());
+    await markLessonState('M01-01-01', 'started');
+    await markLessonState('M01-01-01', 'read');
+    await markLessonState('M01-01-01', 'quiz_passed', { quizPassed: true, quizScore: 100 });
+    await markLessonState('M01-01-01', 'completed');
+
+    const data = await loadProfileData();
+    const m01 = data.moduleProgress.find((m) => m.moduleId === 'M01');
+    expect(m01?.completedLessons).toBeGreaterThan(0);
   });
 
   it('persistiert den Portfolio-Status-Zyklus P00 über upsert und loadProfileData (offen → veröffentlicht → erklärt → offen)', async () => {

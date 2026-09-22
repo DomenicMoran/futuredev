@@ -3,12 +3,14 @@
 // B's `src/data/` (Database-Schnittstelle) und `src/content/`
 // (Manifest/ContentFs) für den Gerätezugriff, dazu die Inhaltsdateien
 // content/modules.json, content/portfolio.json, content/career.json.
+import type { Manifest } from '@futuredev/content-schema';
 import { computeModuleProgress, computeReadiness, type LessonProgress, type ModuleProgress, type ReadinessResult } from '@futuredev/core';
 import { getDatabase } from '../data/db.js';
 import { listProgress } from '../data/progress.js';
 import { listNotes } from '../data/notes.js';
 import { listBookmarks } from '../data/bookmarks.js';
 import { getContentFs, loadLocalManifest } from '../content/index.js';
+import { bundledManifest } from '../../assets/content/bundled.generated.js';
 import modulesFile from '../../../../content/modules.json';
 import portfolioFile from '../../../../content/portfolio.json';
 import careerFile from '../../../../content/career.json';
@@ -51,10 +53,17 @@ export interface ProfileData {
   bookmarks: BookmarkDisplayItem[];
 }
 
+const bundledFallbackManifest = bundledManifest as unknown as Manifest;
+
+function lessonBelongsToModule(lessonId: string, moduleId: string): boolean {
+  return lessonId === moduleId || lessonId.startsWith(`${moduleId}-`);
+}
+
 async function knownLessonIds(): Promise<string[]> {
   const fs = await getContentFs();
   const manifest = await loadLocalManifest(fs);
-  return (manifest?.lessons ?? []).map((l) => l.id);
+  const lessons = manifest?.lessons?.length ? manifest.lessons : bundledFallbackManifest.lessons;
+  return lessons.map((l) => l.id);
 }
 
 export async function loadProfileData(): Promise<ProfileData> {
@@ -72,7 +81,7 @@ export async function loadProfileData(): Promise<ProfileData> {
   const progressByLesson = new Map(progressRows.map((r) => [r.lessonId, r]));
 
   const moduleProgress = modulesFile.modules.map((module) => {
-    const moduleLessonIds = lessonIds.filter((id) => id.startsWith(module.id));
+    const moduleLessonIds = lessonIds.filter((id) => lessonBelongsToModule(id, module.id));
     const lessonProgresses: LessonProgress[] = moduleLessonIds.map((lessonId) => ({
       lessonId,
       state: progressByLesson.get(lessonId)?.state ?? 'new',

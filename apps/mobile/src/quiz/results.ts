@@ -2,7 +2,7 @@
 // (`src/data/`: exam_results, reviews, progress).
 import { createCard, reviewCard, PASS_THRESHOLD_PERCENT, type LeitnerBox, type QuizAnswer, type QuizResult } from '@futuredev/core';
 import { getDatabase } from '../data/db.js';
-import { markLessonState } from '../data/progress.js';
+import { getProgress, markLessonState } from '../data/progress.js';
 import type { QuizRound, QuizScope } from './roundLogic.js';
 import { scopeKey } from './roundLogic.js';
 
@@ -28,6 +28,19 @@ export async function updateReviewCard(cardId: string, wasCorrect: boolean, now:
     dueAt: updated.dueAt,
     errorCount: updated.errorCount,
   });
+}
+
+/** Core erlaubt quiz_passed nur aus read/listened — fehlende Zwischenzustände nachholen. */
+async function ensureLessonReadyForQuizPass(lessonId: string): Promise<void> {
+  let row = await getProgress(lessonId);
+  let state = row?.state ?? 'new';
+  if (state === 'new') {
+    row = await markLessonState(lessonId, 'started');
+    state = row.state;
+  }
+  if (state === 'started') {
+    await markLessonState(lessonId, 'read');
+  }
 }
 
 export interface RecordQuizRoundInput {
@@ -65,6 +78,7 @@ export async function recordQuizRound(input: RecordQuizRoundInput): Promise<void
 
   if (input.scope.type === 'lesson' && input.result.scorePercent >= PASS_THRESHOLD_PERCENT) {
     const lessonId = input.scope.lessonId;
+    await ensureLessonReadyForQuizPass(lessonId);
     await markLessonState(lessonId, 'quiz_passed', {
       quizScore: Math.round(input.result.scorePercent),
       quizPassed: true,

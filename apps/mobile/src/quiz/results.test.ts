@@ -10,6 +10,23 @@ describe('recordQuizRound (AP-3.5, Punkt 1: Ergebnis nach exam_results/progress,
     resetToMemoryDatabase();
   });
 
+  it('trägt ein bestandenes Lektionsquiz als completed ein, auch ohne vorheriges manuelles read', async () => {
+    const pool = makeTestPool(10);
+    const round = drawRound(pool, 10, 1);
+    const answers = round.drawn.map((q, i) => ({
+      questionIndex: i,
+      chosenOptionIndex: q.options.findIndex((o) => o.isCorrect),
+    }));
+    const result = evaluateRound(round, answers);
+    expect(result.passed).toBe(true);
+
+    await recordQuizRound({ scope: { type: 'lesson', lessonId: 'M01-01-01' }, round, answers, result });
+
+    const progress = await getProgress('M01-01-01');
+    expect(progress?.state).toBe('completed');
+    expect(progress?.quizPassed).toBe(true);
+  });
+
   it('trägt ein bestandenes Lektionsquiz als completed in progress ein und legt exam_results an', async () => {
     // Core erlaubt "quiz_passed" nur nach "read" oder "listened" (progress.ts,
     // ALLOWED_TRANSITIONS): erst die Lektion wie beim normalen Durchgang lesen.
