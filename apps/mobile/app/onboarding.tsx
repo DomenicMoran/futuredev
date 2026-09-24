@@ -44,12 +44,9 @@ export default function OnboardingScreen() {
   }
 
   function chooseGoalMinutes(minutes: number) {
-    void (async () => {
-      setDailyGoalMinutes(minutes);
-      await completeOnboarding();
-      useSettingsStore.getState().setOnboardingDone(true);
-      router.replace('/(tabs)');
-    })();
+    setDailyGoalMinutes(minutes);
+    completeOnboarding();
+    router.replace('/(tabs)');
   }
 
   const step2Ready = formDraft !== null && timeDraft !== null;
