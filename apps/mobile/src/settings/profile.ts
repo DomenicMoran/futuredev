@@ -4,12 +4,13 @@
 // (Manifest/ContentFs) für den Gerätezugriff, dazu die Inhaltsdateien
 // content/modules.json, content/portfolio.json, content/career.json.
 import type { Manifest } from '@futuredev/content-schema';
-import { computeModuleProgress, computeReadiness, type LessonProgress, type ModuleProgress, type ReadinessResult } from '@futuredev/core';
+import { computeModuleProgress, computeReadiness, type LessonProgress, type ReadinessResult } from '@futuredev/core';
 import { getDatabase } from '../data/db.js';
 import { listProgress } from '../data/progress.js';
 import { listNotes } from '../data/notes.js';
 import { listBookmarks } from '../data/bookmarks.js';
 import { getContentFs, loadLocalManifest } from '../content/index.js';
+import { de } from '../i18n/de.js';
 import { bundledManifest } from '../../assets/content/bundled.generated.js';
 import modulesFile from '../../../../content/modules.json';
 import portfolioFile from '../../../../content/portfolio.json';
@@ -40,12 +41,21 @@ export interface NoteDisplayItem {
 export interface BookmarkDisplayItem {
   id: string;
   lessonId: string;
+  lessonTitle: string;
   position: number;
   createdAt: string;
 }
 
+export interface ModuleProgressDisplay {
+  moduleId: string;
+  moduleTitle: string;
+  percent: number;
+  totalLessons: number;
+  completedLessons: number;
+}
+
 export interface ProfileData {
-  moduleProgress: ModuleProgress[];
+  moduleProgress: ModuleProgressDisplay[];
   readiness: ReadinessResult;
   portfolio: PortfolioDisplayItem[];
   career: CareerDisplayItem[];
@@ -80,13 +90,39 @@ export async function loadProfileData(): Promise<ProfileData> {
 
   const progressByLesson = new Map(progressRows.map((r) => [r.lessonId, r]));
 
-  const moduleProgress = modulesFile.modules.map((module) => {
+  const lessonTitleById = new Map<string, string>();
+  const fs = await getContentFs();
+  const manifest = await loadLocalManifest(fs);
+  if (manifest) {
+    const { buildModuleList } = await import('../content/listLessons.js');
+    const { loadModules } = await import('../content/lessonLoader.js');
+    const modulesLoaded = await loadModules(fs);
+    if (modulesLoaded) {
+      const moduleList = await buildModuleList(modulesLoaded, manifest, fs);
+      for (const mod of moduleList) {
+        for (const sub of mod.subModules) {
+          for (const lesson of sub.lessons) {
+            lessonTitleById.set(lesson.id, lesson.title);
+          }
+        }
+      }
+    }
+  }
+
+  const moduleProgress: ModuleProgressDisplay[] = modulesFile.modules.map((module) => {
     const moduleLessonIds = lessonIds.filter((id) => lessonBelongsToModule(id, module.id));
     const lessonProgresses: LessonProgress[] = moduleLessonIds.map((lessonId) => ({
       lessonId,
       state: progressByLesson.get(lessonId)?.state ?? 'new',
     }));
-    return computeModuleProgress(module.id, lessonProgresses);
+    const computed = computeModuleProgress(module.id, lessonProgresses);
+    return {
+      moduleId: computed.moduleId,
+      moduleTitle: module.title,
+      percent: computed.percent,
+      totalLessons: computed.totalLessons,
+      completedLessons: computed.completedLessons,
+    };
   });
 
   const passedModuleIds = new Set(
@@ -131,7 +167,15 @@ export async function loadProfileData(): Promise<ProfileData> {
   }));
 
   const notes: NoteDisplayItem[] = [...noteRows].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
-  const bookmarks: BookmarkDisplayItem[] = [...bookmarkRows].sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+  const bookmarks: BookmarkDisplayItem[] = [...bookmarkRows]
+    .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+    .map((b) => ({
+      id: b.id,
+      lessonId: b.lessonId,
+      lessonTitle: lessonTitleById.get(b.lessonId) ?? de.start.lessonTitleFallback,
+      position: b.position,
+      createdAt: b.createdAt,
+    }));
 
   return { moduleProgress, readiness, portfolio, career, notes, bookmarks };
 }

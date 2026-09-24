@@ -61,7 +61,7 @@ export default function IchScreen() {
             {data.moduleProgress
               .filter((m) => m.totalLessons > 0)
               .map((m) => (
-                <ProgressRow key={m.moduleId} label={m.moduleId} percent={m.percent} theme={theme} />
+                <ProgressRow key={m.moduleId} label={m.moduleTitle} percent={m.percent} theme={theme} />
               ))}
           </Section>
 
@@ -87,14 +87,12 @@ export default function IchScreen() {
               <Pressable
                 key={item.id}
                 accessibilityRole="button"
-                accessibilityLabel={`${item.id} ${item.title}, ${statusLabel(item.status)}. Tippen zum Wechseln.`}
+                accessibilityLabel={`${item.title}, ${statusLabel(item.status)}. Tippen zum Wechseln.`}
                 onPress={() => void cyclePortfolioStatus(item.id, item.status)}
                 style={[styles.listRow, { borderColor: theme.colors.border, minHeight: theme.minTapTarget }]}
               >
                 <View style={{ flex: 1 }}>
-                  <Text style={[styles.body, { color: theme.colors.text }]}>
-                    {item.id} · {item.title}
-                  </Text>
+                  <Text style={[styles.body, { color: theme.colors.text }]}>{item.title}</Text>
                   <Text style={[styles.badge, { color: theme.colors.textWeak, marginTop: 2 }]}>{item.goal}</Text>
                 </View>
                 <Text style={[styles.badge, { color: theme.colors.accent }]}>{statusLabel(item.status)}</Text>
@@ -152,12 +150,12 @@ export default function IchScreen() {
                 <Pressable
                   key={b.id}
                   accessibilityRole="button"
-                  accessibilityLabel={`${b.lessonId} ${b.position}`}
-                  onPress={() => router.push(`/lesson/${b.lessonId}?position=${b.position}`)}
+                  accessibilityLabel={`${b.lessonTitle}, Block ${b.position + 1}`}
+                  onPress={() => router.push(`/lesson/${b.lessonId}?block=${b.position}`)}
                   style={[styles.listRow, { borderColor: theme.colors.border }]}
                 >
                   <Text style={[styles.body, { color: theme.colors.text, flex: 1 }]}>
-                    {b.lessonId} · {b.position}
+                    {b.lessonTitle} · Block {b.position + 1}
                   </Text>
                 </Pressable>
               ))

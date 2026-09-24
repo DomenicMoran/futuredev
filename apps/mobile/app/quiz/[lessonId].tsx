@@ -9,6 +9,8 @@ import { BookOpen } from 'lucide-react-native';
 import { de } from '../../src/i18n/de.js';
 import { useSettingsStore } from '../../src/state/settings.js';
 import { loadLessonQuiz, knownLessonIds } from '../../src/quiz/content.js';
+import { getContentFs } from '../../src/content/contentFs.js';
+import { loadLesson } from '../../src/content/lessonLoader.js';
 import { questionCountForScope } from '../../src/quiz/roundLogic.js';
 import { QuizRunner } from '../../src/quiz/QuizRunner.js';
 
@@ -22,10 +24,16 @@ export default function LessonQuizScreen() {
   const [pool, setPool] = useState<QuizQuestionInput[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [nextLessonId, setNextLessonId] = useState<string | null>(null);
+  const [lessonTitle, setLessonTitle] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
     if (!lessonId) return;
+    void (async () => {
+      const fs = await getContentFs();
+      const lesson = await loadLesson(fs, lessonId);
+      if (!cancelled) setLessonTitle(lesson?.title ?? null);
+    })();
     loadLessonQuiz(lessonId)
       .then((questions) => {
         if (!cancelled) setPool(questions);
@@ -69,9 +77,9 @@ export default function LessonQuizScreen() {
         pool={pool}
         desiredCount={questionCountForScope({ type: 'lesson', lessonId }, quizLength)}
         scope={{ type: 'lesson', lessonId }}
-        heading={lessonId}
+        heading={lessonTitle ?? de.start.lessonTitleFallback}
         onExit={() => router.replace(`/lesson/${lessonId}`)}
-        onNextLesson={nextLessonId ? () => router.replace(`/quiz/${nextLessonId}`) : undefined}
+        onNextLesson={nextLessonId ? () => router.replace(`/lesson/${nextLessonId}`) : undefined}
       />
     </SafeAreaView>
   );

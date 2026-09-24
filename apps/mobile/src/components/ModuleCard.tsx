@@ -28,8 +28,9 @@ function ModuleCardInner({ module, onPress }: ModuleCardProps) {
   const progress = module.totalLessons === 0 ? 0 : module.completedLessons / module.totalLessons;
   const durationMinutes = useMemo(() => moduleDurationMinutes(module), [module]);
 
+  const progressPercent = Math.round(progress * 100);
   const meta = hasLessons
-    ? de.lernen.lessonsProgress(module.completedLessons, module.totalLessons)
+    ? `${de.lernen.lessonsProgress(module.completedLessons, module.totalLessons)} · ${de.lernen.moduleProgressPercent(progressPercent)}`
     : `${de.lernen.inPreparation}, ${de.lernen.plannedLessons(module.subModules.length)}`;
 
   const durationSuffix =

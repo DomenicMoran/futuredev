@@ -71,3 +71,15 @@ export async function buildModuleList(
   }
   return result;
 }
+
+/** Erste veröffentlichte Lektion (erstes Modul mit mindestens einer Lektion). */
+export function getFirstPublishedLessonId(moduleList: readonly ModuleListEntry[]): string | null {
+  for (const mod of moduleList) {
+    if (mod.totalLessons === 0) continue;
+    for (const sub of mod.subModules) {
+      const first = sub.lessons[0];
+      if (first) return first.id;
+    }
+  }
+  return null;
+}

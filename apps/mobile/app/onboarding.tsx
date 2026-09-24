@@ -45,7 +45,8 @@ export default function OnboardingScreen() {
           source={onboardingIllustration}
           style={[styles.heroImage, { marginTop: theme.spacing.lg }]}
           accessibilityIgnoresInvertColors
-          accessibilityLabel=""
+          accessibilityRole="image"
+          accessibilityLabel={de.onboarding.heroLabel}
         />
         {step === 1 ? (
           <OnboardingStep

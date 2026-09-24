@@ -101,6 +101,8 @@ export default function HoerenScreen() {
     );
   }
 
+  const hasAnyDownload = Object.values(downloaded).some(Boolean);
+
   if (modules.length === 0) {
     return (
       <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.bg }]}>
@@ -115,6 +117,37 @@ export default function HoerenScreen() {
         {playbackError ? (
           <View style={[styles.banner, { backgroundColor: theme.colors.surface, borderColor: theme.colors.error }]}>
             <Text style={{ color: theme.colors.error }}>{de.player.loadError}</Text>
+          </View>
+        ) : null}
+
+        {!hasAnyDownload ? (
+          <View
+            style={[
+              styles.offlineHint,
+              {
+                borderColor: theme.colors.border,
+                backgroundColor: theme.colors.surface,
+                borderRadius: theme.radius.md,
+                padding: theme.spacing.base,
+              },
+            ]}
+          >
+            <Text style={[styles.moduleTitle, { color: theme.colors.text }]}>{de.hoeren.offlineEmptyHint}</Text>
+            {continueCard ? (
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel={de.hoeren.offlineEmptyCta}
+                onPress={() => {
+                  void (async () => {
+                    await downloadLesson(continueCard.lessonId);
+                    setDownloaded((d) => ({ ...d, [continueCard.lessonId]: true }));
+                  })();
+                }}
+                style={{ minHeight: theme.minTapTarget, justifyContent: 'center', marginTop: theme.spacing.sm }}
+              >
+                <Text style={{ color: theme.colors.accent, fontWeight: '600' }}>{de.hoeren.offlineEmptyCta}</Text>
+              </Pressable>
+            ) : null}
           </View>
         ) : null}
 
@@ -290,4 +323,5 @@ const styles = StyleSheet.create({
   lessonDuration: { fontSize: 13 },
   storage: { borderWidth: StyleSheet.hairlineWidth },
   banner: { padding: 12, borderRadius: 8, borderWidth: StyleSheet.hairlineWidth },
+  offlineHint: { borderWidth: StyleSheet.hairlineWidth },
 });

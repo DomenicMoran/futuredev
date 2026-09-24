@@ -64,6 +64,19 @@ export default function SettingsScreen() {
     }
   }
 
+  function handleResetOnboarding() {
+    Alert.alert(de.settings.resetOnboardingConfirmTitle, de.settings.resetOnboardingConfirmBody, [
+      { text: de.settings.resetOnboardingConfirmNo, style: 'cancel' },
+      {
+        text: de.settings.resetOnboardingConfirmYes,
+        onPress: () => {
+          useOnboardingStore.getState().reset();
+          router.replace('/onboarding');
+        },
+      },
+    ]);
+  }
+
   function handleDeleteAll() {
     Alert.alert(de.settings.deleteAllConfirmTitle, de.settings.deleteAllConfirmBody, [
       { text: de.settings.deleteAllConfirmNo, style: 'cancel' },
@@ -138,6 +151,11 @@ export default function SettingsScreen() {
       </View>
 
       <View style={{ marginTop: theme.spacing.xl }}>
+        <Text style={[styles.groupTitle, { color: theme.colors.text }]}>{de.settings.resetOnboardingTitle}</Text>
+        <ActionButton theme={theme} label={de.settings.resetOnboardingAction} onPress={handleResetOnboarding} />
+      </View>
+
+      <View style={{ marginTop: theme.spacing.lg }}>
         <Text style={[styles.groupTitle, { color: theme.colors.error }]}>{de.settings.deleteAllTitle}</Text>
         <ActionButton theme={theme} label={de.settings.deleteAllAction} onPress={handleDeleteAll} destructive />
       </View>

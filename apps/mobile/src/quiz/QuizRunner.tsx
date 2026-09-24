@@ -225,9 +225,9 @@ export function QuizRunner({ pool, desiredCount, scope, heading, onExit, onNextL
           </View>
         ) : null}
         <View style={{ marginTop: theme.spacing.xl, gap: theme.spacing.sm }}>
-          <ResultButton label={de.quiz.retryWithNewDraw} onPress={retryWithNewDraw} theme={theme} />
-          <ResultButton label={de.quiz.toLesson} onPress={onExit} theme={theme} />
           {onNextLesson ? <ResultButton label={de.quiz.nextLesson} onPress={onNextLesson} theme={theme} primary /> : null}
+          <ResultButton label={de.quiz.toLesson} onPress={onExit} theme={theme} primary={!onNextLesson} />
+          <ResultButton label={de.quiz.retryWithNewDraw} onPress={retryWithNewDraw} theme={theme} />
         </View>
       </ScrollView>
     );

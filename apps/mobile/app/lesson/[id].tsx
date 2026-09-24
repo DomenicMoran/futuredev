@@ -28,6 +28,9 @@ import { listBookmarks, toggleBookmark } from '../../src/data/bookmarks.js';
 import { getSetting, setSetting } from '../../src/data/settings.js';
 import { playLesson } from '../../src/player/index.js';
 import { useBottomChromeInset } from '../../src/navigation/useBottomChromeInset.js';
+import { useSettingsStore } from '../../src/state/settings.js';
+
+const STICKY_ACTIONS_HEIGHT = 72;
 
 type SectionKey = 'body' | 'terms' | 'example' | 'task' | 'faq';
 interface Section {
@@ -45,7 +48,9 @@ export default function LessonScreen() {
   const { id, block: blockParam } = useLocalSearchParams<{ id: string; block?: string }>();
   const theme = useTheme();
   const bottomInset = useBottomChromeInset();
+  const firstFormPreference = useSettingsStore((s) => s.firstFormPreference);
   const { state: contentState } = useContent();
+  const stickyBottomPadding = bottomInset + STICKY_ACTIONS_HEIGHT + 8;
 
   const [lesson, setLesson] = useState<Lesson | null | undefined>(undefined); // undefined = laedt noch
   const [readUntil, setReadUntil] = useState(0);
@@ -240,7 +245,7 @@ export default function LessonScreen() {
       <SectionList
         ref={listRef}
         sections={sections}
-        contentContainerStyle={{ paddingBottom: bottomInset }}
+        contentContainerStyle={{ paddingBottom: stickyBottomPadding }}
         keyExtractor={(item, index) => `${(item as { text?: string })?.text ?? index}-${index}`}
         stickySectionHeadersEnabled={false}
         onViewableItemsChanged={(info) => void handleViewableChanged(info)}
@@ -254,34 +259,22 @@ export default function LessonScreen() {
             lesson={lesson}
             sections={sections}
             onJump={jumpTo}
-            onListen={handleListen}
             audioError={audioError}
           />
         }
         ListFooterComponent={
-          <View style={{ padding: theme.spacing.base }}>
-            <Pressable
-              onPress={() => router.push(`/quiz/${id}`)}
-              accessibilityRole="button"
-              accessibilityLabel={de.lesson.quizStart}
-              style={[styles.primaryButton, { backgroundColor: theme.colors.accent, minHeight: theme.minTapTarget }]}
-            >
-              <Text style={[styles.primaryButtonLabel, { color: theme.colors.accentText }]}>{de.lesson.quizStart}</Text>
-            </Pressable>
-            {nextLessonId ? (
+          nextLessonId ? (
+            <View style={{ padding: theme.spacing.base }}>
               <Pressable
                 onPress={() => router.replace(`/lesson/${nextLessonId}`)}
                 accessibilityRole="button"
                 accessibilityLabel={de.lesson.nextLesson}
-                style={[
-                  styles.secondaryButton,
-                  { borderColor: theme.colors.border, minHeight: theme.minTapTarget, marginTop: theme.spacing.sm },
-                ]}
+                style={[styles.secondaryButton, { borderColor: theme.colors.border, minHeight: theme.minTapTarget }]}
               >
                 <Text style={[styles.secondaryButtonLabel, { color: theme.colors.text }]}>{de.lesson.nextLesson}</Text>
               </Pressable>
-            ) : null}
-          </View>
+            </View>
+          ) : null
         }
         renderSectionHeader={({ section }) =>
           section.title ? (
@@ -408,7 +401,91 @@ export default function LessonScreen() {
         term={glossaryTerm}
         onClose={() => setGlossaryTerm(null)}
       />
+
+      {lesson && id ? (
+        <LessonStickyActions
+          listenFirst={firstFormPreference === 'listen'}
+          bottomInset={bottomInset}
+          onListen={handleListen}
+          onQuiz={() => router.push(`/quiz/${id}`)}
+        />
+      ) : null}
     </SafeAreaView>
+  );
+}
+
+function LessonStickyActions({
+  listenFirst,
+  bottomInset,
+  onListen,
+  onQuiz,
+}: {
+  listenFirst: boolean;
+  bottomInset: number;
+  onListen: () => void;
+  onQuiz: () => void;
+}) {
+  const theme = useTheme();
+  const listenButton = (
+    <Pressable
+      key="listen"
+      onPress={onListen}
+      accessibilityRole="button"
+      accessibilityLabel={de.lesson.listenTab}
+      style={({ pressed }) => [
+        styles.stickyButton,
+        {
+          backgroundColor: theme.colors.accent,
+          borderRadius: theme.radius.md,
+          minHeight: theme.minTapTarget,
+          opacity: pressed ? 0.92 : 1,
+          flex: 1,
+        },
+      ]}
+    >
+      <Text style={[styles.primaryButtonLabel, { color: theme.colors.accentText }]}>{de.lesson.listenTab}</Text>
+    </Pressable>
+  );
+  const quizButton = (
+    <Pressable
+      key="quiz"
+      onPress={onQuiz}
+      accessibilityRole="button"
+      accessibilityLabel={de.lesson.quizStart}
+      style={({ pressed }) => [
+        styles.stickyButton,
+        {
+          backgroundColor: theme.colors.surface,
+          borderColor: theme.colors.border,
+          borderWidth: StyleSheet.hairlineWidth,
+          borderRadius: theme.radius.md,
+          minHeight: theme.minTapTarget,
+          opacity: pressed ? 0.96 : 1,
+          flex: 1,
+        },
+      ]}
+    >
+      <Text style={[styles.secondaryButtonLabel, { color: theme.colors.text, fontWeight: '600' }]}>{de.lesson.quizStart}</Text>
+    </Pressable>
+  );
+
+  return (
+    <View
+      style={[
+        styles.stickyBar,
+        {
+          backgroundColor: theme.colors.bg,
+          borderTopColor: theme.colors.border,
+          paddingBottom: bottomInset + theme.spacing.sm,
+          paddingHorizontal: theme.spacing.base,
+          paddingTop: theme.spacing.sm,
+        },
+      ]}
+    >
+      <View style={{ flexDirection: 'row', gap: theme.spacing.sm }}>
+        {listenFirst ? [listenButton, quizButton] : [quizButton, listenButton]}
+      </View>
+    </View>
   );
 }
 
@@ -421,13 +498,11 @@ function LessonHeader({
   lesson,
   sections,
   onJump,
-  onListen,
   audioError,
 }: {
   lesson: Lesson;
   sections: Section[];
   onJump: (key: SectionKey) => void;
-  onListen: () => void;
   audioError: boolean;
 }) {
   const theme = useTheme();
@@ -455,27 +530,10 @@ function LessonHeader({
 
       <View style={[styles.toggleRow, { marginTop: theme.spacing.base }]}>
         <View
-          style={[styles.toggleButton, styles.toggleButtonActive, { borderColor: theme.colors.accent, minHeight: theme.minTapTarget }]}
+          style={[styles.toggleButton, styles.toggleButtonActive, { borderColor: theme.colors.accent, minHeight: theme.minTapTarget, flex: 1 }]}
         >
           <Text style={{ color: theme.colors.accent, fontWeight: '600' }}>{de.lesson.readTab}</Text>
         </View>
-        <Pressable
-          onPress={onListen}
-          accessibilityRole="button"
-          accessibilityLabel={de.lesson.listenTab}
-          style={({ pressed }) => [
-            styles.toggleButton,
-            styles.listenButton,
-            {
-              backgroundColor: theme.colors.accent,
-              borderColor: theme.colors.accent,
-              minHeight: theme.minTapTarget,
-              opacity: pressed ? 0.92 : 1,
-            },
-          ]}
-        >
-          <Text style={{ color: theme.colors.accentText, fontWeight: '600' }}>{de.lesson.listenTab}</Text>
-        </Pressable>
       </View>
 
       {audioError ? (
@@ -685,4 +743,12 @@ const styles = StyleSheet.create({
   faqQuestion: { fontSize: 15, lineHeight: 21, fontWeight: '600' },
   modalBackdrop: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center', padding: 24 },
   modalCard: { borderRadius: 16, padding: 20 },
+  stickyBar: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    borderTopWidth: StyleSheet.hairlineWidth,
+  },
+  stickyButton: { alignItems: 'center', justifyContent: 'center', paddingHorizontal: 12 },
 });

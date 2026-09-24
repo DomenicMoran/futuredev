@@ -11,6 +11,7 @@ import { dailyRationSize, selectDailyRation } from '../../src/review/dailyRation
 import { pickReviewLesson } from '../../src/review/reviewRound.js';
 import { knownLessonIds } from '../../src/quiz/content.js';
 import { useBottomChromeInset } from '../../src/navigation/useBottomChromeInset.js';
+import modulesFile from '../../../../content/modules.json';
 
 // Reiter Üben (AP-3.5, Punkt 2): Tagesration aus @futuredev/core (leitner.ts),
 // Modul-/Gesamtprüfung, Wiederholungsclips (öffnet vorerst den Hören-Reiter,
@@ -24,6 +25,7 @@ export default function UebenScreen() {
   const [reviewLessonId, setReviewLessonId] = useState<string | null>(null);
   const [availableModuleIds, setAvailableModuleIds] = useState<string[]>([]);
   const bottomInset = useBottomChromeInset();
+  const moduleTitleById = new Map(modulesFile.modules.map((m) => [m.id, m.title]));
 
   const refresh = useCallback(() => {
     let cancelled = false;
@@ -115,7 +117,7 @@ export default function UebenScreen() {
         {availableModuleIds.map((moduleId) => (
           <Tile
             key={moduleId}
-            label={`${de.ueben.moduleExamTile} ${moduleId}`}
+            label={`${de.ueben.moduleExamTile}: ${moduleTitleById.get(moduleId) ?? de.module.unknownTitle}`}
             onPress={() => router.push(`/quiz/exam?scope=module:${moduleId}`)}
             theme={theme}
           />

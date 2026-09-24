@@ -16,6 +16,8 @@ export interface ContinueCard {
   lessonTitle: string;
   state: string;
   positionLabel: string | null;
+  readUntil: number | null;
+  listenedUntil: number | null;
 }
 
 export interface WeekDay {
@@ -72,6 +74,8 @@ export async function loadStartData(dailyGoalMinutes: number, reviewIntensity: R
       lessonTitle: lessonTitle(last.lessonId),
       state: last.state,
       positionLabel,
+      readUntil: last.readUntil,
+      listenedUntil: last.listenedUntil,
     };
   }
 

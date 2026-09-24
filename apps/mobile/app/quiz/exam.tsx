@@ -10,6 +10,7 @@ import { de } from '../../src/i18n/de.js';
 import { loadAllQuiz, loadModuleQuiz } from '../../src/quiz/content.js';
 import { questionCountForScope, type QuizScope } from '../../src/quiz/roundLogic.js';
 import { QuizRunner } from '../../src/quiz/QuizRunner.js';
+import modulesFile from '../../../../content/modules.json';
 
 // Route app/quiz/exam.tsx?scope=module:M01|all (AP-3.5, Punkt 1): Modul- und
 // Gesamtprüfung, gleiche Oberfläche wie das Lektionsquiz, größere Fragenzahl.
@@ -46,7 +47,11 @@ export default function ExamScreen() {
     };
   }, [scopeParam]);
 
-  const heading = scope.type === 'module' ? de.quiz.moduleExamTitle(scope.moduleId) : de.quiz.allExamTitle;
+  const moduleTitle =
+    scope.type === 'module'
+      ? (modulesFile.modules.find((m) => m.id === scope.moduleId)?.title ?? de.module.unknownTitle)
+      : null;
+  const heading = scope.type === 'module' && moduleTitle ? de.quiz.moduleExamTitle(moduleTitle) : de.quiz.allExamTitle;
 
   if (error) {
     return (
