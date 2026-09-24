@@ -4,13 +4,14 @@
  *
  * Mark: four ascending bars (learning / career progress) on accent.
  * Token colors from @futuredev/design-tokens. Regenerates icon.png,
- * adaptive-icon.png (transparent-safe mark on accent), splash.png.
+ * adaptive-icon.png, splash.png, and Android mipmap WEBPs.
  */
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
 import { colors } from '@futuredev/design-tokens';
+import { syncAndroidMipmaps, verifyForegroundBars } from './sync-android-icons.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const assetsDir = join(__dirname, '..', 'assets');
@@ -31,7 +32,6 @@ function markSvg(size, { background, foreground, transparentBg = false }) {
   const rx = barH * 0.28;
   const stackH = 4 * barH + 3 * gap;
   const top0 = (size - stackH) / 2;
-  // Relative lengths (shortest → longest): progress upward
   const fracs = [0.42, 0.58, 0.74, 0.9];
   const maxW = size - pad * 2;
 
@@ -60,17 +60,11 @@ async function renderPng(svg, size, outPath) {
 }
 
 async function main() {
-  // Full-bleed icon (iOS / generic Expo icon)
-  await renderPng(markSvg(1024, { background: accent, foreground: onAccent }), 1024, join(assetsDir, 'icon.png'));
+  const fullMarkSvg = markSvg(1024, { background: accent, foreground: onAccent });
 
-  // Adaptive foreground: same mark on accent (Expo composites with backgroundColor)
-  await renderPng(
-    markSvg(1024, { background: accent, foreground: onAccent }),
-    1024,
-    join(assetsDir, 'adaptive-icon.png'),
-  );
+  await renderPng(fullMarkSvg, 1024, join(assetsDir, 'icon.png'));
+  await renderPng(fullMarkSvg, 1024, join(assetsDir, 'adaptive-icon.png'));
 
-  // Splash: calm page bg + centered rounded motif card
   const splashSize = 1284;
   const motifSize = 440;
   const motifSvg = markSvg(motifSize, { background: accent, foreground: onAccent });
@@ -79,7 +73,6 @@ async function main() {
     .png()
     .toBuffer();
 
-  // Soft round-rect mask for motif (iOS-like tile on splash)
   const radius = Math.round(motifSize * 0.22);
   const rounded = Buffer.from(
     `<svg width="${motifSize}" height="${motifSize}"><rect width="${motifSize}" height="${motifSize}" rx="${radius}" fill="#fff"/></svg>`,
@@ -111,10 +104,24 @@ async function main() {
       `(learning / career progress) in design-token accent \`#2A5FD9\` — not a stock`,
       'image and not a bubbly single-letter F.',
       '',
+      'Also syncs Android `res/mipmap-*/ic_launcher*.webp` (required for the launcher;',
+      'Expo `assets/` alone do not update a committed `android/` tree).',
+      '',
       'Regenerate: `pnpm --filter @futuredev/mobile make-icons`',
+      '',
+      'Android mipmaps only: `pnpm --filter @futuredev/mobile sync-android-icons`',
       '',
     ].join('\n'),
   );
+
+  await syncAndroidMipmaps();
+  const { runs, sampleWidths } = await verifyForegroundBars();
+  console.log(
+    `verify xxxhdpi foreground: center-column white runs=${runs}, bar widths=${sampleWidths.join(', ')}`,
+  );
+  if (runs !== 4) {
+    throw new Error(`Expected 4 ascending bar bands on center column, got ${runs}`);
+  }
 }
 
 main().catch((err) => {
