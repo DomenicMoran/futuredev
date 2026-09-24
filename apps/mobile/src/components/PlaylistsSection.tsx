@@ -119,8 +119,9 @@ export function PlaylistsSection({
       setNameDraft('');
       await reload();
       showFeedback(de.hoeren.playlistSaved);
-    } catch {
-      setNameError(de.hoeren.playlistSaveError);
+    } catch (err) {
+      const devDetail = __DEV__ && err instanceof Error ? ` (${err.message})` : '';
+      setNameError(`${de.hoeren.playlistSaveError}${devDetail}`);
     }
   }, [nameDraft, nameModal, reload, pendingLessonAfterCreate, loadItems, showFeedback]);
 

@@ -15,7 +15,7 @@ export async function toggleBookmark(lessonId: string, blockPosition: number): P
     return false;
   }
   await db.upsertBookmark({
-    id: `${lessonId}-${blockPosition}-${Date.now()}`,
+    id: `${lessonId}-block-${blockPosition}`,
     lessonId,
     position: blockPosition,
     createdAt: new Date().toISOString(),

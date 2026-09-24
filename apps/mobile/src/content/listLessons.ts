@@ -72,6 +72,19 @@ export async function buildModuleList(
   return result;
 }
 
+/** Veröffentlichte Lektionen in Modul-/Untermodul-Reihenfolge (ContentProvider). */
+export function collectOrderedPublishedLessonIds(moduleList: readonly ModuleListEntry[]): string[] {
+  const ids: string[] = [];
+  for (const mod of moduleList) {
+    for (const sub of mod.subModules) {
+      for (const lesson of sub.lessons) {
+        if (lesson.available) ids.push(lesson.id);
+      }
+    }
+  }
+  return ids;
+}
+
 /** Erste veröffentlichte Lektion (erstes Modul mit mindestens einer Lektion). */
 export function getFirstPublishedLessonId(moduleList: readonly ModuleListEntry[]): string | null {
   for (const mod of moduleList) {

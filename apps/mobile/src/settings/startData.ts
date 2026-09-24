@@ -37,7 +37,24 @@ export interface StartData {
   week: WeekDay[];
 }
 
-export async function loadStartData(dailyGoalMinutes: number, reviewIntensity: ReviewIntensity): Promise<StartData> {
+export interface LoadStartDataOptions {
+  /** Curriculum-Reihenfolge aus ContentProvider; Manifest-Sortierung sonst. */
+  orderedLessonIds?: readonly string[];
+}
+
+/** Nächste offene Lektion in Curriculum-Reihenfolge (kein alphabetisches Sort). */
+export function resolveNextLessonId(
+  orderedLessonIds: readonly string[],
+  completedLessonIds: ReadonlySet<string>,
+): string | null {
+  return orderedLessonIds.find((id) => !completedLessonIds.has(id)) ?? orderedLessonIds[0] ?? null;
+}
+
+export async function loadStartData(
+  dailyGoalMinutes: number,
+  reviewIntensity: ReviewIntensity,
+  options?: LoadStartDataOptions,
+): Promise<StartData> {
   const db = await getDatabase();
   const [progressRows, examRows, reviewCards, fs, dailyLearningSecondsToday] = await Promise.all([
     listProgress(),
@@ -85,8 +102,11 @@ export async function loadStartData(dailyGoalMinutes: number, reviewIntensity: R
   }
 
   const completedLessonIds = new Set(progressRows.filter((r) => r.state === 'completed').map((r) => r.lessonId));
-  const orderedLessonIds = (manifest?.lessons ?? []).map((l) => l.id).sort();
-  const nextLessonId = orderedLessonIds.find((id) => !completedLessonIds.has(id)) ?? null;
+  const orderedLessonIds =
+    options?.orderedLessonIds && options.orderedLessonIds.length > 0
+      ? [...options.orderedLessonIds]
+      : (manifest?.lessons ?? []).map((l) => l.id);
+  const nextLessonId = resolveNextLessonId(orderedLessonIds, completedLessonIds);
   const nextLessonTitle = nextLessonId ? lessonTitle(nextLessonId) : null;
 
   const size = dailyRationSize(dailyGoalMinutes, reviewIntensity);

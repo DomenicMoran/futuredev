@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { useTheme } from '../theme/useTheme.js';
 import { formatPlaybackTime } from './formatTime.js';
+import { MINI_PLAYER_SCRUBBER_HIT_HEIGHT } from './miniPlayerLayout.js';
 import { positionFromRatio, ratioFromPosition, ratioFromTouchX } from './scrubberMath.js';
 
 export interface ChapterMark {
@@ -28,7 +29,7 @@ export interface PlaybackScrubberProps {
 const FULL_TRACK_HEIGHT = 4;
 const FULL_HIT_HEIGHT = 44;
 const MINI_TRACK_HEIGHT = 3;
-const MINI_HIT_HEIGHT = 44;
+const MINI_HIT_HEIGHT = MINI_PLAYER_SCRUBBER_HIT_HEIGHT;
 const THUMB_SIZE_FULL = 14;
 
 export function PlaybackScrubber({

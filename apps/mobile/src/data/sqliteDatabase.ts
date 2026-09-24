@@ -100,6 +100,22 @@ function fromBool(value: boolean): number {
   return value ? 1 : 0;
 }
 
+function isMissingPlaylistsTable(err: unknown): boolean {
+  const msg = err instanceof Error ? err.message : String(err);
+  return /no such table:\s*playlists/i.test(msg);
+}
+
+async function repairPlaylistTables(db: SQLite.SQLiteDatabase): Promise<void> {
+  const statements = MIGRATIONS[2];
+  if (!statements) return;
+  await db.execAsync(statements);
+  await db.runAsync(
+    'insert into settings (key, value) values (?, ?) on conflict(key) do update set value = excluded.value',
+    'schema_version',
+    String(Math.max(2, SCHEMA_VERSION)),
+  );
+}
+
 /**
  * SQLite-Implementierung ueber `expo-sqlite` (async API, siehe
  * Technikvorgabe 3). Erfuellt dieselbe {@link Database}-Schnittstelle wie
@@ -113,6 +129,16 @@ export function createSqliteDatabase(): Database {
       dbPromise = SQLite.openDatabaseAsync(DATABASE_NAME);
     }
     return dbPromise;
+  }
+
+  async function withPlaylistTable<T>(run: () => Promise<T>): Promise<T> {
+    try {
+      return await run();
+    } catch (err) {
+      if (!isMissingPlaylistsTable(err)) throw err;
+      await repairPlaylistTables(await getDb());
+      return run();
+    }
   }
 
   async function runMigrations(): Promise<void> {
@@ -140,6 +166,7 @@ export function createSqliteDatabase(): Database {
   return {
     async init() {
       await runMigrations();
+      await repairPlaylistTables(await getDb());
     },
 
     async getSchemaVersion() {
@@ -384,31 +411,35 @@ export function createSqliteDatabase(): Database {
     },
 
     async listPlaylists() {
-      const db = await getDb();
-      const rows = await db.getAllAsync<{ id: string; name: string; created_at: string; updated_at: string }>(
-        'select * from playlists order by updated_at desc',
-      );
-      return rows.map(
-        (row): PlaylistRow => ({
-          id: row.id,
-          name: row.name,
-          createdAt: row.created_at,
-          updatedAt: row.updated_at,
-        }),
-      );
+      return withPlaylistTable(async () => {
+        const db = await getDb();
+        const rows = await db.getAllAsync<{ id: string; name: string; created_at: string; updated_at: string }>(
+          'select * from playlists order by updated_at desc',
+        );
+        return rows.map(
+          (row): PlaylistRow => ({
+            id: row.id,
+            name: row.name,
+            createdAt: row.created_at,
+            updatedAt: row.updated_at,
+          }),
+        );
+      });
     },
     async createPlaylist(name) {
-      const db = await getDb();
-      const now = new Date().toISOString();
-      const id = `pl_${now.replace(/[:.]/g, '')}_${Math.random().toString(36).slice(2, 8)}`;
-      await db.runAsync(
-        'insert into playlists (id, name, created_at, updated_at) values (?, ?, ?, ?)',
-        id,
-        name,
-        now,
-        now,
-      );
-      return { id, name, createdAt: now, updatedAt: now };
+      return withPlaylistTable(async () => {
+        const db = await getDb();
+        const now = new Date().toISOString();
+        const id = `pl_${now.replace(/[:.]/g, '')}_${Math.random().toString(36).slice(2, 8)}`;
+        await db.runAsync(
+          'insert into playlists (id, name, created_at, updated_at) values (?, ?, ?, ?)',
+          id,
+          name,
+          now,
+          now,
+        );
+        return { id, name, createdAt: now, updatedAt: now };
+      });
     },
     async renamePlaylist(id, name) {
       const db = await getDb();
@@ -421,40 +452,44 @@ export function createSqliteDatabase(): Database {
       await db.runAsync('delete from playlists where id = ?', id);
     },
     async listPlaylistItems(playlistId) {
-      const db = await getDb();
-      const rows = await db.getAllAsync<{ playlist_id: string; lesson_id: string; position: number }>(
-        'select * from playlist_items where playlist_id = ? order by position asc',
-        playlistId,
-      );
-      return rows.map(
-        (row): PlaylistItemRow => ({
-          playlistId: row.playlist_id,
-          lessonId: row.lesson_id,
-          position: row.position,
-        }),
-      );
+      return withPlaylistTable(async () => {
+        const db = await getDb();
+        const rows = await db.getAllAsync<{ playlist_id: string; lesson_id: string; position: number }>(
+          'select * from playlist_items where playlist_id = ? order by position asc',
+          playlistId,
+        );
+        return rows.map(
+          (row): PlaylistItemRow => ({
+            playlistId: row.playlist_id,
+            lessonId: row.lesson_id,
+            position: row.position,
+          }),
+        );
+      });
     },
     async addPlaylistItem(playlistId, lessonId) {
-      const db = await getDb();
-      const existing = await db.getFirstAsync<{ position: number }>(
-        'select position from playlist_items where playlist_id = ? and lesson_id = ?',
-        playlistId,
-        lessonId,
-      );
-      if (existing) return;
-      const maxRow = await db.getFirstAsync<{ max_pos: number | null }>(
-        'select max(position) as max_pos from playlist_items where playlist_id = ?',
-        playlistId,
-      );
-      const position = (maxRow?.max_pos ?? -1) + 1;
-      await db.runAsync(
-        'insert into playlist_items (playlist_id, lesson_id, position) values (?, ?, ?)',
-        playlistId,
-        lessonId,
-        position,
-      );
-      const now = new Date().toISOString();
-      await db.runAsync('update playlists set updated_at = ? where id = ?', now, playlistId);
+      return withPlaylistTable(async () => {
+        const db = await getDb();
+        const existing = await db.getFirstAsync<{ position: number }>(
+          'select position from playlist_items where playlist_id = ? and lesson_id = ?',
+          playlistId,
+          lessonId,
+        );
+        if (existing) return;
+        const maxRow = await db.getFirstAsync<{ max_pos: number | null }>(
+          'select max(position) as max_pos from playlist_items where playlist_id = ?',
+          playlistId,
+        );
+        const position = (maxRow?.max_pos ?? -1) + 1;
+        await db.runAsync(
+          'insert into playlist_items (playlist_id, lesson_id, position) values (?, ?, ?)',
+          playlistId,
+          lessonId,
+          position,
+        );
+        const now = new Date().toISOString();
+        await db.runAsync('update playlists set updated_at = ? where id = ?', now, playlistId);
+      });
     },
     async removePlaylistItem(playlistId, lessonId) {
       const db = await getDb();

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
+  Alert,
   AppState,
   Linking,
   Modal,
@@ -30,12 +31,11 @@ import { listBookmarks, toggleBookmark } from '../../src/data/bookmarks.js';
 import { getSetting, setSetting } from '../../src/data/settings.js';
 import { isSameLessonInQueue, playLessonInModuleContext, togglePlayback } from '../../src/player/index.js';
 import { useBottomChromeLayout } from '../../src/navigation/useBottomChromeInset.js';
+import { lessonContentBottomPadding } from '../../src/navigation/lessonStickyChrome.js';
 import { usePlayerStore } from '../../src/player/store.js';
 import { currentItem } from '../../src/player/queue.js';
 import { accumulateReadFocusTick, READ_FOCUS_TICK_SECONDS } from '../../src/settings/dailyLearning.js';
 import { useSettingsStore } from '../../src/state/settings.js';
-
-const STICKY_ACTIONS_HEIGHT = 72;
 
 type SectionKey = 'body' | 'terms' | 'example' | 'task' | 'faq';
 interface Section {
@@ -52,11 +52,12 @@ interface Section {
 export default function LessonScreen() {
   const { id, block: blockParam } = useLocalSearchParams<{ id: string; block?: string }>();
   const theme = useTheme();
-  const { stickyBottomOffset } = useBottomChromeLayout();
+  const chromeLayout = useBottomChromeLayout();
+  const { stickyBottomOffset } = chromeLayout;
   const firstFormPreference = useSettingsStore((s) => s.firstFormPreference);
   const setDailyLearningSecondsToday = useSettingsStore((s) => s.setDailyLearningSecondsToday);
   const { state: contentState } = useContent();
-  const stickyBottomPadding = stickyBottomOffset + STICKY_ACTIONS_HEIGHT + theme.spacing.sm;
+  const stickyBottomPadding = lessonContentBottomPadding(theme, chromeLayout);
 
   const [lesson, setLesson] = useState<Lesson | null | undefined>(undefined); // undefined = laedt noch
   const [readUntil, setReadUntil] = useState(0);
@@ -228,13 +229,31 @@ export default function LessonScreen() {
   }
 
   async function handleBookmark(position: number) {
-    const nowBookmarked = await toggleBookmark(id, position);
+    const wasBookmarked = bookmarkedPositions.has(position);
     setBookmarkedPositions((prev) => {
       const next = new Set(prev);
-      if (nowBookmarked) next.add(position);
-      else next.delete(position);
+      if (wasBookmarked) next.delete(position);
+      else next.add(position);
       return next;
     });
+    try {
+      const nowBookmarked = await toggleBookmark(id, position);
+      setBookmarkedPositions((prev) => {
+        const next = new Set(prev);
+        if (nowBookmarked) next.add(position);
+        else next.delete(position);
+        return next;
+      });
+    } catch (err) {
+      setBookmarkedPositions((prev) => {
+        const next = new Set(prev);
+        if (wasBookmarked) next.add(position);
+        else next.delete(position);
+        return next;
+      });
+      const devDetail = __DEV__ && err instanceof Error ? `\n${err.message}` : '';
+      Alert.alert(de.lesson.bookmarkLabel, `${de.lesson.bookmarkError}${devDetail}`);
+    }
   }
 
   async function handleSaveNote(position: number) {
@@ -548,11 +567,17 @@ function LessonStickyActions({
         {
           backgroundColor: theme.colors.bg,
           borderTopColor: theme.colors.border,
+          borderTopWidth: StyleSheet.hairlineWidth,
           bottom: stickyBottomOffset,
           paddingBottom: theme.spacing.sm,
           paddingHorizontal: theme.spacing.base,
           paddingTop: theme.spacing.sm,
           zIndex: 15,
+          elevation: 8,
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: -2 },
+          shadowOpacity: 0.08,
+          shadowRadius: 4,
         },
       ]}
     >
@@ -703,13 +728,13 @@ function SpeechBlockRow({
     >
       <View style={styles.blockHeaderRow}>
         <Text style={[styles.speakerLabel, { color: theme.colors.textWeak }]}>{speakerLabel}</Text>
-        <View style={styles.blockActions}>
+        <View style={styles.blockActions} pointerEvents="box-none">
           <Pressable
             onPress={onToggleBookmark}
             accessibilityRole="button"
             accessibilityLabel={isBookmarked ? de.lesson.bookmarkRemove : de.lesson.bookmarkSet}
-            hitSlop={8}
-            style={styles.iconButton}
+            hitSlop={12}
+            style={[styles.iconButton, { zIndex: 2 }]}
           >
             {isBookmarked ? (
               <BookmarkCheck size={18} color={theme.colors.accent} />

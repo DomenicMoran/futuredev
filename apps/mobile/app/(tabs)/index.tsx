@@ -1,4 +1,4 @@
-import { useCallback, useState, type ReactNode } from 'react';
+import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
 
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
@@ -14,14 +14,23 @@ import { de } from '../../src/i18n/de.js';
 
 import { useSettingsStore } from '../../src/state/settings.js';
 
-import { loadStartData, type StartData } from '../../src/settings/startData.js';
+import { loadStartData, type ContinueCard, type StartData } from '../../src/settings/startData.js';
 
 import { useBottomChromeInset } from '../../src/navigation/useBottomChromeInset.js';
 
 import { useContent } from '../../src/content/ContentProvider.js';
 
+import {
+  collectOrderedPublishedLessonIds,
+  getFirstPublishedLessonId,
+  type ModuleListEntry,
+} from '../../src/content/listLessons.js';
+
 import { openFirstPublishedLessonOrLernen } from '../../src/navigation/openFirstLesson.js';
 import { TabScreenTitle } from '../../src/components/TabScreenTitle.js';
+import { usePlayerStore } from '../../src/player/store.js';
+import { currentItem } from '../../src/player/queue.js';
+import { formatPlaybackTime } from '../../src/player/formatTime.js';
 
 import {
 
@@ -49,34 +58,69 @@ export default function StartScreen() {
   const reviewIntensity = useSettingsStore((s) => s.reviewIntensity);
 
   const [data, setData] = useState<StartData | null>(null);
+  const [loadError, setLoadError] = useState(false);
 
   const bottomInset = useBottomChromeInset();
+  const queue = usePlayerStore((s) => s.queue);
+  const positionSeconds = usePlayerStore((s) => s.positionSeconds);
 
-
+  const orderedLessonIds = useMemo(() => collectOrderedPublishedLessonIds(moduleList), [moduleList]);
+  const hasBundledModules = moduleList.length > 0;
+  const hasPublishedLessons = orderedLessonIds.length > 0;
 
   const refresh = useCallback(() => {
+    loadStartData(dailyGoalMinutes, reviewIntensity, { orderedLessonIds })
+      .then((next) => {
+        setData(next);
+        setLoadError(false);
+      })
+      .catch(() => {
+        setLoadError(true);
+        setData((prev) => prev ?? buildFallbackStartData(moduleList, orderedLessonIds));
+      });
+  }, [dailyGoalMinutes, reviewIntensity, moduleList, orderedLessonIds]);
 
-    loadStartData(dailyGoalMinutes, reviewIntensity)
+  useFocusEffect(
+    useCallback(() => {
+      refresh();
+    }, [refresh]),
+  );
 
-      .then(setData)
+  useEffect(() => {
+    if (hasPublishedLessons) refresh();
+  }, [hasPublishedLessons, refresh]);
 
-      .catch(() => setData(null));
+  const playerContinueCard = useMemo((): ContinueCard | null => {
+    const item = currentItem(queue);
+    if (!item) return null;
+    return {
+      lessonId: item.lessonId,
+      lessonTitle: lessonTitleFromModules(moduleList, item.lessonId) ?? item.title,
+      state: 'listened',
+      positionLabel: formatPlaybackTime(positionSeconds),
+      readUntil: null,
+      listenedUntil: Math.round(positionSeconds),
+    };
+  }, [queue, moduleList, positionSeconds]);
 
-  }, [dailyGoalMinutes, reviewIntensity]);
+  const continueCard = data?.continueCard ?? playerContinueCard;
+  const nextLessonId =
+    data?.nextLessonId ?? getFirstPublishedLessonId(moduleList) ?? orderedLessonIds[0] ?? null;
+  const nextLessonTitle =
+    data?.nextLessonTitle ??
+    (nextLessonId ? lessonTitleFromModules(moduleList, nextLessonId) : null);
 
-
-
-  useFocusEffect(refresh);
-
-
+  const displayData = useMemo((): StartData | null => {
+    if (data) return data;
+    if (!hasPublishedLessons) return null;
+    return buildFallbackStartData(moduleList, orderedLessonIds);
+  }, [data, hasPublishedLessons, moduleList, orderedLessonIds]);
 
   const greeting = greetingForHour(new Date().getHours());
 
-  const hasAnything = data && (data.continueCard || data.nextLessonId);
+  const showEmptyState = !hasBundledModules && !continueCard && !nextLessonId;
 
-
-
-  if (!hasAnything) {
+  if (showEmptyState) {
 
     return (
 
@@ -112,7 +156,6 @@ export default function StartScreen() {
 
 
 
-  const continueCard = data?.continueCard ?? null;
   const continueMode = continueCard ? resolveContinueMode(continueCard.state, firstFormPreference) : null;
 
   const openContinue = () => {
@@ -137,6 +180,12 @@ export default function StartScreen() {
     >
 
       <TabScreenTitle title={de.start.title} />
+
+      {loadError ? (
+        <Text style={[styles.body, { color: theme.colors.textWeak, marginTop: theme.spacing.sm }]}>
+          {de.start.loadErrorHint}
+        </Text>
+      ) : null}
 
       <Text
 
@@ -220,13 +269,13 @@ export default function StartScreen() {
 
 
 
-      {data ? (
+      {displayData ? (
 
         <Card theme={theme} title={de.start.dailyGoalTitle}>
 
           {(() => {
             const seconds =
-              data.dailyLearningSecondsToday ?? dailyLearningSecondsToday ?? null;
+              displayData.dailyLearningSecondsToday ?? dailyLearningSecondsToday ?? null;
             if (seconds !== null) {
               const learnedMinutes = Math.floor(seconds / 60);
               const fillRatio = dailyGoalMinutes > 0 ? Math.min(1, learnedMinutes / dailyGoalMinutes) : 0;
@@ -270,9 +319,9 @@ export default function StartScreen() {
 
           <Text style={[styles.body, { color: theme.colors.textWeak, marginTop: theme.spacing.xs }]}>
 
-            {data.dueReviewCount > 0
+            {displayData.dueReviewCount > 0
 
-              ? de.start.dailyGoalDueReviews(data.dueReviewCount)
+              ? de.start.dailyGoalDueReviews(displayData.dueReviewCount)
 
               : de.start.dailyRationTileEmpty}
 
@@ -284,13 +333,13 @@ export default function StartScreen() {
 
 
 
-      {data?.nextLessonId ? (
+      {nextLessonId ? (
 
         <Card theme={theme} title={de.start.nextRecommendationTitle}>
 
           <Text style={[styles.cardHeadline, { color: theme.colors.text }]} numberOfLines={2}>
 
-            {data.nextLessonTitle ?? de.start.nextRecommendationFallback}
+            {nextLessonTitle ?? de.start.nextRecommendationFallback}
 
           </Text>
 
@@ -300,7 +349,7 @@ export default function StartScreen() {
 
             label={de.start.nextRecommendationAction}
 
-            onPress={() => router.push(`/lesson/${data.nextLessonId}`)}
+            onPress={() => router.push(`/lesson/${nextLessonId}`)}
 
           />
 
@@ -321,7 +370,9 @@ export default function StartScreen() {
 
           <Text style={[styles.body, { color: theme.colors.textWeak }]}>
 
-            {data && data.dueReviewCount > 0 ? de.start.dailyRationTileBody(data.dueReviewCount) : de.start.dailyRationTileEmpty}
+            {(displayData?.dueReviewCount ?? 0) > 0
+              ? de.start.dailyRationTileBody(displayData?.dueReviewCount ?? 0)
+              : de.start.dailyRationTileEmpty}
 
           </Text>
 
@@ -336,13 +387,13 @@ export default function StartScreen() {
 
 
 
-      {data ? (
+      {displayData ? (
 
         <Card theme={theme} title={de.start.weekOverviewTitle}>
 
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: theme.spacing.xs }}>
 
-            {data.week.map((day) => {
+            {displayData.week.map((day) => {
               const weekdayIndex = (new Date(`${day.date}T12:00:00`).getDay() + 6) % 7;
               const weekdayLabel = de.start.weekdayShort[weekdayIndex];
               return (
@@ -371,6 +422,39 @@ export default function StartScreen() {
 }
 
 
+
+function lessonTitleFromModules(moduleList: readonly ModuleListEntry[], lessonId: string): string | null {
+  for (const mod of moduleList) {
+    for (const sub of mod.subModules) {
+      for (const lesson of sub.lessons) {
+        if (lesson.id === lessonId) return lesson.title;
+      }
+    }
+  }
+  return null;
+}
+
+function buildFallbackStartData(
+  moduleList: readonly ModuleListEntry[],
+  orderedLessonIds: readonly string[],
+): StartData {
+  const nextLessonId = getFirstPublishedLessonId(moduleList) ?? orderedLessonIds[0] ?? null;
+  const week: StartData['week'] = [];
+  const today = new Date();
+  for (let i = 6; i >= 0; i -= 1) {
+    const d = new Date(today);
+    d.setDate(today.getDate() - i);
+    week.push({ date: d.toISOString().slice(0, 10), studied: false });
+  }
+  return {
+    continueCard: null,
+    nextLessonId,
+    nextLessonTitle: nextLessonId ? lessonTitleFromModules(moduleList, nextLessonId) : null,
+    dueReviewCount: 0,
+    dailyLearningSecondsToday: null,
+    week,
+  };
+}
 
 function greetingForHour(hour: number): string {
 

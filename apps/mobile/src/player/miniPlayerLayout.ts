@@ -1,6 +1,9 @@
 import type { Theme } from '../theme/useTheme.js';
 
-/** Muss mit MiniPlayer.tsx progressTrack height übereinstimmen. */
+/** Muss mit PlaybackScrubber variant=mini hitArea minHeight übereinstimmen. */
+export const MINI_PLAYER_SCRUBBER_HIT_HEIGHT = 44;
+
+/** Sichtbare Fortschrittslinie im Mini-Player (innerhalb der Hit-Area). */
 export const MINI_PLAYER_PROGRESS_HEIGHT = 3;
 
 /** Play-Button in MiniPlayer (44×44). */
@@ -42,5 +45,5 @@ export function miniPlayerRowContentHeight(theme: Theme): number {
 export function miniPlayerLayoutHeight(theme: Theme): number {
   const verticalPadding = theme.spacing.sm * 2;
   const rowHeight = Math.max(miniPlayerRowMinHeight(theme), miniPlayerRowContentHeight(theme));
-  return MINI_PLAYER_PROGRESS_HEIGHT + verticalPadding + rowHeight;
+  return MINI_PLAYER_SCRUBBER_HIT_HEIGHT + verticalPadding + rowHeight;
 }
