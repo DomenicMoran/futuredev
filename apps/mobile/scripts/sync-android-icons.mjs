@@ -1,22 +1,20 @@
 #!/usr/bin/env node
 /**
- * Overwrite Android mipmap launcher WEBPs from Expo assets.
- * Expo icon.png does not refresh prebuilt native mipmaps — run after make-icons.
+ * Overwrite Android mipmap launcher assets from vector mark at exact dp sizes.
+ * Legacy launcher: 48dp. Adaptive foreground: 108dp (Android upscales if too small).
  */
-import { mkdirSync } from 'node:fs';
+import { mkdirSync, unlinkSync, existsSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
+import { accent, onAccent, markSvg } from './icon-mark.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const mobileRoot = join(__dirname, '..');
-const assetsDir = join(mobileRoot, 'assets');
 const resRoot = join(mobileRoot, 'android', 'app', 'src', 'main', 'res');
 
-const WEBP_QUALITY = 90;
-
 /** @type {{ folder: string; size: number }[]} */
-const DENSITIES = [
+const LEGACY_DENSITIES = [
   { folder: 'mipmap-mdpi', size: 48 },
   { folder: 'mipmap-hdpi', size: 72 },
   { folder: 'mipmap-xhdpi', size: 96 },
@@ -24,25 +22,68 @@ const DENSITIES = [
   { folder: 'mipmap-xxxhdpi', size: 192 },
 ];
 
-async function writeWebp(sourcePath, outPath, size) {
-  await sharp(sourcePath)
-    .resize(size, size, { fit: 'fill' })
-    .webp({ quality: WEBP_QUALITY })
+/** Adaptive foreground — 108dp × density (mdpi 1× … xxxhdpi 4×). */
+/** @type {{ folder: string; size: number }[]} */
+const FOREGROUND_DENSITIES = [
+  { folder: 'mipmap-mdpi', size: 108 },
+  { folder: 'mipmap-hdpi', size: 162 },
+  { folder: 'mipmap-xhdpi', size: 216 },
+  { folder: 'mipmap-xxhdpi', size: 324 },
+  { folder: 'mipmap-xxxhdpi', size: 432 },
+];
+
+const LAUNCHER_BASENAMES = ['ic_launcher', 'ic_launcher_round', 'ic_launcher_foreground'];
+
+/**
+ * @param {string} svg
+ * @param {string} outPath
+ * @param {number} size
+ */
+async function writePngFromSvg(svg, outPath, size) {
+  await sharp(Buffer.from(svg))
+    .resize(size, size, { fit: 'fill', kernel: sharp.kernel.lanczos3 })
+    .png({ compressionLevel: 9, adaptiveFiltering: false })
     .toFile(outPath);
+}
+
+/** @param {string} dir */
+function removeLegacyWebp(dir) {
+  for (const base of LAUNCHER_BASENAMES) {
+    const webp = join(dir, `${base}.webp`);
+    if (existsSync(webp)) {
+      unlinkSync(webp);
+    }
+  }
 }
 
 /** @returns {Promise<void>} */
 export async function syncAndroidMipmaps() {
-  const iconPath = join(assetsDir, 'icon.png');
-  const adaptivePath = join(assetsDir, 'adaptive-icon.png');
-
-  for (const { folder, size } of DENSITIES) {
+  for (const { folder, size } of LEGACY_DENSITIES) {
     const dir = join(resRoot, folder);
     mkdirSync(dir, { recursive: true });
-    await writeWebp(iconPath, join(dir, 'ic_launcher.webp'), size);
-    await writeWebp(iconPath, join(dir, 'ic_launcher_round.webp'), size);
-    await writeWebp(adaptivePath, join(dir, 'ic_launcher_foreground.webp'), size);
-    console.log(`sync-android-icons: ${folder} (${size}px)`);
+    removeLegacyWebp(dir);
+
+    const fullSvg = markSvg(size, { background: accent, foreground: onAccent });
+    await writePngFromSvg(fullSvg, join(dir, 'ic_launcher.png'), size);
+    await writePngFromSvg(fullSvg, join(dir, 'ic_launcher_round.png'), size);
+    console.log(`sync-android-icons: ${folder} legacy (${size}px)`);
+  }
+
+  for (const { folder, size } of FOREGROUND_DENSITIES) {
+    const dir = join(resRoot, folder);
+    mkdirSync(dir, { recursive: true });
+    const fgWebp = join(dir, 'ic_launcher_foreground.webp');
+    if (existsSync(fgWebp)) {
+      unlinkSync(fgWebp);
+    }
+
+    const fgSvg = markSvg(size, {
+      background: accent,
+      foreground: onAccent,
+      transparentBg: false,
+    });
+    await writePngFromSvg(fgSvg, join(dir, 'ic_launcher_foreground.png'), size);
+    console.log(`sync-android-icons: ${folder} foreground (${size}px)`);
   }
 }
 
@@ -51,7 +92,7 @@ export async function syncAndroidMipmaps() {
  * @returns {Promise<{ runs: number; sampleWidths: number[] }>}
  */
 export async function verifyForegroundBars() {
-  const fgPath = join(resRoot, 'mipmap-xxxhdpi', 'ic_launcher_foreground.webp');
+  const fgPath = join(resRoot, 'mipmap-xxxhdpi', 'ic_launcher_foreground.png');
   const { data, info } = await sharp(fgPath).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
 
   const centerX = Math.floor(info.width / 2);
@@ -94,6 +135,12 @@ export async function verifyForegroundBars() {
 
 async function main() {
   await syncAndroidMipmaps();
+  const meta = await sharp(join(resRoot, 'mipmap-xxxhdpi', 'ic_launcher_foreground.png')).metadata();
+  console.log(`verify xxxhdpi foreground dimensions: ${meta.width}x${meta.height}`);
+  if (meta.width !== 432 || meta.height !== 432) {
+    throw new Error(`Expected 432x432 xxxhdpi foreground, got ${meta.width}x${meta.height}`);
+  }
+
   const { runs, sampleWidths } = await verifyForegroundBars();
   console.log(
     `verify xxxhdpi foreground: center-column white runs=${runs}, bar widths=${sampleWidths.join(', ')}`,

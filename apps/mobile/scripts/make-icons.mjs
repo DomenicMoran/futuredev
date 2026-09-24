@@ -11,48 +11,14 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
 import { colors } from '@futuredev/design-tokens';
+import { accent, onAccent, markSvg } from './icon-mark.mjs';
 import { syncAndroidMipmaps, verifyForegroundBars } from './sync-android-icons.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const assetsDir = join(__dirname, '..', 'assets');
 mkdirSync(assetsDir, { recursive: true });
 
-const accent = colors.light.accent;
-const onAccent = colors.light.accentText;
 const pageBg = colors.light.bg;
-
-/**
- * Ascending ladder mark — reads at 48px, distinct from Facebook-F candy icons.
- * Bars grow left→right length; equal thickness; tight optical stack.
- */
-function markSvg(size, { background, foreground, transparentBg = false }) {
-  const pad = size * 0.22;
-  const gap = size * 0.045;
-  const barH = size * 0.095;
-  const rx = barH * 0.28;
-  const stackH = 4 * barH + 3 * gap;
-  const top0 = (size - stackH) / 2;
-  const fracs = [0.42, 0.58, 0.74, 0.9];
-  const maxW = size - pad * 2;
-
-  const bars = fracs
-    .map((frac, i) => {
-      const w = maxW * frac;
-      const x = (size - w) / 2;
-      const y = top0 + i * (barH + gap);
-      return `<rect x="${x.toFixed(2)}" y="${y.toFixed(2)}" width="${w.toFixed(2)}" height="${barH.toFixed(2)}" rx="${rx.toFixed(2)}" fill="${foreground}" />`;
-    })
-    .join('\n  ');
-
-  const bgRect = transparentBg
-    ? ''
-    : `<rect width="${size}" height="${size}" fill="${background}" />`;
-
-  return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">
-  ${bgRect}
-  ${bars}
-</svg>`;
-}
 
 async function renderPng(svg, size, outPath) {
   await sharp(Buffer.from(svg)).resize(size, size).png().toFile(outPath);
@@ -104,7 +70,7 @@ async function main() {
       `(learning / career progress) in design-token accent \`#2A5FD9\` — not a stock`,
       'image and not a bubbly single-letter F.',
       '',
-      'Also syncs Android `res/mipmap-*/ic_launcher*.webp` (required for the launcher;',
+      'Also syncs Android `res/mipmap-*/ic_launcher*.png` at correct dp (108dp foreground);',
       'Expo `assets/` alone do not update a committed `android/` tree).',
       '',
       'Regenerate: `pnpm --filter @futuredev/mobile make-icons`',
