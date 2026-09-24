@@ -109,7 +109,22 @@ export default function HoerenScreen() {
   if (modules.length === 0) {
     return (
       <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.bg }]}>
-        <EmptyState Icon={Headphones} title={de.hoeren.emptyTitle} body={de.hoeren.emptyBody} />
+        <ScrollView contentContainerStyle={{ padding: theme.spacing.base, paddingBottom: bottomInset, gap: theme.spacing.lg }}>
+          <EmptyState Icon={Headphones} title={de.hoeren.emptyTitle} body={de.hoeren.emptyBody} />
+          <PlaylistsSection
+            lessonTitleFor={(lessonId) => lessonId}
+            onPlaybackError={(empty) => {
+              if (empty) setPlaylistPlaybackError(true);
+            }}
+            requestAddLessonId={requestAddLessonId}
+            onRequestAddHandled={() => setRequestAddLessonId(null)}
+          />
+          {playlistPlaybackError ? (
+            <View style={[styles.banner, { backgroundColor: theme.colors.surface, borderColor: theme.colors.error }]}>
+              <Text style={{ color: theme.colors.error }}>{de.hoeren.playlistEmptyPlayError}</Text>
+            </View>
+          ) : null}
+        </ScrollView>
       </SafeAreaView>
     );
   }
