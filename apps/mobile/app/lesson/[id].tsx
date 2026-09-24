@@ -126,7 +126,7 @@ export default function LessonScreen() {
   if (lesson === undefined) {
     return (
       <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.bg }]}>
-        <EmptyState Icon={BookOpen} title={`${de.lesson.loadingTitle} (${id})`} body={de.lesson.loadingBody} />
+        <EmptyState Icon={BookOpen} title={de.lesson.loadingTitle} body={de.lesson.loadingBody} />
       </SafeAreaView>
     );
   }

@@ -8,6 +8,7 @@ import { loadModules } from '../content/lessonLoader.js';
 import { buildModuleList } from '../content/listLessons.js';
 import { loadReviewCards } from '../review/cards.js';
 import { dailyRationSize, selectDailyRation } from '../review/dailyRation.js';
+import { de } from '../i18n/de.js';
 import type { ReviewIntensity } from './types.js';
 
 export interface ContinueCard {
@@ -51,7 +52,7 @@ export async function loadStartData(dailyGoalMinutes: number, reviewIntensity: R
       }
     }
   }
-  const lessonTitle = (lessonId: string): string => lessonTitleById.get(lessonId) ?? lessonId;
+  const lessonTitle = (lessonId: string): string => lessonTitleById.get(lessonId) ?? de.start.lessonTitleFallback;
 
   const sortedProgress = [...progressRows].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
   const last = sortedProgress[0];

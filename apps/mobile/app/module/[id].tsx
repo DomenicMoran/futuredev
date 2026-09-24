@@ -28,13 +28,10 @@ import { useBottomChromeInset } from '../../src/navigation/useBottomChromeInset'
 
 
 
-type Section = {
-
+interface Section {
   title: string;
-
   data: LessonListEntry[];
-
-};
+}
 
 
 

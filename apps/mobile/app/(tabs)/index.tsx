@@ -58,7 +58,19 @@ export default function StartScreen() {
         paddingBottom: bottomInset,
       }}
     >
-      <Text style={[styles.greeting, { color: theme.colors.text, marginBottom: theme.spacing.sm }]}>{greeting}</Text>
+      <Text
+        style={[
+          styles.greeting,
+          {
+            color: theme.colors.text,
+            marginBottom: theme.spacing.sm,
+            fontSize: theme.type.size['2xl'].size,
+            lineHeight: theme.type.size['2xl'].lineHeight,
+          },
+        ]}
+      >
+        {greeting}
+      </Text>
 
       {data?.continueCard ? (
         <Card theme={theme} title={de.start.continueTitle}>
@@ -86,7 +98,7 @@ export default function StartScreen() {
       {data?.nextLessonId ? (
         <Card theme={theme} title={de.start.nextRecommendationTitle}>
           <Text style={[styles.cardHeadline, { color: theme.colors.text }]} numberOfLines={2}>
-            {data.nextLessonTitle ?? data.nextLessonId}
+            {data.nextLessonTitle ?? de.start.nextRecommendationFallback}
           </Text>
           <PrimaryButton
             theme={theme}
@@ -168,7 +180,7 @@ function PrimaryButton({ theme, label, onPress }: { theme: ReturnType<typeof use
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  greeting: { fontSize: 26, lineHeight: 34, fontWeight: '700' },
+  greeting: { fontWeight: '700' },
   card: { borderWidth: StyleSheet.hairlineWidth },
   cardTitle: { fontSize: 13, lineHeight: 18, fontWeight: '600', textTransform: 'uppercase', letterSpacing: 0.4 },
   cardHeadline: { fontSize: 17, lineHeight: 24, fontWeight: '600', marginTop: 4 },

@@ -10,7 +10,7 @@ import { getContentFs } from '../../src/content/contentFs.js';
 import { loadLocalManifest, loadModules } from '../../src/content/lessonLoader.js';
 import { buildModuleList, type ModuleListEntry } from '../../src/content/listLessons.js';
 import { listProgress } from '../../src/data/index.js';
-import { downloadLesson, isDownloaded, playLesson, deleteDownload, enqueueModule } from '../../src/player/index.js';
+import { downloadLesson, getDownloadedStorageBytes, isDownloaded, playLesson, deleteDownload, enqueueModule } from '../../src/player/index.js';
 import { formatBytes } from '../../src/player/downloads.js';
 import { useBottomChromeInset } from '../../src/navigation/useBottomChromeInset.js';
 
@@ -74,7 +74,7 @@ export default function HoerenScreen() {
           .flatMap((m) => m.subModules)
           .flatMap((sub) => sub.lessons)
           .find((l) => l.id === lastStarted.lessonId);
-        setContinueCard({ lessonId: lastStarted.lessonId, title: lesson?.title ?? lastStarted.lessonId });
+        setContinueCard({ lessonId: lastStarted.lessonId, title: lesson?.title ?? de.hoeren.continueTitleFallback });
       } else {
         setContinueCard(null);
       }
@@ -221,15 +221,39 @@ function StorageSection({
   const downloadedIds = Object.entries(downloaded)
     .filter(([, v]) => v)
     .map(([id]) => id);
+  const [bytesUsed, setBytesUsed] = useState<number | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    if (downloadedIds.length === 0) {
+      setBytesUsed(null);
+      return;
+    }
+    void getDownloadedStorageBytes(downloadedIds).then((bytes) => {
+      if (!cancelled) setBytesUsed(bytes);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [downloadedIds.join('|')]);
 
   if (downloadedIds.length === 0) return null;
 
   return (
-    <View style={[styles.storage, { borderColor: theme.colors.border, borderRadius: theme.radius.md }]}>
+    <View
+      style={[
+        styles.storage,
+        {
+          borderColor: theme.colors.border,
+          borderRadius: theme.radius.md,
+          padding: theme.spacing.base,
+        },
+      ]}
+    >
       <Text style={[styles.moduleTitle, { color: theme.colors.text }]}>{de.hoeren.storageTitle}</Text>
-      <Text style={{ color: theme.colors.textWeak }}>
-        {de.hoeren.storageUsed(formatBytes(downloadedIds.length * 8_900_000))}
-      </Text>
+      {bytesUsed != null ? (
+        <Text style={{ color: theme.colors.textWeak }}>{de.hoeren.storageUsed(formatBytes(bytesUsed))}</Text>
+      ) : null}
       <Pressable
         onPress={() => {
           void (async () => {
@@ -264,6 +288,6 @@ const styles = StyleSheet.create({
   },
   lessonTitle: { flex: 1, fontSize: 15 },
   lessonDuration: { fontSize: 13 },
-  storage: { padding: 16, borderWidth: StyleSheet.hairlineWidth },
+  storage: { borderWidth: StyleSheet.hairlineWidth },
   banner: { padding: 12, borderRadius: 8, borderWidth: StyleSheet.hairlineWidth },
 });
