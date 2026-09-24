@@ -4,6 +4,8 @@ import type {
   Database,
   ExamResultRow,
   NoteRow,
+  PlaylistItemRow,
+  PlaylistRow,
   PortfolioItemRow,
   ProgressRow,
   ReviewRow,
@@ -25,6 +27,8 @@ export function createMemoryDatabase(): Database {
   const portfolioItems = new Map<string, PortfolioItemRow>();
   const careerChecklist = new Map<string, CareerChecklistRow>();
   const examResults = new Map<string, ExamResultRow>();
+  const playlists = new Map<string, PlaylistRow>();
+  const playlistItems = new Map<string, PlaylistItemRow[]>();
 
   return {
     async init() {
@@ -109,6 +113,47 @@ export function createMemoryDatabase(): Database {
     },
     async insertExamResult(row) {
       examResults.set(row.id, row);
+    },
+
+    async listPlaylists() {
+      return [...playlists.values()].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
+    },
+    async createPlaylist(name) {
+      const now = new Date().toISOString();
+      const id = `pl_test_${playlists.size + 1}`;
+      const row: PlaylistRow = { id, name, createdAt: now, updatedAt: now };
+      playlists.set(id, row);
+      playlistItems.set(id, []);
+      return row;
+    },
+    async renamePlaylist(id, name) {
+      const row = playlists.get(id);
+      if (!row) return;
+      const now = new Date().toISOString();
+      playlists.set(id, { ...row, name, updatedAt: now });
+    },
+    async deletePlaylist(id) {
+      playlists.delete(id);
+      playlistItems.delete(id);
+    },
+    async listPlaylistItems(playlistId) {
+      return [...(playlistItems.get(playlistId) ?? [])].sort((a, b) => a.position - b.position);
+    },
+    async addPlaylistItem(playlistId, lessonId) {
+      const items = playlistItems.get(playlistId) ?? [];
+      if (items.some((i) => i.lessonId === lessonId)) return;
+      const position = items.length > 0 ? Math.max(...items.map((i) => i.position)) + 1 : 0;
+      items.push({ playlistId, lessonId, position });
+      playlistItems.set(playlistId, items);
+      const pl = playlists.get(playlistId);
+      if (pl) {
+        const now = new Date().toISOString();
+        playlists.set(playlistId, { ...pl, updatedAt: now });
+      }
+    },
+    async removePlaylistItem(playlistId, lessonId) {
+      const items = (playlistItems.get(playlistId) ?? []).filter((i) => i.lessonId !== lessonId);
+      playlistItems.set(playlistId, items);
     },
   };
 }

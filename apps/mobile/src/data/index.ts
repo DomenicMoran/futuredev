@@ -6,3 +6,4 @@ export * from './notes.js';
 export * from './bookmarks.js';
 export * from './settings.js';
 export * from './exportImport.js';
+export * from './playlists.js';

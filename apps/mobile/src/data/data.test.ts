@@ -6,6 +6,15 @@ import { listNotes, saveNote } from './notes.js';
 import { listBookmarks, toggleBookmark } from './bookmarks.js';
 import { getSetting, getOrCreateInstallId, setSetting } from './settings.js';
 import { exportAllFrom, importAllInto, exportAll, importAll } from './exportImport.js';
+import {
+  addLessonToPlaylist,
+  createPlaylist,
+  deletePlaylist,
+  listPlaylistItems,
+  listPlaylists,
+  removePlaylistItem,
+  renamePlaylist,
+} from './playlists.js';
 import { SCHEMA_VERSION } from './types.js';
 
 describe('Database-Schnittstelle (MemoryDatabase)', () => {
@@ -52,6 +61,24 @@ describe('Database-Schnittstelle (MemoryDatabase)', () => {
     expect(all).toHaveLength(1);
     expect(all[0]?.body).toBe('Zweite Fassung');
     expect(updated.createdAt).toBe(all[0]?.createdAt);
+  });
+
+  it('playlists: anlegen, Lektionen hinzufügen, umbenennen, entfernen, löschen', async () => {
+    expect(await listPlaylists()).toHaveLength(0);
+    const pl = await createPlaylist('Unterwegs');
+    expect(pl.name).toBe('Unterwegs');
+    await addLessonToPlaylist(pl.id, 'M01-01-01');
+    await addLessonToPlaylist(pl.id, 'M01-01-02');
+    await addLessonToPlaylist(pl.id, 'M01-01-01');
+    const items = await listPlaylistItems(pl.id);
+    expect(items).toHaveLength(2);
+    expect(items.map((i) => i.lessonId)).toEqual(['M01-01-01', 'M01-01-02']);
+    await renamePlaylist(pl.id, 'Favoriten');
+    expect((await listPlaylists())[0]?.name).toBe('Favoriten');
+    await removePlaylistItem(pl.id, 'M01-01-01');
+    expect(await listPlaylistItems(pl.id)).toHaveLength(1);
+    await deletePlaylist(pl.id);
+    expect(await listPlaylists()).toHaveLength(0);
   });
 
   it('bookmarks: setzen und wieder entfernen (toggle)', async () => {

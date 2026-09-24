@@ -77,6 +77,20 @@ export const de = {
     deleteAll: 'Alles löschen',
     offlineEmptyHint: 'Lade Lektionen für unterwegs',
     offlineEmptyCta: 'Aktuelle Lektion herunterladen',
+    playlistsTitle: 'Meine Wiedergabelisten',
+    playlistCreate: 'Neue Playlist',
+    playlistCreatePrompt: 'Name der Playlist',
+    playlistRenamePrompt: 'Playlist umbenennen',
+    playlistEmpty: 'Noch keine Playlist. Lege eine an oder füge Lektionen mit dem Plus hinzu.',
+    playlistPlay: 'Playlist abspielen',
+    playlistRename: 'Playlist umbenennen',
+    playlistDelete: 'Playlist löschen',
+    playlistRemoveLesson: 'Aus Playlist entfernen',
+    playlistAddLesson: 'Zur Playlist hinzufügen',
+    playlistPickTitle: 'Playlist wählen',
+    playlistEmptyPlayError: 'Diese Playlist enthält noch keine Lektionen.',
+    playlistLessonCount: (count: number) =>
+      `${count} Lektion${count === 1 ? '' : 'en'}`,
   },
   player: {
     aiVoiceLabel: 'KI-generierte Stimme',
@@ -330,5 +344,7 @@ export const de = {
   common: {
     offlineBanner: 'Offline. Zuletzt aktualisiert am',
     back: 'Zurück',
+    cancel: 'Abbrechen',
+    save: 'Speichern',
   },
 } as const;

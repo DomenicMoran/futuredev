@@ -5,6 +5,8 @@ import type {
   Database,
   ExamResultRow,
   NoteRow,
+  PlaylistItemRow,
+  PlaylistRow,
   PortfolioItemRow,
   ProgressRow,
   ReviewRow,
@@ -72,6 +74,22 @@ const MIGRATIONS: Record<number, string> = {
       passed integer not null default 0,
       taken_at text not null
     );
+  `,
+  2: `
+    create table if not exists playlists (
+      id text primary key not null,
+      name text not null,
+      created_at text not null,
+      updated_at text not null
+    );
+    create table if not exists playlist_items (
+      playlist_id text not null,
+      lesson_id text not null,
+      position integer not null,
+      primary key (playlist_id, lesson_id),
+      foreign key (playlist_id) references playlists(id) on delete cascade
+    );
+    create index if not exists playlist_items_playlist_id_idx on playlist_items (playlist_id);
   `,
 };
 
@@ -363,6 +381,86 @@ export function createSqliteDatabase(): Database {
         fromBool(rowValue.passed),
         rowValue.takenAt,
       );
+    },
+
+    async listPlaylists() {
+      const db = await getDb();
+      const rows = await db.getAllAsync<{ id: string; name: string; created_at: string; updated_at: string }>(
+        'select * from playlists order by updated_at desc',
+      );
+      return rows.map(
+        (row): PlaylistRow => ({
+          id: row.id,
+          name: row.name,
+          createdAt: row.created_at,
+          updatedAt: row.updated_at,
+        }),
+      );
+    },
+    async createPlaylist(name) {
+      const db = await getDb();
+      const now = new Date().toISOString();
+      const id = `pl_${now.replace(/[:.]/g, '')}_${Math.random().toString(36).slice(2, 8)}`;
+      await db.runAsync(
+        'insert into playlists (id, name, created_at, updated_at) values (?, ?, ?, ?)',
+        id,
+        name,
+        now,
+        now,
+      );
+      return { id, name, createdAt: now, updatedAt: now };
+    },
+    async renamePlaylist(id, name) {
+      const db = await getDb();
+      const now = new Date().toISOString();
+      await db.runAsync('update playlists set name = ?, updated_at = ? where id = ?', name, now, id);
+    },
+    async deletePlaylist(id) {
+      const db = await getDb();
+      await db.runAsync('delete from playlist_items where playlist_id = ?', id);
+      await db.runAsync('delete from playlists where id = ?', id);
+    },
+    async listPlaylistItems(playlistId) {
+      const db = await getDb();
+      const rows = await db.getAllAsync<{ playlist_id: string; lesson_id: string; position: number }>(
+        'select * from playlist_items where playlist_id = ? order by position asc',
+        playlistId,
+      );
+      return rows.map(
+        (row): PlaylistItemRow => ({
+          playlistId: row.playlist_id,
+          lessonId: row.lesson_id,
+          position: row.position,
+        }),
+      );
+    },
+    async addPlaylistItem(playlistId, lessonId) {
+      const db = await getDb();
+      const existing = await db.getFirstAsync<{ position: number }>(
+        'select position from playlist_items where playlist_id = ? and lesson_id = ?',
+        playlistId,
+        lessonId,
+      );
+      if (existing) return;
+      const maxRow = await db.getFirstAsync<{ max_pos: number | null }>(
+        'select max(position) as max_pos from playlist_items where playlist_id = ?',
+        playlistId,
+      );
+      const position = (maxRow?.max_pos ?? -1) + 1;
+      await db.runAsync(
+        'insert into playlist_items (playlist_id, lesson_id, position) values (?, ?, ?)',
+        playlistId,
+        lessonId,
+        position,
+      );
+      const now = new Date().toISOString();
+      await db.runAsync('update playlists set updated_at = ? where id = ?', now, playlistId);
+    },
+    async removePlaylistItem(playlistId, lessonId) {
+      const db = await getDb();
+      await db.runAsync('delete from playlist_items where playlist_id = ? and lesson_id = ?', playlistId, lessonId);
+      const now = new Date().toISOString();
+      await db.runAsync('update playlists set updated_at = ? where id = ?', now, playlistId);
     },
   };
 }

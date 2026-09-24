@@ -66,8 +66,21 @@ export interface ExamResultRow {
   takenAt: string;
 }
 
+export interface PlaylistRow {
+  id: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface PlaylistItemRow {
+  playlistId: string;
+  lessonId: string;
+  position: number;
+}
+
 /** Aktuelle Version des Geraete-Schemas. Erhoehen, wenn sich eine Tabelle aendert. */
-export const SCHEMA_VERSION = 1;
+export const SCHEMA_VERSION = 2;
 
 /**
  * Gemeinsame Schnittstelle fuer Geraetedaten. Eine SQLite-Implementierung
@@ -108,4 +121,12 @@ export interface Database {
 
   listExamResults(scope?: string): Promise<ExamResultRow[]>;
   insertExamResult(row: ExamResultRow): Promise<void>;
+
+  listPlaylists(): Promise<PlaylistRow[]>;
+  createPlaylist(name: string): Promise<PlaylistRow>;
+  renamePlaylist(id: string, name: string): Promise<void>;
+  deletePlaylist(id: string): Promise<void>;
+  listPlaylistItems(playlistId: string): Promise<PlaylistItemRow[]>;
+  addPlaylistItem(playlistId: string, lessonId: string): Promise<void>;
+  removePlaylistItem(playlistId: string, lessonId: string): Promise<void>;
 }

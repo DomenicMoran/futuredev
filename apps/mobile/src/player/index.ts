@@ -280,6 +280,22 @@ export async function enqueueModule(moduleId: string): Promise<void> {
   await enqueueLessons(ids);
 }
 
+/** Startet die Wiedergabe einer gespeicherten Playlist in Reihenfolge der Einträge. */
+export async function playPlaylist(playlistId: string): Promise<void> {
+  const { listPlaylistItems } = await import('../data/playlists.js');
+  const items = await listPlaylistItems(playlistId);
+  if (items.length === 0) {
+    throw new Error('playlist_empty');
+  }
+  const queueItems: QueueItem[] = [];
+  for (const item of items) {
+    const lesson = await getLessonForPlayback(item.lessonId);
+    cacheLessonSpeechTexts(lesson);
+    queueItems.push(await lessonToQueueItem(lesson));
+  }
+  await startQueue(queueItems, 0);
+}
+
 /** Hängt konkrete Lektionskennungen an die Warteschlange an. */
 export async function enqueueLessons(lessonIds: readonly string[]): Promise<void> {
   const items: QueueItem[] = [];

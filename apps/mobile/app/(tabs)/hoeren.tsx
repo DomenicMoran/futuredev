@@ -11,6 +11,7 @@ import { loadLocalManifest, loadModules } from '../../src/content/lessonLoader.j
 import { buildModuleList, type ModuleListEntry } from '../../src/content/listLessons.js';
 import { listProgress } from '../../src/data/index.js';
 import { downloadLesson, getDownloadedStorageBytes, isDownloaded, playLesson, deleteDownload, enqueueModule } from '../../src/player/index.js';
+import { PlaylistsSection } from '../../src/components/PlaylistsSection.js';
 import { formatBytes } from '../../src/player/downloads.js';
 import { useBottomChromeInset } from '../../src/navigation/useBottomChromeInset.js';
 
@@ -27,6 +28,8 @@ export default function HoerenScreen() {
   const [continueCard, setContinueCard] = useState<ContinueCard | null>(null);
   const [downloaded, setDownloaded] = useState<Record<string, boolean>>({});
   const [playbackError, setPlaybackError] = useState(false);
+  const [playlistPlaybackError, setPlaylistPlaybackError] = useState(false);
+  const [requestAddLessonId, setRequestAddLessonId] = useState<string | null>(null);
 
   // Faengt einen Fehler beim Starten der Wiedergabe/Warteschlange ab
   // (Pruefbericht Phase 3, B-01: ein ungueltiges Manifest/eine ungueltige
@@ -151,6 +154,28 @@ export default function HoerenScreen() {
           </View>
         ) : null}
 
+        {playlistPlaybackError ? (
+          <View style={[styles.banner, { backgroundColor: theme.colors.surface, borderColor: theme.colors.error }]}>
+            <Text style={{ color: theme.colors.error }}>{de.hoeren.playlistEmptyPlayError}</Text>
+          </View>
+        ) : null}
+
+        <PlaylistsSection
+          lessonTitleFor={(lessonId) => {
+            const lesson = modules
+              .flatMap((m) => m.subModules)
+              .flatMap((sub) => sub.lessons)
+              .find((l) => l.id === lessonId);
+            return lesson?.title ?? de.start.lessonTitleFallback;
+          }}
+          onPlaybackError={(empty) => {
+            if (empty) setPlaylistPlaybackError(true);
+            else setPlaybackError(true);
+          }}
+          requestAddLessonId={requestAddLessonId}
+          onRequestAddHandled={() => setRequestAddLessonId(null)}
+        />
+
         {continueCard ? (
           <Pressable
             onPress={() => void runPlayback(() => playLesson(continueCard.lessonId))}
@@ -208,6 +233,18 @@ export default function HoerenScreen() {
                   {lesson.title}
                 </Text>
                 <Text style={[styles.lessonDuration, { color: theme.colors.textWeak }]}>{lesson.durationMinutes} Min</Text>
+                <Pressable
+                  onPress={(e) => {
+                    e.stopPropagation();
+                    setRequestAddLessonId(lesson.id);
+                  }}
+                  accessibilityRole="button"
+                  accessibilityLabel={de.hoeren.playlistAddLesson}
+                  hitSlop={8}
+                  style={{ minWidth: theme.minTapTarget, minHeight: theme.minTapTarget, alignItems: 'center', justifyContent: 'center' }}
+                >
+                  <ListMusic color={theme.colors.accent} size={18} />
+                </Pressable>
                 <Pressable
                   onPress={(e) => {
                     e.stopPropagation();
