@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
+import { SlideInBottom } from '../motion/SlideInBottom.js';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router, usePathname } from 'expo-router';
 import { FastForward, Pause, Play, X } from 'lucide-react-native';
@@ -76,7 +77,7 @@ export function MiniPlayer() {
   const coverModuleId = moduleIdFromLessonId(item.lessonId);
 
   return (
-    <View
+    <SlideInBottom
       style={[
         styles.container,
         {
@@ -196,7 +197,7 @@ export function MiniPlayer() {
           )}
         </Pressable>
       </View>
-    </View>
+    </SlideInBottom>
   );
 }
 

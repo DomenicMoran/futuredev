@@ -15,6 +15,9 @@ import { downloadLesson, getDownloadedStorageBytes, isDownloaded, playLesson, de
 import { PlaylistsSection } from '../../src/components/PlaylistsSection.js';
 import { formatBytes } from '../../src/player/downloads.js';
 import { useBottomChromeInset } from '../../src/navigation/useBottomChromeInset.js';
+import { FadeInUp } from '../../src/motion/FadeInUp.js';
+import { PressableFeedback } from '../../src/motion/PressableFeedback.js';
+import { motionStaggerDelay } from '../../src/motion/stagger.js';
 
 interface ContinueCard {
   lessonId: string;
@@ -148,6 +151,7 @@ export default function HoerenScreen() {
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.bg }]}>
       <ScrollView contentContainerStyle={{ paddingBottom: bottomInset, gap: theme.spacing.lg }}>
         <TabScreenTitle title={de.hoeren.title} />
+        <FadeInUp durationMs={200} delayMs={motionStaggerDelay(0)}>
         <View style={{ paddingHorizontal: theme.spacing.base, gap: theme.spacing.lg }}>
         {refreshing ? (
           <View style={styles.refreshRow}>
@@ -215,11 +219,10 @@ export default function HoerenScreen() {
         />
 
         {continueCard ? (
-          <Pressable
+          <PressableFeedback
             onPress={() => void runPlayback(() => playLesson(continueCard.lessonId))}
             accessibilityRole="button"
             accessibilityLabel={`${de.hoeren.continueCard}: ${continueCard.title}`}
-            style={({ pressed }) => [{ opacity: pressed ? 0.96 : 1 }]}
           >
             <View
               style={[
@@ -240,11 +243,12 @@ export default function HoerenScreen() {
                 {de.hoeren.continuePlayAction}
               </Text>
             </View>
-          </Pressable>
+          </PressableFeedback>
         ) : null}
 
-        {modules.map((module) => (
-          <View key={module.id} style={styles.moduleBlock}>
+        {modules.map((module, moduleIndex) => (
+          <FadeInUp key={module.id} durationMs={200} delayMs={motionStaggerDelay(moduleIndex + 1)}>
+          <View style={styles.moduleBlock}>
             <View style={styles.moduleHeader}>
               <Text style={[styles.moduleTitle, { color: theme.colors.text }]}>{module.title}</Text>
               <Pressable
@@ -278,27 +282,26 @@ export default function HoerenScreen() {
                   },
                 ]}
               >
-                <Pressable
+                <PressableFeedback
                   onPress={() => void runPlayback(() => playLesson(lesson.id))}
                   accessibilityRole="button"
                   accessibilityLabel={`${de.hoeren.playLesson}: ${lesson.title}`}
                   hitSlop={8}
-                  style={({ pressed }) => [
+                  style={[
                     styles.lessonPlayButton,
                     {
                       minWidth: theme.minTapTarget,
                       minHeight: theme.minTapTarget,
-                      opacity: pressed ? 0.88 : 1,
                     },
                   ]}
                 >
                   <Play color={theme.colors.accent} size={20} />
-                </Pressable>
-                <Pressable
+                </PressableFeedback>
+                <PressableFeedback
                   onPress={() => void runPlayback(() => playLesson(lesson.id))}
                   accessibilityRole="button"
                   accessibilityLabel={`${de.hoeren.playLesson}: ${lesson.title}`}
-                  style={({ pressed }) => [styles.lessonTextBlock, { opacity: pressed ? 0.92 : 1, flex: 1, minWidth: 0 }]}
+                  style={[styles.lessonTextBlock, { flex: 1, minWidth: 0 }]}
                 >
                   <Text numberOfLines={2} ellipsizeMode="tail" style={[styles.lessonTitle, { color: theme.colors.text }]}>
                     {lesson.title}
@@ -306,8 +309,8 @@ export default function HoerenScreen() {
                   <Text numberOfLines={1} style={[styles.lessonDuration, { color: theme.colors.textWeak }]}>
                     {de.hoeren.durationMinutes(lesson.durationMinutes)}
                   </Text>
-                </Pressable>
-                <Pressable
+                </PressableFeedback>
+                <PressableFeedback
                   onPress={() =>
                     openLessonMoreMenu({
                       lessonTitle: lesson.title,
@@ -337,14 +340,16 @@ export default function HoerenScreen() {
                   }}
                 >
                   <MoreVertical color={theme.colors.textWeak} size={20} />
-                </Pressable>
+                </PressableFeedback>
               </View>
             ))}
           </View>
+          </FadeInUp>
         ))}
 
         <StorageSection downloaded={downloaded} onCleared={() => setDownloaded({})} />
           </View>
+        </FadeInUp>
       </ScrollView>
     </SafeAreaView>
   );

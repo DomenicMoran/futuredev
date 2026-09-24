@@ -1,5 +1,6 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import type { LucideIcon } from 'lucide-react-native';
+import { PressableFeedback } from '../motion/PressableFeedback.js';
 import { useTheme } from '../theme/useTheme.js';
 
 interface EmptyStateProps {
@@ -26,7 +27,7 @@ export function EmptyState({ Icon, title, body, actionLabel, onAction }: EmptySt
         {body}
       </Text>
       {actionLabel && onAction ? (
-        <Pressable
+        <PressableFeedback
           onPress={onAction}
           accessibilityRole="button"
           accessibilityLabel={actionLabel}
@@ -41,7 +42,7 @@ export function EmptyState({ Icon, title, body, actionLabel, onAction }: EmptySt
           ]}
         >
           <Text style={[styles.actionLabel, { color: theme.colors.accentText }]}>{actionLabel}</Text>
-        </Pressable>
+        </PressableFeedback>
       ) : null}
     </View>
   );

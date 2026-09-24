@@ -21,6 +21,8 @@ import type { ModuleListEntry } from '../../src/content/listLessons';
 import { useBottomChromeInset } from '../../src/navigation/useBottomChromeInset';
 import { openFirstPublishedLessonOrLernen } from '../../src/navigation/openFirstLesson.js';
 import { TabScreenTitle } from '../../src/components/TabScreenTitle.js';
+import { FadeInUp } from '../../src/motion/FadeInUp.js';
+import { motionStaggerDelay } from '../../src/motion/stagger.js';
 
 
 
@@ -38,9 +40,13 @@ export default function LernenScreen() {
 
 
 
-  const renderItem = ({ item }: { item: ModuleListEntry }) => (
+  const renderItem = ({ item, index }: { item: ModuleListEntry; index: number }) => (
 
-    <ModuleCard module={item} onPress={() => router.push(`/module/${item.id}`)} />
+    <FadeInUp delayMs={motionStaggerDelay(index)} durationMs={200}>
+
+      <ModuleCard module={item} onPress={() => router.push(`/module/${item.id}`)} />
+
+    </FadeInUp>
 
   );
 

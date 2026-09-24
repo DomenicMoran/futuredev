@@ -36,6 +36,7 @@ import { usePlayerStore } from '../../src/player/store.js';
 import { currentItem } from '../../src/player/queue.js';
 import { accumulateReadFocusTick, READ_FOCUS_TICK_SECONDS } from '../../src/settings/dailyLearning.js';
 import { useSettingsStore } from '../../src/state/settings.js';
+import { PressableFeedback } from '../../src/motion/PressableFeedback.js';
 
 type SectionKey = 'body' | 'terms' | 'example' | 'task' | 'faq';
 interface Section {
@@ -512,12 +513,12 @@ function LessonStickyActions({
   const queue = usePlayerStore((s) => s.queue);
   const playingThisLesson = currentItem(queue)?.lessonId === lessonId;
   const listenButton = (
-    <Pressable
+    <PressableFeedback
       key="listen"
       onPress={onListen}
       accessibilityRole="button"
       accessibilityLabel={de.lesson.listenTab}
-      style={({ pressed }) => [
+      style={[
         styles.stickyButton,
         styles.calmAccentAction,
         {
@@ -526,21 +527,20 @@ function LessonStickyActions({
           borderLeftColor: theme.colors.accent,
           borderRadius: theme.radius.md,
           minHeight: theme.minTapTarget,
-          opacity: pressed ? 0.96 : 1,
           flex: 1,
         },
       ]}
     >
       <Text style={[styles.primaryButtonLabel, { color: theme.colors.text, fontWeight: '600' }]}>{de.lesson.listenTab}</Text>
-    </Pressable>
+    </PressableFeedback>
   );
   const quizButton = (
-    <Pressable
+    <PressableFeedback
       key="quiz"
       onPress={onQuiz}
       accessibilityRole="button"
       accessibilityLabel={de.lesson.quizStart}
-      style={({ pressed }) => [
+      style={[
         styles.stickyButton,
         {
           backgroundColor: theme.colors.surface,
@@ -548,13 +548,12 @@ function LessonStickyActions({
           borderWidth: StyleSheet.hairlineWidth,
           borderRadius: theme.radius.md,
           minHeight: theme.minTapTarget,
-          opacity: pressed ? 0.96 : 1,
           flex: 1,
         },
       ]}
     >
       <Text style={[styles.secondaryButtonLabel, { color: theme.colors.text, fontWeight: '600' }]}>{de.lesson.quizStart}</Text>
-    </Pressable>
+    </PressableFeedback>
   );
 
   const actions =

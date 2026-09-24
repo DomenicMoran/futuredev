@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
-import { Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
 import { Dumbbell, Headphones, Layers, MessageCircleQuestion } from 'lucide-react-native';
 import { isDue } from '@futuredev/core';
@@ -12,6 +12,9 @@ import { pickReviewLesson } from '../../src/review/reviewRound.js';
 import { knownLessonIds } from '../../src/quiz/content.js';
 import { useBottomChromeInset } from '../../src/navigation/useBottomChromeInset.js';
 import { TabScreenTitle } from '../../src/components/TabScreenTitle.js';
+import { FadeInUp } from '../../src/motion/FadeInUp.js';
+import { PressableFeedback } from '../../src/motion/PressableFeedback.js';
+import { motionStaggerDelay } from '../../src/motion/stagger.js';
 import modulesFile from '../../../../content/modules.json';
 
 export default function UebenScreen() {
@@ -83,6 +86,7 @@ export default function UebenScreen() {
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh} />}
     >
       <TabScreenTitle title={de.ueben.title} />
+      <FadeInUp durationMs={200} delayMs={motionStaggerDelay(0)}>
       <SectionHeader title={de.ueben.sectionHeute} theme={theme} />
       {rationCount === null ? null : rationCount === 0 ? (
         <CalmCard
@@ -178,6 +182,7 @@ export default function UebenScreen() {
         Icon={Headphones}
         accentBar
       />
+      </FadeInUp>
     </ScrollView>
   );
 }
@@ -250,7 +255,7 @@ function ActionCard({
         <Text style={[styles.cardTitle, { color: theme.colors.text }]}>{title}</Text>
       )}
       <Text style={[styles.cardBody, { color: theme.colors.textWeak, marginTop: Icon ? 0 : theme.spacing.xs }]}>{body}</Text>
-      <Pressable
+      <PressableFeedback
         accessibilityRole="button"
         accessibilityLabel={actionLabel}
         onPress={onAction}
@@ -267,7 +272,7 @@ function ActionCard({
         ]}
       >
         <Text style={[styles.primaryButtonLabel, { color: theme.colors.accentText }]}>{actionLabel}</Text>
-      </Pressable>
+      </PressableFeedback>
     </View>
   );
 }
@@ -290,7 +295,7 @@ function LinkCard({
   accentBar?: boolean;
 }) {
   return (
-    <Pressable
+    <PressableFeedback
       accessibilityRole="button"
       accessibilityLabel={accessibilityLabel}
       onPress={onPress}
@@ -314,7 +319,7 @@ function LinkCard({
         <Text style={[styles.cardTitle, { color: theme.colors.text }]}>{title}</Text>
         <Text style={[styles.cardBody, { color: theme.colors.textWeak, marginTop: theme.spacing.xs }]}>{body}</Text>
       </View>
-    </Pressable>
+    </PressableFeedback>
   );
 }
 
@@ -332,7 +337,7 @@ function ExamRow({
   last?: boolean;
 }) {
   return (
-    <Pressable
+    <PressableFeedback
       accessibilityRole="button"
       accessibilityLabel={label}
       onPress={onPress}
@@ -347,7 +352,7 @@ function ExamRow({
       ]}
     >
       <Text style={[styles.examRowLabel, { color: theme.colors.text }]}>{label}</Text>
-    </Pressable>
+    </PressableFeedback>
   );
 }
 

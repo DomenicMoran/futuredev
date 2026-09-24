@@ -7,3 +7,8 @@
 export function resolveAnimationDuration(reducedMotionEnabled: boolean, normalDurationMs: number): number {
   return reducedMotionEnabled ? 0 : normalDurationMs;
 }
+
+/** Same contract as `useMotionDuration` (testable without React Native). */
+export function motionDurationMs(reducedMotionEnabled: boolean, normalDurationMs: number): number {
+  return resolveAnimationDuration(reducedMotionEnabled, normalDurationMs);
+}

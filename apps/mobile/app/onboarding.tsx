@@ -12,6 +12,8 @@ import { getModuleCover, onboardingIllustration } from '../src/illustrations/mod
 import { ModuleCover } from '../src/components/ModuleCover.js';
 import { useReducedMotion } from '../src/accessibility/useReducedMotion.js';
 import { resolveAnimationDuration } from '../src/accessibility/motion.js';
+import { FadeInUp } from '../src/motion/FadeInUp.js';
+import { PressableFeedback } from '../src/motion/PressableFeedback.js';
 
 // Drei Schritte höchstens (Technikvorgabe 9): Ziel, Lesen/Hören + Lernzeit, Tagesziel.
 type Step = 1 | 2 | 3;
@@ -42,9 +44,12 @@ export default function OnboardingScreen() {
   }
 
   function chooseGoalMinutes(minutes: number) {
-    setDailyGoalMinutes(minutes);
-    completeOnboarding();
-    router.replace('/(tabs)');
+    void (async () => {
+      setDailyGoalMinutes(minutes);
+      await completeOnboarding();
+      useSettingsStore.getState().setOnboardingDone(true);
+      router.replace('/(tabs)');
+    })();
   }
 
   const step2Ready = formDraft !== null && timeDraft !== null;
@@ -85,6 +90,7 @@ export default function OnboardingScreen() {
       >
         <StepDots step={step} total={3} />
         <OnboardingHero step={step} />
+        <FadeInUp key={step} durationMs={200}>
         {step === 1 ? (
           <OnboardingStep
             title={de.onboarding.step1Title}
@@ -153,25 +159,25 @@ export default function OnboardingScreen() {
                 ))}
               </View>
             </View>
-            <Pressable
+            <PressableFeedback
               accessibilityRole="button"
               accessibilityLabel={de.onboarding.next}
               accessibilityState={{ disabled: !step2Ready }}
               disabled={!step2Ready}
               onPress={finishStep2}
-              style={({ pressed }) => [
+              style={[
                 styles.primaryButton,
                 {
                   backgroundColor: theme.colors.accent,
                   borderRadius: theme.radius.md,
                   marginTop: theme.spacing.xl,
                   minHeight: theme.minTapTarget,
-                  opacity: !step2Ready ? 0.45 : pressed ? 0.92 : 1,
+                  opacity: !step2Ready ? 0.45 : 1,
                 },
               ]}
             >
               <Text style={[styles.primaryButtonLabel, { color: theme.colors.accentText }]}>{de.onboarding.next}</Text>
-            </Pressable>
+            </PressableFeedback>
           </>
         ) : null}
         {step === 3 ? (
@@ -186,6 +192,7 @@ export default function OnboardingScreen() {
             }))}
           />
         ) : null}
+        </FadeInUp>
       </ScrollView>
     </SafeAreaView>
   );
@@ -339,12 +346,11 @@ function OptionRow({ label, subtitle, selected, onPress }: OnboardingOption) {
   });
 
   return (
-    <Pressable
+    <PressableFeedback
       onPress={onPress}
       accessibilityRole="button"
       accessibilityLabel={subtitle ? `${label}. ${subtitle}` : label}
       accessibilityState={{ selected: selected ?? false }}
-      style={({ pressed }) => [{ opacity: pressed ? 0.92 : 1 }]}
     >
       <Animated.View
         style={[
@@ -363,7 +369,7 @@ function OptionRow({ label, subtitle, selected, onPress }: OnboardingOption) {
           <Text style={[styles.optionSubtitle, { color: theme.colors.textWeak, marginTop: 4 }]}>{subtitle}</Text>
         ) : null}
       </Animated.View>
-    </Pressable>
+    </PressableFeedback>
   );
 }
 

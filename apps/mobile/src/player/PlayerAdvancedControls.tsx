@@ -1,5 +1,7 @@
-import { useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { Animated, Pressable, StyleSheet, Text, View } from 'react-native';
+import { PressableFeedback } from '../motion/PressableFeedback.js';
+import { useMotionDuration } from '../motion/useMotionDuration.js';
 import {
   ChevronDown,
   ChevronLeft,
@@ -34,22 +36,34 @@ export function PlayerAdvancedControls() {
   const [ratePickerOpen, setRatePickerOpen] = useState(false);
   const [sleepPickerOpen, setSleepPickerOpen] = useState(false);
   const [queueOpen, setQueueOpen] = useState(false);
+  const expandAnim = useRef(new Animated.Value(0)).current;
+  const duration = useMotionDuration(200);
+
+  useEffect(() => {
+    Animated.timing(expandAnim, {
+      toValue: open ? 1 : 0,
+      duration,
+      useNativeDriver: false,
+    }).start();
+  }, [duration, expandAnim, open]);
+
+  const animatedMaxHeight = expandAnim.interpolate({ inputRange: [0, 1], outputRange: [0, 960] });
+  const bodyOpacity = expandAnim;
 
   const summary = de.player.advancedSummary(`${rate.toFixed(1)}×`, repeatSummaryLabel(repeatMode));
 
   return (
     <View style={{ marginTop: theme.spacing.xl, gap: theme.spacing.sm }}>
-      <Pressable
+      <PressableFeedback
         onPress={() => setOpen((v) => !v)}
         accessibilityRole="button"
         accessibilityState={{ expanded: open }}
         accessibilityLabel={de.player.advancedTitle}
-        style={({ pressed }) => [
+        style={[
           styles.accordionHeader,
           {
             borderColor: theme.colors.border,
             minHeight: theme.minTapTarget,
-            opacity: pressed ? 0.92 : 1,
           },
         ]}
       >
@@ -66,10 +80,10 @@ export function PlayerAdvancedControls() {
         ) : (
           <ChevronDown color={theme.colors.textWeak} size={20} />
         )}
-      </Pressable>
+      </PressableFeedback>
 
-      {open ? (
-        <>
+      <Animated.View style={{ maxHeight: animatedMaxHeight, opacity: bodyOpacity, overflow: 'hidden' }}>
+        <View style={{ gap: theme.spacing.sm }}>
           <View style={[styles.settingsRow, { gap: theme.spacing.sm }]}>
             <Pressable
               onPress={() => void skipToPrevious()}
@@ -229,8 +243,8 @@ export function PlayerAdvancedControls() {
                 ))
               : null}
           </View>
-        </>
-      ) : null}
+        </View>
+      </Animated.View>
     </View>
   );
 }

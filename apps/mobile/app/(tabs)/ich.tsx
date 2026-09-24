@@ -12,6 +12,9 @@ import { useBottomChromeInset } from '../../src/navigation/useBottomChromeInset.
 import { TabScreenTitle } from '../../src/components/TabScreenTitle.js';
 import { useSettingsStore } from '../../src/state/settings.js';
 import type { ReviewIntensity } from '../../src/settings/types.js';
+import { FadeInUp } from '../../src/motion/FadeInUp.js';
+import { PressableFeedback } from '../../src/motion/PressableFeedback.js';
+import { motionStaggerDelay } from '../../src/motion/stagger.js';
 
 // Reiter Ich (AP-3.5, Punkt 3): Fortschritt je Modul, Jobreife mit
 // "Was noch fehlt", Portfolio-Bausteine, Karriere-Checkliste, Notizen,
@@ -77,6 +80,7 @@ export default function IchScreen() {
       contentContainerStyle={{ paddingBottom: bottomInset }}
     >
       <TabScreenTitle title={de.ich.title} />
+      <FadeInUp durationMs={200} delayMs={motionStaggerDelay(0)}>
       <View style={{ paddingHorizontal: theme.spacing.lg }}>
       <View
         style={[
@@ -110,7 +114,7 @@ export default function IchScreen() {
             ? de.ich.profileProgressSummary(modulesStarted, lessonsDone)
             : de.ich.profileProgressEmpty}
         </Text>
-        <Pressable
+        <PressableFeedback
           accessibilityRole="button"
           accessibilityLabel={de.ich.profileSettings}
           onPress={() => router.push('/settings')}
@@ -128,7 +132,7 @@ export default function IchScreen() {
           <Text style={[styles.body, { color: theme.colors.text, marginLeft: theme.spacing.sm }]}>
             {de.ich.profileSettings}
           </Text>
-        </Pressable>
+        </PressableFeedback>
       </View>
 
       {!data ? null : !hasAnyProgress ? (
@@ -279,6 +283,7 @@ export default function IchScreen() {
         {de.ich.readinessDisclaimer}
       </Text>
       </View>
+      </FadeInUp>
     </ScrollView>
   );
 }

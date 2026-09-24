@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
 
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { router, useFocusEffect } from 'expo-router';
 
@@ -31,6 +31,9 @@ import { TabScreenTitle } from '../../src/components/TabScreenTitle.js';
 import { usePlayerStore } from '../../src/player/store.js';
 import { currentItem } from '../../src/player/queue.js';
 import { formatPlaybackTime } from '../../src/player/formatTime.js';
+import { FadeInUp } from '../../src/motion/FadeInUp.js';
+import { PressableFeedback } from '../../src/motion/PressableFeedback.js';
+import { motionStaggerDelay } from '../../src/motion/stagger.js';
 
 import {
 
@@ -181,6 +184,8 @@ export default function StartScreen() {
 
       <TabScreenTitle title={de.start.title} />
 
+      <FadeInUp durationMs={200} delayMs={motionStaggerDelay(0)}>
+
       {loadError ? (
         <Text style={[styles.body, { color: theme.colors.textWeak, marginTop: theme.spacing.sm }]}>
           {de.start.loadErrorHint}
@@ -217,15 +222,15 @@ export default function StartScreen() {
 
       {continueCard && continueMode ? (
 
-        <Pressable
+        <FadeInUp durationMs={200} delayMs={motionStaggerDelay(1)}>
+
+        <PressableFeedback
 
           accessibilityRole="button"
 
           accessibilityLabel={`${continueActionLabel(continueMode)}: ${continueCard.lessonTitle}`}
 
           onPress={openContinue}
-
-          style={({ pressed }) => [{ opacity: pressed ? 0.96 : 1 }]}
 
         >
 
@@ -263,13 +268,17 @@ export default function StartScreen() {
 
           </Card>
 
-        </Pressable>
+        </PressableFeedback>
+
+        </FadeInUp>
 
       ) : null}
 
 
 
       {displayData ? (
+
+        <FadeInUp durationMs={200} delayMs={motionStaggerDelay(continueCard ? 2 : 1)}>
 
         <Card theme={theme} title={de.start.dailyGoalTitle}>
 
@@ -329,11 +338,15 @@ export default function StartScreen() {
 
         </Card>
 
+        </FadeInUp>
+
       ) : null}
 
 
 
       {nextLessonId ? (
+
+        <FadeInUp durationMs={200} delayMs={motionStaggerDelay(2)}>
 
         <Card theme={theme} title={de.start.nextRecommendationTitle}>
 
@@ -355,15 +368,18 @@ export default function StartScreen() {
 
         </Card>
 
+        </FadeInUp>
+
       ) : null}
 
 
 
-      <Pressable
+      <FadeInUp durationMs={200} delayMs={motionStaggerDelay(2)}>
+
+      <PressableFeedback
         accessibilityRole="button"
         accessibilityLabel={de.start.dailyRationOpen}
         onPress={() => router.push('/(tabs)/ueben')}
-        style={({ pressed }) => [{ opacity: pressed ? 0.96 : 1 }]}
       >
 
         <Card theme={theme} title={de.start.dailyRationTile}>
@@ -383,11 +399,15 @@ export default function StartScreen() {
 
         </Card>
 
-      </Pressable>
+      </PressableFeedback>
+
+      </FadeInUp>
 
 
 
       {displayData ? (
+
+        <FadeInUp durationMs={200} delayMs={motionStaggerDelay(2)}>
 
         <Card theme={theme} title={de.start.weekOverviewTitle}>
 
@@ -413,7 +433,11 @@ export default function StartScreen() {
 
         </Card>
 
+        </FadeInUp>
+
       ) : null}
+
+      </FadeInUp>
 
     </ScrollView>
 
@@ -515,23 +539,22 @@ function Card({
 
 function SecondaryButton({ theme, label, onPress }: { theme: ReturnType<typeof useTheme>; label: string; onPress: () => void }) {
   return (
-    <Pressable
+    <PressableFeedback
       accessibilityRole="button"
       accessibilityLabel={label}
       onPress={onPress}
-      style={({ pressed }) => [
+      style={[
         styles.secondaryButton,
         {
           borderColor: theme.colors.border,
           borderRadius: theme.radius.md,
           marginTop: theme.spacing.md,
           minHeight: theme.minTapTarget,
-          opacity: pressed ? 0.92 : 1,
         },
       ]}
     >
       <Text style={[styles.secondaryButtonLabel, { color: theme.colors.text }]}>{label}</Text>
-    </Pressable>
+    </PressableFeedback>
   );
 }
 
@@ -539,7 +562,7 @@ function PrimaryButton({ theme, label, onPress }: { theme: ReturnType<typeof use
 
   return (
 
-    <Pressable
+    <PressableFeedback
 
       accessibilityRole="button"
 
@@ -547,7 +570,7 @@ function PrimaryButton({ theme, label, onPress }: { theme: ReturnType<typeof use
 
       onPress={onPress}
 
-      style={({ pressed }) => [
+      style={[
 
         styles.primaryButton,
 
@@ -561,8 +584,6 @@ function PrimaryButton({ theme, label, onPress }: { theme: ReturnType<typeof use
 
           minHeight: theme.minTapTarget,
 
-          opacity: pressed ? 0.92 : 1,
-
         },
 
       ]}
@@ -571,7 +592,7 @@ function PrimaryButton({ theme, label, onPress }: { theme: ReturnType<typeof use
 
       <Text style={[styles.primaryButtonLabel, { color: theme.colors.accentText }]}>{label}</Text>
 
-    </Pressable>
+    </PressableFeedback>
 
   );
 

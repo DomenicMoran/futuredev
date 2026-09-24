@@ -1,5 +1,6 @@
 import { memo, useMemo } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
+import { PressableFeedback } from '../motion/PressableFeedback.js';
 import { ChevronRight, Lock } from 'lucide-react-native';
 import { useTheme } from '../theme/useTheme.js';
 import { de } from '../i18n/de.js';
@@ -37,11 +38,11 @@ function ModuleCardInner({ module, onPress }: ModuleCardProps) {
     hasLessons && durationMinutes > 0 ? ` · ${de.module.lessonDuration(durationMinutes)} gesamt` : '';
 
   return (
-    <Pressable
+    <PressableFeedback
       onPress={onPress}
       accessibilityRole="button"
       accessibilityLabel={module.title}
-      style={({ pressed }) => [
+      style={[
         styles.card,
         {
           backgroundColor: theme.colors.surface,
@@ -49,7 +50,6 @@ function ModuleCardInner({ module, onPress }: ModuleCardProps) {
           borderColor: theme.colors.border,
           padding: theme.spacing.base,
           minHeight: theme.minTapTarget,
-          opacity: pressed ? 0.96 : 1,
         },
       ]}
     >
@@ -87,7 +87,7 @@ function ModuleCardInner({ module, onPress }: ModuleCardProps) {
       ) : (
         <Lock size={18} color={theme.colors.textWeak} accessibilityLabel={de.lernen.inPreparation} />
       )}
-    </Pressable>
+    </PressableFeedback>
   );
 }
 
