@@ -23,9 +23,7 @@ import {
 import type { PlaylistItemRow, PlaylistRow } from '../data/types.js';
 import { playPlaylist } from '../player/index.js';
 
-interface LessonTitleLookup {
-  (lessonId: string): string;
-}
+type LessonTitleLookup = (lessonId: string) => string;
 
 interface PlaylistsSectionProps {
   lessonTitleFor: LessonTitleLookup;
