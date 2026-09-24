@@ -5,12 +5,12 @@ import { chapterRowLabel, isSectionBoundary, sectionHeading, speechPreview } fro
 export const CHAPTER_JUMP_MIN = 5;
 export const CHAPTER_JUMP_MAX = 12;
 
-export type ChapterJump = {
+export interface ChapterJump {
   block: CueBlock;
   label: string;
   /** Oberzeile nur bei Wechsel in terms/example/task/faq */
   sectionHeading: string | null;
-};
+}
 
 /** true, wenn die Cue-Datei mehr als nur einen durchgehenden body-Abschnitt hat. */
 export function hasSectionJumpStructure(blocks: readonly CueBlock[]): boolean {

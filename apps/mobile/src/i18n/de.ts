@@ -48,6 +48,7 @@ export const de = {
   },
   module: {
     backToModules: 'Alle Module',
+    unknownTitle: 'Modul nicht gefunden',
     lessonDuration: (minutes: number) => `${minutes} Min.`,
     emptyNoLessons: 'In diesem Modul sind noch keine Lektionen veröffentlicht.',
   },
