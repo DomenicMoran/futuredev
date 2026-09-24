@@ -28,7 +28,7 @@ export interface PlaybackScrubberProps {
 const FULL_TRACK_HEIGHT = 4;
 const FULL_HIT_HEIGHT = 44;
 const MINI_TRACK_HEIGHT = 3;
-const MINI_HIT_HEIGHT = 28;
+const MINI_HIT_HEIGHT = 44;
 const THUMB_SIZE_FULL = 14;
 
 export function PlaybackScrubber({

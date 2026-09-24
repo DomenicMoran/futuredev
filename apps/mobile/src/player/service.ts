@@ -19,7 +19,7 @@ export async function PlaybackService(): Promise<void> {
   TrackPlayer.addEventListener(Event.RemotePrevious, () => TrackPlayer.skipToPrevious().catch(ignoreQueueEdgeError));
 
   TrackPlayer.addEventListener(Event.RemoteSeek, (event) => {
-    void TrackPlayer.seekTo(event.position);
+    void import('./index.js').then(({ seekToSeconds }) => seekToSeconds(event.position));
   });
 
   // Kopfhoerertasten (doppelt/dreifach antippen) kommen als RemoteJumpForward/

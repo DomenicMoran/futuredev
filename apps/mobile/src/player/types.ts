@@ -30,6 +30,9 @@ export const JUMP_FORWARD_SECONDS = 30;
 // Sekunden, in denen die Wiedergabeposition gesichert wird (progress.listenedUntil).
 export const POSITION_SAVE_INTERVAL_SECONDS = 5;
 
+/** UI-Fortschritt (Scrubber, Mini-Player) — SQLite bleibt bei 5 s. */
+export const POSITION_UI_UPDATE_INTERVAL_SECONDS = 0.25;
+
 // Downloads liegen unter documentDirectory/audio/<lessonId>.mp3 bzw. .cues.json.
 export const DOWNLOAD_DIR_NAME = 'audio';
 

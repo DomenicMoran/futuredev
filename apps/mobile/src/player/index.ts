@@ -19,6 +19,7 @@ import {
   JUMP_BACKWARD_SECONDS,
   JUMP_FORWARD_SECONDS,
   POSITION_SAVE_INTERVAL_SECONDS,
+  POSITION_UI_UPDATE_INTERVAL_SECONDS,
   type QueueItem,
   type SleepTimerMode,
 } from './types.js';
@@ -83,6 +84,7 @@ async function ensureSetup(): Promise<void> {
         ],
         forwardJumpInterval: JUMP_FORWARD_SECONDS,
         backwardJumpInterval: JUMP_BACKWARD_SECONDS,
+        progressUpdateEventInterval: POSITION_UI_UPDATE_INTERVAL_SECONDS,
       });
     })();
   }
@@ -196,6 +198,7 @@ export async function playLesson(lessonId: string, blockIndex?: number): Promise
   usePlayerStore.getState().setBuffering(false);
   usePlayerStore.getState().setPlaying(true);
   usePlayerStore.getState().setPosition(startSeconds);
+  startPositionTracking(lessonId);
 }
 
 /** Hängt alle veröffentlichten Lektionen eines Moduls an ("Modul am Stück"). */
@@ -240,6 +243,8 @@ export async function skipToNext(): Promise<void> {
   state.setQueueState(nextQueue);
   const trackPlayer = await TP();
   await trackPlayer.skipToNext();
+  const nextItem = nextQueue.items[nextQueue.currentIndex];
+  if (nextItem) startPositionTracking(nextItem.lessonId);
 }
 
 export async function skipToPrevious(): Promise<void> {
@@ -249,6 +254,8 @@ export async function skipToPrevious(): Promise<void> {
   state.setQueueState(previousQueue);
   const trackPlayer = await TP();
   await trackPlayer.skipToPrevious();
+  const prevItem = previousQueue.items[previousQueue.currentIndex];
+  if (prevItem) startPositionTracking(prevItem.lessonId);
 }
 
 export async function removeFromQueue(index: number): Promise<void> {
@@ -346,28 +353,60 @@ export function setSleepTimer(mode: SleepTimerMode | null): void {
 /* ------------------------------------------------------------------ Position */
 
 let positionSaveHandle: ReturnType<typeof setInterval> | null = null;
+let positionUiPollHandle: ReturnType<typeof setInterval> | null = null;
+let progressListenerAttached = false;
+let trackedLessonId: string | null = null;
 
-/** Alle 5 s die Position sichern; bei Pause zusätzlich sofort (feedback_audio_gehoert_ins_layout). */
+function attachPlaybackProgressListener(): void {
+  if (progressListenerAttached) return;
+  progressListenerAttached = true;
+  void (async () => {
+    const trackPlayer = await TP();
+    const { Event } = await import('react-native-track-player');
+    trackPlayer.addEventListener(Event.PlaybackProgressUpdated, ({ position }) => {
+      usePlayerStore.getState().setPosition(position);
+    });
+  })();
+}
+
+/** Live-UI per TrackPlayer-Event; SQLite nur alle 5 s (feedback_audio_gehoert_ins_layout). */
 export function startPositionTracking(lessonId: string): void {
   stopPositionTracking();
+  trackedLessonId = lessonId;
+  attachPlaybackProgressListener();
+
+  positionUiPollHandle = setInterval(() => {
+    void (async () => {
+      if (!usePlayerStore.getState().isPlaying) return;
+      const trackPlayer = await TP();
+      const { position } = await trackPlayer.getProgress();
+      usePlayerStore.getState().setPosition(position);
+    })();
+  }, POSITION_UI_UPDATE_INTERVAL_SECONDS * 1000);
+
   positionSaveHandle = setInterval(() => {
     void (async () => {
+      if (!trackedLessonId) return;
       const trackPlayer = await TP();
       const { position, duration } = await trackPlayer.getProgress();
-      usePlayerStore.getState().setPosition(position);
-      await savePlaybackPosition(lessonId, position);
+      await savePlaybackPosition(trackedLessonId, position);
       if (duration > 0 && position >= duration - 0.5) {
-        await markListened(lessonId, position);
+        await markListened(trackedLessonId, position);
       }
     })();
   }, POSITION_SAVE_INTERVAL_SECONDS * 1000);
 }
 
 export function stopPositionTracking(): void {
+  if (positionUiPollHandle) {
+    clearInterval(positionUiPollHandle);
+    positionUiPollHandle = null;
+  }
   if (positionSaveHandle) {
     clearInterval(positionSaveHandle);
     positionSaveHandle = null;
   }
+  trackedLessonId = null;
 }
 
 /** Sichert sofort, für den Pause-Handler (nicht erst im nächsten 5-s-Intervall). */
