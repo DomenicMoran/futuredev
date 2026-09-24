@@ -7,7 +7,12 @@ import {
   readDailyLearningSecondsToday,
 } from '../settings/dailyLearning.js';
 import { hydrateSettings, persistSetting } from '../settings/persist.js';
-import { DEFAULT_QUIZ_LENGTH, type AppSettings, type ReviewIntensity } from '../settings/types.js';
+import {
+  DEFAULT_QUIZ_LENGTH,
+  type AppSettings,
+  type PreferredLearnTime,
+  type ReviewIntensity,
+} from '../settings/types.js';
 
 // Einstellungen, die das Gerüst schon braucht (Dunkelmodus, Tagesziel, Reihenfolge
 // Lesen/Hören) plus die Werte aus AP-3.5 (Quizlänge, Wiederholungsintensität,
@@ -22,6 +27,7 @@ interface SettingsState {
   /** Lernsekunden heute (Hören + Lesefokus); null bis erster Tageseintrag in SQLite. */
   dailyLearningSecondsToday: number | null;
   firstFormPreference: FirstFormPreference;
+  preferredLearnTime: PreferredLearnTime | null;
   quizLength: number;
   reviewIntensity: ReviewIntensity;
   notificationsEnabled: boolean;
@@ -33,6 +39,7 @@ interface SettingsState {
   setDailyGoalMinutes: (value: number) => void;
   setDailyLearningSecondsToday: (value: number | null) => void;
   setFirstFormPreference: (value: FirstFormPreference) => void;
+  setPreferredLearnTime: (value: PreferredLearnTime) => void;
   setQuizLength: (value: number) => void;
   setReviewIntensity: (value: ReviewIntensity) => void;
   setNotificationsEnabled: (value: boolean) => void;
@@ -45,6 +52,7 @@ export const useSettingsStore = create<SettingsState>((set) => ({
   dailyGoalMinutes: 20,
   dailyLearningSecondsToday: null,
   firstFormPreference: 'read',
+  preferredLearnTime: null,
   quizLength: DEFAULT_QUIZ_LENGTH,
   reviewIntensity: 'normal',
   notificationsEnabled: false,
@@ -61,6 +69,7 @@ export const useSettingsStore = create<SettingsState>((set) => ({
       dailyGoalMinutes: loaded.dailyGoalMinutes,
       dailyLearningSecondsToday: hasDailyEntry ? secondsToday : null,
       firstFormPreference: loaded.firstFormPreference,
+      preferredLearnTime: loaded.preferredLearnTime,
       quizLength: loaded.quizLength,
       reviewIntensity: loaded.reviewIntensity,
       notificationsEnabled: loaded.notificationsEnabled,
@@ -83,6 +92,10 @@ export const useSettingsStore = create<SettingsState>((set) => ({
   setFirstFormPreference: (value) => {
     set({ firstFormPreference: value });
     void persistSetting('firstFormPreference', value);
+  },
+  setPreferredLearnTime: (value) => {
+    set({ preferredLearnTime: value });
+    void persistSetting('preferredLearnTime', value);
   },
   setQuizLength: (value) => {
     set({ quizLength: value });

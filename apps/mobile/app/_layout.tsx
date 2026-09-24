@@ -2,7 +2,9 @@ import { useEffect } from 'react';
 import { Redirect, Stack, usePathname } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import * as SplashScreen from 'expo-splash-screen';
+import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { de } from '../src/i18n/de.js';
 import TrackPlayer from 'react-native-track-player';
 import { useTheme } from '../src/theme/useTheme.js';
 import { useOnboardingStore } from '../src/state/onboarding.js';
@@ -76,7 +78,12 @@ function RootLayoutInner() {
   }, []);
 
   if (!hydrated) {
-    return null;
+    return (
+      <View style={[styles.splash, { backgroundColor: theme.colors.bg }]}>
+        <StatusBar style={theme.scheme === 'dark' ? 'light' : 'dark'} />
+        <Text style={[styles.splashTitle, { color: theme.colors.text }]}>{de.common.appName}</Text>
+      </View>
+    );
   }
 
   if (!completed && pathname !== '/onboarding') {
@@ -107,3 +114,8 @@ function RootLayoutInner() {
     </ContentProvider>
   );
 }
+
+const styles = StyleSheet.create({
+  splash: { flex: 1, alignItems: 'center', justifyContent: 'center' },
+  splashTitle: { fontSize: 28, lineHeight: 34, fontWeight: '700', letterSpacing: -0.5 },
+});

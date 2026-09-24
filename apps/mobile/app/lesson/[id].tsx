@@ -29,7 +29,9 @@ import { listNotes, saveNote } from '../../src/data/notes.js';
 import { listBookmarks, toggleBookmark } from '../../src/data/bookmarks.js';
 import { getSetting, setSetting } from '../../src/data/settings.js';
 import { playLessonInModuleContext } from '../../src/player/index.js';
-import { useBottomChromeInset } from '../../src/navigation/useBottomChromeInset.js';
+import { useBottomChromeLayout } from '../../src/navigation/useBottomChromeInset.js';
+import { usePlayerStore } from '../../src/player/store.js';
+import { currentItem } from '../../src/player/queue.js';
 import { accumulateReadFocusTick, READ_FOCUS_TICK_SECONDS } from '../../src/settings/dailyLearning.js';
 import { useSettingsStore } from '../../src/state/settings.js';
 
@@ -50,11 +52,11 @@ interface Section {
 export default function LessonScreen() {
   const { id, block: blockParam } = useLocalSearchParams<{ id: string; block?: string }>();
   const theme = useTheme();
-  const bottomInset = useBottomChromeInset();
+  const { stickyBottomOffset } = useBottomChromeLayout();
   const firstFormPreference = useSettingsStore((s) => s.firstFormPreference);
   const setDailyLearningSecondsToday = useSettingsStore((s) => s.setDailyLearningSecondsToday);
   const { state: contentState } = useContent();
-  const stickyBottomPadding = bottomInset + STICKY_ACTIONS_HEIGHT + 8;
+  const stickyBottomPadding = stickyBottomOffset + STICKY_ACTIONS_HEIGHT + theme.spacing.sm;
 
   const [lesson, setLesson] = useState<Lesson | null | undefined>(undefined); // undefined = laedt noch
   const [readUntil, setReadUntil] = useState(0);
@@ -301,6 +303,7 @@ export default function LessonScreen() {
             sections={sections}
             onJump={jumpTo}
             audioError={audioError}
+            onRetryListen={handleListen}
           />
         }
         ListFooterComponent={
@@ -446,7 +449,8 @@ export default function LessonScreen() {
       {lesson && id ? (
         <LessonStickyActions
           listenFirst={firstFormPreference === 'listen'}
-          bottomInset={bottomInset}
+          stickyBottomOffset={stickyBottomOffset}
+          lessonId={id}
           onListen={handleListen}
           onQuiz={() => router.push(`/quiz/${id}`)}
         />
@@ -457,16 +461,21 @@ export default function LessonScreen() {
 
 function LessonStickyActions({
   listenFirst,
-  bottomInset,
+  stickyBottomOffset,
+  lessonId,
   onListen,
   onQuiz,
 }: {
   listenFirst: boolean;
-  bottomInset: number;
+  /** Aus useBottomChromeLayout: direkt über Mini-Player/Reiter, ohne Scroll-Doppel-Safe-Area. */
+  stickyBottomOffset: number;
+  lessonId: string;
   onListen: () => void;
   onQuiz: () => void;
 }) {
   const theme = useTheme();
+  const queue = usePlayerStore((s) => s.queue);
+  const playingThisLesson = currentItem(queue)?.lessonId === lessonId;
   const listenButton = (
     <Pressable
       key="listen"
@@ -510,6 +519,9 @@ function LessonStickyActions({
     </Pressable>
   );
 
+  const actions =
+    playingThisLesson ? [quizButton] : listenFirst ? [listenButton, quizButton] : [quizButton, listenButton];
+
   return (
     <View
       style={[
@@ -517,15 +529,15 @@ function LessonStickyActions({
         {
           backgroundColor: theme.colors.bg,
           borderTopColor: theme.colors.border,
-          paddingBottom: bottomInset + theme.spacing.sm,
+          bottom: stickyBottomOffset,
+          paddingBottom: theme.spacing.sm,
           paddingHorizontal: theme.spacing.base,
           paddingTop: theme.spacing.sm,
+          zIndex: 15,
         },
       ]}
     >
-      <View style={{ flexDirection: 'row', gap: theme.spacing.sm }}>
-        {listenFirst ? [listenButton, quizButton] : [quizButton, listenButton]}
-      </View>
+      <View style={{ flexDirection: 'row', gap: theme.spacing.sm }}>{actions}</View>
     </View>
   );
 }
@@ -540,11 +552,13 @@ function LessonHeader({
   sections,
   onJump,
   audioError,
+  onRetryListen,
 }: {
   lesson: Lesson;
   sections: Section[];
   onJump: (key: SectionKey) => void;
   audioError: boolean;
+  onRetryListen: () => void;
 }) {
   const theme = useTheme();
   const allJumpTargets: { key: SectionKey; label: string }[] = [
@@ -578,12 +592,32 @@ function LessonHeader({
       </View>
 
       {audioError ? (
-        <Text
-          accessibilityRole="alert"
-          style={[styles.metaText, { color: theme.colors.error, marginTop: theme.spacing.xs }]}
-        >
-          {de.player.loadError}
-        </Text>
+        <View style={{ marginTop: theme.spacing.xs, gap: theme.spacing.sm }}>
+          <Text accessibilityRole="alert" style={[styles.metaText, { color: theme.colors.error }]}>
+            {de.player.loadError}
+          </Text>
+          <Pressable
+            onPress={onRetryListen}
+            accessibilityRole="button"
+            accessibilityLabel={de.player.retryPlayback}
+            style={({ pressed }) => [
+              styles.secondaryButton,
+              {
+                borderColor: theme.colors.error,
+                backgroundColor: theme.colors.surface,
+                minHeight: theme.minTapTarget,
+                minWidth: 160,
+                paddingHorizontal: theme.spacing.base,
+                alignSelf: 'flex-start',
+                opacity: pressed ? 0.88 : 1,
+              },
+            ]}
+          >
+            <Text style={[styles.secondaryButtonLabel, { color: theme.colors.error, fontWeight: '600' }]}>
+              {de.player.retryPlayback}
+            </Text>
+          </Pressable>
+        </View>
       ) : null}
 
       {jumpTargets.length > 0 ? (

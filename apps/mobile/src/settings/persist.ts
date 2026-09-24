@@ -17,6 +17,7 @@ export const SETTINGS_KEYS = {
   colorScheme: 'color_scheme',
   telemetryEnabled: 'telemetry_enabled',
   installId: 'install_id',
+  preferredLearnTime: 'preferred_learn_time',
 } as const;
 
 // Wird von den Stores als "fire and forget" aufgerufen (Store-Update zuerst,
@@ -51,7 +52,13 @@ export async function hydrateSettings(): Promise<AppSettings> {
   const installId = raw[SETTINGS_KEYS.installId] ?? (await getOrCreateInstallId());
 
   const goalRaw = raw[SETTINGS_KEYS.goal];
-  const goal: AppSettings['goal'] = goalRaw === 'career' || goalRaw === 'interest' ? goalRaw : null;
+  const goal: AppSettings['goal'] =
+    goalRaw === 'career' || goalRaw === 'interest' || goalRaw === 'upskill' ? goalRaw : null;
+  const preferredLearnTimeRaw = raw[SETTINGS_KEYS.preferredLearnTime];
+  const preferredLearnTime: AppSettings['preferredLearnTime'] =
+    preferredLearnTimeRaw === 'morning' || preferredLearnTimeRaw === 'commute' || preferredLearnTimeRaw === 'evening'
+      ? preferredLearnTimeRaw
+      : null;
   const firstFormPreference = raw[SETTINGS_KEYS.firstFormPreference] === 'listen' ? 'listen' : 'read';
   const colorSchemeRaw = raw[SETTINGS_KEYS.colorScheme];
   const colorScheme = colorSchemeRaw === 'light' || colorSchemeRaw === 'dark' ? colorSchemeRaw : 'system';
@@ -63,6 +70,7 @@ export async function hydrateSettings(): Promise<AppSettings> {
     onboardingDone: parseBool(raw[SETTINGS_KEYS.onboardingDone], DEFAULT_SETTINGS.onboardingDone),
     goal,
     firstFormPreference,
+    preferredLearnTime,
     dailyGoalMinutes: parseNumber(raw[SETTINGS_KEYS.dailyGoalMinutes], DEFAULT_SETTINGS.dailyGoalMinutes),
     quizLength: parseNumber(raw[SETTINGS_KEYS.quizLength], DEFAULT_SETTINGS.quizLength),
     reviewIntensity,

@@ -27,6 +27,7 @@ export const de = {
       `${count} fällige Wiederholungsfrage${count === 1 ? '' : 'n'} heute`,
     dailyGoalProgressToday: (learnedMinutes: number, goalMinutes: number) =>
       `${learnedMinutes} / ${goalMinutes} Min heute`,
+    dailyGoalMet: 'Tagesziel erreicht — gut gemacht.',
     dailyGoalSettingsTip: (minutes: number) => `Tagesziel: ${minutes} Min. in Einstellungen festlegen.`,
     nextRecommendationTitle: 'Nächste Empfehlung',
     nextRecommendationFallback: 'Nächste Lektion',
@@ -36,6 +37,7 @@ export const de = {
     dailyRationTileBody: (count: number) => `${count} fällige Frage${count === 1 ? '' : 'n'}`,
     dailyRationTileEmpty: 'Heute nichts fällig',
     weekOverviewTitle: 'Wochenübersicht',
+    weekdayShort: ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'] as const,
   },
   lernen: {
     title: 'Lernen',
@@ -70,6 +72,8 @@ export const de = {
     continueCard: 'Weiterhören',
     continueTitleFallback: 'Letzte Lektion',
     playModule: 'Modul am Stück',
+    playLesson: 'Lektion abspielen',
+    refreshing: 'Aktualisiere…',
     downloaded: 'Heruntergeladen',
     notDownloaded: 'Nicht heruntergeladen',
     storageTitle: 'Speicherverwaltung',
@@ -117,6 +121,7 @@ export const de = {
     downloading: (percent: number) => `${percent}% geladen`,
     loadError: 'Diese Aufnahme lässt sich nicht abspielen',
     retry: 'Erneut herunterladen',
+    retryPlayback: 'Erneut abspielen',
     remove: 'Entfernen',
     close: 'Schließen',
   },
@@ -134,6 +139,8 @@ export const de = {
     dailyRationTitle: 'Heutige Wiederholung',
     dailyRationBody: (count: number) => `${count} fällige Frage${count === 1 ? '' : 'n'} in deiner Tagesration`,
     startDailyRation: 'Tagesration starten',
+    dailyRationScopeNote: 'Nur die heutige Tagesration — nicht alle fälligen Fragen.',
+    wiederholenAllDueNote: 'Alle fälligen Fragen — nicht nur die Tagesration.',
     heuteEmptyTitle: 'Nichts fällig',
     heuteEmptyBody: 'Deine Tagesration ist erledigt oder noch leer. Unten findest du Prüfungen und mehr Üben.',
     wiederholenDueBody: (count: number) =>
@@ -163,7 +170,13 @@ export const de = {
     showDefinition: 'Definition zeigen',
     know: 'Kann ich',
     dontKnow: 'Noch nicht',
+    feedbackKnow: 'Gut gemerkt',
+    feedbackDontKnow: 'Wird wiederholt',
     emptyBody: 'Noch keine Begriffe verfügbar. Starte eine Lektion mit Fachbegriffen.',
+    loading: 'Karteikarten werden geladen…',
+    deckCompleteTitle: 'Stapel durch — gut gemacht!',
+    deckCompleteAgain: 'Nochmal',
+    deckCompleteDone: 'Fertig',
   },
   erklaer: {
     title: 'Erklär-Prüfung',
@@ -191,6 +204,7 @@ export const de = {
     title: 'Ich',
     profileTitle: 'Profil',
     profileDailyGoal: (minutes: number) => `Tagesziel: ${minutes} Minuten`,
+    profilePreferredLearnTime: (label: string) => `Bevorzugte Lernzeit: ${label}`,
     profileIntensity: (label: string) => `Wiederholung: ${label}`,
     profileProgressSummary: (modulesStarted: number, lessonsDone: number) =>
       `${modulesStarted} Modul${modulesStarted === 1 ? '' : 'e'} begonnen · ${lessonsDone} Lektion${lessonsDone === 1 ? '' : 'en'} abgeschlossen`,
@@ -218,19 +232,43 @@ export const de = {
   },
   onboarding: {
     step1Title: 'Wofür lernst du?',
-    step1Body: 'Das hilft uns, dir passende Inhalte vorzuschlagen. Rein informativ, keine Sperre.',
+    step1Body:
+      'Dein Ziel steuert, welche Module und Karriere-Hinweise wir zuerst zeigen. Du kannst jederzeit weitermachen wie bisher — nichts wird gesperrt. Wähle, was am ehesten zu deiner Situation passt.',
     step1OptionCareer: 'Berufswechsel',
+    step1OptionCareerSubtitle: 'Fokus auf Jobreife, Portfolio und Prüfungsvorbereitung.',
+    step1OptionUpskill: 'Berufsbegleitend upskillen',
+    step1OptionUpskillSubtitle: 'Kürzere Einheiten und Wiederholungen passend zum Alltag.',
     step1OptionInterest: 'Freies Interesse',
-    step2Title: 'Lesen oder Hören zuerst?',
-    step2Body: 'Änderbar in den Einstellungen.',
-    step2OptionRead: 'Lesen',
-    step2OptionListen: 'Hören',
+    step1OptionInterestSubtitle: 'Entdecken ohne Karriere-Druck — Start und Üben stehen im Vordergrund.',
+    step2Title: 'Wie möchtest du starten?',
+    step2Body:
+      'Lesen und Hören bleiben in jeder Lektion verfügbar. Diese Wahl legt fest, wohin „Weitermachen“ auf dem Start-Reiter springt. Du änderst das jederzeit unter Einstellungen.',
+    step2OptionRead: 'Lesen zuerst',
+    step2OptionReadSubtitle: 'Text, Begriffe und Aufgaben — gut für fokussiertes Arbeiten.',
+    step2OptionListen: 'Hören zuerst',
+    step2OptionListenSubtitle: 'Player und Kapitel — ideal unterwegs oder nebenbei.',
+    step2TimeTitle: 'Wann lernst du am liebsten?',
+    step2TimeBody:
+      'Hilft uns, Erinnerungen und Tagesration später sinnvoll zu planen. Noch ohne Push — nur als Merkhilfe in deinem Profil.',
+    step2TimeMorning: 'Morgens',
+    step2TimeMorningSubtitle: 'Frische Einheit vor dem Tag.',
+    step2TimeCommute: 'Unterwegs',
+    step2TimeCommuteSubtitle: 'Pendeln, Pause oder kurze Slots zwischendurch.',
+    step2TimeEvening: 'Abends',
+    step2TimeEveningSubtitle: 'Ruhiger Block nach Feierabend.',
     step3Title: 'Wie viel Zeit hast du täglich?',
-    step3Body: 'Ein sinnvoller Vorschlag, jederzeit änderbar.',
-    step3OptionShort: '10 Minuten',
-    step3OptionMedium: '20 Minuten',
-    step3OptionLong: '40 Minuten',
+    step3Body:
+      'Das Tagesziel zählt Lese- und Hörminuten zusammen. Auf dem Start-Reiter siehst du deinen Fortschritt; in Üben richtet sich die Tagesration danach. Du kannst die Minuten jederzeit erhöhen oder senken.',
+    step3OptionLabel: (minutes: number) => `${minutes} Minuten`,
+    step3OptionSubtitle: (minutes: number) => {
+      if (minutes <= 10) return 'Kurz und regelmäßig — ideal für den Einstieg.';
+      if (minutes <= 20) return 'Solider Alltagsrhythmus für die meisten.';
+      if (minutes <= 40) return 'Mehr Tiefe pro Tag, wenn du Zeit blocken kannst.';
+      if (minutes <= 60) return 'Intensiver Lernblock — Tagesration wächst mit.';
+      return 'Maximaler Fokus — nur wählen, wenn du wirklich Zeit hast.';
+    },
     next: 'Weiter',
+    back: 'Zurück',
     finish: 'Los geht’s',
     heroLabel: 'Illustration: Lernen mit FutureDev',
   },
@@ -264,6 +302,7 @@ export const de = {
     speakerA: 'Sprecher A',
     speakerB: 'Sprecher B',
     chapterSectionFallback: 'Abschnitt',
+    retryListen: 'Erneut abspielen',
   },
   quiz: {
     rulesTitle: 'Bevor es losgeht',
@@ -280,6 +319,8 @@ export const de = {
     cancelConfirmYes: 'Ja, abbrechen',
     cancelConfirmNo: 'Weitermachen',
     correctAnswerLabel: 'Richtige Antwort',
+    feedbackCorrect: 'Richtig',
+    feedbackWrong: 'Leider falsch',
     resultTitlePassed: 'Bestanden',
     resultTitleFailed: 'Nicht bestanden',
     resultScore: (correct: number, total: number, percent: number) =>
@@ -342,6 +383,7 @@ export const de = {
     aboutTitle: 'Über',
   },
   common: {
+    appName: 'FutureDev',
     offlineBanner: 'Offline. Zuletzt aktualisiert am',
     back: 'Zurück',
     cancel: 'Abbrechen',

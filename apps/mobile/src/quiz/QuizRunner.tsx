@@ -271,14 +271,16 @@ export function QuizRunner({ pool, desiredCount, scope, heading, onExit, onNextL
             const showState = phase === 'feedback';
             let bg: string = theme.colors.surface;
             let border: string = theme.colors.border;
+            let borderWidth = StyleSheet.hairlineWidth;
             if (showState && isChosen && option.isCorrect) {
-              bg = theme.colors.success;
               border = theme.colors.success;
+              borderWidth = 2;
             } else if (showState && isChosen && !option.isCorrect) {
-              bg = theme.colors.error;
               border = theme.colors.error;
+              borderWidth = 2;
             } else if (showState && option.isCorrect) {
               border = theme.colors.success;
+              borderWidth = 2;
             }
             return (
               <Pressable
@@ -293,6 +295,7 @@ export function QuizRunner({ pool, desiredCount, scope, heading, onExit, onNextL
                   {
                     backgroundColor: bg,
                     borderColor: border,
+                    borderWidth,
                     borderRadius: theme.radius.md,
                     minHeight: 56,
                   },
@@ -301,7 +304,7 @@ export function QuizRunner({ pool, desiredCount, scope, heading, onExit, onNextL
                 <Text
                   style={[
                     styles.optionLabel,
-                    { color: showState && isChosen ? theme.colors.accentText : theme.colors.text },
+                    { color: theme.colors.text },
                   ]}
                 >
                   {option.text}
@@ -312,7 +315,17 @@ export function QuizRunner({ pool, desiredCount, scope, heading, onExit, onNextL
         </View>
         {phase === 'feedback' && chosen !== null ? (
           <View style={{ marginTop: theme.spacing.lg }}>
-            <Text style={[styles.body, { color: theme.colors.text }]}>
+            <Text
+              style={[
+                styles.feedbackBadge,
+                {
+                  color: question.options[chosen]?.isCorrect ? theme.colors.success : theme.colors.error,
+                },
+              ]}
+            >
+              {question.options[chosen]?.isCorrect ? de.quiz.feedbackCorrect : de.quiz.feedbackWrong}
+            </Text>
+            <Text style={[styles.body, { color: theme.colors.text, marginTop: theme.spacing.xs }]}>
               {question.options[chosen]?.explanation}
             </Text>
             {!question.options[chosen]?.isCorrect ? (
@@ -387,7 +400,8 @@ const styles = StyleSheet.create({
   topRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   progressTrack: { height: 8, width: '100%', overflow: 'hidden' },
   progressFill: { height: 8 },
-  option: { borderWidth: StyleSheet.hairlineWidth, justifyContent: 'center', paddingHorizontal: 16, paddingVertical: 12 },
+  option: { justifyContent: 'center', paddingHorizontal: 16, paddingVertical: 12 },
+  feedbackBadge: { fontSize: 15, lineHeight: 22, fontWeight: '700' },
   optionLabel: { fontSize: 16, lineHeight: 22, fontWeight: '500' },
   primaryButton: { justifyContent: 'center', alignItems: 'center', paddingHorizontal: 20 },
   primaryButtonLabel: { fontSize: 16, lineHeight: 24, fontWeight: '600' },

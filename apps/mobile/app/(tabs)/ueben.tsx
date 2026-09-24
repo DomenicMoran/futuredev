@@ -19,7 +19,9 @@ export default function UebenScreen() {
   const reviewIntensity = useSettingsStore((s) => s.reviewIntensity);
   const [rationCount, setRationCount] = useState<number | null>(null);
   const [totalDueCount, setTotalDueCount] = useState<number | null>(null);
-  const [reviewLessonId, setReviewLessonId] = useState<string | null>(null);
+  const [rationLessonId, setRationLessonId] = useState<string | null>(null);
+  const [wiederholenLessonId, setWiederholenLessonId] = useState<string | null>(null);
+  const [refreshing, setRefreshing] = useState(false);
   const [publishedLessonIds, setPublishedLessonIds] = useState<string[]>([]);
   const bottomInset = useBottomChromeInset();
   const inset = theme.spacing.base;
@@ -31,23 +33,30 @@ export default function UebenScreen() {
 
   const refresh = useCallback(() => {
     let cancelled = false;
+    setRefreshing(true);
     loadReviewCards()
       .then((cards) => {
         if (cancelled) return;
         const now = new Date();
-        const dueTotal = cards.filter((c) => isDue(c, now)).length;
+        const dueCards = cards.filter((c) => isDue(c, now));
+        const dueTotal = dueCards.length;
         const size = dailyRationSize(dailyGoalMinutes, reviewIntensity);
         const ration = selectDailyRation(cards, size, now);
         setTotalDueCount(dueTotal);
         setRationCount(ration.length);
-        setReviewLessonId(pickReviewLesson(ration.length > 0 ? ration : cards.filter((c) => isDue(c, now))));
+        setRationLessonId(pickReviewLesson(ration));
+        setWiederholenLessonId(pickReviewLesson(dueCards));
       })
       .catch(() => {
         if (!cancelled) {
           setRationCount(0);
           setTotalDueCount(0);
-          setReviewLessonId(null);
+          setRationLessonId(null);
+          setWiederholenLessonId(null);
         }
+      })
+      .finally(() => {
+        if (!cancelled) setRefreshing(false);
       });
     knownLessonIds()
       .then((ids) => {
@@ -63,11 +72,14 @@ export default function UebenScreen() {
 
   useFocusEffect(refresh);
 
+  const sameReviewLesson =
+    rationLessonId !== null && wiederholenLessonId !== null && rationLessonId === wiederholenLessonId;
+
   return (
     <ScrollView
       style={[styles.container, { backgroundColor: theme.colors.bg }]}
       contentContainerStyle={{ padding: inset, paddingBottom: bottomInset }}
-      refreshControl={<RefreshControl refreshing={false} onRefresh={refresh} />}
+      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh} />}
     >
       <SectionHeader title={de.ueben.sectionHeute} theme={theme} />
       {rationCount === null ? null : rationCount === 0 ? (
@@ -79,13 +91,27 @@ export default function UebenScreen() {
       ) : (
         <ActionCard
           title={de.ueben.dailyRationTitle}
-          body={de.ueben.dailyRationBody(rationCount)}
+          body={
+            sameReviewLesson
+              ? `${de.ueben.dailyRationBody(rationCount)} ${de.ueben.dailyRationScopeNote}`
+              : de.ueben.dailyRationBody(rationCount)
+          }
           actionLabel={de.ueben.startDailyRation}
-          onAction={() => reviewLessonId && router.push(`/quiz/${reviewLessonId}`)}
-          disabled={!reviewLessonId}
+          onAction={() => rationLessonId && router.push(`/quiz/${rationLessonId}`)}
+          disabled={!rationLessonId}
           theme={theme}
         />
       )}
+
+      <SectionHeader title={de.ueben.sectionFlashcards} theme={theme} topGap />
+      <ActionCard
+        title={de.ueben.sectionFlashcards}
+        body={de.ueben.flashcardsBody}
+        actionLabel={de.ueben.flashcardsOpen}
+        onAction={() => router.push('/flashcards')}
+        theme={theme}
+        Icon={Layers}
+      />
 
       <SectionHeader title={de.ueben.sectionWiederholen} theme={theme} topGap />
       {totalDueCount === null ? null : totalDueCount === 0 ? (
@@ -93,10 +119,14 @@ export default function UebenScreen() {
       ) : (
         <ActionCard
           title={de.ueben.sectionWiederholen}
-          body={de.ueben.wiederholenDueBody(totalDueCount)}
+          body={
+            sameReviewLesson
+              ? `${de.ueben.wiederholenDueBody(totalDueCount)} ${de.ueben.wiederholenAllDueNote}`
+              : de.ueben.wiederholenDueBody(totalDueCount)
+          }
           actionLabel={de.ueben.wiederholenStart}
-          onAction={() => reviewLessonId && router.push(`/quiz/${reviewLessonId}`)}
-          disabled={!reviewLessonId}
+          onAction={() => wiederholenLessonId && router.push(`/quiz/${wiederholenLessonId}`)}
+          disabled={!wiederholenLessonId}
           theme={theme}
           Icon={Dumbbell}
         />
@@ -125,16 +155,6 @@ export default function UebenScreen() {
           />
         ))}
       </View>
-
-      <SectionHeader title={de.ueben.sectionFlashcards} theme={theme} topGap />
-      <ActionCard
-        title={de.ueben.sectionFlashcards}
-        body={de.ueben.flashcardsBody}
-        actionLabel={de.ueben.flashcardsOpen}
-        onAction={() => router.push('/flashcards')}
-        theme={theme}
-        Icon={Layers}
-      />
 
       <SectionHeader title={de.ueben.sectionErklaeren} theme={theme} topGap />
       <LinkCard

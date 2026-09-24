@@ -1,6 +1,8 @@
 import { useState, type ReactNode } from 'react';
 import { Alert, Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
+import { ChevronLeft } from 'lucide-react-native';
 import * as FileSystem from 'expo-file-system/legacy';
 import * as Sharing from 'expo-sharing';
 import * as DocumentPicker from 'expo-document-picker';
@@ -12,7 +14,7 @@ import { wipeAllTables } from '../../src/settings/db.js';
 import { exportAll, importAll } from '../../src/data/exportImport.js';
 import type { ReviewIntensity } from '../../src/settings/types.js';
 
-const DAILY_GOAL_OPTIONS = [10, 20, 40];
+const DAILY_GOAL_OPTIONS = [10, 20, 40, 60, 90];
 const QUIZ_LENGTH_OPTIONS = [10, 15, 20];
 const REVIEW_INTENSITY_OPTIONS: ReviewIntensity[] = ['leicht', 'normal', 'intensiv'];
 
@@ -93,8 +95,21 @@ export default function SettingsScreen() {
   }
 
   return (
-    <ScrollView style={[styles.container, { backgroundColor: theme.colors.bg }]} contentContainerStyle={{ padding: theme.spacing.lg }}>
-      <Text style={[styles.title, { color: theme.colors.text }]}>{de.settings.title}</Text>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.bg }]}>
+      <View style={[styles.header, { paddingHorizontal: theme.spacing.base }]}>
+        <Pressable
+          onPress={() => router.back()}
+          accessibilityRole="button"
+          accessibilityLabel={de.common.back}
+          hitSlop={12}
+          style={{ minWidth: theme.minTapTarget, minHeight: theme.minTapTarget, justifyContent: 'center' }}
+        >
+          <ChevronLeft color={theme.colors.text} size={26} />
+        </Pressable>
+        <Text style={[styles.headerTitle, { color: theme.colors.text }]}>{de.settings.title}</Text>
+        <View style={{ width: theme.minTapTarget }} />
+      </View>
+      <ScrollView contentContainerStyle={{ padding: theme.spacing.lg }}>
 
       <OptionGroup theme={theme} title={de.settings.dailyGoalTitle}>
         {DAILY_GOAL_OPTIONS.map((minutes) => (
@@ -159,7 +174,8 @@ export default function SettingsScreen() {
         <Text style={[styles.groupTitle, { color: theme.colors.error }]}>{de.settings.deleteAllTitle}</Text>
         <ActionButton theme={theme} label={de.settings.deleteAllAction} onPress={handleDeleteAll} destructive />
       </View>
-    </ScrollView>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
@@ -241,6 +257,8 @@ function ActionButton({ theme, label, onPress, destructive }: { theme: ReturnTyp
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
+  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  headerTitle: { fontSize: 17, fontWeight: '600' },
   title: { fontSize: 24, lineHeight: 32, fontWeight: '700' },
   groupTitle: { fontSize: 15, lineHeight: 22, fontWeight: '600' },
   pill: { paddingHorizontal: 16, justifyContent: 'center', alignItems: 'center', borderWidth: StyleSheet.hairlineWidth },

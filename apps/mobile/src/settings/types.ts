@@ -5,6 +5,8 @@
 
 export type ReviewIntensity = 'leicht' | 'normal' | 'intensiv';
 
+export type PreferredLearnTime = 'morning' | 'commute' | 'evening';
+
 // Faktor auf die Tagesration (lehrplan-konzept.md, Abschnitt 6).
 export const REVIEW_INTENSITY_FACTOR: Record<ReviewIntensity, number> = {
   leicht: 0.5,
@@ -14,8 +16,9 @@ export const REVIEW_INTENSITY_FACTOR: Record<ReviewIntensity, number> = {
 
 export interface AppSettings {
   onboardingDone: boolean;
-  goal: 'career' | 'interest' | null;
+  goal: 'career' | 'interest' | 'upskill' | null;
   firstFormPreference: 'read' | 'listen';
+  preferredLearnTime: PreferredLearnTime | null;
   dailyGoalMinutes: number;
   quizLength: number;
   reviewIntensity: ReviewIntensity;
@@ -31,6 +34,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
   onboardingDone: false,
   goal: null,
   firstFormPreference: 'read',
+  preferredLearnTime: null,
   dailyGoalMinutes: 20,
   quizLength: DEFAULT_QUIZ_LENGTH,
   reviewIntensity: 'normal',

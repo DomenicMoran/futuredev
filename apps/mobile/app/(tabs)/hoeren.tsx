@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect } from 'expo-router';
-import { Headphones, Download, ListMusic, Trash2 } from 'lucide-react-native';
+import { Headphones, Download, ListMusic, Play, Trash2 } from 'lucide-react-native';
 import { useTheme } from '../../src/theme/useTheme.js';
 import { EmptyState } from '../../src/components/EmptyState.js';
 import { de } from '../../src/i18n/de.js';
@@ -24,6 +24,8 @@ export default function HoerenScreen() {
   const theme = useTheme();
   const bottomInset = useBottomChromeInset();
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [hasLoadedOnce, setHasLoadedOnce] = useState(false);
   const [modules, setModules] = useState<ModuleListEntry[]>([]);
   const [continueCard, setContinueCard] = useState<ContinueCard | null>(null);
   const [downloaded, setDownloaded] = useState<Record<string, boolean>>({});
@@ -44,8 +46,9 @@ export default function HoerenScreen() {
     }
   }, []);
 
-  const load = useCallback(async () => {
-    setLoading(true);
+  const load = useCallback(async (background = false) => {
+    if (background) setRefreshing(true);
+    else setLoading(true);
     try {
       const fs = await getContentFs();
       const [manifest, modulesFile, progressRows] = await Promise.all([
@@ -83,20 +86,22 @@ export default function HoerenScreen() {
       }
     } finally {
       setLoading(false);
+      setRefreshing(false);
+      setHasLoadedOnce(true);
     }
   }, []);
 
   useEffect(() => {
-    void load();
+    void load(false);
   }, [load]);
 
   useFocusEffect(
     useCallback(() => {
-      void load();
-    }, [load]),
+      if (hasLoadedOnce) void load(true);
+    }, [load, hasLoadedOnce]),
   );
 
-  if (loading) {
+  if (loading && !hasLoadedOnce) {
     return (
       <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.bg, justifyContent: 'center' }]}>
         <ActivityIndicator color={theme.colors.accent} />
@@ -110,6 +115,12 @@ export default function HoerenScreen() {
     return (
       <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.bg }]}>
         <ScrollView contentContainerStyle={{ padding: theme.spacing.base, paddingBottom: bottomInset, gap: theme.spacing.lg }}>
+          {refreshing ? (
+            <View style={styles.refreshRow}>
+              <ActivityIndicator size="small" color={theme.colors.accent} />
+              <Text style={{ color: theme.colors.textWeak, fontSize: 13 }}>{de.hoeren.refreshing}</Text>
+            </View>
+          ) : null}
           <EmptyState Icon={Headphones} title={de.hoeren.emptyTitle} body={de.hoeren.emptyBody} />
           <PlaylistsSection
             lessonTitleFor={(lessonId) => lessonId}
@@ -132,6 +143,12 @@ export default function HoerenScreen() {
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.bg }]}>
       <ScrollView contentContainerStyle={{ padding: theme.spacing.base, paddingBottom: bottomInset, gap: theme.spacing.lg }}>
+        {refreshing ? (
+          <View style={styles.refreshRow}>
+            <ActivityIndicator size="small" color={theme.colors.accent} />
+            <Text style={{ color: theme.colors.textWeak, fontSize: 13 }}>{de.hoeren.refreshing}</Text>
+          </View>
+        ) : null}
         {playbackError ? (
           <View style={[styles.banner, { backgroundColor: theme.colors.surface, borderColor: theme.colors.error }]}>
             <Text style={{ color: theme.colors.error }}>{de.player.loadError}</Text>
@@ -228,63 +245,87 @@ export default function HoerenScreen() {
             </View>
 
             {module.subModules.flatMap((sub) => sub.lessons).map((lesson) => (
-              <Pressable
+              <View
                 key={lesson.id}
-                onPress={() => void runPlayback(() => playLesson(lesson.id))}
-                accessibilityRole="button"
-                accessibilityLabel={`${lesson.title}, ${lesson.durationMinutes} Minuten, ${downloaded[lesson.id] ? de.hoeren.downloaded : de.hoeren.notDownloaded}`}
-                style={({ pressed }) => [
+                style={[
                   styles.lessonRow,
                   {
                     minHeight: theme.minTapTarget,
                     borderColor: theme.colors.border,
                     borderRadius: theme.radius.md,
                     backgroundColor: theme.colors.surface,
-                    opacity: pressed ? 0.96 : 1,
                   },
                 ]}
               >
+                <Pressable
+                  onPress={() => void runPlayback(() => playLesson(lesson.id))}
+                  accessibilityRole="button"
+                  accessibilityLabel={`${de.hoeren.playLesson}: ${lesson.title}`}
+                  hitSlop={8}
+                  style={({ pressed }) => [
+                    styles.lessonPlayButton,
+                    {
+                      minWidth: theme.minTapTarget,
+                      minHeight: theme.minTapTarget,
+                      opacity: pressed ? 0.88 : 1,
+                    },
+                  ]}
+                >
+                  <Play color={theme.colors.accent} size={20} fill={theme.colors.accent} />
+                </Pressable>
                 <Text numberOfLines={1} style={[styles.lessonTitle, { color: theme.colors.text }]}>
                   {lesson.title}
                 </Text>
                 <Text style={[styles.lessonDuration, { color: theme.colors.textWeak }]}>{lesson.durationMinutes} Min</Text>
-                <Pressable
-                  onPress={(e) => {
-                    e.stopPropagation();
-                    setRequestAddLessonId(lesson.id);
-                  }}
-                  accessibilityRole="button"
-                  accessibilityLabel={de.hoeren.playlistAddLesson}
-                  hitSlop={8}
-                  style={{ minWidth: theme.minTapTarget, minHeight: theme.minTapTarget, alignItems: 'center', justifyContent: 'center' }}
-                >
-                  <ListMusic color={theme.colors.accent} size={18} />
-                </Pressable>
-                <Pressable
-                  onPress={(e) => {
-                    e.stopPropagation();
-                    void runPlayback(async () => {
-                      if (downloaded[lesson.id]) {
-                        await deleteDownload(lesson.id);
-                        setDownloaded((d) => ({ ...d, [lesson.id]: false }));
-                      } else {
-                        await downloadLesson(lesson.id);
-                        setDownloaded((d) => ({ ...d, [lesson.id]: true }));
-                      }
-                    });
-                  }}
-                  accessibilityRole="button"
-                  accessibilityLabel={downloaded[lesson.id] ? de.player.deleteDownload : de.player.download}
-                  hitSlop={8}
-                  style={{ minWidth: theme.minTapTarget, minHeight: theme.minTapTarget, alignItems: 'center', justifyContent: 'center' }}
-                >
+                <View style={styles.lessonIconActions}>
+                  <Pressable
+                    onPress={() => setRequestAddLessonId(lesson.id)}
+                    accessibilityRole="button"
+                    accessibilityLabel={`${de.hoeren.playlistAddLesson}: ${lesson.title}`}
+                    hitSlop={8}
+                    style={{
+                      minWidth: theme.minTapTarget,
+                      minHeight: theme.minTapTarget,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <ListMusic color={theme.colors.accent} size={18} />
+                  </Pressable>
+                  <Pressable
+                    onPress={() => {
+                      void runPlayback(async () => {
+                        if (downloaded[lesson.id]) {
+                          await deleteDownload(lesson.id);
+                          setDownloaded((d) => ({ ...d, [lesson.id]: false }));
+                        } else {
+                          await downloadLesson(lesson.id);
+                          setDownloaded((d) => ({ ...d, [lesson.id]: true }));
+                        }
+                      });
+                    }}
+                    accessibilityRole="button"
+                    accessibilityLabel={
+                      downloaded[lesson.id]
+                        ? `${de.player.deleteDownload}: ${lesson.title}`
+                        : `${de.player.download}: ${lesson.title}`
+                    }
+                    hitSlop={8}
+                    style={{
+                      minWidth: theme.minTapTarget,
+                      minHeight: theme.minTapTarget,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
                   {downloaded[lesson.id] ? (
                     <Trash2 color={theme.colors.textWeak} size={18} />
                   ) : (
                     <Download color={theme.colors.accent} size={18} />
                   )}
-                </Pressable>
-              </Pressable>
+                  </Pressable>
+                </View>
+              </View>
             ))}
           </View>
         ))}
@@ -376,4 +417,7 @@ const styles = StyleSheet.create({
   storage: { borderWidth: StyleSheet.hairlineWidth },
   banner: { padding: 12, borderRadius: 8, borderWidth: StyleSheet.hairlineWidth },
   offlineHint: { borderWidth: StyleSheet.hairlineWidth },
+  refreshRow: { flexDirection: 'row', alignItems: 'center', gap: 8, paddingVertical: 4 },
+  lessonPlayButton: { alignItems: 'center', justifyContent: 'center' },
+  lessonIconActions: { flexDirection: 'row', alignItems: 'center', gap: 4 },
 });

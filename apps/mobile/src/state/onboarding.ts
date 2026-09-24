@@ -4,7 +4,7 @@ import { persistSetting } from '../settings/persist.js';
 // Onboarding-Zustand: drei Schritte. `completed` steuert die Weiterleitung im
 // Root-Layout. Persistiert additiv über src/settings/persist.ts an
 // `settings.onboarding_done` und `settings.goal` (AP-3.5, Punkt 6).
-export type OnboardingGoal = 'career' | 'interest';
+export type OnboardingGoal = 'career' | 'interest' | 'upskill';
 
 interface OnboardingState {
   completed: boolean;

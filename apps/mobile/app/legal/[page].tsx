@@ -1,8 +1,9 @@
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import { useLocalSearchParams } from 'expo-router';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { router, useLocalSearchParams } from 'expo-router';
 import { useTheme } from '../../src/theme/useTheme.js';
 import { EmptyState } from '../../src/components/EmptyState.js';
-import { Scale } from 'lucide-react-native';
+import { ChevronLeft, Scale } from 'lucide-react-native';
 import { de } from '../../src/i18n/de.js';
 import { legal } from '../../src/legal/de.js';
 import licenses from '../../src/legal/licenses.json';
@@ -27,16 +28,19 @@ export default function LegalPageScreen() {
 
   if (!key) {
     return (
-      <View style={[styles.container, { backgroundColor: theme.colors.bg }]}>
+      <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.bg }]}>
+        <LegalHeader title={de.legal.title} theme={theme} />
         <EmptyState Icon={Scale} title={de.legal.title} body={de.legal.draftNotice} />
-      </View>
+      </SafeAreaView>
     );
   }
 
   const content = PAGES[key];
 
   return (
-    <ScrollView style={[styles.container, { backgroundColor: theme.colors.bg }]} contentContainerStyle={{ padding: theme.spacing.lg }}>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.bg }]}>
+      <LegalHeader title={content.title} theme={theme} />
+      <ScrollView contentContainerStyle={{ padding: theme.spacing.lg }}>
       <Text style={[styles.title, { color: theme.colors.text }]}>{content.title}</Text>
       <Text style={[styles.draftNotice, { color: theme.colors.warning, marginTop: theme.spacing.xs }]}>
         {de.legal.draftNotice}
@@ -60,12 +64,35 @@ export default function LegalPageScreen() {
           ))}
         </View>
       ) : null}
-    </ScrollView>
+      </ScrollView>
+    </SafeAreaView>
+  );
+}
+
+function LegalHeader({ title, theme }: { title: string; theme: ReturnType<typeof useTheme> }) {
+  return (
+    <View style={[styles.header, { paddingHorizontal: theme.spacing.base }]}>
+      <Pressable
+        onPress={() => router.back()}
+        accessibilityRole="button"
+        accessibilityLabel={de.common.back}
+        hitSlop={12}
+        style={{ minWidth: theme.minTapTarget, minHeight: theme.minTapTarget, justifyContent: 'center' }}
+      >
+        <ChevronLeft color={theme.colors.text} size={26} />
+      </Pressable>
+      <Text style={[styles.headerTitle, { color: theme.colors.text }]} numberOfLines={1}>
+        {title}
+      </Text>
+      <View style={{ width: theme.minTapTarget }} />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
+  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  headerTitle: { fontSize: 17, fontWeight: '600', flex: 1, textAlign: 'center' },
   title: { fontSize: 24, lineHeight: 32, fontWeight: '700' },
   draftNotice: { fontSize: 13, lineHeight: 18, fontWeight: '600' },
   body: { fontSize: 16, lineHeight: 24 },

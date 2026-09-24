@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useFocusEffect, useLocalSearchParams } from 'expo-router';
@@ -19,6 +19,21 @@ export default function FlashcardsScreen() {
   const [index, setIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [deckCompleted, setDeckCompleted] = useState(false);
+  const [rateFeedback, setRateFeedback] = useState<'know' | 'dont' | null>(null);
+  const advanceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const deckRef = useRef<FlashcardEntry[]>([]);
+
+  useEffect(() => {
+    deckRef.current = deck;
+  }, [deck]);
+
+  const clearAdvanceTimer = useCallback(() => {
+    if (advanceTimerRef.current !== null) {
+      clearTimeout(advanceTimerRef.current);
+      advanceTimerRef.current = null;
+    }
+  }, []);
 
   const refresh = useCallback(() => {
     setLoading(true);
@@ -27,12 +42,20 @@ export default function FlashcardsScreen() {
         setDeck(cards);
         setIndex(0);
         setFlipped(false);
+        setDeckCompleted(false);
       })
       .catch(() => setDeck([]))
       .finally(() => setLoading(false));
   }, [moduleFilter]);
 
-  useFocusEffect(refresh);
+  useFocusEffect(
+    useCallback(() => {
+      refresh();
+      return clearAdvanceTimer;
+    }, [refresh, clearAdvanceTimer]),
+  );
+
+  useEffect(() => clearAdvanceTimer, [clearAdvanceTimer]);
 
   const card = deck[index];
   const progressLabel = useMemo(() => {
@@ -41,14 +64,30 @@ export default function FlashcardsScreen() {
   }, [deck.length, index]);
 
   async function rate(wasCorrect: boolean) {
-    if (!card) return;
+    if (!card || rateFeedback !== null) return;
+    clearAdvanceTimer();
+    setRateFeedback(wasCorrect ? 'know' : 'dont');
     await saveFlashcardReview(card.id, wasCorrect);
+    advanceTimerRef.current = setTimeout(() => {
+      advanceTimerRef.current = null;
+      setFlipped(false);
+      setRateFeedback(null);
+      setIndex((prev) => {
+        const len = deckRef.current.length;
+        if (prev + 1 < len) {
+          return prev + 1;
+        }
+        setDeckCompleted(true);
+        return prev;
+      });
+    }, 320);
+  }
+
+  function restartDeck() {
+    setDeckCompleted(false);
+    setIndex(0);
     setFlipped(false);
-    if (index + 1 < deck.length) {
-      setIndex(index + 1);
-    } else {
-      setIndex(0);
-    }
+    setRateFeedback(null);
   }
 
   return (
@@ -75,7 +114,47 @@ export default function FlashcardsScreen() {
           justifyContent: deck.length ? 'flex-start' : 'center',
         }}
       >
-        {loading ? null : deck.length === 0 ? (
+        {loading ? (
+          <Text style={[styles.empty, { color: theme.colors.textWeak }]}>{de.flashcards.loading}</Text>
+        ) : deckCompleted ? (
+          <View style={[styles.completion, { gap: theme.spacing.base }]}>
+            <Text style={[styles.cardText, { color: theme.colors.text }]}>{de.flashcards.deckCompleteTitle}</Text>
+            <View style={[styles.actions, { marginTop: theme.spacing.md }]}>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel={de.flashcards.deckCompleteAgain}
+                onPress={restartDeck}
+                style={[
+                  styles.actionButton,
+                  {
+                    borderColor: theme.colors.border,
+                    borderRadius: theme.radius.md,
+                    minHeight: theme.minTapTarget,
+                    flex: 1,
+                  },
+                ]}
+              >
+                <Text style={[styles.actionLabel, { color: theme.colors.text }]}>{de.flashcards.deckCompleteAgain}</Text>
+              </Pressable>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel={de.flashcards.deckCompleteDone}
+                onPress={() => router.back()}
+                style={[
+                  styles.actionButton,
+                  {
+                    backgroundColor: theme.colors.accent,
+                    borderRadius: theme.radius.md,
+                    minHeight: theme.minTapTarget,
+                    flex: 1,
+                  },
+                ]}
+              >
+                <Text style={[styles.actionLabel, { color: theme.colors.accentText }]}>{de.flashcards.deckCompleteDone}</Text>
+              </Pressable>
+            </View>
+          </View>
+        ) : deck.length === 0 ? (
           <Text style={[styles.empty, { color: theme.colors.textWeak }]}>{de.flashcards.emptyBody}</Text>
         ) : card ? (
           <>
@@ -90,7 +169,13 @@ export default function FlashcardsScreen() {
                 styles.card,
                 {
                   backgroundColor: theme.colors.surface,
-                  borderColor: theme.colors.border,
+                  borderColor:
+                    rateFeedback === 'know'
+                      ? theme.colors.success
+                      : rateFeedback === 'dont'
+                        ? theme.colors.error
+                        : theme.colors.border,
+                  borderWidth: rateFeedback ? 2 : StyleSheet.hairlineWidth,
                   borderRadius: theme.radius.lg,
                   minHeight: 220,
                   padding: theme.spacing.lg,
@@ -106,40 +191,62 @@ export default function FlashcardsScreen() {
             </Pressable>
 
             {flipped ? (
-              <View style={[styles.actions, { gap: theme.spacing.sm, marginTop: theme.spacing.lg }]}>
-                <Pressable
-                  accessibilityRole="button"
-                  accessibilityLabel={de.flashcards.dontKnow}
-                  onPress={() => void rate(false)}
-                  style={[
-                    styles.actionButton,
-                    {
-                      borderColor: theme.colors.border,
-                      borderRadius: theme.radius.md,
-                      minHeight: theme.minTapTarget,
-                      flex: 1,
-                    },
-                  ]}
-                >
-                  <Text style={[styles.actionLabel, { color: theme.colors.text }]}>{de.flashcards.dontKnow}</Text>
-                </Pressable>
-                <Pressable
-                  accessibilityRole="button"
-                  accessibilityLabel={de.flashcards.know}
-                  onPress={() => void rate(true)}
-                  style={[
-                    styles.actionButton,
-                    {
-                      backgroundColor: theme.colors.accent,
-                      borderRadius: theme.radius.md,
-                      minHeight: theme.minTapTarget,
-                      flex: 1,
-                    },
-                  ]}
-                >
-                  <Text style={[styles.actionLabel, { color: theme.colors.accentText }]}>{de.flashcards.know}</Text>
-                </Pressable>
-              </View>
+              <>
+                {rateFeedback ? (
+                  <Text
+                    style={[
+                      styles.feedbackLine,
+                      {
+                        color: rateFeedback === 'know' ? theme.colors.success : theme.colors.error,
+                        marginTop: theme.spacing.sm,
+                      },
+                    ]}
+                  >
+                    {rateFeedback === 'know' ? de.flashcards.feedbackKnow : de.flashcards.feedbackDontKnow}
+                  </Text>
+                ) : null}
+                <View style={[styles.actions, { gap: theme.spacing.sm, marginTop: theme.spacing.lg }]}>
+                  <Pressable
+                    accessibilityRole="button"
+                    accessibilityLabel={de.flashcards.dontKnow}
+                    onPress={() => void rate(false)}
+                    disabled={rateFeedback !== null}
+                    style={[
+                      styles.actionButton,
+                      {
+                        borderColor: rateFeedback === 'dont' ? theme.colors.error : theme.colors.border,
+                        borderWidth: rateFeedback === 'dont' ? 2 : StyleSheet.hairlineWidth,
+                        borderRadius: theme.radius.md,
+                        minHeight: theme.minTapTarget,
+                        flex: 1,
+                        opacity: rateFeedback !== null && rateFeedback !== 'dont' ? 0.5 : 1,
+                      },
+                    ]}
+                  >
+                    <Text style={[styles.actionLabel, { color: theme.colors.text }]}>{de.flashcards.dontKnow}</Text>
+                  </Pressable>
+                  <Pressable
+                    accessibilityRole="button"
+                    accessibilityLabel={de.flashcards.know}
+                    onPress={() => void rate(true)}
+                    disabled={rateFeedback !== null}
+                    style={[
+                      styles.actionButton,
+                      {
+                        backgroundColor: theme.colors.accent,
+                        borderColor: rateFeedback === 'know' ? theme.colors.success : theme.colors.accent,
+                        borderWidth: rateFeedback === 'know' ? 2 : 0,
+                        borderRadius: theme.radius.md,
+                        minHeight: theme.minTapTarget,
+                        flex: 1,
+                        opacity: rateFeedback !== null && rateFeedback !== 'know' ? 0.5 : 1,
+                      },
+                    ]}
+                  >
+                    <Text style={[styles.actionLabel, { color: theme.colors.accentText }]}>{de.flashcards.know}</Text>
+                  </Pressable>
+                </View>
+              </>
             ) : null}
           </>
         ) : null}
@@ -160,4 +267,6 @@ const styles = StyleSheet.create({
   actionButton: { justifyContent: 'center', alignItems: 'center', borderWidth: StyleSheet.hairlineWidth },
   actionLabel: { fontSize: 16, fontWeight: '600' },
   empty: { fontSize: 15, lineHeight: 22, textAlign: 'center' },
+  feedbackLine: { fontSize: 15, lineHeight: 22, fontWeight: '600', textAlign: 'center' },
+  completion: { flex: 1, justifyContent: 'center', alignItems: 'center', paddingVertical: 24 },
 });

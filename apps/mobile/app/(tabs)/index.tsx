@@ -163,44 +163,6 @@ export default function StartScreen() {
 
 
 
-      {data ? (
-
-        <Card theme={theme} title={de.start.dailyGoalTitle}>
-
-          {(() => {
-            const seconds =
-              data.dailyLearningSecondsToday ?? dailyLearningSecondsToday ?? null;
-            if (seconds !== null) {
-              const learnedMinutes = Math.floor(seconds / 60);
-              return (
-                <Text style={[styles.body, { color: theme.colors.text }]}>
-                  {de.start.dailyGoalProgressToday(learnedMinutes, dailyGoalMinutes)}
-                </Text>
-              );
-            }
-            return (
-              <Text style={[styles.body, { color: theme.colors.textWeak }]}>
-                {de.start.dailyGoalSettingsTip(dailyGoalMinutes)}
-              </Text>
-            );
-          })()}
-
-          <Text style={[styles.body, { color: theme.colors.textWeak, marginTop: theme.spacing.xs }]}>
-
-            {data.dueReviewCount > 0
-
-              ? de.start.dailyGoalDueReviews(data.dueReviewCount)
-
-              : de.start.dailyRationTileEmpty}
-
-          </Text>
-
-        </Card>
-
-      ) : null}
-
-
-
       {continueCard && continueMode ? (
 
         <Pressable
@@ -215,7 +177,7 @@ export default function StartScreen() {
 
         >
 
-          <Card theme={theme} title={de.start.continueTitle}>
+          <Card theme={theme} title={de.start.continueTitle} emphasized>
 
             <Text style={[styles.cardHeadline, { color: theme.colors.text }]} numberOfLines={2}>
 
@@ -255,6 +217,70 @@ export default function StartScreen() {
 
 
 
+      {data ? (
+
+        <Card theme={theme} title={de.start.dailyGoalTitle}>
+
+          {(() => {
+            const seconds =
+              data.dailyLearningSecondsToday ?? dailyLearningSecondsToday ?? null;
+            if (seconds !== null) {
+              const learnedMinutes = Math.floor(seconds / 60);
+              const fillRatio = dailyGoalMinutes > 0 ? Math.min(1, learnedMinutes / dailyGoalMinutes) : 0;
+              const goalMet = learnedMinutes >= dailyGoalMinutes;
+              return (
+                <>
+                  <Text style={[styles.body, { color: theme.colors.text }]}>
+                    {de.start.dailyGoalProgressToday(learnedMinutes, dailyGoalMinutes)}
+                  </Text>
+                  <View
+                    style={[
+                      styles.dailyGoalTrack,
+                      { backgroundColor: theme.colors.border, borderRadius: theme.radius.full, marginTop: theme.spacing.sm },
+                    ]}
+                  >
+                    <View
+                      style={[
+                        styles.dailyGoalFill,
+                        {
+                          backgroundColor: goalMet ? theme.colors.success : theme.colors.accent,
+                          borderRadius: theme.radius.full,
+                          width: `${Math.round(fillRatio * 100)}%`,
+                        },
+                      ]}
+                    />
+                  </View>
+                  {goalMet ? (
+                    <Text style={[styles.body, { color: theme.colors.success, marginTop: theme.spacing.xs, fontWeight: '600' }]}>
+                      {de.start.dailyGoalMet}
+                    </Text>
+                  ) : null}
+                </>
+              );
+            }
+            return (
+              <Text style={[styles.body, { color: theme.colors.textWeak }]}>
+                {de.start.dailyGoalSettingsTip(dailyGoalMinutes)}
+              </Text>
+            );
+          })()}
+
+          <Text style={[styles.body, { color: theme.colors.textWeak, marginTop: theme.spacing.xs }]}>
+
+            {data.dueReviewCount > 0
+
+              ? de.start.dailyGoalDueReviews(data.dueReviewCount)
+
+              : de.start.dailyRationTileEmpty}
+
+          </Text>
+
+        </Card>
+
+      ) : null}
+
+
+
       {data?.nextLessonId ? (
 
         <Card theme={theme} title={de.start.nextRecommendationTitle}>
@@ -265,7 +291,7 @@ export default function StartScreen() {
 
           </Text>
 
-          <PrimaryButton
+          <SecondaryButton
 
             theme={theme}
 
@@ -301,27 +327,23 @@ export default function StartScreen() {
 
         <Card theme={theme} title={de.start.weekOverviewTitle}>
 
-          <View style={{ flexDirection: 'row', gap: theme.spacing.sm, marginTop: theme.spacing.xs }}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: theme.spacing.xs }}>
 
-            {data.week.map((day) => (
-
-              <View
-
-                key={day.date}
-
-                accessibilityLabel={day.date}
-
-                style={[
-
-                  styles.weekDot,
-
-                  { backgroundColor: day.studied ? theme.colors.accent : theme.colors.border },
-
-                ]}
-
-              />
-
-            ))}
+            {data.week.map((day) => {
+              const weekdayIndex = (new Date(`${day.date}T12:00:00`).getDay() + 6) % 7;
+              const weekdayLabel = de.start.weekdayShort[weekdayIndex];
+              return (
+                <View key={day.date} style={styles.weekDayCell} accessibilityLabel={`${weekdayLabel}, ${day.date}`}>
+                  <Text style={[styles.weekdayLabel, { color: theme.colors.textWeak }]}>{weekdayLabel}</Text>
+                  <View
+                    style={[
+                      styles.weekDot,
+                      { backgroundColor: day.studied ? theme.colors.accent : theme.colors.border },
+                    ]}
+                  />
+                </View>
+              );
+            })}
 
           </View>
 
@@ -349,7 +371,17 @@ function greetingForHour(hour: number): string {
 
 
 
-function Card({ theme, title, children }: { theme: ReturnType<typeof useTheme>; title: string; children: ReactNode }) {
+function Card({
+  theme,
+  title,
+  children,
+  emphasized,
+}: {
+  theme: ReturnType<typeof useTheme>;
+  title: string;
+  children: ReactNode;
+  emphasized?: boolean;
+}) {
 
   return (
 
@@ -359,7 +391,14 @@ function Card({ theme, title, children }: { theme: ReturnType<typeof useTheme>; 
 
         styles.card,
 
-        { backgroundColor: theme.colors.surface, borderColor: theme.colors.border, borderRadius: theme.radius.lg, padding: theme.spacing.base, marginTop: theme.spacing.base },
+        {
+          backgroundColor: theme.colors.surface,
+          borderColor: emphasized ? theme.colors.accent : theme.colors.border,
+          borderWidth: emphasized ? 2 : StyleSheet.hairlineWidth,
+          borderRadius: theme.radius.lg,
+          padding: theme.spacing.base,
+          marginTop: theme.spacing.base,
+        },
 
       ]}
 
@@ -376,6 +415,28 @@ function Card({ theme, title, children }: { theme: ReturnType<typeof useTheme>; 
 }
 
 
+
+function SecondaryButton({ theme, label, onPress }: { theme: ReturnType<typeof useTheme>; label: string; onPress: () => void }) {
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={label}
+      onPress={onPress}
+      style={({ pressed }) => [
+        styles.secondaryButton,
+        {
+          borderColor: theme.colors.border,
+          borderRadius: theme.radius.md,
+          marginTop: theme.spacing.md,
+          minHeight: theme.minTapTarget,
+          opacity: pressed ? 0.92 : 1,
+        },
+      ]}
+    >
+      <Text style={[styles.secondaryButtonLabel, { color: theme.colors.text }]}>{label}</Text>
+    </Pressable>
+  );
+}
 
 function PrimaryButton({ theme, label, onPress }: { theme: ReturnType<typeof useTheme>; label: string; onPress: () => void }) {
 
@@ -427,9 +488,13 @@ const styles = StyleSheet.create({
 
   greeting: { fontWeight: '700' },
 
-  card: { borderWidth: StyleSheet.hairlineWidth },
+  card: {},
 
   cardTitle: { fontSize: 13, lineHeight: 18, fontWeight: '600', textTransform: 'uppercase', letterSpacing: 0.4 },
+
+  dailyGoalTrack: { height: 8, width: '100%', overflow: 'hidden' },
+
+  dailyGoalFill: { height: 8 },
 
   cardHeadline: { fontSize: 17, lineHeight: 24, fontWeight: '600', marginTop: 4 },
 
@@ -439,6 +504,12 @@ const styles = StyleSheet.create({
 
   primaryButtonLabel: { fontSize: 15, lineHeight: 22, fontWeight: '600' },
 
+  secondaryButton: { justifyContent: 'center', alignItems: 'center', borderWidth: StyleSheet.hairlineWidth, paddingHorizontal: 16 },
+
+  secondaryButtonLabel: { fontSize: 15, lineHeight: 22, fontWeight: '600' },
+
+  weekDayCell: { alignItems: 'center', gap: 4, minWidth: 28 },
+  weekdayLabel: { fontSize: 11, lineHeight: 14, fontWeight: '600' },
   weekDot: { width: 16, height: 16, borderRadius: 8 },
 
 });

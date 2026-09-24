@@ -26,7 +26,17 @@ export default function IchScreen() {
   const [data, setData] = useState<ProfileData | null>(null);
   const bottomInset = useBottomChromeInset();
   const dailyGoalMinutes = useSettingsStore((s) => s.dailyGoalMinutes);
+  const preferredLearnTime = useSettingsStore((s) => s.preferredLearnTime);
   const reviewIntensity = useSettingsStore((s) => s.reviewIntensity);
+
+  const preferredLearnTimeLabel =
+    preferredLearnTime === 'morning'
+      ? de.onboarding.step2TimeMorning
+      : preferredLearnTime === 'commute'
+        ? de.onboarding.step2TimeCommute
+        : preferredLearnTime === 'evening'
+          ? de.onboarding.step2TimeEvening
+          : null;
 
   const refresh = useCallback(() => {
     loadProfileData()
@@ -84,6 +94,11 @@ export default function IchScreen() {
         <Text style={[styles.body, { color: theme.colors.textWeak, marginTop: theme.spacing.sm }]}>
           {de.ich.profileDailyGoal(dailyGoalMinutes)}
         </Text>
+        {preferredLearnTimeLabel ? (
+          <Text style={[styles.body, { color: theme.colors.textWeak, marginTop: theme.spacing.xs }]}>
+            {de.ich.profilePreferredLearnTime(preferredLearnTimeLabel)}
+          </Text>
+        ) : null}
         <Text style={[styles.body, { color: theme.colors.textWeak, marginTop: theme.spacing.xs }]}>
           {de.ich.profileIntensity(intensityLabel(reviewIntensity))}
         </Text>
@@ -233,10 +248,15 @@ export default function IchScreen() {
         <Settings color={theme.colors.text} size={20} strokeWidth={1.75} />
         <Text style={[styles.body, { color: theme.colors.text, marginLeft: theme.spacing.sm }]}>{de.ich.settingsLink}</Text>
       </Pressable>
-      <View style={[styles.linkRow, { borderColor: theme.colors.border }]}>
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel={de.ich.legalLink}
+        onPress={() => router.push('/legal/imprint')}
+        style={[styles.linkRow, { borderColor: theme.colors.border, minHeight: theme.minTapTarget }]}
+      >
         <Scale color={theme.colors.text} size={20} strokeWidth={1.75} />
         <Text style={[styles.body, { color: theme.colors.text, marginLeft: theme.spacing.sm }]}>{de.ich.legalLink}</Text>
-      </View>
+      </Pressable>
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: theme.spacing.sm, marginTop: theme.spacing.xs }}>
         {(
           [
