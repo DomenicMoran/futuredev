@@ -4,7 +4,7 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { router, useFocusEffect } from 'expo-router';
 
-import { Sparkles } from 'lucide-react-native';
+import { BookOpen, ChevronRight } from 'lucide-react-native';
 
 import { useTheme } from '../../src/theme/useTheme.js';
 
@@ -89,7 +89,7 @@ export default function StartScreen() {
 
         <EmptyState
 
-          Icon={Sparkles}
+          Icon={BookOpen}
 
           title={de.start.emptyTitle}
 
@@ -307,7 +307,12 @@ export default function StartScreen() {
 
 
 
-      <Pressable onPress={() => router.push('/(tabs)/ueben')}>
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel={de.start.dailyRationOpen}
+        onPress={() => router.push('/(tabs)/ueben')}
+        style={({ pressed }) => [{ opacity: pressed ? 0.96 : 1 }]}
+      >
 
         <Card theme={theme} title={de.start.dailyRationTile}>
 
@@ -316,6 +321,11 @@ export default function StartScreen() {
             {data && data.dueReviewCount > 0 ? de.start.dailyRationTileBody(data.dueReviewCount) : de.start.dailyRationTileEmpty}
 
           </Text>
+
+          <View style={styles.cardActionRow}>
+            <Text style={[styles.cardActionLabel, { color: theme.colors.accent }]}>{de.start.dailyRationOpen}</Text>
+            <ChevronRight color={theme.colors.accent} size={20} strokeWidth={1.75} />
+          </View>
 
         </Card>
 
@@ -511,6 +521,10 @@ const styles = StyleSheet.create({
   weekDayCell: { alignItems: 'center', gap: 4, minWidth: 28 },
   weekdayLabel: { fontSize: 11, lineHeight: 14, fontWeight: '600' },
   weekDot: { width: 16, height: 16, borderRadius: 8 },
+
+  cardActionRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 12 },
+
+  cardActionLabel: { fontSize: 15, lineHeight: 22, fontWeight: '600' },
 
 });
 

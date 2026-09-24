@@ -6,6 +6,20 @@ import { useTheme } from '../../src/theme/useTheme';
 import { de } from '../../src/i18n/de';
 import { tabBarHeight } from '../../src/navigation/tabBarMetrics';
 
+const TAB_ICON_SIZE = 22;
+const TAB_STROKE = 1.75;
+
+function TabIcon({ Icon, color, focused }: { Icon: typeof Home; color: string; focused: boolean }) {
+  return (
+    <Icon
+      color={color}
+      size={TAB_ICON_SIZE}
+      strokeWidth={TAB_STROKE}
+      fill={focused ? color : 'transparent'}
+    />
+  );
+}
+
 // Fünf Reiter, Lucide-Symbole, Labels aus src/i18n/de.ts, aktive Farbe Akzent,
 // Mindesthöhe nach design-system.md (Komponente "Reiterleiste").
 export default function TabsLayout() {
@@ -38,45 +52,35 @@ export default function TabsLayout() {
         name="index"
         options={{
           title: de.tabs.start,
-          tabBarIcon: ({ color, focused }) => (
-            <Home color={color} size={focused ? 23 : 22} strokeWidth={focused ? 2 : 1.75} />
-          ),
+          tabBarIcon: ({ color, focused }) => <TabIcon Icon={Home} color={String(color)} focused={focused} />,
         }}
       />
       <Tabs.Screen
         name="lernen"
         options={{
           title: de.tabs.lernen,
-          tabBarIcon: ({ color, focused }) => (
-            <BookOpen color={color} size={focused ? 23 : 22} strokeWidth={focused ? 2 : 1.75} />
-          ),
+          tabBarIcon: ({ color, focused }) => <TabIcon Icon={BookOpen} color={String(color)} focused={focused} />,
         }}
       />
       <Tabs.Screen
         name="hoeren"
         options={{
           title: de.tabs.hoeren,
-          tabBarIcon: ({ color, focused }) => (
-            <Headphones color={color} size={focused ? 23 : 22} strokeWidth={focused ? 2 : 1.75} />
-          ),
+          tabBarIcon: ({ color, focused }) => <TabIcon Icon={Headphones} color={String(color)} focused={focused} />,
         }}
       />
       <Tabs.Screen
         name="ueben"
         options={{
           title: de.tabs.ueben,
-          tabBarIcon: ({ color, focused }) => (
-            <Dumbbell color={color} size={focused ? 23 : 22} strokeWidth={focused ? 2 : 1.75} />
-          ),
+          tabBarIcon: ({ color, focused }) => <TabIcon Icon={Dumbbell} color={String(color)} focused={focused} />,
         }}
       />
       <Tabs.Screen
         name="ich"
         options={{
           title: de.tabs.ich,
-          tabBarIcon: ({ color, focused }) => (
-            <CircleUser color={color} size={focused ? 23 : 22} strokeWidth={focused ? 2 : 1.75} />
-          ),
+          tabBarIcon: ({ color, focused }) => <TabIcon Icon={CircleUser} color={String(color)} focused={focused} />,
         }}
       />
     </Tabs>

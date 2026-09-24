@@ -66,7 +66,7 @@ export default function LessonQuizScreen() {
   if (!pool || !lessonId) {
     return (
       <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.bg }]}>
-        <EmptyState Icon={BookOpen} title={de.lesson.loadingTitle} body={de.lesson.loadingBody} />
+        <EmptyState Icon={BookOpen} title={de.quiz.loadingTitle} body={de.quiz.loadingBody} />
       </SafeAreaView>
     );
   }

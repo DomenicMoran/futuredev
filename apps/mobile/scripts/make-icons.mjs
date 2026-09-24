@@ -1,8 +1,11 @@
 #!/usr/bin/env node
-// Erzeugt icon.png (1024x1024), adaptive-icon.png und splash.png aus einer
-// eigenen SVG (Buchstabe "F" aus zwei Formen in Akzentfarbe auf
-// Hintergrundfarbe der Token), kein Stockbild, kein Emoji. Werte aus
-// packages/design-tokens.
+/**
+ * FutureDev app icons — geometric craft, not a bubbly placeholder F.
+ *
+ * Mark: four ascending bars (learning / career progress) on accent.
+ * Token colors from @futuredev/design-tokens. Regenerates icon.png,
+ * adaptive-icon.png (transparent-safe mark on accent), splash.png.
+ */
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -13,54 +16,104 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const assetsDir = join(__dirname, '..', 'assets');
 mkdirSync(assetsDir, { recursive: true });
 
-const bg = colors.light.accent;
-const fg = colors.light.accentText;
+const accent = colors.light.accent;
+const onAccent = colors.light.accentText;
+const pageBg = colors.light.bg;
 
-// Der Buchstabe "F" aus zwei Formen: einem senkrechten Balken und einem
-// waagerechten Balken, in Akzent-Text-Farbe auf Akzentfläche.
-function iconSvg(size, background) {
-  const stroke = size * 0.16;
-  const left = size * 0.32;
-  const top = size * 0.24;
-  const barLength = size * 0.42;
-  const armLength = size * 0.3;
+/**
+ * Ascending ladder mark — reads at 48px, distinct from Facebook-F candy icons.
+ * Bars grow left→right length; equal thickness; tight optical stack.
+ */
+function markSvg(size, { background, foreground, transparentBg = false }) {
+  const pad = size * 0.22;
+  const gap = size * 0.045;
+  const barH = size * 0.095;
+  const rx = barH * 0.28;
+  const stackH = 4 * barH + 3 * gap;
+  const top0 = (size - stackH) / 2;
+  // Relative lengths (shortest → longest): progress upward
+  const fracs = [0.42, 0.58, 0.74, 0.9];
+  const maxW = size - pad * 2;
+
+  const bars = fracs
+    .map((frac, i) => {
+      const w = maxW * frac;
+      const x = (size - w) / 2;
+      const y = top0 + i * (barH + gap);
+      return `<rect x="${x.toFixed(2)}" y="${y.toFixed(2)}" width="${w.toFixed(2)}" height="${barH.toFixed(2)}" rx="${rx.toFixed(2)}" fill="${foreground}" />`;
+    })
+    .join('\n  ');
+
+  const bgRect = transparentBg
+    ? ''
+    : `<rect width="${size}" height="${size}" fill="${background}" />`;
+
   return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">
-  <rect width="${size}" height="${size}" fill="${background}" />
-  <rect x="${left}" y="${top}" width="${stroke}" height="${barLength}" rx="${stroke * 0.2}" fill="${fg}" />
-  <rect x="${left}" y="${top}" width="${armLength}" height="${stroke}" rx="${stroke * 0.2}" fill="${fg}" />
-  <rect x="${left}" y="${top + barLength * 0.42}" width="${armLength * 0.78}" height="${stroke}" rx="${stroke * 0.2}" fill="${fg}" />
+  ${bgRect}
+  ${bars}
 </svg>`;
 }
 
-async function render(svg, size, outPath) {
+async function renderPng(svg, size, outPath) {
   await sharp(Buffer.from(svg)).resize(size, size).png().toFile(outPath);
-  console.log(`make-icons: ${outPath} geschrieben (${size}x${size}).`);
+  console.log(`make-icons: ${outPath} (${size}x${size})`);
 }
 
 async function main() {
-  await render(iconSvg(1024, bg), 1024, join(assetsDir, 'icon.png'));
-  await render(iconSvg(1024, bg), 1024, join(assetsDir, 'adaptive-icon.png'));
+  // Full-bleed icon (iOS / generic Expo icon)
+  await renderPng(markSvg(1024, { background: accent, foreground: onAccent }), 1024, join(assetsDir, 'icon.png'));
 
-  // Splash: quadratisches Motiv mittig auf Token-Hintergrund, größere Leinwand.
+  // Adaptive foreground: same mark on accent (Expo composites with backgroundColor)
+  await renderPng(
+    markSvg(1024, { background: accent, foreground: onAccent }),
+    1024,
+    join(assetsDir, 'adaptive-icon.png'),
+  );
+
+  // Splash: calm page bg + centered rounded motif card
   const splashSize = 1284;
-  const motifSize = 420;
-  const motif = await sharp(Buffer.from(iconSvg(motifSize, bg))).png().toBuffer();
+  const motifSize = 440;
+  const motifSvg = markSvg(motifSize, { background: accent, foreground: onAccent });
+  const motifPng = await sharp(Buffer.from(motifSvg))
+    .resize(motifSize, motifSize)
+    .png()
+    .toBuffer();
+
+  // Soft round-rect mask for motif (iOS-like tile on splash)
+  const radius = Math.round(motifSize * 0.22);
+  const rounded = Buffer.from(
+    `<svg width="${motifSize}" height="${motifSize}"><rect width="${motifSize}" height="${motifSize}" rx="${radius}" fill="#fff"/></svg>`,
+  );
+  const motifRounded = await sharp(motifPng)
+    .composite([{ input: await sharp(rounded).png().toBuffer(), blend: 'dest-in' }])
+    .png()
+    .toBuffer();
+
   await sharp({
     create: {
       width: splashSize,
       height: splashSize,
       channels: 4,
-      background: colors.light.bg,
+      background: pageBg,
     },
   })
-    .composite([{ input: motif, gravity: 'center' }])
+    .composite([{ input: motifRounded, gravity: 'center' }])
     .png()
     .toFile(join(assetsDir, 'splash.png'));
-  console.log(`make-icons: ${join(assetsDir, 'splash.png')} geschrieben (${splashSize}x${splashSize}).`);
+  console.log(`make-icons: ${join(assetsDir, 'splash.png')} (${splashSize}x${splashSize})`);
 
   writeFileSync(
     join(assetsDir, 'README.md'),
-    'Icons und Splash sind mit scripts/make-icons.mjs aus einer eigenen SVG erzeugt (Buchstabe F, Token-Farben), kein Stockbild.\n',
+    [
+      '# App icons',
+      '',
+      'Generated by `scripts/make-icons.mjs` from a geometric **ascending-bar** mark',
+      `(learning / career progress) in design-token accent \`#2A5FD9\` — not a stock`,
+      'image and not a bubbly single-letter F.',
+      '',
+      'Regenerate: `pnpm --filter @futuredev/mobile make-icons`',
+      '',
+    ].join('\n'),
   );
 }
 

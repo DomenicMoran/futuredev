@@ -213,13 +213,27 @@ export default function HoerenScreen() {
             onPress={() => void runPlayback(() => playLesson(continueCard.lessonId))}
             accessibilityRole="button"
             accessibilityLabel={`${de.hoeren.continueCard}: ${continueCard.title}`}
-            style={[
-              styles.card,
-              { backgroundColor: theme.colors.accent, minHeight: theme.minTapTarget, borderRadius: theme.radius.lg },
-            ]}
+            style={({ pressed }) => [{ opacity: pressed ? 0.96 : 1 }]}
           >
-            <Text style={[styles.cardLabel, { color: theme.colors.accentText }]}>{de.hoeren.continueCard}</Text>
-            <Text style={[styles.cardTitle, { color: theme.colors.accentText }]}>{continueCard.title}</Text>
+            <View
+              style={[
+                styles.continueCard,
+                {
+                  backgroundColor: theme.colors.surface,
+                  borderColor: theme.colors.border,
+                  borderLeftColor: theme.colors.accent,
+                  borderRadius: theme.radius.lg,
+                  padding: theme.spacing.base,
+                  minHeight: theme.minTapTarget,
+                },
+              ]}
+            >
+              <Text style={[styles.cardLabel, { color: theme.colors.textWeak }]}>{de.hoeren.continueCard}</Text>
+              <Text style={[styles.cardTitle, { color: theme.colors.text }]}>{continueCard.title}</Text>
+              <Text style={[styles.continueCta, { color: theme.colors.accent, marginTop: theme.spacing.sm }]}>
+                {de.hoeren.continuePlayAction}
+              </Text>
+            </View>
           </Pressable>
         ) : null}
 
@@ -400,8 +414,10 @@ function StorageSection({
 const styles = StyleSheet.create({
   container: { flex: 1 },
   card: { padding: 16, gap: 4 },
+  continueCard: { gap: 4, borderWidth: StyleSheet.hairlineWidth, borderLeftWidth: 3 },
   cardLabel: { fontSize: 13, fontWeight: '600' },
   cardTitle: { fontSize: 18, fontWeight: '700' },
+  continueCta: { fontSize: 15, lineHeight: 22, fontWeight: '600' },
   moduleBlock: { gap: 8 },
   moduleHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   moduleTitle: { fontSize: 16, fontWeight: '700' },

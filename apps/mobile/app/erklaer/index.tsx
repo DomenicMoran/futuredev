@@ -38,7 +38,7 @@ export default function ErklaerIndexScreen() {
       </View>
 
       {items === null ? (
-        <EmptyState Icon={MessageCircleQuestion} title={de.erklaer.title} body={de.lesson.loadingBody} />
+        <EmptyState Icon={MessageCircleQuestion} title={de.erklaer.loadingTitle} body={de.erklaer.loadingBody} />
       ) : items.length === 0 ? (
         <EmptyState
           Icon={MessageCircleQuestion}

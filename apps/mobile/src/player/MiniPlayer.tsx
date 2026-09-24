@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router, usePathname } from 'expo-router';
 import { FastForward, Pause, Play, X } from 'lucide-react-native';
@@ -55,6 +55,19 @@ export function MiniPlayer() {
 
   const onSeekCommit = useCallback((seconds: number) => {
     void seekToSeconds(seconds);
+  }, []);
+
+  const confirmDismissQueue = useCallback(() => {
+    Alert.alert(de.player.dismissQueueTitle, de.player.dismissQueueBody, [
+      { text: de.player.dismissQueueCancel, style: 'cancel' },
+      {
+        text: de.player.dismissQueueConfirm,
+        style: 'destructive',
+        onPress: () => {
+          void clearPlayback();
+        },
+      },
+    ]);
   }, []);
 
   if (!item) return null;
@@ -133,7 +146,7 @@ export function MiniPlayer() {
         </Pressable>
         {!isPlaying ? (
           <Pressable
-            onPress={() => void clearPlayback()}
+            onPress={confirmDismissQueue}
             accessibilityRole="button"
             accessibilityLabel={de.player.close}
             hitSlop={8}

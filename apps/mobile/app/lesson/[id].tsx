@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useFocusEffect, useLocalSearchParams } from 'expo-router';
-import { BookOpen, Bookmark, BookmarkCheck, ExternalLink, MessageSquarePlus } from 'lucide-react-native';
+import { ArrowLeft, BookOpen, Bookmark, BookmarkCheck, ExternalLink, MessageSquarePlus } from 'lucide-react-native';
 import type { Lesson, SpeechBlock } from '@futuredev/content-schema';
 import { useTheme } from '../../src/theme/useTheme.js';
 import { EmptyState } from '../../src/components/EmptyState.js';
@@ -573,6 +573,19 @@ function LessonHeader({
 
   return (
     <View style={{ padding: theme.spacing.base }}>
+      <Pressable
+        onPress={() => router.back()}
+        accessibilityRole="button"
+        accessibilityLabel={de.lesson.back}
+        style={({ pressed }) => [
+          styles.backRow,
+          { minHeight: theme.minTapTarget, marginBottom: theme.spacing.sm, opacity: pressed ? 0.88 : 1 },
+        ]}
+      >
+        <ArrowLeft size={22} color={theme.colors.text} strokeWidth={1.75} />
+        <Text style={[styles.backLabel, { color: theme.colors.text }]}>{de.lesson.back}</Text>
+      </Pressable>
+
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: theme.spacing.sm }}>
         {moduleId ? <ModuleCover moduleId={moduleId} size={40} /> : null}
         <View style={{ flex: 1 }}>
@@ -582,14 +595,6 @@ function LessonHeader({
       <Text style={[styles.metaText, { color: theme.colors.textWeak }]}>
         {de.module.lessonDuration(lesson.durationMinutes)}
       </Text>
-
-      <View style={[styles.toggleRow, { marginTop: theme.spacing.base }]}>
-        <View
-          style={[styles.toggleButton, styles.toggleButtonActive, { borderColor: theme.colors.accent, minHeight: theme.minTapTarget, flex: 1 }]}
-        >
-          <Text style={{ color: theme.colors.accent, fontWeight: '600' }}>{de.lesson.readTab}</Text>
-        </View>
-      </View>
 
       {audioError ? (
         <View style={{ marginTop: theme.spacing.xs, gap: theme.spacing.sm }}>
@@ -783,18 +788,11 @@ function GlossaryModal({ lesson, term, onClose }: { lesson: Lesson; term: string
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
+  backRow: { flexDirection: 'row', alignItems: 'center', gap: 6, alignSelf: 'flex-start' },
+  backLabel: { fontSize: 15, lineHeight: 22, fontWeight: '600' },
   lessonId: { fontSize: 13, lineHeight: 18, fontWeight: '600', letterSpacing: 0.5 },
   lessonTitle: { fontSize: 24, lineHeight: 32, fontWeight: '700', marginTop: 2 },
   metaText: { fontSize: 13, lineHeight: 18 },
-  toggleRow: { flexDirection: 'row', gap: 8 },
-  toggleButton: {
-    flex: 1,
-    borderWidth: 1,
-    borderRadius: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  toggleButtonActive: { borderWidth: 2 },
   listenButton: { borderWidth: 0 },
   jumpRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   jumpChip: { borderWidth: 1, borderRadius: 18, paddingHorizontal: 12, justifyContent: 'center' },

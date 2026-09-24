@@ -64,7 +64,7 @@ export default function ExamScreen() {
   if (!pool) {
     return (
       <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.bg }]}>
-        <EmptyState Icon={GraduationCap} title={de.lesson.loadingTitle} body={de.lesson.loadingBody} />
+        <EmptyState Icon={GraduationCap} title={de.quiz.examLoadingTitle} body={de.quiz.examLoadingBody} />
       </SafeAreaView>
     );
   }
