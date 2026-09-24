@@ -174,6 +174,7 @@ export default function UebenScreen() {
         accessibilityLabel={de.ueben.reviewClipsAction}
         theme={theme}
         Icon={Headphones}
+        accentBar
       />
     </ScrollView>
   );
@@ -276,6 +277,7 @@ function LinkCard({
   accessibilityLabel,
   theme,
   Icon,
+  accentBar,
 }: {
   title: string;
   body: string;
@@ -283,6 +285,7 @@ function LinkCard({
   accessibilityLabel: string;
   theme: ReturnType<typeof useTheme>;
   Icon: typeof Headphones;
+  accentBar?: boolean;
 }) {
   return (
     <Pressable
@@ -294,6 +297,8 @@ function LinkCard({
         {
           backgroundColor: theme.colors.surface,
           borderColor: theme.colors.border,
+          borderLeftColor: accentBar ? theme.colors.accent : theme.colors.border,
+          borderLeftWidth: accentBar ? 3 : StyleSheet.hairlineWidth,
           borderRadius: theme.radius.lg,
           padding: theme.spacing.base,
           flexDirection: 'row',

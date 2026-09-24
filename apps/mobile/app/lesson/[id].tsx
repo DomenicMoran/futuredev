@@ -28,7 +28,7 @@ import { getProgress, markLessonState, saveReadPosition } from '../../src/data/p
 import { listNotes, saveNote } from '../../src/data/notes.js';
 import { listBookmarks, toggleBookmark } from '../../src/data/bookmarks.js';
 import { getSetting, setSetting } from '../../src/data/settings.js';
-import { playLessonInModuleContext } from '../../src/player/index.js';
+import { isSameLessonInQueue, playLessonInModuleContext, togglePlayback } from '../../src/player/index.js';
 import { useBottomChromeLayout } from '../../src/navigation/useBottomChromeInset.js';
 import { usePlayerStore } from '../../src/player/store.js';
 import { currentItem } from '../../src/player/queue.js';
@@ -277,7 +277,19 @@ export default function LessonScreen() {
   // RedBox/Toast enden, sondern zeigt de.player.loadError mit Wiederholen-
   // Knopf, ohne den Lesebildschirm zu blockieren.
   const handleListen = () => {
+    if (!id) return;
     setAudioError(false);
+    if (isSameLessonInQueue(id)) {
+      const playing = usePlayerStore.getState().isPlaying;
+      if (playing) {
+        router.push('/player');
+        return;
+      }
+      void togglePlayback()
+        .then(() => router.push('/player'))
+        .catch(() => setAudioError(true));
+      return;
+    }
     playLessonInModuleContext(id, readUntil).catch(() => {
       setAudioError(true);
     });
@@ -484,16 +496,19 @@ function LessonStickyActions({
       accessibilityLabel={de.lesson.listenTab}
       style={({ pressed }) => [
         styles.stickyButton,
+        styles.calmAccentAction,
         {
-          backgroundColor: theme.colors.accent,
+          backgroundColor: theme.colors.surface,
+          borderColor: theme.colors.border,
+          borderLeftColor: theme.colors.accent,
           borderRadius: theme.radius.md,
           minHeight: theme.minTapTarget,
-          opacity: pressed ? 0.92 : 1,
+          opacity: pressed ? 0.96 : 1,
           flex: 1,
         },
       ]}
     >
-      <Text style={[styles.primaryButtonLabel, { color: theme.colors.accentText }]}>{de.lesson.listenTab}</Text>
+      <Text style={[styles.primaryButtonLabel, { color: theme.colors.text, fontWeight: '600' }]}>{de.lesson.listenTab}</Text>
     </Pressable>
   );
   const quizButton = (
@@ -824,4 +839,5 @@ const styles = StyleSheet.create({
     borderTopWidth: StyleSheet.hairlineWidth,
   },
   stickyButton: { alignItems: 'center', justifyContent: 'center', paddingHorizontal: 12 },
+  calmAccentAction: { borderWidth: StyleSheet.hairlineWidth, borderLeftWidth: 3 },
 });

@@ -95,6 +95,10 @@ export const de = {
     playlistAddLesson: 'Zur Playlist hinzufügen',
     playlistPickTitle: 'Playlist wählen',
     playlistEmptyPlayError: 'Diese Playlist enthält noch keine Lektionen.',
+    playlistNameRequired: 'Bitte gib einen Namen ein.',
+    playlistSaveError: 'Speichern fehlgeschlagen. Bitte erneut versuchen.',
+    playlistAddError: 'Lektion konnte nicht hinzugefügt werden.',
+    playlistSaved: 'Playlist gespeichert.',
     playlistLessonCount: (count: number) =>
       `${count} Lektion${count === 1 ? '' : 'en'}`,
   },
@@ -268,6 +272,8 @@ export const de = {
     step3Body:
       'Das Tagesziel zählt Lese- und Hörminuten zusammen. Auf dem Start-Reiter siehst du deinen Fortschritt; in Üben richtet sich die Tagesration danach. Du kannst die Minuten jederzeit erhöhen oder senken.',
     step3OptionLabel: (minutes: number) => `${minutes} Minuten`,
+    step2PreviewLabel: 'Vorschau: Lektionscover und Mini-Player',
+    step3HeroLabel: 'Modul-Cover als Tagesziel-Motiv',
     step3OptionSubtitle: (minutes: number) => {
       if (minutes <= 10) return 'Kurz und regelmäßig — ideal für den Einstieg.';
       if (minutes <= 20) return 'Solider Alltagsrhythmus für die meisten.';

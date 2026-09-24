@@ -266,6 +266,7 @@ export default function HoerenScreen() {
                   {
                     minHeight: theme.minTapTarget,
                     borderColor: theme.colors.border,
+                    borderLeftColor: theme.colors.accent,
                     borderRadius: theme.radius.md,
                     backgroundColor: theme.colors.surface,
                   },
@@ -285,7 +286,7 @@ export default function HoerenScreen() {
                     },
                   ]}
                 >
-                  <Play color={theme.colors.accent} size={20} fill={theme.colors.accent} />
+                  <Play color={theme.colors.accent} size={20} />
                 </Pressable>
                 <Text numberOfLines={1} style={[styles.lessonTitle, { color: theme.colors.text }]}>
                   {lesson.title}
@@ -427,6 +428,7 @@ const styles = StyleSheet.create({
     gap: 12,
     paddingHorizontal: 12,
     borderWidth: StyleSheet.hairlineWidth,
+    borderLeftWidth: 3,
   },
   lessonTitle: { flex: 1, fontSize: 15 },
   lessonDuration: { fontSize: 13 },

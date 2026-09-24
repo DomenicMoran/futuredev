@@ -1,11 +1,21 @@
 import { describe, expect, it } from 'vitest';
-import { isTabBarVisible } from './tabBarVisibility.js';
+import { isTabBarVisible, normalizeAppPathname } from './tabBarVisibility.js';
+
+describe('normalizeAppPathname', () => {
+  it('entfernt Expo-Tab-Gruppen', () => {
+    expect(normalizeAppPathname('/(tabs)/hoeren')).toBe('/hoeren');
+    expect(normalizeAppPathname('/(tabs)/')).toBe('/');
+    expect(normalizeAppPathname('/(tabs)/lernen/')).toBe('/lernen');
+  });
+});
 
 describe('isTabBarVisible', () => {
   it('ist true auf Reiter-Routen', () => {
     expect(isTabBarVisible('/')).toBe(true);
     expect(isTabBarVisible('/lernen')).toBe(true);
     expect(isTabBarVisible('/hoeren')).toBe(true);
+    expect(isTabBarVisible('/(tabs)/hoeren')).toBe(true);
+    expect(isTabBarVisible('/(tabs)/ueben')).toBe(true);
   });
 
   it('ist false auf Stack-Routen ohne Reiterleiste', () => {

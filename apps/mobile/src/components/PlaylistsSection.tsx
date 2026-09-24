@@ -48,6 +48,8 @@ export function PlaylistsSection({
   const [itemsByPlaylist, setItemsByPlaylist] = useState<Record<string, PlaylistItemRow[]>>({});
   const [nameModal, setNameModal] = useState<NameModalMode | null>(null);
   const [nameDraft, setNameDraft] = useState('');
+  const [nameError, setNameError] = useState<string | null>(null);
+  const [feedback, setFeedback] = useState<{ text: string; isError: boolean } | null>(null);
   const [pickPlaylistForLesson, setPickPlaylistForLesson] = useState<string | null>(null);
   const [pendingLessonAfterCreate, setPendingLessonAfterCreate] = useState<string | null>(null);
 
@@ -87,25 +89,40 @@ export function PlaylistsSection({
     [loadItems],
   );
 
+  const showFeedback = useCallback((message: string, isError = false) => {
+    setFeedback({ text: message, isError });
+    setTimeout(() => setFeedback(null), 2500);
+  }, []);
+
   const submitNameModal = useCallback(async () => {
     const trimmed = nameDraft.trim();
-    if (!trimmed || !nameModal) return;
-    if (nameModal.kind === 'create') {
-      const created = await createPlaylist(trimmed);
-      setExpandedId(created.id);
-      setItemsByPlaylist((prev) => ({ ...prev, [created.id]: [] }));
-      if (pendingLessonAfterCreate) {
-        await addLessonToPlaylist(created.id, pendingLessonAfterCreate);
-        setPendingLessonAfterCreate(null);
-        await loadItems(created.id);
-      }
-    } else {
-      await renamePlaylist(nameModal.playlistId, trimmed);
+    if (!nameModal) return;
+    if (!trimmed) {
+      setNameError(de.hoeren.playlistNameRequired);
+      return;
     }
-    setNameModal(null);
-    setNameDraft('');
-    await reload();
-  }, [nameDraft, nameModal, reload]);
+    setNameError(null);
+    try {
+      if (nameModal.kind === 'create') {
+        const created = await createPlaylist(trimmed);
+        setExpandedId(created.id);
+        setItemsByPlaylist((prev) => ({ ...prev, [created.id]: [] }));
+        if (pendingLessonAfterCreate) {
+          await addLessonToPlaylist(created.id, pendingLessonAfterCreate);
+          setPendingLessonAfterCreate(null);
+          await loadItems(created.id);
+        }
+      } else {
+        await renamePlaylist(nameModal.playlistId, trimmed);
+      }
+      setNameModal(null);
+      setNameDraft('');
+      await reload();
+      showFeedback(de.hoeren.playlistSaved);
+    } catch {
+      setNameError(de.hoeren.playlistSaveError);
+    }
+  }, [nameDraft, nameModal, reload, pendingLessonAfterCreate, loadItems, showFeedback]);
 
   const onPlay = useCallback(
     async (playlistId: string) => {
@@ -120,12 +137,17 @@ export function PlaylistsSection({
 
   const onAddLessonToPlaylist = useCallback(
     async (playlistId: string, lessonId: string) => {
-      await addLessonToPlaylist(playlistId, lessonId);
-      setPickPlaylistForLesson(null);
-      if (expandedId === playlistId) await loadItems(playlistId);
-      await reload();
+      try {
+        await addLessonToPlaylist(playlistId, lessonId);
+        setPickPlaylistForLesson(null);
+        if (expandedId === playlistId) await loadItems(playlistId);
+        await reload();
+        showFeedback(de.hoeren.playlistSaved);
+      } catch {
+        showFeedback(de.hoeren.playlistAddError, true);
+      }
     },
-    [expandedId, loadItems, reload],
+    [expandedId, loadItems, reload, showFeedback],
   );
 
   if (loading) {
@@ -138,6 +160,7 @@ export function PlaylistsSection({
         <Text style={[styles.sectionTitle, { color: theme.colors.text }]}>{de.hoeren.playlistsTitle}</Text>
         <Pressable
           onPress={() => {
+            setNameError(null);
             setNameModal({ kind: 'create' });
             setNameDraft('');
           }}
@@ -149,6 +172,19 @@ export function PlaylistsSection({
           <Plus color={theme.colors.accent} size={22} />
         </Pressable>
       </View>
+
+      {feedback ? (
+        <Text
+          style={{
+            color: feedback.isError ? theme.colors.error : theme.colors.success,
+            fontSize: 14,
+            fontWeight: '600',
+          }}
+          accessibilityLiveRegion="polite"
+        >
+          {feedback.text}
+        </Text>
+      ) : null}
 
       {playlists.length === 0 ? (
         <Text style={{ color: theme.colors.textWeak }}>{de.hoeren.playlistEmpty}</Text>
@@ -199,6 +235,7 @@ export function PlaylistsSection({
               </Pressable>
               <Pressable
                 onPress={() => {
+                  setNameError(null);
                   setNameModal({ kind: 'rename', playlistId: playlist.id, initial: playlist.name });
                   setNameDraft(playlist.name);
                 }}
@@ -265,10 +302,16 @@ export function PlaylistsSection({
           nameModal?.kind === 'rename' ? de.hoeren.playlistRenamePrompt : de.hoeren.playlistCreatePrompt
         }
         value={nameDraft}
-        onChange={setNameDraft}
+        error={nameError}
+        onChange={(v) => {
+          setNameDraft(v);
+          if (nameError) setNameError(null);
+        }}
         onCancel={() => {
           setNameModal(null);
           setNameDraft('');
+          setNameError(null);
+          setPendingLessonAfterCreate(null);
         }}
         onSubmit={() => void submitNameModal()}
         theme={theme}
@@ -284,6 +327,7 @@ export function PlaylistsSection({
         onCreate={() => {
           setPendingLessonAfterCreate(pickPlaylistForLesson);
           setPickPlaylistForLesson(null);
+          setNameError(null);
           setNameModal({ kind: 'create' });
           setNameDraft('');
         }}
@@ -297,6 +341,7 @@ function NameModal({
   visible,
   title,
   value,
+  error,
   onChange,
   onCancel,
   onSubmit,
@@ -305,6 +350,7 @@ function NameModal({
   visible: boolean;
   title: string;
   value: string;
+  error: string | null;
   onChange: (v: string) => void;
   onCancel: () => void;
   onSubmit: () => void;
@@ -327,13 +373,18 @@ function NameModal({
             style={[
               styles.input,
               {
-                borderColor: theme.colors.border,
+                borderColor: error ? theme.colors.error : theme.colors.border,
                 color: theme.colors.text,
                 borderRadius: theme.radius.md,
               },
             ]}
             onSubmitEditing={onSubmit}
           />
+          {error ? (
+            <Text style={{ color: theme.colors.error, fontSize: 14 }} accessibilityLiveRegion="polite">
+              {error}
+            </Text>
+          ) : null}
           <View style={styles.modalActions}>
             <Pressable onPress={onCancel} accessibilityRole="button" style={{ minHeight: theme.minTapTarget, justifyContent: 'center' }}>
               <Text style={{ color: theme.colors.textWeak }}>{de.common.cancel}</Text>

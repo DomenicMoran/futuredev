@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { Animated, Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { ChevronLeft } from 'lucide-react-native';
@@ -8,7 +8,10 @@ import { useOnboardingStore, type OnboardingGoal } from '../src/state/onboarding
 import { useSettingsStore, type FirstFormPreference } from '../src/state/settings.js';
 import type { PreferredLearnTime } from '../src/settings/types.js';
 import { de } from '../src/i18n/de.js';
-import { onboardingIllustration } from '../src/illustrations/moduleCovers.js';
+import { getModuleCover, onboardingIllustration } from '../src/illustrations/moduleCovers.js';
+import { ModuleCover } from '../src/components/ModuleCover.js';
+import { useReducedMotion } from '../src/accessibility/useReducedMotion.js';
+import { resolveAnimationDuration } from '../src/accessibility/motion.js';
 
 // Drei Schritte höchstens (Technikvorgabe 9): Ziel, Lesen/Hören + Lernzeit, Tagesziel.
 type Step = 1 | 2 | 3;
@@ -81,17 +84,12 @@ export default function OnboardingScreen() {
         keyboardShouldPersistTaps="handled"
       >
         <StepDots step={step} total={3} />
-        <Image
-          source={onboardingIllustration}
-          style={[styles.heroImage, { marginTop: theme.spacing.lg }]}
-          accessibilityIgnoresInvertColors
-          accessibilityRole="image"
-          accessibilityLabel={de.onboarding.heroLabel}
-        />
+        <OnboardingHero step={step} />
         {step === 1 ? (
           <OnboardingStep
             title={de.onboarding.step1Title}
             body={de.onboarding.step1Body}
+            titleScale="large"
             options={[
               {
                 label: de.onboarding.step1OptionCareer,
@@ -116,6 +114,7 @@ export default function OnboardingScreen() {
             <OnboardingStep
               title={de.onboarding.step2Title}
               body={de.onboarding.step2Body}
+              titleScale="medium"
               options={[
                 {
                   label: de.onboarding.step2OptionRead,
@@ -179,6 +178,7 @@ export default function OnboardingScreen() {
           <OnboardingStep
             title={de.onboarding.step3Title}
             body={de.onboarding.step3Body}
+            titleScale="medium"
             options={DAILY_GOAL_MINUTES.map((minutes) => ({
               label: de.onboarding.step3OptionLabel(minutes),
               subtitle: de.onboarding.step3OptionSubtitle(minutes),
@@ -188,6 +188,74 @@ export default function OnboardingScreen() {
         ) : null}
       </ScrollView>
     </SafeAreaView>
+  );
+}
+
+function OnboardingHero({ step }: { step: Step }) {
+  const theme = useTheme();
+  if (step === 1) {
+    return (
+      <Image
+        source={onboardingIllustration}
+        style={[styles.heroImageLarge, { marginTop: theme.spacing.lg }]}
+        accessibilityIgnoresInvertColors
+        accessibilityRole="image"
+        accessibilityLabel={de.onboarding.heroLabel}
+      />
+    );
+  }
+  if (step === 2) {
+    return (
+      <View style={{ marginTop: theme.spacing.lg }} accessibilityRole="image" accessibilityLabel={de.onboarding.step2PreviewLabel}>
+        <ProductPreviewStrip theme={theme} />
+      </View>
+    );
+  }
+  const step3Cover = getModuleCover('M03');
+  return step3Cover ? (
+    <Image
+      source={step3Cover}
+      style={[styles.heroImageMedium, { marginTop: theme.spacing.lg, borderRadius: theme.radius.lg }]}
+      accessibilityIgnoresInvertColors
+      accessibilityRole="image"
+      accessibilityLabel={de.onboarding.step3HeroLabel}
+    />
+  ) : null;
+}
+
+function ProductPreviewStrip({ theme }: { theme: ReturnType<typeof useTheme> }) {
+  return (
+    <View
+      style={[
+        styles.previewCard,
+        {
+          backgroundColor: theme.colors.surface,
+          borderColor: theme.colors.border,
+          borderRadius: theme.radius.lg,
+        },
+      ]}
+      pointerEvents="none"
+    >
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: theme.spacing.sm }}>
+        <ModuleCover moduleId="M01" size={48} />
+        <View style={{ flex: 1, gap: 4 }}>
+          <View style={[styles.previewLine, { backgroundColor: theme.colors.border, width: '72%' }]} />
+          <View style={[styles.previewLine, { backgroundColor: theme.colors.border, width: '48%' }]} />
+        </View>
+      </View>
+      <View
+        style={[
+          styles.previewMini,
+          {
+            borderTopColor: theme.colors.border,
+            backgroundColor: theme.colors.bg,
+          },
+        ]}
+      >
+        <View style={[styles.previewLine, { backgroundColor: theme.colors.border, flex: 1, height: 6 }]} />
+        <View style={[styles.previewPlayDot, { backgroundColor: theme.colors.accent }]} />
+      </View>
+    </View>
   );
 }
 
@@ -221,15 +289,23 @@ interface OnboardingOption {
 interface OnboardingStepProps {
   title: string;
   body: string;
+  titleScale?: 'large' | 'medium';
   options: OnboardingOption[];
 }
 
-function OnboardingStep({ title, body, options }: OnboardingStepProps) {
+function OnboardingStep({ title, body, titleScale = 'medium', options }: OnboardingStepProps) {
   const theme = useTheme();
 
   return (
     <View style={[styles.step, { marginTop: theme.spacing.lg }]}>
-      <Text style={[styles.title, { color: theme.colors.text }]}>{title}</Text>
+      <Text
+        style={[
+          titleScale === 'large' ? styles.titleLarge : styles.titleMedium,
+          { color: theme.colors.text },
+        ]}
+      >
+        {title}
+      </Text>
       <Text style={[styles.body, { color: theme.colors.textWeak, marginTop: theme.spacing.sm }]}>{body}</Text>
       <View style={{ marginTop: theme.spacing.lg, gap: theme.spacing.sm }}>
         {options.map((option) => (
@@ -242,6 +318,25 @@ function OnboardingStep({ title, body, options }: OnboardingStepProps) {
 
 function OptionRow({ label, subtitle, selected, onPress }: OnboardingOption) {
   const theme = useTheme();
+  const reducedMotion = useReducedMotion();
+  const borderAnim = useRef(new Animated.Value(selected ? 1 : 0)).current;
+
+  useEffect(() => {
+    Animated.timing(borderAnim, {
+      toValue: selected ? 1 : 0,
+      duration: resolveAnimationDuration(reducedMotion, 180),
+      useNativeDriver: false,
+    }).start();
+  }, [borderAnim, reducedMotion, selected]);
+
+  const borderColor = borderAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: [theme.colors.border, theme.colors.accent],
+  });
+  const borderWidth = borderAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: [StyleSheet.hairlineWidth, 2],
+  });
 
   return (
     <Pressable
@@ -249,22 +344,25 @@ function OptionRow({ label, subtitle, selected, onPress }: OnboardingOption) {
       accessibilityRole="button"
       accessibilityLabel={subtitle ? `${label}. ${subtitle}` : label}
       accessibilityState={{ selected: selected ?? false }}
-      style={({ pressed }) => [
-        styles.option,
-        {
-          backgroundColor: selected ? theme.colors.surface : theme.colors.surface,
-          borderColor: selected || pressed ? theme.colors.accent : theme.colors.border,
-          borderWidth: selected || pressed ? 2 : StyleSheet.hairlineWidth,
-          borderRadius: theme.radius.md,
-          minHeight: theme.minTapTarget,
-          opacity: pressed ? 0.88 : 1,
-        },
-      ]}
+      style={({ pressed }) => [{ opacity: pressed ? 0.92 : 1 }]}
     >
-      <Text style={[styles.optionLabel, { color: theme.colors.text }]}>{label}</Text>
-      {subtitle ? (
-        <Text style={[styles.optionSubtitle, { color: theme.colors.textWeak, marginTop: 4 }]}>{subtitle}</Text>
-      ) : null}
+      <Animated.View
+        style={[
+          styles.option,
+          {
+            backgroundColor: theme.colors.surface,
+            borderColor,
+            borderWidth,
+            borderRadius: theme.radius.md,
+            minHeight: theme.minTapTarget,
+          },
+        ]}
+      >
+        <Text style={[styles.optionLabel, { color: theme.colors.text }]}>{label}</Text>
+        {subtitle ? (
+          <Text style={[styles.optionSubtitle, { color: theme.colors.textWeak, marginTop: 4 }]}>{subtitle}</Text>
+        ) : null}
+      </Animated.View>
     </Pressable>
   );
 }
@@ -280,10 +378,36 @@ const styles = StyleSheet.create({
   inner: {
     flexGrow: 1,
   },
-  heroImage: {
-    width: 160,
-    height: 160,
+  heroImageLarge: {
+    width: 200,
+    height: 200,
     alignSelf: 'center',
+  },
+  heroImageMedium: {
+    width: 140,
+    height: 140,
+    alignSelf: 'center',
+  },
+  previewCard: {
+    borderWidth: StyleSheet.hairlineWidth,
+    overflow: 'hidden',
+  },
+  previewLine: {
+    height: 8,
+    borderRadius: 4,
+  },
+  previewMini: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    borderTopWidth: StyleSheet.hairlineWidth,
+  },
+  previewPlayDot: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
   },
   dotsRow: {
     flexDirection: 'row',
@@ -297,7 +421,12 @@ const styles = StyleSheet.create({
   step: {
     width: '100%',
   },
-  title: {
+  titleLarge: {
+    fontSize: 26,
+    lineHeight: 34,
+    fontWeight: '700',
+  },
+  titleMedium: {
     fontSize: 22,
     lineHeight: 30,
     fontWeight: '700',

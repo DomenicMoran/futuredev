@@ -14,6 +14,7 @@ import { findBlockAtPosition, findPositionForBlock } from './cues.js';
 import { clampSeekPosition } from './scrubberMath.js';
 import { clampRate } from './rate.js';
 import { computeSleepTimerTarget, isSleepTimerElapsed, volumeForSleepTimer } from './sleepTimer.js';
+import { currentItem } from './queue.js';
 import { EMPTY_QUEUE, enqueue, goToNext, goToPrevious, removeAt, reorder, setQueue } from './queue.js';
 import { persistRepeatMode } from './playerPreferences.js';
 import { usePlayerStore } from './store.js';
@@ -45,6 +46,33 @@ export async function resolveAudioBaseUrl(fs: Awaited<ReturnType<typeof getConte
 
 let setupPromise: Promise<void> | null = null;
 
+const SOFT_START_RAMP_MS = 180;
+const SOFT_START_STEPS = 6;
+
+async function rampVolume(trackPlayer: Awaited<ReturnType<typeof TP>>, from: number, to: number, durationMs: number): Promise<void> {
+  const stepMs = Math.max(1, Math.floor(durationMs / SOFT_START_STEPS));
+  for (let step = 1; step <= SOFT_START_STEPS; step++) {
+    const t = step / SOFT_START_STEPS;
+    await trackPlayer.setVolume(from + (to - from) * t);
+    await new Promise((resolve) => setTimeout(resolve, stepMs));
+  }
+  await trackPlayer.setVolume(to);
+}
+
+/** Schlaf-Timer-Duck aufheben, Lautstärke normalisieren, Tempo erneut setzen. */
+async function preparePlaybackStart(trackPlayer: Awaited<ReturnType<typeof TP>>): Promise<void> {
+  setSleepTimer(null);
+  await trackPlayer.setVolume(1);
+  const rate = usePlayerStore.getState().rate;
+  await trackPlayer.setRate(rate);
+}
+
+async function softStartPlay(trackPlayer: Awaited<ReturnType<typeof TP>>): Promise<void> {
+  await trackPlayer.setVolume(0);
+  await trackPlayer.play();
+  await rampVolume(trackPlayer, 0, 1, SOFT_START_RAMP_MS);
+}
+
 /**
  * Einmaliger Aufbau: TrackPlayer.setupPlayer() plus die Fernbedienungs-
  * Fähigkeiten für Sperrbildschirm/Benachrichtigung (Play/Pause/Sprung/
@@ -63,8 +91,19 @@ async function ensureSetup(): Promise<void> {
         });
       }
       const trackPlayer = await TP();
-      const { Capability, AppKilledPlaybackBehavior } = await import('react-native-track-player');
-      await trackPlayer.setupPlayer();
+      const {
+        AndroidAudioContentType,
+        AppKilledPlaybackBehavior,
+        Capability,
+        IOSCategory,
+        IOSCategoryMode,
+      } = await import('react-native-track-player');
+      await trackPlayer.setupPlayer({
+        androidAudioContentType: AndroidAudioContentType.Speech,
+        iosCategory: IOSCategory.Playback,
+        iosCategoryMode: IOSCategoryMode.SpokenAudio,
+        autoHandleInterruptions: true,
+      });
       await trackPlayer.updateOptions({
         android: { appKilledPlaybackBehavior: AppKilledPlaybackBehavior.ContinuePlayback },
         capabilities: [
@@ -205,7 +244,8 @@ async function startQueue(
     await trackPlayer.skip(startIndex);
   }
   if (startSeconds > 0) await trackPlayer.seekTo(startSeconds);
-  await trackPlayer.play();
+  await preparePlaybackStart(trackPlayer);
+  await softStartPlay(trackPlayer);
 
   usePlayerStore.getState().setBuffering(false);
   usePlayerStore.getState().setPlaying(true);
@@ -218,6 +258,27 @@ async function startQueue(
  * Lesen/Hören, Kapitelliste). Baut die Warteschlange neu aus genau dieser
  * einen Lektion — enqueueModule/enqueueLessons hängen danach weitere Titel an.
  */
+/** Gleiche Lektion in der Warteschlange: Fortsetzen statt Reset (kein Lautstärke-Blast). */
+export async function togglePlayback(): Promise<void> {
+  await ensureSetup();
+  const trackPlayer = await TP();
+  const isPlaying = usePlayerStore.getState().isPlaying;
+  if (isPlaying) {
+    await trackPlayer.pause();
+    usePlayerStore.getState().setPlaying(false);
+    const item = currentItem(usePlayerStore.getState().queue);
+    if (item) await saveCurrentPositionNow(item.lessonId);
+    return;
+  }
+  await preparePlaybackStart(trackPlayer);
+  await softStartPlay(trackPlayer);
+  usePlayerStore.getState().setPlaying(true);
+}
+
+export function isSameLessonInQueue(lessonId: string): boolean {
+  return currentItem(usePlayerStore.getState().queue)?.lessonId === lessonId;
+}
+
 export async function playLesson(lessonId: string, blockIndex?: number): Promise<void> {
   const lesson = await getLessonForPlayback(lessonId);
   cacheLessonSpeechTexts(lesson);
