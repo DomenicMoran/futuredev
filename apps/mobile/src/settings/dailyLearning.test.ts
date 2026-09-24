@@ -9,6 +9,7 @@ import {
   DAILY_LEARNING_SECONDS_KEY,
   MAX_DAILY_LEARNING_SECONDS,
   MAX_LISTEN_DELTA_SECONDS,
+  READ_FOCUS_TICK_SECONDS,
   resolveStoredDailySeconds,
 } from './dailyLearning.js';
 
@@ -44,6 +45,10 @@ describe('dailyLearning accumulator (pure)', () => {
     const delta = MAX_LISTEN_DELTA_SECONDS;
     const result = applyDeltaToDailyTotal('2026-09-23', 900, today, delta);
     expect(result).toEqual({ date: today, seconds: delta });
+  });
+
+  it('READ_FOCUS_TICK_SECONDS folgt dem Hör-Save-Intervall', () => {
+    expect(READ_FOCUS_TICK_SECONDS).toBe(5);
   });
 
   it('applyDeltaToDailyTotal: Tagesmaximum wird eingehalten', () => {

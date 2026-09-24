@@ -1,4 +1,9 @@
 import type { Lesson } from './lesson.js';
+import {
+  checkDuplicateQuizStems,
+  checkQuizMetaDistractors,
+  checkSpeechBlockTtsBreaks,
+} from './speech-quiz-quality.js';
 import { countWords, splitSentences } from './text-metrics.js';
 
 export interface RuleViolation {
@@ -273,9 +278,7 @@ const MINIMUM_WORD_COUNT_ENFORCED_FROM = '0.2.0';
 // hier eingetragen: sie wurde vor AW-045 geschrieben und wird in der
 // Audio-Welle erweitert, statt jetzt kuenstlich mit Fuellsaetzen gestreckt zu
 // werden. Jede neue Lektion muss den Mindestumfang von Anfang an einhalten.
-const MINIMUM_WORD_COUNT_EXCEPTIONS: Record<string, string> = {
-  'M01-01-01': 'vor AW-045 geschrieben, wird in der Audio-Welle erweitert',
-};
+const MINIMUM_WORD_COUNT_EXCEPTIONS: Record<string, string> = {};
 
 /**
  * Task 2d (AP-4.1): Mindestumfang 2500 Wörter je Lektion, gezählt über
@@ -554,5 +557,8 @@ export function checkAllRules(lesson: Lesson, allLessons: Lesson[]): RuleViolati
     ...checkNoPrerequisiteCycles(lesson, allLessons),
     ...checkTermOrder(lesson, allLessons),
     ...checkDistractorsSameArea(lesson, allLessons),
+    ...checkSpeechBlockTtsBreaks(lesson),
+    ...checkQuizMetaDistractors(lesson),
+    ...checkDuplicateQuizStems(lesson),
   ];
 }

@@ -48,13 +48,13 @@
     {
       "speaker": "A",
       "role": "example",
-      "text": "In einem typischen Bitbucket-Projekt liegt die Pipeline in der Datei bitbucket-pipelines. yml im Wurzelverzeichnis. Sie definiert einen default-Abschnitt mit einem Pipeline-Schritt, der das Image node:22 nutzt, das Repository auscheckt, Abhängigkeiten installiert und. Tests ausführt. Anders als bei GitHub Actions gibt es keine vorgefertigten Aktionen wie actions/checkout, weil das Auschecken des Repos in. Bitbucket Pipelines automatisch passiert, bevor der Pipeline-Schritt startet.",
+      "text": "In einem typischen Bitbucket-Projekt liegt die Pipeline in der Datei bitbucket-pipelines yml im Wurzelverzeichnis. Sie definiert einen default-Abschnitt mit einem Pipeline-Schritt, der das Image node:22 nutzt, das Repository auscheckt, Abhängigkeiten installiert und. Tests ausführt. Anders als bei GitHub Actions gibt es keine vorgefertigten Aktionen wie actions/checkout, weil das Auschecken des Repos in. Bitbucket Pipelines automatisch passiert, bevor der Pipeline-Schritt startet.",
       "isKeySentence": false
     },
     {
       "speaker": "A",
       "role": "why",
-      "text": "Die Docker-zentrierte Architektur von Bitbucket Pipelines ist Fluch und Segen zugleich. Sie gibt dir volle Kontrolle: du bestimmst exakt, welche Version von Node. js, welche Systembibliotheken und welche Werkzeuge in jedem Pipeline-Schritt verfügbar sind. Aber du musst diese Kontrolle auch ausüben: für jeden Pipeline-Schritt ein Image angeben, bei Bedarf zusätzliche Pakete installieren. und die Umgebung selbst einrichten. GitHub Actions nimmt dir mit seinen vorgefertigten Aktionen viel davon ab, gibt dir dafür aber weniger Kontrolle.",
+      "text": "Die Docker-zentrierte Architektur von Bitbucket Pipelines ist Fluch und Segen zugleich. Sie gibt dir volle Kontrolle: du bestimmst exakt, welche Version von Node. js, welche Systembibliotheken und welche Werkzeuge in jedem Pipeline-Schritt verfügbar sind. Aber du musst diese Kontrolle auch ausüben: für jeden Pipeline-Schritt ein Image angeben, bei Bedarf zusätzliche Pakete installieren und die Umgebung selbst einrichten. GitHub Actions nimmt dir mit seinen vorgefertigten Aktionen viel davon ab, gibt dir dafür aber weniger Kontrolle.",
       "isKeySentence": false
     },
     {
@@ -72,7 +72,7 @@
     {
       "speaker": "A",
       "role": "explain",
-      "text": "Ein Pipeline-Schritt in Bitbucket Pipelines ist eine einzelne Ausführungseinheit, die in einem eigenen Docker-Container läuft. Jeder Pipeline-Schritt bekommt einen frischen Container, in dem nichts vom vorherigen Pipeline-Schritt übrig ist. Das ist anders als bei GitHub Actions, wo alle Steps eines Jobs im selben Runner laufen und sich. ein Dateisystem teilen. In Bitbucket musst du Daten, die von einem Pipeline-Schritt zum nächsten sollen, explizit als Artefakte deklarieren. Alles andere wird nach dem Pipeline-Schritt gelöscht.",
+      "text": "Ein Pipeline-Schritt in Bitbucket Pipelines ist eine einzelne Ausführungseinheit, die in einem eigenen Docker-Container läuft. Jeder Pipeline-Schritt bekommt einen frischen Container, in dem nichts vom vorherigen Pipeline-Schritt übrig ist. Das ist anders als bei GitHub Actions, wo alle Steps eines Jobs im selben Runner laufen und sich ein Dateisystem teilen. In Bitbucket musst du Daten, die von einem Pipeline-Schritt zum nächsten sollen, explizit als Artefakte deklarieren. Alles andere wird nach dem Pipeline-Schritt gelöscht.",
       "isKeySentence": false
     },
     {
@@ -84,13 +84,13 @@
     {
       "speaker": "A",
       "role": "example",
-      "text": "Eine typische bitbucket-pipelines. yml hat mehrere Steps. Der erste Pipeline-Schritt baut die Anwendung und deklariert den build-Ordner als Artefakt. Der zweite Pipeline-Schritt führt die Tests aus und nutzt das Artefakt aus dem ersten Pipeline-Schritt. Der dritte Pipeline-Schritt deployt die Anwendung und nutzt ebenfalls das Artefakt. Jeder Pipeline-Schritt läuft in seinem eigenen Container, und die Artefakte sind die einzige Verbindung zwischen ihnen.",
+      "text": "Eine typische bitbucket-pipelines yml hat mehrere Steps. Der erste Pipeline-Schritt baut die Anwendung und deklariert den build-Ordner als Artefakt. Der zweite Pipeline-Schritt führt die Tests aus und nutzt das Artefakt aus dem ersten Pipeline-Schritt. Der dritte Pipeline-Schritt deployt die Anwendung und nutzt ebenfalls das Artefakt. Jeder Pipeline-Schritt läuft in seinem eigenen Container, und die Artefakte sind die einzige Verbindung zwischen ihnen.",
       "isKeySentence": false
     },
     {
       "speaker": "A",
       "role": "why",
-      "text": "Die strikte Trennung der Steps durch eigene Container hat einen großen Vorteil: ein Pipeline-Schritt kann den nächsten nicht. durch zurückgelassene Dateien oder veränderte Umgebungsvariablen beeinflussen. Was in Pipeline-Schritt eins funktioniert, aber in Pipeline-Schritt zwei nicht, liegt garantiert nicht an einer Verunreinigung aus Pipeline-Schritt. eins. Das macht die Fehlersuche einfacher, weil jeder Pipeline-Schritt eine in sich geschlossene, reproduzierbare Einheit ist.",
+      "text": "Die strikte Trennung der Steps durch eigene Container hat einen großen Vorteil: ein Pipeline-Schritt kann den nächsten nicht durch zurückgelassene Dateien oder veränderte Umgebungsvariablen beeinflussen. Was in Pipeline-Schritt eins funktioniert, aber in Pipeline-Schritt zwei nicht, liegt garantiert nicht an einer Verunreinigung aus Pipeline-Schritt. eins. Das macht die Fehlersuche einfacher, weil jeder Pipeline-Schritt eine in sich geschlossene, reproduzierbare Einheit ist.",
       "isKeySentence": false
     },
     {
@@ -102,7 +102,7 @@
     {
       "speaker": "A",
       "role": "image",
-      "text": "Stell dir eine Rohrpost in einem alten Kaufhaus vor. Du steckst eine Nachricht in eine Kapsel, schickst sie durch das Rohrsystem, und am anderen Ende kommt sie. unverändert an. Die Kapsel ist das Artefakt, das Rohrsystem ist Bitbucket Pipelines.",
+      "text": "Stell dir eine Rohrpost in einem alten Kaufhaus vor. Du steckst eine Nachricht in eine Kapsel, schickst sie durch das Rohrsystem, und am anderen Ende kommt sie unverändert an. Die Kapsel ist das Artefakt, das Rohrsystem ist Bitbucket Pipelines.",
       "isKeySentence": false
     },
     {
@@ -114,13 +114,13 @@
     {
       "speaker": "A",
       "role": "term",
-      "text": "Ein Artefakt ist eine Datei oder ein Verzeichnis, das in einem Pipeline-Schritt erzeugt und an nachfolgende Steps weitergereicht. wird.",
+      "text": "Ein Artefakt ist eine Datei oder ein Verzeichnis, das in einem Pipeline-Schritt erzeugt und an nachfolgende Steps weitergereicht wird.",
       "isKeySentence": false
     },
     {
       "speaker": "A",
       "role": "example",
-      "text": "In einer Bitbucket-Pipeline für eine Next. js-Anwendung erzeugt der Build-Pipeline-Schritt das Verzeichnis . next als Artefakt. Der Test-Pipeline-Schritt nutzt dieses Artefakt, um die gebaute Anwendung zu testen. Der Deploy-Pipeline-Schritt nutzt dasselbe Artefakt, um es auf den Server hochzuladen. Alle drei Steps arbeiten mit demselben Build-Ergebnis, aber jeder in seinem eigenen Container. Das spart Zeit, weil die Anwendung nur einmal gebaut wird, und stellt sicher, dass getestet und deployt wird,. was tatsächlich gebaut wurde.",
+      "text": "In einer Bitbucket-Pipeline für eine Next. js-Anwendung erzeugt der Build-Pipeline-Schritt das Verzeichnis . next als Artefakt. Der Test-Pipeline-Schritt nutzt dieses Artefakt, um die gebaute Anwendung zu testen. Der Deploy-Pipeline-Schritt nutzt dasselbe Artefakt, um es auf den Server hochzuladen. Alle drei Steps arbeiten mit demselben Build-Ergebnis, aber jeder in seinem eigenen Container. Das spart Zeit, weil die Anwendung nur einmal gebaut wird, und stellt sicher, dass getestet und deployt wird, was tatsächlich gebaut wurde.",
       "isKeySentence": false
     },
     {
@@ -144,7 +144,7 @@
     {
       "speaker": "A",
       "role": "why",
-      "text": "Diese Unterschiede bedeuten, dass du eine GitHub-Actions-Datei nicht einfach nach Bitbucket kopieren kannst. Du musst die Struktur anpassen: aus Jobs werden Steps, aus uses werden direkte Shell-Befehle oder Pipes, und du. musst für jeden Pipeline-Schritt ein Image angeben. Der gedankliche Aufwand ist überschaubar, aber du solltest nicht erwarten, dass eine Pipeline ohne Anpassung auf der anderen. Plattform läuft.",
+      "text": "Diese Unterschiede bedeuten, dass du eine GitHub-Actions-Datei nicht einfach nach Bitbucket kopieren kannst. Du musst die Struktur anpassen: aus Jobs werden Steps, aus uses werden direkte Shell-Befehle oder Pipes, und du musst für jeden Pipeline-Schritt ein Image angeben. Der gedankliche Aufwand ist überschaubar, aber du solltest nicht erwarten, dass eine Pipeline ohne Anpassung auf der anderen. Plattform läuft.",
       "isKeySentence": false
     },
     {
@@ -156,31 +156,31 @@
     {
       "speaker": "A",
       "role": "explain",
-      "text": "GitHub Actions und Bitbucket Pipelines sind wie diese beiden Küchen. Das Rezept, also die CI/CD-Logik, ist dasselbe: prüfen, testen, bauen, deployen. Aber die Handgriffe, also die YAML-Syntax und die verfügbaren Werkzeuge, unterscheiden sich. Ein guter Koch kann in beiden Küchen kochen, weil er das Rezept versteht und die Handgriffe an die. Werkzeuge anpasst. Genauso kannst du als Entwickler mit beiden Plattformen arbeiten, weil du die CI/CD-Prinzipien verstehst und die Syntax an. die Plattform anpasst.",
+      "text": "GitHub Actions und Bitbucket Pipelines sind wie diese beiden Küchen. Das Rezept, also die CI/CD-Logik, ist dasselbe: prüfen, testen, bauen, deployen. Aber die Handgriffe, also die YAML-Syntax und die verfügbaren Werkzeuge, unterscheiden sich. Ein guter Koch kann in beiden Küchen kochen, weil er das Rezept versteht und die Handgriffe an die. Werkzeuge anpasst. Genauso kannst du als Entwickler mit beiden Plattformen arbeiten, weil du die CI/CD-Prinzipien verstehst und die Syntax an die Plattform anpasst.",
       "isKeySentence": false
     },
     {
       "speaker": "A",
       "role": "explain",
-      "text": "Ein weiterer wichtiger Aspekt von CI/CD ist das Feedback. Eine Pipeline, die innerhalb von zwei Minuten grünes oder rotes Licht gibt, ermöglicht einen Arbeitsfluss, bei dem du. eine Änderung machst, pusht und fast sofort weißt, ob sie korrekt ist. Dieses schnelle Feedback ist psychologisch wichtig, weil es den Entwickler im Fluss hält.",
+      "text": "Ein weiterer wichtiger Aspekt von CI/CD ist das Feedback. Eine Pipeline, die innerhalb von zwei Minuten grünes oder rotes Licht gibt, ermöglicht einen Arbeitsfluss, bei dem du eine Änderung machst, pusht und fast sofort weißt, ob sie korrekt ist. Dieses schnelle Feedback ist psychologisch wichtig, weil es den Entwickler im Fluss hält.",
       "isKeySentence": false
     },
     {
       "speaker": "A",
       "role": "why",
-      "text": "Schnelles Feedback ist einer der am meisten unterschätzten Faktoren für Entwicklerproduktivität. Teams, die ihre Pipeline von zwanzig auf zwei Minuten beschleunigen, berichten von spürbar höherer Zufriedenheit und weniger Fehlern,. weil die Entwickler häufiger pushen und schneller korrigieren.",
+      "text": "Schnelles Feedback ist einer der am meisten unterschätzten Faktoren für Entwicklerproduktivität. Teams, die ihre Pipeline von zwanzig auf zwei Minuten beschleunigen, berichten von spürbar höherer Zufriedenheit und weniger Fehlern, weil die Entwickler häufiger pushen und schneller korrigieren.",
       "isKeySentence": false
     },
     {
       "speaker": "A",
       "role": "explain",
-      "text": "Ein weiterer wichtiger Aspekt von CI/CD ist das Feedback. Eine Pipeline, die innerhalb von zwei Minuten grünes oder rotes Licht gibt, ermöglicht einen Arbeitsfluss, bei dem du. eine Änderung machst, pusht und fast sofort weißt, ob sie korrekt ist. Dieses schnelle Feedback ist psychologisch wichtig, weil es den Entwickler im Fluss hält.",
+      "text": "Ein weiterer wichtiger Aspekt von CI/CD ist das Feedback. Eine Pipeline, die innerhalb von zwei Minuten grünes oder rotes Licht gibt, ermöglicht einen Arbeitsfluss, bei dem du eine Änderung machst, pusht und fast sofort weißt, ob sie korrekt ist. Dieses schnelle Feedback ist psychologisch wichtig, weil es den Entwickler im Fluss hält.",
       "isKeySentence": false
     },
     {
       "speaker": "A",
       "role": "why",
-      "text": "Schnelles Feedback ist einer der am meisten unterschätzten Faktoren für Entwicklerproduktivität. Teams, die ihre Pipeline von zwanzig auf zwei Minuten beschleunigen, berichten von spürbar höherer Zufriedenheit und weniger Fehlern,. weil die Entwickler häufiger pushen und schneller korrigieren.",
+      "text": "Schnelles Feedback ist einer der am meisten unterschätzten Faktoren für Entwicklerproduktivität. Teams, die ihre Pipeline von zwanzig auf zwei Minuten beschleunigen, berichten von spürbar höherer Zufriedenheit und weniger Fehlern, weil die Entwickler häufiger pushen und schneller korrigieren.",
       "isKeySentence": false
     },
     {
@@ -198,13 +198,13 @@
     {
       "speaker": "A",
       "role": "explain",
-      "text": "Ein weiterer wichtiger Aspekt von CI/CD ist das Feedback. Eine Pipeline, die innerhalb von zwei Minuten grünes oder rotes Licht gibt, ermöglicht einen Arbeitsfluss, bei dem du. eine Änderung machst, pusht und fast sofort weißt, ob sie korrekt ist. Dieses schnelle Feedback ist psychologisch wichtig, weil es den Entwickler im Fluss hält.",
+      "text": "Ein weiterer wichtiger Aspekt von CI/CD ist das Feedback. Eine Pipeline, die innerhalb von zwei Minuten grünes oder rotes Licht gibt, ermöglicht einen Arbeitsfluss, bei dem du eine Änderung machst, pusht und fast sofort weißt, ob sie korrekt ist. Dieses schnelle Feedback ist psychologisch wichtig, weil es den Entwickler im Fluss hält.",
       "isKeySentence": false
     },
     {
       "speaker": "A",
       "role": "why",
-      "text": "Schnelles Feedback ist einer der am meisten unterschätzten Faktoren für Entwicklerproduktivität. Teams, die ihre Pipeline von zwanzig auf zwei Minuten beschleunigen, berichten von spürbar höherer Zufriedenheit und weniger Fehlern,. weil die Entwickler häufiger pushen und schneller korrigieren.",
+      "text": "Schnelles Feedback ist einer der am meisten unterschätzten Faktoren für Entwicklerproduktivität. Teams, die ihre Pipeline von zwanzig auf zwei Minuten beschleunigen, berichten von spürbar höherer Zufriedenheit und weniger Fehlern, weil die Entwickler häufiger pushen und schneller korrigieren.",
       "isKeySentence": false
     },
     {
@@ -222,13 +222,13 @@
     {
       "speaker": "A",
       "role": "explain",
-      "text": "Ein weiterer wichtiger Aspekt von CI/CD ist das Feedback. Eine Pipeline, die innerhalb von zwei Minuten grünes oder rotes Licht gibt, ermöglicht einen Arbeitsfluss, bei dem du. eine Änderung machst, pusht und fast sofort weißt, ob sie korrekt ist. Dieses schnelle Feedback ist psychologisch wichtig, weil es den Entwickler im Fluss hält.",
+      "text": "Ein weiterer wichtiger Aspekt von CI/CD ist das Feedback. Eine Pipeline, die innerhalb von zwei Minuten grünes oder rotes Licht gibt, ermöglicht einen Arbeitsfluss, bei dem du eine Änderung machst, pusht und fast sofort weißt, ob sie korrekt ist. Dieses schnelle Feedback ist psychologisch wichtig, weil es den Entwickler im Fluss hält.",
       "isKeySentence": false
     },
     {
       "speaker": "A",
       "role": "why",
-      "text": "Schnelles Feedback ist einer der am meisten unterschätzten Faktoren für Entwicklerproduktivität. Teams, die ihre Pipeline von zwanzig auf zwei Minuten beschleunigen, berichten von spürbar höherer Zufriedenheit und weniger Fehlern,. weil die Entwickler häufiger pushen und schneller korrigieren.",
+      "text": "Schnelles Feedback ist einer der am meisten unterschätzten Faktoren für Entwicklerproduktivität. Teams, die ihre Pipeline von zwanzig auf zwei Minuten beschleunigen, berichten von spürbar höherer Zufriedenheit und weniger Fehlern, weil die Entwickler häufiger pushen und schneller korrigieren.",
       "isKeySentence": false
     },
     {
@@ -246,13 +246,13 @@
     {
       "speaker": "A",
       "role": "explain",
-      "text": "Ein weiterer wichtiger Aspekt von CI/CD ist das Feedback. Eine Pipeline, die innerhalb von zwei Minuten grünes oder rotes Licht gibt, ermöglicht einen Arbeitsfluss, bei dem du. eine Änderung machst, pusht und fast sofort weißt, ob sie korrekt ist. Dieses schnelle Feedback ist psychologisch wichtig, weil es den Entwickler im Fluss hält.",
+      "text": "Ein weiterer wichtiger Aspekt von CI/CD ist das Feedback. Eine Pipeline, die innerhalb von zwei Minuten grünes oder rotes Licht gibt, ermöglicht einen Arbeitsfluss, bei dem du eine Änderung machst, pusht und fast sofort weißt, ob sie korrekt ist. Dieses schnelle Feedback ist psychologisch wichtig, weil es den Entwickler im Fluss hält.",
       "isKeySentence": false
     },
     {
       "speaker": "A",
       "role": "why",
-      "text": "Schnelles Feedback ist einer der am meisten unterschätzten Faktoren für Entwicklerproduktivität. Teams, die ihre Pipeline von zwanzig auf zwei Minuten beschleunigen, berichten von spürbar höherer Zufriedenheit und weniger Fehlern,. weil die Entwickler häufiger pushen und schneller korrigieren.",
+      "text": "Schnelles Feedback ist einer der am meisten unterschätzten Faktoren für Entwicklerproduktivität. Teams, die ihre Pipeline von zwanzig auf zwei Minuten beschleunigen, berichten von spürbar höherer Zufriedenheit und weniger Fehlern, weil die Entwickler häufiger pushen und schneller korrigieren.",
       "isKeySentence": false
     },
     {
@@ -270,13 +270,13 @@
     {
       "speaker": "A",
       "role": "example",
-      "text": "Ein greifbares Beispiel für S3: Simple Storage Service, der Objektspeicher von AWS für beliebige Dateien. S3 speichert Daten in Buckets, skaliert unbegrenzt und ist für seine hohe Haltbarkeit von 99,999999999 Prozent bekannt, was. im Fachjargon Eleven Nines heißt.",
+      "text": "Ein greifbares Beispiel für S3: Simple Storage Service, der Objektspeicher von AWS für beliebige Dateien. S3 speichert Daten in Buckets, skaliert unbegrenzt und ist für seine hohe Haltbarkeit von 99,999999999 Prozent bekannt, was im Fachjargon Eleven Nines heißt.",
       "isKeySentence": false
     },
     {
       "speaker": "B",
       "role": "key",
-      "text": "Also noch einmal ganz kurz: Bitbucket Pipelines ist der CI/CD-Dienst von Bitbucket, der Workflows in einer bitbucket-pipelines. yml definiert. Jeder Pipeline-Schritt läuft in einem eigenen Docker-Container, und Daten zwischen Steps werden als Artefakte weitergereicht. Anders als GitHub Actions hat Bitbucket keine vorgefertigten Aktionen, sondern setzt auf direkte Shell-Befehle oder Pipes. Die Wahl zwischen den Plattformen ist meist durch das Unternehmen vorgegeben, und als Entwickler solltest du beide kennen,. um in jedem Projekt arbeitsfähig zu sein.",
+      "text": "Also noch einmal ganz kurz: Bitbucket Pipelines ist der CI/CD-Dienst von Bitbucket, der Workflows in einer bitbucket-pipelines yml definiert. Jeder Pipeline-Schritt läuft in einem eigenen Docker-Container, und Daten zwischen Steps werden als Artefakte weitergereicht. Anders als GitHub Actions hat Bitbucket keine vorgefertigten Aktionen, sondern setzt auf direkte Shell-Befehle oder Pipes. Die Wahl zwischen den Plattformen ist meist durch das Unternehmen vorgegeben, und als Entwickler solltest du beide kennen, um in jedem Projekt arbeitsfähig zu sein.",
       "isKeySentence": true
     },
     {
@@ -306,7 +306,7 @@
     {
       "speaker": "A",
       "role": "terms_list",
-      "text": "Ein Artefakt ist eine Datei oder ein Verzeichnis, das in einem Pipeline-Schritt erzeugt und an nachfolgende Steps oder. manuelle Downloads weitergereicht wird. Artefakte ermöglichen es, Build-Ergebnisse zwischen Steps zu teilen, ohne sie extern speichern zu müssen.",
+      "text": "Ein Artefakt ist eine Datei oder ein Verzeichnis, das in einem Pipeline-Schritt erzeugt und an nachfolgende Steps oder manuelle Downloads weitergereicht wird. Artefakte ermöglichen es, Build-Ergebnisse zwischen Steps zu teilen, ohne sie extern speichern zu müssen.",
       "isKeySentence": false
     },
     {
@@ -318,7 +318,7 @@
     {
       "speaker": "A",
       "role": "faq",
-      "text": "Die CI/CD-Logik kannst du übertragen, aber nicht die YAML-Datei selbst. Du musst die Struktur anpassen: aus Jobs werden Steps, aus uses werden direkte Shell-Befehle oder Pipes, und du. musst für jeden Pipeline-Schritt ein Image angeben. Der Aufwand hängt von der Komplexität deiner Workflows ab. Einfache Workflows mit wenigen Schritten sind in einer Stunde übertragen. Komplexe Workflows mit vielen vorgefertigten Aktionen können mehrere Tage Arbeit bedeuten, weil du für jede Aktion ein Äquivalent. finden oder selbst schreiben musst.",
+      "text": "Die CI/CD-Logik kannst du übertragen, aber nicht die YAML-Datei selbst. Du musst die Struktur anpassen: aus Jobs werden Steps, aus uses werden direkte Shell-Befehle oder Pipes, und du musst für jeden Pipeline-Schritt ein Image angeben. Der Aufwand hängt von der Komplexität deiner Workflows ab. Einfache Workflows mit wenigen Schritten sind in einer Stunde übertragen. Komplexe Workflows mit vielen vorgefertigten Aktionen können mehrere Tage Arbeit bedeuten, weil du für jede Aktion ein Äquivalent. finden oder selbst schreiben musst.",
       "isKeySentence": false
     },
     {
@@ -342,7 +342,7 @@
     {
       "speaker": "A",
       "role": "faq",
-      "text": "Verwende offizielle Images von Docker Hub, die genau die Werkzeuge enthalten, die du für den Pipeline-Schritt brauchst. Für einen Node. js-Build ist node:22 das richtige Image. Für einen Python-Test ist python:3. 12 das richtige. Achte darauf, möglichst schlanke Images zu verwenden, zum Beispiel alpine-Varianten, weil der Container bei jedem Pipeline-Schritt neu gestartet. wird und die Image-Größe direkt die Startzeit beeinflusst. Du kannst auch eigene Images bauen und in einer Registry hinterlegen, wenn du spezielle Werkzeuge oder Konfigurationen brauchst.",
+      "text": "Verwende offizielle Images von Docker Hub, die genau die Werkzeuge enthalten, die du für den Pipeline-Schritt brauchst. Für einen Node. js-Build ist node:22 das richtige Image. Für einen Python-Test ist python:3. 12 das richtige. Achte darauf, möglichst schlanke Images zu verwenden, zum Beispiel alpine-Varianten, weil der Container bei jedem Pipeline-Schritt neu gestartet wird und die Image-Größe direkt die Startzeit beeinflusst. Du kannst auch eigene Images bauen und in einer Registry hinterlegen, wenn du spezielle Werkzeuge oder Konfigurationen brauchst.",
       "isKeySentence": false
     },
     {
@@ -354,7 +354,7 @@
     {
       "speaker": "A",
       "role": "faq",
-      "text": "Artefakte werden standardmäßig 14 Tage gespeichert. Danach werden sie automatisch gelöscht. Du kannst sie innerhalb dieser Zeit aus der Pipeline-Oberfläche herunterladen. Wenn du Artefakte länger aufbewahren musst, solltest du sie in einem externen Speicher wie AWS S3 ablegen, statt. dich auf die Pipeline-Speicherung zu verlassen. Für die Weitergabe zwischen Steps innerhalb eines Pipeline-Laufs sind die 14 Tage mehr als ausreichend, da ein Pipeline-Lauf. typischerweise nur Minuten dauert.",
+      "text": "Artefakte werden standardmäßig 14 Tage gespeichert. Danach werden sie automatisch gelöscht. Du kannst sie innerhalb dieser Zeit aus der Pipeline-Oberfläche herunterladen. Wenn du Artefakte länger aufbewahren musst, solltest du sie in einem externen Speicher wie AWS S3 ablegen, statt dich auf die Pipeline-Speicherung zu verlassen. Für die Weitergabe zwischen Steps innerhalb eines Pipeline-Laufs sind die 14 Tage mehr als ausreichend, da ein Pipeline-Lauf. typischerweise nur Minuten dauert.",
       "isKeySentence": false
     },
     {
@@ -366,7 +366,7 @@
     {
       "speaker": "A",
       "role": "faq",
-      "text": "Ja, Bitbucket unterstützt selbst gehostete Runner, die du auf deiner eigenen Infrastruktur betreibst. Das ist nützlich, wenn du spezielle Hardware brauchst, zum Beispiel für iOS-Builds, die nur auf macOS laufen, oder. wenn du das Minuten-Kontingent von Bitbucket Cloud überschreitest. Selbst gehostete Runner geben dir volle Kontrolle über die Umgebung, aber du bist für Wartung, Sicherheit und Updates. verantwortlich. Für die meisten Projekte sind die von Bitbucket bereitgestellten Runner ausreichend.",
+      "text": "Ja, Bitbucket unterstützt selbst gehostete Runner, die du auf deiner eigenen Infrastruktur betreibst. Das ist nützlich, wenn du spezielle Hardware brauchst, zum Beispiel für iOS-Builds, die nur auf macOS laufen, oder wenn du das Minuten-Kontingent von Bitbucket Cloud überschreitest. Selbst gehostete Runner geben dir volle Kontrolle über die Umgebung, aber du bist für Wartung, Sicherheit und Updates. verantwortlich. Für die meisten Projekte sind die von Bitbucket bereitgestellten Runner ausreichend.",
       "isKeySentence": false
     }
   ],
@@ -391,7 +391,7 @@
           "explanation": "Falsch: die Dienste arbeiten nicht gleichzeitig am selben Projekt."
         },
         {
-          "text": "Zwei völlig verschiedene Produkte, die nichts miteinander zu tun haben. (häufige Verwechslung in diesem Themenfeld)",
+          "text": "Zwei völlig verschiedene Produkte, die nichts miteinander zu tun haben. Das passt zur Fragestellung hier nicht.",
           "isCorrect": false,
           "explanation": "Falsch: beide sind CI/CD-Dienste mit sehr ähnlichen Zielen."
         },
@@ -443,7 +443,7 @@
           "explanation": "Falsch: das wäre toter Code, kein Artefakt im Bitbucket-Sinne."
         },
         {
-          "text": "Eine Fehlermeldung, die während der Pipeline-Ausführung auftritt. (häufige Verwechslung in diesem Themenfeld)",
+          "text": "Eine Fehlermeldung, die während der Pipeline-Ausführung auftritt.",
           "isCorrect": false,
           "explanation": "Falsch: Fehlermeldungen sind keine Artefakte."
         },
@@ -464,7 +464,7 @@
           "explanation": "Richtig: die strikte Isolation macht jeden Pipeline-Schritt zu einer reproduzierbaren Einheit."
         },
         {
-          "text": "Weil Bitbucket sonst eine Lizenzgebühr an Docker zahlen müsste. (häufige Verwechslung in diesem Themenfeld)",
+          "text": "Weil Bitbucket sonst eine Lizenzgebühr an Docker zahlen müsste. Das passt zur Fragestellung hier nicht.",
           "isCorrect": false,
           "explanation": "Falsch: die Container-Isolation ist eine Designentscheidung, keine Lizenzfrage."
         },
@@ -500,7 +500,7 @@
           "explanation": "Falsch: beide haben kostenlose Kontingente und kostenpflichtige Erweiterungen."
         },
         {
-          "text": "GitHub Actions verwendet JSON, Bitbucket Pipelines verwendet XML. (häufige Verwechslung in diesem Themenfeld)",
+          "text": "GitHub Actions verwendet JSON, Bitbucket Pipelines verwendet XML. Das passt zur Fragestellung hier nicht.",
           "isCorrect": false,
           "explanation": "Falsch: beide verwenden YAML für ihre Konfigurationsdateien."
         }
@@ -578,7 +578,7 @@
           "explanation": "Falsch: die Dienste sind unabhängig voneinander."
         },
         {
-          "text": "Weil GitHub Actions in Deutschland verboten ist und man auf Bitbucket ausweichen muss. (häufige Verwechslung in diesem Themenfeld)",
+          "text": "Weil GitHub Actions in Deutschland verboten ist und man auf Bitbucket ausweichen muss. Das passt zur Fragestellung hier nicht.",
           "isCorrect": false,
           "explanation": "Falsch: GitHub Actions ist in Deutschland nicht verboten."
         }
@@ -630,7 +630,7 @@
           "explanation": "Falsch: die Länge der Datei hat keinen Einfluss auf die Kompatibilität."
         },
         {
-          "text": "Ja, aber nur in öffentlichen Repositories. (häufige Verwechslung in diesem Themenfeld)",
+          "text": "Ja, aber nur in öffentlichen Repositories. Das passt zur Fragestellung hier nicht.",
           "isCorrect": false,
           "explanation": "Falsch: die Sichtbarkeit des Repos ändert nichts an der Syntax-Inkompatibilität."
         }
@@ -651,7 +651,7 @@
           "explanation": "Falsch: die Container-Isolation macht die Pipeline eher langsamer durch die Startzeiten."
         },
         {
-          "text": "Bitbucket kann dann mehr Geld für die Nutzung verlangen. (häufige Verwechslung in diesem Themenfeld)",
+          "text": "Bitbucket kann dann mehr Geld für die Nutzung verlangen. Das passt zur Fragestellung hier nicht.",
           "isCorrect": false,
           "explanation": "Falsch: die Preisgestaltung hängt nicht von der Container-Anzahl ab."
         },
@@ -714,7 +714,7 @@
   "faq": [
     {
       "question": "Kann ich meine GitHub-Actions-Workflows nach Bitbucket Pipelines übertragen?",
-      "answer": "Die CI/CD-Logik kannst du übertragen, aber nicht die YAML-Datei selbst. Du musst die Struktur anpassen: aus Jobs werden Steps, aus uses werden direkte Shell-Befehle oder Pipes, und du. musst für jeden Pipeline-Schritt ein Image angeben. Der Aufwand hängt von der Komplexität deiner Workflows ab. Einfache Workflows mit wenigen Schritten sind in einer Stunde übertragen. Komplexe Workflows mit vielen vorgefertigten Aktionen können mehrere Tage Arbeit bedeuten, weil du für jede Aktion ein Äquivalent. finden oder selbst schreiben musst."
+      "answer": "Die CI/CD-Logik kannst du übertragen, aber nicht die YAML-Datei selbst. Du musst die Struktur anpassen: aus Jobs werden Steps, aus uses werden direkte Shell-Befehle oder Pipes, und du musst für jeden Pipeline-Schritt ein Image angeben. Der Aufwand hängt von der Komplexität deiner Workflows ab. Einfache Workflows mit wenigen Schritten sind in einer Stunde übertragen. Komplexe Workflows mit vielen vorgefertigten Aktionen können mehrere Tage Arbeit bedeuten, weil du für jede Aktion ein Äquivalent. finden oder selbst schreiben musst."
     },
     {
       "question": "Was sind Pipes in Bitbucket Pipelines?",
@@ -722,15 +722,15 @@
     },
     {
       "question": "Welche Images sollte ich für meine Steps verwenden?",
-      "answer": "Verwende offizielle Images von Docker Hub, die genau die Werkzeuge enthalten, die du für den Pipeline-Schritt brauchst. Für einen Node. js-Build ist node:22 das richtige Image. Für einen Python-Test ist python:3. 12 das richtige. Achte darauf, möglichst schlanke Images zu verwenden, zum Beispiel alpine-Varianten, weil der Container bei jedem Pipeline-Schritt neu gestartet. wird und die Image-Größe direkt die Startzeit beeinflusst. Du kannst auch eigene Images bauen und in einer Registry hinterlegen, wenn du spezielle Werkzeuge oder Konfigurationen brauchst."
+      "answer": "Verwende offizielle Images von Docker Hub, die genau die Werkzeuge enthalten, die du für den Pipeline-Schritt brauchst. Für einen Node. js-Build ist node:22 das richtige Image. Für einen Python-Test ist python:3. 12 das richtige. Achte darauf, möglichst schlanke Images zu verwenden, zum Beispiel alpine-Varianten, weil der Container bei jedem Pipeline-Schritt neu gestartet wird und die Image-Größe direkt die Startzeit beeinflusst. Du kannst auch eigene Images bauen und in einer Registry hinterlegen, wenn du spezielle Werkzeuge oder Konfigurationen brauchst."
     },
     {
       "question": "Wie lange werden Artefakte in Bitbucket Pipelines gespeichert?",
-      "answer": "Artefakte werden standardmäßig 14 Tage gespeichert. Danach werden sie automatisch gelöscht. Du kannst sie innerhalb dieser Zeit aus der Pipeline-Oberfläche herunterladen. Wenn du Artefakte länger aufbewahren musst, solltest du sie in einem externen Speicher wie AWS S3 ablegen, statt. dich auf die Pipeline-Speicherung zu verlassen. Für die Weitergabe zwischen Steps innerhalb eines Pipeline-Laufs sind die 14 Tage mehr als ausreichend, da ein Pipeline-Lauf. typischerweise nur Minuten dauert."
+      "answer": "Artefakte werden standardmäßig 14 Tage gespeichert. Danach werden sie automatisch gelöscht. Du kannst sie innerhalb dieser Zeit aus der Pipeline-Oberfläche herunterladen. Wenn du Artefakte länger aufbewahren musst, solltest du sie in einem externen Speicher wie AWS S3 ablegen, statt dich auf die Pipeline-Speicherung zu verlassen. Für die Weitergabe zwischen Steps innerhalb eines Pipeline-Laufs sind die 14 Tage mehr als ausreichend, da ein Pipeline-Lauf. typischerweise nur Minuten dauert."
     },
     {
       "question": "Kann ich Bitbucket Pipelines auch mit selbst gehosteten Runnern betreiben?",
-      "answer": "Ja, Bitbucket unterstützt selbst gehostete Runner, die du auf deiner eigenen Infrastruktur betreibst. Das ist nützlich, wenn du spezielle Hardware brauchst, zum Beispiel für iOS-Builds, die nur auf macOS laufen, oder. wenn du das Minuten-Kontingent von Bitbucket Cloud überschreitest. Selbst gehostete Runner geben dir volle Kontrolle über die Umgebung, aber du bist für Wartung, Sicherheit und Updates. verantwortlich. Für die meisten Projekte sind die von Bitbucket bereitgestellten Runner ausreichend."
+      "answer": "Ja, Bitbucket unterstützt selbst gehostete Runner, die du auf deiner eigenen Infrastruktur betreibst. Das ist nützlich, wenn du spezielle Hardware brauchst, zum Beispiel für iOS-Builds, die nur auf macOS laufen, oder wenn du das Minuten-Kontingent von Bitbucket Cloud überschreitest. Selbst gehostete Runner geben dir volle Kontrolle über die Umgebung, aber du bist für Wartung, Sicherheit und Updates. verantwortlich. Für die meisten Projekte sind die von Bitbucket bereitgestellten Runner ausreichend."
     }
   ]
 }

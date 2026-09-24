@@ -19,7 +19,7 @@ interface SettingsState {
   hydrated: boolean;
   colorScheme: ColorSchemeSetting;
   dailyGoalMinutes: number;
-  /** Lernsekunden heute (Hören); null bis erster Tageseintrag in SQLite. */
+  /** Lernsekunden heute (Hören + Lesefokus); null bis erster Tageseintrag in SQLite. */
   dailyLearningSecondsToday: number | null;
   firstFormPreference: FirstFormPreference;
   quizLength: number;

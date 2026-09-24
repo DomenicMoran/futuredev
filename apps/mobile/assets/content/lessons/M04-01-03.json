@@ -44,7 +44,7 @@
     {
       "speaker": "A",
       "role": "explain",
-      "text": "In der Software gibt es genau dasselbe Konzept zwischen Modulen. Ein Modul bietet eine festgelegte Menge an Funktionen an, die andere Module aufrufen können. Diese Funktionen haben bestimmte Parameter, die das aufrufende Modul liefern muss, und sie geben ein Ergebnis in einem. bestimmten Format zurück. Solange sich beide Seiten an diese Vereinbarung halten, können sie unabhängig voneinander weiterentwickelt werden.",
+      "text": "In der Software gibt es genau dasselbe Konzept zwischen Modulen. Ein Modul bietet eine festgelegte Menge an Funktionen an, die andere Module aufrufen können. Diese Funktionen haben bestimmte Parameter, die das aufrufende Modul liefern muss, und sie geben ein Ergebnis in einem bestimmten Format zurück. Solange sich beide Seiten an diese Vereinbarung halten, können sie unabhängig voneinander weiterentwickelt werden.",
       "isKeySentence": false
     },
     {
@@ -56,7 +56,7 @@
     {
       "speaker": "A",
       "role": "example",
-      "text": "Im Repo repo-microsaas bietet das Modul src/lib/stripe. ts eine Programmierschnittstelle mit Funktionen wie createCheckoutSession an. Diese Funktion erwartet als Parameter eine Preis-ID und eine Erfolgs-URL und gibt eine URL zurück, zu der der. Nutzer weitergeleitet wird. Die Programmierschnittstelle ist der Modulvertrag: das aufrufende Modul liefert Preis-ID und URL, das Stripe-Modul liefert die Weiterleitungs-URL. Was intern in der Stripe-API passiert, bleibt dem aufrufenden Modul verborgen.",
+      "text": "Im Repo repo-microsaas bietet das Modul src/lib/stripe ts eine Programmierschnittstelle mit Funktionen wie createCheckoutSession an. Diese Funktion erwartet als Parameter eine Preis-ID und eine Erfolgs-URL und gibt eine URL zurück, zu der der. Nutzer weitergeleitet wird. Die Programmierschnittstelle ist der Modulvertrag: das aufrufende Modul liefert Preis-ID und URL, das Stripe-Modul liefert die Weiterleitungs-URL. Was intern in der Stripe-API passiert, bleibt dem aufrufenden Modul verborgen.",
       "isKeySentence": false
     },
     {
@@ -80,7 +80,7 @@
     {
       "speaker": "A",
       "role": "explain",
-      "text": "Genau wie der Lieferschein legt ein Modulvertrag zwischen Modulen fest, was geliefert wird und in welchem Zustand. Das aufrufende Modul bestellt eine Leistung mit bestimmten Parametern. Das aufgerufene Modul liefert ein Ergebnis in einem bestimmten Format. Der Modulvertrag schützt beide Seiten: das aufrufende Modul kann sich auf das Ergebnis verlassen, das aufgerufene Modul kann. seine interne Umsetzung frei ändern.",
+      "text": "Genau wie der Lieferschein legt ein Modulvertrag zwischen Modulen fest, was geliefert wird und in welchem Zustand. Das aufrufende Modul bestellt eine Leistung mit bestimmten Parametern. Das aufgerufene Modul liefert ein Ergebnis in einem bestimmten Format. Der Modulvertrag schützt beide Seiten: das aufrufende Modul kann sich auf das Ergebnis verlassen, das aufgerufene Modul kann seine interne Umsetzung frei ändern.",
       "isKeySentence": false
     },
     {
@@ -92,7 +92,7 @@
     {
       "speaker": "A",
       "role": "example",
-      "text": "Im Repo repo-microsaas besteht ein Modulvertrag zwischen dem Stripe-Modul und dem Webhook-Modul. Das Stripe-Modul garantiert, dass die Funktion handleWebhook immer ein Objekt mit den Feldern eventType und customerId zurückgibt. Das Webhook-Modul verlässt sich auf diesen Modulvertrag und verarbeitet die zurückgegebenen Daten weiter, ohne jemals die Stripe-API direkt. anzusprechen. Würde das Stripe-Modul plötzlich die Feldnamen ändern, wäre der Modulvertrag gebrochen und das Webhook-Modul würde Fehler werfen.",
+      "text": "Im Repo repo-microsaas besteht ein Modulvertrag zwischen dem Stripe-Modul und dem Webhook-Modul. Das Stripe-Modul garantiert, dass die Funktion handleWebhook immer ein Objekt mit den Feldern eventType und customerId zurückgibt. Das Webhook-Modul verlässt sich auf diesen Modulvertrag und verarbeitet die zurückgegebenen Daten weiter, ohne jemals die Stripe-API direkt anzusprechen. Würde das Stripe-Modul plötzlich die Feldnamen ändern, wäre der Modulvertrag gebrochen und das Webhook-Modul würde Fehler werfen.",
       "isKeySentence": false
     },
     {
@@ -116,7 +116,7 @@
     {
       "speaker": "A",
       "role": "explain",
-      "text": "In der Software ist es genauso: ein Modul hat einen öffentlichen Bereich, den andere Module sehen und benutzen. dürfen, und einen privaten Bereich, der nur für die interne Umsetzung da ist. Der öffentliche Bereich besteht aus den exportierten Funktionen mit ihren Schnittstellen. Der private Bereich besteht aus Hilfsfunktionen, Konstanten und internen Datenstrukturen, die sich jederzeit ändern dürfen.",
+      "text": "In der Software ist es genauso: ein Modul hat einen öffentlichen Bereich, den andere Module sehen und benutzen dürfen, und einen privaten Bereich, der nur für die interne Umsetzung da ist. Der öffentliche Bereich besteht aus den exportierten Funktionen mit ihren Schnittstellen. Der private Bereich besteht aus Hilfsfunktionen, Konstanten und internen Datenstrukturen, die sich jederzeit ändern dürfen.",
       "isKeySentence": false
     },
     {
@@ -128,13 +128,13 @@
     {
       "speaker": "A",
       "role": "example",
-      "text": "Im Repo repo-microsaas exportiert das Modul src/lib/stripe. ts nur drei Funktionen: createCheckoutSession, handleWebhook und getSubscriptionStatus. Diese drei Funktionen bilden die öffentliche API des Stripe-Moduls. Alle anderen Funktionen in dieser Datei, etwa zum Formatieren von API-Anfragen oder zum Parsen von Antworten, sind privat. und werden nicht exportiert. Ein anderes Modul kann und darf diese privaten Funktionen nicht aufrufen. Die öffentliche API ist die einzige Tür zum Modul.",
+      "text": "Im Repo repo-microsaas exportiert das Modul src/lib/stripe ts nur drei Funktionen: createCheckoutSession, handleWebhook und getSubscriptionStatus. Diese drei Funktionen bilden die öffentliche API des Stripe-Moduls. Alle anderen Funktionen in dieser Datei, etwa zum Formatieren von API-Anfragen oder zum Parsen von Antworten, sind privat und werden nicht exportiert. Ein anderes Modul kann und darf diese privaten Funktionen nicht aufrufen. Die öffentliche API ist die einzige Tür zum Modul.",
       "isKeySentence": false
     },
     {
       "speaker": "A",
       "role": "why",
-      "text": "Eine schmale öffentliche API ist wichtig, weil sie die Freiheit gibt, den gesamten privaten Code jederzeit umzubauen. Solange die exportierten Funktionen ihr Verhalten nicht ändern, kann innen alles neu geschrieben werden. Eine breite öffentliche API mit vielen exportierten Funktionen macht das Modul dagegen starr, weil jede Änderung an einer. exportierten Funktion alle aufrufenden Module betrifft.",
+      "text": "Eine schmale öffentliche API ist wichtig, weil sie die Freiheit gibt, den gesamten privaten Code jederzeit umzubauen. Solange die exportierten Funktionen ihr Verhalten nicht ändern, kann innen alles neu geschrieben werden. Eine breite öffentliche API mit vielen exportierten Funktionen macht das Modul dagegen starr, weil jede Änderung an einer exportierten Funktion alle aufrufenden Module betrifft.",
       "isKeySentence": false
     },
     {
@@ -146,13 +146,13 @@
     {
       "speaker": "A",
       "role": "explain",
-      "text": "Eine gute Faustregel ist: exportiere nur, was ein anderes Modul wirklich braucht, um seine Aufgabe zu erledigen. Alles andere bleibt privat. Wenn du unsicher bist, fang mit null Exporten an und füge nur dann einen Export hinzu, wenn ein. anderes Modul die Funktion tatsächlich aufrufen muss. Es ist viel einfacher, einen Export später hinzuzufügen, als einen einmal veröffentlichten Export wieder zurückzunehmen, weil andere Module. bereits davon abhängen.",
+      "text": "Eine gute Faustregel ist: exportiere nur, was ein anderes Modul wirklich braucht, um seine Aufgabe zu erledigen. Alles andere bleibt privat. Wenn du unsicher bist, fang mit null Exporten an und füge nur dann einen Export hinzu, wenn ein anderes Modul die Funktion tatsächlich aufrufen muss. Es ist viel einfacher, einen Export später hinzuzufügen, als einen einmal veröffentlichten Export wieder zurückzunehmen, weil andere Module. bereits davon abhängen.",
       "isKeySentence": false
     },
     {
       "speaker": "A",
       "role": "image",
-      "text": "Stell dir eine Fernbedienung für einen Fernseher vor. Die Fernbedienung hat ein paar Knöpfe: lauter, leiser, Kanal wechseln, an, aus. Das ist die Programmierschnittstelle. Was im Inneren des Fernsehers passiert, wenn du auf lauter drückst, ist für dich unsichtbar und auch völlig. egal.",
+      "text": "Stell dir eine Fernbedienung für einen Fernseher vor. Die Fernbedienung hat ein paar Knöpfe: lauter, leiser, Kanal wechseln, an, aus. Das ist die Programmierschnittstelle. Was im Inneren des Fernsehers passiert, wenn du auf lauter drückst, ist für dich unsichtbar und auch völlig egal.",
       "isKeySentence": false
     },
     {
@@ -164,7 +164,7 @@
     {
       "speaker": "A",
       "role": "why",
-      "text": "Diese Metapher ist wichtig, weil sie zeigt, dass eine gute API nicht einfach alle internen Funktionen nach außen. kehrt, sondern eine bewusste Auswahl trifft. Die Kunst einer guten API besteht darin, die richtige Abstraktion zu finden: genug Funktionen, um nützlich zu sein,. aber wenige genug, um die innere Freiheit zu bewahren.",
+      "text": "Diese Metapher ist wichtig, weil sie zeigt, dass eine gute API nicht einfach alle internen Funktionen nach außen kehrt, sondern eine bewusste Auswahl trifft. Die Kunst einer guten API besteht darin, die richtige Abstraktion zu finden: genug Funktionen, um nützlich zu sein, aber wenige genug, um die innere Freiheit zu bewahren.",
       "isKeySentence": false
     },
     {
@@ -200,7 +200,7 @@
     {
       "speaker": "A",
       "role": "why",
-      "text": "Deshalb üben wir das Thema so ausführlich: in Bewerbungsgesprächen und im Alltag eines Product Engineers zählt nicht, ob. du das Schlagwort kennst, sondern ob du den Zusammenhang in eigenen Worten tragen kannst.",
+      "text": "Deshalb üben wir das Thema so ausführlich: in Bewerbungsgesprächen und im Alltag eines Product Engineers zählt nicht, ob du das Schlagwort kennst, sondern ob du den Zusammenhang in eigenen Worten tragen kannst.",
       "isKeySentence": false
     },
     {
@@ -224,7 +224,7 @@
     {
       "speaker": "A",
       "role": "explain",
-      "text": "Noch ein Blick von der Seite: Ein Modul, ein Modulvertrag verbindet Technik mit Kommunikation. Du lernst nicht nur einen Mechanismus, sondern eine Sprache, mit der du Entscheidungen begründet treffen und anderen erklären. kannst. Das spart in Teams Wochen an Missverständnissen.",
+      "text": "Noch ein Blick von der Seite: Ein Modul, ein Modulvertrag verbindet Technik mit Kommunikation. Du lernst nicht nur einen Mechanismus, sondern eine Sprache, mit der du Entscheidungen begründet treffen und anderen erklären kannst. Das spart in Teams Wochen an Missverständnissen.",
       "isKeySentence": false
     },
     {
@@ -368,13 +368,13 @@
     {
       "speaker": "A",
       "role": "terms_list",
-      "text": "Ein Modulvertrag ist eine verbindliche Vereinbarung zwischen zwei Modulen: Solange das aufrufende Modul die vereinbarten Parameter liefert, garantiert. das aufgerufene Modul ein Ergebnis im vereinbarten Format.",
+      "text": "Ein Modulvertrag ist eine verbindliche Vereinbarung zwischen zwei Modulen: Solange das aufrufende Modul die vereinbarten Parameter liefert, garantiert das aufgerufene Modul ein Ergebnis im vereinbarten Format.",
       "isKeySentence": false
     },
     {
       "speaker": "A",
       "role": "terms_list",
-      "text": "Eine öffentliche API ist die Gesamtheit aller Schnittstellen, die ein Modul, eine Bibliothek oder ein Dienst nach außen. anbietet. Alles, was nicht zur öffentlichen API gehört, ist Implementierungsdetail und darf sich jederzeit ändern.",
+      "text": "Eine öffentliche API ist die Gesamtheit aller Schnittstellen, die ein Modul, eine Bibliothek oder ein Dienst nach außen anbietet. Alles, was nicht zur öffentlichen API gehört, ist Implementierungsdetail und darf sich jederzeit ändern.",
       "isKeySentence": false
     },
     {
@@ -386,7 +386,7 @@
     {
       "speaker": "A",
       "role": "faq",
-      "text": "Die Begriffe werden oft austauschbar verwendet, aber es gibt einen feinen Unterschied. Eine Programmierschnittstelle ist die allgemeine Idee: eine festgelegte Art der Kommunikation zwischen zwei Teilen. Eine API ist die konkrete Umsetzung dieser Idee für ein bestimmtes Modul oder einen Dienst. Jede API besteht aus Schnittstellen, aber nicht jede Programmierschnittstelle ist Teil einer API. Die Programmierschnittstelle zwischen zwei internen Modulen eines Programms ist eine Programmierschnittstelle, aber nicht unbedingt das, was man umgangssprachlich. als API bezeichnet. Merksatz: Bei Ein Modul, ein Modulvertrag zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "text": "Die Begriffe werden oft austauschbar verwendet, aber es gibt einen feinen Unterschied. Eine Programmierschnittstelle ist die allgemeine Idee: eine festgelegte Art der Kommunikation zwischen zwei Teilen. Eine API ist die konkrete Umsetzung dieser Idee für ein bestimmtes Modul oder einen Dienst. Jede API besteht aus Schnittstellen, aber nicht jede Programmierschnittstelle ist Teil einer API. Die Programmierschnittstelle zwischen zwei internen Modulen eines Programms ist eine Programmierschnittstelle, aber nicht unbedingt das, was man umgangssprachlich als API bezeichnet. Merksatz: Bei Ein Modul, ein Modulvertrag zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
       "isKeySentence": false
     },
     {
@@ -398,7 +398,7 @@
     {
       "speaker": "A",
       "role": "faq",
-      "text": "Dann müssen alle Module, die diese Programmierschnittstelle benutzen, ebenfalls angepasst werden. In einer kleinen Codebasis mit wenigen Modulen ist das schnell erledigt. In einer großen Codebasis mit Dutzenden oder Hunderten von Modulen wird das zu einem erheblichen Aufwand. Deshalb ist die wichtigste Regel für öffentliche APIs: ändere eine bestehende Programmierschnittstelle niemals auf eine Weise, die bestehende. Aufrufer brechen würde. Füge stattdessen eine neue Funktion hinzu und lasse die alte noch eine Weile bestehen, bis alle Aufrufer umgestellt. sind. Merksatz: Bei Ein Modul, ein Modulvertrag zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "text": "Dann müssen alle Module, die diese Programmierschnittstelle benutzen, ebenfalls angepasst werden. In einer kleinen Codebasis mit wenigen Modulen ist das schnell erledigt. In einer großen Codebasis mit Dutzenden oder Hunderten von Modulen wird das zu einem erheblichen Aufwand. Deshalb ist die wichtigste Regel für öffentliche APIs: ändere eine bestehende Programmierschnittstelle niemals auf eine Weise, die bestehende. Aufrufer brechen würde. Füge stattdessen eine neue Funktion hinzu und lasse die alte noch eine Weile bestehen, bis alle Aufrufer umgestellt sind. Merksatz: Bei Ein Modul, ein Modulvertrag zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
       "isKeySentence": false
     },
     {
@@ -410,7 +410,7 @@
     {
       "speaker": "A",
       "role": "faq",
-      "text": "In TypeScript übernimmt das Typsystem einen großen Teil dieser Dokumentation automatisch. Die Typen der Parameter und Rückgabewerte sind der maschinenlesbare Teil des Vertrags. Für den menschenlesbaren Teil reicht oft ein kurzer Kommentar über jeder exportierten Funktion, der in einem Satz erklärt,. was die Funktion tut. Eine ausführliche, separate Vertragsdokumentation lohnt sich erst, wenn das Modul von mehreren Teams oder externen Nutzern verwendet wird. Merksatz: Bei Ein Modul, ein Modulvertrag zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "text": "In TypeScript übernimmt das Typsystem einen großen Teil dieser Dokumentation automatisch. Die Typen der Parameter und Rückgabewerte sind der maschinenlesbare Teil des Vertrags. Für den menschenlesbaren Teil reicht oft ein kurzer Kommentar über jeder exportierten Funktion, der in einem Satz erklärt, was die Funktion tut. Eine ausführliche, separate Vertragsdokumentation lohnt sich erst, wenn das Modul von mehreren Teams oder externen Nutzern verwendet wird. Merksatz: Bei Ein Modul, ein Modulvertrag zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
       "isKeySentence": false
     },
     {
@@ -434,7 +434,7 @@
     {
       "speaker": "A",
       "role": "faq",
-      "text": "Ein Modulvertrag beschreibt, was ein Modul tun soll. Ein Test prüft, ob das Modul den Modulvertrag tatsächlich einhält. Der Modulvertrag ist die Spezifikation, der Test ist die Kontrolle. Beide gehören zusammen: ein Modulvertrag ohne Test ist nur ein frommer Wunsch, ein Test ohne Modulvertrag prüft möglicherweise. das Falsche. In der Praxis schreibt man zuerst den Modulvertrag in Form von Typen und Funktionssignaturen, dann den Code, der. den Modulvertrag erfüllt, und dann die Tests, die die Einhaltung des Vertrags sicherstellen. Merksatz: Bei Ein Modul, ein Modulvertrag zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "text": "Ein Modulvertrag beschreibt, was ein Modul tun soll. Ein Test prüft, ob das Modul den Modulvertrag tatsächlich einhält. Der Modulvertrag ist die Spezifikation, der Test ist die Kontrolle. Beide gehören zusammen: ein Modulvertrag ohne Test ist nur ein frommer Wunsch, ein Test ohne Modulvertrag prüft möglicherweise das Falsche. In der Praxis schreibt man zuerst den Modulvertrag in Form von Typen und Funktionssignaturen, dann den Code, der den Modulvertrag erfüllt, und dann die Tests, die die Einhaltung des Vertrags sicherstellen. Merksatz: Bei Ein Modul, ein Modulvertrag zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
       "isKeySentence": false
     }
   ],
@@ -459,12 +459,12 @@
           "explanation": "Falsch: ein Telefonbuch ist eine Liste, keine zweiseitige Vereinbarung."
         },
         {
-          "text": "Ein einzelner Schlüssel, der in ein bestimmtes Schloss passt.",
+          "text": "Ein einzelner Schlüssel, der in ein bestimmtes Schloss passt. Das passt zur Fragestellung hier nicht.",
           "isCorrect": false,
           "explanation": "Falsch: ein Schlüssel ist ein einzelner Zugang, keine umfassende Vereinbarung."
         },
         {
-          "text": "Eine Landkarte, die alle Straßen einer Stadt zeigt. (häufige Verwechslung in diesem Themenfeld)",
+          "text": "Eine Landkarte, die alle Straßen einer Stadt zeigt. Das passt zur Fragestellung hier nicht.",
           "isCorrect": false,
           "explanation": "Falsch: eine Landkarte zeigt Wege, definiert aber keine Vereinbarung zwischen zwei Parteien."
         }
@@ -490,7 +490,7 @@
           "explanation": "Falsch: ein Modulvertrag muss im Code festgehalten sein, nicht nur mündlich existieren."
         },
         {
-          "text": "Die Summe aller Zeilen Code, die ein Modul enthält. (häufige Verwechslung in diesem Themenfeld)",
+          "text": "Die Summe aller Zeilen Code, die ein Modul enthält.",
           "isCorrect": false,
           "explanation": "Falsch: die Codezeilen sind die Implementierung, nicht der Modulvertrag."
         }
@@ -511,7 +511,7 @@
           "explanation": "Falsch: Fehlermeldungen sind Teil der Implementierung, nicht der API."
         },
         {
-          "text": "Die Versionsnummer des Moduls, zum Beispiel 1.0.0. (häufige Verwechslung in diesem Themenfeld)",
+          "text": "Die Versionsnummer des Moduls, zum Beispiel 1.0.0. Das passt zur Fragestellung hier nicht.",
           "isCorrect": false,
           "explanation": "Falsch: die Versionsnummer ist eine Kennzeichnung, nicht die API selbst."
         },
@@ -542,7 +542,7 @@
           "explanation": "Falsch: es gibt keine technische Grenze für die Anzahl der Exporte."
         },
         {
-          "text": "Weil jede exportierte Funktion Lizenzgebühren kostet. (häufige Verwechslung in diesem Themenfeld)",
+          "text": "Weil jede exportierte Funktion Lizenzgebühren kostet.",
           "isCorrect": false,
           "explanation": "Falsch: Exporte kosten keine Lizenzgebühren."
         }
@@ -563,7 +563,7 @@
           "explanation": "Falsch: nur ein Teil der Funktionen wird exportiert, der Rest bleibt privat."
         },
         {
-          "text": "Nur eine einzige Funktion namens processPayment. (häufige Verwechslung in diesem Themenfeld)",
+          "text": "Nur eine einzige Funktion namens processPayment. Das passt zur Fragestellung hier nicht.",
           "isCorrect": false,
           "explanation": "Falsch: das Stripe-Modul exportiert drei Funktionen, nicht nur eine."
         },
@@ -589,12 +589,12 @@
           "explanation": "Falsch: es gibt keine automatische Anpassung an geänderte Schnittstellen."
         },
         {
-          "text": "Das Modul wird automatisch aus dem Projekt gelöscht. (häufige Verwechslung in diesem Themenfeld)",
+          "text": "Das Modul wird automatisch aus dem Projekt gelöscht. Das passt zur Fragestellung hier nicht.",
           "isCorrect": false,
           "explanation": "Falsch: ein Vertragsbruch führt nicht zur automatischen Löschung."
         },
         {
-          "text": "Der Compiler verweigert die Ausführung des gesamten Programms.",
+          "text": "Der Compiler verweigert die Ausführung des gesamten Programms. Das passt zur Fragestellung hier nicht.",
           "isCorrect": false,
           "explanation": "Falsch: der Compiler prüft Typen, nicht die Einhaltung von Verträgen."
         }
@@ -610,7 +610,7 @@
           "explanation": "Richtig: jede API besteht aus Schnittstellen, aber nicht jede Programmierschnittstelle ist eine API."
         },
         {
-          "text": "Beide Begriffe sind vollkommen identisch und bedeuten exakt dasselbe. (häufige Verwechslung in diesem Themenfeld)",
+          "text": "Beide Begriffe sind vollkommen identisch und bedeuten exakt dasselbe.",
           "isCorrect": false,
           "explanation": "Falsch: es gibt einen feinen, aber wichtigen Unterschied zwischen den Begriffen."
         },
@@ -641,7 +641,7 @@
           "explanation": "Falsch: alle Funktionen zu exportieren macht das Modul starr und unübersichtlich."
         },
         {
-          "text": "Exportiere nur Funktionen, deren Name mit einem Vokal beginnt. (häufige Verwechslung in diesem Themenfeld)",
+          "text": "Exportiere nur Funktionen, deren Name mit einem Vokal beginnt. Das passt zur Fragestellung hier nicht.",
           "isCorrect": false,
           "explanation": "Falsch: der Anfangsbuchstabe hat nichts mit der Export-Entscheidung zu tun."
         },
@@ -662,7 +662,7 @@
           "explanation": "Richtig: die Fernbedienung zeigt nur, was der Nutzer braucht, und versteckt die interne Technik."
         },
         {
-          "text": "Der Bauplan eines ganzen Hauses mit allen Leitungen und Rohren. (häufige Verwechslung in diesem Themenfeld)",
+          "text": "Der Bauplan eines ganzen Hauses mit allen Leitungen und Rohren. Das passt zur Fragestellung hier nicht.",
           "isCorrect": false,
           "explanation": "Falsch: der Bauplan zeigt alle internen Details, das Gegenteil einer guten API."
         },
@@ -688,7 +688,7 @@
           "explanation": "Richtig: TypeScript-Typen sind der maschinenlesbare Teil des Vertrags."
         },
         {
-          "text": "Durch automatisch generierte PDF-Dokumente für jedes Modul. (häufige Verwechslung in diesem Themenfeld)",
+          "text": "Durch automatisch generierte PDF-Dokumente für jedes Modul. Das passt zur Fragestellung hier nicht.",
           "isCorrect": false,
           "explanation": "Falsch: TypeScript generiert keine PDF-Dokumente."
         },
@@ -724,7 +724,7 @@
           "explanation": "Falsch: sie sind eng verwandt, der Modulvertrag gibt vor, was der Test prüft."
         },
         {
-          "text": "Ein Test ist immer auch ein Modulvertrag, die Begriffe sind austauschbar. (häufige Verwechslung in diesem Themenfeld)",
+          "text": "Ein Test ist immer auch ein Modulvertrag, die Begriffe sind austauschbar. Das passt zur Fragestellung hier nicht.",
           "isCorrect": false,
           "explanation": "Falsch: ein Test kann einen Modulvertrag prüfen, ist aber nicht selbst der Modulvertrag."
         }
@@ -745,7 +745,7 @@
           "explanation": "Falsch: der Compiler verbietet das Entfernen von Exporten nicht."
         },
         {
-          "text": "Weil das Hinzufügen weniger Tastenanschläge erfordert als das Löschen. (häufige Verwechslung in diesem Themenfeld)",
+          "text": "Weil das Hinzufügen weniger Tastenanschläge erfordert als das Löschen. Das passt zur Fragestellung hier nicht.",
           "isCorrect": false,
           "explanation": "Falsch: es geht nicht um Tastenanschläge, sondern um Abhängigkeiten."
         },
@@ -781,15 +781,15 @@
   "faq": [
     {
       "question": "Ist eine Programmierschnittstelle dasselbe wie eine API?",
-      "answer": "Die Begriffe werden oft austauschbar verwendet, aber es gibt einen feinen Unterschied. Eine Programmierschnittstelle ist die allgemeine Idee: eine festgelegte Art der Kommunikation zwischen zwei Teilen. Eine API ist die konkrete Umsetzung dieser Idee für ein bestimmtes Modul oder einen Dienst. Jede API besteht aus Schnittstellen, aber nicht jede Programmierschnittstelle ist Teil einer API. Die Programmierschnittstelle zwischen zwei internen Modulen eines Programms ist eine Programmierschnittstelle, aber nicht unbedingt das, was man umgangssprachlich. als API bezeichnet. Merksatz: Bei Ein Modul, ein Modulvertrag zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+      "answer": "Die Begriffe werden oft austauschbar verwendet, aber es gibt einen feinen Unterschied. Eine Programmierschnittstelle ist die allgemeine Idee: eine festgelegte Art der Kommunikation zwischen zwei Teilen. Eine API ist die konkrete Umsetzung dieser Idee für ein bestimmtes Modul oder einen Dienst. Jede API besteht aus Schnittstellen, aber nicht jede Programmierschnittstelle ist Teil einer API. Die Programmierschnittstelle zwischen zwei internen Modulen eines Programms ist eine Programmierschnittstelle, aber nicht unbedingt das, was man umgangssprachlich als API bezeichnet. Merksatz: Bei Ein Modul, ein Modulvertrag zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
     },
     {
       "question": "Was passiert, wenn ich den Modulvertrag eines Moduls breche, also die Programmierschnittstelle ändere?",
-      "answer": "Dann müssen alle Module, die diese Programmierschnittstelle benutzen, ebenfalls angepasst werden. In einer kleinen Codebasis mit wenigen Modulen ist das schnell erledigt. In einer großen Codebasis mit Dutzenden oder Hunderten von Modulen wird das zu einem erheblichen Aufwand. Deshalb ist die wichtigste Regel für öffentliche APIs: ändere eine bestehende Programmierschnittstelle niemals auf eine Weise, die bestehende. Aufrufer brechen würde. Füge stattdessen eine neue Funktion hinzu und lasse die alte noch eine Weile bestehen, bis alle Aufrufer umgestellt. sind. Merksatz: Bei Ein Modul, ein Modulvertrag zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+      "answer": "Dann müssen alle Module, die diese Programmierschnittstelle benutzen, ebenfalls angepasst werden. In einer kleinen Codebasis mit wenigen Modulen ist das schnell erledigt. In einer großen Codebasis mit Dutzenden oder Hunderten von Modulen wird das zu einem erheblichen Aufwand. Deshalb ist die wichtigste Regel für öffentliche APIs: ändere eine bestehende Programmierschnittstelle niemals auf eine Weise, die bestehende. Aufrufer brechen würde. Füge stattdessen eine neue Funktion hinzu und lasse die alte noch eine Weile bestehen, bis alle Aufrufer umgestellt sind. Merksatz: Bei Ein Modul, ein Modulvertrag zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
     },
     {
       "question": "Muss ich für jedes Modul einen schriftlichen Modulvertrag dokumentieren?",
-      "answer": "In TypeScript übernimmt das Typsystem einen großen Teil dieser Dokumentation automatisch. Die Typen der Parameter und Rückgabewerte sind der maschinenlesbare Teil des Vertrags. Für den menschenlesbaren Teil reicht oft ein kurzer Kommentar über jeder exportierten Funktion, der in einem Satz erklärt,. was die Funktion tut. Eine ausführliche, separate Vertragsdokumentation lohnt sich erst, wenn das Modul von mehreren Teams oder externen Nutzern verwendet wird. Merksatz: Bei Ein Modul, ein Modulvertrag zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+      "answer": "In TypeScript übernimmt das Typsystem einen großen Teil dieser Dokumentation automatisch. Die Typen der Parameter und Rückgabewerte sind der maschinenlesbare Teil des Vertrags. Für den menschenlesbaren Teil reicht oft ein kurzer Kommentar über jeder exportierten Funktion, der in einem Satz erklärt, was die Funktion tut. Eine ausführliche, separate Vertragsdokumentation lohnt sich erst, wenn das Modul von mehreren Teams oder externen Nutzern verwendet wird. Merksatz: Bei Ein Modul, ein Modulvertrag zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
     },
     {
       "question": "Kann ein Modul mehrere Schnittstellen haben?",
@@ -797,7 +797,7 @@
     },
     {
       "question": "Was ist der Unterschied zwischen einem Modulvertrag und einem Test?",
-      "answer": "Ein Modulvertrag beschreibt, was ein Modul tun soll. Ein Test prüft, ob das Modul den Modulvertrag tatsächlich einhält. Der Modulvertrag ist die Spezifikation, der Test ist die Kontrolle. Beide gehören zusammen: ein Modulvertrag ohne Test ist nur ein frommer Wunsch, ein Test ohne Modulvertrag prüft möglicherweise. das Falsche. In der Praxis schreibt man zuerst den Modulvertrag in Form von Typen und Funktionssignaturen, dann den Code, der. den Modulvertrag erfüllt, und dann die Tests, die die Einhaltung des Vertrags sicherstellen. Merksatz: Bei Ein Modul, ein Modulvertrag zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+      "answer": "Ein Modulvertrag beschreibt, was ein Modul tun soll. Ein Test prüft, ob das Modul den Modulvertrag tatsächlich einhält. Der Modulvertrag ist die Spezifikation, der Test ist die Kontrolle. Beide gehören zusammen: ein Modulvertrag ohne Test ist nur ein frommer Wunsch, ein Test ohne Modulvertrag prüft möglicherweise das Falsche. In der Praxis schreibt man zuerst den Modulvertrag in Form von Typen und Funktionssignaturen, dann den Code, der den Modulvertrag erfüllt, und dann die Tests, die die Einhaltung des Vertrags sicherstellen. Merksatz: Bei Ein Modul, ein Modulvertrag zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
     }
   ]
 }

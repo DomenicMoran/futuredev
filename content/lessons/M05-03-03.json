@@ -30,13 +30,13 @@
     {
       "speaker": "A",
       "role": "image",
-      "text": "Stell dir vor, du hast einen Tresor mit all deinen Wertsachen. Der Tresor hat einen Zahlencode. Wenn du den Code auf einen Zettel schreibst und an die Tür klebst, kann jeder, der vorbeikommt, den. Tresor öffnen. Wenn du den Code in deinem Kopf behältst, bist du sicher, aber was, wenn du ihn vergisst? Die Lösung: Du schreibst den Code auf und legst ihn in einen zweiten, kleineren Tresor, den nur du. öffnen kannst.",
+      "text": "Stell dir vor, du hast einen Tresor mit all deinen Wertsachen. Der Tresor hat einen Zahlencode. Wenn du den Code auf einen Zettel schreibst und an die Tür klebst, kann jeder, der vorbeikommt, den. Tresor öffnen. Wenn du den Code in deinem Kopf behältst, bist du sicher, aber was, wenn du ihn vergisst? Die Lösung: Du schreibst den Code auf und legst ihn in einen zweiten, kleineren Tresor, den nur du öffnen kannst.",
       "isKeySentence": false
     },
     {
       "speaker": "A",
       "role": "explain",
-      "text": "Genau vor diesem Problem stehst du als App-Entwickler. Dein Keystore ist der große Tresor mit deinem Signaturschlüssel. Das Keystore-Passwort ist der Zahlencode. Dieses Passwort darf niemals im Code stehen, nicht in der eas. json, nicht in einer Konfigurationsdatei und schon gar nicht in deinem Git-Repository. Aber der Build-Prozess braucht das Passwort, um die APK zu signieren. Die Lösung: EAS Secrets und Umgebungsvariablen, die das Passwort sicher speichern und nur während des Builds bereitstellen.",
+      "text": "Genau vor diesem Problem stehst du als App-Entwickler. Dein Keystore ist der große Tresor mit deinem Signaturschlüssel. Das Keystore-Passwort ist der Zahlencode. Dieses Passwort darf niemals im Code stehen, nicht in der eas json, nicht in einer Konfigurationsdatei und schon gar nicht in deinem Git-Repository. Aber der Build-Prozess braucht das Passwort, um die APK zu signieren. Die Lösung: EAS Secrets und Umgebungsvariablen, die das Passwort sicher speichern und nur während des Builds bereitstellen.",
       "isKeySentence": false
     },
     {
@@ -48,19 +48,19 @@
     {
       "speaker": "A",
       "role": "explain",
-      "text": "Weil alles, was in Git steht, potenziell öffentlich ist. Selbst ein privates Repository kann kompromittiert werden, und jeder, der Zugriff auf das Repository hat, kann das Passwort. lesen. Wenn dein Keystore-Passwort bekannt wird, kann jeder, der auch deinen Keystore in die Hände bekommt, Apps mit deiner. Signatur signieren. Das bedeutet: Jemand könnte eine gefälschte Version deiner App mit Schadcode veröffentlichen, und Android würde sie als echt. akzeptieren, weil die Signatur gültig ist. Das ist der Albtraum jedes App-Entwicklers.",
+      "text": "Weil alles, was in Git steht, potenziell öffentlich ist. Selbst ein privates Repository kann kompromittiert werden, und jeder, der Zugriff auf das Repository hat, kann das Passwort. lesen. Wenn dein Keystore-Passwort bekannt wird, kann jeder, der auch deinen Keystore in die Hände bekommt, Apps mit deiner. Signatur signieren. Das bedeutet: Jemand könnte eine gefälschte Version deiner App mit Schadcode veröffentlichen, und Android würde sie als echt akzeptieren, weil die Signatur gültig ist. Das ist der Albtraum jedes App-Entwicklers.",
       "isKeySentence": false
     },
     {
       "speaker": "A",
       "role": "term",
-      "text": "Das Keystore-Passwort ist das Passwort, das den Keystore verschlüsselt und ohne das der private Signaturschlüssel nicht genutzt werden. kann, und es darf niemals im Code oder in Git erscheinen.",
+      "text": "Das Keystore-Passwort ist das Passwort, das den Keystore verschlüsselt und ohne das der private Signaturschlüssel nicht genutzt werden kann, und es darf niemals im Code oder in Git erscheinen.",
       "isKeySentence": false
     },
     {
       "speaker": "A",
       "role": "example",
-      "text": "Ein häufiger Fehler: Du schreibst das Keystore-Passwort in die eas. json, weil es bequem ist. Dann committest du die eas. json, weil sie ja zur Projektkonfiguration gehört. Jetzt steht dein Keystore-Passwort im Git-Repository, für immer in der History, auch wenn du es später entfernst. Jeder, der jemals Zugriff auf das Repository hatte oder haben wird, kann das Passwort lesen.",
+      "text": "Ein häufiger Fehler: Du schreibst das Keystore-Passwort in die eas json, weil es bequem ist. Dann committest du die eas json, weil sie ja zur Projektkonfiguration gehört. Jetzt steht dein Keystore-Passwort im Git-Repository, für immer in der History, auch wenn du es später entfernst. Jeder, der jemals Zugriff auf das Repository hatte oder haben wird, kann das Passwort lesen.",
       "isKeySentence": false
     },
     {
@@ -84,7 +84,7 @@
     {
       "speaker": "A",
       "role": "explain",
-      "text": "EAS Secrets sind diese versiegelten Umschläge für deine Build-Umgebung. Du erstellst ein Secret mit eas secret:create, gibst ihm einen Namen und einen Wert, und Expo speichert es. verschlüsselt in der Cloud. Während des Builds fügt EAS das Secret als Umgebungsvariable in die Build-Umgebung ein, wo dein Build-Skript es lesen. kann. Nach dem Build ist das Secret nicht mehr zugänglich. Der Wert erscheint niemals im Code, in Konfigurationsdateien oder in Logs.",
+      "text": "EAS Secrets sind diese versiegelten Umschläge für deine Build-Umgebung. Du erstellst ein Secret mit eas secret:create, gibst ihm einen Namen und einen Wert, und Expo speichert es verschlüsselt in der Cloud. Während des Builds fügt EAS das Secret als Umgebungsvariable in die Build-Umgebung ein, wo dein Build-Skript es lesen kann. Nach dem Build ist das Secret nicht mehr zugänglich. Der Wert erscheint niemals im Code, in Konfigurationsdateien oder in Logs.",
       "isKeySentence": false
     },
     {
@@ -96,7 +96,7 @@
     {
       "speaker": "A",
       "role": "example",
-      "text": "So nutzt du EAS Secrets für dein Keystore-Passwort: Du erstellst ein Secret mit eas secret:create --name KEYSTORE_PASSWORD --value. dein-sicheres-passwort. In deiner eas. json referenzierst du das Secret mit \"KEYSTORE_PASSWORD\": \"$KEYSTORE_PASSWORD\". Während des Builds ersetzt EAS die Referenz durch den echten Wert. Dein Passwort steht nie im Klartext in einer Datei, die in Git landen könnte.",
+      "text": "So nutzt du EAS Secrets für dein Keystore-Passwort: Du erstellst ein Secret mit eas secret:create --name KEYSTORE_PASSWORD --value dein-sicheres-passwort. In deiner eas json referenzierst du das Secret mit \"KEYSTORE_PASSWORD\": \"$KEYSTORE_PASSWORD\". Während des Builds ersetzt EAS die Referenz durch den echten Wert. Dein Passwort steht nie im Klartext in einer Datei, die in Git landen könnte.",
       "isKeySentence": false
     },
     {
@@ -114,7 +114,7 @@
     {
       "speaker": "A",
       "role": "image",
-      "text": "Stell dir einen Hausmeister vor, der die Schlüssel für alle Wohnungen in einem Hochhaus verwaltet. Er muss wissen, welcher Schlüssel zu welcher Wohnung gehört, wer einen Ersatzschlüssel haben darf und was passiert, wenn. ein Schlüssel verloren geht. Ohne ein System würde er den Überblick verlieren, und irgendwann hätte jemand einen Schlüssel, der ihm nicht zusteht.",
+      "text": "Stell dir einen Hausmeister vor, der die Schlüssel für alle Wohnungen in einem Hochhaus verwaltet. Er muss wissen, welcher Schlüssel zu welcher Wohnung gehört, wer einen Ersatzschlüssel haben darf und was passiert, wenn ein Schlüssel verloren geht. Ohne ein System würde er den Überblick verlieren, und irgendwann hätte jemand einen Schlüssel, der ihm nicht zusteht.",
       "isKeySentence": false
     },
     {
@@ -126,7 +126,7 @@
     {
       "speaker": "A",
       "role": "term",
-      "text": "Credential-Management ist die Gesamtheit aller Prozesse zur sicheren Erstellung, Speicherung, Verteilung und Rotation von Zugangsdaten, die sicherstellt, dass. sensible Daten niemals im Klartext im Code erscheinen.",
+      "text": "Credential-Management ist die Gesamtheit aller Prozesse zur sicheren Erstellung, Speicherung, Verteilung und Rotation von Zugangsdaten, die sicherstellt, dass sensible Daten niemals im Klartext im Code erscheinen.",
       "isKeySentence": false
     },
     {
@@ -156,7 +156,7 @@
     {
       "speaker": "A",
       "role": "why",
-      "text": "Ein kompromittiertes Passwort ist kein Weltuntergang, aber es erfordert sofortiges Handeln. Je schneller du reagierst, desto geringer der Schaden. Mit App Signing by Google Play ist der Prozess einfacher, weil der eigentliche Signaturschlüssel bei Google liegt und. nur dein Upload-Schlüssel betroffen ist.",
+      "text": "Ein kompromittiertes Passwort ist kein Weltuntergang, aber es erfordert sofortiges Handeln. Je schneller du reagierst, desto geringer der Schaden. Mit App Signing by Google Play ist der Prozess einfacher, weil der eigentliche Signaturschlüssel bei Google liegt und nur dein Upload-Schlüssel betroffen ist.",
       "isKeySentence": false
     },
     {
@@ -180,7 +180,7 @@
     {
       "speaker": "A",
       "role": "explain",
-      "text": "Der Kern von Schlüssel sicher aufbewahren ist eine klare Reihenfolge: erst das Problem sehen, dann die Lösung in. einfachen Worten, dann den Fachbegriff, dann ein zweites Beispiel, und zum Schluss warum es in der Praxis zählt. Wenn du diese fünf Schritte wiederholen kannst, hast du die Lektion verstanden.",
+      "text": "Der Kern von Schlüssel sicher aufbewahren ist eine klare Reihenfolge: erst das Problem sehen. Dann die Lösung in einfachen Worten, dann den Fachbegriff, dann ein zweites Beispiel, und zum Schluss warum es in der Praxis zählt. Wenn du diese fünf Schritte wiederholen kannst, hast du die Lektion verstanden.",
       "isKeySentence": false
     },
     {
@@ -192,7 +192,7 @@
     {
       "speaker": "A",
       "role": "why",
-      "text": "Deshalb üben wir das Thema so ausführlich: in Bewerbungsgesprächen und im Alltag eines Product Engineers zählt nicht, ob. du das Schlagwort kennst, sondern ob du den Zusammenhang in eigenen Worten tragen kannst.",
+      "text": "Deshalb üben wir das Thema so ausführlich: in Bewerbungsgesprächen und im Alltag eines Product Engineers zählt nicht, ob du das Schlagwort kennst, sondern ob du den Zusammenhang in eigenen Worten tragen kannst.",
       "isKeySentence": false
     },
     {
@@ -216,7 +216,7 @@
     {
       "speaker": "A",
       "role": "explain",
-      "text": "Noch ein Blick von der Seite: Schlüssel sicher aufbewahren verbindet Technik mit Kommunikation. Du lernst nicht nur einen Mechanismus, sondern eine Sprache, mit der du Entscheidungen begründet treffen und anderen erklären. kannst. Das spart in Teams Wochen an Missverständnissen.",
+      "text": "Noch ein Blick von der Seite: Schlüssel sicher aufbewahren verbindet Technik mit Kommunikation. Du lernst nicht nur einen Mechanismus, sondern eine Sprache, mit der du Entscheidungen begründet treffen und anderen erklären kannst. Das spart in Teams Wochen an Missverständnissen.",
       "isKeySentence": false
     },
     {
@@ -234,7 +234,7 @@
     {
       "speaker": "A",
       "role": "explain",
-      "text": "Der Kern von Schlüssel sicher aufbewahren ist eine klare Reihenfolge: erst das Problem sehen, dann die Lösung in. einfachen Worten, dann den Fachbegriff, dann ein zweites Beispiel, und zum Schluss warum es in der Praxis zählt. Wenn du diese fünf Schritte wiederholen kannst, hast du die Lektion verstanden.",
+      "text": "Der Kern von Schlüssel sicher aufbewahren ist eine klare Reihenfolge: erst das Problem sehen. Dann die Lösung in einfachen Worten, dann den Fachbegriff, dann ein zweites Beispiel, und zum Schluss warum es in der Praxis zählt. Wenn du diese fünf Schritte wiederholen kannst, hast du die Lektion verstanden.",
       "isKeySentence": false
     },
     {
@@ -378,7 +378,7 @@
     {
       "speaker": "A",
       "role": "faq",
-      "text": "Ja, für die lokale Entwicklung ist das in Ordnung, solange die . env-Datei in der . gitignore steht und niemals committet wird. Für den Cloud-Build mit EAS sind EAS Secrets die bessere Wahl, weil sie verschlüsselt in der Expo-Cloud liegen. und nicht versehentlich in Git landen können. Eine . env-Datei auf deinem Rechner ist sicher, solange dein Rechner sicher ist. Aber sobald du den Build in die Cloud verlagerst, brauchst du einen Cloud-sicheren Weg, die Geheimnisse zu übergeben,. und das sind EAS Secrets. Merksatz: Bei Schlüssel sicher aufbewahren zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "text": "Ja, für die lokale Entwicklung ist das in Ordnung, solange die . env-Datei in der . gitignore steht und niemals committet wird. Für den Cloud-Build mit EAS sind EAS Secrets die bessere Wahl, weil sie verschlüsselt in der Expo-Cloud liegen und nicht versehentlich in Git landen können. Eine . env-Datei auf deinem Rechner ist sicher, solange dein Rechner sicher ist. Aber sobald du den Build in die Cloud verlagerst, brauchst du einen Cloud-sicheren Weg, die Geheimnisse zu übergeben, und das sind EAS Secrets. Merksatz: Bei Schlüssel sicher aufbewahren zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
       "isKeySentence": false
     },
     {
@@ -390,7 +390,7 @@
     {
       "speaker": "A",
       "role": "faq",
-      "text": "Beide dienen demselben Zweck: sensible Daten sicher zu speichern und nur während automatisierter Prozesse bereitzustellen. GitHub Secrets werden in GitHub Actions verwendet, EAS Secrets in EAS Build. Wenn du CI/CD mit GitHub Actions nutzt, speicherst du deine Geheimnisse als GitHub Secrets. Wenn du direkt mit EAS baust, nutzt du EAS Secrets. Du kannst auch beide kombinieren: GitHub Secrets für die CI/CD-Pipeline, die dann die Werte als EAS Secrets an. den Build weitergibt. Merksatz: Bei Schlüssel sicher aufbewahren zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "text": "Beide dienen demselben Zweck: sensible Daten sicher zu speichern und nur während automatisierter Prozesse bereitzustellen. GitHub Secrets werden in GitHub Actions verwendet, EAS Secrets in EAS Build. Wenn du CI/CD mit GitHub Actions nutzt, speicherst du deine Geheimnisse als GitHub Secrets. Wenn du direkt mit EAS baust, nutzt du EAS Secrets. Du kannst auch beide kombinieren: GitHub Secrets für die CI/CD-Pipeline, die dann die Werte als EAS Secrets an den Build weitergibt. Merksatz: Bei Schlüssel sicher aufbewahren zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
       "isKeySentence": false
     },
     {
@@ -402,7 +402,7 @@
     {
       "speaker": "A",
       "role": "faq",
-      "text": "Für die meisten Zugangsdaten reicht eine jährliche Rotation. Der Keystore und sein Passwort müssen nicht rotiert werden, solange sie nicht kompromittiert sind, weil ein Wechsel des. Signaturschlüssels aufwendig ist. API-Schlüssel für Dienste wie Supabase oder Stripe solltest du jährlich rotieren oder sofort, wenn du den Verdacht hast,. dass sie kompromittiert wurden. Datenbank-Passwörter rotierst du am besten automatisch, wenn dein Hoster das unterstützt. Die Faustregel: Je sensibler die Daten, die hinter dem Zugangsdatum liegen, desto häufiger solltest du es rotieren. Merksatz: Bei Schlüssel sicher aufbewahren zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "text": "Für die meisten Zugangsdaten reicht eine jährliche Rotation. Der Keystore und sein Passwort müssen nicht rotiert werden, solange sie nicht kompromittiert sind, weil ein Wechsel des. Signaturschlüssels aufwendig ist. API-Schlüssel für Dienste wie Supabase oder Stripe solltest du jährlich rotieren oder sofort, wenn du den Verdacht hast, dass sie kompromittiert wurden. Datenbank-Passwörter rotierst du am besten automatisch, wenn dein Hoster das unterstützt. Die Faustregel: Je sensibler die Daten, die hinter dem Zugangsdatum liegen, desto häufiger solltest du es rotieren. Merksatz: Bei Schlüssel sicher aufbewahren zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
       "isKeySentence": false
     },
     {
@@ -414,7 +414,7 @@
     {
       "speaker": "A",
       "role": "faq",
-      "text": "Erstens: Ändere das Passwort sofort. Ein Commit in Git kann nicht rückgängig gemacht werden, die History bleibt für immer. Zweitens: Entferne das Passwort aus der aktuellen Version der Datei und committe die Bereinigung. Drittens: Wenn das Repository öffentlich ist, kontaktiere den Support des betroffenen Dienstes und erkläre die Situation. Viertens: Nutze ein Werkzeug wie git-filter-repo, um das Passwort aus der gesamten History zu entfernen, und force-pushe die. bereinigte History. Das ist aufwendig, aber notwendig, wenn das Passwort nicht geändert werden kann. Merksatz: Bei Schlüssel sicher aufbewahren zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "text": "Erstens: Ändere das Passwort sofort. Ein Commit in Git kann nicht rückgängig gemacht werden, die History bleibt für immer. Zweitens: Entferne das Passwort aus der aktuellen Version der Datei und committe die Bereinigung. Drittens: Wenn das Repository öffentlich ist, kontaktiere den Support des betroffenen Dienstes und erkläre die Situation. Viertens: Nutze ein Werkzeug wie git-filter-repo, um das Passwort aus der gesamten History zu entfernen, und force-pushe die bereinigte History. Das ist aufwendig, aber notwendig, wenn das Passwort nicht geändert werden kann. Merksatz: Bei Schlüssel sicher aufbewahren zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
       "isKeySentence": false
     },
     {
@@ -426,7 +426,7 @@
     {
       "speaker": "A",
       "role": "faq",
-      "text": "Nicht unbedingt. Wenn du mehrere ähnliche Projekte hast, kannst du einen einheitlichen Plan für alle nutzen. Der Plan sollte dokumentieren, wo Zugangsdaten gespeichert werden, wer Zugriff hat und wie sie rotiert werden. Für ein einzelnes Projekt reicht eine einfache Checkliste: Keystore nach Drei-zwei-eins gesichert, Passwörter als EAS Secrets, . env-Dateien in . gitignore, jährliche Rotation. Wichtiger als die Form ist, dass du überhaupt einen Plan hast und ihn befolgst. Merksatz: Bei Schlüssel sicher aufbewahren zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
+      "text": "Nicht unbedingt. Wenn du mehrere ähnliche Projekte hast, kannst du einen einheitlichen Plan für alle nutzen. Der Plan sollte dokumentieren, wo Zugangsdaten gespeichert werden, wer Zugriff hat und wie sie rotiert werden. Für ein einzelnes Projekt reicht eine einfache Checkliste: Keystore nach Drei-zwei-eins gesichert, Passwörter als EAS Secrets, env-Dateien in . gitignore, jährliche Rotation. Wichtiger als die Form ist, dass du überhaupt einen Plan hast und ihn befolgst. Merksatz: Bei Schlüssel sicher aufbewahren zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag.",
       "isKeySentence": false
     }
   ],
@@ -451,7 +451,7 @@
           "explanation": "Falsch: es geht um die sichere Aufbewahrung, nicht um ständige Verfügbarkeit."
         },
         {
-          "text": "Eine Alarmanlage, die bei Einbruch losgeht. (häufige Verwechslung in diesem Themenfeld)",
+          "text": "Eine Alarmanlage, die bei Einbruch losgeht. Das passt zur Fragestellung hier nicht.",
           "isCorrect": false,
           "explanation": "Falsch: es geht um Prävention, nicht um Alarmierung."
         },
@@ -482,7 +482,7 @@
           "explanation": "Falsch: Git kann technisch alle Dateien speichern."
         },
         {
-          "text": "Weil das Passwort dann zu lang für Git wäre. (häufige Verwechslung in diesem Themenfeld)",
+          "text": "Weil das Passwort dann zu lang für Git wäre. Das passt zur Fragestellung hier nicht.",
           "isCorrect": false,
           "explanation": "Falsch: die Länge des Passworts ist nicht das Problem."
         }
@@ -508,7 +508,7 @@
           "explanation": "Falsch: EAS Secrets sind keine Ordner."
         },
         {
-          "text": "Ein Passwort für den Expo-Account. (häufige Verwechslung in diesem Themenfeld)",
+          "text": "Ein Passwort für den Expo-Account. Das passt zur Fragestellung hier nicht.",
           "isCorrect": false,
           "explanation": "Falsch: EAS Secrets sind nicht das Account-Passwort."
         }
@@ -555,7 +555,7 @@
           "explanation": "Falsch: Credential-Management ist mehr als nur Passwort-Generierung."
         },
         {
-          "text": "Eine Google-Dienstleistung für Unternehmen. (häufige Verwechslung in diesem Themenfeld)",
+          "text": "Eine Google-Dienstleistung für Unternehmen.",
           "isCorrect": false,
           "explanation": "Falsch: Credential-Management ist kein Google-Dienst."
         },
@@ -602,7 +602,7 @@
           "explanation": "Richtig: lokal ist das okay, solange die Datei nicht in Git landet."
         },
         {
-          "text": "Nein, .env-Dateien sind grundsätzlich unsicher. (häufige Verwechslung in diesem Themenfeld)",
+          "text": "Nein,env-Dateien sind grundsätzlich unsicher. Das passt zur Fragestellung hier nicht.",
           "isCorrect": false,
           "explanation": "Falsch: .env-Dateien sind für lokale Entwicklung sicher genug."
         },
@@ -633,7 +633,7 @@
           "explanation": "Falsch: beide sind sicher, wenn korrekt verwendet."
         },
         {
-          "text": "Es gibt keinen Unterschied, beide sind identisch. (häufige Verwechslung in diesem Themenfeld)",
+          "text": "Es gibt keinen Unterschied, beide sind identisch. Das passt zur Fragestellung hier nicht.",
           "isCorrect": false,
           "explanation": "Falsch: sie werden in unterschiedlichen Systemen verwendet."
         },
@@ -685,7 +685,7 @@
           "explanation": "Falsch: die History bleibt, auch wenn du den Commit rückgängig machst."
         },
         {
-          "text": "Nichts, das Passwort ist durch Git verschlüsselt. (häufige Verwechslung in diesem Themenfeld)",
+          "text": "Nichts, das Passwort ist durch Git verschlüsselt. Das passt zur Fragestellung hier nicht.",
           "isCorrect": false,
           "explanation": "Falsch: Git verschlüsselt keine Dateiinhalte."
         },
@@ -716,7 +716,7 @@
           "explanation": "Falsch: Apps werden nie ohne Signatur veröffentlicht."
         },
         {
-          "text": "Weil Google den Schaden finanziell ersetzt. (häufige Verwechslung in diesem Themenfeld)",
+          "text": "Weil Google den Schaden finanziell ersetzt.",
           "isCorrect": false,
           "explanation": "Falsch: Google ersetzt keine finanziellen Schäden."
         }
@@ -727,7 +727,7 @@
       "area": "Credential-Management",
       "options": [
         {
-          "text": "Keystore-Sicherung, EAS Secrets, .gitignore für .env, jährliche Rotation.",
+          "text": "Keystore-Sicherung, EAS Secrets,gitignore für .env, jährliche Rotation.",
           "isCorrect": true,
           "explanation": "Richtig: diese vier Punkte decken die wichtigsten Aspekte ab."
         },
@@ -737,7 +737,7 @@
           "explanation": "Falsch: ein Plan umfasst mehr als nur ein starkes Passwort."
         },
         {
-          "text": "Eine Excel-Tabelle mit allen Passwörtern. (häufige Verwechslung in diesem Themenfeld)",
+          "text": "Eine Excel-Tabelle mit allen Passwörtern. Das passt zur Fragestellung hier nicht.",
           "isCorrect": false,
           "explanation": "Falsch: eine Excel-Tabelle ist kein sicherer Aufbewahrungsort."
         },
@@ -757,7 +757,7 @@
       "Die eas.json so konfiguriert, dass sie das Secret referenziert.",
       "Eine .env.example-Datei mit Platzhaltern für alle benötigten Variablen erstellt.",
       "Sichergestellt, dass .env in der .gitignore steht.",
-      "Verstanden, dass .env.example committed werden darf, .env aber nicht."
+      "Verstanden, dass .env.example committed werden darf,env aber nicht."
     ],
     "portfolioItem": "P04"
   },
@@ -773,23 +773,23 @@
   "faq": [
     {
       "question": "Kann ich mein Keystore-Passwort in einer . env-Datei speichern?",
-      "answer": "Ja, für die lokale Entwicklung ist das in Ordnung, solange die . env-Datei in der . gitignore steht und niemals committet wird. Für den Cloud-Build mit EAS sind EAS Secrets die bessere Wahl, weil sie verschlüsselt in der Expo-Cloud liegen. und nicht versehentlich in Git landen können. Eine . env-Datei auf deinem Rechner ist sicher, solange dein Rechner sicher ist. Aber sobald du den Build in die Cloud verlagerst, brauchst du einen Cloud-sicheren Weg, die Geheimnisse zu übergeben,. und das sind EAS Secrets. Merksatz: Bei Schlüssel sicher aufbewahren zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+      "answer": "Ja, für die lokale Entwicklung ist das in Ordnung, solange die . env-Datei in der . gitignore steht und niemals committet wird. Für den Cloud-Build mit EAS sind EAS Secrets die bessere Wahl, weil sie verschlüsselt in der Expo-Cloud liegen und nicht versehentlich in Git landen können. Eine . env-Datei auf deinem Rechner ist sicher, solange dein Rechner sicher ist. Aber sobald du den Build in die Cloud verlagerst, brauchst du einen Cloud-sicheren Weg, die Geheimnisse zu übergeben, und das sind EAS Secrets. Merksatz: Bei Schlüssel sicher aufbewahren zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
     },
     {
       "question": "Was ist der Unterschied zwischen EAS Secrets und GitHub Secrets?",
-      "answer": "Beide dienen demselben Zweck: sensible Daten sicher zu speichern und nur während automatisierter Prozesse bereitzustellen. GitHub Secrets werden in GitHub Actions verwendet, EAS Secrets in EAS Build. Wenn du CI/CD mit GitHub Actions nutzt, speicherst du deine Geheimnisse als GitHub Secrets. Wenn du direkt mit EAS baust, nutzt du EAS Secrets. Du kannst auch beide kombinieren: GitHub Secrets für die CI/CD-Pipeline, die dann die Werte als EAS Secrets an. den Build weitergibt. Merksatz: Bei Schlüssel sicher aufbewahren zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+      "answer": "Beide dienen demselben Zweck: sensible Daten sicher zu speichern und nur während automatisierter Prozesse bereitzustellen. GitHub Secrets werden in GitHub Actions verwendet, EAS Secrets in EAS Build. Wenn du CI/CD mit GitHub Actions nutzt, speicherst du deine Geheimnisse als GitHub Secrets. Wenn du direkt mit EAS baust, nutzt du EAS Secrets. Du kannst auch beide kombinieren: GitHub Secrets für die CI/CD-Pipeline, die dann die Werte als EAS Secrets an den Build weitergibt. Merksatz: Bei Schlüssel sicher aufbewahren zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
     },
     {
       "question": "Wie oft sollte ich meine Passwörter und Schlüssel rotieren?",
-      "answer": "Für die meisten Zugangsdaten reicht eine jährliche Rotation. Der Keystore und sein Passwort müssen nicht rotiert werden, solange sie nicht kompromittiert sind, weil ein Wechsel des. Signaturschlüssels aufwendig ist. API-Schlüssel für Dienste wie Supabase oder Stripe solltest du jährlich rotieren oder sofort, wenn du den Verdacht hast,. dass sie kompromittiert wurden. Datenbank-Passwörter rotierst du am besten automatisch, wenn dein Hoster das unterstützt. Die Faustregel: Je sensibler die Daten, die hinter dem Zugangsdatum liegen, desto häufiger solltest du es rotieren. Merksatz: Bei Schlüssel sicher aufbewahren zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+      "answer": "Für die meisten Zugangsdaten reicht eine jährliche Rotation. Der Keystore und sein Passwort müssen nicht rotiert werden, solange sie nicht kompromittiert sind, weil ein Wechsel des. Signaturschlüssels aufwendig ist. API-Schlüssel für Dienste wie Supabase oder Stripe solltest du jährlich rotieren oder sofort, wenn du den Verdacht hast, dass sie kompromittiert wurden. Datenbank-Passwörter rotierst du am besten automatisch, wenn dein Hoster das unterstützt. Die Faustregel: Je sensibler die Daten, die hinter dem Zugangsdatum liegen, desto häufiger solltest du es rotieren. Merksatz: Bei Schlüssel sicher aufbewahren zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
     },
     {
       "question": "Was mache ich, wenn ich versehentlich ein Passwort in Git committet habe?",
-      "answer": "Erstens: Ändere das Passwort sofort. Ein Commit in Git kann nicht rückgängig gemacht werden, die History bleibt für immer. Zweitens: Entferne das Passwort aus der aktuellen Version der Datei und committe die Bereinigung. Drittens: Wenn das Repository öffentlich ist, kontaktiere den Support des betroffenen Dienstes und erkläre die Situation. Viertens: Nutze ein Werkzeug wie git-filter-repo, um das Passwort aus der gesamten History zu entfernen, und force-pushe die. bereinigte History. Das ist aufwendig, aber notwendig, wenn das Passwort nicht geändert werden kann. Merksatz: Bei Schlüssel sicher aufbewahren zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+      "answer": "Erstens: Ändere das Passwort sofort. Ein Commit in Git kann nicht rückgängig gemacht werden, die History bleibt für immer. Zweitens: Entferne das Passwort aus der aktuellen Version der Datei und committe die Bereinigung. Drittens: Wenn das Repository öffentlich ist, kontaktiere den Support des betroffenen Dienstes und erkläre die Situation. Viertens: Nutze ein Werkzeug wie git-filter-repo, um das Passwort aus der gesamten History zu entfernen, und force-pushe die bereinigte History. Das ist aufwendig, aber notwendig, wenn das Passwort nicht geändert werden kann. Merksatz: Bei Schlüssel sicher aufbewahren zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
     },
     {
       "question": "Brauche ich für jedes Projekt einen eigenen Credential-Management-Plan?",
-      "answer": "Nicht unbedingt. Wenn du mehrere ähnliche Projekte hast, kannst du einen einheitlichen Plan für alle nutzen. Der Plan sollte dokumentieren, wo Zugangsdaten gespeichert werden, wer Zugriff hat und wie sie rotiert werden. Für ein einzelnes Projekt reicht eine einfache Checkliste: Keystore nach Drei-zwei-eins gesichert, Passwörter als EAS Secrets, . env-Dateien in . gitignore, jährliche Rotation. Wichtiger als die Form ist, dass du überhaupt einen Plan hast und ihn befolgst. Merksatz: Bei Schlüssel sicher aufbewahren zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
+      "answer": "Nicht unbedingt. Wenn du mehrere ähnliche Projekte hast, kannst du einen einheitlichen Plan für alle nutzen. Der Plan sollte dokumentieren, wo Zugangsdaten gespeichert werden, wer Zugriff hat und wie sie rotiert werden. Für ein einzelnes Projekt reicht eine einfache Checkliste: Keystore nach Drei-zwei-eins gesichert, Passwörter als EAS Secrets, env-Dateien in . gitignore, jährliche Rotation. Wichtiger als die Form ist, dass du überhaupt einen Plan hast und ihn befolgst. Merksatz: Bei Schlüssel sicher aufbewahren zählt die verständliche Erklärung mehr als das Auswendiglernen einzelner Schlagworte. Wiederhole den Ablauf einmal laut, dann mit einem eigenen Beispiel aus deinem Alltag."
     }
   ]
 }

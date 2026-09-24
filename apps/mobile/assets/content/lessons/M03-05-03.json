@@ -53,7 +53,7 @@
       "speaker": "A",
       "role": "term",
       "isKeySentence": false,
-      "text": "Dieser Standard heißt OAuth2. OAuth2 ist ein offener Standard, mit dem eine App im Namen eines Nutzers auf dessen Daten bei einem. anderen Dienst zugreifen darf, ohne dass der Nutzer sein Passwort an die App verraten muss."
+      "text": "Dieser Standard heißt OAuth2. OAuth2 ist ein offener Standard, mit dem eine App im Namen eines Nutzers auf dessen Daten bei einem anderen Dienst zugreifen darf, ohne dass der Nutzer sein Passwort an die App verraten muss."
     },
     {
       "speaker": "A",
@@ -89,7 +89,7 @@
       "speaker": "A",
       "role": "term",
       "isKeySentence": false,
-      "text": "Dieser Code heißt Authorization Code. Der Authorization Code ist ein einmaliger, kurzlebiger Code, den der Autorisierungsserver nach der Zustimmung des Nutzers ausstellt und. den die App gegen ein Access Token eintauscht, ohne dass der Code selbst Zugriff auf Daten gewährt."
+      "text": "Dieser Code heißt Authorization Code. Der Authorization Code ist ein einmaliger, kurzlebiger Code, den der Autorisierungsserver nach der Zustimmung des Nutzers ausstellt und den die App gegen ein Access Token eintauscht, ohne dass der Code selbst Zugriff auf Daten gewährt."
     },
     {
       "speaker": "A",
@@ -101,7 +101,7 @@
       "speaker": "A",
       "role": "example",
       "isKeySentence": false,
-      "text": "Der Ablauf im Detail: Der Nutzer klickt auf Mit Google anmelden. Deine App leitet ihn zu accounts. google. com weiter, mit deiner Client-ID in der URL. Google zeigt dem Nutzer einen Bildschirm mit der Frage: Die App möchte auf deinen Namen und deine E-Mail-Adresse. zugreifen. Erlauben? Der Nutzer klickt auf Erlauben. Google leitet ihn zurück zu deiner App, mit einem Authorization Code in der URL. Dein Server nimmt diesen Code und schickt ihn zusammen mit seinem geheimen Schlüssel an Google. Google prüft beides und schickt das Access Token zurück."
+      "text": "Der Ablauf im Detail: Der Nutzer klickt auf Mit Google anmelden. Deine App leitet ihn zu accounts google com weiter, mit deiner Client-ID in der URL. Google zeigt dem Nutzer einen Bildschirm mit der Frage: Die App möchte auf deinen Namen und deine E-Mail-Adresse. zugreifen. Erlauben? Der Nutzer klickt auf Erlauben. Google leitet ihn zurück zu deiner App, mit einem Authorization Code in der URL. Dein Server nimmt diesen Code und schickt ihn zusammen mit seinem geheimen Schlüssel an Google. Google prüft beides und schickt das Access Token zurück."
     },
     {
       "speaker": "A",
@@ -113,7 +113,7 @@
       "speaker": "A",
       "role": "explain",
       "isKeySentence": false,
-      "text": "Nachdem deine App den Authorization Code eingetauscht hat, bekommt sie das eigentliche Arbeitspferd des OAuth2-Flows: einen digitalen Ausweis,. den sie bei jeder Anfrage an den geschützten Dienst mitschickt. Dieser Ausweis hat ein Ablaufdatum, meist nach einer Stunde."
+      "text": "Nachdem deine App den Authorization Code eingetauscht hat, bekommt sie das eigentliche Arbeitspferd des OAuth2-Flows: einen digitalen Ausweis, den sie bei jeder Anfrage an den geschützten Dienst mitschickt. Dieser Ausweis hat ein Ablaufdatum, meist nach einer Stunde."
     },
     {
       "speaker": "B",
@@ -131,13 +131,13 @@
       "speaker": "A",
       "role": "why",
       "isKeySentence": false,
-      "text": "Das ist wichtig, weil das Access Token bei jeder einzelnen Anfrage mitgeschickt wird, oft über das Internet. Je öfter ein Token unterwegs ist, desto größer ist die Gefahr, dass es abgefangen wird. Ein kurzes Ablaufdatum begrenzt den Schaden: Selbst wenn jemand das Token stiehlt, kann er es nur für höchstens. eine Stunde nutzen."
+      "text": "Das ist wichtig, weil das Access Token bei jeder einzelnen Anfrage mitgeschickt wird, oft über das Internet. Je öfter ein Token unterwegs ist, desto größer ist die Gefahr, dass es abgefangen wird. Ein kurzes Ablaufdatum begrenzt den Schaden: Selbst wenn jemand das Token stiehlt, kann er es nur für höchstens eine Stunde nutzen."
     },
     {
       "speaker": "A",
       "role": "example",
       "isKeySentence": false,
-      "text": "Wenn deine App die E-Mail-Adresse des Nutzers von Google abrufen will, schickt sie eine Anfrage an googleapis. com mit dem Access Token im Authorization-Header. Google prüft das Token, sieht, dass es gültig ist und die Berechtigung für E-Mail-Adressen enthält, und schickt die. Daten zurück. Eine Stunde später ist dasselbe Token wertlos."
+      "text": "Wenn deine App die E-Mail-Adresse des Nutzers von Google abrufen will, schickt sie eine Anfrage an googleapis com mit dem Access Token im Authorization-Header. Google prüft das Token, sieht, dass es gültig ist und die Berechtigung für E-Mail-Adressen enthält, und schickt die. Daten zurück. Eine Stunde später ist dasselbe Token wertlos."
     },
     {
       "speaker": "A",
@@ -149,7 +149,7 @@
       "speaker": "A",
       "role": "explain",
       "isKeySentence": false,
-      "text": "Wenn das Access Token abläuft, müsste der Nutzer sich eigentlich neu anmelden. Das wäre unpraktisch, wenn es jede Stunde passiert. Deshalb gibt es einen zweiten, langlebigen Schlüssel, mit dem die App selbstständig ein neues Access Token anfordern kann,. ohne den Nutzer zu belästigen."
+      "text": "Wenn das Access Token abläuft, müsste der Nutzer sich eigentlich neu anmelden. Das wäre unpraktisch, wenn es jede Stunde passiert. Deshalb gibt es einen zweiten, langlebigen Schlüssel, mit dem die App selbstständig ein neues Access Token anfordern kann, ohne den Nutzer zu belästigen."
     },
     {
       "speaker": "B",
@@ -161,7 +161,7 @@
       "speaker": "A",
       "role": "term",
       "isKeySentence": false,
-      "text": "Dieser zweite Schlüssel heißt Refresh Token. Ein Refresh Token ist ein langlebiger Schlüssel, mit dem die App ein abgelaufenes Access Token durch ein neues. ersetzen kann, ohne dass der Nutzer sich erneut anmelden muss."
+      "text": "Dieser zweite Schlüssel heißt Refresh Token. Ein Refresh Token ist ein langlebiger Schlüssel, mit dem die App ein abgelaufenes Access Token durch ein neues ersetzen kann, ohne dass der Nutzer sich erneut anmelden muss."
     },
     {
       "speaker": "A",
@@ -179,7 +179,7 @@
       "speaker": "A",
       "role": "image",
       "isKeySentence": false,
-      "text": "Stell dir einen Besucherausweis in einem Bürogebäude vor, auf dem nicht nur steht, dass du hereindarfst, sondern auch. dein Name, dein Foto und die Firma, für die du arbeitest. Der Ausweis dient gleichzeitig als Zugangsberechtigung und als Identitätsnachweis."
+      "text": "Stell dir einen Besucherausweis in einem Bürogebäude vor, auf dem nicht nur steht, dass du hereindarfst, sondern auch dein Name, dein Foto und die Firma, für die du arbeitest. Der Ausweis dient gleichzeitig als Zugangsberechtigung und als Identitätsnachweis."
     },
     {
       "speaker": "A",
@@ -209,7 +209,7 @@
       "speaker": "A",
       "role": "example",
       "isKeySentence": false,
-      "text": "Wenn du dich mit Google bei einer App anmeldest, bekommt die App ein ID Token zusätzlich zum Access. Token. Das ID Token ist ein JWT, das den Namen, die E-Mail-Adresse und ein Profilbild des Nutzers enthält, digital. von Google signiert. OpenID Connect sorgt dafür, dass dieses ID Token bei allen Anbietern dasselbe Format hat."
+      "text": "Wenn du dich mit Google bei einer App anmeldest, bekommt die App ein ID Token zusätzlich zum Access. Token. Das ID Token ist ein JWT, das den Namen, die E-Mail-Adresse und ein Profilbild des Nutzers enthält, digital von Google signiert. OpenID Connect sorgt dafür, dass dieses ID Token bei allen Anbietern dasselbe Format hat."
     },
     {
       "speaker": "A",
@@ -239,13 +239,13 @@
       "speaker": "A",
       "role": "why",
       "isKeySentence": false,
-      "text": "Das ist wichtig, weil der OAuth2-Flow mehrere Schritte hat, bei denen man leicht Fehler machen kann. Ein falsch gesetzter Redirect, ein vertauschter Code, ein fehlender Sicherheitsparameter, und die Anmeldung ist unsicher oder funktioniert gar. nicht. Die Bibliothek nimmt dir diese Details ab."
+      "text": "Das ist wichtig, weil der OAuth2-Flow mehrere Schritte hat, bei denen man leicht Fehler machen kann. Ein falsch gesetzter Redirect, ein vertauschter Code, ein fehlender Sicherheitsparameter, und die Anmeldung ist unsicher oder funktioniert gar nicht. Die Bibliothek nimmt dir diese Details ab."
     },
     {
       "speaker": "A",
       "role": "example",
       "isKeySentence": false,
-      "text": "In Supabase konfigurierst du Google als Anbieter, indem du im Dashboard unter Authentication und Providers die Client-ID und. das Client-Secret von Google einträgst. Danach kannst du in deiner App einfach supabase. auth. signInWithOAuth mit provider: google aufrufen, und Supabase wickelt den gesamten Flow ab, inklusive Redirect, Code-Tausch und Token-Speicherung."
+      "text": "In Supabase konfigurierst du Google als Anbieter, indem du im Dashboard unter Authentication und Providers die Client-ID und das Client-Secret von Google einträgst. Danach kannst du in deiner App einfach supabase auth signInWithOAuth mit provider: google aufrufen, und Supabase wickelt den gesamten Flow ab, inklusive Redirect, Code-Tausch und Token-Speicherung."
     },
     {
       "speaker": "A",
@@ -275,13 +275,13 @@
       "speaker": "A",
       "role": "image",
       "isKeySentence": false,
-      "text": "Stell dir einen Generalschlüssel vor, der nicht nur deine Wohnungstür öffnet, sondern auch dein Auto, dein Büro und. dein Bankschließfach. Ein Schlüssel für alles. Praktisch, aber wenn du ihn verlierst, hat der Finder Zugang zu deinem gesamten Leben."
+      "text": "Stell dir einen Generalschlüssel vor, der nicht nur deine Wohnungstür öffnet, sondern auch dein Auto, dein Büro und dein Bankschließfach. Ein Schlüssel für alles. Praktisch, aber wenn du ihn verlierst, hat der Finder Zugang zu deinem gesamten Leben."
     },
     {
       "speaker": "A",
       "role": "explain",
       "isKeySentence": false,
-      "text": "Das Refresh Token ist so ein Generalschlüssel. Es kann neue Access Tokens ausstellen, solange es gültig ist. Deshalb muss es besonders gut geschützt werden. Während das Access Token im Browser oder in der App gespeichert werden darf, gehört das Refresh Token ausschließlich. auf den Server."
+      "text": "Das Refresh Token ist so ein Generalschlüssel. Es kann neue Access Tokens ausstellen, solange es gültig ist. Deshalb muss es besonders gut geschützt werden. Während das Access Token im Browser oder in der App gespeichert werden darf, gehört das Refresh Token ausschließlich auf den Server."
     },
     {
       "speaker": "A",
@@ -293,7 +293,7 @@
       "speaker": "A",
       "role": "example",
       "isKeySentence": false,
-      "text": "In einer Supabase-App wird das Refresh Token automatisch von Supabase verwaltet und in einem sicheren, nur über HTTPS. zugänglichen Cookie gespeichert. Du als Entwickler musst dich darum nicht kümmern, aber du solltest wissen, dass es existiert und warum es. geschützt werden muss."
+      "text": "In einer Supabase-App wird das Refresh Token automatisch von Supabase verwaltet und in einem sicheren, nur über HTTPS. zugänglichen Cookie gespeichert. Du als Entwickler musst dich darum nicht kümmern, aber du solltest wissen, dass es existiert und warum es geschützt werden muss."
     },
     {
       "speaker": "A",
@@ -305,7 +305,7 @@
       "speaker": "A",
       "role": "why",
       "isKeySentence": false,
-      "text": "Das ist wichtig, weil du als Entwickler diesen Ablauf nicht nur nutzen, sondern auch verstehen solltest, was dabei. passiert. Wenn später etwas nicht funktioniert, kannst du gezielt nach dem fehlerhaften Schritt suchen, statt nur ratlos auf den. Bildschirm zu starren."
+      "text": "Das ist wichtig, weil du als Entwickler diesen Ablauf nicht nur nutzen, sondern auch verstehen solltest, was dabei passiert. Wenn später etwas nicht funktioniert, kannst du gezielt nach dem fehlerhaften Schritt suchen, statt nur ratlos auf den. Bildschirm zu starren."
     },
     {
       "speaker": "A",
@@ -370,7 +370,7 @@
     {
       "speaker": "A",
       "role": "faq",
-      "text": "Dann kann der Dieb sich immer wieder neue Access Tokens ausstellen und dauerhaft in deinem Namen handeln, bis. das Refresh Token abläuft oder für ungültig erklärt wird. Deshalb speichert man Refresh Tokens nur auf dem Server, nie im Browser, und schützt sie wie ein Passwort. Die meisten Anbieter erlauben es, alle Refresh Tokens eines Nutzers mit einem Klick für ungültig zu erklären, falls. ein Diebstahl vermutet wird.",
+      "text": "Dann kann der Dieb sich immer wieder neue Access Tokens ausstellen und dauerhaft in deinem Namen handeln, bis das Refresh Token abläuft oder für ungültig erklärt wird. Deshalb speichert man Refresh Tokens nur auf dem Server, nie im Browser, und schützt sie wie ein Passwort. Die meisten Anbieter erlauben es, alle Refresh Tokens eines Nutzers mit einem Klick für ungültig zu erklären, falls ein Diebstahl vermutet wird.",
       "isKeySentence": false
     },
     {
@@ -394,7 +394,7 @@
     {
       "speaker": "A",
       "role": "faq",
-      "text": "Ja, du kannst deinen eigenen OAuth2-Server betreiben. Das ist aber aufwendig und fehleranfällig, weshalb die meisten Entwickler einen bestehenden Dienst wie Supabase Auth nutzen, der. den OAuth2-Server bereits eingebaut hat. Supabase Auth kann sowohl als OAuth2-Client zu Google und GitHub als auch als OAuth2-Server für deine eigene App. fungieren. Du musst den Server nicht selbst bauen.",
+      "text": "Ja, du kannst deinen eigenen OAuth2-Server betreiben. Das ist aber aufwendig und fehleranfällig, weshalb die meisten Entwickler einen bestehenden Dienst wie Supabase Auth nutzen, der den OAuth2-Server bereits eingebaut hat. Supabase Auth kann sowohl als OAuth2-Client zu Google und GitHub als auch als OAuth2-Server für deine eigene App. fungieren. Du musst den Server nicht selbst bauen.",
       "isKeySentence": false
     },
     {
@@ -483,7 +483,7 @@
           "explanation": "Die Größe ist nicht der Grund für den Tausch."
         },
         {
-          "text": "Weil der Browser keine Tokens empfangen kann, sondern nur Codes. (häufige Verwechslung in diesem Themenfeld)",
+          "text": "Weil der Browser keine Tokens empfangen kann, sondern nur Codes.",
           "isCorrect": false,
           "explanation": "Der Browser kann technisch auch Tokens empfangen, es wäre nur unsicher."
         },
@@ -514,7 +514,7 @@
           "explanation": "Das Access Token enthält keine Verlaufsliste."
         },
         {
-          "text": "Die URL, unter der der Anbieter erreichbar ist. (häufige Verwechslung in diesem Themenfeld)",
+          "text": "Die URL, unter der der Anbieter erreichbar ist.",
           "isCorrect": false,
           "explanation": "Ein Token ist keine URL, sondern ein kryptografischer Ausweis."
         }
@@ -566,7 +566,7 @@
           "explanation": "Das Refresh Token hat nichts mit der Browser-Aktualisierung zu tun."
         },
         {
-          "text": "Ein Protokoll, das die Verbindung zwischen App und Server beschleunigt. (häufige Verwechslung in diesem Themenfeld)",
+          "text": "Ein Protokoll, das die Verbindung zwischen App und Server beschleunigt.",
           "isCorrect": false,
           "explanation": "Das Refresh Token beschleunigt keine Verbindungen."
         }
@@ -592,7 +592,7 @@
           "explanation": "Die Größe ist nicht der Grund für den Schutz."
         },
         {
-          "text": "Weil es nur einmal verwendet werden kann und danach wertlos ist. (häufige Verwechslung in diesem Themenfeld)",
+          "text": "Weil es nur einmal verwendet werden kann und danach wertlos ist.",
           "isCorrect": false,
           "explanation": "Das Refresh Token kann mehrfach verwendet werden, genau das macht es gefährlich."
         }
@@ -665,7 +665,7 @@
           "explanation": "Die Prüfung läuft automatisch, nicht per Telefon."
         },
         {
-          "text": "Sie vergleicht das Token mit einer lokal gespeicherten Kopie. (häufige Verwechslung in diesem Themenfeld)",
+          "text": "Sie vergleicht das Token mit einer lokal gespeicherten Kopie. Das passt zur Fragestellung hier nicht.",
           "isCorrect": false,
           "explanation": "Es gibt keine lokale Kopie zum Vergleichen."
         },
@@ -760,7 +760,7 @@
     },
     {
       "question": "Was passiert, wenn mein Refresh Token gestohlen wird?",
-      "answer": "Dann kann der Dieb sich immer wieder neue Access Tokens ausstellen und dauerhaft in deinem Namen handeln, bis. das Refresh Token abläuft oder für ungültig erklärt wird. Deshalb speichert man Refresh Tokens nur auf dem Server, nie im Browser, und schützt sie wie ein Passwort. Die meisten Anbieter erlauben es, alle Refresh Tokens eines Nutzers mit einem Klick für ungültig zu erklären, falls. ein Diebstahl vermutet wird."
+      "answer": "Dann kann der Dieb sich immer wieder neue Access Tokens ausstellen und dauerhaft in deinem Namen handeln, bis das Refresh Token abläuft oder für ungültig erklärt wird. Deshalb speichert man Refresh Tokens nur auf dem Server, nie im Browser, und schützt sie wie ein Passwort. Die meisten Anbieter erlauben es, alle Refresh Tokens eines Nutzers mit einem Klick für ungültig zu erklären, falls ein Diebstahl vermutet wird."
     },
     {
       "question": "Muss ich für jeden Anbieter wie Google, GitHub und Apple einen eigenen OAuth2-Flow programmieren?",
@@ -768,7 +768,7 @@
     },
     {
       "question": "Kann ich OAuth2 auch für meine eigene App nutzen, ohne Google oder GitHub einzubinden?",
-      "answer": "Ja, du kannst deinen eigenen OAuth2-Server betreiben. Das ist aber aufwendig und fehleranfällig, weshalb die meisten Entwickler einen bestehenden Dienst wie Supabase Auth nutzen, der. den OAuth2-Server bereits eingebaut hat. Supabase Auth kann sowohl als OAuth2-Client zu Google und GitHub als auch als OAuth2-Server für deine eigene App. fungieren. Du musst den Server nicht selbst bauen."
+      "answer": "Ja, du kannst deinen eigenen OAuth2-Server betreiben. Das ist aber aufwendig und fehleranfällig, weshalb die meisten Entwickler einen bestehenden Dienst wie Supabase Auth nutzen, der den OAuth2-Server bereits eingebaut hat. Supabase Auth kann sowohl als OAuth2-Client zu Google und GitHub als auch als OAuth2-Server für deine eigene App. fungieren. Du musst den Server nicht selbst bauen."
     },
     {
       "question": "Woher weiß ich, dass das ID Token von Google wirklich von Google kommt und nicht gefälscht ist?",

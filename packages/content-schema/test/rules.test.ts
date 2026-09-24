@@ -467,10 +467,10 @@ describe('checkMinimumWordCount', () => {
     expect(violations[0]?.severity).toBe('error');
   });
 
-  it('lässt M01-01-01 auch ab Manifest-Version 0.2.0 nur eine Warnung sein (benannte Ausnahme)', () => {
-    const violations = checkMinimumWordCount(makeValidLesson(), '0.2.0');
+  it('kennt keine Ausnahme mehr für M01-01-01 unter 0.2.0', () => {
+    const violations = checkMinimumWordCount(makeValidLesson({ id: 'M01-01-01' }), '0.2.0');
     expect(violations).toHaveLength(1);
-    expect(violations[0]?.severity).toBe('warning');
-    expect(violations[0]?.message).toContain('Ausnahme');
+    expect(violations[0]?.severity).toBe('error');
+    expect(violations[0]?.message).not.toContain('Ausnahme');
   });
 });

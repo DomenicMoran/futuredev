@@ -44,3 +44,15 @@ Nachhaltigkeit:
 - File-Lock verhindert parallele Batches
 
 Ausgabe wie ElevenLabs-Pipeline: `out/<id>.mp3` + `out/<id>.cues.json`.
+
+## Pause / Gaming (GPU frei)
+
+Soft-Pause: `out\_chatterbox_control.json` mit `desired: pause` — Worker beendet nach dem aktuellen Block (Exit 75), Supervisor startet nicht neu bis `desired: run`. **Hinweis:** Ein bereits laufender Worker ohne Pause-Code rendert ggf. noch den aktuellen Block; erst nach Neustart (Supervisor mit aktuellem `render_chatterbox.py`) liest der Batch die Control-Datei zuverlässig zwischen Blöcken.
+
+```powershell
+powershell -File .\open_chatterbox_dashboard.ps1   # http://127.0.0.1:8765/
+powershell -File .\chatterbox_pause.ps1              # vor Gaming
+powershell -File .\chatterbox_resume.ps1             # danach (startet Batch ggf. neu)
+```
+
+Dashboard **Stop** = Pause + sofortiger Kill aller `render_chatterbox.py`-Prozesse.

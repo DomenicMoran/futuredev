@@ -37,7 +37,10 @@ VOICES_DIR = Path(__file__).resolve().parent / "chatterbox-voices"
 REF_A = VOICES_DIR / "speaker-A.wav"
 REF_B = VOICES_DIR / "speaker-B.wav"
 PROGRESS_PATH = OUT_DIR / "_chatterbox_progress.json"
+CONTROL_PATH = OUT_DIR / "_chatterbox_control.json"
 LOCK_PATH = OUT_DIR / "_chatterbox_batch.lock"
+
+EXIT_PAUSED = 75
 
 SAME_SPEAKER_SILENCE_MS = 300
 SPEAKER_CHANGE_SILENCE_MS = 600
@@ -210,6 +213,63 @@ def build_cues(lesson_id: str, blocks: list[dict], durations: list[float]) -> di
         )
         cursor += dur
     return {"lessonId": lesson_id, "blocks": cue_blocks}
+
+
+def read_desired() -> str:
+    if not CONTROL_PATH.exists():
+        return "run"
+    try:
+        data = json.loads(CONTROL_PATH.read_text(encoding="utf-8-sig"))
+        desired = data.get("desired", "run")
+        return desired if desired in ("run", "pause") else "run"
+    except (json.JSONDecodeError, OSError):
+        return "run"
+
+
+def set_desired(desired: str, reason: str = "") -> None:
+    OUT_DIR.mkdir(parents=True, exist_ok=True)
+    payload = {
+        "desired": desired if desired in ("run", "pause") else "run",
+        "updatedAt": time.strftime("%Y-%m-%dT%H:%M:%S"),
+        "reason": reason,
+    }
+    CONTROL_PATH.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+
+
+def read_progress_status() -> str:
+    try:
+        if PROGRESS_PATH.exists():
+            return str(json.loads(PROGRESS_PATH.read_text(encoding="utf-8")).get("status", ""))
+    except (json.JSONDecodeError, OSError):
+        pass
+    return ""
+
+
+def refresh_paused_progress() -> None:
+    extra: dict[str, object] = {}
+    try:
+        if PROGRESS_PATH.exists():
+            data = json.loads(PROGRESS_PATH.read_text(encoding="utf-8"))
+            for key in (
+                "lessonId",
+                "block",
+                "totalBlocks",
+                "speaker",
+                "index",
+                "remaining",
+                "phase",
+            ):
+                if key in data:
+                    extra[key] = data[key]
+    except (json.JSONDecodeError, OSError):
+        pass
+    write_progress(status="paused", phase="paused", **extra)
+
+
+def exit_if_pause_requested() -> None:
+    if read_desired() == "pause":
+        refresh_paused_progress()
+        raise SystemExit(EXIT_PAUSED)
 
 
 def write_progress(**fields: object) -> None:
@@ -438,6 +498,7 @@ def render_lesson(model, lesson_id: str, probe_blocks: int | None, device: str) 
             log(f"  Block {i + 1}/{len(blocks)} neu (ungültig/geändert)")
             bp.unlink(missing_ok=True)
         log(f"  Block {i + 1}/{len(blocks)} (Sprecher {speaker})")
+        exit_if_pause_requested()
         write_progress(
             lessonId=lesson_id,
             block=i + 1,
@@ -489,6 +550,15 @@ def missing_lesson_ids() -> list[str]:
     return [i for i in ids if i not in have]
 
 
+def supervisor_pause_loop() -> None:
+    """GPU frei: kein Worker-Start bis desired==run."""
+    log("Supervisor: Pause aktiv — warte auf Resume (desired=run)...")
+    while read_desired() == "pause":
+        refresh_paused_progress()
+        time.sleep(5)
+    log("Supervisor: Resume — Batch wird fortgesetzt.")
+
+
 def run_supervised(argv_without_supervise: list[str], stall_seconds: int) -> int:
     """Äusserer Supervisor: startet Worker neu bei Crash oder Progress-Stall."""
     py = sys.executable
@@ -500,6 +570,9 @@ def run_supervised(argv_without_supervise: list[str], stall_seconds: int) -> int
         if not missing:
             log("Supervisor: nichts fehlt.")
             return 0
+        if read_desired() == "pause":
+            supervisor_pause_loop()
+            continue
         round_n += 1
         log(f"Supervisor Runde {round_n}: {len(missing)} fehlend, starte Worker...")
         env = os.environ.copy()
@@ -511,7 +584,11 @@ def run_supervised(argv_without_supervise: list[str], stall_seconds: int) -> int
         last_seen = time.time()
         last_progress = ""
         while proc.poll() is None:
-            time.sleep(15)
+            time.sleep(5)
+            paused = read_desired() == "pause" or read_progress_status() == "paused"
+            if paused:
+                last_seen = time.time()
+                continue
             try:
                 raw = PROGRESS_PATH.read_text(encoding="utf-8") if PROGRESS_PATH.exists() else ""
             except OSError:
@@ -534,6 +611,14 @@ def run_supervised(argv_without_supervise: list[str], stall_seconds: int) -> int
         if not still:
             log("Supervisor: alle Lektionen fertig.")
             return 0
+        if (
+            code == EXIT_PAUSED
+            or read_desired() == "pause"
+            or read_progress_status() == "paused"
+        ):
+            supervisor_pause_loop()
+            backoff = 5
+            continue
         log(f"Supervisor: Worker exit={code}, noch {len(still)} fehlend. Warte {backoff}s...")
         time.sleep(backoff)
         backoff = min(backoff * 2, 120)
@@ -613,6 +698,7 @@ def main() -> None:
         model = load_model(device)
         write_progress(status="model-ready", phase="init", remaining=len(ids))
         for idx, lesson_id in enumerate(ids, start=1):
+            exit_if_pause_requested()
             log(f"==== {lesson_id} ({idx}/{len(ids)}) ====")
             write_progress(
                 lessonId=lesson_id,

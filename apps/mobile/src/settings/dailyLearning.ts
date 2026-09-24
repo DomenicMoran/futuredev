@@ -1,4 +1,5 @@
-// Tagesziel: ehrliche Lernminuten aus Hörposition (Delta zwischen Saves).
+// Tagesziel: ehrliche Lernminuten aus Hörposition (Delta zwischen Saves) und
+// Lesefokus auf dem Lektionsbildschirm (Intervall-Ticks bei aktiver App).
 // Persistenz in `settings`: daily_learning_seconds + daily_learning_date (YYYY-MM-DD, lokal).
 import { getSetting, setSetting } from '../data/settings.js';
 import { POSITION_SAVE_INTERVAL_SECONDS } from '../player/types.js';
@@ -8,6 +9,11 @@ export const DAILY_LEARNING_DATE_KEY = 'daily_learning_date';
 
 /** Max. Delta pro Save-Tick (5 s Intervall + Puffer gegen Seek-Sprünge). */
 export const MAX_LISTEN_DELTA_SECONDS = POSITION_SAVE_INTERVAL_SECONDS + 2;
+
+/** Lesefokus: Tick-Intervall auf dem Lektionsbildschirm (Sekunden). */
+export const READ_FOCUS_TICK_SECONDS = POSITION_SAVE_INTERVAL_SECONDS;
+
+export const MAX_READ_FOCUS_DELTA_SECONDS = READ_FOCUS_TICK_SECONDS + 2;
 
 /** Obergrenze pro Kalendertag (24 h), verhindert Korruption durch fehlerhafte Deltas. */
 export const MAX_DAILY_LEARNING_SECONDS = 24 * 60 * 60;
@@ -94,6 +100,23 @@ export async function persistDailyLearningTotal(
  * Erhöht die Tagessekunden anhand einer absoluten Hörposition (Save/markListened).
  * Erster Aufruf pro Lektion in der Session: Baseline setzen, kein Delta.
  */
+/** Erhöht Tagessekunden um einen Lesefokus-Tick (Lesson-Screen, App aktiv). */
+export async function accumulateReadFocusTick(now: Date = new Date()): Promise<number> {
+  const today = localDateKey(now);
+  const [storedDate, storedRaw] = await Promise.all([
+    getSetting(DAILY_LEARNING_DATE_KEY),
+    getSetting(DAILY_LEARNING_SECONDS_KEY),
+  ]);
+  const next = applyDeltaToDailyTotal(
+    storedDate,
+    parseStoredSeconds(storedRaw),
+    today,
+    READ_FOCUS_TICK_SECONDS,
+  );
+  await persistDailyLearningTotal(next.seconds, next.date);
+  return next.seconds;
+}
+
 export async function accumulateListenProgress(
   lessonId: string,
   positionSeconds: number,

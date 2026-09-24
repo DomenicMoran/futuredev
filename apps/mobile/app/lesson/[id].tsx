@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
+  AppState,
   Linking,
   Modal,
   Pressable,
@@ -8,10 +9,11 @@ import {
   Text,
   TextInput,
   View,
+  type AppStateStatus,
   type ViewToken,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { router, useLocalSearchParams } from 'expo-router';
+import { router, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import { BookOpen, Bookmark, BookmarkCheck, ExternalLink, MessageSquarePlus } from 'lucide-react-native';
 import type { Lesson, SpeechBlock } from '@futuredev/content-schema';
 import { useTheme } from '../../src/theme/useTheme.js';
@@ -28,6 +30,7 @@ import { listBookmarks, toggleBookmark } from '../../src/data/bookmarks.js';
 import { getSetting, setSetting } from '../../src/data/settings.js';
 import { playLesson } from '../../src/player/index.js';
 import { useBottomChromeInset } from '../../src/navigation/useBottomChromeInset.js';
+import { accumulateReadFocusTick, READ_FOCUS_TICK_SECONDS } from '../../src/settings/dailyLearning.js';
 import { useSettingsStore } from '../../src/state/settings.js';
 
 const STICKY_ACTIONS_HEIGHT = 72;
@@ -49,6 +52,7 @@ export default function LessonScreen() {
   const theme = useTheme();
   const bottomInset = useBottomChromeInset();
   const firstFormPreference = useSettingsStore((s) => s.firstFormPreference);
+  const setDailyLearningSecondsToday = useSettingsStore((s) => s.setDailyLearningSecondsToday);
   const { state: contentState } = useContent();
   const stickyBottomPadding = bottomInset + STICKY_ACTIONS_HEIGHT + 8;
 
@@ -96,6 +100,43 @@ export default function LessonScreen() {
       cancelled = true;
     };
   }, [id]);
+
+  useFocusEffect(
+    useCallback(() => {
+      let timer: ReturnType<typeof setInterval> | null = null;
+      let appState: AppStateStatus = AppState.currentState;
+
+      const tick = () => {
+        if (appState !== 'active') return;
+        void accumulateReadFocusTick().then((total) => {
+          setDailyLearningSecondsToday(total);
+        });
+      };
+
+      const start = () => {
+        if (timer !== null) return;
+        timer = setInterval(tick, READ_FOCUS_TICK_SECONDS * 1000);
+      };
+
+      const stop = () => {
+        if (timer !== null) clearInterval(timer);
+        timer = null;
+      };
+
+      const subscription = AppState.addEventListener('change', (next) => {
+        appState = next;
+        if (next === 'active') start();
+        else stop();
+      });
+
+      if (appState === 'active') start();
+
+      return () => {
+        subscription.remove();
+        stop();
+      };
+    }, [setDailyLearningSecondsToday]),
+  );
 
   // "Im Text lesen" aus dem Player uebergibt den zuletzt gehoerten Block als
   // `block`-Parameter (app/player.tsx); hierher zurueckspringen heisst genau

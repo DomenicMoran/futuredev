@@ -32,7 +32,7 @@
     {
       "speaker": "A",
       "role": "image",
-      "text": "Stell dir einen Bauplan für ein Fertighaus vor. Der Plan legt exakt fest, welche Materialien verwendet werden, in welcher Reihenfolge sie verbaut werden und wie das. fertige Haus am Ende aussieht. Jeder Bauschritt baut auf dem vorherigen auf.",
+      "text": "Stell dir einen Bauplan für ein Fertighaus vor. Der Plan legt exakt fest, welche Materialien verwendet werden, in welcher Reihenfolge sie verbaut werden und wie das fertige Haus am Ende aussieht. Jeder Bauschritt baut auf dem vorherigen auf.",
       "isKeySentence": false
     },
     {
@@ -50,7 +50,7 @@
     {
       "speaker": "A",
       "role": "explain",
-      "text": "Fertige Images aus öffentlichen Registries sind großartig für Standardsoftware wie Datenbanken oder Webserver. Aber deine eigene Anwendung ist kein Standard. Sie hat spezifische Abhängigkeiten, braucht eine bestimmte Node. js-Version, benötigt bestimmte Umgebungsvariablen und muss deinen eigenen Code enthalten. All das beschreibst du im Dockerfile, und Docker baut daraus ein Image, das exakt deine Anwendung enthält, nichts. mehr und nichts weniger.",
+      "text": "Fertige Images aus öffentlichen Registries sind großartig für Standardsoftware wie Datenbanken oder Webserver. Aber deine eigene Anwendung ist kein Standard. Sie hat spezifische Abhängigkeiten, braucht eine bestimmte Node. js-Version, benötigt bestimmte Umgebungsvariablen und muss deinen eigenen Code enthalten. All das beschreibst du im Dockerfile, und Docker baut daraus ein Image, das exakt deine Anwendung enthält, nichts mehr und nichts weniger.",
       "isKeySentence": false
     },
     {
@@ -62,7 +62,7 @@
     {
       "speaker": "A",
       "role": "example",
-      "text": "Im Repo repo-futuredev gibt es mehrere Dockerfiles. Das Dockerfile für die Next. js-Anwendung beginnt mit FROM node:22-alpine, einer schlanken Node. js-Version auf Basis von Alpine Linux. Dann folgen Anweisungen zum Kopieren der Konfigurationsdateien, zum Installieren der Abhängigkeiten mit pnpm install und zum Bauen der. Anwendung. Das Ergebnis ist ein Image, das die gesamte FutureDev-Plattform enthält und auf jedem System mit Docker gestartet werden. kann.",
+      "text": "Im Repo repo-futuredev gibt es mehrere Dockerfiles. Das Dockerfile für die Next. js-Anwendung beginnt mit FROM node:22-alpine, einer schlanken Node. js-Version auf Basis von Alpine Linux. Dann folgen Anweisungen zum Kopieren der Konfigurationsdateien, zum Installieren der Abhängigkeiten mit pnpm install und zum Bauen der. Anwendung. Das Ergebnis ist ein Image, das die gesamte FutureDev-Plattform enthält und auf jedem System mit Docker gestartet werden kann.",
       "isKeySentence": false
     },
     {
@@ -86,7 +86,7 @@
     {
       "speaker": "A",
       "role": "explain",
-      "text": "Jede Anweisung in einem Dockerfile erzeugt eine neue Schicht, auf Englisch Layer. Die erste Anweisung FROM legt die unterste Schicht fest, das Basis-Image. Jede weitere Anweisung wie RUN, COPY oder ADD legt eine neue Schicht obenauf. Diese Schichten sind unveränderlich: wenn du eine Anweisung änderst, wird nur diese Schicht und alle darüberliegenden neu gebaut,. die darunterliegenden bleiben unverändert. Docker cached jede Schicht einzeln, sodass wiederholte Builds nur die geänderten Schichten neu bauen müssen.",
+      "text": "Jede Anweisung in einem Dockerfile erzeugt eine neue Schicht, auf Englisch Layer. Die erste Anweisung FROM legt die unterste Schicht fest, das Basis-Image. Jede weitere Anweisung wie RUN, COPY oder ADD legt eine neue Schicht obenauf. Diese Schichten sind unveränderlich: wenn du eine Anweisung änderst, wird nur diese Schicht und alle darüberliegenden neu gebaut, die darunterliegenden bleiben unverändert. Docker cached jede Schicht einzeln, sodass wiederholte Builds nur die geänderten Schichten neu bauen müssen.",
       "isKeySentence": false
     },
     {
@@ -98,7 +98,7 @@
     {
       "speaker": "A",
       "role": "example",
-      "text": "Im Repo repo-futuredev nutzt das Dockerfile den Layer-Cache geschickt aus. Zuerst werden nur die Dateien kopiert, die für die Installation der Abhängigkeiten nötig sind, also package. json und pnpm-lock. yaml. Dann wird pnpm install ausgeführt. Erst danach wird der restliche Quellcode kopiert. Das bedeutet: solange sich die Abhängigkeiten nicht ändern, wird die teure Installation aus dem Cache genommen und nur. der Code wird neu kopiert. Ein Build, der sonst Minuten dauern würde, ist so in Sekunden erledigt.",
+      "text": "Im Repo repo-futuredev nutzt das Dockerfile den Layer-Cache geschickt aus. Zuerst werden nur die Dateien kopiert, die für die Installation der Abhängigkeiten nötig sind, also package json und pnpm-lock yaml. Dann wird pnpm install ausgeführt. Erst danach wird der restliche Quellcode kopiert. Das bedeutet: solange sich die Abhängigkeiten nicht ändern, wird die teure Installation aus dem Cache genommen und nur der Code wird neu kopiert. Ein Build, der sonst Minuten dauern würde, ist so in Sekunden erledigt.",
       "isKeySentence": false
     },
     {
@@ -122,13 +122,13 @@
     {
       "speaker": "A",
       "role": "explain",
-      "text": "Wenn du docker build ausführst, liest Docker das Dockerfile Zeile für Zeile. Für jede Anweisung prüft es zuerst, ob es diese Anweisung mit denselben Argumenten schon einmal ausgeführt hat und. das Ergebnis im Cache liegt. Wenn ja, wird die Schicht aus dem Cache genommen. Wenn nein, wird die Anweisung ausgeführt, das Ergebnis als neue Schicht gespeichert und in den Cache gelegt. Am Ende steht ein fertiges Image, das du mit docker run starten kannst.",
+      "text": "Wenn du docker build ausführst, liest Docker das Dockerfile Zeile für Zeile. Für jede Anweisung prüft es zuerst, ob es diese Anweisung mit denselben Argumenten schon einmal ausgeführt hat und das Ergebnis im Cache liegt. Wenn ja, wird die Schicht aus dem Cache genommen. Wenn nein, wird die Anweisung ausgeführt, das Ergebnis als neue Schicht gespeichert und in den Cache gelegt. Am Ende steht ein fertiges Image, das du mit docker run starten kannst.",
       "isKeySentence": false
     },
     {
       "speaker": "A",
       "role": "why",
-      "text": "Dieser Ablauf ist wichtig zu verstehen, weil er erklärt, warum die Reihenfolge der Anweisungen im Dockerfile so entscheidend. ist. Docker bricht den Build nicht ab, wenn eine spätere Schicht neu gebaut werden muss, aber es kann keine. frühere Schicht aus dem Cache holen, wenn eine davorliegende neu gebaut wurde. Der Cache ist eine Kette: bricht die Kette an einer Stelle, müssen alle folgenden Glieder neu geschmiedet werden.",
+      "text": "Dieser Ablauf ist wichtig zu verstehen, weil er erklärt, warum die Reihenfolge der Anweisungen im Dockerfile so entscheidend ist. Docker bricht den Build nicht ab, wenn eine spätere Schicht neu gebaut werden muss, aber es kann keine frühere Schicht aus dem Cache holen, wenn eine davorliegende neu gebaut wurde. Der Cache ist eine Kette: bricht die Kette an einer Stelle, müssen alle folgenden Glieder neu geschmiedet werden.",
       "isKeySentence": false
     },
     {
@@ -158,13 +158,13 @@
     {
       "speaker": "A",
       "role": "example",
-      "text": "Im Repo repo-futuredev wird der Build-Kontext durch eine . dockerignore-Datei gesteuert, das Gegenstück zur . gitignore. Sie schließt node_modules, den . git-Ordner und andere große, für den Build unnötige Dateien aus. Das ist wichtig, weil ein zu großer Build-Kontext den Build verlangsamt: Docker muss das gesamte Verzeichnis archivieren und. an den Daemon senden, bevor der Build überhaupt beginnt. Mit einer guten . dockerignore sparst du Sekunden bei jedem Build.",
+      "text": "Im Repo repo-futuredev wird der Build-Kontext durch eine . dockerignore-Datei gesteuert, das Gegenstück zur . gitignore. Sie schließt node_modules, den . git-Ordner und andere große, für den Build unnötige Dateien aus. Das ist wichtig, weil ein zu großer Build-Kontext den Build verlangsamt: Docker muss das gesamte Verzeichnis archivieren und an den Daemon senden, bevor der Build überhaupt beginnt. Mit einer guten . dockerignore sparst du Sekunden bei jedem Build.",
       "isKeySentence": false
     },
     {
       "speaker": "A",
       "role": "why",
-      "text": "Die . dockerignore ist ein oft übersehenes, aber wirkungsvolles Werkzeug. Ein Build-Kontext mit node_modules kann leicht mehrere hundert Megabyte groß sein, und dieses Archiv bei jedem Build zu. erstellen und zu übertragen, kostet Zeit und Ressourcen. Eine . dockerignore mit node_modules reduziert den Build-Kontext auf wenige Megabyte und macht den Build spürbar schneller.",
+      "text": "Die . dockerignore ist ein oft übersehenes, aber wirkungsvolles Werkzeug. Ein Build-Kontext mit node_modules kann leicht mehrere hundert Megabyte groß sein, und dieses Archiv bei jedem Build zu erstellen und zu übertragen, kostet Zeit und Ressourcen. Eine . dockerignore mit node_modules reduziert den Build-Kontext auf wenige Megabyte und macht den Build spürbar schneller.",
       "isKeySentence": false
     },
     {
@@ -182,13 +182,13 @@
     {
       "speaker": "A",
       "role": "example",
-      "text": "Im Repo repo-futuredev beginnt das Dockerfile der Web-App mit FROM node:22-alpine AS base, gefolgt von WORKDIR /app. Dann werden mit COPY die package. json und die Lockdatei kopiert, mit RUN pnpm install --frozen-lockfile die Abhängigkeiten installiert und schließlich mit COPY . . der restliche Code. Die letzte Anweisung CMD legt fest, dass der Container mit dem Produktionsserver startet. Jede dieser Anweisungen hat einen klaren Zweck und eine festgelegte Position im Ablauf.",
+      "text": "Im Repo repo-futuredev beginnt das Dockerfile der Web-App mit FROM node:22-alpine AS base, gefolgt von WORKDIR /app. Dann werden mit COPY die package json und die Lockdatei kopiert, mit RUN pnpm install --frozen-lockfile die Abhängigkeiten installiert und schließlich mit COPY . . der restliche Code. Die letzte Anweisung CMD legt fest, dass der Container mit dem Produktionsserver startet. Jede dieser Anweisungen hat einen klaren Zweck und eine festgelegte Position im Ablauf.",
       "isKeySentence": false
     },
     {
       "speaker": "A",
       "role": "why",
-      "text": "Die Reihenfolge der Anweisungen ist kein Zufall. COPY package. json kommt vor COPY . . , weil sich die Abhängigkeiten seltener ändern als der Code. So kann Docker die teure Installation cachen und nur den Code neu kopieren. Diese Optimierung ist in fast jedem professionellen Dockerfile zu finden und spart bei jedem Build wertvolle Zeit.",
+      "text": "Die Reihenfolge der Anweisungen ist kein Zufall. COPY package json kommt vor COPY , weil sich die Abhängigkeiten seltener ändern als der Code. So kann Docker die teure Installation cachen und nur den Code neu kopieren. Diese Optimierung ist in fast jedem professionellen Dockerfile zu finden und spart bei jedem Build wertvolle Zeit.",
       "isKeySentence": false
     },
     {
@@ -200,13 +200,13 @@
     {
       "speaker": "A",
       "role": "image",
-      "text": "Stell dir RUN als die Arbeit vor, die der Handwerker in seiner Werkstatt erledigt, bevor er das Regal. zu dir bringt. CMD ist das, was du mit dem Regal machst, nachdem es bei dir an der Wand hängt: du. stellst Bücher hinein.",
+      "text": "Stell dir RUN als die Arbeit vor, die der Handwerker in seiner Werkstatt erledigt, bevor er das Regal. zu dir bringt. CMD ist das, was du mit dem Regal machst, nachdem es bei dir an der Wand hängt: du stellst Bücher hinein.",
       "isKeySentence": false
     },
     {
       "speaker": "A",
       "role": "explain",
-      "text": "RUN wird während des Builds ausgeführt und sein Ergebnis wird Teil des Images. Wenn du RUN apt-get install -y curl schreibst, ist curl danach für immer im Image enthalten. CMD wird dagegen erst beim Start des Containers ausgeführt und legt fest, welcher Prozess im Container laufen soll. Ein typisches CMD ist node server. js oder pnpm start. CMD wird nicht während des Builds ausgeführt und hinterlässt keine Spuren im Image.",
+      "text": "RUN wird während des Builds ausgeführt und sein Ergebnis wird Teil des Images. Wenn du RUN apt-get install -y curl schreibst, ist curl danach für immer im Image enthalten. CMD wird dagegen erst beim Start des Containers ausgeführt und legt fest, welcher Prozess im Container laufen soll. Ein typisches CMD ist node server js oder pnpm start. CMD wird nicht während des Builds ausgeführt und hinterlässt keine Spuren im Image.",
       "isKeySentence": false
     },
     {
@@ -224,7 +224,7 @@
     {
       "speaker": "A",
       "role": "explain",
-      "text": "Der docker build-Prozess ist wie dieses Fließband. Jede Anweisung im Dockerfile ist eine Station, die eine Schicht zum Image hinzufügt. Die Stationen bauen aufeinander auf, und das Ergebnis ist ein fertiges, sofort einsatzbereites Image. Genau wie in der Fabrik kann eine Station nur dann arbeiten, wenn alle vorherigen Stationen ihre Arbeit erledigt. haben.",
+      "text": "Der docker build-Prozess ist wie dieses Fließband. Jede Anweisung im Dockerfile ist eine Station, die eine Schicht zum Image hinzufügt. Die Stationen bauen aufeinander auf, und das Ergebnis ist ein fertiges, sofort einsatzbereites Image. Genau wie in der Fabrik kann eine Station nur dann arbeiten, wenn alle vorherigen Stationen ihre Arbeit erledigt haben.",
       "isKeySentence": false
     },
     {
@@ -236,7 +236,7 @@
     {
       "speaker": "A",
       "role": "explain",
-      "text": "Ja, das ist ein wichtiges Thema, das unter dem Stichwort Multi-Stage Build läuft. Dabei verwendest du mehrere FROM-Anweisungen in einem Dockerfile. Die erste Stage baut die Anwendung mit allen Entwicklerwerkzeugen, die zweite Stage kopiert nur das fertige Build-Ergebnis in. ein schlankes Image. Die Entwicklerwerkzeuge, die nur zum Bauen gebraucht wurden, bleiben in der ersten Stage zurück und belasten das endgültige. Image nicht. So kann aus einem Image von 800 Megabyte eines von 80 Megabyte werden.",
+      "text": "Ja, das ist ein wichtiges Thema, das unter dem Stichwort Multi-Stage Build läuft. Dabei verwendest du mehrere FROM-Anweisungen in einem Dockerfile. Die erste Stage baut die Anwendung mit allen Entwicklerwerkzeugen, die zweite Stage kopiert nur das fertige Build-Ergebnis in ein schlankes Image. Die Entwicklerwerkzeuge, die nur zum Bauen gebraucht wurden, bleiben in der ersten Stage zurück und belasten das endgültige. Image nicht. So kann aus einem Image von 800 Megabyte eines von 80 Megabyte werden.",
       "isKeySentence": false
     },
     {
@@ -332,7 +332,7 @@
     {
       "speaker": "A",
       "role": "faq",
-      "text": "Ja, jede Anwendung braucht ihr eigenes Dockerfile, weil jede Anwendung andere Abhängigkeiten, andere Build-Schritte und einen anderen Startbefehl. hat. Es gibt zwar Vorlagen und Best Practices, aber ein Dockerfile ist immer spezifisch für die Anwendung, die es. verpackt. In einem Monorepo wie repo-futuredev hat jede deploybare Einheit ihr eigenes Dockerfile, weil die Web-App andere Anforderungen hat. als der Hintergrunddienst oder die mobile API.",
+      "text": "Ja, jede Anwendung braucht ihr eigenes Dockerfile, weil jede Anwendung andere Abhängigkeiten, andere Build-Schritte und einen anderen Startbefehl. hat. Es gibt zwar Vorlagen und Best Practices, aber ein Dockerfile ist immer spezifisch für die Anwendung, die es verpackt. In einem Monorepo wie repo-futuredev hat jede deploybare Einheit ihr eigenes Dockerfile, weil die Web-App andere Anforderungen hat als der Hintergrunddienst oder die mobile API.",
       "isKeySentence": false
     },
     {
@@ -344,7 +344,7 @@
     {
       "speaker": "A",
       "role": "faq",
-      "text": "COPY kopiert Dateien und Verzeichnisse aus dem Build-Kontext ins Image, einfach und direkt. ADD kann dasselbe, aber zusätzlich auch Archive automatisch entpacken und Dateien aus URLs herunterladen. Die Docker-Dokumentation empfiehlt, standardmäßig COPY zu verwenden, weil es einfacher und vorhersagbarer ist. ADD sollte nur dann eingesetzt werden, wenn du die Zusatzfunktionen wirklich brauchst, etwa um ein tar-Archiv automatisch zu. entpacken.",
+      "text": "COPY kopiert Dateien und Verzeichnisse aus dem Build-Kontext ins Image, einfach und direkt. ADD kann dasselbe, aber zusätzlich auch Archive automatisch entpacken und Dateien aus URLs herunterladen. Die Docker-Dokumentation empfiehlt, standardmäßig COPY zu verwenden, weil es einfacher und vorhersagbarer ist. ADD sollte nur dann eingesetzt werden, wenn du die Zusatzfunktionen wirklich brauchst, etwa um ein tar-Archiv automatisch zu entpacken.",
       "isKeySentence": false
     },
     {
@@ -356,7 +356,7 @@
     {
       "speaker": "A",
       "role": "faq",
-      "text": "Technisch ja, du kannst einen Container manuell starten, darin Befehle ausführen und ihn dann mit docker commit als. Image speichern. Aber das ist eine schlechte Praxis, weil das Ergebnis nicht reproduzierbar ist. Niemand außer dir weiß, welche Befehle in welcher Reihenfolge ausgeführt wurden, und wenn das Image kaputtgeht, kannst du. es nicht aus der Bauanleitung wiederherstellen. Ein Dockerfile ist die dokumentierte, versionierte, reproduzierbare Bauanleitung, und genau das willst du in einem professionellen Projekt.",
+      "text": "Technisch ja, du kannst einen Container manuell starten, darin Befehle ausführen und ihn dann mit docker commit als. Image speichern. Aber das ist eine schlechte Praxis, weil das Ergebnis nicht reproduzierbar ist. Niemand außer dir weiß, welche Befehle in welcher Reihenfolge ausgeführt wurden, und wenn das Image kaputtgeht, kannst du es nicht aus der Bauanleitung wiederherstellen. Ein Dockerfile ist die dokumentierte, versionierte, reproduzierbare Bauanleitung, und genau das willst du in einem professionellen Projekt.",
       "isKeySentence": false
     },
     {
@@ -368,7 +368,7 @@
     {
       "speaker": "A",
       "role": "faq",
-      "text": "Die Wahl des Basis-Images hängt von deiner Laufzeitumgebung ab. Für Node. js-Anwendungen sind die offiziellen node-Images der beste Startpunkt, für Python die python-Images, für Go die golang-Images. Achte auf den Tag: alpine-Varianten sind besonders schlank, slim-Varianten ein guter Kompromiss, und die ungetaggten Images sind am. größten, aber am vollständigsten. Auf Docker Hub findest du zu jedem offiziellen Image eine Dokumentation, welche Tags es gibt und was sie. enthalten.",
+      "text": "Die Wahl des Basis-Images hängt von deiner Laufzeitumgebung ab. Für Node. js-Anwendungen sind die offiziellen node-Images der beste Startpunkt, für Python die python-Images, für Go die golang-Images. Achte auf den Tag: alpine-Varianten sind besonders schlank, slim-Varianten ein guter Kompromiss, und die ungetaggten Images sind am größten, aber am vollständigsten. Auf Docker Hub findest du zu jedem offiziellen Image eine Dokumentation, welche Tags es gibt und was sie enthalten.",
       "isKeySentence": false
     },
     {
@@ -431,7 +431,7 @@
           "explanation": "Falsch: Layer sind dauerhafte Bestandteile des Images, keine temporären Dateien."
         },
         {
-          "text": "Ein Netzwerkprotokoll, über das Container während der Laufzeit kommunizieren.",
+          "text": "Ein Netzwerkprotokoll, über das Container während der Laufzeit kommunizieren. Das passt zur Fragestellung hier nicht.",
           "isCorrect": false,
           "explanation": "Falsch: Layer haben nichts mit Netzwerkkommunikation zu tun."
         },
@@ -483,12 +483,12 @@
           "explanation": "Falsch: die Reihenfolge hat nichts mit dem Alphabet zu tun, sondern mit der Cache-Strategie."
         },
         {
-          "text": "Weil Docker sonst eine Fehlermeldung ausgibt und den Build abbricht.",
+          "text": "Weil Docker sonst eine Fehlermeldung ausgibt und den Build abbricht. Das passt zur Fragestellung hier nicht.",
           "isCorrect": false,
           "explanation": "Falsch: Docker bricht den Build nicht ab, wenn die Reihenfolge anders ist, aber der Cache wird ineffizient."
         },
         {
-          "text": "Damit package.json im Image an einer anderen Stelle liegt als der restliche Code.",
+          "text": "Damit package.json im Image an einer anderen Stelle liegt als der restliche Code. Das passt zur Fragestellung hier nicht.",
           "isCorrect": false,
           "explanation": "Falsch: die Position im Dateisystem wird durch WORKDIR bestimmt, nicht durch die COPY-Reihenfolge."
         }
@@ -514,7 +514,7 @@
           "explanation": "Falsch: sie haben grundlegend verschiedene Zwecke und Zeitpunkte."
         },
         {
-          "text": "RUN ist für Shell-Befehle, CMD ist für das Kopieren von Dateien.",
+          "text": "RUN ist für Shell-Befehle, CMD ist für das Kopieren von Dateien. Das passt zur Fragestellung hier nicht.",
           "isCorrect": false,
           "explanation": "Falsch: CMD führt ebenfalls einen Befehl aus, aber erst zur Laufzeit, und COPY ist für Dateien zuständig."
         }
@@ -613,7 +613,7 @@
           "explanation": "Falsch: Docker führt die Anweisungen von oben nach unten aus, nicht umgekehrt."
         },
         {
-          "text": "Weil das Betriebssystem sonst die Dateiberechtigungen nicht korrekt setzen kann.",
+          "text": "Weil das Betriebssystem sonst die Dateiberechtigungen nicht korrekt setzen kann. Das passt zur Fragestellung hier nicht.",
           "isCorrect": false,
           "explanation": "Falsch: die Reihenfolge hat nichts mit Dateiberechtigungen zu tun."
         },
@@ -728,19 +728,19 @@
   "faq": [
     {
       "question": "Muss ich für jede Anwendung ein eigenes Dockerfile schreiben?",
-      "answer": "Ja, jede Anwendung braucht ihr eigenes Dockerfile, weil jede Anwendung andere Abhängigkeiten, andere Build-Schritte und einen anderen Startbefehl. hat. Es gibt zwar Vorlagen und Best Practices, aber ein Dockerfile ist immer spezifisch für die Anwendung, die es. verpackt. In einem Monorepo wie repo-futuredev hat jede deploybare Einheit ihr eigenes Dockerfile, weil die Web-App andere Anforderungen hat. als der Hintergrunddienst oder die mobile API."
+      "answer": "Ja, jede Anwendung braucht ihr eigenes Dockerfile, weil jede Anwendung andere Abhängigkeiten, andere Build-Schritte und einen anderen Startbefehl. hat. Es gibt zwar Vorlagen und Best Practices, aber ein Dockerfile ist immer spezifisch für die Anwendung, die es verpackt. In einem Monorepo wie repo-futuredev hat jede deploybare Einheit ihr eigenes Dockerfile, weil die Web-App andere Anforderungen hat als der Hintergrunddienst oder die mobile API."
     },
     {
       "question": "Was ist der Unterschied zwischen COPY und ADD im Dockerfile?",
-      "answer": "COPY kopiert Dateien und Verzeichnisse aus dem Build-Kontext ins Image, einfach und direkt. ADD kann dasselbe, aber zusätzlich auch Archive automatisch entpacken und Dateien aus URLs herunterladen. Die Docker-Dokumentation empfiehlt, standardmäßig COPY zu verwenden, weil es einfacher und vorhersagbarer ist. ADD sollte nur dann eingesetzt werden, wenn du die Zusatzfunktionen wirklich brauchst, etwa um ein tar-Archiv automatisch zu. entpacken."
+      "answer": "COPY kopiert Dateien und Verzeichnisse aus dem Build-Kontext ins Image, einfach und direkt. ADD kann dasselbe, aber zusätzlich auch Archive automatisch entpacken und Dateien aus URLs herunterladen. Die Docker-Dokumentation empfiehlt, standardmäßig COPY zu verwenden, weil es einfacher und vorhersagbarer ist. ADD sollte nur dann eingesetzt werden, wenn du die Zusatzfunktionen wirklich brauchst, etwa um ein tar-Archiv automatisch zu entpacken."
     },
     {
       "question": "Kann ich ein Image auch ohne Dockerfile bauen?",
-      "answer": "Technisch ja, du kannst einen Container manuell starten, darin Befehle ausführen und ihn dann mit docker commit als. Image speichern. Aber das ist eine schlechte Praxis, weil das Ergebnis nicht reproduzierbar ist. Niemand außer dir weiß, welche Befehle in welcher Reihenfolge ausgeführt wurden, und wenn das Image kaputtgeht, kannst du. es nicht aus der Bauanleitung wiederherstellen. Ein Dockerfile ist die dokumentierte, versionierte, reproduzierbare Bauanleitung, und genau das willst du in einem professionellen Projekt."
+      "answer": "Technisch ja, du kannst einen Container manuell starten, darin Befehle ausführen und ihn dann mit docker commit als. Image speichern. Aber das ist eine schlechte Praxis, weil das Ergebnis nicht reproduzierbar ist. Niemand außer dir weiß, welche Befehle in welcher Reihenfolge ausgeführt wurden, und wenn das Image kaputtgeht, kannst du es nicht aus der Bauanleitung wiederherstellen. Ein Dockerfile ist die dokumentierte, versionierte, reproduzierbare Bauanleitung, und genau das willst du in einem professionellen Projekt."
     },
     {
       "question": "Wie finde ich das richtige Basis-Image für mein Dockerfile?",
-      "answer": "Die Wahl des Basis-Images hängt von deiner Laufzeitumgebung ab. Für Node. js-Anwendungen sind die offiziellen node-Images der beste Startpunkt, für Python die python-Images, für Go die golang-Images. Achte auf den Tag: alpine-Varianten sind besonders schlank, slim-Varianten ein guter Kompromiss, und die ungetaggten Images sind am. größten, aber am vollständigsten. Auf Docker Hub findest du zu jedem offiziellen Image eine Dokumentation, welche Tags es gibt und was sie. enthalten."
+      "answer": "Die Wahl des Basis-Images hängt von deiner Laufzeitumgebung ab. Für Node. js-Anwendungen sind die offiziellen node-Images der beste Startpunkt, für Python die python-Images, für Go die golang-Images. Achte auf den Tag: alpine-Varianten sind besonders schlank, slim-Varianten ein guter Kompromiss, und die ungetaggten Images sind am größten, aber am vollständigsten. Auf Docker Hub findest du zu jedem offiziellen Image eine Dokumentation, welche Tags es gibt und was sie enthalten."
     },
     {
       "question": "Was mache ich, wenn mein Build zu lange dauert?",
