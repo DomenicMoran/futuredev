@@ -20,6 +20,7 @@ import type { ModuleListEntry } from '../../src/content/listLessons';
 
 import { useBottomChromeInset } from '../../src/navigation/useBottomChromeInset';
 import { openFirstPublishedLessonOrLernen } from '../../src/navigation/openFirstLesson.js';
+import { TabScreenTitle } from '../../src/components/TabScreenTitle.js';
 
 
 
@@ -115,7 +116,9 @@ export default function LernenScreen() {
 
           renderItem={renderItem}
 
-          contentContainerStyle={{ padding: theme.spacing.base, paddingBottom: bottomInset }}
+          ListHeaderComponent={<TabScreenTitle title={de.lernen.title} />}
+
+          contentContainerStyle={{ paddingBottom: bottomInset }}
 
           initialNumToRender={10}
 

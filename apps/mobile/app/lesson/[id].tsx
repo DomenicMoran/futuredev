@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useFocusEffect, useLocalSearchParams } from 'expo-router';
-import { ArrowLeft, BookOpen, Bookmark, BookmarkCheck, ExternalLink, MessageSquarePlus } from 'lucide-react-native';
+import { ArrowLeft, BookOpen, Bookmark, BookmarkCheck, Check, ExternalLink, MessageSquarePlus } from 'lucide-react-native';
 import type { Lesson, SpeechBlock } from '@futuredev/content-schema';
 import { useTheme } from '../../src/theme/useTheme.js';
 import { EmptyState } from '../../src/components/EmptyState.js';
@@ -427,9 +427,13 @@ export default function LessonScreen() {
                         {
                           borderColor: theme.colors.accent,
                           backgroundColor: checkedTasks.has(i) ? theme.colors.accent : 'transparent',
+                          alignItems: 'center',
+                          justifyContent: 'center',
                         },
                       ]}
-                    />
+                    >
+                      {checkedTasks.has(i) ? <Check color={theme.colors.accentText} size={14} strokeWidth={3} /> : null}
+                    </View>
                     <Text style={[styles.bodyText, { color: theme.colors.text, flex: 1 }]}>{entry}</Text>
                   </Pressable>
                 ))}

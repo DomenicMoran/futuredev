@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
@@ -10,12 +10,6 @@ import {
 
   ChevronDown,
 
-  ChevronLeft,
-
-  ChevronRight,
-
-  Moon,
-
   Pause,
 
   Play,
@@ -25,12 +19,6 @@ import {
   FastForward,
 
   BookOpen,
-
-  X,
-
-  Repeat1,
-
-  Repeat,
 
 } from 'lucide-react-native';
 
@@ -52,11 +40,7 @@ import {
 
   JUMP_FORWARD_SECONDS,
 
-  SLEEP_TIMER_PRESET_MINUTES,
-
 } from '../src/player/types.js';
-
-import { RATE_OPTIONS } from '../src/player/rate.js';
 
 import {
 
@@ -66,31 +50,19 @@ import {
 
   jumpForward,
 
-  removeFromQueue,
-
   seekToBlock,
 
   seekToSeconds,
 
-  setRate,
-
-  setSleepTimer,
-
-  skipToNext,
-
-  skipToPrevious,
-
-  applyRepeatMode,
-
 } from '../src/player/index.js';
-
-import { nextRepeatMode } from '../src/player/playbackEnd.js';
 
 import { formatPlaybackTime } from '../src/player/formatTime.js';
 
 import { buildChapterJumps, findActiveChapterJumpIndex } from '../src/player/chapterJumps.js';
 
 import { PlaybackScrubber } from '../src/player/PlaybackScrubber.js';
+
+import { PlayerAdvancedControls } from '../src/player/PlayerAdvancedControls.js';
 
 
 
@@ -138,10 +110,6 @@ export default function PlayerScreen() {
 
   const positionSeconds = usePlayerStore((s) => s.positionSeconds);
 
-  const rate = usePlayerStore((s) => s.rate);
-
-  const repeatMode = usePlayerStore((s) => s.repeatMode);
-
   const cueSheetByLessonId = usePlayerStore((s) => s.cueSheetByLessonId);
 
   const speechTextsByLessonId = usePlayerStore((s) => s.speechTextsByLessonId);
@@ -187,14 +155,6 @@ export default function PlayerScreen() {
     [chapterJumps],
 
   );
-
-
-
-  const [ratePickerOpen, setRatePickerOpen] = useState(false);
-
-  const [sleepPickerOpen, setSleepPickerOpen] = useState(false);
-
-  const [queueOpen, setQueueOpen] = useState(false);
 
 
 
@@ -490,268 +450,7 @@ export default function PlayerScreen() {
 
 
 
-        <View style={[styles.settingsRow, { gap: theme.spacing.sm, marginTop: theme.spacing.xl }]}>
-
-          <Pressable
-
-            onPress={() => void skipToPrevious()}
-
-            accessibilityRole="button"
-
-            accessibilityLabel={de.player.previous}
-
-            style={({ pressed }) => [
-
-              styles.quietPill,
-
-              { borderColor: theme.colors.border, minHeight: theme.minTapTarget, opacity: pressed ? 0.88 : 1 },
-
-            ]}
-
-          >
-
-            <ChevronLeft color={theme.colors.textWeak} size={18} />
-
-          </Pressable>
-
-          <Pressable
-
-            onPress={() => void skipToNext()}
-
-            accessibilityRole="button"
-
-            accessibilityLabel={de.player.next}
-
-            style={({ pressed }) => [
-
-              styles.quietPill,
-
-              { borderColor: theme.colors.border, minHeight: theme.minTapTarget, opacity: pressed ? 0.88 : 1 },
-
-            ]}
-
-          >
-
-            <ChevronRight color={theme.colors.textWeak} size={18} />
-
-          </Pressable>
-
-          <Pressable
-
-            onPress={() => setRatePickerOpen((v) => !v)}
-
-            accessibilityRole="button"
-
-            accessibilityLabel={`${de.player.rate}: ${rate.toFixed(1)}×`}
-
-            style={({ pressed }) => [
-
-              styles.quietPill,
-
-              { borderColor: theme.colors.border, minHeight: theme.minTapTarget, opacity: pressed ? 0.88 : 1 },
-
-            ]}
-
-          >
-
-            <Text style={{ color: theme.colors.textWeak, fontSize: theme.type.size.sm.size }}>
-
-              {rate.toFixed(1)}×
-
-            </Text>
-
-          </Pressable>
-
-          <Pressable
-
-            onPress={() => void applyRepeatMode(nextRepeatMode(repeatMode))}
-
-            accessibilityRole="button"
-
-            accessibilityLabel={
-              repeatMode === 'one'
-                ? de.player.repeatOne
-                : repeatMode === 'all'
-                  ? de.player.repeatAll
-                  : de.player.repeatOff
-            }
-
-            style={({ pressed }) => [
-
-              styles.quietPill,
-
-              {
-                borderColor: repeatMode === 'off' ? theme.colors.border : theme.colors.accent,
-                minHeight: theme.minTapTarget,
-                opacity: pressed ? 0.88 : 1,
-              },
-
-            ]}
-
-          >
-
-            {repeatMode === 'one' ? (
-              <Repeat1 color={theme.colors.accent} size={16} />
-            ) : (
-              <Repeat color={repeatMode === 'all' ? theme.colors.accent : theme.colors.textWeak} size={16} />
-            )}
-
-          </Pressable>
-
-          <Pressable
-
-            onPress={() => setSleepPickerOpen((v) => !v)}
-
-            accessibilityRole="button"
-
-            accessibilityLabel={de.player.sleepTimer}
-
-            style={({ pressed }) => [
-
-              styles.quietPill,
-
-              { borderColor: theme.colors.border, minHeight: theme.minTapTarget, opacity: pressed ? 0.88 : 1 },
-
-            ]}
-
-          >
-
-            <Moon color={theme.colors.textWeak} size={16} />
-
-          </Pressable>
-
-        </View>
-
-
-
-        {ratePickerOpen ? (
-
-          <View style={[styles.optionRow, { borderColor: theme.colors.border }]}>
-
-            {RATE_OPTIONS.map((option) => (
-
-              <Pressable
-
-                key={option}
-
-                onPress={() => {
-
-                  void setRate(option);
-
-                  setRatePickerOpen(false);
-
-                }}
-
-                accessibilityRole="button"
-
-                accessibilityLabel={`Tempo ${option.toFixed(1)}`}
-
-                style={[
-
-                  styles.option,
-
-                  { backgroundColor: option === rate ? theme.colors.accent : 'transparent', minHeight: theme.minTapTarget },
-
-                ]}
-
-              >
-
-                <Text style={{ color: option === rate ? theme.colors.accentText : theme.colors.text }}>
-
-                  {option.toFixed(1)}×
-
-                </Text>
-
-              </Pressable>
-
-            ))}
-
-          </View>
-
-        ) : null}
-
-
-
-        {sleepPickerOpen ? (
-
-          <View style={[styles.optionRow, { borderColor: theme.colors.border }]}>
-
-            <Pressable
-
-              onPress={() => {
-
-                setSleepTimer(null);
-
-                setSleepPickerOpen(false);
-
-              }}
-
-              accessibilityRole="button"
-
-              accessibilityLabel={de.player.sleepTimerOff}
-
-              style={[styles.option, { minHeight: theme.minTapTarget }]}
-
-            >
-
-              <Text style={{ color: theme.colors.text }}>{de.player.sleepTimerOff}</Text>
-
-            </Pressable>
-
-            {SLEEP_TIMER_PRESET_MINUTES.map((minutes) => (
-
-              <Pressable
-
-                key={minutes}
-
-                onPress={() => {
-
-                  setSleepTimer({ kind: 'minutes', minutes });
-
-                  setSleepPickerOpen(false);
-
-                }}
-
-                accessibilityRole="button"
-
-                accessibilityLabel={de.player.sleepTimerMinutes(minutes)}
-
-                style={[styles.option, { minHeight: theme.minTapTarget }]}
-
-              >
-
-                <Text style={{ color: theme.colors.text }}>{de.player.sleepTimerMinutes(minutes)}</Text>
-
-              </Pressable>
-
-            ))}
-
-            <Pressable
-
-              onPress={() => {
-
-                setSleepTimer({ kind: 'endOfLesson' });
-
-                setSleepPickerOpen(false);
-
-              }}
-
-              accessibilityRole="button"
-
-              accessibilityLabel={de.player.sleepTimerEndOfLesson}
-
-              style={[styles.option, { minHeight: theme.minTapTarget }]}
-
-            >
-
-              <Text style={{ color: theme.colors.text }}>{de.player.sleepTimerEndOfLesson}</Text>
-
-            </Pressable>
-
-          </View>
-
-        ) : null}
-
+        <PlayerAdvancedControls />
 
 
         <Pressable
@@ -895,68 +594,6 @@ export default function PlayerScreen() {
           </View>
 
         ) : null}
-
-
-
-        <View style={[styles.chapterList, { marginTop: theme.spacing.xl }]}>
-
-          <Pressable onPress={() => setQueueOpen((v) => !v)} accessibilityRole="button" accessibilityLabel={de.player.queue}>
-
-            <Text style={[styles.sectionLabel, { color: theme.colors.textWeak }]}>
-
-              {de.player.queue} ({queue.items.length})
-
-            </Text>
-
-          </Pressable>
-
-          {queueOpen
-
-            ? queue.items.map((qItem, index) => (
-
-                <View key={qItem.lessonId} style={[styles.chapterItem, { minHeight: theme.minTapTarget }]}>
-
-                  <Text
-
-                    style={{
-
-                      color: index === queue.currentIndex ? theme.colors.accent : theme.colors.text,
-
-                      flex: 1,
-
-                    }}
-
-                    numberOfLines={1}
-
-                  >
-
-                    {qItem.title}
-
-                  </Text>
-
-                  <Pressable
-
-                    onPress={() => void removeFromQueue(index)}
-
-                    accessibilityRole="button"
-
-                    accessibilityLabel={`${de.player.remove}: ${qItem.title}`}
-
-                    hitSlop={8}
-
-                  >
-
-                    <X color={theme.colors.textWeak} size={18} />
-
-                  </Pressable>
-
-                </View>
-
-              ))
-
-            : null}
-
-        </View>
 
       </ScrollView>
 

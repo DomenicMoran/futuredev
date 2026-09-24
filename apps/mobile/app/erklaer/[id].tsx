@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
 import { MessageCircleQuestion } from 'lucide-react-native';
@@ -30,21 +30,42 @@ export default function ErklaerBausteinScreen() {
 
   const [questionIndex, setQuestionIndex] = useState(0);
   const [phase, setPhase] = useState<StepPhase>('rating');
+  const [selectedRating, setSelectedRating] = useState<SelfRating | null>(null);
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState(false);
 
   const currentQuestion = questions[questionIndex];
   const progressLabel = de.erklaer.questionOf(questionIndex + 1, questions.length);
 
-  function chooseRating(_rating: SelfRating) {
-    if (phase !== 'rating') return;
+  function sampleIntroFor(rating: SelfRating): string {
+    if (rating === 'know') return de.erklaer.sampleIntroKnow;
+    if (rating === 'unsure') return de.erklaer.sampleIntroUnsure;
+    return de.erklaer.sampleIntroUnknown;
+  }
+
+  function advanceAfterRating(rating: SelfRating) {
+    setSelectedRating(rating);
     setPhase('sample');
+  }
+
+  function chooseRating(rating: SelfRating) {
+    if (phase !== 'rating') return;
+    setSelectedRating(rating);
+    if (rating === 'know') {
+      Alert.alert(de.erklaer.skipSampleTitle, de.erklaer.skipSampleBody, [
+        { text: de.common.cancel, style: 'cancel', onPress: () => advanceAfterRating(rating) },
+        { text: de.erklaer.skipSampleConfirm, onPress: () => goNextQuestion() },
+      ]);
+      return;
+    }
+    advanceAfterRating(rating);
   }
 
   function goNextQuestion() {
     if (questionIndex + 1 < questions.length) {
       setQuestionIndex(questionIndex + 1);
       setPhase('rating');
+      setSelectedRating(null);
       return;
     }
     setPhase('done');
@@ -146,11 +167,26 @@ export default function ErklaerBausteinScreen() {
 
           {phase === 'rating' ? (
             <View style={{ marginTop: theme.spacing.lg, gap: theme.spacing.sm }}>
-              <RatingButton label={de.erklaer.ratingKnow} onPress={() => chooseRating('know')} theme={theme} />
-              <RatingButton label={de.erklaer.ratingUnsure} onPress={() => chooseRating('unsure')} theme={theme} />
-              <RatingButton label={de.erklaer.ratingUnknown} onPress={() => chooseRating('unknown')} theme={theme} />
+              <RatingButton
+                label={de.erklaer.ratingKnow}
+                selected={selectedRating === 'know'}
+                onPress={() => chooseRating('know')}
+                theme={theme}
+              />
+              <RatingButton
+                label={de.erklaer.ratingUnsure}
+                selected={selectedRating === 'unsure'}
+                onPress={() => chooseRating('unsure')}
+                theme={theme}
+              />
+              <RatingButton
+                label={de.erklaer.ratingUnknown}
+                selected={selectedRating === 'unknown'}
+                onPress={() => chooseRating('unknown')}
+                theme={theme}
+              />
             </View>
-          ) : (
+          ) : selectedRating ? (
             <View
               style={[
                 styles.sampleBox,
@@ -164,6 +200,9 @@ export default function ErklaerBausteinScreen() {
               ]}
             >
               <Text style={[styles.sampleHeading, { color: theme.colors.text }]}>{de.erklaer.sampleTitle}</Text>
+              <Text style={[styles.sampleIntro, { color: theme.colors.textWeak, marginTop: theme.spacing.xs }]}>
+                {sampleIntroFor(selectedRating)}
+              </Text>
               <Text style={[styles.sampleBody, { color: theme.colors.textWeak, marginTop: theme.spacing.sm }]}>
                 {currentQuestion?.sampleAnswer}
               </Text>
@@ -186,7 +225,7 @@ export default function ErklaerBausteinScreen() {
                 </Text>
               </Pressable>
             </View>
-          )}
+          ) : null}
         </ScrollView>
       )}
     </SafeAreaView>
@@ -195,30 +234,33 @@ export default function ErklaerBausteinScreen() {
 
 function RatingButton({
   label,
+  selected,
   onPress,
   theme,
 }: {
   label: string;
+  selected: boolean;
   onPress: () => void;
   theme: ReturnType<typeof useTheme>;
 }) {
   return (
     <Pressable
       accessibilityRole="button"
+      accessibilityState={{ selected }}
       accessibilityLabel={label}
       onPress={onPress}
       style={[
         styles.ratingButton,
         {
-          backgroundColor: theme.colors.surface,
-          borderColor: theme.colors.border,
+          backgroundColor: selected ? theme.colors.accent : theme.colors.surface,
+          borderColor: selected ? theme.colors.accent : theme.colors.border,
           borderRadius: theme.radius.md,
           minHeight: theme.minTapTarget,
           paddingHorizontal: theme.spacing.base,
         },
       ]}
     >
-      <Text style={[styles.ratingLabel, { color: theme.colors.text }]}>{label}</Text>
+      <Text style={[styles.ratingLabel, { color: selected ? theme.colors.accentText : theme.colors.text }]}>{label}</Text>
     </Pressable>
   );
 }
@@ -234,6 +276,7 @@ const styles = StyleSheet.create({
   ratingLabel: { fontSize: 16, lineHeight: 24, fontWeight: '500' },
   sampleBox: { borderWidth: StyleSheet.hairlineWidth },
   sampleHeading: { fontSize: 16, lineHeight: 24, fontWeight: '600' },
+  sampleIntro: { fontSize: 14, lineHeight: 20, fontWeight: '500' },
   sampleBody: { fontSize: 15, lineHeight: 22 },
   primaryButton: { justifyContent: 'center', alignItems: 'center' },
   primaryButtonLabel: { fontSize: 16, lineHeight: 24, fontWeight: '600' },

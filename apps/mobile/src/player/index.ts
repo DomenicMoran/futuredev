@@ -26,6 +26,9 @@ import {
   type QueueItem,
   type SleepTimerMode,
 } from './types.js';
+import { rampVolume as rampVolumeLinear, SOFT_START_RAMP_MS } from './rampVolume.js';
+
+export { rampVolume, SOFT_START_RAMP_MS } from './rampVolume.js';
 
 async function TP() {
   const mod = await import('react-native-track-player');
@@ -46,17 +49,8 @@ export async function resolveAudioBaseUrl(fs: Awaited<ReturnType<typeof getConte
 
 let setupPromise: Promise<void> | null = null;
 
-const SOFT_START_RAMP_MS = 180;
-const SOFT_START_STEPS = 6;
-
-async function rampVolume(trackPlayer: Awaited<ReturnType<typeof TP>>, from: number, to: number, durationMs: number): Promise<void> {
-  const stepMs = Math.max(1, Math.floor(durationMs / SOFT_START_STEPS));
-  for (let step = 1; step <= SOFT_START_STEPS; step++) {
-    const t = step / SOFT_START_STEPS;
-    await trackPlayer.setVolume(from + (to - from) * t);
-    await new Promise((resolve) => setTimeout(resolve, stepMs));
-  }
-  await trackPlayer.setVolume(to);
+async function rampTrackPlayerVolume(trackPlayer: Awaited<ReturnType<typeof TP>>, from: number, to: number, durationMs: number): Promise<void> {
+  await rampVolumeLinear((v) => trackPlayer.setVolume(v), from, to, durationMs);
 }
 
 /** Schlaf-Timer-Duck aufheben, Lautstärke normalisieren, Tempo erneut setzen. */
@@ -70,7 +64,7 @@ async function preparePlaybackStart(trackPlayer: Awaited<ReturnType<typeof TP>>)
 async function softStartPlay(trackPlayer: Awaited<ReturnType<typeof TP>>): Promise<void> {
   await trackPlayer.setVolume(0);
   await trackPlayer.play();
-  await rampVolume(trackPlayer, 0, 1, SOFT_START_RAMP_MS);
+  await rampTrackPlayerVolume(trackPlayer, 0, 1, SOFT_START_RAMP_MS);
 }
 
 /**

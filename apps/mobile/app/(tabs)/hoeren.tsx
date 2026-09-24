@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ActionSheetIOS, ActivityIndicator, Alert, Platform, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect } from 'expo-router';
-import { Headphones, Download, ListMusic, Play, Trash2 } from 'lucide-react-native';
+import { Headphones, ListMusic, MoreVertical, Play } from 'lucide-react-native';
+import { TabScreenTitle } from '../../src/components/TabScreenTitle.js';
 import { useTheme } from '../../src/theme/useTheme.js';
 import { EmptyState } from '../../src/components/EmptyState.js';
 import { de } from '../../src/i18n/de.js';
@@ -114,7 +115,9 @@ export default function HoerenScreen() {
   if (modules.length === 0) {
     return (
       <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.bg }]}>
-        <ScrollView contentContainerStyle={{ padding: theme.spacing.base, paddingBottom: bottomInset, gap: theme.spacing.lg }}>
+        <ScrollView contentContainerStyle={{ paddingBottom: bottomInset, gap: theme.spacing.lg }}>
+          <TabScreenTitle title={de.hoeren.title} />
+          <View style={{ paddingHorizontal: theme.spacing.base, gap: theme.spacing.lg }}>
           {refreshing ? (
             <View style={styles.refreshRow}>
               <ActivityIndicator size="small" color={theme.colors.accent} />
@@ -135,6 +138,7 @@ export default function HoerenScreen() {
               <Text style={{ color: theme.colors.error }}>{de.hoeren.playlistEmptyPlayError}</Text>
             </View>
           ) : null}
+          </View>
         </ScrollView>
       </SafeAreaView>
     );
@@ -142,7 +146,9 @@ export default function HoerenScreen() {
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.bg }]}>
-      <ScrollView contentContainerStyle={{ padding: theme.spacing.base, paddingBottom: bottomInset, gap: theme.spacing.lg }}>
+      <ScrollView contentContainerStyle={{ paddingBottom: bottomInset, gap: theme.spacing.lg }}>
+        <TabScreenTitle title={de.hoeren.title} />
+        <View style={{ paddingHorizontal: theme.spacing.base, gap: theme.spacing.lg }}>
         {refreshing ? (
           <View style={styles.refreshRow}>
             <ActivityIndicator size="small" color={theme.colors.accent} />
@@ -288,67 +294,91 @@ export default function HoerenScreen() {
                 >
                   <Play color={theme.colors.accent} size={20} />
                 </Pressable>
-                <Text numberOfLines={1} style={[styles.lessonTitle, { color: theme.colors.text }]}>
-                  {lesson.title}
-                </Text>
-                <Text style={[styles.lessonDuration, { color: theme.colors.textWeak }]}>{lesson.durationMinutes} Min</Text>
-                <View style={styles.lessonIconActions}>
-                  <Pressable
-                    onPress={() => setRequestAddLessonId(lesson.id)}
-                    accessibilityRole="button"
-                    accessibilityLabel={`${de.hoeren.playlistAddLesson}: ${lesson.title}`}
-                    hitSlop={8}
-                    style={{
-                      minWidth: theme.minTapTarget,
-                      minHeight: theme.minTapTarget,
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    <ListMusic color={theme.colors.accent} size={18} />
-                  </Pressable>
-                  <Pressable
-                    onPress={() => {
-                      void runPlayback(async () => {
-                        if (downloaded[lesson.id]) {
-                          await deleteDownload(lesson.id);
-                          setDownloaded((d) => ({ ...d, [lesson.id]: false }));
-                        } else {
-                          await downloadLesson(lesson.id);
-                          setDownloaded((d) => ({ ...d, [lesson.id]: true }));
-                        }
-                      });
-                    }}
-                    accessibilityRole="button"
-                    accessibilityLabel={
-                      downloaded[lesson.id]
-                        ? `${de.player.deleteDownload}: ${lesson.title}`
-                        : `${de.player.download}: ${lesson.title}`
-                    }
-                    hitSlop={8}
-                    style={{
-                      minWidth: theme.minTapTarget,
-                      minHeight: theme.minTapTarget,
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
-                  >
-                  {downloaded[lesson.id] ? (
-                    <Trash2 color={theme.colors.textWeak} size={18} />
-                  ) : (
-                    <Download color={theme.colors.accent} size={18} />
-                  )}
-                  </Pressable>
-                </View>
+                <Pressable
+                  onPress={() => void runPlayback(() => playLesson(lesson.id))}
+                  accessibilityRole="button"
+                  accessibilityLabel={`${de.hoeren.playLesson}: ${lesson.title}`}
+                  style={({ pressed }) => [styles.lessonTextBlock, { opacity: pressed ? 0.92 : 1, flex: 1, minWidth: 0 }]}
+                >
+                  <Text numberOfLines={2} ellipsizeMode="tail" style={[styles.lessonTitle, { color: theme.colors.text }]}>
+                    {lesson.title}
+                  </Text>
+                  <Text numberOfLines={1} style={[styles.lessonDuration, { color: theme.colors.textWeak }]}>
+                    {de.hoeren.durationMinutes(lesson.durationMinutes)}
+                  </Text>
+                </Pressable>
+                <Pressable
+                  onPress={() =>
+                    openLessonMoreMenu({
+                      lessonTitle: lesson.title,
+                      isDownloaded: Boolean(downloaded[lesson.id]),
+                      onAddPlaylist: () => setRequestAddLessonId(lesson.id),
+                      onToggleDownload: () => {
+                        void runPlayback(async () => {
+                          if (downloaded[lesson.id]) {
+                            await deleteDownload(lesson.id);
+                            setDownloaded((d) => ({ ...d, [lesson.id]: false }));
+                          } else {
+                            await downloadLesson(lesson.id);
+                            setDownloaded((d) => ({ ...d, [lesson.id]: true }));
+                          }
+                        });
+                      },
+                    })
+                  }
+                  accessibilityRole="button"
+                  accessibilityLabel={`${de.hoeren.lessonMoreMenu}: ${lesson.title}`}
+                  hitSlop={8}
+                  style={{
+                    minWidth: theme.minTapTarget,
+                    minHeight: theme.minTapTarget,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <MoreVertical color={theme.colors.textWeak} size={20} />
+                </Pressable>
               </View>
             ))}
           </View>
         ))}
 
         <StorageSection downloaded={downloaded} onCleared={() => setDownloaded({})} />
+          </View>
       </ScrollView>
     </SafeAreaView>
   );
+}
+
+function openLessonMoreMenu(options: {
+  lessonTitle: string;
+  isDownloaded: boolean;
+  onAddPlaylist: () => void;
+  onToggleDownload: () => void;
+}) {
+  const downloadLabel = options.isDownloaded ? de.hoeren.offlineRemove : de.hoeren.offlineLoad;
+  const playlistLabel = de.hoeren.playlistAddLesson;
+
+  if (Platform.OS === 'ios') {
+    ActionSheetIOS.showActionSheetWithOptions(
+      {
+        options: [de.common.cancel, playlistLabel, downloadLabel],
+        cancelButtonIndex: 0,
+        title: options.lessonTitle,
+      },
+      (index) => {
+        if (index === 1) options.onAddPlaylist();
+        if (index === 2) options.onToggleDownload();
+      },
+    );
+    return;
+  }
+
+  Alert.alert(options.lessonTitle, undefined, [
+    { text: de.common.cancel, style: 'cancel' },
+    { text: playlistLabel, onPress: options.onAddPlaylist },
+    { text: downloadLabel, onPress: options.onToggleDownload },
+  ]);
 }
 
 function StorageSection({
@@ -430,12 +460,12 @@ const styles = StyleSheet.create({
     borderWidth: StyleSheet.hairlineWidth,
     borderLeftWidth: 3,
   },
-  lessonTitle: { flex: 1, fontSize: 15 },
-  lessonDuration: { fontSize: 13 },
+  lessonTextBlock: { justifyContent: 'center', gap: 2, paddingVertical: 8 },
+  lessonTitle: { fontSize: 15, lineHeight: 20 },
+  lessonDuration: { fontSize: 13, lineHeight: 18 },
   storage: { borderWidth: StyleSheet.hairlineWidth },
   banner: { padding: 12, borderRadius: 8, borderWidth: StyleSheet.hairlineWidth },
   offlineHint: { borderWidth: StyleSheet.hairlineWidth },
   refreshRow: { flexDirection: 'row', alignItems: 'center', gap: 8, paddingVertical: 4 },
   lessonPlayButton: { alignItems: 'center', justifyContent: 'center' },
-  lessonIconActions: { flexDirection: 'row', alignItems: 'center', gap: 4 },
 });

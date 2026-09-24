@@ -31,12 +31,8 @@ export default function SettingsScreen() {
   const setQuizLength = useSettingsStore((s) => s.setQuizLength);
   const reviewIntensity = useSettingsStore((s) => s.reviewIntensity);
   const setReviewIntensity = useSettingsStore((s) => s.setReviewIntensity);
-  const notificationsEnabled = useSettingsStore((s) => s.notificationsEnabled);
-  const setNotificationsEnabled = useSettingsStore((s) => s.setNotificationsEnabled);
   const colorScheme = useSettingsStore((s) => s.colorScheme);
   const setColorScheme = useSettingsStore((s) => s.setColorScheme);
-  const telemetryEnabled = useSettingsStore((s) => s.telemetryEnabled);
-  const setTelemetryEnabled = useSettingsStore((s) => s.setTelemetryEnabled);
   const [status, setStatus] = useState<string | null>(null);
 
   async function handleExport() {
@@ -154,8 +150,14 @@ export default function SettingsScreen() {
         <ChoicePill theme={theme} label={de.settings.colorSchemeDark} active={colorScheme === 'dark'} onPress={() => setColorScheme('dark')} />
       </OptionGroup>
 
-      <SwitchRow theme={theme} title={de.settings.notificationsTitle} body={de.settings.notificationsBody} value={notificationsEnabled} onValueChange={setNotificationsEnabled} />
-      <SwitchRow theme={theme} title={de.settings.telemetryTitle} body={de.settings.telemetryBody} value={telemetryEnabled} onValueChange={setTelemetryEnabled} />
+      <SwitchRow
+        theme={theme}
+        title={de.settings.notificationsTitle}
+        body={de.settings.notificationsBody}
+        value={false}
+        disabled
+      />
+      <SwitchRow theme={theme} title={de.settings.telemetryTitle} body={de.settings.telemetryBody} value={false} disabled />
 
       <View style={{ marginTop: theme.spacing.lg }}>
         <Text style={[styles.groupTitle, { color: theme.colors.text }]}>{de.settings.exportTitle}</Text>
@@ -215,13 +217,13 @@ function SwitchRow({
   title,
   body,
   value,
-  onValueChange,
+  disabled,
 }: {
   theme: ReturnType<typeof useTheme>;
   title: string;
   body: string;
   value: boolean;
-  onValueChange: (value: boolean) => void;
+  disabled?: boolean;
 }) {
   return (
     <View style={[styles.switchRow, { marginTop: theme.spacing.lg }]}>
@@ -229,7 +231,7 @@ function SwitchRow({
         <Text style={[styles.groupTitle, { color: theme.colors.text }]}>{title}</Text>
         <Text style={[styles.status, { color: theme.colors.textWeak }]}>{body}</Text>
       </View>
-      <Switch value={value} onValueChange={onValueChange} accessibilityLabel={title} />
+      <Switch value={value} disabled={disabled} accessibilityLabel={title} accessibilityState={{ disabled: Boolean(disabled) }} />
     </View>
   );
 }

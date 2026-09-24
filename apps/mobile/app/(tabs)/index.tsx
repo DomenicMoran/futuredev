@@ -21,6 +21,7 @@ import { useBottomChromeInset } from '../../src/navigation/useBottomChromeInset.
 import { useContent } from '../../src/content/ContentProvider.js';
 
 import { openFirstPublishedLessonOrLernen } from '../../src/navigation/openFirstLesson.js';
+import { TabScreenTitle } from '../../src/components/TabScreenTitle.js';
 
 import {
 
@@ -87,6 +88,8 @@ export default function StartScreen() {
 
       >
 
+        <TabScreenTitle title={de.start.title} />
+
         <EmptyState
 
           Icon={BookOpen}
@@ -127,13 +130,13 @@ export default function StartScreen() {
 
         paddingHorizontal: theme.spacing.base,
 
-        paddingTop: theme.spacing.lg,
-
         paddingBottom: bottomInset,
 
       }}
 
     >
+
+      <TabScreenTitle title={de.start.title} />
 
       <Text
 

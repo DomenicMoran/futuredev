@@ -11,6 +11,7 @@ import { dailyRationSize, selectDailyRation } from '../../src/review/dailyRation
 import { pickReviewLesson } from '../../src/review/reviewRound.js';
 import { knownLessonIds } from '../../src/quiz/content.js';
 import { useBottomChromeInset } from '../../src/navigation/useBottomChromeInset.js';
+import { TabScreenTitle } from '../../src/components/TabScreenTitle.js';
 import modulesFile from '../../../../content/modules.json';
 
 export default function UebenScreen() {
@@ -78,9 +79,10 @@ export default function UebenScreen() {
   return (
     <ScrollView
       style={[styles.container, { backgroundColor: theme.colors.bg }]}
-      contentContainerStyle={{ padding: inset, paddingBottom: bottomInset }}
+      contentContainerStyle={{ paddingHorizontal: inset, paddingBottom: bottomInset }}
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh} />}
     >
+      <TabScreenTitle title={de.ueben.title} />
       <SectionHeader title={de.ueben.sectionHeute} theme={theme} />
       {rationCount === null ? null : rationCount === 0 ? (
         <CalmCard

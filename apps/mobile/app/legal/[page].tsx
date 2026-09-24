@@ -17,9 +17,11 @@ const PAGES: Record<LegalPage, { title: string; body: readonly string[] }> = {
   about: legal.about,
 };
 
+const showLegalDraftBanner = __DEV__ || process.env.EXPO_PUBLIC_LEGAL_DRAFT === '1';
+
 // Route app/legal/[page].tsx (AP-3.5, Punkt 3): Impressum, Datenschutz,
-// Lizenzen, Über. Echte, kurze Entwürfe aus src/legal/de.ts, mit sichtbarem
-// Hinweis "Entwurf, rechtliche Prüfung vor dem Release" auf jeder Seite.
+// Lizenzen, Über. Echte, kurze Entwürfe aus src/legal/de.ts; Entwurf-Hinweis
+// nur in Dev oder mit EXPO_PUBLIC_LEGAL_DRAFT=1.
 export default function LegalPageScreen() {
   const { page } = useLocalSearchParams<{ page: string }>();
   const theme = useTheme();
@@ -30,7 +32,7 @@ export default function LegalPageScreen() {
     return (
       <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.bg }]}>
         <LegalHeader title={de.legal.title} theme={theme} />
-        <EmptyState Icon={Scale} title={de.legal.title} body={de.legal.draftNotice} />
+        <EmptyState Icon={Scale} title={de.legal.title} body={de.legal.notFoundBody} />
       </SafeAreaView>
     );
   }
@@ -42,9 +44,11 @@ export default function LegalPageScreen() {
       <LegalHeader title={content.title} theme={theme} />
       <ScrollView contentContainerStyle={{ padding: theme.spacing.lg }}>
       <Text style={[styles.title, { color: theme.colors.text }]}>{content.title}</Text>
-      <Text style={[styles.draftNotice, { color: theme.colors.warning, marginTop: theme.spacing.xs }]}>
-        {de.legal.draftNotice}
-      </Text>
+      {showLegalDraftBanner ? (
+        <Text style={[styles.draftNotice, { color: theme.colors.warning, marginTop: theme.spacing.xs }]}>
+          {de.legal.draftNotice}
+        </Text>
+      ) : null}
       <View style={{ marginTop: theme.spacing.lg, gap: theme.spacing.base }}>
         {content.body.map((paragraph) => (
           <Text key={paragraph} style={[styles.body, { color: theme.colors.text }]}>

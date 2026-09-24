@@ -9,6 +9,7 @@ import { de } from '../../src/i18n/de.js';
 import { loadProfileData, type ProfileData } from '../../src/settings/profile.js';
 import { getDatabase } from '../../src/data/db.js';
 import { useBottomChromeInset } from '../../src/navigation/useBottomChromeInset.js';
+import { TabScreenTitle } from '../../src/components/TabScreenTitle.js';
 import { useSettingsStore } from '../../src/state/settings.js';
 import type { ReviewIntensity } from '../../src/settings/types.js';
 
@@ -73,8 +74,10 @@ export default function IchScreen() {
   return (
     <ScrollView
       style={[styles.container, { backgroundColor: theme.colors.bg }]}
-      contentContainerStyle={{ padding: theme.spacing.lg, paddingBottom: bottomInset }}
+      contentContainerStyle={{ paddingBottom: bottomInset }}
     >
+      <TabScreenTitle title={de.ich.title} />
+      <View style={{ paddingHorizontal: theme.spacing.lg }}>
       <View
         style={[
           styles.profileCard,
@@ -241,15 +244,6 @@ export default function IchScreen() {
 
       <Pressable
         accessibilityRole="button"
-        accessibilityLabel={de.ich.settingsLink}
-        onPress={() => router.push('/settings')}
-        style={[styles.linkRow, { borderColor: theme.colors.border, minHeight: theme.minTapTarget }]}
-      >
-        <Settings color={theme.colors.text} size={20} strokeWidth={1.75} />
-        <Text style={[styles.body, { color: theme.colors.text, marginLeft: theme.spacing.sm }]}>{de.ich.settingsLink}</Text>
-      </Pressable>
-      <Pressable
-        accessibilityRole="button"
         accessibilityLabel={de.ich.legalLink}
         onPress={() => router.push('/legal/imprint')}
         style={[styles.linkRow, { borderColor: theme.colors.border, minHeight: theme.minTapTarget }]}
@@ -284,6 +278,7 @@ export default function IchScreen() {
       <Text style={[styles.disclaimer, { color: theme.colors.textWeak, marginTop: theme.spacing.lg, textAlign: 'center' }]}>
         {de.ich.readinessDisclaimer}
       </Text>
+      </View>
     </ScrollView>
   );
 }
