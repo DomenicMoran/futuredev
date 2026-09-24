@@ -6,12 +6,12 @@ import { currentItem } from '../player/queue.js';
 import { miniPlayerHeight, tabBarHeight } from './tabBarMetrics.js';
 import { isTabBarVisible } from './tabBarVisibility.js';
 
-export type BottomChromeLayout = {
+export interface BottomChromeLayout {
   /** Scroll-Padding: Tab/Mini-Player + optional Safe-Area unter Mini (Stack-Routen) + Abstand. */
   contentInset: number;
   /** Unterkante der sticky Action-Leiste (ohne doppeltes Safe-Area unter Mini-Player). */
   stickyBottomOffset: number;
-};
+}
 
 export function useBottomChromeLayout(): BottomChromeLayout {
   const theme = useTheme();

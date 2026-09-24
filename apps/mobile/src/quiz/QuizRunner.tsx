@@ -269,7 +269,7 @@ export function QuizRunner({ pool, desiredCount, scope, heading, onExit, onNextL
           {question.options.map((option, optionIndex) => {
             const isChosen = chosen === optionIndex;
             const showState = phase === 'feedback';
-            let bg: string = theme.colors.surface;
+            const bg: string = theme.colors.surface;
             let border: string = theme.colors.border;
             let borderWidth = StyleSheet.hairlineWidth;
             if (showState && isChosen && option.isCorrect) {
