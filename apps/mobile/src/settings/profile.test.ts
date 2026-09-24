@@ -14,8 +14,12 @@ function emptyContentFs(): ContentFs {
   const documentDirectory = 'memory://';
   return {
     documentDirectory,
-    async ensureDirectory() {},
-    async writeFile() {},
+    async ensureDirectory() {
+      return undefined;
+    },
+    async writeFile() {
+      return undefined;
+    },
     async readFile() {
       throw new Error('nicht gefunden');
     },

@@ -278,7 +278,11 @@ describe('checkNoPrerequisiteCycles', () => {
       }),
     ];
     const started = Date.now();
-    expect(checkNoPrerequisiteCycles(lessons[5], lessons)).toHaveLength(0);
+    const diamondMerge = lessons.at(5);
+    if (diamondMerge === undefined) {
+      throw new Error('Test-Setup: sechste Lektion fehlt');
+    }
+    expect(checkNoPrerequisiteCycles(diamondMerge, lessons)).toHaveLength(0);
     expect(Date.now() - started).toBeLessThan(100);
   });
 });

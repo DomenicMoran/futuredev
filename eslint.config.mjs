@@ -16,6 +16,7 @@ export default tseslint.config(
       '**/.turbo/**',
       '**/coverage/**',
       'tools/audio/out/**',
+      'tools/audio/.venv-chatterbox/**',
       'apps/web/out/**',
       'apps/web/next-env.d.ts',
     ],
