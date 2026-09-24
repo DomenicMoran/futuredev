@@ -78,6 +78,7 @@ export const de = {
     sleepTimerMinutes: (minutes: number) => `${minutes} Minuten`,
     queue: 'Warteschlange',
     chapters: 'Kapitel',
+    chapterLoading: '…',
     readInText: 'Im Text lesen',
     download: 'Herunterladen',
     deleteDownload: 'Download löschen',
@@ -194,6 +195,7 @@ export const de = {
     glossaryClose: 'Schließen',
     speakerA: 'Sprecher A',
     speakerB: 'Sprecher B',
+    chapterSectionFallback: 'Abschnitt',
   },
   quiz: {
     rulesTitle: 'Bevor es losgeht',

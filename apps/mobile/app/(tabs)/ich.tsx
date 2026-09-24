@@ -8,6 +8,7 @@ import { EmptyState } from '../../src/components/EmptyState.js';
 import { de } from '../../src/i18n/de.js';
 import { loadProfileData, type ProfileData } from '../../src/settings/profile.js';
 import { getDatabase } from '../../src/data/db.js';
+import { useBottomChromeInset } from '../../src/navigation/useBottomChromeInset.js';
 
 // Reiter Ich (AP-3.5, Punkt 3): Fortschritt je Modul, Jobreife mit
 // "Was noch fehlt", Portfolio-Bausteine, Karriere-Checkliste, Notizen,
@@ -15,6 +16,7 @@ import { getDatabase } from '../../src/data/db.js';
 export default function IchScreen() {
   const theme = useTheme();
   const [data, setData] = useState<ProfileData | null>(null);
+  const bottomInset = useBottomChromeInset();
 
   const refresh = useCallback(() => {
     loadProfileData()
@@ -47,7 +49,10 @@ export default function IchScreen() {
   const hasAnyProgress = data ? data.moduleProgress.some((m) => m.completedLessons > 0) : false;
 
   return (
-    <ScrollView style={[styles.container, { backgroundColor: theme.colors.bg }]} contentContainerStyle={{ padding: theme.spacing.lg }}>
+    <ScrollView
+      style={[styles.container, { backgroundColor: theme.colors.bg }]}
+      contentContainerStyle={{ padding: theme.spacing.lg, paddingBottom: bottomInset }}
+    >
       {!data ? null : !hasAnyProgress ? (
         <EmptyState Icon={CircleUser} title={de.ich.emptyTitle} body={de.ich.emptyBody} />
       ) : (

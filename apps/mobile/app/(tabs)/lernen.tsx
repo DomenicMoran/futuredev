@@ -8,6 +8,7 @@ import { ModuleCover } from '../../src/components/ModuleCover';
 import { de } from '../../src/i18n/de';
 import { useContent } from '../../src/content/ContentProvider';
 import type { ModuleListEntry } from '../../src/content/listLessons';
+import { useBottomChromeInset } from '../../src/navigation/useBottomChromeInset';
 
 // Reiter Lernen: Module M01 bis M10 aus content/modules.json, mit
 // Fortschrittsbalken aus SQLite. Ersetzt den vorherigen Dauer-Leerzustand
@@ -16,6 +17,7 @@ import type { ModuleListEntry } from '../../src/content/listLessons';
 export default function LernenScreen() {
   const theme = useTheme();
   const { state, moduleList, refresh } = useContent();
+  const bottomInset = useBottomChromeInset();
 
   const isLoading = moduleList.length === 0 && state.status === 'ok' && !state.manifest;
 
@@ -50,7 +52,7 @@ export default function LernenScreen() {
           onAction={() => router.push('/lesson/M01-01-01')}
         />
       ) : (
-        <ScrollView contentContainerStyle={{ padding: theme.spacing.base }}>
+        <ScrollView contentContainerStyle={{ padding: theme.spacing.base, paddingBottom: bottomInset }}>
           {moduleList.map((module) => (
             <ModuleRow key={module.id} module={module} />
           ))}

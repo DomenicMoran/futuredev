@@ -10,6 +10,7 @@ import { loadReviewCards } from '../../src/review/cards.js';
 import { dailyRationSize, selectDailyRation } from '../../src/review/dailyRation.js';
 import { pickReviewLesson } from '../../src/review/reviewRound.js';
 import { knownLessonIds } from '../../src/quiz/content.js';
+import { useBottomChromeInset } from '../../src/navigation/useBottomChromeInset.js';
 
 // Reiter Üben (AP-3.5, Punkt 2): Tagesration aus @futuredev/core (leitner.ts),
 // Modul-/Gesamtprüfung, Wiederholungsclips (öffnet vorerst den Hören-Reiter,
@@ -22,6 +23,7 @@ export default function UebenScreen() {
   const [dueCount, setDueCount] = useState<number | null>(null);
   const [reviewLessonId, setReviewLessonId] = useState<string | null>(null);
   const [availableModuleIds, setAvailableModuleIds] = useState<string[]>([]);
+  const bottomInset = useBottomChromeInset();
 
   const refresh = useCallback(() => {
     let cancelled = false;
@@ -65,7 +67,7 @@ export default function UebenScreen() {
   return (
     <ScrollView
       style={[styles.container, { backgroundColor: theme.colors.bg }]}
-      contentContainerStyle={{ padding: theme.spacing.lg }}
+      contentContainerStyle={{ padding: theme.spacing.lg, paddingBottom: bottomInset }}
       refreshControl={<RefreshControl refreshing={false} onRefresh={refresh} />}
     >
       {dueCount === null ? null : dueCount === 0 ? (

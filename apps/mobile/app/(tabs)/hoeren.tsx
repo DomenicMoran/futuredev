@@ -12,6 +12,7 @@ import { buildModuleList, type ModuleListEntry } from '../../src/content/listLes
 import { listProgress } from '../../src/data/index.js';
 import { downloadLesson, isDownloaded, playLesson, deleteDownload, enqueueModule } from '../../src/player/index.js';
 import { formatBytes } from '../../src/player/downloads.js';
+import { useBottomChromeInset } from '../../src/navigation/useBottomChromeInset.js';
 
 interface ContinueCard {
   lessonId: string;
@@ -20,6 +21,7 @@ interface ContinueCard {
 
 export default function HoerenScreen() {
   const theme = useTheme();
+  const bottomInset = useBottomChromeInset();
   const [loading, setLoading] = useState(true);
   const [modules, setModules] = useState<ModuleListEntry[]>([]);
   const [continueCard, setContinueCard] = useState<ContinueCard | null>(null);
@@ -109,7 +111,7 @@ export default function HoerenScreen() {
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.bg }]}>
-      <ScrollView contentContainerStyle={{ padding: theme.spacing.base, gap: theme.spacing.lg }}>
+      <ScrollView contentContainerStyle={{ padding: theme.spacing.base, paddingBottom: bottomInset, gap: theme.spacing.lg }}>
         {playbackError ? (
           <View style={[styles.banner, { backgroundColor: theme.colors.surface, borderColor: theme.colors.error }]}>
             <Text style={{ color: theme.colors.error }}>{de.player.loadError}</Text>
@@ -134,9 +136,7 @@ export default function HoerenScreen() {
         {modules.map((module) => (
           <View key={module.id} style={styles.moduleBlock}>
             <View style={styles.moduleHeader}>
-              <Text style={[styles.moduleTitle, { color: theme.colors.text }]}>
-                {module.id} · {module.title}
-              </Text>
+              <Text style={[styles.moduleTitle, { color: theme.colors.text }]}>{module.title}</Text>
               <Pressable
                 onPress={() => {
                   void runPlayback(async () => {

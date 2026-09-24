@@ -3,7 +3,7 @@
 // src/data/db.ts, weil Vitest das native Modul nicht laden kann). store.ts
 // selbst ist reines TypeScript und ohne Attrappe testbar.
 import { create } from 'zustand';
-import type { CueSheet } from '@futuredev/content-schema';
+import type { BlockRole, CueSheet } from '@futuredev/content-schema';
 import { EMPTY_QUEUE } from './queue.js';
 import type { DownloadState, PlaybackQueueState, SleepTimerMode } from './types.js';
 import type { SleepTimerTarget } from './sleepTimer.js';
@@ -11,6 +11,10 @@ import type { SleepTimerTarget } from './sleepTimer.js';
 export interface PlayerState {
   queue: PlaybackQueueState;
   cueSheetByLessonId: Record<string, CueSheet>;
+  /** Sprechblock-Texte je Lektion (Index = block.index), für Kapitellisten-Labels. */
+  speechTextsByLessonId: Record<string, readonly string[]>;
+  /** Sprechblock-Rollen je Lektion (Index = block.index), für Abschnitts-Sprungliste. */
+  speechBlockRolesByLessonId: Record<string, readonly BlockRole[]>;
   positionSeconds: number;
   isPlaying: boolean;
   isBuffering: boolean;
@@ -20,6 +24,8 @@ export interface PlayerState {
 
   setQueueState: (queue: PlaybackQueueState) => void;
   setCueSheet: (lessonId: string, cueSheet: CueSheet) => void;
+  setSpeechTexts: (lessonId: string, texts: readonly string[]) => void;
+  setSpeechBlockRoles: (lessonId: string, roles: readonly BlockRole[]) => void;
   setPosition: (seconds: number) => void;
   setPlaying: (playing: boolean) => void;
   setBuffering: (buffering: boolean) => void;
@@ -32,6 +38,8 @@ export interface PlayerState {
 const initialState = {
   queue: EMPTY_QUEUE,
   cueSheetByLessonId: {},
+  speechTextsByLessonId: {},
+  speechBlockRolesByLessonId: {},
   positionSeconds: 0,
   isPlaying: false,
   isBuffering: false,
@@ -45,6 +53,10 @@ export const usePlayerStore = create<PlayerState>((set) => ({
   setQueueState: (queue) => set({ queue }),
   setCueSheet: (lessonId, cueSheet) =>
     set((s) => ({ cueSheetByLessonId: { ...s.cueSheetByLessonId, [lessonId]: cueSheet } })),
+  setSpeechTexts: (lessonId, texts) =>
+    set((s) => ({ speechTextsByLessonId: { ...s.speechTextsByLessonId, [lessonId]: texts } })),
+  setSpeechBlockRoles: (lessonId, roles) =>
+    set((s) => ({ speechBlockRolesByLessonId: { ...s.speechBlockRolesByLessonId, [lessonId]: roles } })),
   setPosition: (positionSeconds) => set({ positionSeconds }),
   setPlaying: (isPlaying) => set({ isPlaying }),
   setBuffering: (isBuffering) => set({ isBuffering }),

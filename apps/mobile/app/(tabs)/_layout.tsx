@@ -2,6 +2,7 @@ import { Tabs } from 'expo-router';
 import { Home, BookOpen, Headphones, Dumbbell, CircleUser } from 'lucide-react-native';
 import { useTheme } from '../../src/theme/useTheme';
 import { de } from '../../src/i18n/de';
+import { tabBarHeight } from '../../src/navigation/tabBarMetrics';
 
 // Fünf Reiter, Lucide-Symbole, Labels aus src/i18n/de.ts, aktive Farbe Akzent,
 // Mindesthöhe nach design-system.md (Komponente "Reiterleiste").
@@ -18,7 +19,7 @@ export default function TabsLayout() {
         tabBarStyle: {
           backgroundColor: theme.colors.surface,
           borderTopColor: theme.colors.border,
-          height: 56 + theme.spacing.xs,
+          height: tabBarHeight(theme),
           paddingBottom: theme.spacing.xs,
           paddingTop: theme.spacing.xs,
         },

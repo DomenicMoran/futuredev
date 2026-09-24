@@ -107,6 +107,26 @@ async function lessonToQueueItem(lesson: Lesson): Promise<QueueItem> {
   return { lessonId: lesson.id, title: lesson.title, durationSeconds: lesson.audio.durationSeconds };
 }
 
+function cacheLessonSpeechTexts(lesson: Lesson): void {
+  const store = usePlayerStore.getState();
+  store.setSpeechTexts(
+    lesson.id,
+    lesson.speechBlocks.map((block) => block.text),
+  );
+  store.setSpeechBlockRoles(
+    lesson.id,
+    lesson.speechBlocks.map((block) => block.role),
+  );
+}
+
+/** Lädt Sprechtexte und Rollen für Kapitellisten, falls noch nicht im Store. */
+export async function ensureSpeechTextsForLesson(lessonId: string): Promise<void> {
+  const store = usePlayerStore.getState();
+  if (store.speechTextsByLessonId[lessonId] && store.speechBlockRolesByLessonId[lessonId]) return;
+  const lesson = await getLessonForPlayback(lessonId);
+  cacheLessonSpeechTexts(lesson);
+}
+
 async function loadCueSheet(lessonId: string): Promise<CueSheet> {
   const cached = usePlayerStore.getState().cueSheetByLessonId[lessonId];
   if (cached) return cached;
@@ -151,6 +171,7 @@ async function audioSourceForLesson(lessonId: string): Promise<string> {
  */
 export async function playLesson(lessonId: string, blockIndex?: number): Promise<void> {
   const lesson = await getLessonForPlayback(lessonId);
+  cacheLessonSpeechTexts(lesson);
   const cueSheet = await loadCueSheet(lessonId);
   const item = await lessonToQueueItem(lesson);
 
@@ -192,6 +213,7 @@ export async function enqueueLessons(lessonIds: readonly string[]): Promise<void
   const items: QueueItem[] = [];
   for (const id of lessonIds) {
     const lesson = await getLessonForPlayback(id);
+    cacheLessonSpeechTexts(lesson);
     items.push(await lessonToQueueItem(lesson));
   }
   const state = usePlayerStore.getState();

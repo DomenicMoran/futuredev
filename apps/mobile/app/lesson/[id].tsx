@@ -27,6 +27,7 @@ import { listNotes, saveNote } from '../../src/data/notes.js';
 import { listBookmarks, toggleBookmark } from '../../src/data/bookmarks.js';
 import { getSetting, setSetting } from '../../src/data/settings.js';
 import { playLesson } from '../../src/player/index.js';
+import { useBottomChromeInset } from '../../src/navigation/useBottomChromeInset.js';
 
 type SectionKey = 'body' | 'terms' | 'example' | 'task' | 'faq';
 interface Section {
@@ -43,6 +44,7 @@ interface Section {
 export default function LessonScreen() {
   const { id, block: blockParam } = useLocalSearchParams<{ id: string; block?: string }>();
   const theme = useTheme();
+  const bottomInset = useBottomChromeInset();
   const { state: contentState } = useContent();
 
   const [lesson, setLesson] = useState<Lesson | null | undefined>(undefined); // undefined = laedt noch
@@ -238,6 +240,7 @@ export default function LessonScreen() {
       <SectionList
         ref={listRef}
         sections={sections}
+        contentContainerStyle={{ paddingBottom: bottomInset }}
         keyExtractor={(item, index) => `${(item as { text?: string })?.text ?? index}-${index}`}
         stickySectionHeadersEnabled={false}
         onViewableItemsChanged={(info) => void handleViewableChanged(info)}

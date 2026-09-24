@@ -9,6 +9,7 @@ import { de } from '../../src/i18n/de';
 import { useContent } from '../../src/content/ContentProvider';
 import type { LessonListEntry } from '../../src/content/listLessons';
 import { BookOpen } from 'lucide-react-native';
+import { useBottomChromeInset } from '../../src/navigation/useBottomChromeInset';
 
 // Untermodulliste eines Moduls mit Lektionen (Titel, Zustand-Marke). Nur
 // veröffentlichte Lektionen erscheinen, siehe inhaltsformat.md "Wie die App
@@ -16,6 +17,7 @@ import { BookOpen } from 'lucide-react-native';
 export default function ModuleScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const theme = useTheme();
+  const bottomInset = useBottomChromeInset();
   const { moduleList } = useContent();
   const module = moduleList.find((m) => m.id === id);
 
@@ -34,7 +36,7 @@ export default function ModuleScreen() {
         <View style={styles.titleRow}>
           {module ? <ModuleCover moduleId={module.id} size={48} /> : null}
           <Text style={[styles.title, { color: theme.colors.text, flex: 1 }]}>
-            {module ? `${module.id} ${module.title}` : id}
+            {module ? module.title : id}
           </Text>
         </View>
       </View>
@@ -42,14 +44,12 @@ export default function ModuleScreen() {
       {!module || module.totalLessons === 0 ? (
         <EmptyState Icon={BookOpen} title={de.lernen.inPreparation} body={de.module.emptyNoLessons} />
       ) : (
-        <ScrollView contentContainerStyle={{ padding: theme.spacing.base }}>
+        <ScrollView contentContainerStyle={{ padding: theme.spacing.base, paddingBottom: bottomInset }}>
           {module.subModules
             .filter((sub) => sub.lessons.length > 0)
             .map((sub) => (
               <View key={sub.id} style={{ marginBottom: theme.spacing.lg }}>
-                <Text style={[styles.subModuleTitle, { color: theme.colors.textWeak }]}>
-                  {sub.id} {sub.title}
-                </Text>
+                <Text style={[styles.subModuleTitle, { color: theme.colors.textWeak }]}>{sub.title}</Text>
                 {sub.lessons.map((lesson) => (
                   <LessonRow key={lesson.id} lesson={lesson} />
                 ))}
@@ -70,7 +70,7 @@ function LessonRow({ lesson }: { lesson: LessonListEntry }) {
     <Pressable
       onPress={() => router.push(`/lesson/${lesson.id}`)}
       accessibilityRole="button"
-      accessibilityLabel={`${lesson.id}, ${stateLabel}`}
+      accessibilityLabel={`${lesson.title}, ${stateLabel}`}
       style={[
         styles.lessonRow,
         {

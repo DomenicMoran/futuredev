@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { FlatList, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
@@ -11,10 +11,10 @@ import {
   JUMP_BACKWARD_SECONDS,
   JUMP_FORWARD_SECONDS,
   SLEEP_TIMER_PRESET_MINUTES,
-  type CueBlock,
 } from '../src/player/types.js';
 import { RATE_OPTIONS } from '../src/player/rate.js';
 import {
+  ensureSpeechTextsForLesson,
   jumpBackward,
   jumpForward,
   removeFromQueue,
@@ -24,6 +24,8 @@ import {
   skipToNext,
   skipToPrevious,
 } from '../src/player/index.js';
+import { formatPlaybackTime } from '../src/player/formatTime.js';
+import { buildChapterJumps, findActiveChapterJumpIndex } from '../src/player/chapterJumps.js';
 
 async function togglePlayback(isPlaying: boolean): Promise<void> {
   const trackPlayer = (await import('react-native-track-player')).default;
@@ -36,13 +38,6 @@ async function togglePlayback(isPlaying: boolean): Promise<void> {
   }
 }
 
-function formatTime(seconds: number): string {
-  const total = Math.max(Math.round(seconds), 0);
-  const minutes = Math.floor(total / 60);
-  const secs = total % 60;
-  return `${minutes}:${String(secs).padStart(2, '0')}`;
-}
-
 export default function PlayerScreen() {
   const theme = useTheme();
   const queue = usePlayerStore((s) => s.queue);
@@ -50,8 +45,17 @@ export default function PlayerScreen() {
   const positionSeconds = usePlayerStore((s) => s.positionSeconds);
   const rate = usePlayerStore((s) => s.rate);
   const cueSheetByLessonId = usePlayerStore((s) => s.cueSheetByLessonId);
+  const speechTextsByLessonId = usePlayerStore((s) => s.speechTextsByLessonId);
+  const speechBlockRolesByLessonId = usePlayerStore((s) => s.speechBlockRolesByLessonId);
   const item = currentItem(queue);
   const cueSheet = item ? cueSheetByLessonId[item.lessonId] : undefined;
+  const speechTexts = item ? speechTextsByLessonId[item.lessonId] : undefined;
+  const speechBlockRoles = item ? speechBlockRolesByLessonId[item.lessonId] : undefined;
+
+  const chapterJumps = useMemo(
+    () => (cueSheet ? buildChapterJumps(cueSheet, speechTexts, speechBlockRoles) : []),
+    [cueSheet, speechTexts, speechBlockRoles],
+  );
 
   const [ratePickerOpen, setRatePickerOpen] = useState(false);
   const [sleepPickerOpen, setSleepPickerOpen] = useState(false);
@@ -63,12 +67,18 @@ export default function PlayerScreen() {
     if (!item) router.back();
   }, [item]);
 
+  useEffect(() => {
+    if (!item || speechTexts) return;
+    void ensureSpeechTextsForLesson(item.lessonId);
+  }, [item, speechTexts]);
+
   if (!item) return null;
 
   const progress = item.durationSeconds > 0 ? Math.min(positionSeconds / item.durationSeconds, 1) : 0;
   const currentBlockIndex = cueSheet
     ? [...cueSheet.blocks].reverse().find((b) => b.startSeconds <= positionSeconds)?.index
     : undefined;
+  const activeChapterJumpIndex = findActiveChapterJumpIndex(chapterJumps, currentBlockIndex);
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.bg }]}>
@@ -96,14 +106,14 @@ export default function PlayerScreen() {
         <View style={styles.progressRow}>
           <View style={[styles.progressTrack, { backgroundColor: theme.colors.border }]}>
             <View style={[styles.progressFill, { width: `${progress * 100}%`, backgroundColor: theme.colors.accent }]} />
-            {cueSheet
-              ? cueSheet.blocks.map((block) => (
+            {chapterJumps.length > 0
+              ? chapterJumps.map((jump) => (
                   <View
-                    key={block.index}
+                    key={jump.block.index}
                     style={[
                       styles.chapterMark,
                       {
-                        left: `${(block.startSeconds / Math.max(item.durationSeconds, 1)) * 100}%`,
+                        left: `${(jump.block.startSeconds / Math.max(item.durationSeconds, 1)) * 100}%`,
                         backgroundColor: theme.colors.bg,
                       },
                     ]}
@@ -112,8 +122,8 @@ export default function PlayerScreen() {
               : null}
           </View>
           <View style={styles.timeRow}>
-            <Text style={[styles.time, { color: theme.colors.textWeak }]}>{formatTime(positionSeconds)}</Text>
-            <Text style={[styles.time, { color: theme.colors.textWeak }]}>{formatTime(item.durationSeconds)}</Text>
+            <Text style={[styles.time, { color: theme.colors.textWeak }]}>{formatPlaybackTime(positionSeconds)}</Text>
+            <Text style={[styles.time, { color: theme.colors.textWeak }]}>{formatPlaybackTime(item.durationSeconds)}</Text>
           </View>
         </View>
 
@@ -272,24 +282,52 @@ export default function PlayerScreen() {
         {cueSheet ? (
           <View style={styles.chapterList}>
             <Text style={[styles.sectionLabel, { color: theme.colors.textWeak }]}>{de.player.chapters}</Text>
-            {cueSheet.blocks.map((block: CueBlock) => (
-              <Pressable
-                key={block.index}
-                onPress={() => void seekToBlock(item.lessonId, block.index)}
-                accessibilityRole="button"
-                accessibilityLabel={`Sprecher ${block.speaker}, ${formatTime(block.startSeconds)}`}
-                style={[
-                  styles.chapterItem,
-                  {
-                    minHeight: theme.minTapTarget,
-                    borderLeftColor: block.isKeySentence ? theme.colors.accent : 'transparent',
-                  },
-                ]}
-              >
-                <Text style={[styles.chapterSpeaker, { color: theme.colors.textWeak }]}>{block.speaker}</Text>
-                <Text style={[styles.chapterTime, { color: theme.colors.textWeak }]}>{formatTime(block.startSeconds)}</Text>
-              </Pressable>
-            ))}
+            {chapterJumps.map((jump, jumpListIndex) => {
+              const block = jump.block;
+              const isActive = jumpListIndex === activeChapterJumpIndex;
+              return (
+                <View key={block.index}>
+                  {jump.sectionHeading ? (
+                    <Text
+                      style={[
+                        styles.chapterSectionLabel,
+                        { color: theme.colors.textWeak, marginTop: jumpListIndex === 0 ? 0 : theme.spacing.sm },
+                      ]}
+                    >
+                      {jump.sectionHeading}
+                    </Text>
+                  ) : null}
+                  <Pressable
+                    onPress={() => void seekToBlock(item.lessonId, block.index)}
+                    accessibilityRole="button"
+                    accessibilityLabel={`${jump.label}, ${formatPlaybackTime(block.startSeconds)}`}
+                    style={[
+                      styles.chapterItem,
+                      {
+                        minHeight: theme.minTapTarget,
+                        borderLeftColor: block.isKeySentence ? theme.colors.accent : isActive ? theme.colors.textWeak : 'transparent',
+                        backgroundColor: isActive ? theme.colors.border : 'transparent',
+                        borderRadius: theme.radius.sm,
+                      },
+                    ]}
+                  >
+                    <Text
+                      numberOfLines={2}
+                      ellipsizeMode="tail"
+                      style={[
+                        styles.chapterTitle,
+                        { color: theme.colors.text, flex: 1 },
+                      ]}
+                    >
+                      {jump.label}
+                    </Text>
+                    <Text style={[styles.chapterTime, { color: theme.colors.textWeak }]}>
+                      {formatPlaybackTime(block.startSeconds)}
+                    </Text>
+                  </Pressable>
+                </View>
+              );
+            })}
           </View>
         ) : null}
 
@@ -362,13 +400,22 @@ const styles = StyleSheet.create({
   option: { paddingHorizontal: 12, justifyContent: 'center', borderRadius: 8 },
   chapterList: { marginTop: 32 },
   sectionLabel: { fontSize: 13, fontWeight: '600', textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 8 },
+  chapterSectionLabel: {
+    fontSize: 11,
+    fontWeight: '700',
+    textTransform: 'uppercase',
+    letterSpacing: 0.6,
+    marginBottom: 4,
+    paddingLeft: 8,
+  },
   chapterItem: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
-    paddingLeft: 8,
+    paddingHorizontal: 8,
+    paddingVertical: 6,
     borderLeftWidth: 3,
   },
-  chapterSpeaker: { width: 20, fontWeight: '600' },
-  chapterTime: { flex: 1 },
+  chapterTitle: { fontSize: 14, lineHeight: 20 },
+  chapterTime: { fontSize: 12, minWidth: 40, textAlign: 'right' },
 });

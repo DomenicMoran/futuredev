@@ -1,10 +1,22 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { Pause, Play } from 'lucide-react-native';
 import { useTheme } from '../theme/useTheme.js';
 import { de } from '../i18n/de.js';
+import { usePathname } from 'expo-router';
+import { tabBarHeight } from '../navigation/tabBarMetrics.js';
+import { isTabBarVisible } from '../navigation/tabBarVisibility.js';
+import {
+  MINI_PLAYER_PLAY_BUTTON_SIZE,
+  MINI_PLAYER_PROGRESS_HEIGHT,
+  miniPlayerPaddingBottom,
+  miniPlayerPaddingTop,
+  miniPlayerRowMinHeight,
+} from './miniPlayerLayout.js';
 import { usePlayerStore } from './store.js';
 import { currentItem } from './queue.js';
+import { formatPlaybackTime } from './formatTime.js';
 
 async function togglePlayback(isPlaying: boolean): Promise<void> {
   const trackPlayer = (await import('react-native-track-player')).default;
@@ -24,6 +36,9 @@ async function togglePlayback(isPlaying: boolean): Promise<void> {
  */
 export function MiniPlayer() {
   const theme = useTheme();
+  const insets = useSafeAreaInsets();
+  const pathname = usePathname();
+  const tabBarVisible = isTabBarVisible(pathname);
   const queue = usePlayerStore((s) => s.queue);
   const isPlaying = usePlayerStore((s) => s.isPlaying);
   const positionSeconds = usePlayerStore((s) => s.positionSeconds);
@@ -32,30 +47,71 @@ export function MiniPlayer() {
   if (!item) return null;
 
   const progress = item.durationSeconds > 0 ? Math.min(positionSeconds / item.durationSeconds, 1) : 0;
+  const timeSubtitle = `${formatPlaybackTime(positionSeconds)} / ${formatPlaybackTime(item.durationSeconds)}`;
 
   return (
-    <Pressable
-      onPress={() => router.push('/player')}
-      accessibilityRole="button"
-      accessibilityLabel={`${item.title}, ${de.player.aiVoiceLabel}`}
+    <View
       style={[
         styles.container,
         {
           backgroundColor: theme.colors.surface,
           borderTopColor: theme.colors.border,
-          bottom: 56 + theme.spacing.xs,
+          bottom: tabBarVisible ? tabBarHeight(theme) : insets.bottom,
+          zIndex: 20,
+          shadowColor: theme.colors.text,
         },
       ]}
     >
-      <View style={styles.progressTrack}>
+      <View style={[styles.progressTrack, { backgroundColor: theme.colors.border }]}>
         <View style={[styles.progressFill, { width: `${progress * 100}%`, backgroundColor: theme.colors.accent }]} />
       </View>
-      <View style={styles.row}>
+      <Pressable
+        onPress={() => router.push('/player')}
+        accessibilityRole="button"
+        accessibilityLabel={`${item.title}, ${timeSubtitle}, ${de.player.aiVoiceLabel}`}
+        style={({ pressed }) => [
+          styles.row,
+          {
+            paddingHorizontal: theme.spacing.base,
+            paddingTop: miniPlayerPaddingTop(theme),
+            paddingBottom: miniPlayerPaddingBottom(theme, tabBarVisible ? 0 : insets.bottom),
+            minHeight: miniPlayerRowMinHeight(theme),
+            gap: theme.spacing.md,
+            opacity: pressed ? 0.92 : 1,
+          },
+        ]}
+      >
         <View style={styles.titleBlock}>
-          <Text numberOfLines={1} style={[styles.title, { color: theme.colors.text }]}>
+          <Text
+            numberOfLines={1}
+            ellipsizeMode="tail"
+            style={[
+              styles.title,
+              {
+                color: theme.colors.text,
+                fontSize: theme.type.size.sm.size,
+                lineHeight: theme.type.size.sm.lineHeight,
+              },
+            ]}
+          >
             {item.title}
           </Text>
-          <Text style={[styles.subtitle, { color: theme.colors.textWeak }]}>{de.player.aiVoiceLabel}</Text>
+          <Text
+            numberOfLines={1}
+            ellipsizeMode="tail"
+            style={[
+              styles.subtitle,
+              {
+                color: theme.colors.textWeak,
+                fontSize: theme.type.size.xs.size,
+                lineHeight: theme.type.size.xs.lineHeight,
+              },
+            ]}
+          >
+            {timeSubtitle}
+            {' · '}
+            {de.player.aiVoiceLabel}
+          </Text>
         </View>
         <Pressable
           onPress={(e) => {
@@ -64,17 +120,27 @@ export function MiniPlayer() {
           }}
           accessibilityRole="button"
           accessibilityLabel={isPlaying ? de.player.pause : de.player.play}
-          hitSlop={12}
-          style={[styles.playButton, { backgroundColor: theme.colors.accent, minWidth: theme.minTapTarget, minHeight: theme.minTapTarget }]}
+          hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+          style={[
+            styles.playButton,
+            {
+              backgroundColor: theme.colors.accent,
+              minWidth: MINI_PLAYER_PLAY_BUTTON_SIZE,
+              minHeight: MINI_PLAYER_PLAY_BUTTON_SIZE,
+              width: MINI_PLAYER_PLAY_BUTTON_SIZE,
+              height: MINI_PLAYER_PLAY_BUTTON_SIZE,
+              borderRadius: theme.radius.full,
+            },
+          ]}
         >
           {isPlaying ? (
-            <Pause size={20} color={theme.colors.accentText} fill={theme.colors.accentText} />
+            <Pause size={22} color={theme.colors.accentText} fill={theme.colors.accentText} />
           ) : (
-            <Play size={20} color={theme.colors.accentText} fill={theme.colors.accentText} />
+            <Play size={22} color={theme.colors.accentText} fill={theme.colors.accentText} />
           )}
         </Pressable>
-      </View>
-    </Pressable>
+      </Pressable>
+    </View>
   );
 }
 
@@ -84,35 +150,32 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     borderTopWidth: StyleSheet.hairlineWidth,
+    elevation: 8,
+    shadowOffset: { width: 0, height: -2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 6,
   },
   progressTrack: {
-    height: 2,
-    backgroundColor: 'transparent',
+    height: MINI_PLAYER_PROGRESS_HEIGHT,
   },
   progressFill: {
-    height: 2,
+    height: MINI_PLAYER_PROGRESS_HEIGHT,
   },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    gap: 12,
   },
   titleBlock: {
     flex: 1,
+    minWidth: 0,
   },
   title: {
-    fontSize: 14,
-    lineHeight: 20,
     fontWeight: '600',
   },
   subtitle: {
-    fontSize: 12,
-    lineHeight: 16,
+    marginTop: 2,
   },
   playButton: {
-    borderRadius: 9999,
     alignItems: 'center',
     justifyContent: 'center',
   },

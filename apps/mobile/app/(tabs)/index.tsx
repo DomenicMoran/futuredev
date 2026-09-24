@@ -7,6 +7,7 @@ import { EmptyState } from '../../src/components/EmptyState.js';
 import { de } from '../../src/i18n/de.js';
 import { useSettingsStore } from '../../src/state/settings.js';
 import { loadStartData, type StartData } from '../../src/settings/startData.js';
+import { useBottomChromeInset } from '../../src/navigation/useBottomChromeInset.js';
 
 // Reiter Start (AP-3.5, Punkt 5): Begrüßung nach Tageszeit ohne Namen,
 // Fortsetzen-Karte, nächste Empfehlung, Tagesration-Kachel, Wochenübersicht.
@@ -18,6 +19,7 @@ export default function StartScreen() {
   const dailyGoalMinutes = useSettingsStore((s) => s.dailyGoalMinutes);
   const reviewIntensity = useSettingsStore((s) => s.reviewIntensity);
   const [data, setData] = useState<StartData | null>(null);
+  const bottomInset = useBottomChromeInset();
 
   const refresh = useCallback(() => {
     loadStartData(dailyGoalMinutes, reviewIntensity)
@@ -32,7 +34,10 @@ export default function StartScreen() {
 
   if (!hasAnything) {
     return (
-      <ScrollView style={[styles.container, { backgroundColor: theme.colors.bg }]} contentContainerStyle={{ flexGrow: 1 }}>
+      <ScrollView
+        style={[styles.container, { backgroundColor: theme.colors.bg }]}
+        contentContainerStyle={{ flexGrow: 1, paddingBottom: bottomInset }}
+      >
         <EmptyState
           Icon={Sparkles}
           title={de.start.emptyTitle}
@@ -45,7 +50,10 @@ export default function StartScreen() {
   }
 
   return (
-    <ScrollView style={[styles.container, { backgroundColor: theme.colors.bg }]} contentContainerStyle={{ padding: theme.spacing.lg }}>
+    <ScrollView
+      style={[styles.container, { backgroundColor: theme.colors.bg }]}
+      contentContainerStyle={{ padding: theme.spacing.lg, paddingBottom: bottomInset }}
+    >
       <Text style={[styles.greeting, { color: theme.colors.text }]}>{greeting}</Text>
 
       {data?.continueCard ? (
