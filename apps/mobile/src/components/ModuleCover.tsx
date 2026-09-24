@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import type { ImageSourcePropType } from 'react-native';
 import { useTheme } from '../theme/useTheme.js';
@@ -10,7 +11,7 @@ interface ModuleCoverProps {
 
 // Quadratisches Modul-Cover fuer Listenzeilen; faellt auf Akzentflaeche zurueck,
 // falls fuer eine Modul-ID noch kein Asset existiert.
-export function ModuleCover({ moduleId, size = 56 }: ModuleCoverProps) {
+function ModuleCoverInner({ moduleId, size = 56 }: ModuleCoverProps) {
   const theme = useTheme();
   const source: ImageSourcePropType | null = getModuleCover(moduleId);
 
@@ -35,6 +36,8 @@ export function ModuleCover({ moduleId, size = 56 }: ModuleCoverProps) {
     </View>
   );
 }
+
+export const ModuleCover = memo(ModuleCoverInner);
 
 const styles = StyleSheet.create({
   frame: {

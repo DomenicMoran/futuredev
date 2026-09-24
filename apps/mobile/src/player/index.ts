@@ -10,6 +10,7 @@ import { loadLocalManifest } from '../content/lessonLoader.js';
 import { downloadedAudioPath, downloadedCuesPath, downloadDirPath, remoteAudioUrl, remoteCuesUrl } from './downloads.js';
 import { getLessonForPlayback, markListened, savePlaybackPosition } from './dataSource.js';
 import { findBlockAtPosition, findPositionForBlock } from './cues.js';
+import { clampSeekPosition } from './scrubberMath.js';
 import { clampRate } from './rate.js';
 import { computeSleepTimerTarget, isSleepTimerElapsed, volumeForSleepTimer } from './sleepTimer.js';
 import { enqueue, goToNext, goToPrevious, removeAt, reorder, setQueue } from './queue.js';
@@ -277,9 +278,18 @@ export async function jumpForward(seconds: number): Promise<void> {
 export async function seekToBlock(lessonId: string, blockIndex: number): Promise<void> {
   const cueSheet = await loadCueSheet(lessonId);
   const seconds = findPositionForBlock(cueSheet, blockIndex);
+  await seekToSeconds(seconds);
+}
+
+/** Seek auf absolute Position (Scrubber, Tap-to-Seek). */
+export async function seekToSeconds(seconds: number): Promise<void> {
+  const state = usePlayerStore.getState();
+  const item = state.queue.items[state.queue.currentIndex];
+  if (!item) return;
+  const clamped = clampSeekPosition(seconds, item.durationSeconds);
   const trackPlayer = await TP();
-  await trackPlayer.seekTo(seconds);
-  usePlayerStore.getState().setPosition(seconds);
+  await trackPlayer.seekTo(clamped);
+  usePlayerStore.getState().setPosition(clamped);
 }
 
 export function currentBlockIndex(lessonId: string, positionSeconds: number): number | null {
@@ -419,6 +429,29 @@ export async function deleteDownload(lessonId: string): Promise<void> {
   usePlayerStore
     .getState()
     .setDownloadState({ lessonId, status: 'not-downloaded', progress: 0, bytesTotal: null });
+}
+
+/** Summiert die Bytes aller lokalen Audio- und Cue-Dateien fuer die angegebenen Lektionen. */
+export async function getDownloadedStorageBytes(lessonIds: readonly string[]): Promise<number | null> {
+  if (lessonIds.length === 0) return null;
+  const fs = await getContentFs();
+  const { getInfoAsync } = await import('expo-file-system/legacy');
+  let total = 0;
+  let found = false;
+  for (const lessonId of lessonIds) {
+    for (const path of [
+      downloadedAudioPath(fs.documentDirectory, lessonId),
+      downloadedCuesPath(fs.documentDirectory, lessonId),
+    ]) {
+      if (!(await existsSafe(fs, path))) continue;
+      const info = await getInfoAsync(path);
+      if (info.exists && typeof info.size === 'number') {
+        total += info.size;
+        found = true;
+      }
+    }
+  }
+  return found ? total : null;
 }
 
 export { usePlayerStore } from './store.js';
