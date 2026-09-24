@@ -1,5 +1,11 @@
 import { create } from 'zustand';
 import type { ColorSchemeSetting } from '../theme/colorScheme.js';
+import { getSetting } from '../data/settings.js';
+import {
+  DAILY_LEARNING_DATE_KEY,
+  localDateKey,
+  readDailyLearningSecondsToday,
+} from '../settings/dailyLearning.js';
 import { hydrateSettings, persistSetting } from '../settings/persist.js';
 import { DEFAULT_QUIZ_LENGTH, type AppSettings, type ReviewIntensity } from '../settings/types.js';
 
@@ -13,6 +19,8 @@ interface SettingsState {
   hydrated: boolean;
   colorScheme: ColorSchemeSetting;
   dailyGoalMinutes: number;
+  /** Lernsekunden heute (Hören); null bis erster Tageseintrag in SQLite. */
+  dailyLearningSecondsToday: number | null;
   firstFormPreference: FirstFormPreference;
   quizLength: number;
   reviewIntensity: ReviewIntensity;
@@ -23,6 +31,7 @@ interface SettingsState {
   hydrate: () => Promise<AppSettings>;
   setColorScheme: (value: ColorSchemeSetting) => void;
   setDailyGoalMinutes: (value: number) => void;
+  setDailyLearningSecondsToday: (value: number | null) => void;
   setFirstFormPreference: (value: FirstFormPreference) => void;
   setQuizLength: (value: number) => void;
   setReviewIntensity: (value: ReviewIntensity) => void;
@@ -34,6 +43,7 @@ export const useSettingsStore = create<SettingsState>((set) => ({
   hydrated: false,
   colorScheme: 'system',
   dailyGoalMinutes: 20,
+  dailyLearningSecondsToday: null,
   firstFormPreference: 'read',
   quizLength: DEFAULT_QUIZ_LENGTH,
   reviewIntensity: 'normal',
@@ -42,10 +52,14 @@ export const useSettingsStore = create<SettingsState>((set) => ({
   installId: '',
   hydrate: async () => {
     const loaded = await hydrateSettings();
+    const secondsToday = await readDailyLearningSecondsToday();
+    const storedDate = await getSetting(DAILY_LEARNING_DATE_KEY);
+    const hasDailyEntry = storedDate === localDateKey();
     set({
       hydrated: true,
       colorScheme: loaded.colorScheme,
       dailyGoalMinutes: loaded.dailyGoalMinutes,
+      dailyLearningSecondsToday: hasDailyEntry ? secondsToday : null,
       firstFormPreference: loaded.firstFormPreference,
       quizLength: loaded.quizLength,
       reviewIntensity: loaded.reviewIntensity,
@@ -62,6 +76,9 @@ export const useSettingsStore = create<SettingsState>((set) => ({
   setDailyGoalMinutes: (value) => {
     set({ dailyGoalMinutes: value });
     void persistSetting('dailyGoalMinutes', value);
+  },
+  setDailyLearningSecondsToday: (value) => {
+    set({ dailyLearningSecondsToday: value });
   },
   setFirstFormPreference: (value) => {
     set({ firstFormPreference: value });

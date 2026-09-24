@@ -9,6 +9,8 @@ import { buildModuleList } from '../content/listLessons.js';
 import { loadReviewCards } from '../review/cards.js';
 import { dailyRationSize, selectDailyRation } from '../review/dailyRation.js';
 import { de } from '../i18n/de.js';
+import { getSetting } from '../data/settings.js';
+import { DAILY_LEARNING_DATE_KEY, localDateKey, readDailyLearningSecondsToday } from './dailyLearning.js';
 import type { ReviewIntensity } from './types.js';
 
 export interface ContinueCard {
@@ -30,16 +32,19 @@ export interface StartData {
   nextLessonId: string | null;
   nextLessonTitle: string | null;
   dueReviewCount: number;
+  /** Sekunden Lernzeit heute (Hören); null wenn noch kein Tageseintrag in SQLite. */
+  dailyLearningSecondsToday: number | null;
   week: WeekDay[];
 }
 
 export async function loadStartData(dailyGoalMinutes: number, reviewIntensity: ReviewIntensity): Promise<StartData> {
   const db = await getDatabase();
-  const [progressRows, examRows, reviewCards, fs] = await Promise.all([
+  const [progressRows, examRows, reviewCards, fs, dailyLearningSecondsToday] = await Promise.all([
     listProgress(),
     db.listExamResults(),
     loadReviewCards(),
     getContentFs(),
+    readDailyLearningSecondsToday(),
   ]);
   const manifest = await loadLocalManifest(fs);
   const modulesFile = await loadModules(fs);
@@ -105,5 +110,15 @@ export async function loadStartData(dailyGoalMinutes: number, reviewIntensity: R
     week.push({ date: iso, studied: activityDays.has(iso) });
   }
 
-  return { continueCard, nextLessonId, nextLessonTitle, dueReviewCount, week };
+  const storedDate = await getSetting(DAILY_LEARNING_DATE_KEY);
+  const hasDailyEntry = storedDate === localDateKey();
+
+  return {
+    continueCard,
+    nextLessonId,
+    nextLessonTitle,
+    dueReviewCount,
+    dailyLearningSecondsToday: hasDailyEntry ? dailyLearningSecondsToday : null,
+    week,
+  };
 }

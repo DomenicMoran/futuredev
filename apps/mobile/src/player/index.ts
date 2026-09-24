@@ -9,6 +9,7 @@ import { getContentFs } from '../content/contentFs.js';
 import { loadLocalManifest } from '../content/lessonLoader.js';
 import { downloadedAudioPath, downloadedCuesPath, downloadDirPath, remoteAudioUrl, remoteCuesUrl } from './downloads.js';
 import { getLessonForPlayback, markListened, savePlaybackPosition } from './dataSource.js';
+import { setListenProgressBaseline } from '../settings/dailyLearning.js';
 import { findBlockAtPosition, findPositionForBlock } from './cues.js';
 import { clampSeekPosition } from './scrubberMath.js';
 import { clampRate } from './rate.js';
@@ -374,6 +375,12 @@ export function startPositionTracking(lessonId: string): void {
   stopPositionTracking();
   trackedLessonId = lessonId;
   attachPlaybackProgressListener();
+
+  void (async () => {
+    const trackPlayer = await TP();
+    const { position } = await trackPlayer.getProgress();
+    setListenProgressBaseline(lessonId, position);
+  })();
 
   positionUiPollHandle = setInterval(() => {
     void (async () => {

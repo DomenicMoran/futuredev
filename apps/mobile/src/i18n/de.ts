@@ -25,6 +25,8 @@ export const de = {
     dailyGoalTitle: 'Tagesziel',
     dailyGoalDueReviews: (count: number) =>
       `${count} fällige Wiederholungsfrage${count === 1 ? '' : 'n'} heute`,
+    dailyGoalProgressToday: (learnedMinutes: number, goalMinutes: number) =>
+      `${learnedMinutes} / ${goalMinutes} Min heute`,
     dailyGoalSettingsTip: (minutes: number) => `Tagesziel: ${minutes} Min. in Einstellungen festlegen.`,
     nextRecommendationTitle: 'Nächste Empfehlung',
     nextRecommendationFallback: 'Nächste Lektion',

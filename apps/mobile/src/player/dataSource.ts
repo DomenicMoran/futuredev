@@ -9,6 +9,7 @@
 // die Felder aus datenmodell.md tragen (listenedUntil).
 import { lessonSchema, type Lesson, type Manifest } from '@futuredev/content-schema';
 import { getProgress, markLessonState } from '../data/index.js';
+import { accumulateListenProgress } from '../settings/dailyLearning.js';
 import { getContentFs } from '../content/contentFs.js';
 import { loadLesson, loadLocalManifest } from '../content/lessonLoader.js';
 
@@ -61,6 +62,9 @@ export async function getLessonForPlayback(lessonId: string): Promise<Lesson> {
 
 /** Sichert die Hörposition (progress.listenedUntil), alle 5 s bzw. sofort bei Pause. */
 export async function savePlaybackPosition(lessonId: string, seconds: number): Promise<void> {
+  const totalToday = await accumulateListenProgress(lessonId, seconds);
+  const { useSettingsStore } = await import('../state/settings.js');
+  useSettingsStore.getState().setDailyLearningSecondsToday(totalToday);
   const existing = await getProgress(lessonId);
   const nextState = existing?.state === 'new' ? 'started' : (existing?.state ?? 'started');
   await markLessonState(lessonId, nextState, { listenedUntil: Math.round(seconds) });
@@ -73,6 +77,6 @@ export async function savePlaybackPosition(lessonId: string, seconds: number): P
  * stillschweigend ignoriert.
  */
 export async function markListened(lessonId: string, seconds: number): Promise<void> {
-  await markLessonState(lessonId, 'started', {});
+  await savePlaybackPosition(lessonId, seconds);
   await markLessonState(lessonId, 'listened', { listenedUntil: Math.round(seconds) });
 }

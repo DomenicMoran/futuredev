@@ -41,6 +41,7 @@ export default function StartScreen() {
   const { moduleList } = useContent();
 
   const dailyGoalMinutes = useSettingsStore((s) => s.dailyGoalMinutes);
+  const dailyLearningSecondsToday = useSettingsStore((s) => s.dailyLearningSecondsToday);
 
   const firstFormPreference = useSettingsStore((s) => s.firstFormPreference);
 
@@ -166,19 +167,31 @@ export default function StartScreen() {
 
         <Card theme={theme} title={de.start.dailyGoalTitle}>
 
-          <Text style={[styles.body, { color: theme.colors.textWeak }]}>
+          {(() => {
+            const seconds =
+              data.dailyLearningSecondsToday ?? dailyLearningSecondsToday ?? null;
+            if (seconds !== null) {
+              const learnedMinutes = Math.floor(seconds / 60);
+              return (
+                <Text style={[styles.body, { color: theme.colors.text }]}>
+                  {de.start.dailyGoalProgressToday(learnedMinutes, dailyGoalMinutes)}
+                </Text>
+              );
+            }
+            return (
+              <Text style={[styles.body, { color: theme.colors.textWeak }]}>
+                {de.start.dailyGoalSettingsTip(dailyGoalMinutes)}
+              </Text>
+            );
+          })()}
+
+          <Text style={[styles.body, { color: theme.colors.textWeak, marginTop: theme.spacing.xs }]}>
 
             {data.dueReviewCount > 0
 
               ? de.start.dailyGoalDueReviews(data.dueReviewCount)
 
               : de.start.dailyRationTileEmpty}
-
-          </Text>
-
-          <Text style={[styles.body, { color: theme.colors.textWeak, marginTop: theme.spacing.xs }]}>
-
-            {de.start.dailyGoalSettingsTip(dailyGoalMinutes)}
 
           </Text>
 
