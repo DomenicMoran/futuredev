@@ -28,7 +28,7 @@ import { getProgress, markLessonState, saveReadPosition } from '../../src/data/p
 import { listNotes, saveNote } from '../../src/data/notes.js';
 import { listBookmarks, toggleBookmark } from '../../src/data/bookmarks.js';
 import { getSetting, setSetting } from '../../src/data/settings.js';
-import { playLesson } from '../../src/player/index.js';
+import { playLessonInModuleContext } from '../../src/player/index.js';
 import { useBottomChromeInset } from '../../src/navigation/useBottomChromeInset.js';
 import { accumulateReadFocusTick, READ_FOCUS_TICK_SECONDS } from '../../src/settings/dailyLearning.js';
 import { useSettingsStore } from '../../src/state/settings.js';
@@ -276,7 +276,7 @@ export default function LessonScreen() {
   // Knopf, ohne den Lesebildschirm zu blockieren.
   const handleListen = () => {
     setAudioError(false);
-    playLesson(id, readUntil).catch(() => {
+    playLessonInModuleContext(id, readUntil).catch(() => {
       setAudioError(true);
     });
   };

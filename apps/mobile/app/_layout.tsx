@@ -10,6 +10,8 @@ import { useSettingsStore } from '../src/state/settings.js';
 import { ContentProvider } from '../src/content/ContentProvider.js';
 import { MiniPlayer } from '../src/player/MiniPlayer.js';
 import { PlaybackService } from '../src/player/service.js';
+import { loadPlayerPreferences } from '../src/player/playerPreferences.js';
+import { usePlayerStore } from '../src/player/store.js';
 
 SplashScreen.preventAutoHideAsync().catch(() => {
   // Kein Fehlerfall, der die App blockieren darf: Splash-Screen bleibt notfalls stehen.
@@ -47,6 +49,15 @@ function RootLayoutInner() {
   // lesen, sonst würde ein wiederkehrender Start immer kurz zurück ins
   // Onboarding springen (Store startet mit completed=false).
   useEffect(() => {
+    loadPlayerPreferences()
+      .then((prefs) => {
+        usePlayerStore.getState().setAutoplayNext(prefs.autoplayNext);
+        usePlayerStore.getState().setRepeatMode(prefs.repeatMode);
+        usePlayerStore.getState().setPlayerPreferencesHydrated(true);
+      })
+      .catch(() => {
+        usePlayerStore.getState().setPlayerPreferencesHydrated(true);
+      });
     useSettingsStore
       .getState()
       .hydrate()
@@ -90,6 +101,7 @@ function RootLayoutInner() {
         <Stack.Screen name="lesson/[id]" />
         <Stack.Screen name="module/[id]" />
         <Stack.Screen name="player" options={{ presentation: 'modal' }} />
+        <Stack.Screen name="flashcards/index" />
       </Stack>
       {showMiniPlayer ? <MiniPlayer /> : null}
     </ContentProvider>

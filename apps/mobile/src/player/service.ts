@@ -43,4 +43,15 @@ export async function PlaybackService(): Promise<void> {
       void TrackPlayer.pause();
     }
   });
+
+  TrackPlayer.addEventListener(Event.PlaybackQueueEnded, () => {
+    void import('./trackEnd.js').then(({ handlePlaybackQueueEnded }) => handlePlaybackQueueEnded());
+  });
+
+  TrackPlayer.addEventListener(Event.PlaybackActiveTrackChanged, (event) => {
+    const trackId = event.track?.id;
+    if (typeof trackId === 'string') {
+      void import('./trackEnd.js').then(({ syncActiveTrackIndex }) => syncActiveTrackIndex(trackId));
+    }
+  });
 }

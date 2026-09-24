@@ -28,6 +28,10 @@ import {
 
   X,
 
+  Repeat1,
+
+  Repeat,
+
 } from 'lucide-react-native';
 
 import { useTheme } from '../src/theme/useTheme.js';
@@ -76,7 +80,11 @@ import {
 
   skipToPrevious,
 
+  applyRepeatMode,
+
 } from '../src/player/index.js';
+
+import { nextRepeatMode } from '../src/player/playbackEnd.js';
 
 import { formatPlaybackTime } from '../src/player/formatTime.js';
 
@@ -131,6 +139,8 @@ export default function PlayerScreen() {
   const positionSeconds = usePlayerStore((s) => s.positionSeconds);
 
   const rate = usePlayerStore((s) => s.rate);
+
+  const repeatMode = usePlayerStore((s) => s.repeatMode);
 
   const cueSheetByLessonId = usePlayerStore((s) => s.cueSheetByLessonId);
 
@@ -549,6 +559,42 @@ export default function PlayerScreen() {
               {rate.toFixed(1)}×
 
             </Text>
+
+          </Pressable>
+
+          <Pressable
+
+            onPress={() => void applyRepeatMode(nextRepeatMode(repeatMode))}
+
+            accessibilityRole="button"
+
+            accessibilityLabel={
+              repeatMode === 'one'
+                ? de.player.repeatOne
+                : repeatMode === 'all'
+                  ? de.player.repeatAll
+                  : de.player.repeatOff
+            }
+
+            style={({ pressed }) => [
+
+              styles.quietPill,
+
+              {
+                borderColor: repeatMode === 'off' ? theme.colors.border : theme.colors.accent,
+                minHeight: theme.minTapTarget,
+                opacity: pressed ? 0.88 : 1,
+              },
+
+            ]}
+
+          >
+
+            {repeatMode === 'one' ? (
+              <Repeat1 color={theme.colors.accent} size={16} />
+            ) : (
+              <Repeat color={repeatMode === 'all' ? theme.colors.accent : theme.colors.textWeak} size={16} />
+            )}
 
           </Pressable>
 

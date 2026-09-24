@@ -14,7 +14,8 @@ import { findBlockAtPosition, findPositionForBlock } from './cues.js';
 import { clampSeekPosition } from './scrubberMath.js';
 import { clampRate } from './rate.js';
 import { computeSleepTimerTarget, isSleepTimerElapsed, volumeForSleepTimer } from './sleepTimer.js';
-import { enqueue, goToNext, goToPrevious, removeAt, reorder, setQueue } from './queue.js';
+import { EMPTY_QUEUE, enqueue, goToNext, goToPrevious, removeAt, reorder, setQueue } from './queue.js';
+import { persistRepeatMode } from './playerPreferences.js';
 import { usePlayerStore } from './store.js';
 import {
   JUMP_BACKWARD_SECONDS,
@@ -167,39 +168,105 @@ async function audioSourceForLesson(lessonId: string): Promise<string> {
   return remoteAudioUrl(await resolveAudioBaseUrl(fs), lessonId);
 }
 
-/**
- * Startet eine Lektion, optional ab einem Kapitelmarken-Index (Umschalter
- * Lesen/Hören, Kapitelliste). Baut die Warteschlange neu aus genau dieser
- * einen Lektion, wenn noch keine läuft — enqueueModule/enqueueLessons hängen
- * danach weitere Titel an.
- */
-export async function playLesson(lessonId: string, blockIndex?: number): Promise<void> {
-  const lesson = await getLessonForPlayback(lessonId);
-  cacheLessonSpeechTexts(lesson);
-  const cueSheet = await loadCueSheet(lessonId);
-  const item = await lessonToQueueItem(lesson);
+function moduleIdFromLessonId(lessonId: string): string {
+  return lessonId.slice(0, 3);
+}
 
-  usePlayerStore.getState().setQueueState(setQueue([item]));
+async function startQueue(
+  items: readonly QueueItem[],
+  startIndex: number,
+  blockIndex?: number,
+): Promise<void> {
+  if (items.length === 0) return;
+  const startItem = items[startIndex];
+  if (!startItem) return;
+
+  usePlayerStore.getState().setQueueState(setQueue(items, startIndex));
   usePlayerStore.getState().setBuffering(true);
 
   await ensureSetup();
   const trackPlayer = await TP();
   await trackPlayer.reset();
-  await trackPlayer.add({
-    id: lesson.id,
-    url: await audioSourceForLesson(lesson.id),
-    title: lesson.title,
-    artist: 'KI-generierte Stimme',
-  });
+  for (const queueItem of items) {
+    await trackPlayer.add({
+      id: queueItem.lessonId,
+      url: await audioSourceForLesson(queueItem.lessonId),
+      title: queueItem.title,
+      artist: 'KI-generierte Stimme',
+    });
+  }
 
-  const startSeconds = blockIndex !== undefined ? findPositionForBlock(cueSheet, blockIndex) : 0;
+  let startSeconds = 0;
+  if (blockIndex !== undefined) {
+    const cueSheet = await loadCueSheet(startItem.lessonId);
+    startSeconds = findPositionForBlock(cueSheet, blockIndex);
+  }
+  if (startIndex > 0) {
+    await trackPlayer.skip(startIndex);
+  }
   if (startSeconds > 0) await trackPlayer.seekTo(startSeconds);
   await trackPlayer.play();
 
   usePlayerStore.getState().setBuffering(false);
   usePlayerStore.getState().setPlaying(true);
   usePlayerStore.getState().setPosition(startSeconds);
-  startPositionTracking(lessonId);
+  startPositionTracking(startItem.lessonId);
+}
+
+/**
+ * Startet eine Lektion, optional ab einem Kapitelmarken-Index (Umschalter
+ * Lesen/Hören, Kapitelliste). Baut die Warteschlange neu aus genau dieser
+ * einen Lektion — enqueueModule/enqueueLessons hängen danach weitere Titel an.
+ */
+export async function playLesson(lessonId: string, blockIndex?: number): Promise<void> {
+  const lesson = await getLessonForPlayback(lessonId);
+  cacheLessonSpeechTexts(lesson);
+  const item = await lessonToQueueItem(lesson);
+  await startQueue([item], 0, blockIndex);
+}
+
+/** Startet ab dieser Lektion und stellt den Rest des Moduls in die Warteschlange. */
+export async function playLessonInModuleContext(lessonId: string, blockIndex?: number): Promise<void> {
+  const moduleId = moduleIdFromLessonId(lessonId);
+  const fs = await getContentFs();
+  const manifest = await loadLocalManifest(fs);
+  const lessonIds = (manifest?.lessons ?? [])
+    .map((entry) => entry.id)
+    .filter((id) => id.startsWith(`${moduleId}-`))
+    .sort();
+  const startIdx = lessonIds.indexOf(lessonId);
+  const sliceFrom = startIdx >= 0 ? startIdx : 0;
+  const items: QueueItem[] = [];
+  for (const id of lessonIds.slice(sliceFrom)) {
+    const lesson = await getLessonForPlayback(id);
+    cacheLessonSpeechTexts(lesson);
+    items.push(await lessonToQueueItem(lesson));
+  }
+  if (items.length === 0) {
+    await playLesson(lessonId, blockIndex);
+    return;
+  }
+  await startQueue(items, 0, blockIndex);
+}
+
+/** Stoppt Wiedergabe, leert Warteschlange und Benachrichtigung. */
+export async function clearPlayback(): Promise<void> {
+  stopPositionTracking();
+  usePlayerStore.getState().setQueueState(EMPTY_QUEUE);
+  usePlayerStore.getState().setPlaying(false);
+  usePlayerStore.getState().setPosition(0);
+  try {
+    await ensureSetup();
+    const trackPlayer = await TP();
+    await trackPlayer.reset();
+  } catch {
+    // Kein Blockierfall, wenn TrackPlayer noch nicht initialisiert ist.
+  }
+}
+
+export async function applyRepeatMode(mode: import('./types.js').AppRepeatMode): Promise<void> {
+  usePlayerStore.getState().setRepeatMode(mode);
+  await persistRepeatMode(mode);
 }
 
 /** Hängt alle veröffentlichten Lektionen eines Moduls an ("Modul am Stück"). */

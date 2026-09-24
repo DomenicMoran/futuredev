@@ -9,14 +9,24 @@ import { de } from '../../src/i18n/de.js';
 import { loadProfileData, type ProfileData } from '../../src/settings/profile.js';
 import { getDatabase } from '../../src/data/db.js';
 import { useBottomChromeInset } from '../../src/navigation/useBottomChromeInset.js';
+import { useSettingsStore } from '../../src/state/settings.js';
+import type { ReviewIntensity } from '../../src/settings/types.js';
 
 // Reiter Ich (AP-3.5, Punkt 3): Fortschritt je Modul, Jobreife mit
 // "Was noch fehlt", Portfolio-Bausteine, Karriere-Checkliste, Notizen,
 // Lesezeichen, Einstellungen, Rechtliches.
+function intensityLabel(intensity: ReviewIntensity): string {
+  if (intensity === 'leicht') return de.settings.reviewIntensityLight;
+  if (intensity === 'intensiv') return de.settings.reviewIntensityIntense;
+  return de.settings.reviewIntensityNormal;
+}
+
 export default function IchScreen() {
   const theme = useTheme();
   const [data, setData] = useState<ProfileData | null>(null);
   const bottomInset = useBottomChromeInset();
+  const dailyGoalMinutes = useSettingsStore((s) => s.dailyGoalMinutes);
+  const reviewIntensity = useSettingsStore((s) => s.reviewIntensity);
 
   const refresh = useCallback(() => {
     loadProfileData()
@@ -47,12 +57,62 @@ export default function IchScreen() {
   }
 
   const hasAnyProgress = data ? data.moduleProgress.some((m) => m.completedLessons > 0) : false;
+  const modulesStarted = data ? data.moduleProgress.filter((m) => m.completedLessons > 0 || m.percent > 0).length : 0;
+  const lessonsDone = data ? data.moduleProgress.reduce((sum, m) => sum + m.completedLessons, 0) : 0;
 
   return (
     <ScrollView
       style={[styles.container, { backgroundColor: theme.colors.bg }]}
       contentContainerStyle={{ padding: theme.spacing.lg, paddingBottom: bottomInset }}
     >
+      <View
+        style={[
+          styles.profileCard,
+          {
+            backgroundColor: theme.colors.surface,
+            borderColor: theme.colors.border,
+            borderRadius: theme.radius.lg,
+            padding: theme.spacing.base,
+            marginBottom: theme.spacing.lg,
+          },
+        ]}
+      >
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: theme.spacing.sm }}>
+          <CircleUser color={theme.colors.accent} size={32} strokeWidth={1.75} />
+          <Text style={[styles.sectionTitle, { color: theme.colors.text }]}>{de.ich.profileTitle}</Text>
+        </View>
+        <Text style={[styles.body, { color: theme.colors.textWeak, marginTop: theme.spacing.sm }]}>
+          {de.ich.profileDailyGoal(dailyGoalMinutes)}
+        </Text>
+        <Text style={[styles.body, { color: theme.colors.textWeak, marginTop: theme.spacing.xs }]}>
+          {de.ich.profileIntensity(intensityLabel(reviewIntensity))}
+        </Text>
+        <Text style={[styles.body, { color: theme.colors.text, marginTop: theme.spacing.sm }]}>
+          {hasAnyProgress
+            ? de.ich.profileProgressSummary(modulesStarted, lessonsDone)
+            : de.ich.profileProgressEmpty}
+        </Text>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={de.ich.profileSettings}
+          onPress={() => router.push('/settings')}
+          style={[
+            styles.profileSettingsButton,
+            {
+              borderColor: theme.colors.border,
+              borderRadius: theme.radius.md,
+              marginTop: theme.spacing.base,
+              minHeight: theme.minTapTarget,
+            },
+          ]}
+        >
+          <Settings color={theme.colors.text} size={20} strokeWidth={1.75} />
+          <Text style={[styles.body, { color: theme.colors.text, marginLeft: theme.spacing.sm }]}>
+            {de.ich.profileSettings}
+          </Text>
+        </Pressable>
+      </View>
+
       {!data ? null : !hasAnyProgress ? (
         <EmptyState Icon={CircleUser} title={de.ich.emptyTitle} body={de.ich.emptyBody} />
       ) : (
@@ -259,6 +319,14 @@ function ProgressRow({
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
+  profileCard: { borderWidth: StyleSheet.hairlineWidth },
+  profileSettingsButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: StyleSheet.hairlineWidth,
+    paddingHorizontal: 14,
+  },
   sectionTitle: { fontSize: 18, lineHeight: 26, fontWeight: '700' },
   subheading: { fontSize: 16, lineHeight: 22, fontWeight: '600' },
   body: { fontSize: 15, lineHeight: 22 },

@@ -5,7 +5,7 @@
 import { create } from 'zustand';
 import type { BlockRole, CueSheet } from '@futuredev/content-schema';
 import { EMPTY_QUEUE } from './queue.js';
-import type { DownloadState, PlaybackQueueState, SleepTimerMode } from './types.js';
+import type { AppRepeatMode, DownloadState, PlaybackQueueState, SleepTimerMode } from './types.js';
 import type { SleepTimerTarget } from './sleepTimer.js';
 
 export interface PlayerState {
@@ -21,6 +21,9 @@ export interface PlayerState {
   rate: number;
   sleepTimer: { mode: SleepTimerMode; target: SleepTimerTarget } | null;
   downloads: Record<string, DownloadState>;
+  autoplayNext: boolean;
+  repeatMode: AppRepeatMode;
+  playerPreferencesHydrated: boolean;
 
   setQueueState: (queue: PlaybackQueueState) => void;
   setCueSheet: (lessonId: string, cueSheet: CueSheet) => void;
@@ -32,6 +35,9 @@ export interface PlayerState {
   setRate: (rate: number) => void;
   setSleepTimer: (value: { mode: SleepTimerMode; target: SleepTimerTarget } | null) => void;
   setDownloadState: (state: DownloadState) => void;
+  setAutoplayNext: (value: boolean) => void;
+  setRepeatMode: (value: AppRepeatMode) => void;
+  setPlayerPreferencesHydrated: (value: boolean) => void;
   reset: () => void;
 }
 
@@ -46,6 +52,9 @@ const initialState = {
   rate: 1.0,
   sleepTimer: null,
   downloads: {},
+  autoplayNext: true,
+  repeatMode: 'off',
+  playerPreferencesHydrated: false,
 } satisfies Partial<PlayerState>;
 
 export const usePlayerStore = create<PlayerState>((set) => ({
@@ -64,5 +73,8 @@ export const usePlayerStore = create<PlayerState>((set) => ({
   setSleepTimer: (sleepTimer) => set({ sleepTimer }),
   setDownloadState: (state) =>
     set((s) => ({ downloads: { ...s.downloads, [state.lessonId]: state } })),
+  setAutoplayNext: (autoplayNext) => set({ autoplayNext }),
+  setRepeatMode: (repeatMode) => set({ repeatMode }),
+  setPlayerPreferencesHydrated: (playerPreferencesHydrated) => set({ playerPreferencesHydrated }),
   reset: () => set(initialState),
 }));

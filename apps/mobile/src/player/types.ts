@@ -47,3 +47,5 @@ export interface CueLookupResult {
   readonly blockIndex: number;
   readonly cueSheet: CueSheet;
 }
+
+export type AppRepeatMode = 'off' | 'one' | 'all';

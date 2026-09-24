@@ -2,7 +2,8 @@ import { useCallback } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router, usePathname } from 'expo-router';
-import { FastForward, Pause, Play } from 'lucide-react-native';
+import { FastForward, Pause, Play, X } from 'lucide-react-native';
+import { clearPlayback } from './index.js';
 import { useTheme } from '../theme/useTheme.js';
 import { de } from '../i18n/de.js';
 import { ModuleCover } from '../components/ModuleCover.js';
@@ -68,7 +69,7 @@ export function MiniPlayer() {
         {
           backgroundColor: theme.colors.surface,
           borderTopColor: theme.colors.border,
-          bottom: tabBarVisible ? tabBarHeight(theme) : insets.bottom,
+          bottom: tabBarVisible ? tabBarHeight(theme, insets.bottom) : insets.bottom,
           zIndex: 20,
         },
       ]}
@@ -130,18 +131,33 @@ export function MiniPlayer() {
             </Text>
           </View>
         </Pressable>
-        <Pressable
-          onPress={() => void jumpForward(JUMP_FORWARD_SECONDS)}
-          accessibilityRole="button"
-          accessibilityLabel={de.player.jumpForward}
-          hitSlop={8}
-          style={({ pressed }) => [
-            styles.iconButton,
-            { minWidth: theme.minTapTarget, minHeight: theme.minTapTarget, opacity: pressed ? 0.88 : 1 },
-          ]}
-        >
-          <FastForward color={theme.colors.textWeak} size={22} />
-        </Pressable>
+        {!isPlaying ? (
+          <Pressable
+            onPress={() => void clearPlayback()}
+            accessibilityRole="button"
+            accessibilityLabel={de.player.close}
+            hitSlop={8}
+            style={({ pressed }) => [
+              styles.iconButton,
+              { minWidth: theme.minTapTarget, minHeight: theme.minTapTarget, opacity: pressed ? 0.88 : 1 },
+            ]}
+          >
+            <X color={theme.colors.textWeak} size={22} />
+          </Pressable>
+        ) : (
+          <Pressable
+            onPress={() => void jumpForward(JUMP_FORWARD_SECONDS)}
+            accessibilityRole="button"
+            accessibilityLabel={de.player.jumpForward}
+            hitSlop={8}
+            style={({ pressed }) => [
+              styles.iconButton,
+              { minWidth: theme.minTapTarget, minHeight: theme.minTapTarget, opacity: pressed ? 0.88 : 1 },
+            ]}
+          >
+            <FastForward color={theme.colors.textWeak} size={22} />
+          </Pressable>
+        )}
         <Pressable
           onPress={() => void togglePlayback(isPlaying)}
           accessibilityRole="button"

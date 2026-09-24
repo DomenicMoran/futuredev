@@ -1,9 +1,9 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
-import { Dumbbell, Headphones, MessageCircleQuestion } from 'lucide-react-native';
+import { Dumbbell, Headphones, Layers, MessageCircleQuestion } from 'lucide-react-native';
+import { isDue } from '@futuredev/core';
 import { useTheme } from '../../src/theme/useTheme.js';
-import { EmptyState } from '../../src/components/EmptyState.js';
 import { de } from '../../src/i18n/de.js';
 import { useSettingsStore } from '../../src/state/settings.js';
 import { loadReviewCards } from '../../src/review/cards.js';
@@ -13,35 +13,48 @@ import { knownLessonIds } from '../../src/quiz/content.js';
 import { useBottomChromeInset } from '../../src/navigation/useBottomChromeInset.js';
 import modulesFile from '../../../../content/modules.json';
 
-// Reiter Üben (AP-3.5, Punkt 2): Tagesration aus @futuredev/core (leitner.ts),
-// Modul-/Gesamtprüfung, Wiederholungsclips (öffnet vorerst den Hören-Reiter,
-// da Agent C's player.enqueueLessons zum Zeitpunkt dieses Auftrags noch nicht
-// existiert, siehe app/(tabs)/hoeren.tsx).
 export default function UebenScreen() {
   const theme = useTheme();
   const dailyGoalMinutes = useSettingsStore((s) => s.dailyGoalMinutes);
   const reviewIntensity = useSettingsStore((s) => s.reviewIntensity);
-  const [dueCount, setDueCount] = useState<number | null>(null);
+  const [rationCount, setRationCount] = useState<number | null>(null);
+  const [totalDueCount, setTotalDueCount] = useState<number | null>(null);
   const [reviewLessonId, setReviewLessonId] = useState<string | null>(null);
-  const [availableModuleIds, setAvailableModuleIds] = useState<string[]>([]);
+  const [publishedLessonIds, setPublishedLessonIds] = useState<string[]>([]);
   const bottomInset = useBottomChromeInset();
-  const moduleTitleById = new Map(modulesFile.modules.map((m) => [m.id, m.title]));
+  const inset = theme.spacing.base;
+
+  const examModules = useMemo(() => {
+    const published = new Set(publishedLessonIds.map((id) => id.slice(0, 3)));
+    return modulesFile.modules.filter((module) => published.has(module.id));
+  }, [publishedLessonIds]);
 
   const refresh = useCallback(() => {
     let cancelled = false;
     loadReviewCards()
       .then((cards) => {
         if (cancelled) return;
+        const now = new Date();
+        const dueTotal = cards.filter((c) => isDue(c, now)).length;
         const size = dailyRationSize(dailyGoalMinutes, reviewIntensity);
-        const ration = selectDailyRation(cards, size);
-        setDueCount(ration.length);
-        setReviewLessonId(pickReviewLesson(ration));
+        const ration = selectDailyRation(cards, size, now);
+        setTotalDueCount(dueTotal);
+        setRationCount(ration.length);
+        setReviewLessonId(pickReviewLesson(ration.length > 0 ? ration : cards.filter((c) => isDue(c, now))));
       })
       .catch(() => {
         if (!cancelled) {
-          setDueCount(0);
+          setRationCount(0);
+          setTotalDueCount(0);
           setReviewLessonId(null);
         }
+      });
+    knownLessonIds()
+      .then((ids) => {
+        if (!cancelled) setPublishedLessonIds(ids);
+      })
+      .catch(() => {
+        if (!cancelled) setPublishedLessonIds([]);
       });
     return () => {
       cancelled = true;
@@ -50,168 +63,276 @@ export default function UebenScreen() {
 
   useFocusEffect(refresh);
 
-  useFocusEffect(
-    useCallback(() => {
-      let cancelled = false;
-      knownLessonIds()
-        .then((ids) => {
-          if (!cancelled) setAvailableModuleIds([...new Set(ids.map((id) => id.slice(0, 3)))]);
-        })
-        .catch(() => {
-          if (!cancelled) setAvailableModuleIds([]);
-        });
-      return () => {
-        cancelled = true;
-      };
-    }, []),
-  );
-
   return (
     <ScrollView
       style={[styles.container, { backgroundColor: theme.colors.bg }]}
-      contentContainerStyle={{ padding: theme.spacing.lg, paddingBottom: bottomInset }}
+      contentContainerStyle={{ padding: inset, paddingBottom: bottomInset }}
       refreshControl={<RefreshControl refreshing={false} onRefresh={refresh} />}
     >
-      {dueCount === null ? null : dueCount === 0 ? (
-        <EmptyState
-          Icon={Dumbbell}
-          title={de.ueben.emptyTitle}
-          body={de.ueben.emptyBody}
-          actionLabel={de.ueben.emptyAction}
-          onAction={() => router.push('/(tabs)/lernen')}
+      <SectionHeader title={de.ueben.sectionHeute} theme={theme} />
+      {rationCount === null ? null : rationCount === 0 ? (
+        <CalmCard
+          title={de.ueben.heuteEmptyTitle}
+          body={de.ueben.heuteEmptyBody}
+          theme={theme}
         />
       ) : (
-        <View
-          style={[
-            styles.card,
-            { backgroundColor: theme.colors.surface, borderColor: theme.colors.border, borderRadius: theme.radius.lg, padding: theme.spacing.base },
-          ]}
-        >
-          <Text style={[styles.cardTitle, { color: theme.colors.text }]}>{de.ueben.dailyRationTitle}</Text>
-          <Text style={[styles.cardBody, { color: theme.colors.textWeak, marginTop: theme.spacing.xs }]}>
-            {de.ueben.dailyRationBody(dueCount)}
-          </Text>
-          <Pressable
-            accessibilityRole="button"
-            accessibilityLabel={de.ueben.startDailyRation}
-            onPress={() => reviewLessonId && router.push(`/quiz/${reviewLessonId}`)}
-            disabled={!reviewLessonId}
-            style={[
-              styles.primaryButton,
-              {
-                backgroundColor: theme.colors.accent,
-                borderRadius: theme.radius.md,
-                marginTop: theme.spacing.base,
-                minHeight: theme.minTapTarget,
-              },
-            ]}
-          >
-            <Text style={[styles.primaryButtonLabel, { color: theme.colors.accentText }]}>
-              {de.ueben.startDailyRation}
-            </Text>
-          </Pressable>
-        </View>
+        <ActionCard
+          title={de.ueben.dailyRationTitle}
+          body={de.ueben.dailyRationBody(rationCount)}
+          actionLabel={de.ueben.startDailyRation}
+          onAction={() => reviewLessonId && router.push(`/quiz/${reviewLessonId}`)}
+          disabled={!reviewLessonId}
+          theme={theme}
+        />
       )}
 
-      <View style={[styles.row, { marginTop: theme.spacing.lg, gap: theme.spacing.sm }]}>
-        {availableModuleIds.map((moduleId) => (
-          <Tile
-            key={moduleId}
-            label={`${de.ueben.moduleExamTile}: ${moduleTitleById.get(moduleId) ?? de.module.unknownTitle}`}
-            onPress={() => router.push(`/quiz/exam?scope=module:${moduleId}`)}
+      <SectionHeader title={de.ueben.sectionWiederholen} theme={theme} topGap />
+      {totalDueCount === null ? null : totalDueCount === 0 ? (
+        <CalmCard title={de.ueben.emptyTitle} body={de.ueben.wiederholenEmptyTip} theme={theme} />
+      ) : (
+        <ActionCard
+          title={de.ueben.sectionWiederholen}
+          body={de.ueben.wiederholenDueBody(totalDueCount)}
+          actionLabel={de.ueben.wiederholenStart}
+          onAction={() => reviewLessonId && router.push(`/quiz/${reviewLessonId}`)}
+          disabled={!reviewLessonId}
+          theme={theme}
+          Icon={Dumbbell}
+        />
+      )}
+
+      <SectionHeader title={de.ueben.sectionPruefungen} theme={theme} topGap />
+      <View
+        style={[
+          styles.listCard,
+          { backgroundColor: theme.colors.surface, borderColor: theme.colors.border, borderRadius: theme.radius.lg },
+        ]}
+      >
+        <ExamRow
+          label={de.ueben.examAllRow}
+          onPress={() => router.push('/quiz/exam?scope=all')}
+          theme={theme}
+          first
+        />
+        {examModules.map((module, idx) => (
+          <ExamRow
+            key={module.id}
+            label={module.title}
+            onPress={() => router.push(`/quiz/exam?scope=module:${module.id}`)}
             theme={theme}
+            last={idx === examModules.length - 1}
           />
         ))}
-        <Tile label={de.ueben.allExamTile} onPress={() => router.push('/quiz/exam?scope=all')} theme={theme} />
       </View>
 
-      <Pressable
-        accessibilityRole="button"
-        accessibilityLabel={de.ueben.explainExamAction}
-        onPress={() => router.push('/erklaer')}
-        style={[
-          styles.card,
-          {
-            backgroundColor: theme.colors.surface,
-            borderColor: theme.colors.border,
-            borderRadius: theme.radius.lg,
-            padding: theme.spacing.base,
-            marginTop: theme.spacing.lg,
-            flexDirection: 'row',
-            alignItems: 'center',
-            gap: theme.spacing.sm,
-          },
-        ]}
-      >
-        <MessageCircleQuestion color={theme.colors.accent} size={28} strokeWidth={1.75} />
-        <View style={{ flex: 1 }}>
-          <Text style={[styles.cardTitle, { color: theme.colors.text }]}>{de.ueben.explainExamTitle}</Text>
-          <Text style={[styles.cardBody, { color: theme.colors.textWeak, marginTop: theme.spacing.xs }]}>
-            {de.ueben.explainExamBody}
-          </Text>
-        </View>
-      </Pressable>
+      <SectionHeader title={de.ueben.sectionFlashcards} theme={theme} topGap />
+      <ActionCard
+        title={de.ueben.sectionFlashcards}
+        body={de.ueben.flashcardsBody}
+        actionLabel={de.ueben.flashcardsOpen}
+        onAction={() => router.push('/flashcards')}
+        theme={theme}
+        Icon={Layers}
+      />
 
-      <Pressable
-        accessibilityRole="button"
-        accessibilityLabel={de.ueben.reviewClipsAction}
+      <SectionHeader title={de.ueben.sectionErklaeren} theme={theme} topGap />
+      <LinkCard
+        title={de.ueben.explainExamTitle}
+        body={de.ueben.explainExamBody}
+        onPress={() => router.push('/erklaer')}
+        accessibilityLabel={de.ueben.explainExamAction}
+        theme={theme}
+        Icon={MessageCircleQuestion}
+      />
+
+      <SectionHeader title={de.ueben.sectionHoerenClips} theme={theme} topGap />
+      <LinkCard
+        title={de.ueben.reviewClipsTitle}
+        body={de.ueben.reviewClipsBody}
         onPress={() => router.push('/(tabs)/hoeren')}
-        style={[
-          styles.card,
-          {
-            backgroundColor: theme.colors.surface,
-            borderColor: theme.colors.border,
-            borderRadius: theme.radius.lg,
-            padding: theme.spacing.base,
-            marginTop: theme.spacing.lg,
-            flexDirection: 'row',
-            alignItems: 'center',
-            gap: theme.spacing.sm,
-          },
-        ]}
-      >
-        <Headphones color={theme.colors.accent} size={28} strokeWidth={1.75} />
-        <View style={{ flex: 1 }}>
-          <Text style={[styles.cardTitle, { color: theme.colors.text }]}>{de.ueben.reviewClipsTitle}</Text>
-          <Text style={[styles.cardBody, { color: theme.colors.textWeak, marginTop: theme.spacing.xs }]}>
-            {de.ueben.reviewClipsBody}
-          </Text>
-        </View>
-      </Pressable>
+        accessibilityLabel={de.ueben.reviewClipsAction}
+        theme={theme}
+        Icon={Headphones}
+      />
     </ScrollView>
   );
 }
 
-function Tile({ label, onPress, theme }: { label: string; onPress: () => void; theme: ReturnType<typeof useTheme> }) {
+function SectionHeader({
+  title,
+  theme,
+  topGap,
+}: {
+  title: string;
+  theme: ReturnType<typeof useTheme>;
+  topGap?: boolean;
+}) {
+  return (
+    <Text
+      style={[
+        styles.sectionTitle,
+        { color: theme.colors.text, marginTop: topGap ? theme.spacing.lg : theme.spacing.sm, marginBottom: theme.spacing.sm },
+      ]}
+    >
+      {title}
+    </Text>
+  );
+}
+
+function CalmCard({ title, body, theme }: { title: string; body: string; theme: ReturnType<typeof useTheme> }) {
+  return (
+    <View
+      style={[
+        styles.card,
+        { backgroundColor: theme.colors.surface, borderColor: theme.colors.border, borderRadius: theme.radius.lg, padding: theme.spacing.base },
+      ]}
+    >
+      <Text style={[styles.cardTitle, { color: theme.colors.text }]}>{title}</Text>
+      <Text style={[styles.cardBody, { color: theme.colors.textWeak, marginTop: theme.spacing.xs }]}>{body}</Text>
+    </View>
+  );
+}
+
+function ActionCard({
+  title,
+  body,
+  actionLabel,
+  onAction,
+  disabled,
+  theme,
+  Icon,
+}: {
+  title: string;
+  body: string;
+  actionLabel: string;
+  onAction: () => void;
+  disabled?: boolean;
+  theme: ReturnType<typeof useTheme>;
+  Icon?: typeof Dumbbell;
+}) {
+  return (
+    <View
+      style={[
+        styles.card,
+        { backgroundColor: theme.colors.surface, borderColor: theme.colors.border, borderRadius: theme.radius.lg, padding: theme.spacing.base },
+      ]}
+    >
+      {Icon ? (
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: theme.spacing.sm, marginBottom: theme.spacing.xs }}>
+          <Icon color={theme.colors.accent} size={24} strokeWidth={1.75} />
+          <Text style={[styles.cardTitle, { color: theme.colors.text, flex: 1 }]}>{title}</Text>
+        </View>
+      ) : (
+        <Text style={[styles.cardTitle, { color: theme.colors.text }]}>{title}</Text>
+      )}
+      <Text style={[styles.cardBody, { color: theme.colors.textWeak, marginTop: Icon ? 0 : theme.spacing.xs }]}>{body}</Text>
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel={actionLabel}
+        onPress={onAction}
+        disabled={disabled}
+        style={[
+          styles.primaryButton,
+          {
+            backgroundColor: theme.colors.accent,
+            borderRadius: theme.radius.md,
+            marginTop: theme.spacing.base,
+            minHeight: theme.minTapTarget,
+            opacity: disabled ? 0.5 : 1,
+          },
+        ]}
+      >
+        <Text style={[styles.primaryButtonLabel, { color: theme.colors.accentText }]}>{actionLabel}</Text>
+      </Pressable>
+    </View>
+  );
+}
+
+function LinkCard({
+  title,
+  body,
+  onPress,
+  accessibilityLabel,
+  theme,
+  Icon,
+}: {
+  title: string;
+  body: string;
+  onPress: () => void;
+  accessibilityLabel: string;
+  theme: ReturnType<typeof useTheme>;
+  Icon: typeof Headphones;
+}) {
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={accessibilityLabel}
+      onPress={onPress}
+      style={[
+        styles.card,
+        {
+          backgroundColor: theme.colors.surface,
+          borderColor: theme.colors.border,
+          borderRadius: theme.radius.lg,
+          padding: theme.spacing.base,
+          flexDirection: 'row',
+          alignItems: 'center',
+          gap: theme.spacing.sm,
+        },
+      ]}
+    >
+      <Icon color={theme.colors.accent} size={28} strokeWidth={1.75} />
+      <View style={{ flex: 1 }}>
+        <Text style={[styles.cardTitle, { color: theme.colors.text }]}>{title}</Text>
+        <Text style={[styles.cardBody, { color: theme.colors.textWeak, marginTop: theme.spacing.xs }]}>{body}</Text>
+      </View>
+    </Pressable>
+  );
+}
+
+function ExamRow({
+  label,
+  onPress,
+  theme,
+  first,
+  last,
+}: {
+  label: string;
+  onPress: () => void;
+  theme: ReturnType<typeof useTheme>;
+  first?: boolean;
+  last?: boolean;
+}) {
   return (
     <Pressable
       accessibilityRole="button"
       accessibilityLabel={label}
       onPress={onPress}
       style={[
-        styles.tile,
+        styles.examRow,
         {
-          backgroundColor: theme.colors.surface,
           borderColor: theme.colors.border,
-          borderRadius: theme.radius.md,
           minHeight: theme.minTapTarget,
-          paddingHorizontal: theme.spacing.base,
+          borderTopWidth: first ? 0 : StyleSheet.hairlineWidth,
+          borderBottomWidth: last ? 0 : StyleSheet.hairlineWidth,
         },
       ]}
     >
-      <Text style={[styles.tileLabel, { color: theme.colors.text }]}>{label}</Text>
+      <Text style={[styles.examRowLabel, { color: theme.colors.text }]}>{label}</Text>
     </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
+  sectionTitle: { fontSize: 13, lineHeight: 18, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 0.6 },
   card: { borderWidth: StyleSheet.hairlineWidth },
   cardTitle: { fontSize: 17, lineHeight: 24, fontWeight: '600' },
   cardBody: { fontSize: 14, lineHeight: 20 },
   primaryButton: { justifyContent: 'center', alignItems: 'center' },
   primaryButtonLabel: { fontSize: 16, lineHeight: 24, fontWeight: '600' },
-  row: { flexDirection: 'row', flexWrap: 'wrap' },
-  tile: { borderWidth: StyleSheet.hairlineWidth, justifyContent: 'center', alignItems: 'center' },
-  tileLabel: { fontSize: 14, fontWeight: '500' },
+  listCard: { borderWidth: StyleSheet.hairlineWidth, overflow: 'hidden' },
+  examRow: { paddingHorizontal: 16, paddingVertical: 14, justifyContent: 'center' },
+  examRowLabel: { fontSize: 16, lineHeight: 22, fontWeight: '500' },
 });

@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { Tabs } from 'expo-router';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Home, BookOpen, Headphones, Dumbbell, CircleUser } from 'lucide-react-native';
 import { useTheme } from '../../src/theme/useTheme';
 import { de } from '../../src/i18n/de';
@@ -9,6 +10,7 @@ import { tabBarHeight } from '../../src/navigation/tabBarMetrics';
 // Mindesthöhe nach design-system.md (Komponente "Reiterleiste").
 export default function TabsLayout() {
   const theme = useTheme();
+  const insets = useSafeAreaInsets();
 
   return (
     <Tabs
@@ -21,8 +23,8 @@ export default function TabsLayout() {
           backgroundColor: theme.colors.surface,
           borderTopColor: theme.colors.border,
           borderTopWidth: StyleSheet.hairlineWidth,
-          height: tabBarHeight(theme),
-          paddingBottom: theme.spacing.xs,
+          height: tabBarHeight(theme, insets.bottom),
+          paddingBottom: insets.bottom + theme.spacing.xs,
           paddingTop: theme.spacing.sm,
         },
         tabBarLabelStyle: {

@@ -14,7 +14,7 @@ export function useBottomChromeInset(): number {
   const tabBarVisible = isTabBarVisible(pathname);
   const queue = usePlayerStore((s) => s.queue);
   const hasMiniPlayer = currentItem(queue) !== null;
-  const tabBar = tabBarVisible ? tabBarHeight(theme) : 0;
+  const tabBar = tabBarVisible ? tabBarHeight(theme, insets.bottom) : insets.bottom;
   const miniPlayer = hasMiniPlayer ? miniPlayerHeight(theme) : 0;
   const miniPlayerSafeGap = hasMiniPlayer && !tabBarVisible ? insets.bottom : 0;
   return tabBar + miniPlayer + miniPlayerSafeGap + theme.spacing.sm;
