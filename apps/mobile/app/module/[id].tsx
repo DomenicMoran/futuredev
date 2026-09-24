@@ -1,7 +1,7 @@
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
-import { ArrowLeft, CheckCircle2, Circle } from 'lucide-react-native';
+import { ArrowLeft, CheckCircle2, ChevronRight, Circle } from 'lucide-react-native';
 import { useTheme } from '../../src/theme/useTheme';
 import { EmptyState } from '../../src/components/EmptyState';
 import { ModuleCover } from '../../src/components/ModuleCover';
@@ -91,11 +91,11 @@ function LessonRow({ lesson }: { lesson: LessonListEntry }) {
       <View style={styles.lessonRowText}>
         <Text style={[styles.lessonId, { color: theme.colors.text }]}>{lesson.title}</Text>
         <Text style={[styles.lessonState, { color: theme.colors.textWeak }]}>
-          {lesson.durationMinutes > 0 ? de.module.lessonDuration(lesson.durationMinutes) : lesson.id}
-          {' · '}
-          {stateLabel}
+          {lesson.durationMinutes > 0 ? de.module.lessonDuration(lesson.durationMinutes) : stateLabel}
+          {lesson.durationMinutes > 0 ? ` · ${stateLabel}` : null}
         </Text>
       </View>
+      <ChevronRight size={20} color={theme.colors.textWeak} />
     </Pressable>
   );
 }

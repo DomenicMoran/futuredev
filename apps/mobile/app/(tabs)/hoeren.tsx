@@ -160,9 +160,15 @@ export default function HoerenScreen() {
                 onPress={() => void runPlayback(() => playLesson(lesson.id))}
                 accessibilityRole="button"
                 accessibilityLabel={`${lesson.title}, ${lesson.durationMinutes} Minuten, ${downloaded[lesson.id] ? de.hoeren.downloaded : de.hoeren.notDownloaded}`}
-                style={[
+                style={({ pressed }) => [
                   styles.lessonRow,
-                  { minHeight: theme.minTapTarget, borderColor: theme.colors.border, borderRadius: theme.radius.md },
+                  {
+                    minHeight: theme.minTapTarget,
+                    borderColor: theme.colors.border,
+                    borderRadius: theme.radius.md,
+                    backgroundColor: theme.colors.surface,
+                    opacity: pressed ? 0.96 : 1,
+                  },
                 ]}
               >
                 <Text numberOfLines={1} style={[styles.lessonTitle, { color: theme.colors.text }]}>

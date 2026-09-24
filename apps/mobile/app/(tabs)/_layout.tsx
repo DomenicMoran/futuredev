@@ -1,3 +1,4 @@
+import { StyleSheet } from 'react-native';
 import { Tabs } from 'expo-router';
 import { Home, BookOpen, Headphones, Dumbbell, CircleUser } from 'lucide-react-native';
 import { useTheme } from '../../src/theme/useTheme';
@@ -19,13 +20,15 @@ export default function TabsLayout() {
         tabBarStyle: {
           backgroundColor: theme.colors.surface,
           borderTopColor: theme.colors.border,
+          borderTopWidth: StyleSheet.hairlineWidth,
           height: tabBarHeight(theme),
           paddingBottom: theme.spacing.xs,
-          paddingTop: theme.spacing.xs,
+          paddingTop: theme.spacing.sm,
         },
         tabBarLabelStyle: {
           fontSize: theme.type.size.xs.size,
           fontWeight: '500',
+          marginTop: 2,
         },
       }}
     >
@@ -33,35 +36,45 @@ export default function TabsLayout() {
         name="index"
         options={{
           title: de.tabs.start,
-          tabBarIcon: ({ color, size }) => <Home color={color} size={size} strokeWidth={1.75} />,
+          tabBarIcon: ({ color, focused }) => (
+            <Home color={color} size={focused ? 23 : 22} strokeWidth={focused ? 2 : 1.75} />
+          ),
         }}
       />
       <Tabs.Screen
         name="lernen"
         options={{
           title: de.tabs.lernen,
-          tabBarIcon: ({ color, size }) => <BookOpen color={color} size={size} strokeWidth={1.75} />,
+          tabBarIcon: ({ color, focused }) => (
+            <BookOpen color={color} size={focused ? 23 : 22} strokeWidth={focused ? 2 : 1.75} />
+          ),
         }}
       />
       <Tabs.Screen
         name="hoeren"
         options={{
           title: de.tabs.hoeren,
-          tabBarIcon: ({ color, size }) => <Headphones color={color} size={size} strokeWidth={1.75} />,
+          tabBarIcon: ({ color, focused }) => (
+            <Headphones color={color} size={focused ? 23 : 22} strokeWidth={focused ? 2 : 1.75} />
+          ),
         }}
       />
       <Tabs.Screen
         name="ueben"
         options={{
           title: de.tabs.ueben,
-          tabBarIcon: ({ color, size }) => <Dumbbell color={color} size={size} strokeWidth={1.75} />,
+          tabBarIcon: ({ color, focused }) => (
+            <Dumbbell color={color} size={focused ? 23 : 22} strokeWidth={focused ? 2 : 1.75} />
+          ),
         }}
       />
       <Tabs.Screen
         name="ich"
         options={{
           title: de.tabs.ich,
-          tabBarIcon: ({ color, size }) => <CircleUser color={color} size={size} strokeWidth={1.75} />,
+          tabBarIcon: ({ color, focused }) => (
+            <CircleUser color={color} size={focused ? 23 : 22} strokeWidth={focused ? 2 : 1.75} />
+          ),
         }}
       />
     </Tabs>

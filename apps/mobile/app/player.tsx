@@ -94,7 +94,7 @@ export default function PlayerScreen() {
         </Pressable>
       </View>
 
-      <ScrollView contentContainerStyle={[styles.scrollContent, { paddingHorizontal: theme.spacing.lg }]}>
+      <ScrollView contentContainerStyle={[styles.scrollContent, { paddingHorizontal: theme.spacing.base }]}>
         <View style={styles.titleBlock}>
           <Text style={[styles.title, { color: theme.colors.text }]}>{item.title}</Text>
           <View style={[styles.badge, { backgroundColor: theme.colors.accent }]}>
@@ -128,7 +128,7 @@ export default function PlayerScreen() {
         </View>
 
         {/* Steuerung: 15 s zurück, Play/Pause, 30 s vor, Vorherige/Nächste */}
-        <View style={styles.controls}>
+        <View style={[styles.controls, { gap: theme.spacing.sm, marginTop: theme.spacing.xl }]}>
           <Pressable
             onPress={() => void skipToPrevious()}
             accessibilityRole="button"
@@ -151,9 +151,15 @@ export default function PlayerScreen() {
             onPress={() => void togglePlayback(isPlaying)}
             accessibilityRole="button"
             accessibilityLabel={isPlaying ? de.player.pause : de.player.play}
-            style={[
+            style={({ pressed }) => [
               styles.playButton,
-              { backgroundColor: theme.colors.accent, minWidth: 64, minHeight: 64, borderRadius: 32 },
+              {
+                backgroundColor: theme.colors.accent,
+                minWidth: 64,
+                minHeight: 64,
+                borderRadius: theme.radius.full,
+                opacity: pressed ? 0.92 : 1,
+              },
             ]}
           >
             {isPlaying ? (
@@ -305,9 +311,10 @@ export default function PlayerScreen() {
                       styles.chapterItem,
                       {
                         minHeight: theme.minTapTarget,
-                        borderLeftColor: block.isKeySentence ? theme.colors.accent : isActive ? theme.colors.textWeak : 'transparent',
-                        backgroundColor: isActive ? theme.colors.border : 'transparent',
+                        borderLeftColor: block.isKeySentence ? theme.colors.accent : isActive ? theme.colors.accent : 'transparent',
+                        backgroundColor: isActive ? theme.colors.bg : 'transparent',
                         borderRadius: theme.radius.sm,
+                        paddingHorizontal: theme.spacing.sm,
                       },
                     ]}
                   >
@@ -381,12 +388,12 @@ const styles = StyleSheet.create({
   badge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 9999 },
   badgeText: { fontSize: 12, fontWeight: '600' },
   progressRow: { marginTop: 32 },
-  progressTrack: { height: 4, borderRadius: 2, overflow: 'visible' },
-  progressFill: { height: 4, borderRadius: 2 },
+  progressTrack: { height: 3, borderRadius: 2, overflow: 'hidden' },
+  progressFill: { height: 3, borderRadius: 2 },
   chapterMark: { position: 'absolute', top: -2, width: 2, height: 8 },
   timeRow: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 6 },
   time: { fontSize: 12 },
-  controls: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 32 },
+  controls: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center' },
   playButton: { alignItems: 'center', justifyContent: 'center' },
   settingsRow: { flexDirection: 'row', gap: 12, marginTop: 32 },
   pill: {

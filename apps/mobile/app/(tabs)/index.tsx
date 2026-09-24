@@ -52,18 +52,25 @@ export default function StartScreen() {
   return (
     <ScrollView
       style={[styles.container, { backgroundColor: theme.colors.bg }]}
-      contentContainerStyle={{ padding: theme.spacing.lg, paddingBottom: bottomInset }}
+      contentContainerStyle={{
+        paddingHorizontal: theme.spacing.base,
+        paddingTop: theme.spacing.lg,
+        paddingBottom: bottomInset,
+      }}
     >
-      <Text style={[styles.greeting, { color: theme.colors.text }]}>{greeting}</Text>
+      <Text style={[styles.greeting, { color: theme.colors.text, marginBottom: theme.spacing.sm }]}>{greeting}</Text>
 
       {data?.continueCard ? (
         <Card theme={theme} title={de.start.continueTitle}>
+          <Text style={[styles.cardHeadline, { color: theme.colors.text }]} numberOfLines={2}>
+            {data.continueCard.lessonTitle}
+          </Text>
           <Text style={[styles.body, { color: theme.colors.textWeak }]}>
             {data.continueCard.state === 'listened' && data.continueCard.positionLabel
               ? de.start.continueListenFrom(data.continueCard.positionLabel)
               : data.continueCard.positionLabel
                 ? de.start.continueReadFrom(data.continueCard.positionLabel)
-                : data.continueCard.lessonId}
+                : null}
           </Text>
           <PrimaryButton
             theme={theme}
@@ -78,7 +85,9 @@ export default function StartScreen() {
 
       {data?.nextLessonId ? (
         <Card theme={theme} title={de.start.nextRecommendationTitle}>
-          <Text style={[styles.body, { color: theme.colors.textWeak }]}>{data.nextLessonId}</Text>
+          <Text style={[styles.cardHeadline, { color: theme.colors.text }]} numberOfLines={2}>
+            {data.nextLessonTitle ?? data.nextLessonId}
+          </Text>
           <PrimaryButton
             theme={theme}
             label={de.start.nextRecommendationAction}
@@ -141,9 +150,15 @@ function PrimaryButton({ theme, label, onPress }: { theme: ReturnType<typeof use
       accessibilityRole="button"
       accessibilityLabel={label}
       onPress={onPress}
-      style={[
+      style={({ pressed }) => [
         styles.primaryButton,
-        { backgroundColor: theme.colors.accent, borderRadius: theme.radius.md, marginTop: theme.spacing.sm, minHeight: theme.minTapTarget },
+        {
+          backgroundColor: theme.colors.accent,
+          borderRadius: theme.radius.md,
+          marginTop: theme.spacing.md,
+          minHeight: theme.minTapTarget,
+          opacity: pressed ? 0.92 : 1,
+        },
       ]}
     >
       <Text style={[styles.primaryButtonLabel, { color: theme.colors.accentText }]}>{label}</Text>
@@ -155,7 +170,8 @@ const styles = StyleSheet.create({
   container: { flex: 1 },
   greeting: { fontSize: 26, lineHeight: 34, fontWeight: '700' },
   card: { borderWidth: StyleSheet.hairlineWidth },
-  cardTitle: { fontSize: 16, lineHeight: 22, fontWeight: '600' },
+  cardTitle: { fontSize: 13, lineHeight: 18, fontWeight: '600', textTransform: 'uppercase', letterSpacing: 0.4 },
+  cardHeadline: { fontSize: 17, lineHeight: 24, fontWeight: '600', marginTop: 4 },
   body: { fontSize: 15, lineHeight: 22, marginTop: 4 },
   primaryButton: { justifyContent: 'center', alignItems: 'center' },
   primaryButtonLabel: { fontSize: 15, lineHeight: 22, fontWeight: '600' },

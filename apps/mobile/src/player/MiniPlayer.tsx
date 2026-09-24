@@ -58,7 +58,6 @@ export function MiniPlayer() {
           borderTopColor: theme.colors.border,
           bottom: tabBarVisible ? tabBarHeight(theme) : insets.bottom,
           zIndex: 20,
-          shadowColor: theme.colors.text,
         },
       ]}
     >
@@ -121,7 +120,7 @@ export function MiniPlayer() {
           accessibilityRole="button"
           accessibilityLabel={isPlaying ? de.player.pause : de.player.play}
           hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-          style={[
+          style={({ pressed }) => [
             styles.playButton,
             {
               backgroundColor: theme.colors.accent,
@@ -130,6 +129,7 @@ export function MiniPlayer() {
               width: MINI_PLAYER_PLAY_BUTTON_SIZE,
               height: MINI_PLAYER_PLAY_BUTTON_SIZE,
               borderRadius: theme.radius.full,
+              opacity: pressed ? 0.88 : 1,
             },
           ]}
         >
@@ -150,10 +150,6 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     borderTopWidth: StyleSheet.hairlineWidth,
-    elevation: 8,
-    shadowOffset: { width: 0, height: -2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 6,
   },
   progressTrack: {
     height: MINI_PLAYER_PROGRESS_HEIGHT,
@@ -170,7 +166,7 @@ const styles = StyleSheet.create({
     minWidth: 0,
   },
   title: {
-    fontWeight: '600',
+    fontWeight: '500',
   },
   subtitle: {
     marginTop: 2,

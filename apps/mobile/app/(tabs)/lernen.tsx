@@ -70,8 +70,8 @@ function ModuleRow({ module }: { module: ModuleListEntry }) {
     <Pressable
       onPress={() => router.push(`/module/${module.id}`)}
       accessibilityRole="button"
-      accessibilityLabel={`${module.id}: ${module.title}`}
-      style={[
+      accessibilityLabel={module.title}
+      style={({ pressed }) => [
         styles.moduleRow,
         {
           backgroundColor: theme.colors.surface,
@@ -80,12 +80,12 @@ function ModuleRow({ module }: { module: ModuleListEntry }) {
           padding: theme.spacing.base,
           marginBottom: theme.spacing.sm,
           minHeight: theme.minTapTarget,
+          opacity: pressed ? 0.96 : 1,
         },
       ]}
     >
       <ModuleCover moduleId={module.id} size={56} />
       <View style={styles.moduleRowText}>
-        <Text style={[styles.moduleId, { color: theme.colors.textWeak }]}>{module.id}</Text>
         <Text style={[styles.moduleTitle, { color: theme.colors.text }]}>{module.title}</Text>
         <Text style={[styles.moduleMeta, { color: theme.colors.textWeak }]}>
           {hasLessons
@@ -155,12 +155,6 @@ const styles = StyleSheet.create({
   moduleRowText: {
     flex: 1,
     marginRight: 4,
-  },
-  moduleId: {
-    fontSize: 12,
-    lineHeight: 16,
-    fontWeight: '600',
-    letterSpacing: 0.5,
   },
   moduleTitle: {
     fontSize: 16,

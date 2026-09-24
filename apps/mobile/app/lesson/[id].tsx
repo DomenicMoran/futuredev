@@ -446,7 +446,6 @@ function LessonHeader({
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: theme.spacing.sm }}>
         {moduleId ? <ModuleCover moduleId={moduleId} size={40} /> : null}
         <View style={{ flex: 1 }}>
-          <Text style={[styles.lessonId, { color: theme.colors.textWeak }]}>{lesson.id}</Text>
           <Text style={[styles.lessonTitle, { color: theme.colors.text }]}>{lesson.title}</Text>
         </View>
       </View>
@@ -464,9 +463,18 @@ function LessonHeader({
           onPress={onListen}
           accessibilityRole="button"
           accessibilityLabel={de.lesson.listenTab}
-          style={[styles.toggleButton, { borderColor: theme.colors.border, minHeight: theme.minTapTarget }]}
+          style={({ pressed }) => [
+            styles.toggleButton,
+            styles.listenButton,
+            {
+              backgroundColor: theme.colors.accent,
+              borderColor: theme.colors.accent,
+              minHeight: theme.minTapTarget,
+              opacity: pressed ? 0.92 : 1,
+            },
+          ]}
         >
-          <Text style={{ color: theme.colors.text }}>{de.lesson.listenTab}</Text>
+          <Text style={{ color: theme.colors.accentText, fontWeight: '600' }}>{de.lesson.listenTab}</Text>
         </Pressable>
       </View>
 
@@ -626,9 +634,6 @@ function GlossaryModal({ lesson, term, onClose }: { lesson: Lesson; term: string
           <Text style={[styles.bodyText, { color: theme.colors.text, marginTop: theme.spacing.sm }]}>
             {entry?.definition}
           </Text>
-          <Text style={[styles.metaText, { color: theme.colors.textWeak, marginTop: theme.spacing.sm }]}>
-            {lesson.id}
-          </Text>
           <Pressable
             onPress={onClose}
             accessibilityRole="button"
@@ -657,6 +662,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   toggleButtonActive: { borderWidth: 2 },
+  listenButton: { borderWidth: 0 },
   jumpRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   jumpChip: { borderWidth: 1, borderRadius: 18, paddingHorizontal: 12, justifyContent: 'center' },
   sectionHeading: { fontSize: 15, lineHeight: 22, fontWeight: '700', paddingHorizontal: 16, paddingTop: 20, paddingBottom: 8 },
@@ -665,7 +671,7 @@ const styles = StyleSheet.create({
   speakerLabel: { fontSize: 12, lineHeight: 16, fontWeight: '700', letterSpacing: 0.5 },
   blockActions: { flexDirection: 'row', gap: 4 },
   iconButton: { padding: 6 },
-  bodyText: { fontSize: 16, lineHeight: 24 },
+  bodyText: { fontSize: 16, lineHeight: 26, maxWidth: 560 },
   noteText: { fontSize: 13, lineHeight: 18, marginTop: 4, fontStyle: 'italic' },
   noteInput: { borderWidth: 1, borderRadius: 8, padding: 8, fontSize: 14, minHeight: 60, textAlignVertical: 'top' },
   termChips: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, paddingHorizontal: 16, paddingBottom: 16 },
