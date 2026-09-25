@@ -336,8 +336,8 @@ function startMiniPlayerForGate() {
       .sort((a, b) => b.y - a.y);
     if (stickyListen.length) {
       tapNode(stickyListen[0], 'lesson-sticky-Hören');
-    } else {
-      tapTextOrDesc('Hören', { partial: true }) || tap(792, 1912);
+    } else if (!tapTextOrDesc('Hören', { partial: true })) {
+      tap(792, 1912);
     }
     sleep(9000);
   }
@@ -519,10 +519,14 @@ function xmlHasPlaylistName(xml, name) {
 function inputTextSafe(text) {
   ensureForeground();
   for (let attempt = 0; attempt < 4; attempt++) {
-    tapTestId('playlist-name-input') ||
-      tapAppEditText({ resourceFragment: 'playlist-name-input' }) ||
-      tapAppEditText({ labelPartial: 'Playlist' }) ||
-      tapAppEditText({ labelPartial: 'Name' });
+    if (
+      !tapTestId('playlist-name-input') &&
+      !tapAppEditText({ resourceFragment: 'playlist-name-input' }) &&
+      !tapAppEditText({ labelPartial: 'Playlist' }) &&
+      !tapAppEditText({ labelPartial: 'Name' })
+    ) {
+      /* focus retry */
+    }
     sleep(800 + attempt * 200);
     clearFocusedField();
     sleep(250);
@@ -537,7 +541,12 @@ function inputTextSafe(text) {
       /* API */
     }
     sleep(400);
-    tapTestId('playlist-name-input') || tapAppEditText({ resourceFragment: 'playlist-name-input' });
+    if (
+      !tapTestId('playlist-name-input') &&
+      !tapAppEditText({ resourceFragment: 'playlist-name-input' })
+    ) {
+      /* paste retry */
+    }
     sleep(500);
     clearFocusedField();
     sh(`"${adb}" -s ${SER} shell input keyevent 279`);

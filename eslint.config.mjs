@@ -19,6 +19,7 @@ export default tseslint.config(
       'tools/audio/.venv-chatterbox/**',
       'apps/web/out/**',
       'apps/web/next-env.d.ts',
+      'tools/qa/**',
     ],
   },
   js.configs.recommended,
