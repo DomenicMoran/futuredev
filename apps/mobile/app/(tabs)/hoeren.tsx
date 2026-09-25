@@ -304,7 +304,7 @@ export default function HoerenScreen() {
                   accessibilityLabel={`${de.hoeren.playLesson}: ${lesson.title}`}
                   style={[styles.lessonTextBlock, { flex: 1, minWidth: 0 }]}
                 >
-                  <Text numberOfLines={2} ellipsizeMode="tail" style={[styles.lessonTitle, { color: theme.colors.text }]}>
+                  <Text numberOfLines={3} ellipsizeMode="tail" style={[styles.lessonTitle, { color: theme.colors.text }]}>
                     {lesson.title}
                   </Text>
                   <Text numberOfLines={1} style={[styles.lessonDuration, { color: theme.colors.textWeak }]}>
