@@ -1,4 +1,6 @@
-export interface ExpoExtra extends Record<string, unknown> {}
+export interface ExpoExtra {
+  [key: string]: unknown;
+}
 
 export interface QaRuntimeSignals {
   isDev: boolean;
