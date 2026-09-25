@@ -10,22 +10,23 @@ interface OnboardingState {
   completed: boolean;
   goal: OnboardingGoal | null;
   setGoal: (goal: OnboardingGoal) => void;
-  complete: () => void;
+  complete: () => Promise<void>;
   reset: () => void;
   /** Übernimmt einen aus SQLite gelesenen Stand (App-Start). */
   applyHydrated: (completed: boolean, goal: OnboardingGoal | null) => void;
 }
 
-export const useOnboardingStore = create<OnboardingState>((set) => ({
+export const useOnboardingStore = create<OnboardingState>((set, get) => ({
   completed: false,
   goal: null,
   setGoal: (goal) => {
     set({ goal });
-    void persistSetting('goal', goal);
   },
-  complete: () => {
+  complete: async () => {
+    const goal = get().goal;
     set({ completed: true });
-    void persistSetting('onboardingDone', true);
+    await persistSetting('onboardingDone', true);
+    if (goal) await persistSetting('goal', goal);
   },
   reset: () => {
     set({ completed: false, goal: null });

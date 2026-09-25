@@ -1,3 +1,4 @@
+import Constants from 'expo-constants';
 import { create } from 'zustand';
 import type { ColorSchemeSetting } from '../theme/colorScheme.js';
 import { getSetting } from '../data/settings.js';
@@ -7,6 +8,7 @@ import {
   readDailyLearningSecondsToday,
 } from '../settings/dailyLearning.js';
 import { hydrateSettings, persistSetting } from '../settings/persist.js';
+import { useOnboardingStore } from './onboarding.js';
 import {
   DEFAULT_QUIZ_LENGTH,
   type AppSettings,
@@ -22,6 +24,8 @@ export type FirstFormPreference = 'read' | 'listen';
 
 interface SettingsState {
   hydrated: boolean;
+  /** Aus SQLite (`onboarding_done`), für Root-Redirect ohne Race zum Onboarding-Store. */
+  onboardingDone: boolean;
   colorScheme: ColorSchemeSetting;
   dailyGoalMinutes: number;
   /** Lernsekunden heute (Hören + Lesefokus); null bis erster Tageseintrag in SQLite. */
@@ -44,10 +48,12 @@ interface SettingsState {
   setReviewIntensity: (value: ReviewIntensity) => void;
   setNotificationsEnabled: (value: boolean) => void;
   setTelemetryEnabled: (value: boolean) => void;
+  setOnboardingDone: (value: boolean) => void;
 }
 
 export const useSettingsStore = create<SettingsState>((set) => ({
   hydrated: false,
+  onboardingDone: false,
   colorScheme: 'system',
   dailyGoalMinutes: 20,
   dailyLearningSecondsToday: null,
@@ -59,12 +65,33 @@ export const useSettingsStore = create<SettingsState>((set) => ({
   telemetryEnabled: false,
   installId: '',
   hydrate: async () => {
-    const loaded = await hydrateSettings();
+    let loaded = await hydrateSettings();
+    const extra =
+      Constants.expoConfig?.extra ??
+      (Constants as { manifest?: { extra?: Record<string, unknown> } }).manifest?.extra;
+    if (extra?.qaSkipOnboarding === true && !loaded.onboardingDone) {
+      loaded = {
+        ...loaded,
+        onboardingDone: true,
+        goal: loaded.goal ?? 'interest',
+        firstFormPreference: loaded.firstFormPreference ?? 'read',
+        preferredLearnTime: loaded.preferredLearnTime ?? 'morning',
+        dailyGoalMinutes: loaded.dailyGoalMinutes || 20,
+      };
+      await persistSetting('onboardingDone', true);
+      if (loaded.goal) await persistSetting('goal', loaded.goal);
+      await persistSetting('firstFormPreference', loaded.firstFormPreference);
+      if (loaded.preferredLearnTime) await persistSetting('preferredLearnTime', loaded.preferredLearnTime);
+      await persistSetting('dailyGoalMinutes', loaded.dailyGoalMinutes);
+    }
     const secondsToday = await readDailyLearningSecondsToday();
     const storedDate = await getSetting(DAILY_LEARNING_DATE_KEY);
     const hasDailyEntry = storedDate === localDateKey();
+    // Onboarding-Store vor hydrated=true, sonst leitet _layout einmalig fälschlich ins Onboarding (Deep-Link/Cold-Start).
+    useOnboardingStore.getState().applyHydrated(loaded.onboardingDone, loaded.goal);
     set({
       hydrated: true,
+      onboardingDone: loaded.onboardingDone,
       colorScheme: loaded.colorScheme,
       dailyGoalMinutes: loaded.dailyGoalMinutes,
       dailyLearningSecondsToday: hasDailyEntry ? secondsToday : null,
@@ -112,5 +139,8 @@ export const useSettingsStore = create<SettingsState>((set) => ({
   setTelemetryEnabled: (value) => {
     set({ telemetryEnabled: value });
     void persistSetting('telemetryEnabled', value);
+  },
+  setOnboardingDone: (value) => {
+    set({ onboardingDone: value });
   },
 }));

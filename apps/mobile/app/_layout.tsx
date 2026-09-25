@@ -43,6 +43,7 @@ export default function RootLayout() {
 function RootLayoutInner() {
   const theme = useTheme();
   const completed = useOnboardingStore((s) => s.completed);
+  const onboardingDonePersisted = useSettingsStore((s) => s.onboardingDone);
   const hydrated = useSettingsStore((s) => s.hydrated);
   const pathname = usePathname();
 
@@ -63,9 +64,6 @@ function RootLayoutInner() {
     useSettingsStore
       .getState()
       .hydrate()
-      .then((loaded) => {
-        useOnboardingStore.getState().applyHydrated(loaded.onboardingDone, loaded.goal);
-      })
       .catch(() => {
         // Kein Blockierfall: ohne lesbare Einstellungen bleibt es beim
         // Vorgabewert (Onboarding erneut anzeigen).
@@ -86,7 +84,8 @@ function RootLayoutInner() {
     );
   }
 
-  if (!completed && pathname !== '/onboarding') {
+  const onboardingGateOpen = completed || onboardingDonePersisted;
+  if (!onboardingGateOpen && pathname !== '/onboarding') {
     return <Redirect href="/onboarding" />;
   }
 

@@ -21,14 +21,6 @@ interface ContentContextValue {
 
 const ContentContext = createContext<ContentContextValue | null>(null);
 
-const INITIAL_STATE: ContentState = {
-  status: 'ok',
-  manifest: null,
-  modules: null,
-  lastUpdatedAt: null,
-  hasNewLessons: false,
-};
-
 /**
  * Stellt Manifest, Modulkarte, Ladezustand und `refresh()` bereit
  * (Technikvorgabe 4). Bindet sich in `app/_layout.tsx` ein (minimale,
@@ -36,8 +28,26 @@ const INITIAL_STATE: ContentState = {
  * abgleichen, Modulliste mit Fortschritt bauen.
  */
 export function ContentProvider({ children }: { children: ReactNode }) {
-  const [state, setState] = useState<ContentState>(INITIAL_STATE);
+  const [state, setState] = useState<ContentState>(() => ({
+    status: 'ok',
+    manifest: BUNDLED.manifest,
+    modules: BUNDLED.modules,
+    lastUpdatedAt: null,
+    hasNewLessons: false,
+  }));
   const [moduleList, setModuleList] = useState<ModuleListEntry[]>([]);
+
+  useEffect(() => {
+    let cancelled = false;
+    void (async () => {
+      const fs = await getContentFs();
+      const list = await buildModuleList(BUNDLED.modules, BUNDLED.manifest, fs);
+      if (!cancelled) setModuleList(list);
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const refresh = useCallback(async () => {
     const nextState = await refreshContent(BUNDLED);

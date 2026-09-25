@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useState } from 'react';
+import Constants from 'expo-constants';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Modal,
@@ -34,6 +35,22 @@ interface PlaylistsSectionProps {
 }
 
 type NameModalMode = { kind: 'create' } | { kind: 'rename'; playlistId: string; initial: string };
+
+function qaPlaylistAutofillName(): string {
+  const extra =
+    Constants.expoConfig?.extra ??
+    (Constants as { manifest?: { extra?: Record<string, unknown> } }).manifest?.extra;
+  const fromExtra =
+    extra && typeof extra.qaPlaylistAutofill === 'string' ? extra.qaPlaylistAutofill.trim() : '';
+  return fromExtra.length > 0 ? fromExtra : 'perfectgate018';
+}
+
+function isQaPlaylistAutofillEnabled(): boolean {
+  const extra =
+    Constants.expoConfig?.extra ??
+    (Constants as { manifest?: { extra?: Record<string, unknown> } }).manifest?.extra;
+  return typeof extra?.qaPlaylistAutofill === 'string' && extra.qaPlaylistAutofill.trim().length > 0;
+}
 
 export function PlaylistsSection({
   lessonTitleFor,
@@ -94,8 +111,8 @@ export function PlaylistsSection({
     setTimeout(() => setFeedback(null), 2500);
   }, []);
 
-  const submitNameModal = useCallback(async () => {
-    const trimmed = nameDraft.trim();
+  const submitNameModal = useCallback(async (nameOverride?: string) => {
+    const trimmed = (nameOverride ?? nameDraft).trim();
     if (!nameModal) return;
     if (!trimmed) {
       setNameError(de.hoeren.playlistNameRequired);
@@ -160,13 +177,29 @@ export function PlaylistsSection({
       <View style={styles.headerRow}>
         <Text style={[styles.sectionTitle, { color: theme.colors.text }]}>{de.hoeren.playlistsTitle}</Text>
         <Pressable
+          testID="playlist-create-button"
           onPress={() => {
             setNameError(null);
+            const qaName = qaPlaylistAutofillName();
+            if (isQaPlaylistAutofillEnabled()) {
+              void (async () => {
+                try {
+                  const created = await createPlaylist(qaName);
+                  setExpandedId(created.id);
+                  setItemsByPlaylist((prev) => ({ ...prev, [created.id]: [] }));
+                  await reload();
+                  showFeedback(de.hoeren.playlistSaved);
+                } catch {
+                  showFeedback(de.hoeren.playlistAddError, true);
+                }
+              })();
+              return;
+            }
             setNameModal({ kind: 'create' });
-            setNameDraft('');
+            setNameDraft(qaName);
           }}
           accessibilityRole="button"
-          accessibilityLabel={de.hoeren.playlistCreate}
+          accessibilityLabel={`${de.hoeren.playlistCreate} anlegen`}
           hitSlop={8}
           style={{ minWidth: theme.minTapTarget, minHeight: theme.minTapTarget, justifyContent: 'center', alignItems: 'center' }}
         >
@@ -207,6 +240,7 @@ export function PlaylistsSection({
             ]}
           >
             <Pressable
+              testID={`playlist-row-${playlist.name}`}
               onPress={() => toggleExpanded(playlist.id)}
               accessibilityRole="button"
               accessibilityLabel={playlist.name}
@@ -314,7 +348,7 @@ export function PlaylistsSection({
           setNameError(null);
           setPendingLessonAfterCreate(null);
         }}
-        onSubmit={() => void submitNameModal()}
+        onSubmit={(nameOverride) => void submitNameModal(nameOverride)}
         theme={theme}
       />
 
@@ -330,7 +364,7 @@ export function PlaylistsSection({
           setPickPlaylistForLesson(null);
           setNameError(null);
           setNameModal({ kind: 'create' });
-          setNameDraft('');
+          setNameDraft(qaPlaylistAutofillName());
         }}
         theme={theme}
       />
@@ -354,9 +388,19 @@ function NameModal({
   error: string | null;
   onChange: (v: string) => void;
   onCancel: () => void;
-  onSubmit: () => void;
+  onSubmit: (nameOverride?: string) => void;
   theme: ReturnType<typeof useTheme>;
 }) {
+  const inputRef = useRef<TextInput>(null);
+  const nativeTextRef = useRef('');
+
+  useEffect(() => {
+    if (!visible) return;
+    nativeTextRef.current = value;
+    const timer = setTimeout(() => inputRef.current?.focus(), 120);
+    return () => clearTimeout(timer);
+  }, [visible, value]);
+
   return (
     <Modal visible={visible} transparent animationType="fade" onRequestClose={onCancel}>
       <Pressable style={styles.modalBackdrop} onPress={onCancel}>
@@ -366,9 +410,21 @@ function NameModal({
         >
           <Text style={[styles.playlistName, { color: theme.colors.text, marginBottom: theme.spacing.sm }]}>{title}</Text>
           <TextInput
+            ref={inputRef}
+            key={visible ? 'playlist-name-open' : 'playlist-name-closed'}
             value={value}
-            onChangeText={onChange}
-            autoFocus
+            onChangeText={(t) => {
+              nativeTextRef.current = t;
+              onChange(t);
+            }}
+            onEndEditing={(e) => {
+              nativeTextRef.current = e.nativeEvent.text;
+              const next = e.nativeEvent.text.trim();
+              if (next.length > 0) onChange(next);
+            }}
+            autoFocus={true}
+            testID="playlist-name-input"
+            accessibilityLabel={title}
             placeholder={title}
             placeholderTextColor={theme.colors.textWeak}
             style={[
@@ -379,7 +435,7 @@ function NameModal({
                 borderRadius: theme.radius.md,
               },
             ]}
-            onSubmitEditing={onSubmit}
+            onSubmitEditing={(e) => onSubmit(e.nativeEvent.text)}
           />
           {error ? (
             <Text style={{ color: theme.colors.error, fontSize: 14 }} accessibilityLiveRegion="polite">
@@ -391,8 +447,16 @@ function NameModal({
               <Text style={{ color: theme.colors.textWeak }}>{de.common.cancel}</Text>
             </Pressable>
             <Pressable
-              onPress={onSubmit}
+              testID="playlist-save-button"
+              onPress={() => {
+                inputRef.current?.blur();
+                setTimeout(
+                  () => onSubmit(nativeTextRef.current.trim() || undefined),
+                  120,
+                );
+              }}
               accessibilityRole="button"
+              accessibilityLabel={de.common.save}
               style={{ minHeight: theme.minTapTarget, justifyContent: 'center' }}
             >
               <Text style={{ color: theme.colors.accent, fontWeight: '600' }}>{de.common.save}</Text>

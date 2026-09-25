@@ -51,7 +51,7 @@ export default function StartScreen() {
 
   const theme = useTheme();
 
-  const { moduleList } = useContent();
+  const { moduleList, state: contentState } = useContent();
 
   const dailyGoalMinutes = useSettingsStore((s) => s.dailyGoalMinutes);
   const dailyLearningSecondsToday = useSettingsStore((s) => s.dailyLearningSecondsToday);
@@ -121,7 +121,23 @@ export default function StartScreen() {
 
   const greeting = greetingForHour(new Date().getHours());
 
-  const showEmptyState = !hasBundledModules && !continueCard && !nextLessonId;
+  const contentStillLoading = moduleList.length === 0 && contentState.modules === null;
+
+  const showEmptyState = !contentStillLoading && !hasBundledModules && !continueCard && !nextLessonId;
+
+  if (contentStillLoading) {
+    return (
+      <ScrollView
+        style={[styles.container, { backgroundColor: theme.colors.bg, justifyContent: 'center' }]}
+        contentContainerStyle={{ flexGrow: 1, paddingBottom: bottomInset, justifyContent: 'center' }}
+      >
+        <TabScreenTitle title={de.start.title} />
+        <Text style={[styles.body, { color: theme.colors.textWeak, textAlign: 'center', marginTop: theme.spacing.lg }]}>
+          {de.start.loadingBody}
+        </Text>
+      </ScrollView>
+    );
+  }
 
   if (showEmptyState) {
 

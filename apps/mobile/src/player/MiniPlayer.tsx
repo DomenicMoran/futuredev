@@ -173,6 +173,7 @@ export function MiniPlayer() {
           </Pressable>
         )}
         <Pressable
+          testID="mini-player-play-toggle"
           onPress={() => void togglePlayback(isPlaying)}
           accessibilityRole="button"
           accessibilityLabel={isPlaying ? de.player.pause : de.player.play}

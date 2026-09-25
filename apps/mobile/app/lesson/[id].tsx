@@ -50,8 +50,15 @@ interface Section {
 // die teils 60+ Sprechbloecke einer 20-40-Minuten-Lektion (AW-045) UND
 // unterstuetzt eine Sprungleiste ueber scrollToLocation (Begriffe,
 // Praxisbeispiel, Praxisaufgabe, FAQ), ohne eine fremde Bibliothek.
+function routeParam(value: string | string[] | undefined): string | undefined {
+  if (value === undefined) return undefined;
+  return Array.isArray(value) ? value[0] : value;
+}
+
 export default function LessonScreen() {
-  const { id, block: blockParam } = useLocalSearchParams<{ id: string; block?: string }>();
+  const { id: rawId, block: rawBlock } = useLocalSearchParams<{ id: string | string[]; block?: string | string[] }>();
+  const id = routeParam(rawId);
+  const blockParam = routeParam(rawBlock);
   const theme = useTheme();
   const chromeLayout = useBottomChromeLayout();
   const { stickyBottomOffset } = chromeLayout;
@@ -230,6 +237,7 @@ export default function LessonScreen() {
   }
 
   async function handleBookmark(position: number) {
+    if (!id) return;
     const wasBookmarked = bookmarkedPositions.has(position);
     setBookmarkedPositions((prev) => {
       const next = new Set(prev);
@@ -258,6 +266,7 @@ export default function LessonScreen() {
   }
 
   async function handleSaveNote(position: number) {
+    if (!id) return;
     const body = noteBodies[position] ?? '';
     await saveNote(`${id}-block-${position}`, id, body);
     setNoteDraftFor(null);
@@ -272,7 +281,7 @@ export default function LessonScreen() {
   }
 
   async function handleViewableChanged({ viewableItems }: { viewableItems: ViewToken[] }) {
-    if (!lesson) return;
+    if (!lesson || !id) return;
     const bodyItems = viewableItems.filter((v) => v.section?.key === 'body');
     if (bodyItems.length === 0) return;
     const lastVisibleIndex = Math.max(...bodyItems.map((v) => v.index ?? 0));

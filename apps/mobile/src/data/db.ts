@@ -10,11 +10,13 @@ import { createMemoryDatabase } from './memoryDatabase.js';
 // Top-Level-Import wuerde also jeden Test brechen, der irgendetwas aus
 // `src/data` importiert, nicht nur SQLite-spezifische Tests.
 let instance: Database | null = null;
+let instancePromise: Promise<Database> | null = null;
 let initPromise: Promise<void> | null = null;
 
 /** Nur fuer Tests: ersetzt die Datenbank (etwa durch `createMemoryDatabase()`). */
 export function setDatabase(db: Database): void {
   instance = db;
+  instancePromise = null;
   initPromise = null;
 }
 
@@ -28,14 +30,21 @@ async function createDefaultDatabase(): Promise<Database> {
  * (Migrationen gelaufen) ist, bevor sie zurueckgegeben wird.
  */
 export async function getDatabase(): Promise<Database> {
-  if (!instance) {
-    instance = await createDefaultDatabase();
+  if (!instancePromise) {
+    instancePromise = createDefaultDatabase().then((db) => {
+      instance = db;
+      return db;
+    });
   }
+  const db = instance ?? (await instancePromise);
   if (!initPromise) {
-    initPromise = instance.init();
+    initPromise = db.init().catch((err: unknown) => {
+      initPromise = null;
+      throw err;
+    });
   }
   await initPromise;
-  return instance;
+  return db;
 }
 
 /** Nur fuer Tests: alles auf eine frische Speicher-Datenbank zuruecksetzen. */

@@ -16,6 +16,17 @@ import { SCHEMA_VERSION } from './types.js';
 
 const DATABASE_NAME = 'futuredev.db';
 
+let sqliteSerial: Promise<unknown> = Promise.resolve();
+
+async function serialDb<T>(work: () => Promise<T>): Promise<T> {
+  const next = sqliteSerial.then(work, work);
+  sqliteSerial = next.then(
+    () => undefined,
+    () => undefined,
+  );
+  return next;
+}
+
 // Migrationen mit Versionsnummer, wie in `settings.schema_version` hinterlegt
 // (Technikvorgabe 3). Jede Migration ist idempotent (`create table if not
 // exists`), damit ein zweiter Lauf nach einem Absturz nichts kaputt macht.
@@ -105,6 +116,34 @@ function isMissingPlaylistsTable(err: unknown): boolean {
   return /no such table:\s*playlists/i.test(msg);
 }
 
+function isMissingBookmarksTable(err: unknown): boolean {
+  const msg = err instanceof Error ? err.message : String(err);
+  return /no such table:\s*bookmarks/i.test(msg);
+}
+
+async function repairBookmarkTables(db: SQLite.SQLiteDatabase): Promise<void> {
+  const statements = MIGRATIONS[1];
+  if (!statements) return;
+  await db.execAsync(statements);
+  const columns = await db
+    .getAllAsync<{ name: string }>('pragma table_info(bookmarks)')
+    .catch(() => [] as { name: string }[]);
+  const names = new Set(columns.map((c) => c.name));
+  const required = ['id', 'lesson_id', 'position', 'created_at'];
+  if (required.some((col) => !names.has(col))) {
+    await db.execAsync('drop table if exists bookmarks');
+    await db.execAsync(`
+      create table if not exists bookmarks (
+        id text primary key not null,
+        lesson_id text not null,
+        position integer not null,
+        created_at text not null
+      );
+      create index if not exists bookmarks_lesson_id_idx on bookmarks (lesson_id);
+    `);
+  }
+}
+
 async function repairPlaylistTables(db: SQLite.SQLiteDatabase): Promise<void> {
   const statements = MIGRATIONS[2];
   if (!statements) return;
@@ -131,42 +170,73 @@ export function createSqliteDatabase(): Database {
     return dbPromise;
   }
 
+  async function withDb<T>(work: (db: SQLite.SQLiteDatabase) => Promise<T>): Promise<T> {
+    return serialDb(async () => work(await getDb()));
+  }
+
   async function withPlaylistTable<T>(run: () => Promise<T>): Promise<T> {
     try {
       return await run();
     } catch (err) {
       if (!isMissingPlaylistsTable(err)) throw err;
-      await repairPlaylistTables(await getDb());
+      await withDb(async (db) => {
+        await repairPlaylistTables(db);
+      });
+      return run();
+    }
+  }
+
+  async function withPlaylistWrite<T>(run: () => Promise<T>): Promise<T> {
+    try {
+      return await withPlaylistTable(run);
+    } catch (err) {
+      if (!isMissingPlaylistsTable(err)) throw err;
+      await withDb(async (db) => {
+        await repairPlaylistTables(db);
+      });
+      return withPlaylistTable(run);
+    }
+  }
+
+  async function withBookmarkTable<T>(run: () => Promise<T>): Promise<T> {
+    try {
+      return await run();
+    } catch (err) {
+      if (!isMissingBookmarksTable(err)) throw err;
+      await withDb(async (db) => {
+        await repairBookmarkTables(db);
+      });
       return run();
     }
   }
 
   async function runMigrations(): Promise<void> {
-    const db = await getDb();
-    await db.execAsync('pragma journal_mode = WAL;');
-    const row = await db.getFirstAsync<{ value: string }>(
-      "select value from settings where key = 'schema_version'",
-    ).catch(() => undefined);
-    // Erste Tabelle existiert eventuell noch nicht: `settings` wird in
-    // Migration 1 angelegt, deshalb faengt currentVersion bei 0 an, wenn die
-    // Abfrage selbst fehlschlaegt (Tabelle fehlt).
-    const currentVersion = row ? Number(row.value) : 0;
-    for (let version = currentVersion + 1; version <= SCHEMA_VERSION; version += 1) {
-      const statements = MIGRATIONS[version];
-      if (!statements) continue;
-      await db.execAsync(statements);
-      await db.runAsync(
-        'insert into settings (key, value) values (?, ?) on conflict(key) do update set value = excluded.value',
-        'schema_version',
-        String(version),
-      );
-    }
+    await withDb(async (db) => {
+      await db.execAsync('pragma journal_mode = WAL;');
+      const row = await db.getFirstAsync<{ value: string }>(
+        "select value from settings where key = 'schema_version'",
+      ).catch(() => undefined);
+      const currentVersion = row ? Number(row.value) : 0;
+      for (let version = currentVersion + 1; version <= SCHEMA_VERSION; version += 1) {
+        const statements = MIGRATIONS[version];
+        if (!statements) continue;
+        await db.execAsync(statements);
+        await db.runAsync(
+          'insert into settings (key, value) values (?, ?) on conflict(key) do update set value = excluded.value',
+          'schema_version',
+          String(version),
+        );
+      }
+    });
   }
 
   return {
     async init() {
       await runMigrations();
-      await repairPlaylistTables(await getDb());
+      await withDb(async (db) => {
+        await repairBookmarkTables(db);
+        await repairPlaylistTables(db);
+      });
     },
 
     async getSchemaVersion() {
@@ -308,47 +378,56 @@ export function createSqliteDatabase(): Database {
     },
 
     async listBookmarks(lessonId) {
-      const db = await getDb();
-      const rows = lessonId
-        ? await db.getAllAsync<BookmarkRowSql>(
-            'select * from bookmarks where lesson_id = ? order by position asc',
-            lessonId,
-          )
-        : await db.getAllAsync<BookmarkRowSql>('select * from bookmarks order by created_at desc');
-      return rows.map(mapBookmarkRow);
+      return withBookmarkTable(async () =>
+        withDb(async (db) => {
+          const rows = lessonId
+            ? await db.getAllAsync<BookmarkRowSql>(
+                'select * from bookmarks where lesson_id = ? order by position asc',
+                lessonId,
+              )
+            : await db.getAllAsync<BookmarkRowSql>('select * from bookmarks order by created_at desc');
+          return rows.map(mapBookmarkRow);
+        }),
+      );
     },
     async upsertBookmark(rowValue) {
-      const db = await getDb();
-      await db.runAsync(
-        `insert into bookmarks (id, lesson_id, position, created_at) values (?, ?, ?, ?)
-         on conflict(id) do update set position = excluded.position`,
-        rowValue.id,
-        rowValue.lessonId,
-        rowValue.position,
-        rowValue.createdAt,
+      return withBookmarkTable(async () =>
+        withDb(async (db) => {
+          await db.runAsync(
+            `insert or replace into bookmarks (id, lesson_id, position, created_at) values (?, ?, ?, ?)`,
+            rowValue.id,
+            rowValue.lessonId,
+            rowValue.position,
+            rowValue.createdAt,
+          );
+        }),
       );
     },
     async deleteBookmark(id) {
-      const db = await getDb();
-      await db.runAsync('delete from bookmarks where id = ?', id);
+      return withBookmarkTable(async () => {
+        await withDb(async (db) => {
+          await db.runAsync('delete from bookmarks where id = ?', id);
+        });
+      });
     },
 
     async getSetting(key) {
-      const db = await getDb();
-      const row = await db.getFirstAsync<{ value: string }>('select value from settings where key = ?', key);
-      return row?.value;
+      return withDb(async (db) => {
+        const row = await db.getFirstAsync<{ value: string }>('select value from settings where key = ?', key);
+        return row?.value;
+      });
     },
     async setSetting(key, value) {
-      const db = await getDb();
-      await db.runAsync(
-        'insert into settings (key, value) values (?, ?) on conflict(key) do update set value = excluded.value',
-        key,
-        value,
-      );
+      await withDb(async (db) => {
+        await db.runAsync(
+          'insert into settings (key, value) values (?, ?) on conflict(key) do update set value = excluded.value',
+          key,
+          value,
+        );
+      });
     },
     async listSettings() {
-      const db = await getDb();
-      return db.getAllAsync<SettingRow>('select key, value from settings');
+      return withDb((db) => db.getAllAsync<SettingRow>('select key, value from settings'));
     },
 
     async listPortfolioItems() {
@@ -411,91 +490,104 @@ export function createSqliteDatabase(): Database {
     },
 
     async listPlaylists() {
-      return withPlaylistTable(async () => {
-        const db = await getDb();
-        const rows = await db.getAllAsync<{ id: string; name: string; created_at: string; updated_at: string }>(
-          'select * from playlists order by updated_at desc',
-        );
-        return rows.map(
-          (row): PlaylistRow => ({
-            id: row.id,
-            name: row.name,
-            createdAt: row.created_at,
-            updatedAt: row.updated_at,
-          }),
-        );
-      });
+      return withPlaylistTable(async () =>
+        withDb(async (db) => {
+          const rows = await db.getAllAsync<{ id: string; name: string; created_at: string; updated_at: string }>(
+            'select * from playlists order by updated_at desc',
+          );
+          return rows.map(
+            (row): PlaylistRow => ({
+              id: row.id,
+              name: row.name,
+              createdAt: row.created_at,
+              updatedAt: row.updated_at,
+            }),
+          );
+        }),
+      );
     },
     async createPlaylist(name) {
-      return withPlaylistTable(async () => {
-        const db = await getDb();
-        const now = new Date().toISOString();
-        const id = `pl_${now.replace(/[:.]/g, '')}_${Math.random().toString(36).slice(2, 8)}`;
-        await db.runAsync(
-          'insert into playlists (id, name, created_at, updated_at) values (?, ?, ?, ?)',
-          id,
-          name,
-          now,
-          now,
-        );
-        return { id, name, createdAt: now, updatedAt: now };
-      });
+      return withPlaylistWrite(async () =>
+        withDb(async (db) => {
+          const now = new Date().toISOString();
+          const id = `pl_${now.replace(/[:.]/g, '')}_${Math.random().toString(36).slice(2, 8)}`;
+          await db.runAsync(
+            'insert into playlists (id, name, created_at, updated_at) values (?, ?, ?, ?)',
+            id,
+            name,
+            now,
+            now,
+          );
+          return { id, name, createdAt: now, updatedAt: now };
+        }),
+      );
     },
     async renamePlaylist(id, name) {
-      const db = await getDb();
-      const now = new Date().toISOString();
-      await db.runAsync('update playlists set name = ?, updated_at = ? where id = ?', name, now, id);
+      return withPlaylistWrite(async () =>
+        withDb(async (db) => {
+          const now = new Date().toISOString();
+          await db.runAsync('update playlists set name = ?, updated_at = ? where id = ?', name, now, id);
+        }),
+      );
     },
     async deletePlaylist(id) {
-      const db = await getDb();
-      await db.runAsync('delete from playlist_items where playlist_id = ?', id);
-      await db.runAsync('delete from playlists where id = ?', id);
+      return withPlaylistWrite(async () =>
+        withDb(async (db) => {
+          await db.runAsync('delete from playlist_items where playlist_id = ?', id);
+          await db.runAsync('delete from playlists where id = ?', id);
+        }),
+      );
     },
     async listPlaylistItems(playlistId) {
-      return withPlaylistTable(async () => {
-        const db = await getDb();
-        const rows = await db.getAllAsync<{ playlist_id: string; lesson_id: string; position: number }>(
-          'select * from playlist_items where playlist_id = ? order by position asc',
-          playlistId,
-        );
-        return rows.map(
-          (row): PlaylistItemRow => ({
-            playlistId: row.playlist_id,
-            lessonId: row.lesson_id,
-            position: row.position,
-          }),
-        );
-      });
+      return withPlaylistTable(async () =>
+        withDb(async (db) => {
+          const rows = await db.getAllAsync<{ playlist_id: string; lesson_id: string; position: number }>(
+            'select * from playlist_items where playlist_id = ? order by position asc',
+            playlistId,
+          );
+          return rows.map(
+            (row): PlaylistItemRow => ({
+              playlistId: row.playlist_id,
+              lessonId: row.lesson_id,
+              position: row.position,
+            }),
+          );
+        }),
+      );
     },
     async addPlaylistItem(playlistId, lessonId) {
-      return withPlaylistTable(async () => {
-        const db = await getDb();
-        const existing = await db.getFirstAsync<{ position: number }>(
-          'select position from playlist_items where playlist_id = ? and lesson_id = ?',
-          playlistId,
-          lessonId,
-        );
-        if (existing) return;
-        const maxRow = await db.getFirstAsync<{ max_pos: number | null }>(
-          'select max(position) as max_pos from playlist_items where playlist_id = ?',
-          playlistId,
-        );
-        const position = (maxRow?.max_pos ?? -1) + 1;
-        await db.runAsync(
-          'insert into playlist_items (playlist_id, lesson_id, position) values (?, ?, ?)',
-          playlistId,
-          lessonId,
-          position,
-        );
-        const now = new Date().toISOString();
-        await db.runAsync('update playlists set updated_at = ? where id = ?', now, playlistId);
-      });
+      return withPlaylistWrite(async () =>
+        withDb(async (db) => {
+          const existing = await db.getFirstAsync<{ position: number }>(
+            'select position from playlist_items where playlist_id = ? and lesson_id = ?',
+            playlistId,
+            lessonId,
+          );
+          if (existing) return;
+          const maxRow = await db.getFirstAsync<{ max_pos: number | null }>(
+            'select max(position) as max_pos from playlist_items where playlist_id = ?',
+            playlistId,
+          );
+          const position = (maxRow?.max_pos ?? -1) + 1;
+          await db.runAsync(
+            'insert into playlist_items (playlist_id, lesson_id, position) values (?, ?, ?)',
+            playlistId,
+            lessonId,
+            position,
+          );
+          const now = new Date().toISOString();
+          await db.runAsync('update playlists set updated_at = ? where id = ?', now, playlistId);
+        }),
+      );
     },
     async removePlaylistItem(playlistId, lessonId) {
-      const db = await getDb();
-      await db.runAsync('delete from playlist_items where playlist_id = ? and lesson_id = ?', playlistId, lessonId);
-      const now = new Date().toISOString();
-      await db.runAsync('update playlists set updated_at = ? where id = ?', now, playlistId);
+      return withPlaylistWrite(async () =>
+        withDb(async (db) => {
+          await db.runAsync('delete from playlist_items where playlist_id = ? and lesson_id = ?', playlistId, lessonId);
+          const now = new Date().toISOString();
+          await db.runAsync('update playlists set updated_at = ? where id = ?', now, playlistId);
+        }),
+      );
     },
   };
 }

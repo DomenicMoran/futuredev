@@ -220,6 +220,7 @@ export default function HoerenScreen() {
 
         {continueCard ? (
           <PressableFeedback
+            testID="hoeren-continue-play"
             onPress={() => void runPlayback(() => playLesson(continueCard.lessonId))}
             accessibilityRole="button"
             accessibilityLabel={`${de.hoeren.continueCard}: ${continueCard.title}`}

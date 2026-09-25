@@ -13,6 +13,7 @@ export const de = {
     emptyTitle: 'Willkommen bei FutureDev',
     emptyBody: 'Noch kein Fortschritt vorhanden. Beginne mit der ersten Lektion.',
     emptyAction: 'Erstes Modul öffnen',
+    loadingBody: 'Lerninhalte werden vorbereitet …',
     greetingMorning: 'Guten Morgen',
     greetingAfternoon: 'Guten Tag',
     greetingEvening: 'Guten Abend',

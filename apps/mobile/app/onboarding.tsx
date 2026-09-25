@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Animated, Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { ChevronLeft } from 'lucide-react-native';
 import { useTheme } from '../src/theme/useTheme.js';
@@ -22,6 +22,7 @@ const DAILY_GOAL_MINUTES = [10, 20, 40, 60, 90] as const;
 
 export default function OnboardingScreen() {
   const theme = useTheme();
+  const insets = useSafeAreaInsets();
   const [step, setStep] = useState<Step>(1);
   const [formDraft, setFormDraft] = useState<FirstFormPreference | null>(null);
   const [timeDraft, setTimeDraft] = useState<PreferredLearnTime | null>(null);
@@ -43,9 +44,10 @@ export default function OnboardingScreen() {
     setStep(3);
   }
 
-  function chooseGoalMinutes(minutes: number) {
+  async function chooseGoalMinutes(minutes: number) {
     setDailyGoalMinutes(minutes);
-    completeOnboarding();
+    await completeOnboarding();
+    useSettingsStore.getState().setOnboardingDone(true);
     router.replace('/(tabs)');
   }
 
@@ -63,8 +65,10 @@ export default function OnboardingScreen() {
     }
   }
 
+  const step2FooterPadding = Math.max(insets.bottom, theme.spacing.md);
+
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.bg }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.bg }]} edges={['top', 'left', 'right']}>
       {step > 1 ? (
         <View style={[styles.backRow, { paddingHorizontal: theme.spacing.lg, paddingTop: theme.spacing.sm }]}>
           <Pressable
@@ -79,9 +83,14 @@ export default function OnboardingScreen() {
         </View>
       ) : null}
       <ScrollView
+        style={step === 2 ? styles.scrollFlex : undefined}
         contentContainerStyle={[
           styles.inner,
-          { paddingHorizontal: theme.spacing.lg, paddingTop: theme.spacing.lg, paddingBottom: theme.spacing.xl },
+          {
+            paddingHorizontal: theme.spacing.lg,
+            paddingTop: theme.spacing.lg,
+            paddingBottom: step === 2 ? theme.spacing.md : theme.spacing.xl,
+          },
         ]}
         keyboardShouldPersistTaps="handled"
       >
@@ -156,25 +165,6 @@ export default function OnboardingScreen() {
                 ))}
               </View>
             </View>
-            <PressableFeedback
-              accessibilityRole="button"
-              accessibilityLabel={de.onboarding.next}
-              accessibilityState={{ disabled: !step2Ready }}
-              disabled={!step2Ready}
-              onPress={finishStep2}
-              style={[
-                styles.primaryButton,
-                {
-                  backgroundColor: theme.colors.accent,
-                  borderRadius: theme.radius.md,
-                  marginTop: theme.spacing.xl,
-                  minHeight: theme.minTapTarget,
-                  opacity: !step2Ready ? 0.45 : 1,
-                },
-              ]}
-            >
-              <Text style={[styles.primaryButtonLabel, { color: theme.colors.accentText }]}>{de.onboarding.next}</Text>
-            </PressableFeedback>
           </>
         ) : null}
         {step === 3 ? (
@@ -191,6 +181,47 @@ export default function OnboardingScreen() {
         ) : null}
         </FadeInUp>
       </ScrollView>
+      {step === 2 ? (
+        <SafeAreaView
+          edges={['bottom']}
+          style={[
+            styles.step2Footer,
+            {
+              paddingHorizontal: theme.spacing.lg,
+              paddingTop: theme.spacing.sm,
+              paddingBottom: step2FooterPadding,
+              backgroundColor: theme.colors.bg,
+              borderTopColor: theme.colors.border,
+            },
+          ]}
+        >
+          <PressableFeedback
+            testID="onboarding-step2-weiter"
+            accessibilityRole="button"
+            accessibilityLabel={de.onboarding.next}
+            accessibilityState={{ disabled: !step2Ready }}
+            disabled={!step2Ready}
+            onPress={finishStep2}
+            style={[
+              styles.primaryButton,
+              {
+                backgroundColor: theme.colors.accent,
+                borderRadius: theme.radius.md,
+                minHeight: theme.minTapTarget,
+                opacity: !step2Ready ? 0.45 : 1,
+              },
+            ]}
+          >
+            <Text
+              importantForAccessibility="no-hide-descendants"
+              accessibilityElementsHidden
+              style={[styles.primaryButtonLabel, { color: theme.colors.accentText }]}
+            >
+              {de.onboarding.next}
+            </Text>
+          </PressableFeedback>
+        </SafeAreaView>
+      ) : null}
     </SafeAreaView>
   );
 }
@@ -373,6 +404,12 @@ function OptionRow({ label, subtitle, selected, onPress }: OnboardingOption) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  scrollFlex: {
+    flex: 1,
+  },
+  step2Footer: {
+    borderTopWidth: StyleSheet.hairlineWidth,
   },
   backRow: {
     flexDirection: 'row',
