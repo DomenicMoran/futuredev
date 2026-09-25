@@ -1167,15 +1167,20 @@ if (xml.includes(playlistName) || xml.includes(`playlist-row-${playlistName}`)) 
 }
 }
 
-openLessonForGate();
-if (!tapTextOrDesc('Lesezeichen gesetzt', { partial: true })) {
-  tapTextOrDesc('Lesezeichen', { partial: true });
+const lessonOpen = openLessonForGate();
+sleep(lessonOpen ? 2500 : 0);
+dismissDialogs(6);
+if (lessonOpen) {
+  if (!tapTextOrDesc('Lesezeichen gesetzt', { partial: true })) {
+    tapTextOrDesc('Lesezeichen', { partial: true });
+  }
+  sleep(2000);
+  dismissDialogs(8);
 }
-sleep(2000);
-dismissDialogs(8);
 xml = dumpUi();
 saveDump('first10-04-bookmark', xml);
 const bookmarkVisible =
+  lessonOpen &&
   !xml.includes('Lesezeichen konnte nicht') &&
   (xml.includes('Lesezeichen entfernen') || xml.includes('Lesezeichen gesetzt'));
 recordFirst10('Bookmark toggle visible', bookmarkVisible, bookmarkVisible ? 'sticky/header' : 'bookmark error');
