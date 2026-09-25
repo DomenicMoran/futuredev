@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { resolveNextLessonId } from './startData.js';
+import { resolveNextLessonId } from './resolveNextLessonId.js';
 
 describe('resolveNextLessonId', () => {
   it('nutzt Curriculum-Reihenfolge (nicht alphabetisch)', () => {

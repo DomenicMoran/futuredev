@@ -11,7 +11,10 @@ import { dailyRationSize, selectDailyRation } from '../review/dailyRation.js';
 import { de } from '../i18n/de.js';
 import { getSetting } from '../data/settings.js';
 import { DAILY_LEARNING_DATE_KEY, localDateKey, readDailyLearningSecondsToday } from './dailyLearning.js';
+import { resolveNextLessonId } from './resolveNextLessonId.js';
 import type { ReviewIntensity } from './types.js';
+
+export { resolveNextLessonId } from './resolveNextLessonId.js';
 
 export interface ContinueCard {
   lessonId: string;
@@ -40,14 +43,6 @@ export interface StartData {
 export interface LoadStartDataOptions {
   /** Curriculum-Reihenfolge aus ContentProvider; Manifest-Sortierung sonst. */
   orderedLessonIds?: readonly string[];
-}
-
-/** Nächste offene Lektion in Curriculum-Reihenfolge (kein alphabetisches Sort). */
-export function resolveNextLessonId(
-  orderedLessonIds: readonly string[],
-  completedLessonIds: ReadonlySet<string>,
-): string | null {
-  return orderedLessonIds.find((id) => !completedLessonIds.has(id)) ?? orderedLessonIds[0] ?? null;
 }
 
 export async function loadStartData(
