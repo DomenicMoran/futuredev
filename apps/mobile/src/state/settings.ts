@@ -1,5 +1,5 @@
-import Constants from 'expo-constants';
 import { create } from 'zustand';
+import { readExpoExtra, shouldApplyQaSkipOnboarding } from '../qa/buildGate.js';
 import type { ColorSchemeSetting } from '../theme/colorScheme.js';
 import { getSetting } from '../data/settings.js';
 import {
@@ -66,10 +66,8 @@ export const useSettingsStore = create<SettingsState>((set) => ({
   installId: '',
   hydrate: async () => {
     let loaded = await hydrateSettings();
-    const extra =
-      Constants.expoConfig?.extra ??
-      (Constants as { manifest?: { extra?: Record<string, unknown> } }).manifest?.extra;
-    if (extra?.qaSkipOnboarding === true && !loaded.onboardingDone) {
+    const extra = readExpoExtra();
+    if (shouldApplyQaSkipOnboarding(extra) && !loaded.onboardingDone) {
       loaded = {
         ...loaded,
         onboardingDone: true,

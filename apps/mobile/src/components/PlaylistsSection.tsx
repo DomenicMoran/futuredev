@@ -1,5 +1,5 @@
-import Constants from 'expo-constants';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { qaPlaylistAutofillName } from '../qa/buildGate.js';
 import {
   ActivityIndicator,
   Modal,
@@ -35,15 +35,6 @@ interface PlaylistsSectionProps {
 }
 
 type NameModalMode = { kind: 'create' } | { kind: 'rename'; playlistId: string; initial: string };
-
-function qaPlaylistAutofillName(): string {
-  const extra =
-    Constants.expoConfig?.extra ??
-    (Constants as { manifest?: { extra?: Record<string, unknown> } }).manifest?.extra;
-  const fromExtra =
-    extra && typeof extra.qaPlaylistAutofill === 'string' ? extra.qaPlaylistAutofill.trim() : '';
-  return fromExtra.length > 0 ? fromExtra : 'perfectgate018';
-}
 
 export function PlaylistsSection({
   lessonTitleFor,

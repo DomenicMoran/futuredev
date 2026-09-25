@@ -11,7 +11,7 @@ const adb = String.raw`C:\Users\domen\AppData\Local\Android\Sdk\platform-tools\a
 const SER = 'emulator-5560';
 const PKG = 'de.domenicmoran.futuredev';
 const OUT = path.join(ROOT, 'tmp-qa/ux-pixel-2026-09-25');
-const VERSION = process.env.FUTUREDEV_APK_VERSION || '0.1.20';
+const VERSION = process.env.FUTUREDEV_APK_VERSION || '0.1.21';
 const DEFAULT_APK = path.join(ROOT, `tmp-qa/apk/futuredev-v${VERSION}-x86_64-emulator.apk`);
 const APK = process.argv[2] ? path.resolve(process.argv[2]) : DEFAULT_APK;
 
