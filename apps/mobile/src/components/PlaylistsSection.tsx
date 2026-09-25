@@ -45,13 +45,6 @@ function qaPlaylistAutofillName(): string {
   return fromExtra.length > 0 ? fromExtra : 'perfectgate018';
 }
 
-function isQaPlaylistAutofillEnabled(): boolean {
-  const extra =
-    Constants.expoConfig?.extra ??
-    (Constants as { manifest?: { extra?: Record<string, unknown> } }).manifest?.extra;
-  return typeof extra?.qaPlaylistAutofill === 'string' && extra.qaPlaylistAutofill.trim().length > 0;
-}
-
 export function PlaylistsSection({
   lessonTitleFor,
   onPlaybackError,
@@ -180,23 +173,8 @@ export function PlaylistsSection({
           testID="playlist-create-button"
           onPress={() => {
             setNameError(null);
-            const qaName = qaPlaylistAutofillName();
-            if (isQaPlaylistAutofillEnabled()) {
-              void (async () => {
-                try {
-                  const created = await createPlaylist(qaName);
-                  setExpandedId(created.id);
-                  setItemsByPlaylist((prev) => ({ ...prev, [created.id]: [] }));
-                  await reload();
-                  showFeedback(de.hoeren.playlistSaved);
-                } catch {
-                  showFeedback(de.hoeren.playlistAddError, true);
-                }
-              })();
-              return;
-            }
             setNameModal({ kind: 'create' });
-            setNameDraft(qaName);
+            setNameDraft(qaPlaylistAutofillName());
           }}
           accessibilityRole="button"
           accessibilityLabel={`${de.hoeren.playlistCreate} anlegen`}
@@ -528,7 +506,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 24,
   },
-  modalCard: { padding: 16, gap: 8 },
+  modalCard: { padding: 16, gap: 8, width: '100%', maxWidth: 400, alignSelf: 'center' },
   modalActions: { flexDirection: 'row', justifyContent: 'flex-end', gap: 16, marginTop: 8 },
   input: { borderWidth: StyleSheet.hairlineWidth, paddingHorizontal: 12, paddingVertical: 10, fontSize: 16 },
 });

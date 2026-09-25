@@ -204,6 +204,7 @@ function ChoicePill({ theme, label, active, onPress }: { theme: ReturnType<typeo
           borderColor: theme.colors.border,
           borderRadius: theme.radius.full,
           minHeight: theme.minTapTarget,
+          minWidth: theme.minTapTarget,
         },
       ]}
     >

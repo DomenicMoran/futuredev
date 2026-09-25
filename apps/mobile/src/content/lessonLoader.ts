@@ -1,6 +1,14 @@
 import { lessonSchema, modulesFileSchema, manifestSchema, type Lesson, type Manifest, type ModulesFile } from '@futuredev/content-schema';
 import type { ContentFs } from './types.js';
 import { CONTENT_DIR_NAME, LESSONS_DIR_NAME } from './contentFs.js';
+import { bundledLessons } from '../../assets/content/bundled.generated.js';
+
+function loadBundledLesson(id: string): Lesson | null {
+  const raw = bundledLessons[id as keyof typeof bundledLessons];
+  if (raw == null) return null;
+  const parsed = lessonSchema.safeParse(raw);
+  return parsed.success ? parsed.data : null;
+}
 
 function contentDir(fs: ContentFs): string {
   return `${fs.documentDirectory}${CONTENT_DIR_NAME}/`;
@@ -10,13 +18,20 @@ function lessonsDir(fs: ContentFs): string {
 }
 
 /** Liest die lokal gespeicherte Lektion (nach Erststart-Kopie oder Nachladen). */
-export async function loadLesson(fs: ContentFs, id: string): Promise<Lesson | null> {
+export interface LoadLessonOptions {
+  /** Gebuendelte Erststart-Kopie, wenn die Datei noch nicht im Dokumentverzeichnis liegt (Modulliste, Start). */
+  bundledFallback?: boolean;
+}
+
+export async function loadLesson(fs: ContentFs, id: string, options?: LoadLessonOptions): Promise<Lesson | null> {
   const path = `${lessonsDir(fs)}${id}.json`;
-  if (!(await fs.exists(path))) return null;
-  const raw = await fs.readFile(path);
-  const parsed = lessonSchema.safeParse(JSON.parse(raw));
-  if (!parsed.success) return null;
-  return parsed.data;
+  if (await fs.exists(path)) {
+    const raw = await fs.readFile(path);
+    const parsed = lessonSchema.safeParse(JSON.parse(raw));
+    if (parsed.success) return parsed.data;
+  }
+  if (options?.bundledFallback) return loadBundledLesson(id);
+  return null;
 }
 
 export async function saveLesson(fs: ContentFs, id: string, lesson: unknown): Promise<void> {

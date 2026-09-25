@@ -108,6 +108,7 @@ export function MiniPlayer() {
         ]}
       >
         <Pressable
+          testID="mini-player-open"
           onPress={() => router.push('/player')}
           accessibilityRole="button"
           accessibilityLabel={`${item.title}, ${timeSubtitle}`}

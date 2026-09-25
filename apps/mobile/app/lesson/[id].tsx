@@ -377,6 +377,7 @@ export default function LessonScreen() {
             // fuer Notizen, Lesezeichen und den Player zaehlen weiter über
             // lesson.speechBlocks), nur die Darstellung entfaellt.
             if (block.role === 'faq') return null;
+            if (!block.text.trim()) return null;
             return (
               <SpeechBlockRow
                 block={block}
@@ -521,24 +522,22 @@ function LessonStickyActions({
   const theme = useTheme();
   const queue = usePlayerStore((s) => s.queue);
   const playingThisLesson = currentItem(queue)?.lessonId === lessonId;
+  const stickyActionStyle = {
+    backgroundColor: theme.colors.surface,
+    borderColor: theme.colors.border,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderRadius: theme.radius.md,
+    minHeight: theme.minTapTarget,
+    flex: 1,
+  } as const;
+
   const listenButton = (
     <PressableFeedback
       key="listen"
       onPress={onListen}
       accessibilityRole="button"
       accessibilityLabel={de.lesson.listenTab}
-      style={[
-        styles.stickyButton,
-        styles.calmAccentAction,
-        {
-          backgroundColor: theme.colors.surface,
-          borderColor: theme.colors.border,
-          borderLeftColor: theme.colors.accent,
-          borderRadius: theme.radius.md,
-          minHeight: theme.minTapTarget,
-          flex: 1,
-        },
-      ]}
+      style={[styles.stickyButton, stickyActionStyle]}
     >
       <Text style={[styles.primaryButtonLabel, { color: theme.colors.text, fontWeight: '600' }]}>{de.lesson.listenTab}</Text>
     </PressableFeedback>
@@ -549,17 +548,7 @@ function LessonStickyActions({
       onPress={onQuiz}
       accessibilityRole="button"
       accessibilityLabel={de.lesson.quizStart}
-      style={[
-        styles.stickyButton,
-        {
-          backgroundColor: theme.colors.surface,
-          borderColor: theme.colors.border,
-          borderWidth: StyleSheet.hairlineWidth,
-          borderRadius: theme.radius.md,
-          minHeight: theme.minTapTarget,
-          flex: 1,
-        },
-      ]}
+      style={[styles.stickyButton, stickyActionStyle]}
     >
       <Text style={[styles.secondaryButtonLabel, { color: theme.colors.text, fontWeight: '600' }]}>{de.lesson.quizStart}</Text>
     </PressableFeedback>
@@ -876,5 +865,4 @@ const styles = StyleSheet.create({
     borderTopWidth: StyleSheet.hairlineWidth,
   },
   stickyButton: { alignItems: 'center', justifyContent: 'center', paddingHorizontal: 12 },
-  calmAccentAction: { borderWidth: StyleSheet.hairlineWidth, borderLeftWidth: 3 },
 });

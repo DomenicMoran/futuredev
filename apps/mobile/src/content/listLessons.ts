@@ -56,7 +56,7 @@ export async function buildModuleList(
         const state = stateByLessonId.get(id) ?? 'new';
         totalLessons += 1;
         if (state === 'completed') completedLessons += 1;
-        const lesson = fs ? await loadLesson(fs, id) : null;
+        const lesson = fs ? await loadLesson(fs, id, { bundledFallback: true }) : null;
         lessons.push({
           id,
           title: lesson?.title ?? id,
