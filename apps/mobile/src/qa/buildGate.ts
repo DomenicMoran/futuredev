@@ -5,7 +5,7 @@ import {
   type ExpoExtra,
 } from './buildGateLogic.js';
 
-export type { ExpoExtra } from './buildGateLogic.js';
+export type { ExpoExtra, QaRuntimeSignals } from './buildGateLogic.js';
 
 function runtimeSignals() {
   return {

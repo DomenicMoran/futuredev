@@ -1,9 +1,9 @@
-export type ExpoExtra = Record<string, unknown>;
+export interface ExpoExtra extends Record<string, unknown> {}
 
-export type QaRuntimeSignals = {
+export interface QaRuntimeSignals {
   isDev: boolean;
   publicQaEnv: string | undefined;
-};
+}
 
 export function hasNonStoreQaSignal(
   extra: ExpoExtra | undefined,
