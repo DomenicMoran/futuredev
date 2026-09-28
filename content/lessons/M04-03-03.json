@@ -29,7 +29,7 @@
     {
       "speaker": "A",
       "role": "explain",
-      "text": "Eine moderne Webanwendung besteht fast nie aus einem einzigen Container. Da ist die Datenbank, der Anwendungsserver, vielleicht ein Cache, ein Hintergrunddienst für E-Mails und ein Reverse Proxy. Jeder dieser Dienste läuft in seinem eigenen Container, aber sie müssen zusammenarbeiten: der Anwendungsserver muss die Datenbank erreichen, der Reverse Proxy muss den Anwendungsserver kennen. Diese vielen Container von Hand zu starten, mit den richtigen Netzwerken zu verbinden und in der richtigen Reihenfolge. hochzufahren, wäre mühsam und fehleranfällig.",
+      "text": "Eine moderne Webanwendung besteht fast nie aus einem einzigen Container. Da ist die Datenbank, der Anwendungsserver, vielleicht ein Cache, ein Hintergrunddienst für E-Mails und ein Reverse Proxy. Jeder dieser Dienste läuft in seinem eigenen Container, aber sie müssen zusammenarbeiten: der Anwendungsserver muss die Datenbank erreichen, der Reverse Proxy muss den Anwendungsserver kennen. Diese vielen Container von Hand zu starten, mit den richtigen Netzwerken zu verbinden und in der richtigen Reihenfolge. Hochzufahren, wäre mühsam und fehleranfällig.",
       "isKeySentence": false
     },
     {
@@ -95,7 +95,7 @@
     {
       "speaker": "A",
       "role": "why",
-      "text": "Die Servicenamen als Hostnamen nutzen zu können, ist ein mächtiges Feature von Docker Compose. Du musst keine IP-Adressen konfigurieren oder herausfinden, welcher Container welche Adresse bekommen hat. Der API-Hintergrund-Service schreibt in seine Konfiguration einfach db als Datenbank-Host, und Docker Compose sorgt dafür, dass dieser Name. immer zum richtigen Container aufgelöst wird, egal auf welchem Rechner und mit welchen IP-Adressen.",
+      "text": "Die Servicenamen als Hostnamen nutzen zu können, ist ein mächtiges Feature von Docker Compose. Du musst keine IP-Adressen konfigurieren oder herausfinden, welcher Container welche Adresse bekommen hat. Der API-Hintergrund-Service schreibt in seine Konfiguration einfach db als Datenbank-Host, und Docker Compose sorgt dafür, dass dieser Name. Immer zum richtigen Container aufgelöst wird, egal auf welchem Rechner und mit welchen IP-Adressen.",
       "isKeySentence": false
     },
     {
@@ -113,7 +113,7 @@
     {
       "speaker": "A",
       "role": "explain",
-      "text": "Container sind vergänglich: wenn du einen Datenbank-Container löschst, sind alle Daten weg, die er während seiner Laufzeit gespeichert hat. Das wäre für eine Datenbank katastrophal. Die Lösung heißt Volume. Ein Volume ist ein Speicherort, der unabhängig vom Container existiert. Du sagst Docker: hänge dieses Volume in den Container ein, und alles, was der Container in dieses Verzeichnis. schreibt, landet im Volume. Löscht du den Container, bleibt das Volume erhalten. Startest du einen neuen Container mit demselben Volume, findet er alle Daten so vor, wie der alte sie hinterlassen hat.",
+      "text": "Container sind vergänglich: wenn du einen Datenbank-Container löschst, sind alle Daten weg, die er während seiner Laufzeit gespeichert hat. Das wäre für eine Datenbank katastrophal. Die Lösung heißt Volume. Ein Volume ist ein Speicherort, der unabhängig vom Container existiert. Du sagst Docker: hänge dieses Volume in den Container ein, und alles, was der Container in dieses Verzeichnis. Schreibt, landet im Volume. Löscht du den Container, bleibt das Volume erhalten. Startest du einen neuen Container mit demselben Volume, findet er alle Daten so vor, wie der alte sie hinterlassen hat.",
       "isKeySentence": false
     },
     {
@@ -125,7 +125,7 @@
     {
       "speaker": "A",
       "role": "example",
-      "text": "Im Repo repo-futuredev verwendet die docker-compose yml ein Volume für die PostgreSQL-Datenbank. Der db-Hintergrund-Service hat eine volumes-Deklaration, die das Volume pgdata in das Verzeichnis /var/lib/postgresql/data im Container einhängt. Das ist das Verzeichnis, in dem PostgreSQL seine Daten speichert. Wenn ein Entwickler den Datenbank-Container stoppt und löscht, etwa um ein neues Image zu testen, bleiben alle Entwicklungsdaten. im Volume erhalten. Der nächste docker compose up hängt dasselbe Volume wieder ein, und die Datenbank ist unverändert.",
+      "text": "Im Repo repo-futuredev verwendet die docker-compose yml ein Volume für die PostgreSQL-Datenbank. Der db-Hintergrund-Service hat eine volumes-Deklaration, die das Volume pgdata in das Verzeichnis /var/lib/postgresql/data im Container einhängt. Das ist das Verzeichnis, in dem PostgreSQL seine Daten speichert. Wenn ein Entwickler den Datenbank-Container stoppt und löscht, etwa um ein neues Image zu testen, bleiben alle Entwicklungsdaten. Im Volume erhalten. Der nächste docker compose up hängt dasselbe Volume wieder ein, und die Datenbank ist unverändert.",
       "isKeySentence": false
     },
     {
@@ -143,7 +143,7 @@
     {
       "speaker": "A",
       "role": "explain",
-      "text": "Ja, Docker kennt zwei Hauptarten: benannte Volumes und Bind Mounts. Ein benanntes Volume wird von Docker selbst verwaltet, liegt in einem Docker-eigenen Verzeichnis und ist der empfohlene Weg. für Daten, die über Container-Lebenszyklen hinweg bestehen sollen. Ein Bind Mount ist ein beliebiges Verzeichnis auf dem Host, das du in den Container einblendest. Bind Mounts sind nützlich in der Entwicklung, wenn du deinen Code auf dem Host bearbeiten willst, aber im. Container ausführen möchtest: du blendest dein src-Verzeichnis als Bind Mount ein, änderst den Code in deinem Editor, und der Container sieht die Änderung sofort.",
+      "text": "Ja, Docker kennt zwei Hauptarten: benannte Volumes und Bind Mounts. Ein benanntes Volume wird von Docker selbst verwaltet, liegt in einem Docker-eigenen Verzeichnis und ist der empfohlene Weg. Für Daten, die über Container-Lebenszyklen hinweg bestehen sollen. Ein Bind Mount ist ein beliebiges Verzeichnis auf dem Host, das du in den Container einblendest. Bind Mounts sind nützlich in der Entwicklung, wenn du deinen Code auf dem Host bearbeiten willst, aber im. Container ausführen möchtest: du blendest dein src-Verzeichnis als Bind Mount ein, änderst den Code in deinem Editor, und der Container sieht die Änderung sofort.",
       "isKeySentence": false
     },
     {
@@ -179,25 +179,25 @@
     {
       "speaker": "A",
       "role": "why",
-      "text": "Diese Einschränkung von depends_on ist eine häufige Falle für Einsteiger. Der Datenbank-Container ist gestartet, aber die Datenbank selbst führt noch ihre Initialisierung durch und hört noch nicht auf ihrem Port. Ein ungeduldiger Webserver, der sofort versucht, sich zu verbinden, bekommt eine Fehlermeldung. In Produktionsumgebungen löst man das mit Wiederholungslogik im Anwendungscode oder mit einem Init-Container, der aktiv auf die Bereitschaft. der Datenbank wartet.",
+      "text": "Diese Einschränkung von depends_on ist eine häufige Falle für Einsteiger. Der Datenbank-Container ist gestartet, aber die Datenbank selbst führt noch ihre Initialisierung durch und hört noch nicht auf ihrem Port. Ein ungeduldiger Webserver, der sofort versucht, sich zu verbinden, bekommt eine Fehlermeldung. In Produktionsumgebungen löst man das mit Wiederholungslogik im Anwendungscode oder mit einem Init-Container, der aktiv auf die Bereitschaft. Der Datenbank wartet.",
       "isKeySentence": false
     },
     {
       "speaker": "A",
       "role": "image",
-      "text": "Stell dir eine Staffelübergabe beim Staffellauf vor. Der erste Läufer ist im Ziel angekommen, aber er muss den Stab erst sicher an den nächsten Läufer. übergeben, bevor der loslaufen kann. Nur weil der erste Läufer im Ziel ist, heißt das nicht, dass der zweite schon den Stab hat.",
+      "text": "Stell dir eine Staffelübergabe beim Staffellauf vor. Der erste Läufer ist im Ziel angekommen, aber er muss den Stab erst sicher an den nächsten Läufer. Übergeben, bevor der loslaufen kann. Nur weil der erste Läufer im Ziel ist, heißt das nicht, dass der zweite schon den Stab hat.",
       "isKeySentence": false
     },
     {
       "speaker": "A",
       "role": "explain",
-      "text": "Genauso ist es mit depends_on: der erste Container ist gestartet, aber die Übergabe, also die Bereitschaft des Dienstes, ist noch nicht erfolgt. Der zweite Container muss warten, bis der erste nicht nur läuft, sondern auch wirklich bereit ist. In Docker Compose kannst du das mit Healthchecks lösen: du definierst einen Test, der prüft, ob der Dienst. bereit ist, und der abhängige Container wartet, bis dieser Test erfolgreich ist.",
+      "text": "Genauso ist es mit depends_on: der erste Container ist gestartet, aber die Übergabe, also die Bereitschaft des Dienstes, ist noch nicht erfolgt. Der zweite Container muss warten, bis der erste nicht nur läuft, sondern auch wirklich bereit ist. In Docker Compose kannst du das mit Healthchecks lösen: du definierst einen Test, der prüft, ob der Dienst. Bereit ist, und der abhängige Container wartet, bis dieser Test erfolgreich ist.",
       "isKeySentence": false
     },
     {
       "speaker": "A",
       "role": "explain",
-      "text": "Ein oft übersehener Vorteil von Containern ist die Reproduzierbarkeit in der Qualitätssicherung. Wenn ein Tester einen Fehler in Version 2. 1. 3 meldet, startet er einfach einen Container aus dem Image von Version 2. 1. 3 und hat die exakt gleiche Umgebung wie der Kunde. Kein Raten, keine Unterschiede in den installierten Bibliotheken, keine verlorene Zeit mit der Suche nach der richtigen Konfiguration.",
+      "text": "Ein oft übersehener Vorteil von Containern ist die Reproduzierbarkeit in der Qualitätssicherung. Wenn ein Tester einen Fehler in Version 2. Zuerst 3 meldet, startet er einfach einen Container aus dem Image von Version. Dann 1. 3 und hat die exakt gleiche Umgebung wie der Kunde. Kein Raten, keine Unterschiede in den installierten Bibliotheken, keine verlorene Zeit mit der Suche nach der richtigen Konfiguration.",
       "isKeySentence": false
     },
     {
@@ -209,37 +209,7 @@
     {
       "speaker": "A",
       "role": "explain",
-      "text": "Ein oft übersehener Vorteil von Containern ist die Reproduzierbarkeit in der Qualitätssicherung. Wenn ein Tester einen Fehler in Version 2. 1. 3 meldet, startet er einfach einen Container aus dem Image von Version 2. 1. 3 und hat die exakt gleiche Umgebung wie der Kunde. Kein Raten, keine Unterschiede in den installierten Bibliotheken, keine verlorene Zeit mit der Suche nach der richtigen Konfiguration.",
-      "isKeySentence": false
-    },
-    {
-      "speaker": "A",
-      "role": "why",
-      "text": "Diese Reproduzierbarkeit spart in der Praxis enorm viel Zeit und Geld. Studien zeigen, dass Entwickler bis zu einem Drittel ihrer Zeit mit der Fehlersuche in nicht reproduzierbaren Umgebungen verbringen. Container eliminieren diese Klasse von Problemen vollständig, weil die Umgebung Teil des Artefakts ist und nicht Teil der. Infrastruktur.",
-      "isKeySentence": false
-    },
-    {
-      "speaker": "B",
-      "role": "question",
-      "text": "Gibt es Situationen, in denen Container nicht die richtige Wahl sind?",
-      "isKeySentence": false
-    },
-    {
-      "speaker": "A",
-      "role": "explain",
-      "text": "Ja, es gibt Grenzfälle. Anwendungen, die direkten Hardware-Zugriff benötigen, wie bestimmte Datenbanken oder Systemwerkzeuge, laufen in Containern manchmal langsamer oder mit Einschränkungen. Auch Echtzeitanwendungen mit harten Latenzanforderungen können unter der zusätzlichen Abstraktionsschicht leiden. Und für sehr kleine, einfache Skripte ist der Overhead eines Containers manchmal größer als der Nutzen. Aber für die allermeisten Webanwendungen und Microservices sind Container die richtige Wahl.",
-      "isKeySentence": false
-    },
-    {
-      "speaker": "A",
-      "role": "why",
-      "text": "Diese Abwägung ist wichtig, weil kein Werkzeug für jeden Einsatzzweck das beste ist. Container sind ein mächtiges Werkzeug, aber sie sind kein Allheilmittel. Zu wissen, wann man sie einsetzt und wann nicht, unterscheidet den erfahrenen Entwickler vom Anfänger, der jedes Problem. mit dem gleichen Hammer schlagen will.",
-      "isKeySentence": false
-    },
-    {
-      "speaker": "A",
-      "role": "explain",
-      "text": "Ein oft übersehener Vorteil von Containern ist die Reproduzierbarkeit in der Qualitätssicherung. Wenn ein Tester einen Fehler in Version 2. 1. 3 meldet, startet er einfach einen Container aus dem Image von Version 2. 1. 3 und hat die exakt gleiche Umgebung wie der Kunde. Kein Raten, keine Unterschiede in den installierten Bibliotheken, keine verlorene Zeit mit der Suche nach der richtigen Konfiguration.",
+      "text": "Ein oft übersehener Vorteil von Containern ist die Reproduzierbarkeit in der Qualitätssicherung. Wenn ein Tester einen Fehler in Version 2. Zuerst 3 meldet, startet er einfach einen Container aus dem Image von Version. Dann 1. 3 und hat die exakt gleiche Umgebung wie der Kunde. Kein Raten, keine Unterschiede in den installierten Bibliotheken, keine verlorene Zeit mit der Suche nach der richtigen Konfiguration.",
       "isKeySentence": false
     },
     {
@@ -263,7 +233,37 @@
     {
       "speaker": "A",
       "role": "why",
-      "text": "Diese Abwägung ist wichtig, weil kein Werkzeug für jeden Einsatzzweck das beste ist. Container sind ein mächtiges Werkzeug, aber sie sind kein Allheilmittel. Zu wissen, wann man sie einsetzt und wann nicht, unterscheidet den erfahrenen Entwickler vom Anfänger, der jedes Problem. mit dem gleichen Hammer schlagen will.",
+      "text": "Diese Abwägung ist wichtig, weil kein Werkzeug für jeden Einsatzzweck das beste ist. Container sind ein mächtiges Werkzeug, aber sie sind kein Allheilmittel. Zu wissen, wann man sie einsetzt und wann nicht, unterscheidet den erfahrenen Entwickler vom Anfänger, der jedes Problem. Mit dem gleichen Hammer schlagen will.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein oft übersehener Vorteil von Containern ist die Reproduzierbarkeit in der Qualitätssicherung. Wenn ein Tester einen Fehler in Version 2. Zuerst 3 meldet, startet er einfach einen Container aus dem Image von Version. Dann 1. 3 und hat die exakt gleiche Umgebung wie der Kunde. Kein Raten, keine Unterschiede in den installierten Bibliotheken, keine verlorene Zeit mit der Suche nach der richtigen Konfiguration.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Diese Reproduzierbarkeit spart in der Praxis enorm viel Zeit und Geld. Studien zeigen, dass Entwickler bis zu einem Drittel ihrer Zeit mit der Fehlersuche in nicht reproduzierbaren Umgebungen verbringen. Container eliminieren diese Klasse von Problemen vollständig, weil die Umgebung Teil des Artefakts ist und nicht Teil der. Infrastruktur.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "B",
+      "role": "question",
+      "text": "Gibt es Situationen, in denen Container nicht die richtige Wahl sind?",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ja, es gibt Grenzfälle. Anwendungen, die direkten Hardware-Zugriff benötigen, wie bestimmte Datenbanken oder Systemwerkzeuge, laufen in Containern manchmal langsamer oder mit Einschränkungen. Auch Echtzeitanwendungen mit harten Latenzanforderungen können unter der zusätzlichen Abstraktionsschicht leiden. Und für sehr kleine, einfache Skripte ist der Overhead eines Containers manchmal größer als der Nutzen. Aber für die allermeisten Webanwendungen und Microservices sind Container die richtige Wahl.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Diese Abwägung ist wichtig, weil kein Werkzeug für jeden Einsatzzweck das beste ist. Container sind ein mächtiges Werkzeug, aber sie sind kein Allheilmittel. Zu wissen, wann man sie einsetzt und wann nicht, unterscheidet den erfahrenen Entwickler vom Anfänger, der jedes Problem. Mit dem gleichen Hammer schlagen will.",
       "isKeySentence": false
     },
     {
@@ -311,7 +311,7 @@
     {
       "speaker": "A",
       "role": "faq",
-      "text": "docker compose mit Leerzeichen ist der neuere, in Docker integrierte Befehl, der als Plugin in der Docker-CLI läuft docker-compose mit Bindestrich war das ältere, eigenständige Python-Programm, das separat installiert werden musste. Seit Docker Desktop 4. x und Docker Engine 20. 10 ist docker compose der empfohlene Befehl, und docker-compose wird nicht mehr weiterentwickelt. Die Compose-Dateien selbst sind zu beiden Befehlen kompatibel, du musst nur den Bindestrich durch ein Leerzeichen ersetzen.",
+      "text": "docker compose mit Leerzeichen ist der neuere, in Docker integrierte Befehl, der als Plugin in der Docker-CLI läuft docker-compose mit Bindestrich war das ältere, eigenständige Python-Programm, das separat installiert werden musste. Seit Docker Desktop 4. X und Docker Engine 20. 10 ist docker compose der empfohlene Befehl, und docker-compose wird nicht mehr weiterentwickelt. Die Compose-Dateien selbst sind zu beiden Befehlen kompatibel, du musst nur den Bindestrich durch ein Leerzeichen ersetzen.",
       "isKeySentence": false
     },
     {
@@ -341,13 +341,13 @@
     {
       "speaker": "B",
       "role": "faq",
-      "text": "Kann ich Umgebungsvariablen in einer . env-Datei für Docker Compose nutzen?",
+      "text": "Kann ich Umgebungsvariablen in einer Punkt-env-Datei für Docker Compose nutzen?",
       "isKeySentence": false
     },
     {
       "speaker": "A",
       "role": "faq",
-      "text": "Ja, Docker Compose liest automatisch eine . env-Datei im selben Verzeichnis wie die docker-compose yml. Du kannst Variablen in der . env definieren und in der Compose-Datei mit ${VARIABLE} referenzieren. Das ist besonders nützlich für Geheimnisse wie Datenbankpasswörter oder API-Schlüssel, die nicht in der versionierten Compose-Datei stehen sollen. Die . env-Datei gehört in die . gitignore, und du kannst eine . env example mit Platzhaltern ins Repo legen, damit andere Entwickler wissen, welche Variablen sie setzen müssen.",
+      "text": "Ja, Docker Compose liest automatisch eine Punkt-env-Datei im selben Verzeichnis wie die docker-compose yml. Du kannst Variablen in der Punkt-env definieren und in der Compose-Datei mit ${VARIABLE} referenzieren. Das ist besonders nützlich für Geheimnisse wie Datenbankpasswörter oder API-Schlüssel, die nicht in der versionierten Compose-Datei stehen sollen. Die Punkt-env-Datei gehört in die Punkt-gitignore, und du kannst eine Punkt-env-example mit Platzhaltern ins Repo legen, damit andere Entwickler wissen, welche Variablen sie setzen müssen.",
       "isKeySentence": false
     },
     {
@@ -370,316 +370,328 @@
   },
   "quiz": [
     {
-      "question": "Welches Alltagsbild beschreibt Docker Compose am treffendsten?",
+      "question": "Welche Analogie passt dazu, dass Docker Compose mehrere Container-Dienste gemeinsam konfiguriert und startet?",
       "area": "Docker: Docker Compose",
       "options": [
         {
-          "text": "Ein Orchester, in dem viele Musiker nach einer gemeinsamen Partitur zusammenspielen.",
+          "text": "Ein Ensemble folgt einer gemeinsamen Partitur, während jeder Musiker eine eigene Stimme übernimmt.",
           "isCorrect": true,
-          "explanation": "Richtig: Docker Compose ist die Partitur, die alle Container-Services koordiniert."
+          "explanation": "Richtig: Compose bündelt die Konfiguration mehrerer Dienste; es ersetzt nicht deren jeweilige Aufgabe."
         },
         {
-          "text": "Ein einzelner Musiker, der alle Instrumente gleichzeitig spielt und dabei ständig zwischen ihnen wechselt.",
+          "text": "Ein Solist spielt sämtliche Instrumente nacheinander, ohne dass andere Beteiligte abgestimmt werden müssen.",
           "isCorrect": false,
-          "explanation": "Falsch: Docker Compose orchestriert mehrere Container, nicht einen einzelnen."
+          "explanation": "Falsch: Compose ist gerade für mehrere abgestimmte Services gedacht."
         },
         {
-          "text": "Ein Musikgeschäft, das Instrumente verkauft, aber selbst keine Musik macht.",
+          "text": "Ein Konzertsaal stellt lediglich einen Raum bereit und kennt weder Musiker noch Ablauf des Konzerts.",
           "isCorrect": false,
-          "explanation": "Falsch: Docker Compose verkauft nichts, es startet und verbindet Container."
+          "explanation": "Falsch: Compose beschreibt Dienste und ihre Beziehungen, nicht nur einen passiven Raum."
         },
         {
-          "text": "Ein Konzertsaal, der nur den Raum bereitstellt, aber nichts mit den Musikern zu tun hat.",
+          "text": "Ein Musikgeschäft verkauft Instrumente, führt aber keine gemeinsame Aufführung oder Ablaufplanung durch.",
           "isCorrect": false,
-          "explanation": "Falsch: Docker Compose stellt nicht nur den Raum bereit, es dirigiert aktiv die Container."
+          "explanation": "Falsch: Der Vergleich beschreibt keinen gemeinsamen Start mehrerer Services."
         }
-      ]
+      ],
+      "questionId": "q_841ab478-5b78-4c4e-9df2-70b23c807aa4"
     },
     {
-      "question": "Was ist ein Hintergrund-Service in Docker Compose?",
+      "question": "Was beschreibt ein Service in einer Docker-Compose-Datei?",
       "area": "Docker: Service",
       "options": [
         {
-          "text": "Ein einzelner Container-Typ, der eine bestimmte Komponente der Anwendung bereitstellt.",
+          "text": "Eine deklarative Konfiguration für einen Container-Service, etwa mit Image oder Build und Laufzeitoptionen.",
           "isCorrect": true,
-          "explanation": "Richtig: ein Hintergrund-Service beschreibt einen Container-Typ mit Image, Ports und Umgebungsvariablen."
+          "explanation": "Richtig: Compose-Services beschreiben, wie Container für Anwendungskomponenten erstellt und gestartet werden."
         },
         {
-          "text": "Ein kostenpflichtiges Abonnement bei Docker Hub für erweiterte Funktionen. Das passt zur Fragestellung hier nicht.",
+          "text": "Ein fertiges Image, das bereits vollständig gebaut und gestartet ist, bevor Compose die Anwendungsdefinition lädt.",
           "isCorrect": false,
-          "explanation": "Falsch: Hintergrund-Service in Docker Compose hat nichts mit einem Abonnement zu tun."
+          "explanation": "Falsch: Image bezeichnet ein Template; der Compose-Service enthält Startkonfiguration und kann das Image auswählen oder bauen."
         },
         {
-          "text": "Ein Hintergrundprozess, der automatisch Updates für alle Container installiert.",
+          "text": "Eine laufende Container-Instanz, deren Netzwerk-, Image- und Umgebungswerte Compose erst nach ihrem Start ausliest.",
           "isCorrect": false,
-          "explanation": "Falsch: ein Hintergrund-Service ist kein Update-Mechanismus, sondern eine Container-Beschreibung."
+          "explanation": "Falsch: Der Service ist Konfiguration; Compose erstellt daraus Container mit den deklarierten Werten."
         },
         {
-          "text": "Eine grafische Oberfläche, die alle laufenden Container in einem Dashboard anzeigt.",
+          "text": "Eine Netzwerktopologie, die Container-Namen und feste IP-Adressen zwischen mehreren Hosts zentral registriert.",
           "isCorrect": false,
-          "explanation": "Falsch: die grafische Oberfläche ist Docker Desktop, nicht ein Hintergrund-Service."
+          "explanation": "Falsch: Compose-Service beschreibt einen Anwendungsteil; Netzwerkdefinitionen sind separate Compose-Ressourcen."
         }
-      ]
+      ],
+      "questionId": "q_b003825c-a116-4193-93f7-607a38011353"
     },
     {
-      "question": "Was ist ein Volume in Docker?",
+      "question": "Wozu dient ein Docker-Volume typischerweise?",
       "area": "Docker: Volume",
       "options": [
         {
-          "text": "Ein vom Container unabhängiger Speicherort, der Daten über das Löschen des Containers hinaus erhält.",
+          "text": "Es speichert Daten unabhängig vom Lebenszyklus eines Containers, damit sie nach dessen Entfernung erhalten bleiben können.",
           "isCorrect": true,
-          "explanation": "Richtig: ein Volume überlebt den Container und kann an neue Container angehängt werden."
+          "explanation": "Richtig: Persistente Volumes bewahren Daten über Container-Neuerstellungen hinweg."
         },
         {
-          "text": "Die Lautstärkeeinstellung für die Audioausgabe eines Containers. Das passt zur Fragestellung hier nicht.",
+          "text": "Es begrenzt die maximale Größe des Images, das zum Erstellen eines Containers heruntergeladen wird.",
           "isCorrect": false,
-          "explanation": "Falsch: Volume hat in Docker nichts mit Audio-Lautstärke zu tun."
+          "explanation": "Falsch: Image-Größe und persistente Laufzeitdaten sind getrennte Dinge."
         },
         {
-          "text": "Die maximale Größe, die ein Container-Image auf der Festplatte einnehmen darf.",
+          "text": "Es bildet ein Netzwerkprotokoll, über das Container Daten zwischen verschiedenen Hosts austauschen.",
           "isCorrect": false,
-          "explanation": "Falsch: die Image-Größe wird nicht durch Volumes begrenzt."
+          "explanation": "Falsch: Volumes sind Speichermechanismen, keine Netzwerkprotokolle."
         },
         {
-          "text": "Ein Netzwerkprotokoll, das die Datenübertragung zwischen Containern regelt.",
+          "text": "Es legt fest, wie viele CPU-Kerne ein Container für Datenbankabfragen verwenden darf.",
           "isCorrect": false,
-          "explanation": "Falsch: Volumes sind Speicher, keine Netzwerkprotokolle."
+          "explanation": "Falsch: Ressourcenlimits werden über andere Einstellungen konfiguriert."
         }
-      ]
+      ],
+      "questionId": "q_1be2585d-e793-4cde-a82f-b38e72afbfc7"
     },
     {
-      "question": "Was ist der Unterschied zwischen einem benannten Volume und einem Bind Mount?",
+      "question": "Worin unterscheiden sich ein benanntes Volume und ein Bind Mount?",
       "area": "Docker: Volume",
       "options": [
         {
-          "text": "Benannte Volumes werden von Docker verwaltet, Bind Mounts blenden ein Host-Verzeichnis ein.",
+          "text": "Docker verwaltet den Speicherort eines benannten Volumes; ein Bind Mount bindet einen konkreten Host-Pfad ein.",
           "isCorrect": true,
-          "explanation": "Richtig: benannte Volumes liegen in Docker-eigenen Verzeichnissen, Bind Mounts zeigen auf beliebige Host-Pfade."
+          "explanation": "Richtig: Der Host-Pfad beim Bind Mount wird explizit angegeben; benannte Volumes abstrahieren ihn."
         },
         {
-          "text": "Benannte Volumes sind schneller, Bind Mounts sind sicherer.",
+          "text": "Benannte Volumes können ausschließlich in Produktion, Bind Mounts ausschließlich lokal verwendet werden.",
           "isCorrect": false,
-          "explanation": "Falsch: die Geschwindigkeit hängt vom Dateisystem ab, nicht vom Volume-Typ."
+          "explanation": "Falsch: Das sind keine technischen Einsatzgrenzen."
         },
         {
-          "text": "Benannte Volumes gibt es nur in der Produktion, Bind Mounts nur in der Entwicklung.",
+          "text": "Benannte Volumes enthalten nur Dateien, Bind Mounts dagegen nur Netzwerkverbindungen.",
           "isCorrect": false,
-          "explanation": "Falsch: beide können in beiden Umgebungen verwendet werden, auch wenn es Konventionen gibt."
+          "explanation": "Falsch: Beide stellen Dateisystempfade bereit, aber mit unterschiedlicher Verwaltung."
         },
         {
-          "text": "Benannte Volumes werden in der docker-compose.yml definiert, Bind Mounts nur auf der Kommandozeile.",
+          "text": "Ein benanntes Volume wird nur in der Kommandozeile angelegt; Bind Mounts lassen sich ausschließlich in Compose konfigurieren.",
           "isCorrect": false,
-          "explanation": "Falsch: beide können in der docker-compose.yml definiert werden."
+          "explanation": "Falsch: Beide Arten lassen sich sowohl per CLI als auch in Compose nutzen."
         }
-      ]
+      ],
+      "questionId": "q_55bd7e1f-3602-4762-8678-d886b4907a87"
     },
     {
-      "question": "Welche Aussage über das Repo repo-futuredev und Docker Compose ist richtig?",
+      "question": "Was beschreibt eine Compose-Datei typischerweise für eine lokale Entwicklungsumgebung?",
       "area": "Praxisbeispiel repo-futuredev",
       "options": [
         {
-          "text": "Die docker-compose.yml startet alle Entwicklungsservices und nutzt ein Volume für die Datenbank.",
+          "text": "Welche Dienste gestartet werden, welche Netzwerke sie teilen und welche Daten persistent gespeichert werden.",
           "isCorrect": true,
-          "explanation": "Richtig: docker compose up startet die gesamte Infrastruktur mit einem Volume für PostgreSQL."
+          "explanation": "Richtig: Compose kann Service-Konfiguration, Netzwerke und Volumes gemeinsam deklarieren."
         },
         {
-          "text": "Das Repo verwendet kein Docker Compose, weil alle Services einzeln von Hand gestartet werden.",
+          "text": "Dass alle Teammitglieder weder Docker noch Laufzeitabhängigkeiten installieren müssen, weil die YAML-Datei sie bereitstellt.",
           "isCorrect": false,
-          "explanation": "Falsch: repo-futuredev setzt stark auf Docker Compose für die lokale Entwicklung."
+          "explanation": "Falsch: Compose beschreibt Container; Docker Engine und gegebenenfalls weitere Voraussetzungen bleiben nötig."
         },
         {
-          "text": "Docker Compose wird nur für die Produktionsumgebung verwendet, nicht für die Entwicklung. Das passt zur Fragestellung hier nicht.",
+          "text": "Dass sämtliche Services ohne eigene Konfiguration automatisch im öffentlichen Docker Hub registriert werden.",
           "isCorrect": false,
-          "explanation": "Falsch: Docker Compose wird primär für die lokale Entwicklungsumgebung eingesetzt."
+          "explanation": "Falsch: Compose startet Services, veröffentlicht sie aber nicht automatisch in einer Registry."
         },
         {
-          "text": "Jeder Entwickler muss seine eigene docker-compose.yml schreiben, es gibt keine gemeinsame.",
+          "text": "Dass das Projekt keine Umgebungsvariablen, Geheimnisse oder zusätzlichen Setup-Schritte mehr benötigt.",
           "isCorrect": false,
-          "explanation": "Falsch: die docker-compose.yml ist im Repo versioniert und für alle gleich."
+          "explanation": "Falsch: Compose kann Konfiguration bündeln, ersetzt aber keine sichere Secret-Verwaltung oder alle Voraussetzungen."
         }
-      ]
+      ],
+      "questionId": "q_e4b0eb7e-43dc-4678-8f7f-ac0b38f8bfbe"
     },
     {
-      "question": "Was bewirkt depends_on in einer Docker-Compose-Datei?",
+      "question": "Was garantiert die Kurzform `depends_on` in Compose standardmäßig?",
       "area": "Docker: Docker Compose",
       "options": [
         {
-          "text": "Es legt die Startreihenfolge fest, garantiert aber nicht die Bereitschaft des abhängigen Dienstes.",
+          "text": "Sie ordnet den Start abhängiger Services, prüft aber nicht automatisch, ob deren Anwendung bereit ist.",
           "isCorrect": true,
-          "explanation": "Richtig: depends_on startet Dienste in der richtigen Reihenfolge, aber ohne Bereitschaftsprüfung."
+          "explanation": "Richtig: Für Bereitschaft sind Healthchecks und passende Abhängigkeitsbedingungen nötig."
         },
         {
-          "text": "Es garantiert, dass die Datenbank vollständig initialisiert ist, bevor der Webserver startet.",
+          "text": "Sie wartet stets, bis jede abhängige Datenbank vollständig initialisiert und für Abfragen bereit ist.",
           "isCorrect": false,
-          "explanation": "Falsch: depends_on wartet nur auf den Container-Start, nicht auf die Dienstbereitschaft."
+          "explanation": "Falsch: Die Kurzform garantiert nur Startreihenfolge, keine Dienstbereitschaft."
         },
         {
-          "text": "Es installiert automatisch alle Abhängigkeiten des Containers aus der Docker Registry. Das passt zur Fragestellung hier nicht.",
+          "text": "Sie lädt sämtliche Bibliotheken des abhängigen Services aus der Image-Registry nach.",
           "isCorrect": false,
-          "explanation": "Falsch: depends_on hat nichts mit der Installation von Abhängigkeiten zu tun."
+          "explanation": "Falsch: Image-Auflösung und Abhängigkeitsinstallation sind nicht die Funktion von `depends_on`."
         },
         {
-          "text": "Es verbietet, dass zwei Container gleichzeitig laufen, und erzwingt einen sequenziellen Betrieb.",
+          "text": "Sie verhindert, dass abhängige Container gleichzeitig laufen, und serialisiert alle Laufzeitprozesse.",
           "isCorrect": false,
-          "explanation": "Falsch: depends_on regelt die Startreihenfolge, nicht den gleichzeitigen Betrieb."
+          "explanation": "Falsch: Die Reihenfolge betrifft den Start; Services können danach parallel laufen."
         }
-      ]
+      ],
+      "questionId": "q_0052f9b5-e335-4ff2-ab59-86d5fd40c522"
     },
     {
-      "question": "Warum sind Volumes für Datenbank-Container besonders wichtig?",
+      "question": "Warum sollte eine Datenbank in einem Container meist persistente Speicherung nutzen?",
       "area": "Docker: Volume",
       "options": [
         {
-          "text": "Weil die Datenbankdaten das Löschen des Containers überleben müssen.",
+          "text": "Damit Daten einen Austausch oder eine Neuerstellung des Containers überdauern können.",
           "isCorrect": true,
-          "explanation": "Richtig: ohne Volume wären alle Datenbankdaten beim Löschen des Containers unwiderruflich verloren."
+          "explanation": "Richtig: Container sind austauschbar; Datenpersistenz muss separat konfiguriert sein."
         },
         {
-          "text": "Weil Docker sonst eine monatliche Gebühr für jeden Datenbank-Container verlangt.",
+          "text": "Weil ein Datenbankprozess ohne Volume grundsätzlich nicht starten oder Anfragen beantworten kann.",
           "isCorrect": false,
-          "explanation": "Falsch: Docker verlangt keine Gebühren für Container."
+          "explanation": "Falsch: Ohne persistente Speicherung kann er laufen, aber Daten gehen beim Containerwechsel verloren."
         },
         {
-          "text": "Weil die Datenbank sonst nicht starten kann und eine Fehlermeldung ausgibt.",
+          "text": "Weil Volumes die Zugangsdaten verschlüsseln und den Datenbankzugriff automatisch autorisieren.",
           "isCorrect": false,
-          "explanation": "Falsch: eine Datenbank startet auch ohne Volume, aber die Daten sind dann flüchtig."
+          "explanation": "Falsch: Volumes verwalten Speicher, nicht Authentifizierung oder Verschlüsselung."
         },
         {
-          "text": "Weil Volumes die einzige Möglichkeit sind, die Datenbank mit einem Passwort zu schützen.",
+          "text": "Weil Docker für jeden Datenbankcontainer eine monatliche Gebühr erhebt, die Volumes vermeiden.",
           "isCorrect": false,
-          "explanation": "Falsch: Passwörter werden über Umgebungsvariablen gesetzt, nicht über Volumes."
+          "explanation": "Falsch: Ein Volume ist kein Gebühren- oder Lizenzmechanismus."
         }
-      ]
+      ],
+      "questionId": "q_fa30511f-29af-4d48-b7b5-36e765607d47"
     },
     {
-      "question": "Wie sprechen sich Services in Docker Compose gegenseitig an?",
+      "question": "Wie erreichen sich Services auf demselben Compose-Netzwerk typischerweise?",
       "area": "Docker: Docker Compose",
       "options": [
         {
-          "text": "Über ihren Servicenamen, den Docker Compose automatisch als Hostnamen auflöst.",
+          "text": "Sie verwenden den Service-Namen als DNS-Namen und den passenden Container-Port.",
           "isCorrect": true,
-          "explanation": "Richtig: der API-Hintergrund-Service erreicht die Datenbank einfach unter dem Hostnamen db."
+          "explanation": "Richtig: Compose stellt Service-Namensauflösung im gemeinsamen Netzwerk bereit."
         },
         {
-          "text": "Über ihre IP-Adresse, die jeder Entwickler manuell in einer Konfigurationsdatei eintragen muss.",
+          "text": "Sie hinterlegen eine feste Container-IP, die nach jeder Neuerstellung garantiert gleich bleibt.",
           "isCorrect": false,
-          "explanation": "Falsch: Docker Compose löst Servicenamen automatisch auf, IP-Adressen sind nicht nötig."
+          "explanation": "Falsch: Container-IPs können sich ändern; Service-Namen sind die stabile Referenz."
         },
         {
-          "text": "Über eine zentrale Registry, die alle laufenden Container bei Docker Hub anmeldet.",
+          "text": "Sie registrieren jeden Container in Docker Hub und lösen dann den Namen über die Image-Registry auf.",
           "isCorrect": false,
-          "explanation": "Falsch: Docker Hub ist eine Image-Registry, kein Vermittler für laufende Container."
+          "explanation": "Falsch: Hub speichert Images, nicht lokale DNS-Zuordnungen laufender Services."
         },
         {
-          "text": "Gar nicht, Services in Docker Compose sind vollständig voneinander isoliert.",
+          "text": "Sie können nur über den Host-Port des Entwicklerrechners kommunizieren, auch innerhalb desselben Compose-Netzwerks.",
           "isCorrect": false,
-          "explanation": "Falsch: Services sind über ein gemeinsames Netzwerk verbunden und können kommunizieren."
+          "explanation": "Falsch: Services können im internen Netzwerk über Service-Namen und Container-Port kommunizieren."
         }
-      ]
+      ],
+      "questionId": "q_b5e35461-ff84-4d28-8c58-ffd28039c45c"
     },
     {
-      "question": "Was passiert mit einem benannten Volume, wenn du docker compose down ausführst?",
+      "question": "Was geschieht mit einem von Compose verwalteten benannten Volume bei `docker compose down` ohne `-v`?",
       "area": "Docker: Volume",
       "options": [
         {
-          "text": "Das Volume bleibt erhalten, nur mit docker compose down -v wird es gelöscht.",
+          "text": "Compose entfernt Container und Netzwerke, lässt benannte Volumes und deren Daten standardmäßig bestehen.",
           "isCorrect": true,
-          "explanation": "Richtig: docker compose down stoppt und löscht Container, aber Volumes bleiben standardmäßig erhalten."
+          "explanation": "Richtig: `down -v` entfernt zusätzlich deklarierte benannte Volumes; externe Volumes bleiben bestehen."
         },
         {
-          "text": "Das Volume wird automatisch mitgelöscht, weil es an die Container gebunden ist.",
+          "text": "Compose löscht grundsätzlich jedes Volume, weil dessen Lebensdauer automatisch an einen Container gekoppelt ist.",
           "isCorrect": false,
-          "explanation": "Falsch: Volumes sind unabhängig von Containern und werden nicht automatisch gelöscht."
+          "explanation": "Falsch: Benannte Volumes bleiben ohne `-v` erhalten."
         },
         {
-          "text": "Das Volume wird in ein Image umgewandelt und in der lokalen Registry gespeichert.",
+          "text": "Compose wandelt das Volume in ein Image um und archiviert es in der lokalen Registry.",
           "isCorrect": false,
-          "explanation": "Falsch: Volumes werden nicht in Images umgewandelt."
+          "explanation": "Falsch: `down` exportiert oder konvertiert Volumes nicht."
         },
         {
-          "text": "Das Volume wird geleert, aber die Verzeichnisstruktur bleibt erhalten.",
+          "text": "Compose entfernt alle Dateien aus dem Volume, behält aber den leeren Speichereintrag bei.",
           "isCorrect": false,
-          "explanation": "Falsch: docker compose down ohne -v lässt sowohl das Volume als auch seinen Inhalt unangetastet."
+          "explanation": "Falsch: Ohne `-v` bleibt der Inhalt des benannten Volumes bestehen."
         }
-      ]
+      ],
+      "questionId": "q_178f73cd-8a8e-4694-b922-5098caccfab4"
     },
     {
-      "question": "Wofür ist ein Bind Mount in der Entwicklung nützlich?",
+      "question": "Wofür kann ein Bind Mount im lokalen Entwicklungsworkflow nützlich sein?",
       "area": "Docker: Volume",
       "options": [
         {
-          "text": "Um Code auf dem Host zu bearbeiten und die Änderungen sofort im Container zu sehen.",
+          "text": "Quellcode vom Host in den Container einbinden, damit Änderungen dort sichtbar werden können.",
           "isCorrect": true,
-          "explanation": "Richtig: ein Bind Mount spiegelt ein Host-Verzeichnis in den Container und ermöglicht schnelles Feedback."
+          "explanation": "Richtig: Bind Mounts erleichtern den Austausch lokaler Dateien; Dateiwatching hängt von der Anwendung ab."
         },
         {
-          "text": "Um die Sicherheit des Containers zu erhöhen, indem alle Netzwerkverbindungen gekappt werden.",
+          "text": "Containerverkehr von außen sperren, indem der Host-Pfad ohne Netzwerkverbindung gemountet wird.",
           "isCorrect": false,
-          "explanation": "Falsch: Bind Mounts haben nichts mit Netzwerksicherheit zu tun."
+          "explanation": "Falsch: Bind Mounts konfigurieren Dateizugriff und ersetzen keine Netzwerkregeln."
         },
         {
-          "text": "Um den Container mit einem anderen Betriebssystem zu starten als dem des Hosts.",
+          "text": "Das Betriebssystem des Containers durch das Host-Betriebssystem ersetzen, ohne ein anderes Image zu nutzen.",
           "isCorrect": false,
-          "explanation": "Falsch: das Betriebssystem des Containers wird durch das Image bestimmt, nicht durch Bind Mounts."
+          "explanation": "Falsch: Das Image bestimmt die Containerumgebung; ein Mount bindet Dateien ein."
         },
         {
-          "text": "Um automatisch Backups des Containers in der Cloud zu erstellen.",
+          "text": "Eine verschlüsselte Cloud-Sicherung des Containers erstellen, sobald eine Datei gespeichert wird.",
           "isCorrect": false,
-          "explanation": "Falsch: Bind Mounts erstellen keine automatischen Backups."
+          "explanation": "Falsch: Ein Bind Mount ist keine Backup- oder Cloud-Replikationsfunktion."
         }
-      ]
+      ],
+      "questionId": "q_b8b204b2-37ed-4de9-8890-02bf49d3f45e"
     },
     {
-      "question": "Welche restart-Anweisung ist für eine Produktionsdatenbank am sinnvollsten?",
+      "question": "Was bedeutet `restart: unless-stopped` für einen Container?",
       "area": "Docker: Docker Compose",
       "options": [
         {
-          "text": "unless-stopped, damit die Datenbank nach einem Absturz neu startet, aber manuell gestoppt werden kann.",
+          "text": "Docker startet ihn nach einem unerwarteten Ende neu; ein manuell gestoppter Container bleibt gestoppt.",
           "isCorrect": true,
-          "explanation": "Richtig: unless-stopped startet nach Abstürzen neu, erlaubt aber geplantes Herunterfahren."
+          "explanation": "Richtig: Die Policy reagiert auf Ausfälle, respektiert aber einen expliziten manuellen Stopp."
         },
         {
-          "text": "no, damit der Administrator jeden Neustart manuell durchführen und protokollieren kann.",
+          "text": "Docker startet ihn nur dreimal neu und deaktiviert ihn nach dem dritten Fehler dauerhaft.",
           "isCorrect": false,
-          "explanation": "Falsch: bei einem Absturz mitten in der Nacht will niemand manuell eingreifen müssen."
+          "explanation": "Falsch: Eine feste Versuchszahl gehört zu `on-failure:<n>`, nicht zu dieser Policy."
         },
         {
-          "text": "always, damit die Datenbank auch dann neu startet, wenn der Administrator sie bewusst gestoppt hat.",
+          "text": "Docker startet ihn sogar nach einem manuellen Stopp beim nächsten Daemon-Start zwingend wieder.",
           "isCorrect": false,
-          "explanation": "Falsch: always würde auch nach einem bewussten Stopp neu starten, was Wartungsarbeiten erschwert."
+          "explanation": "Falsch: Das unterscheidet `unless-stopped` von `always`."
         },
         {
-          "text": "on-failure:3, damit die Datenbank nach drei Abstürzen endgültig aufgibt. Das passt zur Fragestellung hier nicht.",
+          "text": "Docker startet den Container nur, wenn ein Administrator jede Wiederholung einzeln bestätigt.",
           "isCorrect": false,
-          "explanation": "Falsch: eine Datenbank sollte nicht nach einer bestimmten Anzahl von Abstürzen aufgeben."
+          "explanation": "Falsch: Die Policy automatisiert Neustarts, sie verlangt keine Bestätigung."
         }
-      ]
+      ],
+      "questionId": "q_636c8b0d-c386-4b41-8935-7b8dac68657c"
     },
     {
-      "question": "Was ist der Vorteil, wenn die gesamte Infrastruktur in einer docker-compose.yml beschrieben ist?",
+      "question": "Welchen Nutzen bietet eine versionierte Compose-Beschreibung für ein Team?",
       "area": "Docker: Docker Compose",
       "options": [
         {
-          "text": "Neue Teammitglieder starten die gesamte Umgebung mit einem Befehl, ohne etwas installieren zu müssen.",
+          "text": "Sie hält Service- und Abhängigkeitskonfiguration nachvollziehbar fest und erleichtert reproduzierbare lokale Starts.",
           "isCorrect": true,
-          "explanation": "Richtig: docker compose up ersetzt seitenlange Installationsanleitungen durch einen Befehl."
+          "explanation": "Richtig: Docker bleibt Voraussetzung; Compose ersetzt weder Dokumentation noch Tests."
         },
         {
-          "text": "Die Anwendung läuft dann automatisch schneller, weil Docker Compose den Code optimiert.",
+          "text": "Sie beseitigt den Bedarf an installierter Container-Laufzeit, weil die YAML-Datei Docker selbst mitliefert.",
           "isCorrect": false,
-          "explanation": "Falsch: Docker Compose optimiert keinen Code, es orchestriert Container."
+          "explanation": "Falsch: Eine Compose-Datei enthält keine Docker Engine."
         },
         {
-          "text": "Docker Compose schreibt automatisch die gesamte Dokumentation des Projekts. Das passt zur Fragestellung hier nicht.",
+          "text": "Sie optimiert den Anwendungscode und verbessert dessen Laufzeitgeschwindigkeit bei jedem Start.",
           "isCorrect": false,
-          "explanation": "Falsch: Docker Compose ersetzt nicht die Projektdokumentation."
+          "explanation": "Falsch: Compose beschreibt Infrastruktur und optimiert keine Geschäftslogik."
         },
         {
-          "text": "Die docker-compose.yml ersetzt alle Tests, weil die Infrastruktur ja korrekt beschrieben ist.",
+          "text": "Sie dokumentiert automatisch jeden internen Codepfad und ersetzt Reviews sowie automatisierte Tests.",
           "isCorrect": false,
-          "explanation": "Falsch: eine Beschreibung der Infrastruktur ersetzt keine automatisierten Tests."
+          "explanation": "Falsch: Compose kennt die Implementierungslogik nicht und ersetzt keine Tests."
         }
-      ]
+      ],
+      "questionId": "q_0e85aa57-3806-47a9-bb0b-4f08f8945631"
     }
   ],
   "practiceTask": {
@@ -708,7 +720,7 @@
   "faq": [
     {
       "question": "Was ist der Unterschied zwischen docker compose und docker-compose?",
-      "answer": "docker compose mit Leerzeichen ist der neuere, in Docker integrierte Befehl, der als Plugin in der Docker-CLI läuft docker-compose mit Bindestrich war das ältere, eigenständige Python-Programm, das separat installiert werden musste. Seit Docker Desktop 4. x und Docker Engine 20. 10 ist docker compose der empfohlene Befehl, und docker-compose wird nicht mehr weiterentwickelt. Die Compose-Dateien selbst sind zu beiden Befehlen kompatibel, du musst nur den Bindestrich durch ein Leerzeichen ersetzen."
+      "answer": "docker compose mit Leerzeichen ist der neuere, in Docker integrierte Befehl, der als Plugin in der Docker-CLI läuft docker-compose mit Bindestrich war das ältere, eigenständige Python-Programm, das separat installiert werden musste. Seit Docker Desktop 4. X und Docker Engine 20. 10 ist docker compose der empfohlene Befehl, und docker-compose wird nicht mehr weiterentwickelt. Die Compose-Dateien selbst sind zu beiden Befehlen kompatibel, du musst nur den Bindestrich durch ein Leerzeichen ersetzen."
     },
     {
       "question": "Kann ich eine docker-compose yml auch in Produktion verwenden?",
@@ -719,8 +731,8 @@
       "answer": "Mit docker volume ls listest du alle Volumes auf, mit docker volume rm <name> löschst du ein einzelnes. Volume. Docker Compose bietet den Befehl docker compose down -v, der alle Container stoppt, löscht und zusätzlich alle von dieser Compose-Datei erstellten Volumes entfernt. Vorsicht: dieser Befehl löscht alle Daten in diesen Volumes unwiderruflich. In der Entwicklung ist das manchmal nützlich, um einen sauberen Neustart zu machen, in Produktion wäre es eine. Katastrophe."
     },
     {
-      "question": "Kann ich Umgebungsvariablen in einer . env-Datei für Docker Compose nutzen?",
-      "answer": "Ja, Docker Compose liest automatisch eine . env-Datei im selben Verzeichnis wie die docker-compose yml. Du kannst Variablen in der . env definieren und in der Compose-Datei mit ${VARIABLE} referenzieren. Das ist besonders nützlich für Geheimnisse wie Datenbankpasswörter oder API-Schlüssel, die nicht in der versionierten Compose-Datei stehen sollen. Die . env-Datei gehört in die . gitignore, und du kannst eine . env example mit Platzhaltern ins Repo legen, damit andere Entwickler wissen, welche Variablen sie setzen müssen."
+      "question": "Kann ich Umgebungsvariablen in einer Punkt-env-Datei für Docker Compose nutzen?",
+      "answer": "Ja, Docker Compose liest automatisch eine Punkt-env-Datei im selben Verzeichnis wie die docker-compose yml. Du kannst Variablen in der Punkt-env definieren und in der Compose-Datei mit ${VARIABLE} referenzieren. Das ist besonders nützlich für Geheimnisse wie Datenbankpasswörter oder API-Schlüssel, die nicht in der versionierten Compose-Datei stehen sollen. Die Punkt-env-Datei gehört in die Punkt-gitignore, und du kannst eine Punkt-env-example mit Platzhaltern ins Repo legen, damit andere Entwickler wissen, welche Variablen sie setzen müssen."
     },
     {
       "question": "Was mache ich, wenn ein Container in meiner Compose-Anwendung abstürzt?",

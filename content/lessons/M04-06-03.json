@@ -50,19 +50,19 @@
     {
       "speaker": "A",
       "role": "image",
-      "text": "Stell dir ein Krankenhaus vor, in dem die Ärzte Patientendaten auf gelben Post-it-Zettel schreiben und im ganzen Flur. an die Wände kleben. Jeder, der den Flur betritt – Putzkräfte, Besucher, Lieferanten – kann die Diagnosen, Medikamente und Namen lesen. Die Ärzte denken sich nichts dabei, weil die Zettel ja nur für das interne Personal gedacht sind. Aber ein einziger Besucher mit einem Smartphone macht ein Foto, und plötzlich sind die vertraulichsten Daten der Patienten. im Internet. Genau das passiert mit deinen Logs, wenn du Personendaten unbedacht hineinschreibst.",
+      "text": "Stell dir ein Krankenhaus vor, in dem die Ärzte Patientendaten auf gelben Post-it-Zettel schreiben und im ganzen Flur. An die Wände kleben. Jeder, der den Flur betritt – Putzkräfte, Besucher, Lieferanten – kann die Diagnosen, Medikamente und Namen lesen. Die Ärzte denken sich nichts dabei, weil die Zettel ja nur für das interne Personal gedacht sind. Aber ein einziger Besucher mit einem Smartphone macht ein Foto, und plötzlich sind die vertraulichsten Daten der Patienten. Im Internet. Genau das passiert mit deinen Logs, wenn du Personendaten unbedacht hineinschreibst.",
       "isKeySentence": false
     },
     {
       "speaker": "A",
       "role": "explain",
-      "text": "Logs sind keine privaten Notizzettel, sondern potenziell öffentliche Dokumente. Sie werden auf Servern gespeichert, in Backups kopiert, an Monitoring-Dienste wie Sentry oder Datadog übertragen und im Fehlerfall. von mehreren Personen eingesehen – nicht nur von dir. Enthält ein Log-Eintrag eine E-Mail-Adresse, eine IP-Adresse oder einen vollen Namen, dann hast du personenbezogene Daten verteilt, ohne dass die betroffene Person davon weiß oder eingewilligt hat. Nach der DSGVO ist das ein meldepflichtiger Datenschutzverstoß, der mit Bußgeldern von bis zu zwanzig Millionen Euro oder vier Prozent des weltweiten Jahresumsatzes geahndet werden kann – je nachdem, was höher ist. Das gilt auch für Startups mit drei Leuten. Die Aufsichtsbehörden unterscheiden nicht zwischen einem Log-Eintrag und einer Datenbanktabelle: Beides sind Verarbeitungen personenbezogener Daten und unterliegen denselben strengen Regeln.",
+      "text": "Logs sind keine privaten Notizzettel, sondern potenziell öffentliche Dokumente. Sie werden auf Servern gespeichert, in Backups kopiert, an Monitoring-Dienste wie Sentry oder Datadog übertragen und im Fehlerfall. Von mehreren Personen eingesehen – nicht nur von dir. Enthält ein Log-Eintrag eine E-Mail-Adresse, eine IP-Adresse oder einen vollen Namen, dann hast du personenbezogene Daten verteilt, ohne dass die betroffene Person davon weiß oder eingewilligt hat. Nach der DSGVO ist das ein meldepflichtiger Datenschutzverstoß, der mit Bußgeldern von bis zu zwanzig Millionen Euro oder vier Prozent des weltweiten Jahresumsatzes geahndet werden kann – je nachdem, was höher ist. Das gilt auch für Startups mit drei Leuten. Die Aufsichtsbehörden unterscheiden nicht zwischen einem Log-Eintrag und einer Datenbanktabelle: Beides sind Verarbeitungen personenbezogener Daten und unterliegen denselben strengen Regeln.",
       "isKeySentence": false
     },
     {
       "speaker": "A",
       "role": "term",
-      "text": "Diese Daten, die eine Person direkt oder indirekt identifizierbar machen, heißen PII – Personally Identifiable Information, auf Deutsch. personenbezogene Daten.",
+      "text": "Diese Daten, die eine Person direkt oder indirekt identifizierbar machen, heißen PII – Personally Identifiable Information, auf Deutsch. Personenbezogene Daten.",
       "isKeySentence": false
     },
     {
@@ -92,7 +92,7 @@
     {
       "speaker": "A",
       "role": "explain",
-      "text": "Log-Redaktion bedeutet, dass du personenbezogene Daten aus Log-Einträgen entfernst, bevor sie gespeichert werden. Das kannst du auf drei Arten tun. Erstens: Löschung – du schreibst die Daten gar nicht erst in den Log. Statt \"Nutzer Max Mustermann hat sich eingeloggt\" loggst du \"Nutzer hat sich eingeloggt\". Zweitens: Maskierung – du ersetzt den sensiblen Teil durch Platzhalter. Aus \"max mustermann@example com\" wird \"m***@example com\" oder einfach \"[EMAIL]\". Drittens: Pseudonymisierung – du ersetzt die echte Identität durch eine interne Kennung, die ohne eine getrennt gespeicherte Zuordnungstabelle. keinen Personenbezug herstellt. Aus \"Max Mustermann\" wird \"User-ID a1b2c3d4\". Die dritte Variante ist die mächtigste, weil du verschiedene Aktionen derselben Person noch korrelieren kannst, ohne ihre Identität. preiszugeben.",
+      "text": "Log-Redaktion bedeutet, dass du personenbezogene Daten aus Log-Einträgen entfernst, bevor sie gespeichert werden. Das kannst du auf drei Arten tun. Zuerst Löschung – du schreibst die Daten gar nicht erst in den Log. Statt \"Nutzer Max Mustermann hat sich eingeloggt\" loggst du \"Nutzer hat sich eingeloggt\". Dann Maskierung – du ersetzt den sensiblen Teil durch Platzhalter. Aus \"max mustermann@example com\" wird \"m***@example com\" oder einfach \"[EMAIL]\". Schliesslich Pseudonymisierung – du ersetzt die echte Identität durch eine interne Kennung, die ohne eine getrennt gespeicherte Zuordnungstabelle. Keinen Personenbezug herstellt. Aus \"Max Mustermann\" wird \"User-ID a1b2c3d4\". Die dritte Variante ist die mächtigste, weil du verschiedene Aktionen derselben Person noch korrelieren kannst, ohne ihre Identität. Preiszugeben.",
       "isKeySentence": false
     },
     {
@@ -104,31 +104,31 @@
     {
       "speaker": "A",
       "role": "example",
-      "text": "In einer Node. js-Anwendung baust du einen Log-Wrapper, der alle übergebenen Argumente vor dem Schreiben prüft. Der Wrapper erkennt Felder wie email, phone, ip, name und address automatisch anhand ihres Schlüsselnamens und ersetzt ihren. Wert durch einen maskierten Platzhalter. Aus `logger info('Profil aktualisiert', { user: 'max@example com', ip: '83. 12. 45. 67' })` wird im Log: `Profil aktualisiert { user: '[EMAIL]', ip: '[IP]' }`. Der Wrapper läuft in allen Umgebungen außer der lokalen Entwicklung, sodass du auf deinem Rechner noch die vollen. Daten siehst, aber in Staging und Produktion nur bereinigte Logs entstehen. Die Fehlersuche bleibt möglich, weil du siehst, dass eine E-Mail-Adresse und eine IP im Spiel waren – du kennst nur nicht den konkreten Wert.",
+      "text": "In einer Node.js-Anwendung baust du einen Log-Wrapper, der alle übergebenen Argumente vor dem Schreiben prüft. Der Wrapper erkennt Felder wie email, phone, ip, name und address automatisch anhand ihres Schlüsselnamens und ersetzt ihren. Wert durch einen maskierten Platzhalter. Aus `logger info('Profil aktualisiert', { user: 'max@example com', ip: '83. 12. 45. 67' })` wird im Log: `Profil aktualisiert { user: '[EMAIL]', ip: '[IP]' }`. Der Wrapper läuft in allen Umgebungen außer der lokalen Entwicklung, sodass du auf deinem Rechner noch die vollen. Daten siehst, aber in Staging und Produktion nur bereinigte Logs entstehen. Die Fehlersuche bleibt möglich, weil du siehst, dass eine E-Mail-Adresse und eine IP im Spiel waren – du kennst nur nicht den konkreten Wert.",
       "isKeySentence": false
     },
     {
       "speaker": "A",
       "role": "why",
-      "text": "Log-Redaktion ist kein nettes Extra, sondern eine technische Notwendigkeit. Ohne sie hast du nur zwei schlechte Optionen: Entweder du loggst gar nichts und fliegst bei der Fehlersuche. blind, oder du loggst alles und riskierst ein Bußgeld. Mit Redaktion bekommst du beides: aussagekräftige Logs für die Diagnose und saubere Logs für die Compliance. Der entscheidende Punkt ist Automatisierung: Wenn du dich darauf verlässt, dass jeder Entwickler bei jedem console log an die DSGVO denkt, wirst du scheitern. Ein automatisierter Redaktions-Mechanismus, der auf Ebene des Loggers greift, macht den Datenschutz zum unsichtbaren Standard, nicht zur manuellen. Disziplin.",
+      "text": "Log-Redaktion ist kein nettes Extra, sondern eine technische Notwendigkeit. Ohne sie hast du nur zwei schlechte Optionen: Entweder du loggst gar nichts und fliegst bei der Fehlersuche. Blind, oder du loggst alles und riskierst ein Bußgeld. Mit Redaktion bekommst du beides: aussagekräftige Logs für die Diagnose und saubere Logs für die Compliance. Der entscheidende Punkt ist Automatisierung: Wenn du dich darauf verlässt, dass jeder Entwickler bei jedem console log an die DSGVO denkt, wirst du scheitern. Ein automatisierter Redaktions-Mechanismus, der auf Ebene des Loggers greift, macht den Datenschutz zum unsichtbaren Standard, nicht zur manuellen. Disziplin.",
       "isKeySentence": false
     },
     {
       "speaker": "B",
       "role": "question",
-      "text": "Manchmal muss ich aber doch nachvollziehen, wer eine kritische Aktion ausgeführt hat – wie geht das ohne Personendaten. im Log?",
+      "text": "Manchmal muss ich aber doch nachvollziehen, wer eine kritische Aktion ausgeführt hat – wie geht das ohne Personendaten. Im Log?",
       "isKeySentence": false
     },
     {
       "speaker": "A",
       "role": "image",
-      "text": "Stell dir eine Garderobe in einem Theater vor. Du gibst deinen Mantel ab und bekommst eine nummerierte Marke. Die Garderobenfrau notiert nicht deinen Namen, sondern nur die Nummer der Marke und die Nummer des Hakens, an dem dein Mantel hängt. Wenn du deinen Mantel zurückhaben willst, zeigst du die Marke vor, und sie findet den richtigen Haken. Sie muss deinen Namen nicht kennen, um deinen Mantel zu finden. Aber wenn ein Mantel verschwindet, kann sie anhand der Markennummer nachvollziehen, wer wann welchen Haken bedient hat –. ohne jemals einen Namen notiert zu haben.",
+      "text": "Stell dir eine Garderobe in einem Theater vor. Du gibst deinen Mantel ab und bekommst eine nummerierte Marke. Die Garderobenfrau notiert nicht deinen Namen, sondern nur die Nummer der Marke und die Nummer des Hakens, an dem dein Mantel hängt. Wenn du deinen Mantel zurückhaben willst, zeigst du die Marke vor, und sie findet den richtigen Haken. Sie muss deinen Namen nicht kennen, um deinen Mantel zu finden. Aber wenn ein Mantel verschwindet, kann sie anhand der Markennummer nachvollziehen, wer wann welchen Haken bedient hat –. Ohne jemals einen Namen notiert zu haben.",
       "isKeySentence": false
     },
     {
       "speaker": "A",
       "role": "explain",
-      "text": "Ein Audit-Log funktioniert nach demselben Prinzip. Es zeichnet sicherheitsrelevante Aktionen auf: Wer hat sich wann eingeloggt? Wer hat welche Daten geändert? Wer hat welche Berechtigung vergeben? Es speichert aber nicht den Namen oder die E-Mail-Adresse der Person, sondern nur eine interne, nicht-personenbezogene Kennung. Diese Kennung ist im normalen Betrieb bedeutungslos. Nur wenn ein Sicherheitsvorfall untersucht werden muss, kann ein Administrator mit besonderen Rechten die Kennung über ein getrenntes, streng zugriffsbeschränktes System einer realen Person zuordnen. Das Audit-Log selbst enthält zu keinem Zeitpunkt PII. Zusätzlich ist ein Audit-Log fälschungssicher: Jeder Eintrag wird mit einem Hash des vorherigen Eintrags verkettet, sodass nachträgliche Änderungen. oder Löschungen sofort auffallen. Das ist der entscheidende Unterschied zu einem normalen Anwendungs-Log: Ein Audit-Log ist ein Beweismittel, kein Debugging-Werkzeug.",
+      "text": "Ein Audit-Log funktioniert nach demselben Prinzip. Es zeichnet sicherheitsrelevante Aktionen auf: Wer hat sich wann eingeloggt? Wer hat welche Daten geändert? Wer hat welche Berechtigung vergeben? Es speichert aber nicht den Namen oder die E-Mail-Adresse der Person, sondern nur eine interne, nicht-personenbezogene Kennung. Diese Kennung ist im normalen Betrieb bedeutungslos. Nur wenn ein Sicherheitsvorfall untersucht werden muss, kann ein Administrator mit besonderen Rechten die Kennung über ein getrenntes, streng zugriffsbeschränktes System einer realen Person zuordnen. Das Audit-Log selbst enthält zu keinem Zeitpunkt PII. Zusätzlich ist ein Audit-Log fälschungssicher: Jeder Eintrag wird mit einem Hash des vorherigen Eintrags verkettet, sodass nachträgliche Änderungen. Oder Löschungen sofort auffallen. Das ist der entscheidende Unterschied zu einem normalen Anwendungs-Log: Ein Audit-Log ist ein Beweismittel, kein Debugging-Werkzeug.",
       "isKeySentence": false
     },
     {
@@ -164,7 +164,7 @@
     {
       "speaker": "A",
       "role": "explain",
-      "text": "Die technische Umsetzung erfolgt auf drei Ebenen. Ebene eins ist der Log-Wrapper: Du baust eine Funktion wie `safeLog(level, message, context)`, die alle Werte im context-Objekt. gegen eine Liste bekannter PII-Felder prüft und diese Felder automatisch maskiert oder entfernt. Ebene zwei ist die Umgebungssteuerung: In der Entwicklungsumgebung loggst du vollständig, in Staging und Produktion nur bereinigt. Das stellst du über eine Umgebungsvariable wie `LOG_PII_MODE=redact` sicher. Ebene drei ist die CI/CD-Prüfung: Eine automatische Prüfung vor dem Speichern oder ein CI-Job scannt den Code nach. Verdächtigen Log-Aufrufen wie `console log(user email)` und blockiert die Zusammenführung, bis der Aufruf durch den sicheren Wrapper ersetzt wurde. Diese drei Ebenen zusammen stellen sicher, dass kein PII-haltiger Log-Eintrag jemals die Produktion erreicht – unabhängig davon, wie gestresst oder müde der Entwickler war, der den Code geschrieben hat.",
+      "text": "Die technische Umsetzung erfolgt auf drei Ebenen. Ebene eins ist der Log-Wrapper: Du baust eine Funktion wie `safeLog(level, message, context)`, die alle Werte im context-Objekt. Gegen eine Liste bekannter PII-Felder prüft und diese Felder automatisch maskiert oder entfernt. Ebene zwei ist die Umgebungssteuerung: In der Entwicklungsumgebung loggst du vollständig, in Staging und Produktion nur bereinigt. Das stellst du über eine Umgebungsvariable wie `LOG_PII_MODE=redact` sicher. Ebene drei ist die CI/CD-Prüfung: Eine automatische Prüfung vor dem Speichern oder ein CI-Job scannt den Code nach. Verdächtigen Log-Aufrufen wie `console log(user email)` und blockiert die Zusammenführung, bis der Aufruf durch den sicheren Wrapper ersetzt wurde. Diese drei Ebenen zusammen stellen sicher, dass kein PII-haltiger Log-Eintrag jemals die Produktion erreicht – unabhängig davon, wie gestresst oder müde der Entwickler war, der den Code geschrieben hat.",
       "isKeySentence": false
     },
     {
@@ -200,7 +200,7 @@
     {
       "speaker": "A",
       "role": "example",
-      "text": "Ein bekanntes Beispiel ist ein deutscher Online-Händler, der 2023 ein Bußgeld von fünfzigtausend Euro erhielt, weil in den. Access-Logs des Webservers die vollen IP-Adressen der Besucher gespeichert wurden – ohne Rechtsgrundlage und ohne ausreichende Sicherheitsmaßnahmen. Der Händler argumentierte, dass IP-Adressen nun einmal technisch notwendig seien und jeder Webserver sie logge. Die Behörde entgegnete, dass die IP-Adressen nach spätestens sieben Tagen hätten anonymisiert werden müssen und dass die Speicherung. der vollen Adressen über Monate hinweg einen Verstoß gegen die Datenminimierung darstellte. Der Händler musste nicht nur das Bußgeld zahlen, sondern auch ein Verfahren zur regelmäßigen Löschung und Anonymisierung von. Logdaten einführen und dessen Einhaltung dokumentieren.",
+      "text": "Ein bekanntes Beispiel ist ein deutscher Online-Händler, der 2023 ein Bußgeld von fünfzigtausend Euro erhielt, weil in den. Access-Logs des Webservers die vollen IP-Adressen der Besucher gespeichert wurden – ohne Rechtsgrundlage und ohne ausreichende Sicherheitsmaßnahmen. Der Händler argumentierte, dass IP-Adressen nun einmal technisch notwendig seien und jeder Webserver sie logge. Die Behörde entgegnete, dass die IP-Adressen nach spätestens sieben Tagen hätten anonymisiert werden müssen und dass die Speicherung. Der vollen Adressen über Monate hinweg einen Verstoß gegen die Datenminimierung darstellte. Der Händler musste nicht nur das Bußgeld zahlen, sondern auch ein Verfahren zur regelmäßigen Löschung und Anonymisierung von. Logdaten einführen und dessen Einhaltung dokumentieren.",
       "isKeySentence": false
     },
     {
@@ -218,7 +218,7 @@
     {
       "speaker": "A",
       "role": "example",
-      "text": "Ein greifbares Beispiel für Gesetzliche Verpflichtung: Die Rechtsgrundlage, die die Verarbeitung personenbezogener Daten erlaubt, wenn eine gesetzliche Vorschrift. den Verantwortlichen dazu verpflichtet. Typische Beispiele sind steuerrechtliche Aufbewahrungspflichten für Rechnungsdaten oder die Meldepflicht bei Datenpannen an die Aufsichtsbehörde.",
+      "text": "Ein greifbares Beispiel für Gesetzliche Verpflichtung: Die Rechtsgrundlage, die die Verarbeitung personenbezogener Daten erlaubt, wenn eine gesetzliche Vorschrift. Den Verantwortlichen dazu verpflichtet. Typische Beispiele sind steuerrechtliche Aufbewahrungspflichten für Rechnungsdaten oder die Meldepflicht bei Datenpannen an die Aufsichtsbehörde.",
       "isKeySentence": false
     },
     {
@@ -230,7 +230,7 @@
     {
       "speaker": "B",
       "role": "key",
-      "text": "Also noch einmal ganz kurz: PII – Personally Identifiable Information – sind alle Daten, die eine Person identifizierbar machen, wie Name, E-Mail oder IP-Adresse. Sie haben in Logs nichts verloren, weil jeder Log-Eintrag ein potenzieller Datenschutzverstoß mit Bußgeldern bis zu zwanzig Millionen. Euro ist. Log-Redaktion ist der automatisierte Prozess, der PII aus Logs entfernt oder maskiert, bevor sie gespeichert werden – du ersetzt echte Daten durch Platzhalter wie [EMAIL] oder [IP], ohne die diagnostische Aussagekraft zu verlieren. Ein Audit-Log zeichnet sicherheitsrelevante Aktionen mit einer nicht-personenbezogenen Kennung auf und ist durch Hash-Ketten fälschungssicher. Es trennt die Frage was ist passiert? von der Frage wer war es? , sodass du im Ernstfall nachvollziehen kannst, ohne im Normalbetrieb PII zu speichern. Die technische Umsetzung erfolgt durch einen Log-Wrapper, der alle Ausgaben automatisch filtert, kombiniert mit einer automatischen Prüfung, die. PII-haltige Log-Aufrufe schon vor der Zusammenführung blockiert.",
+      "text": "Also noch einmal ganz kurz: PII – Personally Identifiable Information – sind alle Daten, die eine Person identifizierbar machen, wie Name, E-Mail oder IP-Adresse. Sie haben in Logs nichts verloren, weil jeder Log-Eintrag ein potenzieller Datenschutzverstoß mit Bußgeldern bis zu zwanzig Millionen. Euro ist. Log-Redaktion ist der automatisierte Prozess, der PII aus Logs entfernt oder maskiert, bevor sie gespeichert werden – du ersetzt echte Daten durch Platzhalter wie [EMAIL] oder [IP], ohne die diagnostische Aussagekraft zu verlieren. Ein Audit-Log zeichnet sicherheitsrelevante Aktionen mit einer nicht-personenbezogenen Kennung auf und ist durch Hash-Ketten fälschungssicher. Es trennt die Frage was ist passiert? von der Frage wer war es?, sodass du im Ernstfall nachvollziehen kannst, ohne im Normalbetrieb PII zu speichern. Die technische Umsetzung erfolgt durch einen Log-Wrapper, der alle Ausgaben automatisch filtert, kombiniert mit einer automatischen Prüfung, die. PII-haltige Log-Aufrufe schon vor der Zusammenführung blockiert.",
       "isKeySentence": true
     },
     {
@@ -242,7 +242,7 @@
     {
       "speaker": "A",
       "role": "terms_list",
-      "text": "Log-Redaktion ist der automatisierte oder manuelle Prozess, personenbezogene Daten aus Log-Einträgen zu entfernen, zu maskieren oder durch Pseudonyme. zu ersetzen, bevor die Einträge gespeichert oder an externe Dienste übertragen werden. Die drei Methoden sind Löschung, Maskierung und Pseudonymisierung. Bei der Löschung wird das Feld komplett weggelassen. Bei der Maskierung wird der Wert durch einen Platzhalter wie [EMAIL] ersetzt. Bei der Pseudonymisierung wird die echte Identität durch eine interne Kennung ersetzt, die ohne getrennte Zuordnungstabelle keinen Personenbezug. herstellt. Ziel ist immer, die diagnostische Aussagekraft des Logs zu erhalten, während der Personenbezug gekappt wird.",
+      "text": "Log-Redaktion ist der automatisierte oder manuelle Prozess, personenbezogene Daten aus Log-Einträgen zu entfernen, zu maskieren oder durch Pseudonyme. Zu ersetzen, bevor die Einträge gespeichert oder an externe Dienste übertragen werden. Die drei Methoden sind Löschung, Maskierung und Pseudonymisierung. Bei der Löschung wird das Feld komplett weggelassen. Bei der Maskierung wird der Wert durch einen Platzhalter wie [EMAIL] ersetzt. Bei der Pseudonymisierung wird die echte Identität durch eine interne Kennung ersetzt, die ohne getrennte Zuordnungstabelle keinen Personenbezug. Herstellt. Ziel ist immer, die diagnostische Aussagekraft des Logs zu erhalten, während der Personenbezug gekappt wird.",
       "isKeySentence": false
     },
     {
@@ -260,7 +260,7 @@
     {
       "speaker": "A",
       "role": "faq",
-      "text": "Die Sieben-Tage-Regel ist ein Mythos. Die DSGVO schreibt keine pauschale Löschfrist für Logs vor, sondern verlangt, dass du personenbezogene Daten nur so lange speicherst, wie es für den Zweck erforderlich ist. Selbst wenn du Logs nach einem Tag löschst, war der Eintrag in dieser Zeit auf deinem Server, in deinem Monitoring-Dashboard und vielleicht in den Backups deines Hosting-Providers. Ein Datenschutzverstoß entsteht in dem Moment, in dem du PII ohne Rechtsgrundlage verarbeitest – nicht erst nach Ablauf. einer Frist. Löschung allein reicht nicht, du musst die Daten gar nicht erst in den Log schreiben.",
+      "text": "Die Sieben-Tage-Regel ist ein Mythos. Die DSGVO schreibt keine pauschale Löschfrist für Logs vor, sondern verlangt, dass du personenbezogene Daten nur so lange speicherst, wie es für den Zweck erforderlich ist. Selbst wenn du Logs nach einem Tag löschst, war der Eintrag in dieser Zeit auf deinem Server, in deinem Monitoring-Dashboard und vielleicht in den Backups deines Hosting-Providers. Ein Datenschutzverstoß entsteht in dem Moment, in dem du PII ohne Rechtsgrundlage verarbeitest – nicht erst nach Ablauf. Einer Frist. Löschung allein reicht nicht, du musst die Daten gar nicht erst in den Log schreiben.",
       "isKeySentence": false
     },
     {
@@ -354,7 +354,8 @@
           "isCorrect": false,
           "explanation": "Falsch: Logs sind nicht privat und werden nicht automatisch vernichtet – sie werden kopiert, übertragen und oft jahrelang gespeichert."
         }
-      ]
+      ],
+      "questionId": "q_17b1cb25-067b-4798-a5e4-1f670ec7643d"
     },
     {
       "question": "Wofür steht die Abkürzung PII?",
@@ -380,7 +381,8 @@
           "isCorrect": false,
           "explanation": "Falsch: das wäre ein Deployment-Begriff, PII ist ein Datenschutzbegriff."
         }
-      ]
+      ],
+      "questionId": "q_b5b66d08-3ffa-4310-83f6-34b8966510ee"
     },
     {
       "question": "Welche der folgenden Informationen gilt nach DSGVO als PII?",
@@ -406,7 +408,8 @@
           "isCorrect": false,
           "explanation": "Falsch: die DSGVO schützt alle natürlichen Personen, unabhängig davon, ob sie Kunden sind oder nicht."
         }
-      ]
+      ],
+      "questionId": "q_1cc42622-ff84-498a-a283-f5ce9204288f"
     },
     {
       "question": "Was ist Log-Redaktion?",
@@ -423,7 +426,7 @@
           "explanation": "Falsch: Log-Redaktion ist ein automatisierter technischer Prozess, keine manuelle Prüfung."
         },
         {
-          "text": "Die farbliche Hervorhebung von Fehlermeldungen in einem Log-Viewer, um sie schneller zu finden. Das passt zur Fragestellung hier nicht.",
+          "text": "Die farbliche Hervorhebung von Fehlermeldungen in einem Log-Viewer, um sie schneller zu finden.",
           "isCorrect": false,
           "explanation": "Falsch: das wäre Syntax-Highlighting, nicht Log-Redaktion."
         },
@@ -432,7 +435,8 @@
           "isCorrect": false,
           "explanation": "Falsch: Log-Redaktion ist eine technische Maßnahme, keine gesetzliche Löschfrist."
         }
-      ]
+      ],
+      "questionId": "q_864c657c-4c4d-4b84-8ebc-7941d0a0b81f"
     },
     {
       "question": "Welche drei Methoden der Log-Redaktion werden in der Lektion genannt?",
@@ -458,7 +462,8 @@
           "isCorrect": false,
           "explanation": "Falsch: das sind Methoden der Datensicherung, nicht der Log-Redaktion."
         }
-      ]
+      ],
+      "questionId": "q_892e3a28-bad1-4c5a-b083-dc47e86e653a"
     },
     {
       "question": "Was ist der entscheidende Unterschied zwischen Maskierung und Pseudonymisierung?",
@@ -484,7 +489,8 @@
           "isCorrect": false,
           "explanation": "Falsch: genau umgekehrt – Maskierung ersetzt durch Platzhalter, Pseudonymisierung behält eine Zuordnungsmöglichkeit."
         }
-      ]
+      ],
+      "questionId": "q_0036b9db-c177-455a-a5b3-f40fc1d81889"
     },
     {
       "question": "Welches Alltagsbild beschreibt ein Audit-Log am treffendsten?",
@@ -510,7 +516,8 @@
           "isCorrect": false,
           "explanation": "Falsch: eine Überwachungskamera erfasst Bilder von Personen, ein Audit-Log speichert nur Aktionen mit internen Kennungen."
         }
-      ]
+      ],
+      "questionId": "q_d38dc984-2fa3-4187-acf5-e32c44047f29"
     },
     {
       "question": "Wodurch wird ein Audit-Log fälschungssicher?",
@@ -527,7 +534,7 @@
           "explanation": "Falsch: das wäre eine physische Sicherung, aber kein technischer Fälschungsschutz."
         },
         {
-          "text": "Nur der Geschäftsführer hat das Passwort für die Logdatei, und er ändert es wöchentlich. Das passt zur Fragestellung hier nicht.",
+          "text": "Nur der Geschäftsführer hat das Passwort für die Logdatei, und er ändert es wöchentlich.",
           "isCorrect": false,
           "explanation": "Falsch: ein Passwort schützt vor unbefugtem Zugriff, aber nicht vor Manipulation durch jemanden mit Zugriff."
         },
@@ -536,7 +543,8 @@
           "isCorrect": false,
           "explanation": "Falsch: Hash-Ketten sind das technische Prinzip, aber sie laufen lokal und brauchen keine Blockchain."
         }
-      ]
+      ],
+      "questionId": "q_225fdcb3-7c3b-4b67-ad59-201d655826b1"
     },
     {
       "question": "Welche drei technischen Ebenen empfiehlt die Lektion für die Umsetzung von PII-freiem Logging?",
@@ -562,7 +570,8 @@
           "isCorrect": false,
           "explanation": "Falsch: das sind allgemeine Umgebungsstufen, keine spezifischen technischen Maßnahmen für Log-Redaktion."
         }
-      ]
+      ],
+      "questionId": "q_5b3436c6-c5dd-48ac-9014-587b3c911e83"
     },
     {
       "question": "Welcher DSGVO-Artikel verlangt, dass du nur so viele personenbezogene Daten speicherst, wie für den Zweck erforderlich sind?",
@@ -588,7 +597,8 @@
           "isCorrect": false,
           "explanation": "Falsch: Artikel 99 regelt nur das Inkrafttreten der DSGVO, nicht die Datenminimierung."
         }
-      ]
+      ],
+      "questionId": "q_410529b2-f109-468d-84c0-432eb0a98426"
     },
     {
       "question": "Innerhalb welcher Frist musst du einen Datenschutzverstoß der Aufsichtsbehörde melden?",
@@ -614,7 +624,8 @@
           "isCorrect": false,
           "explanation": "Falsch: die Frist beträgt 72 Stunden, nicht sieben Werktage, und Wochenenden zählen mit."
         }
-      ]
+      ],
+      "questionId": "q_8a9f06dc-356e-4377-a16d-723317e26253"
     },
     {
       "question": "Welche Aussage über die FutureDev-Logger-Implementierung ist richtig?",
@@ -636,11 +647,12 @@
           "explanation": "Falsch: FutureDev hat ein separates Audit-Log für sicherheitsrelevante Aktionen mit Hash-Ketten."
         },
         {
-          "text": "Die PII-Redaktion im FutureDev-Logger funktioniert nur in der Produktion, in der Entwicklung werden keine Logs geschrieben. Das passt zur Fragestellung hier nicht.",
+          "text": "Die PII-Redaktion im FutureDev-Logger funktioniert nur in der Produktion, in der Entwicklung werden keine Logs geschrieben.",
           "isCorrect": false,
           "explanation": "Falsch: in der Entwicklung werden Logs geschrieben, aber ohne Redaktion – die Redaktion greift nur in Staging und Produktion."
         }
-      ]
+      ],
+      "questionId": "q_7f20d38f-59d2-477c-9560-e14ca7f3ca07"
     }
   ],
   "practiceTask": {
@@ -669,7 +681,7 @@
   "faq": [
     {
       "question": "Reicht es nicht, Logs einfach nach sieben Tagen zu löschen? Dann sind die Personendaten doch weg, bevor jemand sie finden kann?",
-      "answer": "Die Sieben-Tage-Regel ist ein Mythos. Die DSGVO schreibt keine pauschale Löschfrist für Logs vor, sondern verlangt, dass du personenbezogene Daten nur so lange speicherst, wie es für den Zweck erforderlich ist. Selbst wenn du Logs nach einem Tag löschst, war der Eintrag in dieser Zeit auf deinem Server, in deinem Monitoring-Dashboard und vielleicht in den Backups deines Hosting-Providers. Ein Datenschutzverstoß entsteht in dem Moment, in dem du PII ohne Rechtsgrundlage verarbeitest – nicht erst nach Ablauf. einer Frist. Löschung allein reicht nicht, du musst die Daten gar nicht erst in den Log schreiben."
+      "answer": "Die Sieben-Tage-Regel ist ein Mythos. Die DSGVO schreibt keine pauschale Löschfrist für Logs vor, sondern verlangt, dass du personenbezogene Daten nur so lange speicherst, wie es für den Zweck erforderlich ist. Selbst wenn du Logs nach einem Tag löschst, war der Eintrag in dieser Zeit auf deinem Server, in deinem Monitoring-Dashboard und vielleicht in den Backups deines Hosting-Providers. Ein Datenschutzverstoß entsteht in dem Moment, in dem du PII ohne Rechtsgrundlage verarbeitest – nicht erst nach Ablauf. Einer Frist. Löschung allein reicht nicht, du musst die Daten gar nicht erst in den Log schreiben."
     },
     {
       "question": "Was ist der Unterschied zwischen Maskierung und Pseudonymisierung, und wann nehme ich welche Methode?",

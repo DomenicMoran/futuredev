@@ -24,7 +24,7 @@
     {
       "speaker": "A",
       "role": "explain",
-      "text": "GitHub Actions und Bitbucket Pipelines sind wie diese beiden Fabriken. Beide sind CI/CD-Dienste, beide automatisieren Prüfungen und Deployments, beide werden durch YAML-Dateien im Repository gesteuert. Aber sie unterscheiden sich in ihrer Architektur und ihrer Philosophie. Bitbucket Pipelines setzt konsequent auf Docker: jeder einzelne Schritt läuft in einem eigenen, frischen Docker-Container. Das gibt dir maximale Kontrolle über die Ausführungsumgebung, erfordert aber auch, dass du für jeden Schritt ein Image. angibst.",
+      "text": "GitHub Actions und Bitbucket Pipelines sind wie diese beiden Fabriken. Beide sind CI/CD-Dienste, beide automatisieren Prüfungen und Deployments, beide werden durch YAML-Dateien im Repository gesteuert. Aber sie unterscheiden sich in ihrer Architektur und ihrer Philosophie. Bitbucket Pipelines setzt konsequent auf Docker: jeder einzelne Schritt läuft in einem eigenen, frischen Docker-Container. Das gibt dir maximale Kontrolle über die Ausführungsumgebung, erfordert aber auch, dass du für jeden Schritt ein Image. Angibst.",
       "isKeySentence": false
     },
     {
@@ -36,7 +36,7 @@
     {
       "speaker": "A",
       "role": "explain",
-      "text": "Die Wahl zwischen GitHub Actions und Bitbucket Pipelines ist fast immer keine persönliche Entscheidung, sondern eine des Arbeitgebers. oder des Projekts. Wenn das Unternehmen Bitbucket als Git-Plattform nutzt, nutzt du Bitbucket Pipelines. Wenn es GitHub nutzt, nutzt du GitHub Actions. Beide Dienste sind tief in ihre jeweilige Plattform integriert, und ein Wechsel ist aufwendig. Als Entwickler solltest du beide kennen, damit du in jedem Projekt sofort arbeitsfähig bist, egal welche Plattform das. Team gewählt hat.",
+      "text": "Die Wahl zwischen GitHub Actions und Bitbucket Pipelines ist fast immer keine persönliche Entscheidung, sondern eine des Arbeitgebers. Oder des Projekts. Wenn das Unternehmen Bitbucket als Git-Plattform nutzt, nutzt du Bitbucket Pipelines. Wenn es GitHub nutzt, nutzt du GitHub Actions. Beide Dienste sind tief in ihre jeweilige Plattform integriert, und ein Wechsel ist aufwendig. Als Entwickler solltest du beide kennen, damit du in jedem Projekt sofort arbeitsfähig bist, egal welche Plattform das. Team gewählt hat.",
       "isKeySentence": false
     },
     {
@@ -54,7 +54,7 @@
     {
       "speaker": "A",
       "role": "why",
-      "text": "Die Docker-zentrierte Architektur von Bitbucket Pipelines ist Fluch und Segen zugleich. Sie gibt dir volle Kontrolle: du bestimmst exakt, welche Version von Node. js, welche Systembibliotheken und welche Werkzeuge in jedem Pipeline-Schritt verfügbar sind. Aber du musst diese Kontrolle auch ausüben: für jeden Pipeline-Schritt ein Image angeben, bei Bedarf zusätzliche Pakete installieren und die Umgebung selbst einrichten. GitHub Actions nimmt dir mit seinen vorgefertigten Aktionen viel davon ab, gibt dir dafür aber weniger Kontrolle.",
+      "text": "Die Docker-zentrierte Architektur von Bitbucket Pipelines ist Fluch und Segen zugleich. Sie gibt dir volle Kontrolle: du bestimmst exakt, welche Version von Node.js, welche Systembibliotheken und welche Werkzeuge in jedem Pipeline-Schritt verfügbar sind. Aber du musst diese Kontrolle auch ausüben: für jeden Pipeline-Schritt ein Image angeben, bei Bedarf zusätzliche Pakete installieren und die Umgebung selbst einrichten. GitHub Actions nimmt dir mit seinen vorgefertigten Aktionen viel davon ab, gibt dir dafür aber weniger Kontrolle.",
       "isKeySentence": false
     },
     {
@@ -90,7 +90,7 @@
     {
       "speaker": "A",
       "role": "why",
-      "text": "Die strikte Trennung der Steps durch eigene Container hat einen großen Vorteil: ein Pipeline-Schritt kann den nächsten nicht durch zurückgelassene Dateien oder veränderte Umgebungsvariablen beeinflussen. Was in Pipeline-Schritt eins funktioniert, aber in Pipeline-Schritt zwei nicht, liegt garantiert nicht an einer Verunreinigung aus Pipeline-Schritt. eins. Das macht die Fehlersuche einfacher, weil jeder Pipeline-Schritt eine in sich geschlossene, reproduzierbare Einheit ist.",
+      "text": "Die strikte Trennung der Steps durch eigene Container hat einen großen Vorteil: ein Pipeline-Schritt kann den nächsten nicht durch zurückgelassene Dateien oder veränderte Umgebungsvariablen beeinflussen. Was in Pipeline-Schritt eins funktioniert, aber in Pipeline-Schritt zwei nicht, liegt garantiert nicht an einer Verunreinigung aus Pipeline-Schritt. Eins. Das macht die Fehlersuche einfacher, weil jeder Pipeline-Schritt eine in sich geschlossene, reproduzierbare Einheit ist.",
       "isKeySentence": false
     },
     {
@@ -120,7 +120,7 @@
     {
       "speaker": "A",
       "role": "example",
-      "text": "In einer Bitbucket-Pipeline für eine Next. js-Anwendung erzeugt der Build-Pipeline-Schritt das Verzeichnis . next als Artefakt. Der Test-Pipeline-Schritt nutzt dieses Artefakt, um die gebaute Anwendung zu testen. Der Deploy-Pipeline-Schritt nutzt dasselbe Artefakt, um es auf den Server hochzuladen. Alle drei Steps arbeiten mit demselben Build-Ergebnis, aber jeder in seinem eigenen Container. Das spart Zeit, weil die Anwendung nur einmal gebaut wird, und stellt sicher, dass getestet und deployt wird, was tatsächlich gebaut wurde.",
+      "text": "In einer Bitbucket-Pipeline für eine Next. Js-Anwendung erzeugt der Build-Pipeline-Schritt das Verzeichnis. Next als Artefakt. Der Test-Pipeline-Schritt nutzt dieses Artefakt, um die gebaute Anwendung zu testen. Der Deploy-Pipeline-Schritt nutzt dasselbe Artefakt, um es auf den Server hochzuladen. Alle drei Steps arbeiten mit demselben Build-Ergebnis, aber jeder in seinem eigenen Container. Das spart Zeit, weil die Anwendung nur einmal gebaut wird, und stellt sicher, dass getestet und deployt wird, was tatsächlich gebaut wurde.",
       "isKeySentence": false
     },
     {
@@ -138,7 +138,7 @@
     {
       "speaker": "A",
       "role": "explain",
-      "text": "Die grundlegende Struktur ist ähnlich: beide nutzen YAML, beide haben Trigger wie Push und Pull Request, beide definieren. Schritte, die Befehle ausführen. Der Hauptunterschied liegt in der Granularität. GitHub Actions hat Jobs, die Steps enthalten, und alle Steps eines Jobs teilen sich einen Runner. Bitbucket Pipelines hat nur Steps, und jeder Pipeline-Schritt hat seinen eigenen Container. Außerdem hat Bitbucket keine vorgefertigten Aktionen wie uses in GitHub Actions. Stattdessen schreibst du die Befehle direkt als Shell-Kommandos in den Pipeline-Schritt oder nutzt Pipes, das Bitbucket-Äquivalent zu Aktionen.",
+      "text": "Die grundlegende Struktur ist ähnlich: beide nutzen YAML, beide haben Trigger wie Push und Pull Request, beide definieren Schritte, die Befehle ausführen. Der Hauptunterschied liegt in der Granularität. GitHub Actions hat Jobs, die Steps enthalten, und alle Steps eines Jobs teilen sich einen Runner. Bitbucket Pipelines hat nur Steps, und jeder Pipeline-Schritt hat seinen eigenen Container. Außerdem hat Bitbucket keine vorgefertigten Aktionen wie uses in GitHub Actions. Stattdessen schreibst du die Befehle direkt als Shell-Kommandos in den Pipeline-Schritt oder nutzt Pipes, das Bitbucket-Äquivalent zu Aktionen.",
       "isKeySentence": false
     },
     {
@@ -318,7 +318,7 @@
     {
       "speaker": "A",
       "role": "faq",
-      "text": "Die CI/CD-Logik kannst du übertragen, aber nicht die YAML-Datei selbst. Du musst die Struktur anpassen: aus Jobs werden Steps, aus uses werden direkte Shell-Befehle oder Pipes, und du musst für jeden Pipeline-Schritt ein Image angeben. Der Aufwand hängt von der Komplexität deiner Workflows ab. Einfache Workflows mit wenigen Schritten sind in einer Stunde übertragen. Komplexe Workflows mit vielen vorgefertigten Aktionen können mehrere Tage Arbeit bedeuten, weil du für jede Aktion ein Äquivalent. finden oder selbst schreiben musst.",
+      "text": "Die CI/CD-Logik kannst du übertragen, aber nicht die YAML-Datei selbst. Du musst die Struktur anpassen: aus Jobs werden Steps, aus uses werden direkte Shell-Befehle oder Pipes, und du musst für jeden Pipeline-Schritt ein Image angeben. Der Aufwand hängt von der Komplexität deiner Workflows ab. Einfache Workflows mit wenigen Schritten sind in einer Stunde übertragen. Komplexe Workflows mit vielen vorgefertigten Aktionen können mehrere Tage Arbeit bedeuten, weil du für jede Aktion ein Äquivalent. Finden oder selbst schreiben musst.",
       "isKeySentence": false
     },
     {
@@ -342,7 +342,7 @@
     {
       "speaker": "A",
       "role": "faq",
-      "text": "Verwende offizielle Images von Docker Hub, die genau die Werkzeuge enthalten, die du für den Pipeline-Schritt brauchst. Für einen Node. js-Build ist node:22 das richtige Image. Für einen Python-Test ist python:3. 12 das richtige. Achte darauf, möglichst schlanke Images zu verwenden, zum Beispiel alpine-Varianten, weil der Container bei jedem Pipeline-Schritt neu gestartet wird und die Image-Größe direkt die Startzeit beeinflusst. Du kannst auch eigene Images bauen und in einer Registry hinterlegen, wenn du spezielle Werkzeuge oder Konfigurationen brauchst.",
+      "text": "Verwende offizielle Images von Docker Hub, die genau die Werkzeuge enthalten, die du für den Pipeline-Schritt brauchst. Für einen Node.js-Build ist node:22 das richtige Image. Für einen Python-Test ist python:3. 12 das richtige. Achte darauf, möglichst schlanke Images zu verwenden, zum Beispiel alpine-Varianten, weil der Container bei jedem Pipeline-Schritt neu gestartet wird und die Image-Größe direkt die Startzeit beeinflusst. Du kannst auch eigene Images bauen und in einer Registry hinterlegen, wenn du spezielle Werkzeuge oder Konfigurationen brauchst.",
       "isKeySentence": false
     },
     {
@@ -354,7 +354,7 @@
     {
       "speaker": "A",
       "role": "faq",
-      "text": "Artefakte werden standardmäßig 14 Tage gespeichert. Danach werden sie automatisch gelöscht. Du kannst sie innerhalb dieser Zeit aus der Pipeline-Oberfläche herunterladen. Wenn du Artefakte länger aufbewahren musst, solltest du sie in einem externen Speicher wie AWS S3 ablegen, statt dich auf die Pipeline-Speicherung zu verlassen. Für die Weitergabe zwischen Steps innerhalb eines Pipeline-Laufs sind die 14 Tage mehr als ausreichend, da ein Pipeline-Lauf. typischerweise nur Minuten dauert.",
+      "text": "Artefakte werden standardmäßig 14 Tage gespeichert. Danach werden sie automatisch gelöscht. Du kannst sie innerhalb dieser Zeit aus der Pipeline-Oberfläche herunterladen. Wenn du Artefakte länger aufbewahren musst, solltest du sie in einem externen Speicher wie AWS S3 ablegen, statt dich auf die Pipeline-Speicherung zu verlassen. Für die Weitergabe zwischen Steps innerhalb eines Pipeline-Laufs sind die 14 Tage mehr als ausreichend, da ein Pipeline-Lauf. Typischerweise nur Minuten dauert.",
       "isKeySentence": false
     },
     {
@@ -366,7 +366,7 @@
     {
       "speaker": "A",
       "role": "faq",
-      "text": "Ja, Bitbucket unterstützt selbst gehostete Runner, die du auf deiner eigenen Infrastruktur betreibst. Das ist nützlich, wenn du spezielle Hardware brauchst, zum Beispiel für iOS-Builds, die nur auf macOS laufen, oder wenn du das Minuten-Kontingent von Bitbucket Cloud überschreitest. Selbst gehostete Runner geben dir volle Kontrolle über die Umgebung, aber du bist für Wartung, Sicherheit und Updates. verantwortlich. Für die meisten Projekte sind die von Bitbucket bereitgestellten Runner ausreichend.",
+      "text": "Ja, Bitbucket unterstützt selbst gehostete Runner, die du auf deiner eigenen Infrastruktur betreibst. Das ist nützlich, wenn du spezielle Hardware brauchst, zum Beispiel für iOS-Builds, die nur auf macOS laufen, oder wenn du das Minuten-Kontingent von Bitbucket Cloud überschreitest. Selbst gehostete Runner geben dir volle Kontrolle über die Umgebung, aber du bist für Wartung, Sicherheit und Updates. Verantwortlich. Für die meisten Projekte sind die von Bitbucket bereitgestellten Runner ausreichend.",
       "isKeySentence": false
     }
   ],
@@ -377,316 +377,328 @@
   },
   "quiz": [
     {
-      "question": "Welches Alltagsbild beschreibt Bitbucket Pipelines im Vergleich zu GitHub Actions am treffendsten?",
+      "question": "Welche Analogie passt dazu, dass GitHub Actions und Bitbucket Pipelines dieselben CI-Ziele mit unterschiedlichen Konfigurationen umsetzen?",
       "area": "CI/CD: Bitbucket Pipelines",
       "options": [
         {
-          "text": "Zwei verschiedene Autofabriken, die beide Autos bauen, aber mit unterschiedlichen Maschinen und Abläufen.",
+          "text": "Zwei Werkstätten prüfen ähnliche Produkte, nutzen dafür aber eigene Werkzeuge und Arbeitsabläufe.",
           "isCorrect": true,
-          "explanation": "Richtig: beide Dienste machen dasselbe, aber mit unterschiedlicher Architektur und Syntax."
+          "explanation": "Richtig: Beide Plattformen automatisieren Builds und Checks, unterscheiden sich aber in Konfiguration und wiederverwendbaren Bausteinen."
         },
         {
-          "text": "Ein einziges Auto, das von zwei verschiedenen Fahrern gleichzeitig gesteuert wird.",
+          "text": "Zwei identische Werkstätten, bei denen jede YAML-Datei und jeder Schritt ohne Änderung austauschbar ist.",
           "isCorrect": false,
-          "explanation": "Falsch: die Dienste arbeiten nicht gleichzeitig am selben Projekt."
+          "explanation": "Falsch: Die Konfigurationsformate und Integrationsbausteine sind nicht vollständig austauschbar."
         },
         {
-          "text": "Zwei völlig verschiedene Produkte, die nichts miteinander zu tun haben. Das passt zur Fragestellung hier nicht.",
+          "text": "Ein Lager und ein Versanddienst, die keinerlei Prüfung oder gemeinsame Schritte im Entwicklungsprozess ausführen.",
           "isCorrect": false,
-          "explanation": "Falsch: beide sind CI/CD-Dienste mit sehr ähnlichen Zielen."
+          "explanation": "Falsch: Beide Plattformen können CI/CD-Prüfungen und Bereitstellungen automatisieren."
         },
         {
-          "text": "Ein Auto und ein Fahrrad, die völlig unterschiedliche Fortbewegungsmittel sind.",
+          "text": "Eine Werkstatt, die nur Produkte verpackt, während die andere ausschließlich Rechnungen erstellt.",
           "isCorrect": false,
-          "explanation": "Falsch: beide Dienste sind vergleichbar, nicht grundverschieden."
+          "explanation": "Falsch: Beide können vergleichbare Build- und Deploy-Aufgaben übernehmen."
         }
-      ]
+      ],
+      "questionId": "q_9df5a87d-1bb3-4208-bf4f-7d357f3f4728"
     },
     {
-      "question": "Was ist ein Pipeline-Schritt in Bitbucket Pipelines?",
+      "question": "Was ist ein Step in Bitbucket Pipelines?",
       "area": "CI/CD: Step",
       "options": [
         {
-          "text": "Eine einzelne Ausführungseinheit, die in einem eigenen Docker-Container läuft.",
+          "text": "Eine Pipeline-Ausführungseinheit, deren Befehle in einem eigenen Docker-Container laufen.",
           "isCorrect": true,
-          "explanation": "Richtig: jeder Pipeline-Schritt bekommt einen frischen Container, isoliert von allen anderen Steps."
+          "explanation": "Richtig: Jeder Step startet in einem separaten Container; Übergabe von Dateien erfordert Artefakte oder andere Konfiguration."
         },
         {
-          "text": "Eine vorgefertigte Aktion aus dem Bitbucket Marketplace, ähnlich wie uses in GitHub Actions.",
+          "text": "Ein Befehl, der stets im selben Prozess und Dateisystem wie jeder Step aller früheren Läufe weiterläuft.",
           "isCorrect": false,
-          "explanation": "Falsch: vorgefertigte Bausteine heißen in Bitbucket Pipes, nicht Steps."
+          "explanation": "Falsch: Steps starten separat; frühere Laufzeitdateien werden nicht beliebig geteilt."
         },
         {
-          "text": "Ein einzelner Shell-Befehl, der innerhalb eines Containers ausgeführt wird.",
+          "text": "Ein vollständiger Workflow mit sämtlichen Triggern, Branch-Regeln und Umgebungsvariablen des Repos.",
           "isCorrect": false,
-          "explanation": "Falsch: ein Pipeline-Schritt kann mehrere Shell-Befehle enthalten, er ist die übergeordnete Einheit."
+          "explanation": "Falsch: Das ist eher die gesamte Pipeline-Konfiguration; ein Step ist eine einzelne Ausführungseinheit."
         },
         {
-          "text": "Die Konfigurationsdatei, die die gesamte Pipeline beschreibt.",
+          "text": "Ein Artefaktverzeichnis, das Pipelines automatisch für alle späteren Builds dauerhaft archiviert.",
           "isCorrect": false,
-          "explanation": "Falsch: die Konfigurationsdatei heißt bitbucket-pipelines.yml."
+          "explanation": "Falsch: Ein Step ist eine Ausführung, kein dauerhaftes Artefakt-Repository."
         }
-      ]
+      ],
+      "questionId": "q_ee6c5863-ccc2-4d19-95d1-4fbdb598e1ae"
     },
     {
-      "question": "Was ist ein Artefakt in Bitbucket Pipelines?",
+      "question": "Was ist ein Pipeline-Artefakt in Bitbucket?",
       "area": "CI/CD: Artifact",
       "options": [
         {
-          "text": "Eine Datei oder ein Verzeichnis, das in einem Pipeline-Sc…",
+          "text": "Eine ausgewählte Datei oder ein Verzeichnis aus einem Step, das nachfolgende Steps nutzen oder später abrufen können.",
           "isCorrect": true,
-          "explanation": "Richtig: Artefakte sind die einzige Verbindung zwischen den isolierten Steps."
+          "explanation": "Richtig: Artefakte übertragen ausgewählte Ergebnisse zwischen Steps und haben eine begrenzte Aufbewahrungszeit."
         },
         {
-          "text": "Ein altes, nicht mehr verwendetes Stück Code, das aus dem Repository entfernt werden sollte.",
+          "text": "Eine installierte Abhängigkeit, die automatisch für alle Builds als Cache gespeichert und unbegrenzt wiederverwendet wird.",
           "isCorrect": false,
-          "explanation": "Falsch: das wäre toter Code, kein Artefakt im Bitbucket-Sinne."
+          "explanation": "Falsch: Caches beschleunigen Builds; Artefakte übertragen konkrete Step-Ausgaben und bleiben begrenzt verfügbar."
         },
         {
-          "text": "Eine Fehlermeldung, die während der Pipeline-Ausführung auftritt.",
+          "text": "Ein Docker-Image, das der Runner ausschließlich im Arbeitsspeicher hält und nie an weitere Steps geben kann.",
           "isCorrect": false,
-          "explanation": "Falsch: Fehlermeldungen sind keine Artefakte."
+          "explanation": "Falsch: Artefakte können ausgewählte Build-Ausgaben zwischen Steps weitergeben."
         },
         {
-          "text": "Ein Docker-Image, das als Basis für einen Pipeline-Schritt verwendet wird.",
+          "text": "Der komplette Source-Checkout, der ohne YAML-Konfiguration an jede spätere Pipeline-Ausführung vererbt wird.",
           "isCorrect": false,
-          "explanation": "Falsch: das Basis-Image wird mit image deklariert, nicht als Artefakt."
+          "explanation": "Falsch: Artefakte müssen als Ausgaben definiert werden und sind nicht automatisch alle Checkout-Dateien."
         }
-      ]
+      ],
+      "questionId": "q_7a00b865-d14d-4273-941c-28fd4d9ad752"
     },
     {
-      "question": "Warum läuft jeder Pipeline-Schritt in Bitbucket Pipelines in einem eigenen Container?",
+      "question": "Warum werden Bitbucket-Pipeline-Steps in getrennten Containern ausgeführt?",
       "area": "CI/CD: Bitbucket Pipelines",
       "options": [
         {
-          "text": "Damit Steps sich nicht durch zurückgelassene Dateien oder Umgebungsvariablen beeinflussen können.",
+          "text": "Ein Step erhält eine frische Laufzeitumgebung; Dateien werden nur über ausdrücklich geteilte Artefakte oder Ressourcen weitergereicht.",
           "isCorrect": true,
-          "explanation": "Richtig: die strikte Isolation macht jeden Pipeline-Schritt zu einer reproduzierbaren Einheit."
+          "explanation": "Richtig: Das reduziert unbeabsichtigte Seiteneffekte, bedeutet aber nicht, dass Datenübergabe unmöglich ist."
         },
         {
-          "text": "Weil Bitbucket sonst eine Lizenzgebühr an Docker zahlen müsste. Das passt zur Fragestellung hier nicht.",
+          "text": "Damit jeder Step zwingend ein anderes Betriebssystem nutzt als der vorangehende Step.",
           "isCorrect": false,
-          "explanation": "Falsch: die Container-Isolation ist eine Designentscheidung, keine Lizenzfrage."
+          "explanation": "Falsch: Schritte können dasselbe Image verwenden, laufen aber jeweils in separaten Containern."
         },
         {
-          "text": "Damit die Pipeline schneller läuft, weil mehrere Container parallel arbeiten.",
+          "text": "Damit nur der erste Step Variablen sehen kann und alle späteren Steps keine Konfiguration erhalten.",
           "isCorrect": false,
-          "explanation": "Falsch: die Isolation macht die Pipeline eher langsamer, weil jeder Container neu starten muss."
+          "explanation": "Falsch: Variablen können für Pipeline und Schritte konfiguriert werden; Containergrenzen verhindern das nicht."
         },
         {
-          "text": "Weil Docker das einzige von Bitbucket unterstützte Laufzeitsystem ist.",
+          "text": "Damit Änderungen in einem Step automatisch als dauerhafte Änderungen am Build-Image gespeichert werden.",
           "isCorrect": false,
-          "explanation": "Falsch: Bitbucket hat sich bewusst für Docker entschieden, nicht aus technischer Notwendigkeit."
+          "explanation": "Falsch: Änderungen am Container-Dateisystem werden nicht automatisch in das Image übernommen."
         }
-      ]
+      ],
+      "questionId": "q_6641d3ec-0d17-449a-b4cd-85f42c6a3f61"
     },
     {
-      "question": "Was ist der Hauptunterschied zwischen GitHub Actions und Bitbucket Pipelines?",
+      "question": "Welche Aussage beschreibt Bitbucket Pipes im Vergleich zu GitHub Actions am besten?",
       "area": "CI/CD: Bitbucket Pipelines",
       "options": [
         {
-          "text": "Bitbucket hat keine vorgefertigten Aktionen, sondern setzt auf direkte Shell-Befehle oder Pipes.",
+          "text": "Pipes sind wiederverwendbare, containerbasierte Aufgaben; GitHub Actions nutzt eigene Action-Metadaten und Referenzen.",
           "isCorrect": true,
-          "explanation": "Richtig: Bitbucket hat kein uses-Äquivalent, du schreibst die Befehle direkt."
+          "explanation": "Richtig: Beide bieten wiederverwendbare Workflow-Bausteine, aber Verpackung und Aufrufsyntax unterscheiden sich."
         },
         {
-          "text": "GitHub Actions kann nur auf Linux laufen, Bitbucket Pipelines nur auf Windows.",
+          "text": "Bitbucket unterstützt keinerlei vorgefertigte Bausteine; jede Integration muss vollständig als Shell-Skript geschrieben werden.",
           "isCorrect": false,
-          "explanation": "Falsch: beide unterstützen mehrere Betriebssysteme."
+          "explanation": "Falsch: Pipes sind vorgefertigte und eigene wiederverwendbare Bausteine."
         },
         {
-          "text": "Bitbucket Pipelines ist kostenlos, GitHub Actions kostet immer Geld.",
+          "text": "Eine GitHub Action lässt sich unverändert als Pipe referenzieren, weil beide dieselbe YAML-Syntax und Laufzeit besitzen.",
           "isCorrect": false,
-          "explanation": "Falsch: beide haben kostenlose Kontingente und kostenpflichtige Erweiterungen."
+          "explanation": "Falsch: Die Plattformen unterscheiden sich in Referenz- und Ausführungsformaten."
         },
         {
-          "text": "GitHub Actions verwendet JSON, Bitbucket Pipelines verwendet XML. Das passt zur Fragestellung hier nicht.",
+          "text": "GitHub Actions besteht ausschließlich aus Docker-Pipes, während Bitbucket nur Git-Branches verarbeitet.",
           "isCorrect": false,
-          "explanation": "Falsch: beide verwenden YAML für ihre Konfigurationsdateien."
+          "explanation": "Falsch: GitHub Actions und Bitbucket Pipelines bieten beide Workflow-Ausführung und weitere Bausteine."
         }
-      ]
+      ],
+      "questionId": "q_b70dc9e5-8df4-4a1e-aae0-f290d4d2bbf4"
     },
     {
-      "question": "Wie lange werden Artefakte in Bitbucket Pipelines standardmäßig gespeichert?",
+      "question": "Wie lange bleiben reguläre Bitbucket-Pipeline-Artefakte laut Atlassian-Dokumentation höchstens verfügbar?",
       "area": "CI/CD: Artifact",
       "options": [
         {
-          "text": "14 Tage.",
+          "text": "Bis zu 14 Tage; für längere Aufbewahrung ist ein externer Speicher nötig.",
           "isCorrect": true,
-          "explanation": "Richtig: nach 14 Tagen werden Artefakte automatisch gelöscht."
+          "explanation": "Richtig: Atlassian nennt für Pipeline-Artefakte ein maximales Aufbewahrungsfenster von 14 Tagen."
         },
         {
-          "text": "Für immer, bis der Nutzer sie manuell löscht.",
+          "text": "Unbegrenzt, solange der zugehörige Git-Branch im Repository nicht gelöscht wird.",
           "isCorrect": false,
-          "explanation": "Falsch: Artefakte haben eine begrenzte Lebensdauer von 14 Tagen."
+          "explanation": "Falsch: Die Artifact-Aufbewahrung ist begrenzt, unabhängig von der Branch-Lebensdauer."
         },
         {
-          "text": "Nur während des laufenden Pipeline-Durchlaufs, danach sofort.",
+          "text": "Nur bis zum Ende des nächsten Steps, selbst wenn die Datei als Artefakt definiert wurde.",
           "isCorrect": false,
-          "explanation": "Falsch: Artefakte überleben den Pipeline-Lauf um 14 Tage."
+          "explanation": "Falsch: Artefakte können zwischen Steps geteilt und bis zum Ablauf der Retention heruntergeladen werden."
         },
         {
-          "text": "7 Tage.",
+          "text": "Genau 90 Tage für jeden Artifact-Typ, ohne Möglichkeit eines externen Speichers.",
           "isCorrect": false,
-          "explanation": "Falsch: die Standardaufbewahrungsdauer beträgt 14 Tage, nicht 7."
+          "explanation": "Falsch: Die dokumentierte Höchstdauer regulärer Artefakte beträgt 14 Tage."
         }
-      ]
+      ],
+      "questionId": "q_a1dcd66f-cbea-4e25-906e-60af97532f99"
     },
     {
-      "question": "Was sind Pipes in Bitbucket Pipelines?",
+      "question": "Was ist eine Pipe in Bitbucket Pipelines?",
       "area": "CI/CD: Bitbucket Pipelines",
       "options": [
         {
-          "text": "Vorgefertigte, wiederverwendbare Bausteine, ähnlich wie GitHub Actions.",
+          "text": "Ein wiederverwendbarer Container-Baustein, der ein bestimmtes Skript oder eine Integration kapselt.",
           "isCorrect": true,
-          "explanation": "Richtig: Pipes sind das Bitbucket-Äquivalent zu den uses-Aktionen in GitHub Actions."
+          "explanation": "Richtig: Pipes vereinfachen wiederkehrende Aufgaben wie Deployments oder Benachrichtigungen."
         },
         {
-          "text": "Rohre, durch die der Code physisch von einem Server zum anderen fließt.",
+          "text": "Ein persistenter Docker-Daemon, der jeden Step und sämtliche Dateien zwischen Pipeline-Läufen gemeinsam ausführt.",
           "isCorrect": false,
-          "explanation": "Falsch: Pipes sind ein technisches Konzept, keine physischen Rohre."
+          "explanation": "Falsch: Eine Pipe ist ein aufrufbarer Aufgabenbaustein, kein persistenter Runner."
         },
         {
-          "text": "Die Shell-Befehle, die in einem Pipeline-Schritt ausgeführt werden.",
+          "text": "Ein Pipeline-Artefakt, das nach jedem Lauf die gesamte Repository-Historie archiviert.",
           "isCorrect": false,
-          "explanation": "Falsch: Shell-Befehle sind script, Pipes sind vorgefertigte Bausteine."
+          "explanation": "Falsch: Artefakte speichern ausgewählte Ausgaben; eine Pipe führt eine Aufgabe aus."
         },
         {
-          "text": "Die Benachrichtigungen, die Bitbucket nach einem Pipeline-Lauf verschickt.",
+          "text": "Eine feste Netzwerkverbindung, die Repository und Entwicklercomputer dauerhaft miteinander verbindet.",
           "isCorrect": false,
-          "explanation": "Falsch: Benachrichtigungen sind notifications, nicht Pipes."
+          "explanation": "Falsch: Pipes kapseln Pipeline-Aktionen und sind keine VPN- oder Netzwerkverbindung."
         }
-      ]
+      ],
+      "questionId": "q_6666769a-d667-4e81-883f-ac77f3a08d92"
     },
     {
-      "question": "Warum sollte ein Entwickler sowohl GitHub Actions als auch Bitbucket Pipelines kennen?",
+      "question": "Warum kann es nützlich sein, mit mehreren CI/CD-Plattformen vertraut zu sein?",
       "area": "CI/CD: Bitbucket Pipelines",
       "options": [
         {
-          "text": "Weil die Wahl der Plattform meist vom Arbeitgeber vorgegeben ist und man in jedem Projekt arbeitsfähig sein sollte.",
+          "text": "Viele CI-Konzepte sind übertragbar; Syntax, Runner und Integrationen musst du aber je Plattform anpassen.",
           "isCorrect": true,
-          "explanation": "Richtig: wer beide kennt, kann in jedem Team sofort mitarbeiten."
+          "explanation": "Richtig: Kenntnisse erleichtern Wechsel und Einarbeitung, ohne die Konfigurationen gleichzusetzen."
         },
         {
-          "text": "Weil GitHub Actions und Bitbucket Pipelines im selben Projekt gleichzeitig verwendet werden müssen.",
+          "text": "Weil jedes Team alle CI-Anbieter gleichzeitig einsetzen muss, um einen erfolgreichen Build zu erhalten.",
           "isCorrect": false,
-          "explanation": "Falsch: ein Projekt nutzt typischerweise nur eine der beiden Plattformen."
+          "explanation": "Falsch: Ein Projekt kann die zu seinen Anforderungen passende Plattform auswählen."
         },
         {
-          "text": "Weil Bitbucket Pipelines nur funktioniert, wenn GitHub Actions ebenfalls eingerichtet ist.",
+          "text": "Weil eine Pipeline einer Plattform automatisch die Geheimnisse und Jobs jeder anderen Plattform übernehmen kann.",
           "isCorrect": false,
-          "explanation": "Falsch: die Dienste sind unabhängig voneinander."
+          "explanation": "Falsch: Secrets und Workflow-Konfigurationen werden nicht automatisch geteilt."
         },
         {
-          "text": "Weil GitHub Actions in Deutschland verboten ist und man auf Bitbucket ausweichen muss. Das passt zur Fragestellung hier nicht.",
+          "text": "Weil nach dem Wechsel einer Plattform keinerlei Tests oder Integrationsprüfungen erneut notwendig sind.",
           "isCorrect": false,
-          "explanation": "Falsch: GitHub Actions ist in Deutschland nicht verboten."
+          "explanation": "Falsch: Plattformwechsel sollten durch passende Testläufe überprüft werden."
         }
-      ]
+      ],
+      "questionId": "q_ed4fcba6-2e50-482e-88de-6d9e5ea9f8d2"
     },
     {
-      "question": "Welches Image solltest du für einen Node.js-Build-Pipeline-Schritt in Bitbucket Pipelines verwenden?",
+      "question": "Wie wählst du das Container-Image für einen Node.js-Build-Step sinnvoll aus?",
       "area": "CI/CD: Bitbucket Pipelines",
       "options": [
         {
-          "text": "node:22, das offizielle Node.js-Image von Docker Hub.",
+          "text": "Ein gepflegtes Image mit der zur Anwendung passenden Node-Version auswählen und die Version nachvollziehbar festlegen.",
           "isCorrect": true,
-          "explanation": "Richtig: offizielle Images sind getestet, aktuell und für den Einsatzzweck optimiert."
+          "explanation": "Richtig: Das Image sollte zur Projektversion passen; ein aktueller Major-Tag allein garantiert keine Reproduzierbarkeit."
         },
         {
-          "text": "ubuntu:latest, weil Ubuntu alles kann und Node.js automatisch installiert ist.",
+          "text": "Immer das neueste Image ohne Versionsangabe nutzen, auch wenn lokale und CI-Node-Versionen abweichen.",
           "isCorrect": false,
-          "explanation": "Falsch: ubuntu:latest enthält Node.js nicht vorinstalliert, du müsstest es erst installieren."
+          "explanation": "Falsch: Unfixierte Versionen können unerwartete Änderungen und Build-Unterschiede verursachen."
         },
         {
-          "text": "Ein selbst gebautes Image mit allen erdenklichen Werkzeugen für alle Eventualitäten.",
+          "text": "Ein beliebiges Betriebssystem-Image ohne Node installieren, weil Bitbucket Node in jedem Step voraussetzt.",
           "isCorrect": false,
-          "explanation": "Falsch: ein überladenes Image ist langsam und schwer zu warten."
+          "explanation": "Falsch: Das Image muss die benötigte Laufzeit enthalten oder sie im Step installieren."
         },
         {
-          "text": "bitbucket/node:latest, ein speziell für Bitbucket optimiertes Image.",
+          "text": "Ein Image mit einer anderen Node-Hauptversion als im Projekt verwenden, damit CI lokale Bedingungen nicht nachbildet.",
           "isCorrect": false,
-          "explanation": "Falsch: es gibt kein spezielles Bitbucket-Node-Image, die offiziellen Docker-Hub-Images sind der Standard."
+          "explanation": "Falsch: Versionen sollten absichtlich zum Projektziel passen; Abweichungen müssen gezielt getestet werden."
         }
-      ]
+      ],
+      "questionId": "q_a8f540a7-0719-4c3e-a786-ec4689878351"
     },
     {
-      "question": "Kannst du eine GitHub-Actions-YAML-Datei direkt in Bitbucket Pipelines verwenden?",
+      "question": "Kannst du eine GitHub-Actions-YAML direkt als Bitbucket-Pipelines-Konfiguration nutzen?",
       "area": "CI/CD: Bitbucket Pipelines",
       "options": [
         {
-          "text": "Nein, die Syntax unterscheidet sich, und du musst die Struktur anpassen.",
+          "text": "Nein; Workflow- und Step-Syntax unterscheiden sich, daher muss die Konfiguration übertragen werden.",
           "isCorrect": true,
-          "explanation": "Richtig: aus Jobs werden Steps, aus uses werden Shell-Befehle oder Pipes."
+          "explanation": "Richtig: Konzepte lassen sich übernehmen, die Plattformdateien aber nicht direkt austauschen."
         },
         {
-          "text": "Ja, beide verwenden YAML und sind vollständig kompatibel zueinander.",
+          "text": "Ja; beide Plattformen lesen dieselbe YAML-Datei und interpretieren identische Trigger und Jobs.",
           "isCorrect": false,
-          "explanation": "Falsch: obwohl beide YAML nutzen, ist die Syntax unterschiedlich."
+          "explanation": "Falsch: YAML als Syntax macht die jeweiligen Schemata nicht kompatibel."
         },
         {
-          "text": "Nur wenn die Datei weniger als 100 Zeilen hat.",
+          "text": "Ja, wenn du nur die Dateiendung in `bitbucket-pipelines.yml` änderst und sonst nichts anpasst.",
           "isCorrect": false,
-          "explanation": "Falsch: die Länge der Datei hat keinen Einfluss auf die Kompatibilität."
+          "explanation": "Falsch: Die Schlüssel und Aktionsreferenzen folgen unterschiedlichen Schemas."
         },
         {
-          "text": "Ja, aber nur in öffentlichen Repositories. Das passt zur Fragestellung hier nicht.",
+          "text": "Nein; Bitbucket unterstützt überhaupt keine YAML-basierte Pipeline-Konfiguration.",
           "isCorrect": false,
-          "explanation": "Falsch: die Sichtbarkeit des Repos ändert nichts an der Syntax-Inkompatibilität."
+          "explanation": "Falsch: Bitbucket Pipelines nutzt eine YAML-Konfigurationsdatei."
         }
-      ]
+      ],
+      "questionId": "q_98896b41-496c-474a-8c8e-e2dd2ab0f7dd"
     },
     {
-      "question": "Was ist der Vorteil, wenn jeder Pipeline-Schritt in einem eigenen Container läuft?",
+      "question": "Welchen möglichen Effekt hat ein eigener Container pro Pipeline-Step?",
       "area": "CI/CD: Bitbucket Pipelines",
       "options": [
         {
-          "text": "Fehler sind leichter zu finden, weil kein Pipeline-Schritt den nächsten verunreinigen kann.",
+          "text": "Ein Step startet in einem eigenen Container; nötige Ausgaben müssen explizit als Artefakte geteilt werden.",
           "isCorrect": true,
-          "explanation": "Richtig: die strikte Isolation macht jeden Pipeline-Schritt zu einer in sich geschlossenen Einheit."
+          "explanation": "Richtig: Frische Container begrenzen Seiteneffekte, während Artefakte und Caches gezielt Daten weitergeben."
         },
         {
-          "text": "Die Pipeline läuft schneller, weil mehrere Container parallel arbeiten können.",
+          "text": "Jeder Fehler wird dadurch automatisch isoliert und kann weder Pipeline-Artefakte noch spätere Jobs beeinflussen.",
           "isCorrect": false,
-          "explanation": "Falsch: die Container-Isolation macht die Pipeline eher langsamer durch die Startzeiten."
+          "explanation": "Falsch: Fehlgeschlagene Steps können Jobs beeinflussen; Artefakte und Status bleiben relevant."
         },
         {
-          "text": "Bitbucket kann dann mehr Geld für die Nutzung verlangen. Das passt zur Fragestellung hier nicht.",
+          "text": "Dateien aus dem Repository können nie von mehr als einem Step gelesen werden, selbst mit Artefaktübergabe.",
           "isCorrect": false,
-          "explanation": "Falsch: die Preisgestaltung hängt nicht von der Container-Anzahl ab."
+          "explanation": "Falsch: Checkout und Artefakte ermöglichen gezielten Zugriff in mehreren Steps."
         },
         {
-          "text": "Die Pipeline kann dann in verschiedenen Programmiersprachen geschrieben werden.",
+          "text": "Alle Umgebungsvariablen werden gelöscht und müssen für jeden Befehl neu in der YAML definiert werden.",
           "isCorrect": false,
-          "explanation": "Falsch: die Pipeline selbst ist immer YAML, unabhängig von den Containern."
+          "explanation": "Falsch: Variablen können über Repository-, Deployment- oder Pipeline-Konfiguration bereitgestellt werden."
         }
-      ]
+      ],
+      "questionId": "q_e61c2518-78d2-43a6-9afa-2b0369f213ee"
     },
     {
-      "question": "Wo wird die Bitbucket-Pipelines-Konfiguration gespeichert?",
+      "question": "Wo liegt üblicherweise die Konfiguration von Bitbucket Pipelines?",
       "area": "CI/CD: Bitbucket Pipelines",
       "options": [
         {
-          "text": "In der Datei bitbucket-pipelines.yml im Wurzelverzeichnis des Repositories.",
+          "text": "In `bitbucket-pipelines.yml` im Wurzelverzeichnis des Repositories.",
           "isCorrect": true,
-          "explanation": "Richtig: Bitbucket sucht nach dieser Datei und führt sie automatisch aus."
+          "explanation": "Richtig: Bitbucket erkennt die Pipeline-Datei an diesem Namen und Speicherort."
         },
         {
-          "text": "In den Einstellungen des Bitbucket-Repositories unter dem Menüpunkt Pipelines.",
+          "text": "In `.github/workflows/ci.yml`, das Bitbucket unverändert als eigene Workflow-Datei ausführt.",
           "isCorrect": false,
-          "explanation": "Falsch: die Konfiguration steht in einer Datei im Repository, nicht in den Einstellungen."
+          "explanation": "Falsch: Dieser Pfad gehört typischerweise zu GitHub Actions."
         },
         {
-          "text": "In einer externen Datenbank, die über eine API mit Bitbucket verbunden ist.",
+          "text": "In einer privaten Datenbank in Bitbucket-Einstellungen, ohne versionierbare Konfigurationsdatei.",
           "isCorrect": false,
-          "explanation": "Falsch: die Konfiguration ist Teil des Repositories und wird mit versioniert."
+          "explanation": "Falsch: Pipeline-Konfiguration wird im Repository als YAML-Datei abgelegt."
         },
         {
-          "text": "In der Datei .github/workflows/pipelines.yml.",
+          "text": "In `package.json`, das Bitbucket direkt als vollständiges Pipeline-Schema interpretiert.",
           "isCorrect": false,
-          "explanation": "Falsch: .github/workflows ist der Pfad für GitHub Actions, nicht für Bitbucket."
+          "explanation": "Falsch: package.json kann Skripte enthalten; Pipeline-Trigger und Steps stehen in eigener Datei."
         }
-      ]
+      ],
+      "questionId": "q_866fb5e9-3066-4134-b349-048e1e02779c"
     }
   ],
   "practiceTask": {
@@ -714,7 +726,7 @@
   "faq": [
     {
       "question": "Kann ich meine GitHub-Actions-Workflows nach Bitbucket Pipelines übertragen?",
-      "answer": "Die CI/CD-Logik kannst du übertragen, aber nicht die YAML-Datei selbst. Du musst die Struktur anpassen: aus Jobs werden Steps, aus uses werden direkte Shell-Befehle oder Pipes, und du musst für jeden Pipeline-Schritt ein Image angeben. Der Aufwand hängt von der Komplexität deiner Workflows ab. Einfache Workflows mit wenigen Schritten sind in einer Stunde übertragen. Komplexe Workflows mit vielen vorgefertigten Aktionen können mehrere Tage Arbeit bedeuten, weil du für jede Aktion ein Äquivalent. finden oder selbst schreiben musst."
+      "answer": "Die CI/CD-Logik kannst du übertragen, aber nicht die YAML-Datei selbst. Du musst die Struktur anpassen: aus Jobs werden Steps, aus uses werden direkte Shell-Befehle oder Pipes, und du musst für jeden Pipeline-Schritt ein Image angeben. Der Aufwand hängt von der Komplexität deiner Workflows ab. Einfache Workflows mit wenigen Schritten sind in einer Stunde übertragen. Komplexe Workflows mit vielen vorgefertigten Aktionen können mehrere Tage Arbeit bedeuten, weil du für jede Aktion ein Äquivalent. Finden oder selbst schreiben musst."
     },
     {
       "question": "Was sind Pipes in Bitbucket Pipelines?",
@@ -722,15 +734,15 @@
     },
     {
       "question": "Welche Images sollte ich für meine Steps verwenden?",
-      "answer": "Verwende offizielle Images von Docker Hub, die genau die Werkzeuge enthalten, die du für den Pipeline-Schritt brauchst. Für einen Node. js-Build ist node:22 das richtige Image. Für einen Python-Test ist python:3. 12 das richtige. Achte darauf, möglichst schlanke Images zu verwenden, zum Beispiel alpine-Varianten, weil der Container bei jedem Pipeline-Schritt neu gestartet wird und die Image-Größe direkt die Startzeit beeinflusst. Du kannst auch eigene Images bauen und in einer Registry hinterlegen, wenn du spezielle Werkzeuge oder Konfigurationen brauchst."
+      "answer": "Verwende offizielle Images von Docker Hub, die genau die Werkzeuge enthalten, die du für den Pipeline-Schritt brauchst. Für einen Node.js-Build ist node:22 das richtige Image. Für einen Python-Test ist python:3. 12 das richtige. Achte darauf, möglichst schlanke Images zu verwenden, zum Beispiel alpine-Varianten, weil der Container bei jedem Pipeline-Schritt neu gestartet wird und die Image-Größe direkt die Startzeit beeinflusst. Du kannst auch eigene Images bauen und in einer Registry hinterlegen, wenn du spezielle Werkzeuge oder Konfigurationen brauchst."
     },
     {
       "question": "Wie lange werden Artefakte in Bitbucket Pipelines gespeichert?",
-      "answer": "Artefakte werden standardmäßig 14 Tage gespeichert. Danach werden sie automatisch gelöscht. Du kannst sie innerhalb dieser Zeit aus der Pipeline-Oberfläche herunterladen. Wenn du Artefakte länger aufbewahren musst, solltest du sie in einem externen Speicher wie AWS S3 ablegen, statt dich auf die Pipeline-Speicherung zu verlassen. Für die Weitergabe zwischen Steps innerhalb eines Pipeline-Laufs sind die 14 Tage mehr als ausreichend, da ein Pipeline-Lauf. typischerweise nur Minuten dauert."
+      "answer": "Artefakte werden standardmäßig 14 Tage gespeichert. Danach werden sie automatisch gelöscht. Du kannst sie innerhalb dieser Zeit aus der Pipeline-Oberfläche herunterladen. Wenn du Artefakte länger aufbewahren musst, solltest du sie in einem externen Speicher wie AWS S3 ablegen, statt dich auf die Pipeline-Speicherung zu verlassen. Für die Weitergabe zwischen Steps innerhalb eines Pipeline-Laufs sind die 14 Tage mehr als ausreichend, da ein Pipeline-Lauf. Typischerweise nur Minuten dauert."
     },
     {
       "question": "Kann ich Bitbucket Pipelines auch mit selbst gehosteten Runnern betreiben?",
-      "answer": "Ja, Bitbucket unterstützt selbst gehostete Runner, die du auf deiner eigenen Infrastruktur betreibst. Das ist nützlich, wenn du spezielle Hardware brauchst, zum Beispiel für iOS-Builds, die nur auf macOS laufen, oder wenn du das Minuten-Kontingent von Bitbucket Cloud überschreitest. Selbst gehostete Runner geben dir volle Kontrolle über die Umgebung, aber du bist für Wartung, Sicherheit und Updates. verantwortlich. Für die meisten Projekte sind die von Bitbucket bereitgestellten Runner ausreichend."
+      "answer": "Ja, Bitbucket unterstützt selbst gehostete Runner, die du auf deiner eigenen Infrastruktur betreibst. Das ist nützlich, wenn du spezielle Hardware brauchst, zum Beispiel für iOS-Builds, die nur auf macOS laufen, oder wenn du das Minuten-Kontingent von Bitbucket Cloud überschreitest. Selbst gehostete Runner geben dir volle Kontrolle über die Umgebung, aber du bist für Wartung, Sicherheit und Updates. Verantwortlich. Für die meisten Projekte sind die von Bitbucket bereitgestellten Runner ausreichend."
     }
   ]
 }
