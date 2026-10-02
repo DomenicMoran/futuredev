@@ -13,6 +13,9 @@ export interface ContentFs {
   readFile(path: string): Promise<string>;
   exists(path: string): Promise<boolean>;
   listDirectory(path: string): Promise<string[]>;
+  moveFile(from: string, to: string): Promise<void>;
+  getFileSize(path: string): Promise<number | null>;
+  readFilePrefixBase64(path: string, maxBytes: number): Promise<string>;
 }
 
 export type ContentLoadStatus = 'ok' | 'offline' | 'error';

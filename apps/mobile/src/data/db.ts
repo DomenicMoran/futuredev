@@ -12,9 +12,11 @@ import { createMemoryDatabase } from './memoryDatabase.js';
 let instance: Database | null = null;
 let instancePromise: Promise<Database> | null = null;
 let initPromise: Promise<void> | null = null;
+let generation = 0;
 
 /** Nur fuer Tests: ersetzt die Datenbank (etwa durch `createMemoryDatabase()`). */
 export function setDatabase(db: Database): void {
+  generation += 1;
   instance = db;
   instancePromise = null;
   initPromise = null;
@@ -30,21 +32,40 @@ async function createDefaultDatabase(): Promise<Database> {
  * (Migrationen gelaufen) ist, bevor sie zurueckgegeben wird.
  */
 export async function getDatabase(): Promise<Database> {
-  if (!instancePromise) {
-    instancePromise = createDefaultDatabase().then((db) => {
-      instance = db;
+  const requestedGeneration = generation;
+  if (!instance && !instancePromise) {
+    const creating = createDefaultDatabase().then((db) => {
+      if (generation !== requestedGeneration) return getDatabase();
+      if (!instance) instance = db;
       return db;
+    }).catch((err: unknown) => {
+      if (instancePromise === creating) instancePromise = null;
+      if (generation !== requestedGeneration) return getDatabase();
+      throw err;
     });
+    instancePromise = creating;
   }
-  const db = instance ?? (await instancePromise);
+  let db = instance;
+  if (!db) db = await instancePromise;
+  // A test or app setup can replace the database while a native factory/init
+  // is pending. Never return the stale connection to a caller after reset.
+  if (generation !== requestedGeneration) return getDatabase();
+  db = instance ?? db;
+  if (!db) throw new Error('Datenbank konnte nicht initialisiert werden');
   if (!initPromise) {
-    initPromise = db.init().catch((err: unknown) => {
-      initPromise = null;
+    const initializing = db;
+    initPromise = initializing.init().catch((err: unknown) => {
+      // A replacement DB may be installed while this generation initializes.
+      // Its callers should continue below to the generation check and retry;
+      // do not report the stale initializer's failure or clear the replacement.
+      if (generation !== requestedGeneration) return;
+      if (generation === requestedGeneration && instance === initializing) initPromise = null;
       throw err;
     });
   }
   await initPromise;
-  return db;
+  if (generation !== requestedGeneration) return getDatabase();
+  return instance ?? db;
 }
 
 /** Nur fuer Tests: alles auf eine frische Speicher-Datenbank zuruecksetzen. */

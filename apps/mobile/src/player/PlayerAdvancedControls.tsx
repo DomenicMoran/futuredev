@@ -31,11 +31,13 @@ export function PlayerAdvancedControls() {
   const queue = usePlayerStore((s) => s.queue);
   const rate = usePlayerStore((s) => s.rate);
   const repeatMode = usePlayerStore((s) => s.repeatMode);
+  const sleepTimer = usePlayerStore((s) => s.sleepTimer);
 
   const [open, setOpen] = useState(false);
   const [ratePickerOpen, setRatePickerOpen] = useState(false);
   const [sleepPickerOpen, setSleepPickerOpen] = useState(false);
   const [queueOpen, setQueueOpen] = useState(false);
+  const [timerNow, setTimerNow] = useState(Date.now());
   const expandAnim = useRef(new Animated.Value(0)).current;
   const duration = useMotionDuration(200);
 
@@ -46,6 +48,12 @@ export function PlayerAdvancedControls() {
       useNativeDriver: false,
     }).start();
   }, [duration, expandAnim, open]);
+
+  useEffect(() => {
+    if (!sleepTimer) return undefined;
+    const handle = setInterval(() => setTimerNow(Date.now()), 1000);
+    return () => clearInterval(handle);
+  }, [sleepTimer]);
 
   const animatedMaxHeight = expandAnim.interpolate({ inputRange: [0, 1], outputRange: [0, 960] });
   const bodyOpacity = expandAnim;
@@ -140,13 +148,18 @@ export function PlayerAdvancedControls() {
             <Pressable
               onPress={() => setSleepPickerOpen((v) => !v)}
               accessibilityRole="button"
-              accessibilityLabel={de.player.sleepTimer}
+              accessibilityLabel={sleepTimer ? `Schlaftimer aktiv: ${sleepTimer.mode.kind === 'minutes' ? `${sleepTimer.mode.minutes} Minuten` : 'bis zum Ende der Lektion'}` : de.player.sleepTimer}
               style={({ pressed }) => [
                 styles.quietPill,
-                { borderColor: theme.colors.border, minHeight: theme.minTapTarget, opacity: pressed ? 0.88 : 1 },
+                { borderColor: sleepTimer ? theme.colors.accent : theme.colors.border, minHeight: theme.minTapTarget, opacity: pressed ? 0.88 : 1 },
               ]}
             >
-              <Moon color={theme.colors.textWeak} size={16} />
+              <Moon color={sleepTimer ? theme.colors.accent : theme.colors.textWeak} size={16} />
+              {sleepTimer ? (
+                <Text style={{ color: theme.colors.accent, fontSize: 10 }}>
+                  {sleepTimer.mode.kind === 'endOfLesson' ? 'Ende' : `${Math.max(0, Math.ceil((sleepTimer.target.endsAtMs - timerNow) / 60_000))} min`}
+                </Text>
+              ) : null}
             </Pressable>
           </View>
 

@@ -10,21 +10,16 @@ import type {
   PortfolioItemRow,
   ProgressRow,
   ReviewRow,
+  LegacyReviewArchiveRow,
   SettingRow,
 } from './types.js';
-import { SCHEMA_VERSION } from './types.js';
+import { PERSONAL_DATA_TABLES, SCHEMA_VERSION } from './types.js';
+import { runSerialized } from './serialQueue.js';
 
 const DATABASE_NAME = 'futuredev.db';
 
-let sqliteSerial: Promise<unknown> = Promise.resolve();
-
 async function serialDb<T>(work: () => Promise<T>): Promise<T> {
-  const next = sqliteSerial.then(work, work);
-  sqliteSerial = next.then(
-    () => undefined,
-    () => undefined,
-  );
-  return next;
+  return runSerialized(work);
 }
 
 // Migrationen mit Versionsnummer, wie in `settings.schema_version` hinterlegt
@@ -104,6 +99,58 @@ const MIGRATIONS: Record<number, string> = {
   `,
 };
 
+async function migrateReviewIdentity(db: SQLite.SQLiteDatabase): Promise<void> {
+  const columns = await db.getAllAsync<{ name: string }>('pragma table_info(reviews)');
+  const hasStableKeys = columns.some((column) => column.name === 'source_lesson_id');
+  await db.execAsync(`
+    create table if not exists legacy_review_archive (
+      id text primary key not null,
+      leitner_stage integer not null,
+      due_at text not null,
+      error_count integer not null default 0,
+      archived_at text not null,
+      reason text not null
+    );
+  `);
+  if (hasStableKeys) return;
+  const legacyRows = await db.getAllAsync<{ lesson_id: string; leitner_stage: number; due_at: string; error_count: number }>(
+    'select lesson_id, leitner_stage, due_at, error_count from reviews',
+  );
+  const archivedRows = await db.getAllAsync<{ id: string; leitner_stage: number; due_at: string; error_count: number }>(
+    'select id, leitner_stage, due_at, error_count from legacy_review_archive',
+  );
+  const archivedById = new Map(archivedRows.map((row) => [row.id, row]));
+  for (const row of legacyRows) {
+    const archived = archivedById.get(row.lesson_id);
+    if (archived && (archived.leitner_stage !== row.leitner_stage || archived.due_at !== row.due_at || archived.error_count !== row.error_count)) {
+      throw new Error(`Legacy review archive collision for ${row.lesson_id}`);
+    }
+  }
+  await db.execAsync(`
+    alter table reviews rename to reviews_legacy_v2;
+    create table reviews (
+      source_lesson_id text not null,
+      question_id text not null,
+      leitner_stage integer not null,
+      due_at text not null,
+      error_count integer not null default 0,
+      primary key (source_lesson_id, question_id)
+    );
+  `);
+  for (const row of legacyRows) {
+    await db.runAsync(
+      `insert into legacy_review_archive (id, leitner_stage, due_at, error_count, archived_at, reason)
+       values (?, ?, ?, ?, strftime('%Y-%m-%dT%H:%M:%fZ','now'), 'legacy-question-index-unknown')
+       on conflict(id) do nothing`,
+      row.lesson_id, row.leitner_stage, row.due_at, row.error_count,
+    );
+  }
+  const finalArchive = await db.getAllAsync<{ id: string }>('select id from legacy_review_archive');
+  const finalIds = new Set(finalArchive.map((row) => row.id));
+  if (legacyRows.some((row) => !finalIds.has(row.lesson_id))) throw new Error('Legacy review archive verification failed');
+  await db.execAsync('drop table reviews_legacy_v2');
+}
+
 function toBool(value: number | null | undefined): boolean {
   return value === 1;
 }
@@ -149,9 +196,9 @@ async function repairPlaylistTables(db: SQLite.SQLiteDatabase): Promise<void> {
   if (!statements) return;
   await db.execAsync(statements);
   await db.runAsync(
-    'insert into settings (key, value) values (?, ?) on conflict(key) do update set value = excluded.value',
+    `insert into settings (key, value) values (?, ?) on conflict(key) do update set value = case when cast(settings.value as integer) < 2 then excluded.value else settings.value end`,
     'schema_version',
-    String(Math.max(2, SCHEMA_VERSION)),
+    '2',
   );
 }
 
@@ -160,8 +207,9 @@ async function repairPlaylistTables(db: SQLite.SQLiteDatabase): Promise<void> {
  * Technikvorgabe 3). Erfuellt dieselbe {@link Database}-Schnittstelle wie
  * `memoryDatabase.ts`.
  */
-export function createSqliteDatabase(): Database {
-  let dbPromise: Promise<SQLite.SQLiteDatabase> | null = null;
+export function createSqliteDatabase(databaseOverride?: SQLite.SQLiteDatabase): Database {
+  let dbPromise: Promise<SQLite.SQLiteDatabase> | null = databaseOverride ? Promise.resolve(databaseOverride) : null;
+  const transactionScoped = databaseOverride !== undefined;
 
   async function getDb(): Promise<SQLite.SQLiteDatabase> {
     if (!dbPromise) {
@@ -171,6 +219,7 @@ export function createSqliteDatabase(): Database {
   }
 
   async function withDb<T>(work: (db: SQLite.SQLiteDatabase) => Promise<T>): Promise<T> {
+    if (transactionScoped) return work(await getDb());
     return serialDb(async () => work(await getDb()));
   }
 
@@ -219,8 +268,18 @@ export function createSqliteDatabase(): Database {
       const currentVersion = row ? Number(row.value) : 0;
       for (let version = currentVersion + 1; version <= SCHEMA_VERSION; version += 1) {
         const statements = MIGRATIONS[version];
-        if (!statements) continue;
-        await db.execAsync(statements);
+        if (version === 3) {
+          await db.withExclusiveTransactionAsync(async (transactionDb) => {
+            await migrateReviewIdentity(transactionDb);
+            await transactionDb.runAsync(
+              'insert into settings (key, value) values (?, ?) on conflict(key) do update set value = excluded.value',
+              'schema_version', String(version),
+            );
+          });
+          continue;
+        } else if (statements) {
+          await db.execAsync(statements);
+        } else continue;
         await db.runAsync(
           'insert into settings (key, value) values (?, ?) on conflict(key) do update set value = excluded.value',
           'schema_version',
@@ -231,6 +290,22 @@ export function createSqliteDatabase(): Database {
   }
 
   return {
+    async clearPersonalData() {
+      await withDb(async (db) => {
+        for (const table of PERSONAL_DATA_TABLES) await db.runAsync(`DELETE FROM ${table}`);
+      });
+    },
+    async transaction(work) {
+      if (transactionScoped) return work(createSqliteDatabase(await getDb()));
+      let result!: Awaited<ReturnType<typeof work>>;
+      await serialDb(async () => {
+        const db = await getDb();
+        await db.withExclusiveTransactionAsync(async (transactionDb) => {
+          result = await work(createSqliteDatabase(transactionDb));
+        });
+      });
+      return result;
+    },
     async init() {
       await runMigrations();
       await withDb(async (db) => {
@@ -240,15 +315,14 @@ export function createSqliteDatabase(): Database {
     },
 
     async getSchemaVersion() {
-      const db = await getDb();
-      const row = await db.getFirstAsync<{ value: string }>(
-        "select value from settings where key = 'schema_version'",
-      );
-      return row ? Number(row.value) : 0;
+      return withDb(async (db) => {
+        const row = await db.getFirstAsync<{ value: string }>("select value from settings where key = 'schema_version'");
+        return row ? Number(row.value) : 0;
+      });
     },
 
     async getProgress(lessonId) {
-      const db = await getDb();
+      return withDb(async (db) => {
       const row = await db.getFirstAsync<{
         lesson_id: string;
         state: string;
@@ -268,9 +342,10 @@ export function createSqliteDatabase(): Database {
         quizPassed: toBool(row.quiz_passed),
         updatedAt: row.updated_at,
       };
+      });
     },
     async upsertProgress(rowValue) {
-      const db = await getDb();
+      await withDb(async (db) => {
       await db.runAsync(
         `insert into progress (lesson_id, state, read_until, listened_until, quiz_score, quiz_passed, updated_at)
          values (?, ?, ?, ?, ?, ?, ?)
@@ -286,9 +361,10 @@ export function createSqliteDatabase(): Database {
         fromBool(rowValue.quizPassed),
         rowValue.updatedAt,
       );
+      });
     },
     async listProgress() {
-      const db = await getDb();
+      return withDb(async (db) => {
       const rows = await db.getAllAsync<{
         lesson_id: string;
         state: string;
@@ -307,61 +383,85 @@ export function createSqliteDatabase(): Database {
         quizPassed: toBool(row.quiz_passed),
         updatedAt: row.updated_at,
       }));
+      });
     },
 
-    async getReview(lessonId) {
-      const db = await getDb();
+    async getReview(sourceLessonId, questionId) {
+      return withDb(async (db) => {
       const row = await db.getFirstAsync<{
-        lesson_id: string;
+        source_lesson_id: string;
+        question_id: string;
         leitner_stage: number;
         due_at: string;
         error_count: number;
-      }>('select * from reviews where lesson_id = ?', lessonId);
+      }>('select * from reviews where source_lesson_id = ? and question_id = ?', sourceLessonId, questionId);
       if (!row) return undefined;
       return {
-        lessonId: row.lesson_id,
+        sourceLessonId: row.source_lesson_id,
+        questionId: row.question_id,
         leitnerStage: row.leitner_stage,
         dueAt: row.due_at,
         errorCount: row.error_count,
       };
+      });
     },
     async upsertReview(rowValue: ReviewRow) {
-      const db = await getDb();
+      await withDb(async (db) => {
       await db.runAsync(
-        `insert into reviews (lesson_id, leitner_stage, due_at, error_count) values (?, ?, ?, ?)
-         on conflict(lesson_id) do update set
+        `insert into reviews (source_lesson_id, question_id, leitner_stage, due_at, error_count) values (?, ?, ?, ?, ?)
+         on conflict(source_lesson_id, question_id) do update set
            leitner_stage = excluded.leitner_stage, due_at = excluded.due_at, error_count = excluded.error_count`,
-        rowValue.lessonId,
+        rowValue.sourceLessonId,
+        rowValue.questionId,
         rowValue.leitnerStage,
         rowValue.dueAt,
         rowValue.errorCount,
       );
+      });
     },
     async listReviews() {
-      const db = await getDb();
+      return withDb(async (db) => {
       const rows = await db.getAllAsync<{
-        lesson_id: string;
+        source_lesson_id: string;
+        question_id: string;
         leitner_stage: number;
         due_at: string;
         error_count: number;
       }>('select * from reviews');
       return rows.map((row) => ({
-        lessonId: row.lesson_id,
+        sourceLessonId: row.source_lesson_id,
+        questionId: row.question_id,
         leitnerStage: row.leitner_stage,
         dueAt: row.due_at,
         errorCount: row.error_count,
       }));
+      });
+    },
+    async listLegacyReviewArchive() {
+      return withDb(async (db) => db.getAllAsync<{
+        id: string; leitner_stage: number; due_at: string; error_count: number; archived_at: string; reason: LegacyReviewArchiveRow['reason'];
+      }>('select * from legacy_review_archive').then((rows) => rows.map((row) => ({
+        id: row.id, leitnerStage: row.leitner_stage, dueAt: row.due_at, errorCount: row.error_count,
+        archivedAt: row.archived_at, reason: row.reason,
+      }))));
+    },
+    async upsertLegacyReviewArchive(row) {
+      await withDb(async (db) => { await db.runAsync(
+        `insert or ignore into legacy_review_archive (id, leitner_stage, due_at, error_count, archived_at, reason) values (?, ?, ?, ?, ?, ?)`,
+        row.id, row.leitnerStage, row.dueAt, row.errorCount, row.archivedAt, row.reason,
+      ); });
     },
 
     async listNotes(lessonId) {
-      const db = await getDb();
+      return withDb(async (db) => {
       const rows = lessonId
         ? await db.getAllAsync<NoteRowSql>('select * from notes where lesson_id = ? order by created_at desc', lessonId)
         : await db.getAllAsync<NoteRowSql>('select * from notes order by created_at desc');
       return rows.map(mapNoteRow);
+      });
     },
     async upsertNote(rowValue) {
-      const db = await getDb();
+      await withDb(async (db) => {
       await db.runAsync(
         `insert into notes (id, lesson_id, body, created_at, updated_at) values (?, ?, ?, ?, ?)
          on conflict(id) do update set body = excluded.body, updated_at = excluded.updated_at`,
@@ -371,10 +471,10 @@ export function createSqliteDatabase(): Database {
         rowValue.createdAt,
         rowValue.updatedAt,
       );
+      });
     },
     async deleteNote(id) {
-      const db = await getDb();
-      await db.runAsync('delete from notes where id = ?', id);
+      await withDb((db) => db.runAsync('delete from notes where id = ?', id).then(() => undefined));
     },
 
     async listBookmarks(lessonId) {
@@ -431,12 +531,13 @@ export function createSqliteDatabase(): Database {
     },
 
     async listPortfolioItems() {
-      const db = await getDb();
+      return withDb(async (db) => {
       const rows = await db.getAllAsync<PortfolioItemRowSql>('select * from portfolio_items');
       return rows.map(mapPortfolioItemRow);
+      });
     },
     async upsertPortfolioItem(rowValue) {
-      const db = await getDb();
+      await withDb(async (db) => {
       await db.runAsync(
         `insert into portfolio_items (id, baustein, status, url, updated_at) values (?, ?, ?, ?, ?)
          on conflict(id) do update set status = excluded.status, url = excluded.url, updated_at = excluded.updated_at`,
@@ -446,10 +547,11 @@ export function createSqliteDatabase(): Database {
         rowValue.url,
         rowValue.updatedAt,
       );
+      });
     },
 
     async listCareerChecklist() {
-      const db = await getDb();
+      return withDb(async (db) => {
       const rows = await db.getAllAsync<{ item: string; checked: number; updated_at: string }>(
         'select * from career_checklist',
       );
@@ -458,9 +560,10 @@ export function createSqliteDatabase(): Database {
         checked: toBool(row.checked),
         updatedAt: row.updated_at,
       }));
+      });
     },
     async upsertCareerChecklistItem(rowValue) {
-      const db = await getDb();
+      await withDb(async (db) => {
       await db.runAsync(
         `insert into career_checklist (item, checked, updated_at) values (?, ?, ?)
          on conflict(item) do update set checked = excluded.checked, updated_at = excluded.updated_at`,
@@ -468,17 +571,19 @@ export function createSqliteDatabase(): Database {
         fromBool(rowValue.checked),
         rowValue.updatedAt,
       );
+      });
     },
 
     async listExamResults(scope) {
-      const db = await getDb();
+      return withDb(async (db) => {
       const rows = scope
         ? await db.getAllAsync<ExamResultRowSql>('select * from exam_results where scope = ? order by taken_at desc', scope)
         : await db.getAllAsync<ExamResultRowSql>('select * from exam_results order by taken_at desc');
       return rows.map(mapExamResultRow);
+      });
     },
     async insertExamResult(rowValue) {
-      const db = await getDb();
+      await withDb(async (db) => {
       await db.runAsync(
         'insert into exam_results (id, scope, score, passed, taken_at) values (?, ?, ?, ?, ?)',
         rowValue.id,
@@ -487,6 +592,7 @@ export function createSqliteDatabase(): Database {
         fromBool(rowValue.passed),
         rowValue.takenAt,
       );
+      });
     },
 
     async listPlaylists() {
@@ -521,6 +627,13 @@ export function createSqliteDatabase(): Database {
           return { id, name, createdAt: now, updatedAt: now };
         }),
       );
+    },
+    async restorePlaylist(rowValue, items) {
+      return withPlaylistWrite(async () => withDb(async (db) => {
+        await db.runAsync('insert or replace into playlists (id, name, created_at, updated_at) values (?, ?, ?, ?)', rowValue.id, rowValue.name, rowValue.createdAt, rowValue.updatedAt);
+        await db.runAsync('delete from playlist_items where playlist_id = ?', rowValue.id);
+        for (const item of items) await db.runAsync('insert into playlist_items (playlist_id, lesson_id, position) values (?, ?, ?)', item.playlistId, item.lessonId, item.position);
+      }));
     },
     async renamePlaylist(id, name) {
       return withPlaylistWrite(async () =>

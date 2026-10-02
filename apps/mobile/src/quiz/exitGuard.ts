@@ -8,6 +8,6 @@
 export type QuizGuardPhase = 'rules' | 'question' | 'feedback' | 'result';
 
 /** Ob ein Verlassen der Pruefung in dieser Phase eine Rueckfrage braucht. */
-export function shouldConfirmExit(phase: QuizGuardPhase): boolean {
-  return phase === 'question' || phase === 'feedback';
+export function shouldConfirmExit(phase: QuizGuardPhase, saving = false, saveFailed = false): boolean {
+  return phase === 'question' || phase === 'feedback' || (phase === 'result' && (saving || saveFailed));
 }

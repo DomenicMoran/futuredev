@@ -6,6 +6,7 @@ import type { SleepTimerMode } from './types.js';
 export interface SleepTimerTarget {
   // Zeitpunkt (ms seit Epoch), an dem der Timer ablaeuft.
   readonly endsAtMs: number;
+  readonly trackId?: string;
 }
 
 /**
@@ -20,12 +21,13 @@ export function computeSleepTimerTarget(
   nowMs: number,
   positionSeconds: number,
   durationSeconds: number,
+  rate = 1,
 ): SleepTimerTarget {
   if (mode.kind === 'minutes') {
     return { endsAtMs: nowMs + mode.minutes * 60_000 };
   }
   const remainingSeconds = Math.max(durationSeconds - positionSeconds, 0);
-  return { endsAtMs: nowMs + remainingSeconds * 1000 };
+  return { endsAtMs: nowMs + (remainingSeconds / Math.max(rate, 0.1)) * 1000 };
 }
 
 /** Ob der Timer bereits abgelaufen ist. */

@@ -12,8 +12,35 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { resetToMemoryDatabase, getDatabase } from '../data/db.js';
 import { importAll } from '../data/exportImport.js';
+import { EXPORTABLE_TABLES } from './types.js';
+import { importExportJson } from './importExport.js';
+import { wipeAllTables } from './db.js';
 
 describe('Import-Sicherheit (kein Tabellenname aus einer Importdatei in SQL)', () => {
+  it('delete-all deckt alle persönlichen Tabellen inklusive Playlist-Inhalte ab', () => {
+    expect(EXPORTABLE_TABLES).toEqual(['progress','reviews','legacy_review_archive','notes','bookmarks','settings','portfolio_items','career_checklist','exam_results','playlist_items','playlists']);
+  });
+
+  it('wipeAllTables entfernt auch Playlists und Playlist-Items atomar', async () => {
+    const db = await getDatabase();
+    const playlist = await db.createPlaylist('Keep? no');
+    await db.addPlaylistItem(playlist.id, 'M01-01-01');
+    await db.upsertProgress({ lessonId: 'M01-01-01', state: 'started', readUntil: null, listenedUntil: null, quizScore: null, quizPassed: false, updatedAt: '2026-01-01T00:00:00.000Z' });
+    await wipeAllTables();
+    expect(await db.listProgress()).toEqual([]);
+    expect(await db.listPlaylists()).toEqual([]);
+    expect(await db.listPlaylistItems(playlist.id)).toEqual([]);
+    expect(await db.listSettings()).toEqual([]);
+  });
+
+  it('Einstellungen-JSON-Einstieg weist beschädigte Dateien vor Änderungen zurück', async () => {
+    const db = await getDatabase();
+    await db.upsertNote({ id: 'keep', lessonId: 'M01-01-01', body: 'bleibt', createdAt: '2026-01-01T00:00:00.000Z', updatedAt: '2026-01-01T00:00:00.000Z' });
+    await expect(importExportJson('{broken')).rejects.toThrow();
+    const rejected = JSON.stringify({ schemaVersion: 2, notes: [{ id: 42 }] });
+    await expect(importExportJson(rejected)).rejects.toThrow();
+    expect((await db.listNotes()).map((n) => n.id)).toEqual(['keep']);
+  });
   beforeEach(() => {
     resetToMemoryDatabase();
   });

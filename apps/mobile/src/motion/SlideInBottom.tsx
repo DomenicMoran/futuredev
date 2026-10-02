@@ -1,5 +1,5 @@
 import { useEffect, useRef, type ReactNode } from 'react';
-import { Animated, type StyleProp, type ViewStyle } from 'react-native';
+import { Animated, type LayoutChangeEvent, type StyleProp, type ViewStyle } from 'react-native';
 import { useMotionDuration } from './useMotionDuration.js';
 
 interface SlideInBottomProps {
@@ -7,10 +7,11 @@ interface SlideInBottomProps {
   visible?: boolean;
   durationMs?: number;
   style?: StyleProp<ViewStyle>;
+  onLayout?: (event: LayoutChangeEvent) => void;
 }
 
 /** Enter from below (mini player, modals). */
-export function SlideInBottom({ children, visible = true, durationMs = 220, style }: SlideInBottomProps) {
+export function SlideInBottom({ children, visible = true, durationMs = 220, style, onLayout }: SlideInBottomProps) {
   const duration = useMotionDuration(durationMs);
   const translateY = useRef(new Animated.Value(duration === 0 || visible ? 0 : 20)).current;
   const opacity = useRef(new Animated.Value(duration === 0 || visible ? 1 : 0)).current;
@@ -42,6 +43,6 @@ export function SlideInBottom({ children, visible = true, durationMs = 220, styl
   }, [duration, opacity, translateY, visible]);
 
   return (
-    <Animated.View style={[style, { opacity, transform: [{ translateY }] }]}>{children}</Animated.View>
+    <Animated.View onLayout={onLayout} style={[style, { opacity, transform: [{ translateY }] }]}>{children}</Animated.View>
   );
 }

@@ -1,7 +1,7 @@
 import type { LeitnerCard } from '@futuredev/core';
 import { getContentFs, loadLesson, loadLocalManifest } from '../content/index.js';
 import { listProgress } from '../data/progress.js';
-import { bundledManifest } from '../../assets/content/bundled.generated.js';
+import { bundledManifest } from '../content/bundledData.js';
 import type { FlashcardEntry } from './types.js';
 
 function flashcardId(lessonId: string, term: string): string {

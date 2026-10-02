@@ -2,6 +2,7 @@ import type { Lesson } from './lesson.js';
 import {
   checkDuplicateQuizStems,
   checkQuizMetaDistractors,
+  checkQuizTruncatedOptions,
   checkSpeechBlockTtsBreaks,
 } from './speech-quiz-quality.js';
 import { countWords, splitSentences } from './text-metrics.js';
@@ -559,6 +560,7 @@ export function checkAllRules(lesson: Lesson, allLessons: Lesson[]): RuleViolati
     ...checkDistractorsSameArea(lesson, allLessons),
     ...checkSpeechBlockTtsBreaks(lesson),
     ...checkQuizMetaDistractors(lesson),
+    ...checkQuizTruncatedOptions(lesson),
     ...checkDuplicateQuizStems(lesson),
   ];
 }

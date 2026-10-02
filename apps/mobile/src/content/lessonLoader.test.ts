@@ -19,6 +19,15 @@ const emptyFs: ContentFs = {
   async listDirectory() {
     return [];
   },
+  async moveFile() {
+    return undefined;
+  },
+  async getFileSize() {
+    return null;
+  },
+  async readFilePrefixBase64() {
+    return '';
+  },
 };
 
 describe('loadLesson', () => {

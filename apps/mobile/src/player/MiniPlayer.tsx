@@ -1,15 +1,16 @@
 import { useCallback } from 'react';
-import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Alert, Pressable, StyleSheet, Text, View } from 'react-native';
 import { SlideInBottom } from '../motion/SlideInBottom.js';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router, usePathname } from 'expo-router';
 import { FastForward, Pause, Play, X } from 'lucide-react-native';
-import { clearPlayback } from './index.js';
+import { clearPlayback, togglePlayback } from './index.js';
 import { useTheme } from '../theme/useTheme.js';
 import { de } from '../i18n/de.js';
 import { ModuleCover } from '../components/ModuleCover.js';
 import { tabBarHeight } from '../navigation/tabBarMetrics.js';
 import { isTabBarVisible } from '../navigation/tabBarVisibility.js';
+import { setMeasuredMiniPlayerHeight } from '../navigation/miniPlayerMeasurement.js';
 import {
   MINI_PLAYER_PLAY_BUTTON_SIZE,
   miniPlayerPaddingBottom,
@@ -22,17 +23,6 @@ import { formatPlaybackTime } from './formatTime.js';
 import { PlaybackScrubber } from './PlaybackScrubber.js';
 import { JUMP_FORWARD_SECONDS } from './types.js';
 import { jumpForward, seekToSeconds } from './index.js';
-
-async function togglePlayback(isPlaying: boolean): Promise<void> {
-  const trackPlayer = (await import('react-native-track-player')).default;
-  if (isPlaying) {
-    await trackPlayer.pause();
-    usePlayerStore.getState().setPlaying(false);
-  } else {
-    await trackPlayer.play();
-    usePlayerStore.getState().setPlaying(true);
-  }
-}
 
 function moduleIdFromLessonId(lessonId: string): string {
   const dash = lessonId.indexOf('-');
@@ -51,6 +41,8 @@ export function MiniPlayer() {
   const tabBarVisible = isTabBarVisible(pathname);
   const queue = usePlayerStore((s) => s.queue);
   const isPlaying = usePlayerStore((s) => s.isPlaying);
+  const isBuffering = usePlayerStore((s) => s.isBuffering);
+  const playbackError = usePlayerStore((s) => s.playbackError);
   const positionSeconds = usePlayerStore((s) => s.positionSeconds);
   const item = currentItem(queue);
 
@@ -73,11 +65,12 @@ export function MiniPlayer() {
 
   if (!item) return null;
 
-  const timeSubtitle = `${formatPlaybackTime(positionSeconds)} / ${formatPlaybackTime(item.durationSeconds)}`;
+  const timeSubtitle = playbackError ? 'Wiedergabe fehlgeschlagen' : isBuffering ? 'Audio wird geladen …' : `${formatPlaybackTime(positionSeconds)} / ${formatPlaybackTime(item.durationSeconds)}`;
   const coverModuleId = moduleIdFromLessonId(item.lessonId);
 
   return (
     <SlideInBottom
+      onLayout={(event) => setMeasuredMiniPlayerHeight(event.nativeEvent.layout.height)}
       style={[
         styles.container,
         {
@@ -175,7 +168,7 @@ export function MiniPlayer() {
         )}
         <Pressable
           testID="mini-player-play-toggle"
-          onPress={() => void togglePlayback(isPlaying)}
+          onPress={() => void togglePlayback().catch(() => undefined)}
           accessibilityRole="button"
           accessibilityLabel={isPlaying ? de.player.pause : de.player.play}
           hitSlop={8}
@@ -192,7 +185,7 @@ export function MiniPlayer() {
             },
           ]}
         >
-          {isPlaying ? (
+          {isBuffering ? <ActivityIndicator color={theme.colors.accentText} /> : isPlaying ? (
             <Pause size={22} color={theme.colors.accentText} fill={theme.colors.accentText} />
           ) : (
             <Play size={22} color={theme.colors.accentText} fill={theme.colors.accentText} />

@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   checkDuplicateQuizStems,
   checkQuizMetaDistractors,
+  checkQuizTruncatedOptions,
   checkSpeechBlockTtsBreaks,
   hasTtsMidSentenceBreak,
 } from '../src/speech-quiz-quality.js';
@@ -43,6 +44,20 @@ describe('checkQuizMetaDistractors', () => {
         : q,
     );
     expect(checkQuizMetaDistractors({ ...lesson, quiz }).length).toBeGreaterThan(0);
+  });
+
+  it('rejects historical giveaway and padding text, not only labeled meta distractors', () => {
+    const lesson = makeValidLesson();
+    const quiz = lesson.quiz.map((q, i) => i === 0 ? { ...q, options: q.options.map((o, j) => j === 1 ? { ...o, text: `${o.text} Das passt zur Fragestellung hier nicht.` } : o) } : q);
+    expect(checkQuizMetaDistractors({ ...lesson, quiz })).toHaveLength(1);
+  });
+});
+
+describe('checkQuizTruncatedOptions', () => {
+  it('rejects terminal ellipses as likely destructive answer truncation', () => {
+    const lesson = makeValidLesson();
+    const quiz = lesson.quiz.map((q, i) => i === 0 ? { ...q, options: q.options.map((o, j) => j === 0 ? { ...o, text: 'Eine vollständige Erklärung, die aber abgeschnitten…' } : o) } : q);
+    expect(checkQuizTruncatedOptions({ ...lesson, quiz })).toHaveLength(1);
   });
 });
 

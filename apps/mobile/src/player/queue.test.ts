@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import {
   EMPTY_QUEUE,
+  bindQueueItemSnapshot,
   currentItem,
+  queueHasCurrentItem,
   enqueue,
   goToNext,
   goToPrevious,
@@ -10,10 +12,20 @@ import {
   removeAt,
   reorder,
   setQueue,
+  snapshotForQueueItem,
 } from './queue.js';
 import type { QueueItem } from './types.js';
+import type { ContentSnapshot } from '../content/generation.js';
 
 const item = (lessonId: string): QueueItem => ({ lessonId, title: lessonId, durationSeconds: 100 });
+
+describe('Mini-Player-Reservierung', () => {
+  it('behandelt undefined aus EMPTY_QUEUE als kein sichtbares Player-Element', () => {
+    expect(currentItem(EMPTY_QUEUE)).toBeUndefined();
+    expect(queueHasCurrentItem(EMPTY_QUEUE)).toBe(false);
+    expect(queueHasCurrentItem(setQueue([item('M01-01-01')]))).toBe(true);
+  });
+});
 
 describe('setQueue', () => {
   it('liefert die leere Warteschlange für eine leere Liste', () => {
@@ -66,6 +78,20 @@ describe('enqueue', () => {
   it('startet die Warteschlange, wenn sie vorher leer war', () => {
     const next = enqueue(EMPTY_QUEUE, [item('a')]);
     expect(currentItem(next)?.lessonId).toBe('a');
+  });
+
+  it('behält pro Queue-Item seine gepinnte Contentgeneration durch Append, Skip, Reorder und Remove', () => {
+    const snapshotA = { root: 'A/', generationId: 'A' } as ContentSnapshot;
+    const snapshotB = { root: 'B/', generationId: 'B' } as ContentSnapshot;
+    const first = item('M01-01-01');
+    const second = item('M01-01-02');
+    bindQueueItemSnapshot(first, snapshotA);
+    bindQueueItemSnapshot(second, snapshotB);
+    const joined = enqueue(setQueue([first]), [second]);
+    expect(snapshotForQueueItem(joined.items[0])).toBe(snapshotA);
+    expect(snapshotForQueueItem(joined.items[1])).toBe(snapshotB);
+    expect(snapshotForQueueItem(reorder(joined, 0, 1).items[0])).toBe(snapshotB);
+    expect(snapshotForQueueItem(removeAt(joined, 0).items[0])).toBe(snapshotB);
   });
 });
 

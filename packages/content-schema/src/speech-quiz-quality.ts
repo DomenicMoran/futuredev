@@ -7,6 +7,8 @@ export interface RuleViolation {
 }
 
 const META_DISTRACTOR_RE = /\(häufige Verwechslung in diesem Themenfeld\)/i;
+const QUIZ_GIVEAWAY_RE = /Das passt zur Fragestellung hier nicht\./i;
+const QUIZ_PADDING_RE = /Das trifft auf den Kern dieser Frage nicht zu, auch wenn es in anderen Kontexten plausibel klingen kann\./i;
 
 /** Bekannte Abkürzungen vor Punkt — kein TTS-Satzbruch. */
 const ABBREV_BEFORE_DOT = new Set([
@@ -65,7 +67,7 @@ export function checkQuizMetaDistractors(lesson: Lesson): RuleViolation[] {
   const violations: RuleViolation[] = [];
   lesson.quiz.forEach((q, qi) => {
     q.options.forEach((o, oi) => {
-      if (META_DISTRACTOR_RE.test(o.text)) {
+      if (META_DISTRACTOR_RE.test(o.text) || QUIZ_GIVEAWAY_RE.test(o.text) || QUIZ_PADDING_RE.test(o.text)) {
         violations.push({
           rule: 'quiz-meta-ablenker',
           message: `${lesson.id}: Frage ${qi + 1}, Option ${oi + 1} nutzt Platzhalter-Ablenker`,
@@ -73,6 +75,17 @@ export function checkQuizMetaDistractors(lesson: Lesson): RuleViolation[] {
       }
     });
   });
+  return violations;
+}
+
+/** Terminal ellipses in answers are often destructive truncation, not deliberate punctuation. */
+export function checkQuizTruncatedOptions(lesson: Lesson): RuleViolation[] {
+  const violations: RuleViolation[] = [];
+  lesson.quiz.forEach((q, qi) => q.options.forEach((o, oi) => {
+    if (/(?:…|\.\.\.)\s*$/.test(o.text)) {
+      violations.push({ rule: 'quiz-antwort-abgeschnitten', message: `${lesson.id}: Frage ${qi + 1}, Option ${oi + 1} endet mit einer Auslassung` });
+    }
+  }));
   return violations;
 }
 

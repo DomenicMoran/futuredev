@@ -11,6 +11,9 @@ import {
 } from 'react-native';
 import { ChevronDown, ChevronUp, ListMusic, Pencil, Play, Plus, Trash2 } from 'lucide-react-native';
 import { useTheme } from '../theme/useTheme.js';
+import { normalizedPlaylistDraft } from './playlistDraft.js';
+import { PressableFeedback } from '../motion/PressableFeedback.js';
+import { useFocusEffect } from 'expo-router';
 import { de } from '../i18n/de.js';
 import {
   addLessonToPlaylist,
@@ -44,6 +47,7 @@ export function PlaylistsSection({
 }: PlaylistsSectionProps) {
   const theme = useTheme();
   const [loading, setLoading] = useState(true);
+  const [reloadError, setReloadError] = useState<string | null>(null);
   const [playlists, setPlaylists] = useState<PlaylistRow[]>([]);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [itemsByPlaylist, setItemsByPlaylist] = useState<Record<string, PlaylistItemRow[]>>({});
@@ -53,19 +57,31 @@ export function PlaylistsSection({
   const [feedback, setFeedback] = useState<{ text: string; isError: boolean } | null>(null);
   const [pickPlaylistForLesson, setPickPlaylistForLesson] = useState<string | null>(null);
   const [pendingLessonAfterCreate, setPendingLessonAfterCreate] = useState<string | null>(null);
+  const saveInFlight = useRef(false);
+  const reloadGeneration = useRef(0);
 
   const reload = useCallback(async () => {
+    const generation = ++reloadGeneration.current;
     setLoading(true);
     try {
-      setPlaylists(await listPlaylists());
+      const rows = await listPlaylists();
+      const itemLists = await Promise.all(rows.map(async (row) => [row.id, await listPlaylistItems(row.id)] as const));
+      if (generation !== reloadGeneration.current) return;
+      setPlaylists(rows);
+      setItemsByPlaylist(Object.fromEntries(itemLists));
+      setReloadError(null);
+    } catch (error) {
+      if (generation === reloadGeneration.current) setReloadError(error instanceof Error ? error.message : 'Playlists konnten nicht geladen werden.');
+      throw error;
     } finally {
-      setLoading(false);
+      if (generation === reloadGeneration.current) setLoading(false);
     }
   }, []);
 
-  useEffect(() => {
-    void reload();
-  }, [reload]);
+  useFocusEffect(useCallback(() => {
+    void reload().catch(() => undefined);
+    return () => { reloadGeneration.current += 1; };
+  }, [reload]));
 
   useEffect(() => {
     if (requestAddLessonId) {
@@ -83,26 +99,30 @@ export function PlaylistsSection({
     (playlistId: string) => {
       setExpandedId((current) => {
         const next = current === playlistId ? null : playlistId;
-        if (next) void loadItems(next);
+        if (next) void loadItems(next).catch((error: unknown) => setReloadError(error instanceof Error ? error.message : 'Playlist konnte nicht geladen werden.'));
         return next;
       });
     },
     [loadItems],
   );
 
+  const feedbackTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => () => { if (feedbackTimer.current) clearTimeout(feedbackTimer.current); }, []);
   const showFeedback = useCallback((message: string, isError = false) => {
     setFeedback({ text: message, isError });
-    setTimeout(() => setFeedback(null), 2500);
+    if (feedbackTimer.current) clearTimeout(feedbackTimer.current);
+    feedbackTimer.current = setTimeout(() => setFeedback(null), 2500);
   }, []);
 
   const submitNameModal = useCallback(async (nameOverride?: string) => {
-    const trimmed = (nameOverride ?? nameDraft).trim();
-    if (!nameModal) return;
+    const trimmed = normalizedPlaylistDraft(nameOverride ?? nameDraft);
+    if (!nameModal || saveInFlight.current) return;
     if (!trimmed) {
       setNameError(de.hoeren.playlistNameRequired);
       return;
     }
     setNameError(null);
+    saveInFlight.current = true;
     try {
       if (nameModal.kind === 'create') {
         const created = await createPlaylist(trimmed);
@@ -123,6 +143,8 @@ export function PlaylistsSection({
     } catch (err) {
       const devDetail = __DEV__ && err instanceof Error ? ` (${err.message})` : '';
       setNameError(`${de.hoeren.playlistSaveError}${devDetail}`);
+    } finally {
+      saveInFlight.current = false;
     }
   }, [nameDraft, nameModal, reload, pendingLessonAfterCreate, loadItems, showFeedback]);
 
@@ -153,13 +175,13 @@ export function PlaylistsSection({
   );
 
   if (loading) {
-    return <ActivityIndicator color={theme.colors.accent} style={{ marginVertical: theme.spacing.sm }} />;
+    return <View accessibilityLiveRegion="polite" style={{ minHeight: theme.minTapTarget, flexDirection: 'row', alignItems: 'center', gap: theme.spacing.sm }}><ActivityIndicator color={theme.colors.accent} /><Text style={{ color: theme.colors.textWeak }}>{de.hoeren.playlistLoading}</Text></View>;
   }
 
   return (
     <View style={styles.block}>
       <View style={styles.headerRow}>
-        <Text style={[styles.sectionTitle, { color: theme.colors.text }]}>{de.hoeren.playlistsTitle}</Text>
+        <Text testID="playlists-heading" style={[styles.sectionTitle, { color: theme.colors.text, flex: 1, minWidth: 0, flexShrink: 1 }]}>{de.hoeren.playlistsTitle}</Text>
         <Pressable
           testID="playlist-create-button"
           onPress={() => {
@@ -175,6 +197,12 @@ export function PlaylistsSection({
           <Plus color={theme.colors.accent} size={22} />
         </Pressable>
       </View>
+
+      {reloadError ? (
+        <PressableFeedback onPress={() => void reload().catch(() => undefined)} accessibilityRole="button" accessibilityLabel="Playlists erneut laden" style={{ paddingVertical: theme.spacing.sm }}>
+          <Text style={{ color: theme.colors.error, fontSize: 13 }}>Playlists konnten nicht aktualisiert werden. Erneut versuchen.</Text>
+        </PressableFeedback>
+      ) : null}
 
       {feedback ? (
         <Text
@@ -251,11 +279,15 @@ export function PlaylistsSection({
               </Pressable>
               <Pressable
                 onPress={() => {
-                  void (async () => {
-                    await deletePlaylist(playlist.id);
-                    if (expandedId === playlist.id) setExpandedId(null);
-                    await reload();
-                  })();
+                    void (async () => {
+                      try {
+                        await deletePlaylist(playlist.id);
+                        if (expandedId === playlist.id) setExpandedId(null);
+                        await reload();
+                      } catch {
+                        showFeedback(de.hoeren.playlistSaveError, true);
+                      }
+                    })();
                 }}
                 accessibilityRole="button"
                 accessibilityLabel={de.hoeren.playlistDelete}
@@ -279,9 +311,13 @@ export function PlaylistsSection({
                       <Pressable
                         onPress={() => {
                           void (async () => {
-                            await removePlaylistItem(playlist.id, item.lessonId);
-                            await loadItems(playlist.id);
-                            await reload();
+                            try {
+                              await removePlaylistItem(playlist.id, item.lessonId);
+                              await loadItems(playlist.id);
+                              await reload();
+                            } catch {
+                              showFeedback(de.hoeren.playlistAddError, true);
+                            }
                           })();
                         }}
                         accessibilityRole="button"
@@ -368,7 +404,7 @@ function NameModal({
     nativeTextRef.current = value;
     const timer = setTimeout(() => inputRef.current?.focus(), 120);
     return () => clearTimeout(timer);
-  }, [visible, value]);
+  }, [visible]);
 
   return (
     <Modal visible={visible} transparent animationType="fade" onRequestClose={onCancel}>
@@ -386,12 +422,7 @@ function NameModal({
               nativeTextRef.current = t;
               onChange(t);
             }}
-            onEndEditing={(e) => {
-              nativeTextRef.current = e.nativeEvent.text;
-              const next = e.nativeEvent.text.trim();
-              if (next.length > 0) onChange(next);
-            }}
-            autoFocus={true}
+            autoFocus={false}
             testID="playlist-name-input"
             accessibilityLabel={title}
             placeholder={title}
@@ -418,11 +449,9 @@ function NameModal({
             <Pressable
               testID="playlist-save-button"
               onPress={() => {
+                const finalDraft = nativeTextRef.current;
                 inputRef.current?.blur();
-                setTimeout(
-                  () => onSubmit(nativeTextRef.current.trim() || undefined),
-                  120,
-                );
+                onSubmit(normalizedPlaylistDraft(finalDraft));
               }}
               accessibilityRole="button"
               accessibilityLabel={de.common.save}
@@ -483,7 +512,7 @@ function PickPlaylistModal({
 
 const styles = StyleSheet.create({
   block: { gap: 10 },
-  headerRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  headerRow: { flexDirection: 'row', alignItems: 'center', gap: 8, width: '100%' },
   sectionTitle: { fontSize: 16, fontWeight: '700' },
   playlistCard: { borderWidth: StyleSheet.hairlineWidth, padding: 12, gap: 8 },
   playlistTitleRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },

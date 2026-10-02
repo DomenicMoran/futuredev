@@ -7,6 +7,7 @@ function makeQuestion(
   wrongTexts: [string, string, string],
 ): Lesson['quiz'][number] {
   return {
+    questionId: `q_00000000-0000-4000-8000-${String(index).padStart(12, '0')}`,
     question: `Testfrage ${index}?`,
     area,
     options: [

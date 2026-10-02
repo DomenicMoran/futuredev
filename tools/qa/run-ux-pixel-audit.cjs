@@ -1,19 +1,23 @@
 /**
  * FutureDev UX pixel audit — numbered PNGs + UI dumps for visual review.
- * Usage: node run-ux-pixel-audit.cjs [apk-path]
+ * Explicit device, APK hash/version, fresh output and clean|upgrade flags required.
  */
 const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
-const ROOT = 'C:/rnb/FutureDev';
-const adb = String.raw`C:\Users\domen\AppData\Local\Android\Sdk\platform-tools\adb.exe`;
-const SER = 'emulator-5560';
+const { parseRunArgs, createAdbRunner, prepareRun, verifyInstalledArtifact, verifyLegacyDisplay, captureFreshXml, capturePng } = require('./native-evidence.cjs');
+
+const ROOT = path.resolve(__dirname, '../..');
+const config = parseRunArgs(process.argv.slice(2), ROOT);
+const sdk = process.env.ANDROID_HOME || path.join(process.env.LOCALAPPDATA || '', 'Android', 'Sdk');
+const adb = path.join(sdk, 'platform-tools', process.platform === 'win32' ? 'adb.exe' : 'adb');
+const SER = config.serial;
 const PKG = 'de.domenicmoran.futuredev';
-const OUT = path.join(ROOT, 'tmp-qa/ux-pixel-2026-09-25');
-const VERSION = process.env.FUTUREDEV_APK_VERSION || '0.1.21';
-const DEFAULT_APK = path.join(ROOT, `tmp-qa/apk/futuredev-v${VERSION}-x86_64-emulator.apk`);
-const APK = process.argv[2] ? path.resolve(process.argv[2]) : DEFAULT_APK;
+const OUT = config.out;
+const VERSION = config.version;
+const APK = config.apk;
+const runAdb = createAdbRunner(adb, SER);
 
 const TAB_COORDS = {
   Start: [108, 2264],
@@ -23,9 +27,7 @@ const TAB_COORDS = {
   Ich: [972, 2264],
 };
 
-const findings = [];
 let shotN = 0;
-let lastGoodUiXml = '';
 
 function sh(cmd, { retries = 3, delayMs = 1200 } = {}) {
   let lastErr;
@@ -100,48 +102,8 @@ function parseAllNodes(xml) {
   return nodes;
 }
 
-function killHungUiautomator() {
-  try {
-    sh(`"${adb}" -s ${SER} shell pkill -f uiautomator`, { retries: 1, delayMs: 200 });
-  } catch {
-    /* */
-  }
-  sleep(400);
-}
-
-function dumpUiRaw({ allowStale = true } = {}) {
-  sleep(400);
-  let lastErr;
-  const local = path.join(OUT, '_ui_live.xml');
-  for (let attempt = 0; attempt < 8; attempt++) {
-    try {
-      try {
-        execSync(`"${adb}" -s ${SER} shell uiautomator dump /sdcard/window_dump.xml`, {
-          encoding: 'utf8',
-          stdio: ['ignore', 'pipe', 'pipe'],
-        });
-      } catch {
-        /* */
-      }
-      sleep(350 + attempt * 120);
-      sh(`"${adb}" -s ${SER} pull /sdcard/window_dump.xml "${local.replace(/\\/g, '/')}"`, {
-        retries: 3,
-        delayMs: 900 + attempt * 400,
-      });
-      const fresh = fs.readFileSync(local, 'utf8');
-      if (fresh.includes('<hierarchy') && fresh.includes(`package="${PKG}"`)) {
-        lastGoodUiXml = fresh;
-      }
-      if (fresh.includes('<hierarchy')) return fresh;
-      lastErr = new Error('empty hierarchy');
-    } catch (err) {
-      lastErr = err;
-      if (attempt >= 4) killHungUiautomator();
-      sleep(1200 + attempt * 700);
-    }
-  }
-  if (allowStale && lastGoodUiXml) return lastGoodUiXml;
-  throw lastErr ?? new Error('uiautomator dump failed');
+function dumpUiRaw() {
+  return captureFreshXml(runAdb);
 }
 
 function pressBack() {
@@ -153,12 +115,10 @@ function capture(label) {
   shotN += 1;
   const num = String(shotN).padStart(2, '0');
   const base = `${num}-${label}`;
-  const remote = `/sdcard/ux-${base}.png`;
-  sh(`"${adb}" -s ${SER} shell screencap -p ${remote}`);
-  const png = path.join(OUT, `${base}.png`);
-  sh(`"${adb}" -s ${SER} pull ${remote} "${png.replace(/\\/g, '/')}"`);
   const xml = dumpUiRaw();
-  fs.writeFileSync(path.join(OUT, `${base}.xml`), xml, 'utf8');
+  const png = path.join(OUT, `${base}.png`);
+  capturePng(runAdb, png);
+  fs.writeFileSync(path.join(OUT, `${base}.xml`), xml, { encoding: 'utf8', flag: 'wx' });
   console.log('CAPTURE', base);
   return { png, xml, base };
 }
@@ -270,9 +230,7 @@ function isHomeXml(xml) {
   return hasMainTabs(xml) && !isOnboardingXml(xml);
 }
 
-function isLessonReaderXml(xml) {
-  return xml.includes('Quiz zu dieser Lektion') && xml.includes('Sprecher');
-}
+
 
 function tabByLabel(label) {
   ensureForeground();
@@ -314,7 +272,8 @@ function deepLinkLesson() {
 
 function installFresh() {
   sh(`"${adb}" -s ${SER} install -r "${APK.replace(/\\/g, '/')}"`);
-  sh(`"${adb}" -s ${SER} shell pm clear ${PKG}`);
+  verifyInstalledArtifact(config, runAdb, PKG);
+  if (config.mode === 'clean') sh(`"${adb}" -s ${SER} shell pm clear ${PKG}`);
   grantRuntimePermissions();
   sh(`"${adb}" -s ${SER} shell am force-stop ${PKG}`);
   sh(`"${adb}" -s ${SER} shell monkey -p ${PKG} -c android.intent.category.LAUNCHER 1`);
@@ -490,7 +449,9 @@ function writeAuditStub() {
   const md = [
     '# FutureDev UX Pixel Audit',
     '',
-    `Date: 2026-09-25`,
+    `Date: ${new Date().toISOString()}`,
+    `APK SHA256: ${config.sha256}`,
+    `Mode: ${config.mode}; version code: ${config['version-code']}; AVD: ${config.avd}`,
     `Version: ${VERSION}`,
     `Emulator: ${SER}`,
     `APK: \`${APK}\``,
@@ -510,8 +471,13 @@ function writeAuditStub() {
   fs.writeFileSync(path.join(OUT, 'AUDIT.md'), md.join('\n'), 'utf8');
 }
 
-// --- main ---
-fs.mkdirSync(OUT, { recursive: true });
+// --- main: no device mutation before explicit provenance/geometry checks ---
+prepareRun(config, runAdb);
+process.on('exit', code => {
+  const result = path.join(OUT, 'run-result.json');
+  if (!fs.existsSync(result)) fs.writeFileSync(result, JSON.stringify({ status: 'incomplete-or-failed', exitCode: code, sha256: config.sha256, captured: shotN }, null, 2), { flag: 'wx' });
+});
+fs.writeFileSync(path.join(OUT, 'device-config.json'), JSON.stringify(verifyLegacyDisplay(runAdb), null, 2), { flag: 'wx' });
 console.log('AUDIT OUT', OUT);
 console.log('APK', APK);
 installFresh();
@@ -524,4 +490,5 @@ ichProfileFlow();
 miniPlayerExpand();
 emptyPlaylistError();
 writeAuditStub();
+fs.writeFileSync(path.join(OUT, 'run-result.json'), JSON.stringify({ status: 'captures-complete-visual-review-pending', sha256: config.sha256, captured: shotN }, null, 2), { flag: 'wx' });
 console.log('DONE shots', shotN);

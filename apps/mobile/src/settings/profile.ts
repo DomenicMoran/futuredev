@@ -11,7 +11,8 @@ import { listNotes } from '../data/notes.js';
 import { listBookmarks } from '../data/bookmarks.js';
 import { getContentFs, loadLocalManifest } from '../content/index.js';
 import { de } from '../i18n/de.js';
-import { bundledManifest } from '../../assets/content/bundled.generated.js';
+import { bundledManifest } from '../content/bundledData.js';
+import type { ProgressRow } from '../data/types.js';
 import modulesFile from '../../../../content/modules.json';
 import portfolioFile from '../../../../content/portfolio.json';
 import careerFile from '../../../../content/career.json';
@@ -52,6 +53,18 @@ export interface ModuleProgressDisplay {
   percent: number;
   totalLessons: number;
   completedLessons: number;
+  startedLessons: number;
+}
+
+export interface ProfileToolsData {
+  portfolio: PortfolioDisplayItem[];
+  career: CareerDisplayItem[];
+}
+
+export function lessonRowCountsAsStarted(row: ProgressRow | undefined): boolean {
+  if (!row) return false;
+  if (row.state !== 'new') return true;
+  return row.quizScore !== null || row.quizPassed;
 }
 
 export interface ProfileData {
@@ -63,7 +76,7 @@ export interface ProfileData {
   bookmarks: BookmarkDisplayItem[];
 }
 
-const bundledFallbackManifest = bundledManifest as unknown as Manifest;
+const bundledFallbackManifest: Manifest = bundledManifest;
 
 function lessonBelongsToModule(lessonId: string, moduleId: string): boolean {
   return lessonId === moduleId || lessonId.startsWith(`${moduleId}-`);
@@ -116,12 +129,19 @@ export async function loadProfileData(): Promise<ProfileData> {
       state: progressByLesson.get(lessonId)?.state ?? 'new',
     }));
     const computed = computeModuleProgress(module.id, lessonProgresses);
+    let startedLessons = moduleLessonIds.filter((lessonId) =>
+      lessonRowCountsAsStarted(progressByLesson.get(lessonId)),
+    ).length;
+    if (startedLessons === 0 && examRows.some((row) => row.scope === `module:${module.id}`)) {
+      startedLessons = 1;
+    }
     return {
       moduleId: computed.moduleId,
       moduleTitle: module.title,
       percent: computed.percent,
       totalLessons: computed.totalLessons,
       completedLessons: computed.completedLessons,
+      startedLessons,
     };
   });
 
@@ -178,4 +198,29 @@ export async function loadProfileData(): Promise<ProfileData> {
     }));
 
   return { moduleProgress, readiness, portfolio, career, notes, bookmarks };
+}
+
+export async function loadProfileToolsData(): Promise<ProfileToolsData> {
+  const db = await getDatabase();
+  const [portfolioRows, careerRows] = await Promise.all([db.listPortfolioItems(), db.listCareerChecklist()]);
+  const portfolioByBaustein = new Map(portfolioRows.map((r) => [r.baustein, r]));
+  const careerByItem = new Map(careerRows.map((r) => [r.item, r]));
+  const portfolio: PortfolioDisplayItem[] = portfolioFile.items.map((item) => {
+    const row = portfolioByBaustein.get(item.id);
+    const status = row?.status;
+    return {
+      id: item.id,
+      title: item.title,
+      goal: item.goal,
+      status: status === 'veroeffentlicht' || status === 'erklaert' ? status : 'offen',
+      url: row?.url ?? null,
+    };
+  });
+  const career: CareerDisplayItem[] = careerFile.items.map((item) => ({
+    id: item.id,
+    title: item.title,
+    description: item.description,
+    checked: careerByItem.get(item.id)?.checked === true,
+  }));
+  return { portfolio, career };
 }

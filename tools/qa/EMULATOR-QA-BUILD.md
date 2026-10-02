@@ -1,8 +1,18 @@
 # Emulator-QA-APK (Perfect Gate / Pixel-Audit)
 
+Für die Abnahme ist eine produktionsgleiche Emulator-APK **ohne** Onboarding-Bypass, Seed-Playlist oder QA-Sonderpfade erforderlich. Beide QA-Umgebungsvariablen vor Build/Bundle entfernen und die eingebettete `assets/app.config` tatsächlich aus dem ZIP lesen; `aapt dump badging` allein zeigt diese Flags nicht. Versioncode, Quellhashliste, APK-SHA und installierte APK separat verifizieren. Aufrufvertrag: [NATIVE-EVIDENCE.md](NATIVE-EVIDENCE.md).
+
+```powershell
+Remove-Item Env:FUTUREDEV_QA_EMULATOR -ErrorAction SilentlyContinue
+Remove-Item Env:EXPO_PUBLIC_FUTUREDEV_QA -ErrorAction SilentlyContinue
+$env:ORG_GRADLE_PROJECT_reactNativeArchitectures = 'x86_64'
+# Aus apps/mobile/android, nach eingefrorenem Content-Bundle und Quellenstand:
+.\gradlew.bat assembleRelease --no-daemon
+```
+
 Store- und arm64-Release-APKs nutzen `app.json` mit `qaSkipOnboarding: false` und `qaEmulatorBuild: false`. QA-Hilfen laufen nur mit **beidem**: gesetztem Extra-Flag **und** Nicht-Store-Signal (`__DEV__`, `qaEmulatorBuild`, oder `EXPO_PUBLIC_FUTUREDEV_QA=1` zur Bundle-Zeit).
 
-## x86_64 Emulator-Release (QA eingeschaltet)
+## Historischer Debugweg: x86_64 mit QA-Hilfen (kein Abnahmenachweis)
 
 Vor `expo prebuild` / erneutem JS-Bundle für den x86-Build:
 
@@ -31,6 +41,7 @@ Ohne `FUTUREDEV_QA_EMULATOR`. Frische Installation zeigt Onboarding.
 ```powershell
 $env:ORG_GRADLE_PROJECT_reactNativeArchitectures = 'arm64-v8a'
 Remove-Item Env:FUTUREDEV_QA_EMULATOR -ErrorAction SilentlyContinue
+Remove-Item Env:EXPO_PUBLIC_FUTUREDEV_QA -ErrorAction SilentlyContinue
 .\gradlew.bat assembleRelease --no-daemon
 ```
 

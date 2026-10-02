@@ -9,6 +9,7 @@ import { resolveAnimationDuration } from '../accessibility/motion.js';
 import { drawRound, evaluateRound, collectWrongAnswers, type QuizRound, type QuizScope } from './roundLogic.js';
 import { shouldConfirmExit } from './exitGuard.js';
 import { recordQuizRound } from './results.js';
+import { quizOptionAnnouncement } from './accessibility.js';
 
 interface QuizRunnerProps {
   pool: QuizQuestionInput[];
@@ -37,8 +38,14 @@ export function QuizRunner({ pool, desiredCount, scope, heading, onExit, onNextL
   const [chosen, setChosen] = useState<number | null>(null);
   const [result, setResult] = useState<QuizResult | null>(null);
   const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const saveInFlightRef = useRef(false);
+  const advancedQuestionRef = useRef<number | null>(null);
   const phaseRef = useRef(phase);
   phaseRef.current = phase;
+  const pendingSaveRef = useRef({ saving, saveError });
+  pendingSaveRef.current = { saving, saveError };
 
   const question = round.drawn[index];
   const wrongAnswers = useMemo(
@@ -69,8 +76,26 @@ export function QuizRunner({ pool, desiredCount, scope, heading, onExit, onNextL
     setPhase('feedback');
   }
 
-  async function goNext() {
+  async function saveResult(finalResult: QuizResult, finalAnswers: QuizAnswer[]) {
+    if (saveInFlightRef.current || saved) return;
+    saveInFlightRef.current = true;
+    setSaving(true);
+    setSaveError(false);
+    try {
+      await recordQuizRound({ scope, round, answers: finalAnswers, result: finalResult });
+      setSaved(true);
+    } catch {
+      setSaveError(true);
+    } finally {
+      saveInFlightRef.current = false;
+      setSaving(false);
+    }
+  }
+
+  function goNext() {
     if (chosen === null || !question) return;
+    if (advancedQuestionRef.current === index) return;
+    advancedQuestionRef.current = index;
     const nextAnswers = [...answers, { questionIndex: index, chosenOptionIndex: chosen }];
     setAnswers(nextAnswers);
     setChosen(null);
@@ -84,16 +109,14 @@ export function QuizRunner({ pool, desiredCount, scope, heading, onExit, onNextL
     const finalResult = evaluateRound(round, nextAnswers);
     setResult(finalResult);
     setPhase('result');
-    setSaving(true);
-    try {
-      await recordQuizRound({ scope, round, answers: nextAnswers, result: finalResult });
-    } finally {
-      setSaving(false);
-    }
+    void saveResult(finalResult, nextAnswers);
   }
 
   function requestCancel() {
-    Alert.alert(de.quiz.cancelConfirmTitle, de.quiz.cancelConfirmBody, [
+    const body = phaseRef.current === 'result'
+      ? pendingSaveRef.current.saving ? de.quiz.cancelPendingResultBody : de.quiz.cancelUnsavedResultBody
+      : de.quiz.cancelConfirmBody;
+    Alert.alert(de.quiz.cancelConfirmTitle, body, [
       { text: de.quiz.cancelConfirmNo, style: 'cancel' },
       { text: de.quiz.cancelConfirmYes, style: 'destructive', onPress: onExit },
     ]);
@@ -109,9 +132,12 @@ export function QuizRunner({ pool, desiredCount, scope, heading, onExit, onNextL
   // Navigationsereignis, sondern als eigenes Systemereignis melden.
   useEffect(() => {
     const beforeRemoveSub = navigation.addListener('beforeRemove', (e) => {
-      if (!shouldConfirmExit(phaseRef.current)) return;
+      if (!shouldConfirmExit(phaseRef.current, pendingSaveRef.current.saving, pendingSaveRef.current.saveError)) return;
       e.preventDefault();
-      Alert.alert(de.quiz.cancelConfirmTitle, de.quiz.cancelConfirmBody, [
+      const body = phaseRef.current === 'result'
+        ? pendingSaveRef.current.saving ? de.quiz.cancelPendingResultBody : de.quiz.cancelUnsavedResultBody
+        : de.quiz.cancelConfirmBody;
+      Alert.alert(de.quiz.cancelConfirmTitle, body, [
         { text: de.quiz.cancelConfirmNo, style: 'cancel' },
         {
           text: de.quiz.cancelConfirmYes,
@@ -122,7 +148,7 @@ export function QuizRunner({ pool, desiredCount, scope, heading, onExit, onNextL
     });
 
     const backHandlerSub = BackHandler.addEventListener('hardwareBackPress', () => {
-      if (!shouldConfirmExit(phaseRef.current)) return false;
+      if (!shouldConfirmExit(phaseRef.current, pendingSaveRef.current.saving, pendingSaveRef.current.saveError)) return false;
       requestCancel();
       return true;
     });
@@ -140,6 +166,9 @@ export function QuizRunner({ pool, desiredCount, scope, heading, onExit, onNextL
     setAnswers([]);
     setChosen(null);
     setResult(null);
+    setSaveError(false);
+    setSaved(false);
+    advancedQuestionRef.current = null;
     setPhase('rules');
   }
 
@@ -195,7 +224,24 @@ export function QuizRunner({ pool, desiredCount, scope, heading, onExit, onNextL
         <Text style={[styles.body, { color: theme.colors.text, marginTop: theme.spacing.xs }]}>
           {de.quiz.resultScore(result.correctCount, result.totalCount, result.scorePercent)}
         </Text>
-        {saving ? null : null}
+        {saving ? (
+          <Text accessibilityRole="alert" accessibilityLiveRegion="polite" style={[styles.body, { color: theme.colors.textWeak, marginTop: theme.spacing.base }]}>
+            {de.quiz.savingResult}
+          </Text>
+        ) : null}
+        {saved ? (
+          <Text accessibilityRole="alert" style={[styles.body, { color: theme.colors.success, marginTop: theme.spacing.base }]}>
+            {de.quiz.saveResultSuccess}
+          </Text>
+        ) : null}
+        {saveError ? (
+          <View style={{ marginTop: theme.spacing.base, gap: theme.spacing.sm }}>
+            <Text accessibilityRole="alert" accessibilityLiveRegion="assertive" style={[styles.body, { color: theme.colors.error }]}>
+              {de.quiz.saveResultError}
+            </Text>
+            <ResultButton label={de.quiz.retrySaveResult} onPress={() => void saveResult(result, answers)} theme={theme} primary />
+          </View>
+        ) : null}
         {wrongAnswers.length > 0 ? (
           <View style={{ marginTop: theme.spacing.lg }}>
             <Text style={[styles.title, { color: theme.colors.text }]}>{de.quiz.resultWrongListTitle}</Text>
@@ -224,11 +270,13 @@ export function QuizRunner({ pool, desiredCount, scope, heading, onExit, onNextL
             ))}
           </View>
         ) : null}
-        <View style={{ marginTop: theme.spacing.xl, gap: theme.spacing.sm }}>
-          {onNextLesson ? <ResultButton label={de.quiz.nextLesson} onPress={onNextLesson} theme={theme} primary /> : null}
-          <ResultButton label={de.quiz.toLesson} onPress={onExit} theme={theme} primary={!onNextLesson} />
-          <ResultButton label={de.quiz.retryWithNewDraw} onPress={retryWithNewDraw} theme={theme} />
-        </View>
+        {!saving ? (
+          <View style={{ marginTop: theme.spacing.xl, gap: theme.spacing.sm }}>
+            {!saveError && onNextLesson ? <ResultButton label={de.quiz.nextLesson} onPress={onNextLesson} theme={theme} primary /> : null}
+            <ResultButton label={de.quiz.toLesson} onPress={saveError ? requestCancel : onExit} theme={theme} primary={!saveError && !onNextLesson} />
+            {!saveError ? <ResultButton label={de.quiz.retryWithNewDraw} onPress={retryWithNewDraw} theme={theme} /> : null}
+          </View>
+        ) : null}
       </ScrollView>
     );
   }
@@ -285,9 +333,17 @@ export function QuizRunner({ pool, desiredCount, scope, heading, onExit, onNextL
             return (
               <Pressable
                 key={option.text}
-                accessibilityRole="button"
-                accessibilityLabel={option.text}
-                accessibilityState={{ selected: isChosen }}
+                accessibilityRole="radio"
+                accessibilityLabel={quizOptionAnnouncement(
+                  option.text,
+                  option.isCorrect,
+                  isChosen,
+                  showState,
+                  de.quiz.feedbackCorrect,
+                  de.quiz.feedbackWrong,
+                  de.quiz.correctAnswerLabel,
+                )}
+                accessibilityState={{ selected: isChosen, disabled: showState }}
                 onPress={() => chooseOption(optionIndex)}
                 disabled={phase === 'feedback'}
                 style={[
@@ -316,6 +372,8 @@ export function QuizRunner({ pool, desiredCount, scope, heading, onExit, onNextL
         {phase === 'feedback' && chosen !== null ? (
           <View style={{ marginTop: theme.spacing.lg }}>
             <Text
+              accessibilityRole="alert"
+              accessibilityLiveRegion="polite"
               style={[
                 styles.feedbackBadge,
                 {

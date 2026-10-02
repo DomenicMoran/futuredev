@@ -38,5 +38,20 @@ export async function createFileSystemContentFs(): Promise<ContentFs> {
       if (!info.exists) return [];
       return FileSystem.readDirectoryAsync(path);
     },
+    async moveFile(from: string, to: string) {
+      await FileSystem.moveAsync({ from, to });
+    },
+    async getFileSize(path: string) {
+      const info = await FileSystem.getInfoAsync(path);
+      if (!info.exists || info.isDirectory) return null;
+      return typeof info.size === 'number' ? info.size : null;
+    },
+    async readFilePrefixBase64(path: string, maxBytes: number) {
+      return FileSystem.readAsStringAsync(path, {
+        encoding: FileSystem.EncodingType.Base64,
+        position: 0,
+        length: maxBytes,
+      });
+    },
   };
 }

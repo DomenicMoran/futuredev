@@ -41,6 +41,7 @@ export interface DownloadState {
   readonly status: 'not-downloaded' | 'downloading' | 'downloaded' | 'error';
   readonly progress: number; // 0..1
   readonly bytesTotal: number | null;
+  readonly error?: string;
 }
 
 export interface CueLookupResult {

@@ -8,10 +8,12 @@
 // binden an `getProgress`/`markLessonState` (src/data/progress.ts), die schon
 // die Felder aus datenmodell.md tragen (listenedUntil).
 import { lessonSchema, type Lesson, type Manifest } from '@futuredev/content-schema';
-import { getProgress, markLessonState } from '../data/index.js';
+import { markLessonListened, saveListenPosition } from '../data/progress.js';
 import { accumulateListenProgress } from '../settings/dailyLearning.js';
 import { getContentFs } from '../content/contentFs.js';
-import { loadLesson, loadLocalManifest } from '../content/lessonLoader.js';
+import { loadLesson } from '../content/lessonLoader.js';
+import { loadContentSnapshot, type ContentSnapshot } from '../content/generation.js';
+import { fetchVerifiedFile } from '../content/verifiedFile.js';
 
 /**
  * Basis-URL kommt vorrangig aus dem Manifest (lokal abgelegt nach
@@ -25,39 +27,36 @@ export function resolveContentBaseUrl(localManifest: Manifest | null): string {
   return process.env.EXPO_PUBLIC_CONTENT_BASE_URL ?? localManifest?.contentBaseUrl ?? '';
 }
 
-async function fetchRemoteLesson(lessonId: string): Promise<Lesson> {
-  const fs = await getContentFs();
-  const localManifest = await loadLocalManifest(fs);
-  const base = resolveContentBaseUrl(localManifest);
+async function fetchRemoteLesson(lessonId: string, snapshot: ContentSnapshot): Promise<Lesson> {
+  const entry = snapshot.manifest?.lessons.find((lesson) => lesson.id === lessonId);
+  if (!entry || entry.file !== `${lessonId}.json`) {
+    throw new Error(`getLessonForPlayback: ${lessonId} ist im gepinnten Manifest nicht veröffentlicht`);
+  }
+  const base = resolveContentBaseUrl(snapshot.manifest);
   const trimmedBase = base.replace(/\/$/, '');
   if (!trimmedBase) {
     throw new Error(
-      `getLessonForPlayback: ${lessonId} liegt nicht lokal vor und EXPO_PUBLIC_CONTENT_BASE_URL ist nicht gesetzt`,
+      `getLessonForPlayback: ${lessonId} liegt nicht lokal vor und es ist keine Inhaltsbasis-URL gesetzt`,
     );
   }
-  const entry = localManifest?.lessons.find((l) => l.id === lessonId);
-  const fileName = entry?.file ?? `${lessonId}.json`;
-  const response = await fetch(`${trimmedBase}/lessons/${fileName}`, { cache: 'no-store' });
-  if (!response.ok) {
-    throw new Error(`getLessonForPlayback: Lektionsabruf fehlgeschlagen (HTTP ${response.status})`);
-  }
-  // safeParse statt parse: ein ungueltiges Manifest/eine ungueltige
-  // Basis-URL (Pruefbericht Phase 3, B-01) darf nie als unbehandelter
-  // ZodError bis zur Oberflaeche durchschlagen, sondern wird als normaler
-  // Error mit klarer Meldung gemeldet, den die Aufrufer bereits abfangen.
-  const parsed = lessonSchema.safeParse(await response.json());
+  const raw = await fetchVerifiedFile(`${trimmedBase}/lessons/${entry.file}`, entry.sha256);
+  let value: unknown;
+  try { value = JSON.parse(raw); } catch { throw new Error(`getLessonForPlayback: ${lessonId} enthält kein gültiges JSON`); }
+  const parsed = lessonSchema.safeParse(value);
   if (!parsed.success) {
     throw new Error(`getLessonForPlayback: ${lessonId} entspricht nicht dem Lektionsschema`);
   }
+  if (parsed.data.id !== lessonId) throw new Error(`getLessonForPlayback: Lektionskennung stimmt bei ${entry.file} nicht überein`);
   return parsed.data;
 }
 
 /** Lädt eine Lektion für die Wiedergabe: lokal (nach Erststart-Kopie/Sync) vor Netz. */
-export async function getLessonForPlayback(lessonId: string): Promise<Lesson> {
+export async function getLessonForPlayback(lessonId: string, pinnedSnapshot?: ContentSnapshot): Promise<Lesson> {
   const fs = await getContentFs();
-  const local = await loadLesson(fs, lessonId);
+  const snapshot = pinnedSnapshot ?? await loadContentSnapshot(fs);
+  const local = await loadLesson(fs, lessonId, { snapshot });
   if (local) return local;
-  return fetchRemoteLesson(lessonId);
+  return fetchRemoteLesson(lessonId, snapshot);
 }
 
 /** Sichert die Hörposition (progress.listenedUntil), alle 5 s bzw. sofort bei Pause. */
@@ -65,9 +64,7 @@ export async function savePlaybackPosition(lessonId: string, seconds: number): P
   const totalToday = await accumulateListenProgress(lessonId, seconds);
   const { useSettingsStore } = await import('../state/settings.js');
   useSettingsStore.getState().setDailyLearningSecondsToday(totalToday);
-  const existing = await getProgress(lessonId);
-  const nextState = existing?.state === 'new' ? 'started' : (existing?.state ?? 'started');
-  await markLessonState(lessonId, nextState, { listenedUntil: Math.round(seconds) });
+  await saveListenPosition(lessonId, seconds);
 }
 
 /**
@@ -77,6 +74,8 @@ export async function savePlaybackPosition(lessonId: string, seconds: number): P
  * stillschweigend ignoriert.
  */
 export async function markListened(lessonId: string, seconds: number): Promise<void> {
-  await savePlaybackPosition(lessonId, seconds);
-  await markLessonState(lessonId, 'listened', { listenedUntil: Math.round(seconds) });
+  const totalToday = await accumulateListenProgress(lessonId, seconds);
+  const { useSettingsStore } = await import('../state/settings.js');
+  useSettingsStore.getState().setDailyLearningSecondsToday(totalToday);
+  await markLessonListened(lessonId, seconds);
 }

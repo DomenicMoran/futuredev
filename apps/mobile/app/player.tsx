@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo } from 'react';
 
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -53,6 +53,7 @@ import {
   seekToBlock,
 
   seekToSeconds,
+  togglePlayback,
 
 } from '../src/player/index.js';
 
@@ -63,28 +64,6 @@ import { buildChapterJumps, findActiveChapterJumpIndex } from '../src/player/cha
 import { PlaybackScrubber } from '../src/player/PlaybackScrubber.js';
 
 import { PlayerAdvancedControls } from '../src/player/PlayerAdvancedControls.js';
-
-
-
-async function togglePlayback(isPlaying: boolean): Promise<void> {
-
-  const trackPlayer = (await import('react-native-track-player')).default;
-
-  if (isPlaying) {
-
-    await trackPlayer.pause();
-
-    usePlayerStore.getState().setPlaying(false);
-
-  } else {
-
-    await trackPlayer.play();
-
-    usePlayerStore.getState().setPlaying(true);
-
-  }
-
-}
 
 
 
@@ -107,6 +86,8 @@ export default function PlayerScreen() {
   const queue = usePlayerStore((s) => s.queue);
 
   const isPlaying = usePlayerStore((s) => s.isPlaying);
+  const isBuffering = usePlayerStore((s) => s.isBuffering);
+  const playbackError = usePlayerStore((s) => s.playbackError);
 
   const positionSeconds = usePlayerStore((s) => s.positionSeconds);
 
@@ -302,6 +283,13 @@ export default function PlayerScreen() {
 
           ) : null}
 
+          {isBuffering ? <ActivityIndicator color={theme.colors.accent} accessibilityLabel="Audio wird geladen" /> : null}
+          {playbackError ? (
+            <Text style={{ color: theme.colors.error, textAlign: 'center' }} accessibilityLiveRegion="polite">
+              Wiedergabe fehlgeschlagen: {playbackError}
+            </Text>
+          ) : null}
+
           <Text
 
             style={[
@@ -380,11 +368,11 @@ export default function PlayerScreen() {
 
           <Pressable
 
-            onPress={() => void togglePlayback(isPlaying)}
+            onPress={() => void togglePlayback().catch(() => undefined)}
 
             accessibilityRole="button"
 
-            accessibilityLabel={isPlaying ? de.player.pause : de.player.play}
+            accessibilityLabel={playbackError ? 'Wiedergabe erneut versuchen' : isPlaying ? de.player.pause : de.player.play}
 
             style={({ pressed }) => [
 

@@ -25,4 +25,21 @@ describe('modulesFileSchema', () => {
     });
     expect(result.success).toBe(false);
   });
+
+  it('lehnt doppelte Untermodulkennungen auch dann ab, wenn sie nicht im Manifest verwendet werden', () => {
+    const modules = JSON.parse(readFileSync(modulesPath, 'utf8')) as { modules: { id: string; subModules: { id: string; title: string }[] }[] };
+    const first = modules.modules[0];
+    const firstSubmodule = first?.subModules[0];
+    if (!first || !firstSubmodule) throw new Error('expected fixture M01 submodule');
+    first.subModules.push({ ...firstSubmodule, title: 'Doppelt' });
+    expect(modulesFileSchema.safeParse(modules).success).toBe(false);
+  });
+
+  it('lehnt Untermodule unter einem falschen Modul ab', () => {
+    const modules = JSON.parse(readFileSync(modulesPath, 'utf8')) as { modules: { id: string; subModules: { id: string }[] }[] };
+    const first = modules.modules[0];
+    if (!first || !first.subModules[0]) throw new Error('expected fixture submodule');
+    first.subModules[0].id = 'M02-99';
+    expect(modulesFileSchema.safeParse(modules).success).toBe(false);
+  });
 });

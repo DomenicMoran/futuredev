@@ -3,7 +3,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '../theme/useTheme.js';
 
 /** Calm H1 under the safe area on main tab screens (large-title replacement). */
-export function TabScreenTitle({ title }: { title: string }) {
+export function TabScreenTitle({ title, includeSafeAreaTop = true }: { title: string; includeSafeAreaTop?: boolean }) {
   const theme = useTheme();
   const insets = useSafeAreaInsets();
   return (
@@ -14,7 +14,7 @@ export function TabScreenTitle({ title }: { title: string }) {
         {
           color: theme.colors.text,
           paddingHorizontal: theme.spacing.base,
-          paddingTop: insets.top + theme.spacing.sm,
+          paddingTop: (includeSafeAreaTop ? insets.top : 0) + theme.spacing.sm,
           paddingBottom: theme.spacing.xs,
         },
       ]}

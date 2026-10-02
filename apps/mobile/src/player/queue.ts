@@ -2,6 +2,18 @@
 // umsortieren), getrennt vom Zustand-Speicher, damit Vitest sie ohne
 // Track-Player-Attrappe pruefen kann.
 import type { PlaybackQueueState, QueueItem } from './types.js';
+import type { ContentSnapshot } from '../content/generation.js';
+
+const itemSnapshots = new WeakMap<QueueItem, ContentSnapshot>();
+
+/** Keeps content-generation metadata out of persisted/visible queue item data. */
+export function bindQueueItemSnapshot(item: QueueItem, snapshot: ContentSnapshot): void {
+  itemSnapshots.set(item, snapshot);
+}
+
+export function snapshotForQueueItem(item: QueueItem | undefined): ContentSnapshot | undefined {
+  return item ? itemSnapshots.get(item) : undefined;
+}
 
 export const EMPTY_QUEUE: PlaybackQueueState = { items: [], currentIndex: -1 };
 
@@ -13,6 +25,11 @@ export function setQueue(items: readonly QueueItem[], startIndex = 0): PlaybackQ
 
 export function currentItem(state: PlaybackQueueState): QueueItem | undefined {
   return state.items[state.currentIndex];
+}
+
+/** True only for an actual current queue item (empty arrays return undefined). */
+export function queueHasCurrentItem(state: PlaybackQueueState): boolean {
+  return currentItem(state) != null;
 }
 
 export function hasNext(state: PlaybackQueueState): boolean {

@@ -107,6 +107,18 @@ function createFakeFs(): ContentFs & { files: Map<string, string> } {
     async listDirectory(path) {
       return [...files.keys()].filter((p) => p.startsWith(path));
     },
+    async moveFile(from, to) {
+      const value = files.get(from);
+      if (value === undefined) throw new Error('missing source');
+      files.set(to, value);
+      files.delete(from);
+    },
+    async getFileSize(path) {
+      return files.get(path)?.length ?? null;
+    },
+    async readFilePrefixBase64() {
+      return '';
+    },
   };
 }
 

@@ -8,6 +8,16 @@ describe('lessonSchema', () => {
     expect(result.success).toBe(true);
   });
 
+  it('verlangt eindeutige persistente IDs der Quizfragen innerhalb der Lektion', () => {
+    const lesson = makeValidLesson();
+    const duplicateIdQuiz = lesson.quiz.map((question, index) => index === 1
+      ? { ...question, questionId: lesson.quiz[0]?.questionId ?? question.questionId }
+      : question);
+    const result = lessonSchema.safeParse({ ...lesson, quiz: duplicateIdQuiz });
+    expect(result.success).toBe(false);
+    if (!result.success) expect(result.error.issues.some((issue) => issue.path.join('.') === 'quiz.1.questionId')).toBe(true);
+  });
+
   it('lehnt eine falsche Lektionskennung ab', () => {
     const result = lessonSchema.safeParse(makeValidLesson({ id: 'foo' as never }));
     expect(result.success).toBe(false);

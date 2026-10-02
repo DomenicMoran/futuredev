@@ -2,9 +2,10 @@ import { usePathname } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '../theme/useTheme.js';
 import { usePlayerStore } from '../player/store.js';
-import { currentItem } from '../player/queue.js';
+import { queueHasCurrentItem } from '../player/queue.js';
 import { miniPlayerHeight, tabBarHeight } from './tabBarMetrics.js';
 import { isTabBarVisible } from './tabBarVisibility.js';
+import { useMeasuredMiniPlayerHeight } from './miniPlayerMeasurement.js';
 
 export interface BottomChromeLayout {
   /** Scroll-Padding: Tab/Mini-Player + optional Safe-Area unter Mini (Stack-Routen) + Abstand. */
@@ -19,9 +20,12 @@ export function useBottomChromeLayout(): BottomChromeLayout {
   const insets = useSafeAreaInsets();
   const queue = usePlayerStore((s) => s.queue);
   const tabBarVisible = isTabBarVisible(pathname);
-  const hasMiniPlayer = currentItem(queue) !== null;
+  // currentItem is undefined for EMPTY_QUEUE (not null). Strict-null checks
+  // incorrectly reserved a full player-sized gap while no player is mounted.
+  const hasMiniPlayer = queueHasCurrentItem(queue);
   const tabBar = tabBarVisible ? tabBarHeight(theme, insets.bottom) : insets.bottom;
-  const miniPlayer = hasMiniPlayer ? miniPlayerHeight(theme) : 0;
+  const measuredMiniPlayer = useMeasuredMiniPlayerHeight(miniPlayerHeight(theme));
+  const miniPlayer = hasMiniPlayer ? measuredMiniPlayer : 0;
   // Auf Stack-Routen sitzt der Mini-Player über der Home-Indicator-Zone; contentInset zählt
   // diese Zone mit, stickyBottomOffset nicht (Leiste liegt direkt über dem Mini-Player).
   const miniPlayerSafeGap = hasMiniPlayer && !tabBarVisible ? insets.bottom : 0;

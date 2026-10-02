@@ -2,37 +2,26 @@ import Link from 'next/link';
 
 export default function Impressum() {
   return (
-    <div className="legal">
+    <main className="legal">
       <Link href="/">&larr; Zurück</Link>
       <h1>Impressum</h1>
-      <p><strong>Entwurf – vor Veröffentlichung von Domenic zu prüfen.</strong></p>
-      <h2>Angaben gemäß § 5 TMG</h2>
+      <h2>Angaben nach § 5 DDG</h2>
       <p>
         Domenic Moran<br />
-        MenuCloud Berlin<br />
-        c/o Postadresse auf Anfrage<br />
-        E-Mail: info@menucloud.de
+        Heidelberger Straße 36<br />
+        12059 Berlin<br />
+        Deutschland
       </p>
-      <h2>Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV</h2>
-      <p>Domenic Moran (Anschrift wie oben)</p>
-      <h2>Haftungsausschluss</h2>
-      <p>
-        Die Inhalte dieser Seiten wurden mit größter Sorgfalt erstellt. Für die
-        Richtigkeit, Vollständigkeit und Aktualität der Inhalte kann jedoch keine
-        Gewähr übernommen werden.
-      </p>
+      <p>E-Mail: <a href="mailto:kontakt@domenicmoran.de">kontakt@domenicmoran.de</a></p>
+      <h2>Verantwortlich für den Inhalt</h2>
+      <p>Domenic Moran, Anschrift wie oben.</p>
       <h2>Urheberrecht</h2>
       <p>
-        Die durch den Seitenbetreiber erstellten Inhalte und Werke auf diesen
-        Seiten unterliegen dem deutschen Urheberrecht. Der Code steht unter der
-        MIT-Lizenz, die Lehrinhalte unter CC BY-NC-SA 4.0.
+        Die durch den Seitenbetreiber erstellten Inhalte und Werke unterliegen dem deutschen
+        Urheberrecht. Der Programmcode steht unter der MIT-Lizenz, die Lerninhalte unter CC BY-NC-SA 4.0.
       </p>
-      <h2>KI-Kennzeichnung</h2>
-      <p>
-        Die Audio-Inhalte dieser Website und der FutureDev-App wurden mit
-        KI-generierten Stimmen erzeugt (ElevenLabs und lokal Chatterbox).
-        Diese Kennzeichnung erfolgt gemäß Art. 50 EU AI Act.
-      </p>
-    </div>
+      <h2>Audio</h2>
+      <p>Die Audio-Inhalte der FutureDev-App wurden mit KI-generierten Stimmen erzeugt.</p>
+    </main>
   );
 }

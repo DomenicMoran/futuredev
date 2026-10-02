@@ -9,6 +9,8 @@ export function must<T>(value: T | undefined): T {
 /** Kleine, deterministische Fragen-Attrappe für Tests (kein echter Lektionsinhalt). */
 export function makeTestPool(count: number): QuizQuestionInput[] {
   return Array.from({ length: count }, (_, i) => ({
+    questionId: `q_test-${i}`,
+    sourceLessonId: 'M01-01-01',
     question: `Frage ${i}`,
     options: [
       { text: 'richtig', isCorrect: true, explanation: 'weil richtig' },

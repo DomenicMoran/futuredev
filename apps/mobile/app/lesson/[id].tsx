@@ -25,25 +25,33 @@ import { useContent } from '../../src/content/ContentProvider.js';
 import { getContentFs } from '../../src/content/contentFs.js';
 import { loadLesson } from '../../src/content/lessonLoader.js';
 import { linkTermsInBlocks, type TextSegment } from '../../src/lesson/termLinking.js';
-import { getProgress, markLessonState, saveReadPosition } from '../../src/data/progress.js';
+import { getProgress, markLessonRead, saveReadPosition } from '../../src/data/progress.js';
 import { listNotes, saveNote } from '../../src/data/notes.js';
 import { listBookmarks, toggleBookmark } from '../../src/data/bookmarks.js';
 import { getSetting, setSetting } from '../../src/data/settings.js';
 import { isSameLessonInQueue, playLessonInModuleContext, togglePlayback } from '../../src/player/index.js';
 import { useBottomChromeLayout } from '../../src/navigation/useBottomChromeInset.js';
 import { lessonContentBottomPadding } from '../../src/navigation/lessonStickyChrome.js';
+import { anchoredSectionRows, isLessonJumpTargetVisible, lessonJumpTargetKey, measureLessonJumpTargetAlignment, persistReadCompletion, visibleSpeechBlockTarget, type MeasurableJumpView } from '../../src/navigation/lessonReadingState.js';
 import { usePlayerStore } from '../../src/player/store.js';
 import { currentItem } from '../../src/player/queue.js';
 import { accumulateReadFocusTick, READ_FOCUS_TICK_SECONDS } from '../../src/settings/dailyLearning.js';
 import { useSettingsStore } from '../../src/state/settings.js';
 import { PressableFeedback } from '../../src/motion/PressableFeedback.js';
 
-type SectionKey = 'body' | 'terms' | 'example' | 'task' | 'faq';
+type SectionKey = 'body' | 'terms' | 'example' | 'task' | 'faq' | 'completion';
 interface Section {
   key: SectionKey;
   title: string | null;
   data: unknown[];
 }
+interface PendingScroll {
+  sectionKey: SectionKey;
+  itemIndex: number;
+  attempts: number;
+}
+
+const LESSON_VIEWABILITY_CONFIG = { itemVisiblePercentThreshold: 10, minimumViewTime: 120 };
 
 // Vollstaendiger Lesen-Bildschirm (ersetzt die vorherige Ladeansicht von
 // Agent A vollstaendig). SectionList statt FlatList/ScrollView: virtualisiert
@@ -65,7 +73,7 @@ export default function LessonScreen() {
   const firstFormPreference = useSettingsStore((s) => s.firstFormPreference);
   const setDailyLearningSecondsToday = useSettingsStore((s) => s.setDailyLearningSecondsToday);
   const { state: contentState } = useContent();
-  const stickyBottomPadding = lessonContentBottomPadding(theme, chromeLayout);
+  const stickyBottomPadding = lessonContentBottomPadding(theme);
 
   const [lesson, setLesson] = useState<Lesson | null | undefined>(undefined); // undefined = laedt noch
   const [readUntil, setReadUntil] = useState(0);
@@ -75,13 +83,50 @@ export default function LessonScreen() {
   const [glossaryTerm, setGlossaryTerm] = useState<string | null>(null);
   const [checkedTasks, setCheckedTasks] = useState<Set<number>>(new Set());
   const [audioError, setAudioError] = useState(false);
+  const [completionStatus, setCompletionStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
   const listRef = useRef<SectionList<unknown, Section>>(null);
-  const hasMarkedRead = useRef(false);
-  const pendingScrollRef = useRef<{ sectionIndex: number; itemIndex: number; attempts: number } | null>(null);
+  const completionStateRef = useRef({ done: false, inFlight: false });
+  const latestLessonRef = useRef(lesson);
+  latestLessonRef.current = lesson;
+  const currentLessonIdRef = useRef(id);
+  currentLessonIdRef.current = id;
+  const pendingScrollRef = useRef<PendingScroll | null>(null);
+  const failedScrollRef = useRef<PendingScroll | null>(null);
+  const scrollRetryTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const listViewportRef = useRef<MeasurableJumpView | null>(null);
+  const jumpAnchorRefs = useRef(new Map<string, View>());
+  const jumpMeasurementInFlightRef = useRef<string | null>(null);
+  const pendingTargetViewableRef = useRef(false);
+  const scrollOffsetRef = useRef(0);
+  const [scrollError, setScrollError] = useState(false);
+  const viewabilityHandlerRef = useRef<(info: { viewableItems: ViewToken[] }) => void>(() => undefined);
+  const stableViewabilityHandler = useRef((info: { viewableItems: ViewToken[] }) => viewabilityHandlerRef.current(info)).current;
+  const sections = useMemo<Section[]>(() => {
+    if (!lesson) return [];
+    const result: Section[] = [{ key: 'body', title: null, data: lesson.speechBlocks }];
+    if (lesson.terms.length > 0) result.push({
+      key: 'terms', title: null, data: anchoredSectionRows(de.lesson.termsHeading, lesson.terms),
+    });
+    result.push({ key: 'example', title: null, data: anchoredSectionRows(de.lesson.practiceExampleHeading, [lesson.practiceExample]) });
+    result.push({ key: 'task', title: null, data: anchoredSectionRows(de.lesson.practiceTaskHeading, [lesson.practiceTask]) });
+    if (lesson.faq && lesson.faq.length > 0) {
+      result.push({ key: 'faq', title: null, data: anchoredSectionRows(de.lesson.faqHeading, lesson.faq) });
+    }
+    result.push({ key: 'completion', title: null, data: [{ kind: 'lesson-completion-action' }] });
+    return result;
+  }, [lesson]);
+  const beginScrollRef = useRef<(sectionKey: SectionKey, itemIndex: number) => PendingScroll>(() => ({ sectionKey: 'body', itemIndex: 0, attempts: 0 }));
 
   useEffect(() => {
     let cancelled = false;
     if (!id) return;
+    setLesson(undefined);
+    completionStateRef.current = { done: false, inFlight: false };
+    setCompletionStatus('idle');
+    pendingScrollRef.current = null;
+    failedScrollRef.current = null;
+    if (scrollRetryTimerRef.current) clearTimeout(scrollRetryTimerRef.current);
+    setScrollError(false);
     (async () => {
       const fs = await getContentFs();
       const loaded = await loadLesson(fs, id);
@@ -111,6 +156,10 @@ export default function LessonScreen() {
       cancelled = true;
     };
   }, [id]);
+
+  useEffect(() => () => {
+    if (scrollRetryTimerRef.current) clearTimeout(scrollRetryTimerRef.current);
+  }, []);
 
   useFocusEffect(
     useCallback(() => {
@@ -153,19 +202,24 @@ export default function LessonScreen() {
   // `block`-Parameter (app/player.tsx); hierher zurueckspringen heisst genau
   // dorthin scrollen, nicht nur die Lektion oeffnen.
   useEffect(() => {
-    if (!lesson || blockParam === undefined) return;
+    if (!lesson || lesson.id !== id || blockParam === undefined) return;
     const blockIndex = Number(blockParam);
     if (!Number.isFinite(blockIndex) || blockIndex < 0 || blockIndex >= lesson.speechBlocks.length) return;
     const timer = setTimeout(() => {
+      const target = visibleSpeechBlockTarget(blockIndex, lesson.speechBlocks, lesson.faq ?? []);
+      beginScrollRef.current(target.sectionKey, target.itemIndex);
+      setScrollError(false);
+      const sectionIndex = sections.findIndex((section) => section.key === target.sectionKey);
+      if (sectionIndex < 0) return;
       listRef.current?.scrollToLocation({
-        sectionIndex: 0,
-        itemIndex: blockIndex,
+        sectionIndex,
+        itemIndex: target.itemIndex,
         viewPosition: 0,
         animated: true,
       });
     }, 0);
     return () => clearTimeout(timer);
-  }, [lesson, blockParam]);
+  }, [lesson, blockParam, sections, id]);
 
   const termSegments = useMemo<TextSegment[][]>(() => {
     if (!lesson) return [];
@@ -182,7 +236,7 @@ export default function LessonScreen() {
 
   if (lesson === undefined) {
     return (
-      <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.bg }]}>
+      <SafeAreaView edges={['top', 'left', 'right']} style={[styles.container, { backgroundColor: theme.colors.bg }]}>
         <EmptyState Icon={BookOpen} title={de.lesson.loadingTitle} body={de.lesson.loadingBody} />
       </SafeAreaView>
     );
@@ -190,46 +244,118 @@ export default function LessonScreen() {
 
   if (lesson === null) {
     return (
-      <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.bg }]}>
+      <SafeAreaView edges={['top', 'left', 'right']} style={[styles.container, { backgroundColor: theme.colors.bg }]}>
         <EmptyState Icon={BookOpen} title={de.lesson.notFoundTitle} body={de.lesson.notFoundBody} />
       </SafeAreaView>
     );
   }
 
-  const sections: Section[] = [{ key: 'body', title: null, data: lesson.speechBlocks }];
-  if (lesson.terms.length > 0) sections.push({ key: 'terms', title: de.lesson.termsHeading, data: [lesson.terms] });
-  sections.push({ key: 'example', title: de.lesson.practiceExampleHeading, data: [lesson.practiceExample] });
-  sections.push({ key: 'task', title: de.lesson.practiceTaskHeading, data: [lesson.practiceTask] });
-  if (lesson.faq && lesson.faq.length > 0) {
-    sections.push({ key: 'faq', title: de.lesson.faqHeading, data: [lesson.faq] });
+  if (lesson.id !== id) {
+    return (
+      <SafeAreaView edges={['top', 'left', 'right']} style={[styles.container, { backgroundColor: theme.colors.bg}]}>
+        <EmptyState Icon={BookOpen} title={de.lesson.loadingTitle} body={de.lesson.loadingBody} />
+      </SafeAreaView>
+    );
   }
-
   function jumpTo(key: SectionKey) {
     const sectionIndex = sections.findIndex((s) => s.key === key);
     if (sectionIndex === -1) return;
-    pendingScrollRef.current = { sectionIndex, itemIndex: 0, attempts: 0 };
-    listRef.current?.scrollToLocation({ sectionIndex, itemIndex: 0, viewPosition: 0, animated: true });
+    const pending = beginScroll(key, 0);
+    scrollToPendingTarget(pending, true);
+  }
+
+  function beginScroll(sectionKey: SectionKey, itemIndex: number): PendingScroll {
+    if (scrollRetryTimerRef.current) clearTimeout(scrollRetryTimerRef.current);
+    const pending = { sectionKey, itemIndex, attempts: 0 };
+    pendingScrollRef.current = pending;
+    failedScrollRef.current = null;
+    pendingTargetViewableRef.current = false;
+    jumpMeasurementInFlightRef.current = null;
+    setScrollError(false);
+    scheduleScrollRetry(pending);
+    return pending;
+  }
+  beginScrollRef.current = beginScroll;
+
+  function scheduleScrollRetry(pending: PendingScroll) {
+    if (scrollRetryTimerRef.current) clearTimeout(scrollRetryTimerRef.current);
+    scrollRetryTimerRef.current = setTimeout(() => {
+      if (pendingScrollRef.current !== pending) return;
+      if (pending.attempts >= 24) {
+        failedScrollRef.current = pending;
+        pendingScrollRef.current = null;
+        setScrollError(true);
+        return;
+      }
+      pending.attempts += 1;
+      if (sections.findIndex((section) => section.key === pending.sectionKey) < 0) {
+        failedScrollRef.current = pending;
+        pendingScrollRef.current = null;
+        setScrollError(true);
+        return;
+      }
+      if (pendingTargetViewableRef.current) {
+        measurePendingTargetAlignment(pending);
+      } else {
+        scrollToPendingTarget(pending, false);
+      }
+      scheduleScrollRetry(pending);
+    }, pending.attempts === 0 ? 650 : 450);
+  }
+
+  function scrollToPendingTarget(pending: PendingScroll, animated: boolean) {
+    const sectionIndex = sections.findIndex((section) => section.key === pending.sectionKey);
+    if (sectionIndex < 0) return;
+    listRef.current?.scrollToLocation({ sectionIndex, itemIndex: pending.itemIndex, viewPosition: 0, animated });
+    setTimeout(() => measurePendingTargetAlignment(pending), 100);
+  }
+
+  function applyJumpScrollCorrection(pending: PendingScroll, scrollDelta: number) {
+    if (pendingScrollRef.current !== pending) return;
+    const nextOffset = Math.max(0, scrollOffsetRef.current + scrollDelta);
+    scrollOffsetRef.current = nextOffset;
+    listRef.current?.getScrollResponder()?.scrollTo({ y: nextOffset, animated: false });
+    setTimeout(() => measurePendingTargetAlignment(pending), 50);
+  }
+
+  function measurePendingTargetAlignment(pending: PendingScroll) {
+    measureLessonJumpTargetAlignment(
+      pending,
+      () => pendingScrollRef.current,
+      jumpMeasurementInFlightRef,
+      jumpAnchorRefs.current,
+      listViewportRef.current,
+      settlePendingScroll,
+      (scrollDelta) => applyJumpScrollCorrection(pending, scrollDelta),
+    );
+  }
+
+  function registerJumpAnchor(sectionKey: SectionKey, itemIndex: number, node: View | null) {
+    const key = lessonJumpTargetKey({ sectionKey, itemIndex });
+    if (node) jumpAnchorRefs.current.set(key, node);
+    else jumpAnchorRefs.current.delete(key);
+  }
+
+  function onJumpAnchorLayout(sectionKey: SectionKey, itemIndex: number) {
+    const pending = pendingScrollRef.current;
+    if (pending?.sectionKey === sectionKey && pending.itemIndex === itemIndex) {
+      setTimeout(() => measurePendingTargetAlignment(pending), 50);
+    }
   }
 
   function retryPendingScroll(info: { averageItemLength: number; index: number }) {
     const pending = pendingScrollRef.current;
-    if (!pending || pending.attempts >= 4) {
-      pendingScrollRef.current = null;
-      return;
-    }
-    pending.attempts += 1;
-    listRef.current?.getScrollResponder()?.scrollTo({
-      y: Math.max(0, info.averageItemLength * info.index),
-      animated: false,
-    });
-    setTimeout(() => {
-      listRef.current?.scrollToLocation({
-        sectionIndex: pending.sectionIndex,
-        itemIndex: pending.itemIndex,
-        viewPosition: 0,
-        animated: true,
+    if (!pending) return;
+    // The estimate only moves the virtualized window near the target. It is
+    // never treated as success: the request remains pending until its actual
+    // section/item appears in viewability callbacks.
+    if (info) {
+      listRef.current?.getScrollResponder()?.scrollTo({
+        y: Math.max(0, info.averageItemLength * info.index),
+        animated: false,
       });
-    }, 50);
+    }
+    scheduleScrollRetry(pending);
   }
 
   async function openGlossary(term: string) {
@@ -280,18 +406,66 @@ export default function LessonScreen() {
     await setSetting(`checklist:${id}`, JSON.stringify([...next]));
   }
 
-  async function handleViewableChanged({ viewableItems }: { viewableItems: ViewToken[] }) {
-    if (!lesson || !id) return;
+  viewabilityHandlerRef.current = ({ viewableItems }) => {
+    const visibleItems = viewableItems.flatMap((token) =>
+      token.section?.key && token.index !== null && token.index !== undefined
+        ? [{ sectionKey: String(token.section.key), itemIndex: token.index, isViewable: token.isViewable === true }]
+        : [],
+    );
+    const pending = pendingScrollRef.current;
+    const pendingVisible = pending
+      ? isLessonJumpTargetVisible(visibleItems, { sectionKey: pending.sectionKey, itemIndex: pending.itemIndex })
+      : false;
+    pendingTargetViewableRef.current = pendingVisible;
+    if (pending && pendingVisible) {
+      measurePendingTargetAlignment(pending);
+    }
+    const currentId = currentLessonIdRef.current;
+    if (!latestLessonRef.current || latestLessonRef.current.id !== currentId || !currentId) return;
     const bodyItems = viewableItems.filter((v) => v.section?.key === 'body');
     if (bodyItems.length === 0) return;
     const lastVisibleIndex = Math.max(...bodyItems.map((v) => v.index ?? 0));
     setReadUntil(lastVisibleIndex);
-    await saveReadPosition(id, lastVisibleIndex);
-    const isLastBlock = lastVisibleIndex >= lesson.speechBlocks.length - 1;
-    if (isLastBlock && !hasMarkedRead.current) {
-      hasMarkedRead.current = true;
-      await markLessonState(id, 'read');
-    }
+    void saveReadPosition(currentId, lastVisibleIndex).catch(() => undefined);
+  };
+
+  function settlePendingScroll() {
+    pendingScrollRef.current = null;
+    pendingTargetViewableRef.current = false;
+    jumpMeasurementInFlightRef.current = null;
+    if (scrollRetryTimerRef.current) clearTimeout(scrollRetryTimerRef.current);
+    scrollRetryTimerRef.current = null;
+    setScrollError(false);
+  }
+
+  function cancelPendingScrollForManualScroll() {
+    // Once a learner takes control, retries must not yank the list back and a
+    // stale failure affordance must not remain after they reach the section.
+    pendingScrollRef.current = null;
+    failedScrollRef.current = null;
+    pendingTargetViewableRef.current = false;
+    jumpMeasurementInFlightRef.current = null;
+    if (scrollRetryTimerRef.current) clearTimeout(scrollRetryTimerRef.current);
+    scrollRetryTimerRef.current = null;
+    setScrollError(false);
+  }
+
+  async function handleCompleteReading() {
+    const targetId = id;
+    if (!targetId) return;
+    setCompletionStatus('saving');
+    const status = await persistReadCompletion(completionStateRef.current, () => markLessonRead(targetId).then(() => undefined));
+    if (currentLessonIdRef.current !== targetId) return;
+    setCompletionStatus(status === 'saved' || status === 'already-saved' ? 'saved' : status === 'failed' ? 'error' : 'saving');
+  }
+
+  function retryFailedScroll() {
+    const failed = failedScrollRef.current;
+    if (!failed) return;
+    const sectionIndex = sections.findIndex((section) => section.key === failed.sectionKey);
+    if (sectionIndex < 0) return;
+    const pending = beginScroll(failed.sectionKey, failed.itemIndex);
+    scrollToPendingTarget(pending, true);
   }
 
   const openRepo = () => {
@@ -325,19 +499,39 @@ export default function LessonScreen() {
   };
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.bg }]}>
-      <SectionList
-        ref={listRef}
-        sections={sections}
-        contentContainerStyle={{ paddingBottom: stickyBottomPadding }}
-        keyExtractor={(item, index) => `${(item as { text?: string })?.text ?? index}-${index}`}
-        stickySectionHeadersEnabled={false}
-        onViewableItemsChanged={(info) => void handleViewableChanged(info)}
-        viewabilityConfig={{ itemVisiblePercentThreshold: 60 }}
-        onScrollToIndexFailed={(info) => retryPendingScroll(info)}
-        onMomentumScrollEnd={() => {
-          pendingScrollRef.current = null;
+    <SafeAreaView edges={['top', 'left', 'right']} style={[styles.container, { backgroundColor: theme.colors.bg }]}>
+            <View
+        collapsable={false}
+        style={{ flex: 1 }}
+        ref={(node) => {
+          listViewportRef.current = node;
         }}
+      >
+      <SectionList
+        ref={(node) => {
+          listRef.current = node;
+        }}
+        sections={sections}
+        style={{ flex: 1 }}
+        contentContainerStyle={{ paddingBottom: stickyBottomPadding }}
+        keyExtractor={(item, index) => {
+          const row = item as { text?: string; term?: string; question?: string; title?: string; kind?: string };
+          return `${row?.text ?? row?.term ?? row?.question ?? row?.title ?? row?.kind ?? 'row'}-${index}`;
+        }}
+        stickySectionHeadersEnabled={false}
+        // SectionList converts flattened ViewTokens to {section,index} only
+        // through this callback. `viewabilityConfigCallbackPairs` passes the
+        // unconverted VirtualizedList tokens and never supplied `section`.
+        viewabilityConfig={LESSON_VIEWABILITY_CONFIG}
+        onViewableItemsChanged={stableViewabilityHandler}
+        onScroll={(event) => {
+          scrollOffsetRef.current = event.nativeEvent.contentOffset.y;
+          const pending = pendingScrollRef.current;
+          if (pending) measurePendingTargetAlignment(pending);
+        }}
+        scrollEventThrottle={16}
+        onScrollToIndexFailed={(info) => retryPendingScroll(info)}
+        onScrollBeginDrag={cancelPendingScrollForManualScroll}
         ListHeaderComponent={
           <LessonHeader
             lesson={lesson}
@@ -361,14 +555,21 @@ export default function LessonScreen() {
             </View>
           ) : null
         }
-        renderSectionHeader={({ section }) =>
-          section.title ? (
-            <Text style={[styles.sectionHeading, { color: theme.colors.text, backgroundColor: theme.colors.bg }]}>
-              {section.title}
-            </Text>
-          ) : null
-        }
+        renderSectionHeader={() => null}
         renderItem={({ item, index, section }) => {
+          if ((item as { kind?: string })?.kind === 'lesson-section-anchor') {
+            return (
+              <View
+                collapsable={false}
+                ref={(node) => registerJumpAnchor(section.key, index, node)}
+                onLayout={() => onJumpAnchorLayout(section.key, index)}
+              >
+                <Text style={[styles.sectionHeading, { color: theme.colors.text, backgroundColor: theme.colors.bg }]}>
+                  {(item as { title: string }).title}
+                </Text>
+              </View>
+            );
+          }
           if (section.key === 'body') {
             const block = item as SpeechBlock;
             // role "faq" steht schon im eigenen Abschnitt (aus lesson.faq);
@@ -379,40 +580,40 @@ export default function LessonScreen() {
             if (block.role === 'faq') return null;
             if (!block.text.trim()) return null;
             return (
-              <SpeechBlockRow
-                block={block}
-                segments={termSegments[index] ?? [{ text: block.text, term: null }]}
-                isBookmarked={bookmarkedPositions.has(index)}
-                noteBody={noteBodies[index]}
-                isDraftOpen={noteDraftFor === index}
-                onTapTerm={openGlossary}
-                onToggleBookmark={() => void handleBookmark(index)}
-                onOpenNoteDraft={() => setNoteDraftFor(index)}
-                onChangeNote={(text) => setNoteBodies((prev) => ({ ...prev, [index]: text }))}
-                onSaveNote={() => void handleSaveNote(index)}
-              />
+              <View collapsable={false} ref={(node) => registerJumpAnchor(section.key, index, node)} onLayout={() => onJumpAnchorLayout(section.key, index)}>
+                <SpeechBlockRow
+                  block={block}
+                  showSpeaker={index === 0 || lesson.speechBlocks[index - 1]?.speaker !== block.speaker}
+                  segments={termSegments[index] ?? [{ text: block.text, term: null }]}
+                  isBookmarked={bookmarkedPositions.has(index)}
+                  noteBody={noteBodies[index]}
+                  isDraftOpen={noteDraftFor === index}
+                  onTapTerm={openGlossary}
+                  onToggleBookmark={() => void handleBookmark(index)}
+                  onOpenNoteDraft={() => setNoteDraftFor(index)}
+                  onChangeNote={(text) => setNoteBodies((prev) => ({ ...prev, [index]: text }))}
+                  onSaveNote={() => void handleSaveNote(index)}
+                />
+              </View>
             );
           }
           if (section.key === 'terms') {
             return (
-              <View style={styles.termChips}>
-                {lesson.terms.map((t) => (
-                  <Pressable
-                    key={t.term}
-                    onPress={() => void openGlossary(t.term)}
-                    accessibilityRole="button"
-                    accessibilityLabel={t.term}
-                    style={[styles.termChip, { borderColor: theme.colors.accent, minHeight: 44 }]}
-                  >
-                    <Text style={{ color: theme.colors.accent, fontSize: 14, lineHeight: 20 }}>{t.term}</Text>
-                  </Pressable>
-                ))}
+              <View collapsable={false} ref={(node) => registerJumpAnchor(section.key, index, node)} onLayout={() => onJumpAnchorLayout(section.key, index)} style={{ paddingHorizontal: theme.spacing.base, paddingBottom: 4 }}>
+                <Pressable
+                  onPress={() => void openGlossary((item as { term: string }).term)}
+                  accessibilityRole="button"
+                  accessibilityLabel={(item as { term: string }).term}
+                  style={[styles.termChip, { borderColor: theme.colors.accent, minHeight: 44, alignSelf: 'flex-start' }]}
+                >
+                  <Text style={{ color: theme.colors.accent, fontSize: 14, lineHeight: 20 }}>{(item as { term: string }).term}</Text>
+                </Pressable>
               </View>
             );
           }
           if (section.key === 'example') {
             return (
-              <View style={{ paddingHorizontal: theme.spacing.base, paddingBottom: theme.spacing.base }}>
+              <View collapsable={false} ref={(node) => registerJumpAnchor(section.key, index, node)} onLayout={() => onJumpAnchorLayout(section.key, index)} style={{ paddingHorizontal: theme.spacing.base, paddingBottom: theme.spacing.base }}>
                 <Text style={[styles.bodyText, { color: theme.colors.text }]}>{lesson.practiceExample.text}</Text>
                 <Text style={[styles.metaText, { color: theme.colors.textWeak, marginTop: theme.spacing.xs }]}>
                   {lesson.practiceExample.location}
@@ -436,7 +637,7 @@ export default function LessonScreen() {
           }
           if (section.key === 'task') {
             return (
-              <View style={{ paddingHorizontal: theme.spacing.base, paddingBottom: theme.spacing.base }}>
+              <View collapsable={false} ref={(node) => registerJumpAnchor(section.key, index, node)} onLayout={() => onJumpAnchorLayout(section.key, index)} style={{ paddingHorizontal: theme.spacing.base, paddingBottom: theme.spacing.base }}>
                 <Text style={[styles.bodyText, { color: theme.colors.text }]}>{lesson.practiceTask.task}</Text>
                 <Text style={[styles.metaText, { color: theme.colors.textWeak, marginTop: theme.spacing.sm, fontWeight: '600' }]}>
                   {de.lesson.practiceTaskExpectation}
@@ -470,21 +671,49 @@ export default function LessonScreen() {
               </View>
             );
           }
-          // faq
-          return (
-            <View style={{ paddingHorizontal: theme.spacing.base, paddingBottom: theme.spacing.base }}>
-              {(lesson.faq ?? []).map((entry) => (
-                <View key={entry.question} style={{ marginBottom: theme.spacing.md }}>
-                  <Text style={[styles.faqQuestion, { color: theme.colors.text }]}>{entry.question}</Text>
-                  <Text style={[styles.bodyText, { color: theme.colors.textWeak, marginTop: theme.spacing.xs }]}>
-                    {entry.answer}
+          if (section.key === 'completion') {
+            const isComplete = completionStatus === 'saved';
+            return (
+              <View collapsable={false} ref={(node) => registerJumpAnchor(section.key, index, node)} onLayout={() => onJumpAnchorLayout(section.key, index)} style={{ padding: theme.spacing.base, alignItems: 'stretch' }}>
+                <Pressable
+                  onPress={() => void handleCompleteReading()}
+                  disabled={completionStatus === 'saving' || isComplete}
+                  accessibilityRole="button"
+                  accessibilityLabel={isComplete ? 'Lektion als gelesen markiert' : 'Lektion als gelesen markieren'}
+                  accessibilityState={{ disabled: completionStatus === 'saving' || isComplete }}
+                  style={[styles.secondaryButton, { borderColor: completionStatus === 'error' ? theme.colors.error : theme.colors.border, minHeight: theme.minTapTarget }]}
+                >
+                  <Text style={[styles.secondaryButtonLabel, { color: completionStatus === 'error' ? theme.colors.error : theme.colors.text }]}>
+                    {completionStatus === 'saving' ? 'Speichert …' : isComplete ? 'Als gelesen markiert' : 'Lektion als gelesen markieren'}
                   </Text>
-                </View>
-              ))}
+                </Pressable>
+                {completionStatus === 'error' ? (
+                  <Text accessibilityRole="alert" style={[styles.metaText, { color: theme.colors.error, marginTop: theme.spacing.xs }]}>
+                    Speichern fehlgeschlagen. Tippe zum erneuten Versuch.
+                  </Text>
+                ) : null}
+              </View>
+            );
+          }
+          return (
+            <View collapsable={false} ref={(node) => registerJumpAnchor(section.key, index, node)} onLayout={() => onJumpAnchorLayout(section.key, index)} style={{ paddingHorizontal: theme.spacing.base, paddingBottom: theme.spacing.base }}>
+              <View style={{ marginBottom: theme.spacing.md }}>
+                <Text style={[styles.faqQuestion, { color: theme.colors.text }]}>{(item as { question: string }).question}</Text>
+                <Text style={[styles.bodyText, { color: theme.colors.textWeak, marginTop: theme.spacing.xs }]}>
+                  {(item as { answer: string }).answer}
+                </Text>
+              </View>
             </View>
           );
         }}
       />
+      </View>
+
+      {scrollError ? (
+        <Pressable onPress={retryFailedScroll} accessibilityRole="button" style={{ paddingHorizontal: theme.spacing.base, minHeight: theme.minTapTarget, justifyContent: 'center' }}>
+          <Text accessibilityRole="alert" style={[styles.metaText, { color: theme.colors.error }]}>Abschnitt nicht erreicht. Erneut versuchen.</Text>
+        </Pressable>
+      ) : null}
 
       <GlossaryModal
         lesson={lesson}
@@ -495,26 +724,23 @@ export default function LessonScreen() {
       {lesson && id ? (
         <LessonStickyActions
           listenFirst={firstFormPreference === 'listen'}
-          stickyBottomOffset={stickyBottomOffset}
           lessonId={id}
           onListen={handleListen}
           onQuiz={() => router.push(`/quiz/${id}`)}
         />
       ) : null}
+      <View style={{ height: stickyBottomOffset }} />
     </SafeAreaView>
   );
 }
 
 function LessonStickyActions({
   listenFirst,
-  stickyBottomOffset,
   lessonId,
   onListen,
   onQuiz,
 }: {
   listenFirst: boolean;
-  /** Aus useBottomChromeLayout: direkt über Mini-Player/Reiter, ohne Scroll-Doppel-Safe-Area. */
-  stickyBottomOffset: number;
   lessonId: string;
   onListen: () => void;
   onQuiz: () => void;
@@ -565,7 +791,6 @@ function LessonStickyActions({
           backgroundColor: theme.colors.bg,
           borderTopColor: theme.colors.border,
           borderTopWidth: StyleSheet.hairlineWidth,
-          bottom: stickyBottomOffset,
           paddingBottom: theme.spacing.sm,
           paddingHorizontal: theme.spacing.base,
           paddingTop: theme.spacing.sm,
@@ -687,6 +912,7 @@ function LessonHeader({
 
 function SpeechBlockRow({
   block,
+  showSpeaker,
   segments,
   isBookmarked,
   noteBody,
@@ -698,6 +924,7 @@ function SpeechBlockRow({
   onSaveNote,
 }: {
   block: SpeechBlock;
+  showSpeaker: boolean;
   segments: TextSegment[];
   isBookmarked: boolean;
   noteBody: string | undefined;
@@ -724,14 +951,14 @@ function SpeechBlockRow({
       ]}
     >
       <View style={styles.blockHeaderRow}>
-        <Text style={[styles.speakerLabel, { color: theme.colors.textWeak }]}>{speakerLabel}</Text>
+        {showSpeaker ? <Text style={[styles.speakerLabel, { color: theme.colors.textWeak }]}>{speakerLabel}</Text> : <View />}
         <View style={styles.blockActions} pointerEvents="box-none">
           <Pressable
             onPress={onToggleBookmark}
             accessibilityRole="button"
-            accessibilityLabel={isBookmarked ? de.lesson.bookmarkRemove : de.lesson.bookmarkSet}
-            hitSlop={12}
-            style={[styles.iconButton, { zIndex: 2 }]}
+            accessibilityLabel={isBookmarked ? de.lesson.bookmarkRemove : `${de.lesson.bookmarkLabel} setzen`}
+            accessibilityState={{ checked: isBookmarked }}
+            style={[styles.iconButton, { zIndex: 2, minWidth: 44, minHeight: 44 }]}
           >
             {isBookmarked ? (
               <BookmarkCheck size={18} color={theme.colors.accent} />
@@ -743,8 +970,7 @@ function SpeechBlockRow({
             onPress={onOpenNoteDraft}
             accessibilityRole="button"
             accessibilityLabel={de.lesson.noteAdd}
-            hitSlop={8}
-            style={styles.iconButton}
+            style={[styles.iconButton, { minWidth: 44, minHeight: 44 }]}
           >
             <MessageSquarePlus size={18} color={noteBody ? theme.colors.accent : theme.colors.textWeak} />
           </Pressable>
@@ -841,8 +1067,8 @@ const styles = StyleSheet.create({
   blockRow: {},
   blockHeaderRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 },
   speakerLabel: { fontSize: 12, lineHeight: 16, fontWeight: '700', letterSpacing: 0.5 },
-  blockActions: { flexDirection: 'row', gap: 4 },
-  iconButton: { padding: 6 },
+  blockActions: { flexDirection: 'row', gap: 8 },
+  iconButton: { padding: 8, alignItems: 'center', justifyContent: 'center' },
   bodyText: { fontSize: 16, lineHeight: 26, maxWidth: 560 },
   noteText: { fontSize: 13, lineHeight: 18, marginTop: 4, fontStyle: 'italic' },
   noteInput: { borderWidth: 1, borderRadius: 8, padding: 8, fontSize: 14, minHeight: 60, textAlignVertical: 'top' },
@@ -858,10 +1084,6 @@ const styles = StyleSheet.create({
   modalBackdrop: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center', padding: 24 },
   modalCard: { borderRadius: 16, padding: 20 },
   stickyBar: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
     borderTopWidth: StyleSheet.hairlineWidth,
   },
   stickyButton: { alignItems: 'center', justifyContent: 'center', paddingHorizontal: 12 },

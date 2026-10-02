@@ -1,117 +1,97 @@
 #!/usr/bin/env tsx
-// Erzeugt content/manifest.json neu aus content/lessons/*.json: Prüfsumme je Datei,
-// updatedAt aus dem letzten Git-Commit der Datei (Fallback Dateizeit).
-import { createHash } from 'node:crypto';
+// Builds a complete manifest from the exact UTF-8 bytes of modules and every
+// lesson. `--qa-output <dir>` writes a disposable snapshot only and never
+// touches content/manifest.json.
 import { execFileSync } from 'node:child_process';
-import { readFileSync, readdirSync, writeFileSync, statSync, existsSync } from 'node:fs';
-import { join, dirname } from 'node:path';
+import { mkdirSync, readFileSync, readdirSync, renameSync, rmSync, statSync, writeFileSync, existsSync } from 'node:fs';
+import { join, dirname, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { lessonSchema } from './lesson.js';
-import type { Manifest } from './manifest.js';
+import { buildManifest, compareSemver, type ManifestSourceLesson } from './manifest-generation.js';
 import { MissingBaseUrlError, resolveManifestBaseUrls, type ManifestConfig } from './manifest-base-url.js';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const repoRoot = join(__dirname, '..', '..', '..');
+const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 const contentDir = join(repoRoot, 'content');
 const lessonsDir = join(contentDir, 'lessons');
 const manifestPath = join(contentDir, 'manifest.json');
+const modulesPath = join(contentDir, 'modules.json');
 const manifestConfigPath = join(contentDir, 'manifest.config.json');
-
-/**
- * Basis-URLs kommen aus der Umgebung (CONTENT_BASE_URL/AUDIO_BASE_URL) oder,
- * falls nicht gesetzt, aus der committeten `content/manifest.config.json`.
- * Kein erfundener Fallback (Pruefbericht Phase 3, B-01): fehlen beide
- * Quellen fuer eine der beiden URLs, bricht der Lauf mit Rueckgabewert 1 und
- * einer klaren Meldung ab, statt eine nicht existierende Adresse wie
- * "futuredev.supabase.co" ins Manifest zu schreiben. Die eigentliche
- * Aufloesung steckt in manifest-base-url.ts, damit sie mit Vitest ohne
- * Prozessabbruch pruefbar ist.
- */
-function loadManifestConfig(): ManifestConfig {
-  if (!existsSync(manifestConfigPath)) return {};
-  try {
-    return JSON.parse(readFileSync(manifestConfigPath, 'utf8')) as ManifestConfig;
-  } catch {
-    console.error(`content:manifest: ${manifestConfigPath} ist kein gueltiges JSON.`);
-    process.exit(1);
-  }
-}
-
-let CONTENT_BASE_URL: string;
-let AUDIO_BASE_URL: string;
-try {
-  const resolved = resolveManifestBaseUrls(process.env, loadManifestConfig());
-  CONTENT_BASE_URL = resolved.contentBaseUrl;
-  AUDIO_BASE_URL = resolved.audioBaseUrl;
-} catch (error) {
-  if (error instanceof MissingBaseUrlError) {
-    console.error(`content:manifest: ${error.message}`);
-    process.exit(1);
-  }
-  throw error;
-}
-
-function sha256(content: string): string {
-  return createHash('sha256').update(content).digest('hex');
-}
 
 function updatedAtFor(path: string): string {
   try {
-    const out = execFileSync('git', ['log', '-1', '--format=%cI', '--', path], {
-      cwd: repoRoot,
-      encoding: 'utf8',
-    }).trim();
+    const out = execFileSync('git', ['log', '-1', '--format=%cI', '--', path], { cwd: repoRoot, encoding: 'utf8' }).trim();
     if (out) return out;
-  } catch {
-    // kein Git-Verlauf, etwa vor dem ersten Commit: auf Dateizeit ausweichen.
-  }
+  } catch { /* first uncommitted generation uses filesystem time */ }
   return new Date(statSync(path).mtime).toISOString();
 }
 
-function main(): void {
-  if (!existsSync(lessonsDir)) {
-    console.error('content:manifest: Ordner content/lessons fehlt.');
-    process.exit(1);
-  }
-
-  const files = readdirSync(lessonsDir).filter((f) => f.endsWith('.json')).sort();
-  const lessons: Manifest['lessons'] = [];
-
-  for (const file of files) {
-    const path = join(lessonsDir, file);
-    const raw = readFileSync(path, 'utf8');
-    const parsed = lessonSchema.safeParse(JSON.parse(raw));
-    if (!parsed.success) {
-      console.error(`content:manifest: ${file} entspricht nicht dem Lektionsschema, übersprungen.`);
-      continue;
-    }
-    lessons.push({
-      id: parsed.data.id,
-      file,
-      sha256: sha256(raw),
-      updatedAt: updatedAtFor(path),
-    });
-  }
-
-  let version = '0.1.0';
-  if (existsSync(manifestPath)) {
-    try {
-      const existing = JSON.parse(readFileSync(manifestPath, 'utf8')) as { version?: string };
-      if (existing.version) version = existing.version;
-    } catch {
-      // vorhandenes Manifest unlesbar: bei 0.1.0 bleiben.
-    }
-  }
-
-  const manifest: Manifest = {
-    version,
-    contentBaseUrl: CONTENT_BASE_URL,
-    audioBaseUrl: AUDIO_BASE_URL,
-    lessons,
-  };
-
-  writeFileSync(manifestPath, JSON.stringify(manifest, null, 2) + '\n');
-  console.log(`content:manifest: ${lessons.length} Lektion(en) in manifest.json geschrieben.`);
+function atomicWrite(path: string, value: string): void {
+  mkdirSync(dirname(path), { recursive: true });
+  const temp = `${path}.${process.pid}.tmp`;
+  writeFileSync(temp, value, 'utf8');
+  renameSync(temp, path);
 }
 
-main();
+function writeSnapshotAtomically(target: string, rawManifest: string, rawModules: Uint8Array, sources: readonly ManifestSourceLesson[]): void {
+  const stage = `${target}.stage-${process.pid}`;
+  const backup = `${target}.previous-${process.pid}`;
+  if (existsSync(stage)) rmSync(stage, { recursive: true, force: true });
+  mkdirSync(join(stage, 'lessons'), { recursive: true });
+  try {
+    writeFileSync(join(stage, 'modules.json'), rawModules);
+    for (const source of sources) writeFileSync(join(stage, 'lessons', source.file), source.bytes);
+    atomicWrite(join(stage, 'manifest.json'), rawManifest);
+    if (existsSync(target)) renameSync(target, backup);
+    try { renameSync(stage, target); }
+    catch (error) {
+      if (existsSync(backup) && !existsSync(target)) renameSync(backup, target);
+      throw error;
+    }
+  } catch (error) {
+    if (existsSync(stage)) rmSync(stage, { recursive: true, force: true });
+    throw error;
+  }
+}
+
+function main(): void {
+  const qaArg = process.argv.indexOf('--qa-output');
+  const qaOutput = qaArg >= 0 ? process.argv[qaArg + 1] : undefined;
+  if (qaArg >= 0 && !qaOutput) throw new Error('--qa-output requires a target folder');
+  const config = JSON.parse(readFileSync(manifestConfigPath, 'utf8')) as ManifestConfig;
+  const bases = resolveManifestBaseUrls(process.env, config);
+  const version = process.env.CONTENT_VERSION ?? '0.6.0';
+  const rawModules = readFileSync(modulesPath);
+  const sources: ManifestSourceLesson[] = readdirSync(lessonsDir).filter((file) => file.endsWith('.json')).sort().map((file) => {
+    const path = join(lessonsDir, file);
+    return { file, bytes: readFileSync(path), updatedAt: updatedAtFor(path) };
+  });
+  const manifest = buildManifest({ version, contentBaseUrl: bases.contentBaseUrl, audioBaseUrl: bases.audioBaseUrl, rawModules, lessons: sources });
+  const current = (() => { try { return JSON.parse(readFileSync(manifestPath, 'utf8')) as { version?: string; modulesSha256?: string; lessons?: { id: string; sha256: string }[] }; } catch { return null; } })();
+  if (current?.version) {
+    if (compareSemver(version, current.version) < 0) throw new Error(`Refusing manifest downgrade ${current.version} → ${version}`);
+    if (compareSemver(version, current.version) === 0) {
+      const identity = (rows: readonly { id: string; sha256: string }[] = []) => rows.map(({ id, sha256 }) => `${id}:${sha256}`).sort().join('|');
+      const same = current.modulesSha256 === manifest.modulesSha256 && identity(current.lessons) === identity(manifest.lessons);
+      if (!same) throw new Error(`Content changed without a version increase from ${current.version}`);
+    }
+  }
+  const rawManifest = `${JSON.stringify(manifest, null, 2)}\n`;
+
+  if (qaOutput) {
+    const target = resolve(repoRoot, qaOutput);
+    const qaRoot = `${resolve(repoRoot, 'tmp-qa')}${sep}`;
+    if (!target.startsWith(qaRoot)) throw new Error('--qa-output is restricted to repository tmp-qa paths');
+    writeSnapshotAtomically(target, rawManifest, rawModules, sources);
+    console.log(`content:manifest: QA snapshot ${manifest.version}, ${sources.length} lessons at ${target}; repository manifest unchanged.`);
+    return;
+  }
+  atomicWrite(manifestPath, rawManifest);
+  console.log(`content:manifest: full generation ${manifest.version}, ${sources.length} lessons with module and raw-byte SHA-256 written atomically.`);
+}
+
+try {
+  main();
+} catch (error) {
+  const message = error instanceof MissingBaseUrlError ? error.message : error instanceof Error ? error.message : String(error);
+  console.error(`content:manifest: ${message}`);
+  process.exitCode = 1;
+}

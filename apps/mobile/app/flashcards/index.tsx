@@ -21,8 +21,16 @@ export default function FlashcardsScreen() {
   const [loading, setLoading] = useState(true);
   const [deckCompleted, setDeckCompleted] = useState(false);
   const [rateFeedback, setRateFeedback] = useState<'know' | 'dont' | null>(null);
+  const [loadError, setLoadError] = useState(false);
+  const [saveError, setSaveError] = useState(false);
+  const [savingReview, setSavingReview] = useState(false);
+  const [retryRating, setRetryRating] = useState<boolean | null>(null);
   const advanceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const deckRef = useRef<FlashcardEntry[]>([]);
+  const focusedRef = useRef(false);
+  const focusEpochRef = useRef(0);
+  const requestEpochRef = useRef(0);
+  const savingRef = useRef(false);
 
   useEffect(() => {
     deckRef.current = deck;
@@ -36,22 +44,44 @@ export default function FlashcardsScreen() {
   }, []);
 
   const refresh = useCallback(() => {
+    focusEpochRef.current += 1;
+    const requestEpoch = ++requestEpochRef.current;
     setLoading(true);
+    setLoadError(false);
+    setRateFeedback(null);
+    setSaveError(false);
+    setRetryRating(null);
+    savingRef.current = false;
+    setSavingReview(false);
+    clearAdvanceTimer();
     loadFlashcardDeck(moduleFilter)
       .then((cards) => {
+        if (!focusedRef.current || requestEpoch !== requestEpochRef.current) return;
         setDeck(cards);
         setIndex(0);
         setFlipped(false);
         setDeckCompleted(false);
       })
-      .catch(() => setDeck([]))
-      .finally(() => setLoading(false));
-  }, [moduleFilter]);
+      .catch(() => {
+        if (focusedRef.current && requestEpoch === requestEpochRef.current) setLoadError(true);
+      })
+      .finally(() => {
+        if (focusedRef.current && requestEpoch === requestEpochRef.current) setLoading(false);
+      });
+  }, [moduleFilter, clearAdvanceTimer]);
 
   useFocusEffect(
     useCallback(() => {
+      focusedRef.current = true;
+      focusEpochRef.current += 1;
       refresh();
-      return clearAdvanceTimer;
+      return () => {
+        focusedRef.current = false;
+        focusEpochRef.current += 1;
+        requestEpochRef.current += 1;
+        savingRef.current = false;
+        clearAdvanceTimer();
+      };
     }, [refresh, clearAdvanceTimer]),
   );
 
@@ -64,12 +94,33 @@ export default function FlashcardsScreen() {
   }, [deck.length, index]);
 
   async function rate(wasCorrect: boolean) {
-    if (!card || rateFeedback !== null) return;
+    if (!card || rateFeedback !== null || savingRef.current || !focusedRef.current) return;
+    const ratedCardId = card.id;
+    const focusEpoch = focusEpochRef.current;
     clearAdvanceTimer();
+    savingRef.current = true;
+    setSavingReview(true);
+    setSaveError(false);
+    setRetryRating(null);
+    try {
+      await saveFlashcardReview(ratedCardId, wasCorrect);
+    } catch {
+      if (focusedRef.current && focusEpochRef.current === focusEpoch) {
+        setSaveError(true);
+        setRetryRating(wasCorrect);
+      }
+      return;
+    } finally {
+      savingRef.current = false;
+      if (focusedRef.current && focusEpochRef.current === focusEpoch) setSavingReview(false);
+    }
+    if (!focusedRef.current || focusEpochRef.current !== focusEpoch) return;
+    setSaveError(false);
+    setRetryRating(null);
     setRateFeedback(wasCorrect ? 'know' : 'dont');
-    await saveFlashcardReview(card.id, wasCorrect);
     advanceTimerRef.current = setTimeout(() => {
       advanceTimerRef.current = null;
+      if (!focusedRef.current || focusEpochRef.current !== focusEpoch) return;
       setFlipped(false);
       setRateFeedback(null);
       setIndex((prev) => {
@@ -81,6 +132,10 @@ export default function FlashcardsScreen() {
         return prev;
       });
     }, 320);
+  }
+
+  function retrySave() {
+    if (retryRating !== null) void rate(retryRating);
   }
 
   function restartDeck() {
@@ -114,6 +169,26 @@ export default function FlashcardsScreen() {
           justifyContent: deck.length ? 'flex-start' : 'center',
         }}
       >
+        {loadError ? (
+          <View style={{ alignItems: 'center', gap: theme.spacing.sm, marginBottom: theme.spacing.base }}>
+            <Text testID="flashcards-load-error" accessibilityRole="alert" style={[styles.feedbackLine, { color: theme.colors.error }]}>
+              {de.flashcards.loadError}
+            </Text>
+            <Pressable testID="flashcards-load-retry" accessibilityRole="button" accessibilityLabel={de.flashcards.retryLoad} onPress={refresh}>
+              <Text style={[styles.actionLabel, { color: theme.colors.accent }]}>{de.flashcards.retryLoad}</Text>
+            </Pressable>
+          </View>
+        ) : null}
+        {saveError ? (
+          <View style={{ alignItems: 'center', gap: theme.spacing.sm, marginBottom: theme.spacing.base }}>
+            <Text testID="flashcards-save-error" accessibilityRole="alert" style={[styles.feedbackLine, { color: theme.colors.error }]}>
+              {de.flashcards.saveError}
+            </Text>
+            <Pressable testID="flashcards-save-retry" accessibilityRole="button" accessibilityLabel={de.flashcards.retrySave} onPress={retrySave}>
+              <Text style={[styles.actionLabel, { color: theme.colors.accent }]}>{de.flashcards.retrySave}</Text>
+            </Pressable>
+          </View>
+        ) : null}
         {loading ? (
           <Text style={[styles.empty, { color: theme.colors.textWeak }]}>{de.flashcards.loading}</Text>
         ) : deckCompleted ? (
@@ -154,7 +229,7 @@ export default function FlashcardsScreen() {
               </Pressable>
             </View>
           </View>
-        ) : deck.length === 0 ? (
+        ) : loadError && deck.length === 0 ? null : deck.length === 0 ? (
           <Text style={[styles.empty, { color: theme.colors.textWeak }]}>{de.flashcards.emptyBody}</Text>
         ) : card ? (
           <>
@@ -192,6 +267,11 @@ export default function FlashcardsScreen() {
 
             {flipped ? (
               <>
+                {savingReview ? (
+                  <Text style={[styles.feedbackLine, { color: theme.colors.textWeak, marginTop: theme.spacing.sm }]}>
+                    {de.flashcards.savingReview}
+                  </Text>
+                ) : null}
                 {rateFeedback ? (
                   <Text
                     style={[
@@ -210,7 +290,7 @@ export default function FlashcardsScreen() {
                     accessibilityRole="button"
                     accessibilityLabel={de.flashcards.dontKnow}
                     onPress={() => void rate(false)}
-                    disabled={rateFeedback !== null}
+                    disabled={rateFeedback !== null || savingReview}
                     style={[
                       styles.actionButton,
                       {
@@ -219,7 +299,7 @@ export default function FlashcardsScreen() {
                         borderRadius: theme.radius.md,
                         minHeight: theme.minTapTarget,
                         flex: 1,
-                        opacity: rateFeedback !== null && rateFeedback !== 'dont' ? 0.5 : 1,
+                        opacity: (rateFeedback !== null && rateFeedback !== 'dont') || savingReview ? 0.5 : 1,
                       },
                     ]}
                   >
@@ -229,7 +309,7 @@ export default function FlashcardsScreen() {
                     accessibilityRole="button"
                     accessibilityLabel={de.flashcards.know}
                     onPress={() => void rate(true)}
-                    disabled={rateFeedback !== null}
+                    disabled={rateFeedback !== null || savingReview}
                     style={[
                       styles.actionButton,
                       {
@@ -239,7 +319,7 @@ export default function FlashcardsScreen() {
                         borderRadius: theme.radius.md,
                         minHeight: theme.minTapTarget,
                         flex: 1,
-                        opacity: rateFeedback !== null && rateFeedback !== 'know' ? 0.5 : 1,
+                        opacity: (rateFeedback !== null && rateFeedback !== 'know') || savingReview ? 0.5 : 1,
                       },
                     ]}
                   >

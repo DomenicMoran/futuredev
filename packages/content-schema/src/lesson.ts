@@ -68,6 +68,8 @@ const quizOptionSchema = z.object({
 });
 
 const quizQuestionSchema = z.object({
+  // Persistent ID assigned once; never derived from editable question text or array position.
+  questionId: z.string().regex(/^q_[0-9a-f-]{36}$/i),
   question: z.string().min(1),
   // Ablenker-Bereich (Untermodul) fuer die Ablenker-aus-demselben-Bereich-Regel.
   area: z.string().min(1),
@@ -96,6 +98,8 @@ const faqEntrySchema = z.object({
 
 const audioSchema = z.object({
   file: z.string().regex(/^M\d{2}-\d{2}-\d{2}\.mp3$/, 'Audiodatei muss <Lektionskennung>.mp3 heißen'),
+  /** Published media digest; omitted until the exact audio bytes have been measured. */
+  sha256: z.string().regex(/^[a-f0-9]{64}$/).optional(),
   durationSeconds: z.number().int().positive(),
   voices: z.array(z.enum(['A', 'B'])).min(1),
   // Pflichtfeld nach EU AI Act Art. 50: Kennzeichnung als KI-Stimme. Immer true,
@@ -117,6 +121,14 @@ export const lessonSchema = z.object({
   // Pflichtfeld seit AP-4.1 (AW-045): mindestens fuenf Eintraege. Konsistenz
   // zu den vertonten faq-Sprechbloecken prueft rules.ts (checkFaqBlocksMatchEntries).
   faq: z.array(faqEntrySchema).min(5, 'mindestens fünf FAQ-Einträge'),
+}).superRefine((lesson, context) => {
+  const seen = new Set<string>();
+  lesson.quiz.forEach((question, index) => {
+    if (seen.has(question.questionId)) {
+      context.addIssue({ code: z.ZodIssueCode.custom, path: ['quiz', index, 'questionId'], message: 'questionId muss je Lektion eindeutig sein' });
+    }
+    seen.add(question.questionId);
+  });
 });
 
 export type Lesson = z.infer<typeof lessonSchema>;

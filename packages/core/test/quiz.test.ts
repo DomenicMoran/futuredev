@@ -3,6 +3,8 @@ import { drawQuestions, evaluateQuiz, type QuizQuestionInput } from '../src/quiz
 
 function makePool(count: number): QuizQuestionInput[] {
   return Array.from({ length: count }, (_, i) => ({
+    questionId: `q_test-${i}`,
+    sourceLessonId: 'M01-01-01',
     question: `Frage ${i}`,
     options: [
       { text: 'richtig', isCorrect: true, explanation: 'weil richtig' },
@@ -31,6 +33,17 @@ describe('drawQuestions', () => {
     const drawn = drawQuestions(makePool(20), 5, 1);
     const firstOptionIsAlwaysCorrect = drawn.every((q) => q.options[0]?.isCorrect);
     expect(firstOptionIsAlwaysCorrect).toBe(false);
+  });
+
+  it('erhält sourceLessonId und questionId unverändert über Frage- und Optionsshuffle', () => {
+    const pool = [
+      ...makePool(8),
+      ...makePool(8).map((question, index) => ({ ...question, sourceLessonId: 'M02-01-01', questionId: `q_other-${index}` })),
+    ];
+    const drawn = drawQuestions(pool, pool.length, 997);
+    expect(new Set(drawn.map((question) => `${question.sourceLessonId}:${question.questionId}`))).toEqual(
+      new Set(pool.map((question) => `${question.sourceLessonId}:${question.questionId}`)),
+    );
   });
 
   it('wirft, wenn mehr Fragen verlangt werden als vorhanden sind', () => {

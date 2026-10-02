@@ -16,10 +16,21 @@ export interface ProgressRow {
 }
 
 export interface ReviewRow {
-  lessonId: string;
+  sourceLessonId: string;
+  questionId: string;
   leitnerStage: number;
   dueAt: string;
   errorCount: number;
+}
+
+/** Lossless archive of legacy lesson#qN cards; never auto-map unknown indices. */
+export interface LegacyReviewArchiveRow {
+  id: string;
+  leitnerStage: number;
+  dueAt: string;
+  errorCount: number;
+  archivedAt: string;
+  reason: 'legacy-question-index-unknown';
 }
 
 export interface NoteRow {
@@ -80,7 +91,15 @@ export interface PlaylistItemRow {
 }
 
 /** Aktuelle Version des Geraete-Schemas. Erhoehen, wenn sich eine Tabelle aendert. */
-export const SCHEMA_VERSION = 2;
+export const SCHEMA_VERSION = 3;
+/** Version of the portable backup document, intentionally independent of SQLite migrations. */
+export const EXPORT_VERSION = 4;
+
+/** Fixed local personal-data tables used by the atomic Settings reset. */
+export const PERSONAL_DATA_TABLES = [
+  'progress', 'reviews', 'legacy_review_archive', 'notes', 'bookmarks', 'settings', 'portfolio_items',
+  'career_checklist', 'exam_results', 'playlist_items', 'playlists',
+] as const;
 
 /**
  * Gemeinsame Schnittstelle fuer Geraetedaten. Eine SQLite-Implementierung
@@ -90,6 +109,9 @@ export const SCHEMA_VERSION = 2;
  * funktionieren.
  */
 export interface Database {
+  /** Nested calls JOIN the current transaction (no savepoints); rollback occurs only if an error escapes the outermost callback. */
+  transaction<T>(work: (transactionDb: Database) => Promise<T>): Promise<T>;
+  clearPersonalData(): Promise<void>;
   init(): Promise<void>;
   getSchemaVersion(): Promise<number>;
 
@@ -97,9 +119,11 @@ export interface Database {
   upsertProgress(row: ProgressRow): Promise<void>;
   listProgress(): Promise<ProgressRow[]>;
 
-  getReview(lessonId: string): Promise<ReviewRow | undefined>;
+  getReview(sourceLessonId: string, questionId: string): Promise<ReviewRow | undefined>;
   upsertReview(row: ReviewRow): Promise<void>;
   listReviews(): Promise<ReviewRow[]>;
+  listLegacyReviewArchive(): Promise<LegacyReviewArchiveRow[]>;
+  upsertLegacyReviewArchive(row: LegacyReviewArchiveRow): Promise<void>;
 
   listNotes(lessonId?: string): Promise<NoteRow[]>;
   upsertNote(row: NoteRow): Promise<void>;
@@ -124,6 +148,7 @@ export interface Database {
 
   listPlaylists(): Promise<PlaylistRow[]>;
   createPlaylist(name: string): Promise<PlaylistRow>;
+  restorePlaylist(row: PlaylistRow, items: PlaylistItemRow[]): Promise<void>;
   renamePlaylist(id: string, name: string): Promise<void>;
   deletePlaylist(id: string): Promise<void>;
   listPlaylistItems(playlistId: string): Promise<PlaylistItemRow[]>;

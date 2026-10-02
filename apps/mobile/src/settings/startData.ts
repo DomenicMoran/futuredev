@@ -5,13 +5,14 @@ import { getDatabase } from '../data/db.js';
 import { listProgress } from '../data/progress.js';
 import { getContentFs, loadLocalManifest } from '../content/index.js';
 import { loadModules } from '../content/lessonLoader.js';
-import { buildModuleList } from '../content/listLessons.js';
+import { buildModuleList, type ModuleListEntry } from '../content/listLessons.js';
 import { loadReviewCards } from '../review/cards.js';
 import { dailyRationSize, selectDailyRation } from '../review/dailyRation.js';
 import { de } from '../i18n/de.js';
 import { getSetting } from '../data/settings.js';
 import { DAILY_LEARNING_DATE_KEY, localDateKey, readDailyLearningSecondsToday } from './dailyLearning.js';
 import { resolveNextLessonId } from './resolveNextLessonId.js';
+import { resolvePublishedLessonDisplayTitle } from './startDisplay.js';
 import type { ReviewIntensity } from './types.js';
 
 export { resolveNextLessonId } from './resolveNextLessonId.js';
@@ -45,6 +46,19 @@ export interface LoadStartDataOptions {
   orderedLessonIds?: readonly string[];
 }
 
+/** Never expose an internal lesson ID as user-facing text while content hydrates. */
+export function resolveStartLessonTitle(moduleList: readonly ModuleListEntry[], lessonId: string): string {
+  for (const module of moduleList) {
+    for (const subModule of module.subModules) {
+      const lesson = subModule.lessons.find((entry) => entry.id === lessonId);
+      if (lesson) {
+        return resolvePublishedLessonDisplayTitle(lesson.title, lessonId);
+      }
+    }
+  }
+  return de.start.lessonTitleFallback;
+}
+
 export async function loadStartData(
   dailyGoalMinutes: number,
   reviewIntensity: ReviewIntensity,
@@ -60,18 +74,11 @@ export async function loadStartData(
   ]);
   const manifest = await loadLocalManifest(fs);
   const modulesFile = await loadModules(fs);
-  const lessonTitleById = new Map<string, string>();
+  let moduleList: ModuleListEntry[] = [];
   if (modulesFile) {
-    const moduleList = await buildModuleList(modulesFile, manifest, fs);
-    for (const mod of moduleList) {
-      for (const sub of mod.subModules) {
-        for (const lesson of sub.lessons) {
-          lessonTitleById.set(lesson.id, lesson.title);
-        }
-      }
-    }
+    moduleList = await buildModuleList(modulesFile, manifest, fs);
   }
-  const lessonTitle = (lessonId: string): string => lessonTitleById.get(lessonId) ?? de.start.lessonTitleFallback;
+  const lessonTitle = (lessonId: string): string => resolveStartLessonTitle(moduleList, lessonId);
 
   const sortedProgress = [...progressRows].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
   const last = sortedProgress[0];

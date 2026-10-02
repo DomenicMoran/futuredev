@@ -1,8 +1,8 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Redirect, Stack, usePathname } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import * as SplashScreen from 'expo-splash-screen';
-import { StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { de } from '../src/i18n/de.js';
 import TrackPlayer from 'react-native-track-player';
@@ -45,6 +45,8 @@ function RootLayoutInner() {
   const completed = useOnboardingStore((s) => s.completed);
   const onboardingDonePersisted = useSettingsStore((s) => s.onboardingDone);
   const hydrated = useSettingsStore((s) => s.hydrated);
+  const hydrationError = useSettingsStore((s) => s.hydrationError);
+  const [retryingHydration, setRetryingHydration] = useState(false);
   const pathname = usePathname();
 
   // Onboarding-Persistenz (AP-3.5, Punkt 6): vor der ersten Weiterleitungs-
@@ -77,9 +79,18 @@ function RootLayoutInner() {
 
   if (!hydrated) {
     return (
-      <View style={[styles.splash, { backgroundColor: theme.colors.bg }]}>
+      <View style={[styles.splash, { backgroundColor: theme.colors.bg, padding: theme.spacing.lg }]}>
         <StatusBar style={theme.scheme === 'dark' ? 'light' : 'dark'} />
         <Text style={[styles.splashTitle, { color: theme.colors.text }]}>{de.common.appName}</Text>
+        {hydrationError ? <>
+          <Text accessibilityRole="alert" style={[styles.hydrationError, { color: theme.colors.error, marginTop: theme.spacing.base }]}>{de.start.hydrationError}</Text>
+          <Pressable testID="root-hydration-retry" accessibilityRole="button" disabled={retryingHydration} onPress={() => {
+            setRetryingHydration(true);
+            void useSettingsStore.getState().hydrate().catch(() => undefined).finally(() => setRetryingHydration(false));
+          }} style={[styles.retryButton, { borderColor: theme.colors.border, borderRadius: theme.radius.md, marginTop: theme.spacing.base, minHeight: theme.minTapTarget, paddingHorizontal: theme.spacing.lg }]}>
+            <Text style={[styles.retryLabel, { color: theme.colors.accent }]}>{retryingHydration ? de.start.hydrationRetrying : de.start.hydrationRetry}</Text>
+          </Pressable>
+        </> : null}
       </View>
     );
   }
@@ -117,4 +128,7 @@ function RootLayoutInner() {
 const styles = StyleSheet.create({
   splash: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   splashTitle: { fontSize: 28, lineHeight: 34, fontWeight: '700', letterSpacing: -0.5 },
+  hydrationError: { fontSize: 16, lineHeight: 24, textAlign: 'center' },
+  retryButton: { borderWidth: StyleSheet.hairlineWidth, alignItems: 'center', justifyContent: 'center' },
+  retryLabel: { fontSize: 16, lineHeight: 24, fontWeight: '600' },
 });

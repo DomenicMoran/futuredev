@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useFocusEffect } from 'expo-router';
 import { MessageCircleQuestion } from 'lucide-react-native';
@@ -11,11 +11,10 @@ import { listPublishedPortfolioItems, type PublishedPortfolioItem } from '../../
 export default function ErklaerIndexScreen() {
   const theme = useTheme();
   const [items, setItems] = useState<PublishedPortfolioItem[] | null>(null);
+  const [loadError, setLoadError] = useState(false);
 
   const refresh = useCallback(() => {
-    listPublishedPortfolioItems()
-      .then(setItems)
-      .catch(() => setItems([]));
+    listPublishedPortfolioItems().then((rows) => { setItems(rows); setLoadError(false); }).catch(() => setLoadError(true));
   }, []);
 
   useFocusEffect(refresh);
@@ -35,10 +34,13 @@ export default function ErklaerIndexScreen() {
         <Text style={[styles.subtitle, { color: theme.colors.textWeak, marginTop: theme.spacing.xs }]}>
           {de.erklaer.listSubtitle}
         </Text>
+        <Text style={[styles.selfAssessment, { color: theme.colors.textWeak, marginTop: theme.spacing.xs }]}>{de.erklaer.selfAssessment}</Text>
       </View>
 
-      {items === null ? (
-        <EmptyState Icon={MessageCircleQuestion} title={de.erklaer.loadingTitle} body={de.erklaer.loadingBody} />
+      {items === null && loadError ? (
+        <View accessibilityRole="alert" style={styles.loadError}><Text style={[styles.errorText, { color: theme.colors.error }]}>{de.erklaer.loadError}</Text><Pressable testID="explain-retry" accessibilityRole="button" onPress={refresh} style={{ minHeight: theme.minTapTarget, justifyContent: 'center' }}><Text style={{ color: theme.colors.accent }}>{de.erklaer.retry}</Text></Pressable></View>
+      ) : items === null ? (
+        <View style={styles.loading}><ActivityIndicator color={theme.colors.accent} /><Text style={[styles.errorText, { color: theme.colors.textWeak }]}>{de.erklaer.loadingBody}</Text></View>
       ) : items.length === 0 ? (
         <EmptyState
           Icon={MessageCircleQuestion}
@@ -87,6 +89,10 @@ const styles = StyleSheet.create({
   backLabel: { fontSize: 16, lineHeight: 24, fontWeight: '500' },
   title: { fontSize: 22, lineHeight: 28, fontWeight: '700' },
   subtitle: { fontSize: 15, lineHeight: 22 },
+  selfAssessment: { fontSize: 14, lineHeight: 20 },
+  loading: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12, padding: 24 },
+  loadError: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12, padding: 24 },
+  errorText: { fontSize: 15, lineHeight: 22, textAlign: 'center' },
   card: { borderWidth: StyleSheet.hairlineWidth },
   cardId: { fontSize: 13, fontWeight: '600', letterSpacing: 0.3 },
   cardTitle: { fontSize: 17, lineHeight: 24, fontWeight: '600' },

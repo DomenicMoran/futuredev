@@ -16,12 +16,14 @@ export async function rampVolume(
   to: number,
   durationMs: number,
   sleep: SleepFn = defaultSleep,
+  shouldContinue: () => boolean = () => true,
 ): Promise<void> {
   const stepMs = Math.max(1, Math.floor(durationMs / SOFT_START_STEPS));
   for (let step = 1; step <= SOFT_START_STEPS; step++) {
+    if (!shouldContinue()) return;
     const t = step / SOFT_START_STEPS;
     await setVolume(from + (to - from) * t);
     await sleep(stepMs);
   }
-  await setVolume(to);
+  if (shouldContinue()) await setVolume(to);
 }

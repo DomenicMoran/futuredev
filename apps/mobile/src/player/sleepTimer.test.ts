@@ -17,6 +17,13 @@ describe('computeSleepTimerTarget', () => {
     expect(target.endsAtMs).toBe(1_000 + 60_000);
   });
 
+  it('rechnet Medienrest unter 2x und aktualisiert sich nach Ratewechsel neu', () => {
+    const target2x = computeSleepTimerTarget({ kind: 'endOfLesson' }, 1_000, 100, 160, 2);
+    expect(target2x.endsAtMs).toBe(31_000);
+    const targetRateChanged = computeSleepTimerTarget({ kind: 'endOfLesson' }, 5_000, 120, 160, 0.8);
+    expect(targetRateChanged.endsAtMs).toBe(55_000);
+  });
+
   it('wird bei "Ende der Lektion" nach dem Ende nicht negativ', () => {
     const target = computeSleepTimerTarget({ kind: 'endOfLesson' }, 1_000, 200, 160);
     expect(target.endsAtMs).toBe(1_000);

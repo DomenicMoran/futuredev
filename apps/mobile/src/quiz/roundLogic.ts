@@ -11,8 +11,11 @@ export const ALL_EXAM_QUESTION_COUNT = 60;
 // Mindestens zehn Fragen je Runde, sonst entscheidet Glück statt Wissen
 // (feedback_pruefung_zehn_fragen_ein_kreuz).
 export const MIN_ROUND_QUESTION_COUNT = 10;
+let roundSequence = 0;
 
 export interface QuizRound {
+  /** Stable id for all retries of this exact round result write. */
+  id: string;
   drawn: DrawnQuestion[];
   seed: number;
 }
@@ -23,7 +26,8 @@ export interface QuizRound {
  */
 export function drawRound(pool: QuizQuestionInput[], desiredCount: number, seed: number): QuizRound {
   const count = Math.min(desiredCount, pool.length);
-  return { drawn: drawQuestions(pool, count, seed), seed };
+  roundSequence += 1;
+  return { id: `quiz-${seed.toString(36)}-${roundSequence.toString(36)}`, drawn: drawQuestions(pool, count, seed), seed };
 }
 
 export function evaluateRound(round: QuizRound, answers: QuizAnswer[]): QuizResult {
@@ -58,16 +62,18 @@ export function collectWrongAnswers(round: QuizRound, answers: QuizAnswer[]): Wr
   return wrong;
 }
 
-export type QuizScope = { type: 'lesson'; lessonId: string } | { type: 'module'; moduleId: string } | { type: 'all' };
+export type QuizScope = { type: 'lesson'; lessonId: string } | { type: 'module'; moduleId: string } | { type: 'all' } | { type: 'review'; cardIds: string[] };
 
 export function questionCountForScope(scope: QuizScope, quizLength: number): number {
   if (scope.type === 'lesson') return Math.max(MIN_ROUND_QUESTION_COUNT, quizLength);
   if (scope.type === 'module') return MODULE_EXAM_QUESTION_COUNT;
+  if (scope.type === 'review') return scope.cardIds.length;
   return ALL_EXAM_QUESTION_COUNT;
 }
 
 export function scopeKey(scope: QuizScope): string {
   if (scope.type === 'lesson') return scope.lessonId;
   if (scope.type === 'module') return `module:${scope.moduleId}`;
+  if (scope.type === 'review') return 'review';
   return 'all';
 }

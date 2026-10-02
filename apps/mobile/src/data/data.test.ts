@@ -1,11 +1,11 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { createMemoryDatabase } from './memoryDatabase.js';
 import { resetToMemoryDatabase, getDatabase, setDatabase } from './db.js';
 import { getProgress, markLessonState, saveReadPosition } from './progress.js';
 import { listNotes, saveNote } from './notes.js';
 import { listBookmarks, toggleBookmark } from './bookmarks.js';
 import { getSetting, getOrCreateInstallId, setSetting } from './settings.js';
-import { exportAllFrom, importAllInto, exportAll, importAll } from './exportImport.js';
+import { exportAllFrom, importAllInto, exportAll, importAll, parseExportBundle } from './exportImport.js';
 import {
   addLessonToPlaylist,
   createPlaylist,
@@ -15,7 +15,10 @@ import {
   removePlaylistItem,
   renamePlaylist,
 } from './playlists.js';
-import { SCHEMA_VERSION } from './types.js';
+import { EXPORT_VERSION, SCHEMA_VERSION } from './types.js';
+
+const sqliteMock = vi.hoisted(() => ({ imported: false, openDatabaseAsync: vi.fn() }));
+vi.mock('expo-sqlite', () => { sqliteMock.imported = true; return sqliteMock; });
 
 describe('Database-Schnittstelle (MemoryDatabase)', () => {
   beforeEach(() => {
@@ -95,11 +98,11 @@ describe('Database-Schnittstelle (MemoryDatabase)', () => {
     expect(await getSetting('install_id')).toBe(first);
   });
 
-  it('exportAll liefert schemaVersion und alle acht Tabellen als Arrays', async () => {
+  it('exportAll liefert schemaVersion und persönliche Tabellen einschließlich Playlists', async () => {
     await markLessonState('M01-01-01', 'started');
     await saveNote('n1', 'M01-01-01', 'Notiz');
     const bundle = await exportAll();
-    expect(bundle.schemaVersion).toBe(SCHEMA_VERSION);
+    expect(bundle.schemaVersion).toBe(EXPORT_VERSION);
     expect(bundle.progress).toHaveLength(1);
     expect(bundle.notes).toHaveLength(1);
     expect(bundle.reviews).toEqual([]);
@@ -107,6 +110,8 @@ describe('Database-Schnittstelle (MemoryDatabase)', () => {
     expect(bundle.portfolio_items).toEqual([]);
     expect(bundle.career_checklist).toEqual([]);
     expect(bundle.exam_results).toEqual([]);
+    expect(bundle.playlists).toEqual([]);
+    expect(bundle.playlist_items).toEqual([]);
   });
 
   it('importAll: neuerer Zeitstempel gewinnt bei einem Konflikt', async () => {
@@ -137,13 +142,110 @@ describe('Database-Schnittstelle (MemoryDatabase)', () => {
   it('exportAllFrom/importAllInto funktionieren direkt gegen eine uebergebene Database', async () => {
     const source = createMemoryDatabase();
     await source.init();
-    await source.upsertNote({ id: 'x1', lessonId: 'M01-01-01', body: 'Quelle', createdAt: 'a', updatedAt: 'a' });
+    await source.upsertNote({ id: 'x1', lessonId: 'M01-01-01', body: 'Quelle', createdAt: '2026-01-01T00:00:00.000Z', updatedAt: '2026-01-01T00:00:00.000Z' });
     const bundle = await exportAllFrom(source);
 
     const target = createMemoryDatabase();
     await target.init();
     await importAllInto(target, bundle);
     expect((await target.listNotes())[0]?.body).toBe('Quelle');
+  });
+
+  it('vollständiger Export-Roundtrip erhält alle persönlichen Tabellen und Playlist-Reihenfolge', async () => {
+    const source = createMemoryDatabase(); await source.init();
+    await source.upsertProgress({ lessonId: 'M01-01-01', state: 'started', readUntil: 3, listenedUntil: null, quizScore: null, quizPassed: false, updatedAt: '2026-01-01T00:00:00.000Z' });
+    await source.upsertReview({ sourceLessonId: 'M01-01-01', questionId: 'q_00000000-0000-4000-8000-000000000001', leitnerStage: 2, dueAt: '2026-02-01T00:00:00.000Z', errorCount: 1 });
+    await source.upsertNote({ id: 'n', lessonId: 'M01-01-01', body: 'note', createdAt: '2026-01-01T00:00:00.000Z', updatedAt: '2026-01-02T00:00:00.000Z' });
+    await source.upsertBookmark({ id: 'b', lessonId: 'M01-01-01', position: 2, createdAt: '2026-01-01T00:00:00.000Z' });
+    await source.setSetting('theme', 'dark');
+    await source.upsertPortfolioItem({ id: 'p', baustein: 'P00', status: 'offen', url: null, updatedAt: '2026-01-01T00:00:00.000Z' });
+    await source.upsertCareerChecklistItem({ item: 'cv', checked: true, updatedAt: '2026-01-01T00:00:00.000Z' });
+    await source.insertExamResult({ id: 'e', scope: 'gesamt', score: 8, passed: true, takenAt: '2026-01-01T00:00:00.000Z' });
+    const pl = await source.createPlaylist('Favoriten'); await source.addPlaylistItem(pl.id, 'M01-01-02'); await source.addPlaylistItem(pl.id, 'M01-01-01');
+    const bundle = await exportAllFrom(source);
+    const target = createMemoryDatabase(); await target.init(); await importAllInto(target, bundle);
+    expect(await exportAllFrom(target)).toEqual(bundle);
+  });
+
+  it('validiert jede Zeile vor dem ersten Schreibzugriff', async () => {
+    const db = createMemoryDatabase(); await db.init();
+    await db.upsertNote({ id: 'old', lessonId: 'M01-01-01', body: 'keep', createdAt: '2026-01-01', updatedAt: '2026-01-01' });
+    const bad = await exportAllFrom(createMemoryDatabase());
+    bad.notes = [{ id: 'new', lessonId: 'M01-01-01', body: 'x', createdAt: 'x', updatedAt: 'x' }, { id: 'bad' } as never];
+    await expect(importAllInto(db, bad)).rejects.toThrow(/ungültige Zeile/);
+    expect(await db.listNotes()).toEqual([{ id: 'old', lessonId: 'M01-01-01', body: 'keep', createdAt: '2026-01-01', updatedAt: '2026-01-01' }]);
+  });
+
+  it('rollt bei Schreibfehlern die gesamte Importtransaktion zurück', async () => {
+    const db = createMemoryDatabase(); await db.init();
+    const payload = await exportAllFrom(createMemoryDatabase());
+    payload.progress = [{ lessonId: 'M01-01-01', state: 'started', readUntil: 1, listenedUntil: null, quizScore: null, quizPassed: false, updatedAt: '2026-01-01T00:00:00.000Z' }];
+    db.upsertNote = async () => { throw new Error('simulierter Speicherfehler'); };
+    payload.notes = [{ id: 'n', lessonId: 'M01-01-01', body: 'x', createdAt: '2026-01-01T00:00:00.000Z', updatedAt: '2026-01-01T00:00:00.000Z' }];
+    await expect(importAllInto(db, payload)).rejects.toThrow('simulierter Speicherfehler');
+    expect(await db.listProgress()).toEqual([]);
+  });
+
+  it('erlaubt Snapshot-Export innerhalb einer vorhandenen Transaktion ohne Deadlock', async () => {
+    const db = createMemoryDatabase(); await db.init();
+    const snapshot = await db.transaction(async (tx) => exportAllFrom(tx));
+    expect(snapshot.schemaVersion).toBe(EXPORT_VERSION);
+  });
+
+  it('akzeptiert v1 und v2 Backups ohne Playlist-Felder, lehnt unbekannte Version ab, ohne Eingabe zu mutieren', async () => {
+    const bundle = await exportAllFrom(createMemoryDatabase());
+    const legacyV1 = { ...bundle, schemaVersion: 1 };
+    delete (legacyV1 as Partial<typeof bundle>).playlists;
+    delete (legacyV1 as Partial<typeof bundle>).playlist_items;
+    const legacyFields = { ...legacyV1 };
+    delete (legacyFields as Partial<typeof bundle>).playlists;
+    delete (legacyFields as Partial<typeof bundle>).playlist_items;
+    await expect(importAllInto(createMemoryDatabase(), legacyV1)).resolves.toBeUndefined();
+    await expect(importAllInto(createMemoryDatabase(), { ...legacyFields, schemaVersion: 2 })).resolves.toBeUndefined();
+    expect('playlists' in legacyV1).toBe(false);
+    await expect(importAllInto(createMemoryDatabase(), { ...bundle, schemaVersion: 999 })).rejects.toThrow(/schemaVersion/);
+  });
+
+  it('archiviert Legacy-Review-Indices aus v1/v2/v3 verlustfrei statt sie als neue questionIds zu raten', async () => {
+    const current = await exportAllFrom(createMemoryDatabase());
+    const legacyReview = { lessonId: 'M01-01-01', leitnerStage: 3, dueAt: '2026-09-26T10:00:00.000Z', errorCount: 2 };
+    const v2: Record<string, unknown> = { ...current, schemaVersion: 2, reviews: [legacyReview] };
+    delete v2.playlists;
+    delete v2.playlist_items;
+    const parsedV2 = parseExportBundle(v2);
+    expect(parsedV2.reviews).toEqual([]);
+    expect(parsedV2.legacyReviewArchive).toMatchObject([{ id: 'M01-01-01', leitnerStage: 3, dueAt: legacyReview.dueAt, errorCount: 2, reason: 'legacy-question-index-unknown' }]);
+
+    const v3: Record<string, unknown> = { ...current, schemaVersion: 3, reviews: [legacyReview] };
+    delete v3.legacyReviewArchive;
+    const parsedV3 = parseExportBundle(v3);
+    expect(parsedV3.legacyReviewArchive[0]?.id).toBe('M01-01-01');
+    const target = createMemoryDatabase(); await target.init();
+    await importAllInto(target, v3);
+    expect(await target.listReviews()).toEqual([]);
+    expect(await target.listLegacyReviewArchive()).toMatchObject([{ id: 'M01-01-01', errorCount: 2 }]);
+  });
+
+  it('vergleicht Offsets als Zeitwerte und lässt bei älterem Backup neuere Notiz stehen', async () => {
+    const db = createMemoryDatabase(); await db.init();
+    await db.upsertNote({ id: 'n', lessonId: 'M01-01-01', body: 'neu', createdAt: '2026-09-25T09:00:00.000Z', updatedAt: '2026-09-25T10:00:00.000Z' });
+    const bundle = await exportAllFrom(createMemoryDatabase());
+    bundle.notes = [{ id: 'n', lessonId: 'M01-01-01', body: 'alt', createdAt: '2026-09-25T09:00:00.000Z', updatedAt: '2026-09-25T11:00:00.000+02:00' }];
+    await importAllInto(db, bundle);
+    expect((await db.listNotes())[0]?.body).toBe('neu');
+  });
+
+  it('weist falsch typisierte Enum-Werte und doppelte Primärschlüssel vor Änderungen zurück', async () => {
+    const db = createMemoryDatabase(); await db.init();
+    await db.upsertProgress({ lessonId: 'keep', state: 'started', readUntil: 1, listenedUntil: null, quizScore: null, quizPassed: false, updatedAt: '2026-01-01T00:00:00.000Z' });
+    const base = await exportAllFrom(createMemoryDatabase());
+    base.progress = [{ lessonId: 'bad', state: ['completed'] as never, readUntil: null, listenedUntil: null, quizScore: null, quizPassed: false, updatedAt: '2026-01-01T00:00:00.000Z' }];
+    await expect(importAllInto(db, base)).rejects.toThrow(/ungültige Zeile/);
+    const duplicates = await exportAllFrom(createMemoryDatabase());
+    const duplicate = { lessonId: 'dup', state: 'started' as const, readUntil: null, listenedUntil: null, quizScore: null, quizPassed: false, updatedAt: '2026-01-01T00:00:00.000Z' };
+    duplicates.progress = [duplicate, duplicate];
+    await expect(importAllInto(db, duplicates)).rejects.toThrow(/doppelter Schlüssel/);
+    expect((await db.listProgress()).map((r) => r.lessonId)).toEqual(['keep']);
   });
 });
 
@@ -152,5 +254,29 @@ describe('setDatabase erlaubt das Austauschen der Implementierung', () => {
     const injected = createMemoryDatabase();
     setDatabase(injected);
     expect(await getDatabase()).toBe(injected);
+  });
+
+  it('lädt bei bereits injizierter MemoryDatabase den nativen SQLite-Adapter nicht nach', async () => {
+    const injected = createMemoryDatabase();
+    setDatabase(injected);
+    expect(await getDatabase()).toBe(injected);
+    await new Promise<void>((resolve) => setTimeout(resolve, 0));
+    expect(sqliteMock.imported).toBe(false);
+  });
+});
+
+describe('MemoryDatabase verschachtelte Transaktionen', () => {
+  it('behandelt verschachtelte Transaktionen als JOIN ohne Savepoint', async () => {
+    const db = createMemoryDatabase();
+    await db.init();
+    await db.transaction(async (outer) => {
+      try {
+        await outer.transaction(async (inner) => {
+          await inner.upsertProgress({ lessonId: 'joined', state: 'started', readUntil: 1, listenedUntil: null, quizScore: null, quizPassed: false, updatedAt: '2026-01-01T00:00:00.000Z' });
+          throw new Error('caught nested failure');
+        });
+      } catch { /* outer caller elects to continue and commit */ }
+    });
+    expect((await db.getProgress('joined'))?.state).toBe('started');
   });
 });

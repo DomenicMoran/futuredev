@@ -2,6 +2,7 @@
 // eigentliche Gerätezugriff (Tabellen aus datenmodell.md, Abschnitt b) läuft
 // über Agent B's `src/data/`; `EXPORTABLE_TABLES` bleibt hier nur noch für
 // `src/settings/db.ts` (Einstellungen "Alles löschen").
+import { PERSONAL_DATA_TABLES } from '../data/types.js';
 
 export type ReviewIntensity = 'leicht' | 'normal' | 'intensiv';
 
@@ -46,15 +47,6 @@ export const DEFAULT_SETTINGS: AppSettings = {
 
 // Reihenfolgen der Tabellen aus datenmodell.md, für Export/Import in derselben
 // Reihenfolge und für das serienweise Löschen bei "Alles löschen".
-export const EXPORTABLE_TABLES = [
-  'progress',
-  'reviews',
-  'notes',
-  'bookmarks',
-  'settings',
-  'portfolio_items',
-  'career_checklist',
-  'exam_results',
-] as const;
+export const EXPORTABLE_TABLES = PERSONAL_DATA_TABLES;
 
 export type ExportableTable = (typeof EXPORTABLE_TABLES)[number];

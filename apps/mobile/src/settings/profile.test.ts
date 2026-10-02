@@ -20,6 +20,9 @@ function emptyContentFs(): ContentFs {
     async writeFile() {
       return undefined;
     },
+    async moveFile() { return undefined; },
+    async getFileSize() { return null; },
+    async readFilePrefixBase64() { return ''; },
     async readFile() {
       throw new Error('nicht gefunden');
     },
@@ -52,6 +55,9 @@ function fakeContentFs(): ContentFs {
     async writeFile(path, contents) {
       store.set(path, contents);
     },
+    async moveFile(from, to) { const value = store.get(from); if (value !== undefined) { store.set(to, value); store.delete(from); } },
+    async getFileSize(path) { return store.has(path) ? new TextEncoder().encode(store.get(path) ?? '').length : null; },
+    async readFilePrefixBase64(path) { const value = store.get(path); if (value === undefined) throw new Error('missing'); return btoa(value.slice(0, 8)); },
     async readFile(path) {
       const value = store.get(path);
       if (value === undefined) throw new Error(`nicht gefunden: ${path}`);
@@ -99,6 +105,44 @@ describe('loadProfileData: Jobreife-Anzeige aus progress, exam_results, portfoli
     const m01 = data.moduleProgress.find((m) => m.moduleId === 'M01');
     expect(m01?.totalLessons).toBe(1);
     expect(m01?.completedLessons).toBe(0);
+    expect(m01?.startedLessons).toBe(1);
+  });
+
+  it('zählt Teillese- und Hörfortschritt als Lernaktivität ohne abgeschlossene Lektion', async () => {
+    await markLessonState('M01-01-01', 'started', { readUntil: 12 });
+    await markLessonState('M01-01-02', 'started', { listenedUntil: 93 });
+    const data = await loadProfileData();
+    const m01 = data.moduleProgress.find((m) => m.moduleId === 'M01');
+    expect(m01?.completedLessons).toBe(0);
+    expect(m01?.startedLessons).toBeGreaterThanOrEqual(1);
+  });
+
+  it('zählt ein bestandenes Direktquiz als Lernaktivität auch wenn noch kein Lesezustand existiert', async () => {
+    await markLessonState('M01-01-01', 'new', { quizPassed: true, quizScore: 100 });
+    const data = await loadProfileData();
+    const m01 = data.moduleProgress.find((m) => m.moduleId === 'M01');
+    expect(m01?.startedLessons).toBe(1);
+    expect(m01?.completedLessons).toBe(0);
+  });
+
+  it('zählt ein nicht bestandenes Direktquiz (quizScore 0) als begonnene Lektion', async () => {
+    await markLessonState('M01-01-01', 'new', { quizPassed: false, quizScore: 0 });
+    const data = await loadProfileData();
+    const m01 = data.moduleProgress.find((m) => m.moduleId === 'M01');
+    expect(m01?.startedLessons).toBe(1);
+    expect(m01?.completedLessons).toBe(0);
+  });
+
+  it('liefert 10.000 importierte Notizen vollständig für die virtualisierte, durchsuchbare Detailansicht', async () => {
+    const db = await getDatabase();
+    for (let index = 0; index < 10_000; index += 1) {
+      const id = `note-${String(index).padStart(5, '0')}`;
+      await db.upsertNote({ id, lessonId: 'M01-01-01', body: index === 9_999 ? 'letzter seltener Suchbegriff' : `Notiz ${index}`, createdAt: '2026-09-25T12:00:00.000Z', updatedAt: '2026-09-25T12:00:00.000Z' });
+    }
+    const data = await loadProfileData();
+    expect(data.notes).toHaveLength(10_000);
+    expect(data.notes.some((note) => note.body === 'letzter seltener Suchbegriff')).toBe(true);
+    expect(data.notes.some((note) => note.id === 'note-00000')).toBe(true);
   });
 
   it('zählt completed in M01 auch ohne lokales Manifest (Bundled-Fallback für Lektions-IDs)', async () => {

@@ -1,23 +1,25 @@
 /**
- * FutureDev perfect gate — emulator-5560, Unicode-safe uiautomator XML in Node.
- * Usage: node run-perfect-gate.cjs [apk-path]
+ * Legacy scripted native smoke walk, not an exhaustive product release gate.
+ * Requires explicit artifact/device/provenance flags; see native-evidence.cjs.
  */
 const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
+const { parseRunArgs, createAdbRunner, prepareRun, verifyInstalledArtifact, verifyLegacyDisplay, captureFreshXml, capturePng } = require('./native-evidence.cjs');
 
-const ROOT = 'C:/rnb/FutureDev';
-const adb = String.raw`C:\Users\domen\AppData\Local\Android\Sdk\platform-tools\adb.exe`;
-const SER = 'emulator-5560';
+const ROOT = path.resolve(__dirname, '../..');
+const config = parseRunArgs(process.argv.slice(2), ROOT);
+const sdk = process.env.ANDROID_HOME || path.join(process.env.LOCALAPPDATA || '', 'Android', 'Sdk');
+const adb = path.join(sdk, 'platform-tools', process.platform === 'win32' ? 'adb.exe' : 'adb');
+const SER = config.serial;
 const PKG = 'de.domenicmoran.futuredev';
-const OUT = path.join(ROOT, 'tmp-qa/ux-pe-2026-09-24/perfect-018');
-const VERSION = process.env.FUTUREDEV_APK_VERSION || '0.1.21';
-const DEFAULT_APK = path.join(ROOT, `tmp-qa/apk/futuredev-v${VERSION}-x86_64-emulator.apk`);
-const APK = process.argv[2] ? path.resolve(process.argv[2]) : DEFAULT_APK;
+const OUT = config.out;
+const VERSION = config.version;
+const APK = config.apk;
+const runAdb = createAdbRunner(adb, SER);
 
 const checks = [];
 let overallFail = false;
-let lastGoodUiXml = '';
 const LOCK_PATH = path.join(OUT, '_gate.lock');
 const TAB_COORDS = {
   Start: [108, 2264],
@@ -115,66 +117,13 @@ function parseAllNodes(xml) {
   return nodes;
 }
 
-function killHungUiautomator() {
-  try {
-    sh(`"${adb}" -s ${SER} shell pkill -f uiautomator`, { retries: 1, delayMs: 200 });
-  } catch {
-    /* none running */
-  }
+function dumpUiRaw() {
   sleep(400);
-}
-
-function dumpUiRaw({ allowStale = true } = {}) {
-  sleep(400);
-  let lastErr;
-  const local = path.join(OUT, '_ui_live.xml');
-  for (let attempt = 0; attempt < 8; attempt++) {
-    try {
-      // "could not get idle state" often exits non-zero while XML is still written.
-      try {
-        execSync(`"${adb}" -s ${SER} shell uiautomator dump /sdcard/window_dump.xml`, {
-          encoding: 'utf8',
-          stdio: ['ignore', 'pipe', 'pipe'],
-        });
-      } catch {
-        /* still pull below */
-      }
-      sleep(350 + attempt * 120);
-      sh(`"${adb}" -s ${SER} pull /sdcard/window_dump.xml "${local.replace(/\\/g, '/')}"`, {
-        retries: 3,
-        delayMs: 900 + attempt * 400,
-      });
-      const fresh = fs.readFileSync(local, 'utf8');
-      if (
-        fresh.includes('<hierarchy') &&
-        fresh.includes(`package="${PKG}"`) &&
-        !fresh.includes('alert_title')
-      ) {
-        lastGoodUiXml = fresh;
-      }
-      if (fresh.includes('<hierarchy')) return fresh;
-      lastErr = new Error('empty hierarchy');
-    } catch (err) {
-      lastErr = err;
-      console.warn(`WARN uiautomator dump attempt ${attempt + 1}/8`);
-      if (attempt >= 4) killHungUiautomator();
-      sleep(1200 + attempt * 700);
-    }
-  }
-  if (
-    allowStale &&
-    lastGoodUiXml &&
-    lastGoodUiXml.includes(`package="${PKG}"`) &&
-    !lastGoodUiXml.includes('alert_title')
-  ) {
-    console.warn('WARN uiautomator dump failed, reusing last snapshot');
-    return lastGoodUiXml;
-  }
-  throw lastErr ?? new Error('uiautomator dump failed');
+  return captureFreshXml(runAdb);
 }
 
 function dumpUiFresh() {
-  return dumpUiRaw({ allowStale: false });
+  return dumpUiRaw();
 }
 
 function dumpUi() {
@@ -183,24 +132,14 @@ function dumpUi() {
 }
 
 function saveDump(name, xml) {
-  fs.writeFileSync(path.join(OUT, `${name}.xml`), xml, 'utf8');
+  fs.writeFileSync(path.join(OUT, `${name}.xml`), xml, { encoding: 'utf8', flag: 'wx' });
 }
 
 function shot(name) {
-  const remote = `/sdcard/pg-${name}.png`;
-  sh(`"${adb}" -s ${SER} shell screencap -p ${remote}`);
-  const local = path.join(OUT, `${name}.png`).replace(/\\/g, '/');
-  try {
-    sh(`"${adb}" -s ${SER} pull ${remote} "${local}"`);
-  } catch {
-    /* optional */
-  }
+  capturePng(runAdb, path.join(OUT, `${name}.png`));
 }
 
-function xmlHas(xml, pattern) {
-  if (typeof pattern === 'string') return xml.includes(pattern);
-  return pattern.test(xml);
-}
+
 
 function findNodes(xml, pred) {
   return parseNodes(xml).filter(pred);
@@ -264,22 +203,7 @@ function ensureHoerenTab() {
   return false;
 }
 
-function waitHoerenPlaylistsReady(timeoutMs = 90000) {
-  const deadline = Date.now() + timeoutMs;
-  while (Date.now() < deadline) {
-    ensureHoerenTab();
-    const xml = dumpUiRaw();
-    if (xml.includes('playlist-create-button') || xml.includes('Neue Playlist anlegen')) return true;
-    if (xml.includes('Lade Lektionen')) {
-      sleep(2500);
-      continue;
-    }
-    if (xml.includes('Meine Wiedergabelisten')) return true;
-    scrollUp(3);
-    sleep(1200);
-  }
-  return false;
-}
+
 
 function tapCreatePlaylist() {
   if (tapTestId('playlist-create-button')) return true;
@@ -374,17 +298,7 @@ function hasMainTabs(xml) {
   );
 }
 
-function isHomeScreen(xml) {
-  if (isOnboardingXml(xml)) return false;
-  return (
-    hasMainTabs(xml) ||
-    /Tagesziel/i.test(xml) ||
-    /Nächste Empfehlung/i.test(xml) ||
-    xml.includes('NÄCHSTE EMPFEHLUNG') ||
-    /Guten (Tag|Morgen|Abend)/.test(xml) ||
-    xml.includes('Willkommen bei FutureDev')
-  );
-}
+
 
 function isStartDashboard(xml) {
   if (isOnboardingXml(xml)) return false;
@@ -508,13 +422,7 @@ function clearFocusedField() {
   for (let i = 0; i < 40; i++) sh(`"${adb}" -s ${SER} shell input keyevent 67`);
 }
 
-function xmlHasPlaylistName(xml, name) {
-  return (
-    xml.includes(name) ||
-    xml.includes(`playlist-row-${name}`) ||
-    xml.includes(`resource-id="playlist-name-input"`)
-  );
-}
+
 
 function inputTextSafe(text) {
   ensureForeground();
@@ -824,17 +732,16 @@ function tabScreenSignals(label, xml) {
 
 /** Tap tab and wait until selection or unique screen content (fresh dumps only). */
 function waitForTab(label, attempts = 8) {
-  lastGoodUiXml = '';
   for (let i = 0; i < attempts; i++) {
-    if (isLessonReaderXml(dumpUiRaw({ allowStale: false }))) popToTabRoot();
+    if (isLessonReaderXml(dumpUiRaw())) popToTabRoot();
     ensureForeground();
     tabByLabel(label);
     sleep(2200 + i * 200);
     dismissDialogs(1);
-    const xml = dumpUiRaw({ allowStale: false });
+    const xml = dumpUiRaw();
     if (tabNodeSelected(xml, label) || tabScreenSignals(label, xml)) return xml;
   }
-  return dumpUiRaw({ allowStale: false });
+  return dumpUiRaw();
 }
 
 function deepLinkLesson() {
@@ -933,7 +840,8 @@ function installFresh() {
   }
   sh(`"${adb}" -s ${SER} shell am force-stop ${PKG}`);
   sh(`"${adb}" -s ${SER} install -r "${APK.replace(/\\/g, '/')}"`);
-  sh(`"${adb}" -s ${SER} shell pm clear ${PKG}`);
+  verifyInstalledArtifact(config, runAdb, PKG);
+  if (config.mode === 'clean') sh(`"${adb}" -s ${SER} shell pm clear ${PKG}`);
   grantRuntimePermissions();
   sleep(2000);
   sh(`"${adb}" -s ${SER} shell monkey -p ${PKG} -c android.intent.category.LAUNCHER 1`);
@@ -949,14 +857,19 @@ function installFresh() {
 
 function writeGateMd(ci) {
   const lines = [
-    '# PERFECT-GATE',
+    '# Native smoke walk (legacy scenarios)',
+    '',
+    'These scripted checks do not certify every screen, pixel, accessibility state, or native race.',
     '',
     `Version: **${VERSION}**`,
     `APK: \`${APK}\``,
     `Emulator: \`${SER}\``,
     `Run: ${new Date().toISOString()}`,
     '',
-    '## CI',
+    `SHA256: ${config.sha256}`,
+    `Version code: ${config['version-code']}; mode: ${config.mode}; AVD: ${config.avd}`,
+    '',
+    '## Caller-supplied CI metadata (not independently verified by this script)',
     '',
     `| Check | Result |`,
     `|---|---|`,
@@ -979,11 +892,11 @@ function writeGateMd(ci) {
   lines.push('', '## Blocking dialogs', '');
   const block = checks.find((x) => x.name === 'No blocking system dialog');
   lines.push(block ? (block.pass ? 'None observed during walk.' : `FAIL: ${block.detail}`) : 'n/a');
-  lines.push('', '---', '', `## Overall: **${overallFail ? 'FAIL' : 'PASS'}**`, '');
+  lines.push('', '---', '', `## Scripted smoke result: **${overallFail ? 'FAIL' : 'PASS'}**`, '');
   fs.writeFileSync(path.join(OUT, 'PERFECT-GATE.md'), lines.join('\n'), 'utf8');
   fs.writeFileSync(
     path.join(OUT, 'ERGEBNIS.md'),
-    `# perfect-018\n\nOverall: **${overallFail ? 'FAIL' : 'PASS'}**\n\nSee PERFECT-GATE.md\n`,
+    `# Native scripted smoke\n\nScripted smoke result: **${overallFail ? 'FAIL' : 'PASS'}**\n\nSee PERFECT-GATE.md\n`,
     'utf8',
   );
 }
@@ -1000,8 +913,17 @@ function recordMotion(name, pass) {
   console.log(pass ? 'PASS' : 'FAIL', '[MOTION]', name);
 }
 
-// --- main ---
-fs.mkdirSync(OUT, { recursive: true });
+// --- main: all preflight checks precede install, clear, taps, and permissions ---
+prepareRun(config, runAdb);
+process.on('exit', code => {
+  const result = path.join(OUT, 'run-result.json');
+  if (!fs.existsSync(result)) {
+    fs.writeFileSync(result, JSON.stringify({ status: 'incomplete-or-failed', exitCode: code, sha256: config.sha256, serial: SER, checks }, null, 2), { flag: 'wx' });
+  }
+});
+// This historical coordinate walk is valid only for its original geometry.
+// Other device/font configurations use the separately documented native matrix.
+fs.writeFileSync(path.join(OUT, 'device-config.json'), JSON.stringify(verifyLegacyDisplay(runAdb), null, 2), { flag: 'wx' });
 if (fs.existsSync(LOCK_PATH)) {
   const prev = Number(fs.readFileSync(LOCK_PATH, 'utf8').trim());
   if (Number.isFinite(prev) && prev > 0) {
@@ -1218,7 +1140,6 @@ popToTabRoot();
 const motionScreens = ['Start', 'Lernen', 'Hören', 'Üben', 'Ich'];
 
 for (const tab of motionScreens) {
-  lastGoodUiXml = '';
   xml = waitForTab(tab);
   if (isLauncherXml(xml)) {
     relaunchApp();
@@ -1242,22 +1163,20 @@ for (const tab of motionScreens) {
   recordMotion(tab, tabOk);
 }
 
-lastGoodUiXml = '';
 const miniStarted = startMiniPlayerForGate();
 sleep(3000);
 dismissDialogs(3);
-xml = dumpUiRaw({ allowStale: false });
+xml = dumpUiRaw();
 shot('motion-mini-player');
 saveDump('motion-mini-player', xml);
 const miniOk =
-  miniStarted ||
-  xml.includes('mini-player-play-toggle') ||
+  miniStarted &&
+  (xml.includes('mini-player-play-toggle') ||
   xml.includes('Pause') ||
   xml.includes('Wiedergabe') ||
-  findNodes(xml, (n) => n.package === PKG && (n.desc === 'Pause' || n.desc === 'Wiedergabe')).length > 0;
+  findNodes(xml, (n) => n.package === PKG && (n.desc === 'Pause' || n.desc === 'Wiedergabe')).length > 0);
 recordMotion('MiniPlayer after play', miniOk);
 
-lastGoodUiXml = '';
 let stickyLanded = false;
 for (let attempt = 0; attempt < 5; attempt++) {
   if (openLessonForGate()) {
@@ -1266,7 +1185,7 @@ for (let attempt = 0; attempt < 5; attempt++) {
     for (let i = 0; i < 4; i++) dismissNativeAlert();
     scrollDown(10);
     sleep(1000);
-    xml = dumpUiRaw({ allowStale: false });
+    xml = dumpUiRaw();
     if (isLessonReaderXml(xml) && hasLessonStickyChrome(xml)) {
       stickyLanded = true;
       break;
@@ -1274,7 +1193,7 @@ for (let attempt = 0; attempt < 5; attempt++) {
   }
 }
 if (!stickyLanded) {
-  xml = dumpUiRaw({ allowStale: false });
+  xml = dumpUiRaw();
 }
 shot('motion-lesson-sticky');
 saveDump('motion-lesson-sticky', xml);
@@ -1296,4 +1215,5 @@ const ci = {
   test: process.env.PERFECT_CI_TEST || 'NOT_RUN',
 };
 writeGateMd(ci);
+fs.writeFileSync(path.join(OUT, 'run-result.json'), JSON.stringify({ status: overallFail ? 'failed' : 'scripted-smoke-passed', sha256: config.sha256, serial: SER, completedAt: new Date().toISOString(), checks }, null, 2), { flag: 'wx' });
 process.exit(overallFail ? 1 : 0);

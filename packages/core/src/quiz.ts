@@ -9,6 +9,10 @@ export interface QuizOptionInput {
 }
 
 export interface QuizQuestionInput {
+  /** Stable content identity; preserved across every shuffle and exam scope. */
+  questionId: string;
+  /** Originating lesson, required for cross-lesson pools/review cards. */
+  sourceLessonId: string;
   question: string;
   options: QuizOptionInput[];
 }
@@ -18,6 +22,8 @@ export interface DrawnOption extends QuizOptionInput {
 }
 
 export interface DrawnQuestion {
+  questionId: string;
+  sourceLessonId: string;
   question: string;
   options: DrawnOption[];
 }
@@ -58,6 +64,8 @@ export function drawQuestions(
   const rand = mulberry32(seed);
   const chosen = shuffle(questions, rand).slice(0, count);
   return chosen.map((q) => ({
+    questionId: q.questionId,
+    sourceLessonId: q.sourceLessonId,
     question: q.question,
     options: shuffle(
       q.options.map((o, index) => ({ ...o, index })),

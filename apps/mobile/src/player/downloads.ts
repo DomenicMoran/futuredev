@@ -16,6 +16,22 @@ export function downloadedCuesPath(documentDirectory: string, lessonId: string):
   return `${downloadDirPath(documentDirectory)}${lessonId}.cues.json`;
 }
 
+export function downloadedPackagePath(documentDirectory: string, lessonId: string): string {
+  return `${downloadDirPath(documentDirectory)}${lessonId}.download.json`;
+}
+
+export function publishedPackagePath(documentDirectory: string, lessonId: string, generation: string): string {
+  return `${downloadDirPath(documentDirectory)}${lessonId}.${generation}.download.json`;
+}
+
+export function stagedDownloadPath(documentDirectory: string, lessonId: string, generation: string, extension: 'mp3' | 'cues.json'): string {
+  return `${downloadDirPath(documentDirectory)}.${lessonId}.${generation}.partial.${extension}`;
+}
+
+export function packagedDownloadPath(documentDirectory: string, lessonId: string, generation: string, extension: 'mp3' | 'cues.json'): string {
+  return `${downloadDirPath(documentDirectory)}${lessonId}.${generation}.${extension}`;
+}
+
 export function remoteAudioUrl(audioBaseUrl: string, lessonId: string): string {
   return `${audioBaseUrl.replace(/\/$/, '')}/${lessonId}.mp3`;
 }

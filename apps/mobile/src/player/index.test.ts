@@ -13,6 +13,9 @@ function fakeFs(manifest: string | null): ContentFs {
     documentDirectory: 'file:///doc/',
     ensureDirectory: vi.fn(async () => undefined),
     writeFile: vi.fn(async () => undefined),
+    moveFile: vi.fn(async () => undefined),
+    getFileSize: vi.fn(async () => null),
+    readFilePrefixBase64: vi.fn(async () => ''),
     readFile: vi.fn(async () => {
       if (manifest === null) throw new Error('nicht vorhanden');
       return manifest;

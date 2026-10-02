@@ -2,6 +2,7 @@ import type { Manifest, ModulesFile } from '@futuredev/content-schema';
 import type { LessonState } from '@futuredev/core';
 import { listProgress } from '../data/progress.js';
 import { loadLesson } from './lessonLoader.js';
+import type { ContentSnapshot } from './generation.js';
 import type { ContentFs } from './types.js';
 
 export interface LessonListEntry {
@@ -37,6 +38,7 @@ export async function buildModuleList(
   modules: ModulesFile,
   manifest: Manifest | null,
   fs?: ContentFs,
+  pinnedSnapshot?: ContentSnapshot,
 ): Promise<ModuleListEntry[]> {
   const publishedIds = new Set((manifest?.lessons ?? []).map((l) => l.id));
   const progressRows = await listProgress();
@@ -56,7 +58,7 @@ export async function buildModuleList(
         const state = stateByLessonId.get(id) ?? 'new';
         totalLessons += 1;
         if (state === 'completed') completedLessons += 1;
-        const lesson = fs ? await loadLesson(fs, id, { bundledFallback: true }) : null;
+        const lesson = fs ? await loadLesson(fs, id, { bundledFallback: true, snapshot: pinnedSnapshot }) : null;
         lessons.push({
           id,
           title: lesson?.title ?? id,

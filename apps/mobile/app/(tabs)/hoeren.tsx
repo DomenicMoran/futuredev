@@ -1,23 +1,28 @@
-import { useCallback, useEffect, useState } from 'react';
-import { ActionSheetIOS, ActivityIndicator, Alert, Platform, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { ActionSheetIOS, ActivityIndicator, Alert, Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect } from 'expo-router';
-import { Headphones, ListMusic, MoreVertical, Play } from 'lucide-react-native';
+import { Headphones, ListMusic, MoreVertical, Play, Search } from 'lucide-react-native';
 import { TabScreenTitle } from '../../src/components/TabScreenTitle.js';
 import { useTheme } from '../../src/theme/useTheme.js';
 import { EmptyState } from '../../src/components/EmptyState.js';
 import { de } from '../../src/i18n/de.js';
 import { getContentFs } from '../../src/content/contentFs.js';
-import { loadLocalManifest, loadModules } from '../../src/content/lessonLoader.js';
+import { loadContentSnapshot } from '../../src/content/generation.js';
 import { buildModuleList, type ModuleListEntry } from '../../src/content/listLessons.js';
 import { listProgress } from '../../src/data/index.js';
-import { downloadLesson, getDownloadedStorageBytes, isDownloaded, playLesson, deleteDownload, enqueueModule } from '../../src/player/index.js';
+import { downloadLesson, cancelDownload, getDownloadedStorageBytes, isDownloaded, playLesson, deleteDownload, enqueueModule } from '../../src/player/index.js';
 import { PlaylistsSection } from '../../src/components/PlaylistsSection.js';
 import { formatBytes } from '../../src/player/downloads.js';
 import { useBottomChromeInset } from '../../src/navigation/useBottomChromeInset.js';
 import { FadeInUp } from '../../src/motion/FadeInUp.js';
 import { PressableFeedback } from '../../src/motion/PressableFeedback.js';
 import { motionStaggerDelay } from '../../src/motion/stagger.js';
+import { usePlayerStore } from '../../src/player/store.js';
+import { reconcileDownloadedUiState } from '../../src/player/downloadedUiState.js';
+import { downloadedLessonIds } from '../../src/player/downloadedBatch.js';
+import { loadLessonSearchIndex } from '../../src/settings/lessonSearchIndex.js';
+import { createLessonSearchEntry, searchLessonEntries, type LessonSearchEntry } from '../../src/settings/lessonSearch.js';
 
 interface ContinueCard {
   lessonId: string;
@@ -27,9 +32,16 @@ interface ContinueCard {
 export default function HoerenScreen() {
   const theme = useTheme();
   const bottomInset = useBottomChromeInset();
+  const downloadStates = usePlayerStore((s) => s.downloads);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [hasLoadedOnce, setHasLoadedOnce] = useState(false);
+  const [loadError, setLoadError] = useState(false);
+  const [query, setQuery] = useState('');
+  const [searchIndex, setSearchIndex] = useState<LessonSearchEntry[]>([]);
+  const [indexLoading, setIndexLoading] = useState(false);
+  const searchIndexRequest = useRef(0);
+  const loadRequest = useRef(0);
   const [modules, setModules] = useState<ModuleListEntry[]>([]);
   const [continueCard, setContinueCard] = useState<ContinueCard | null>(null);
   const [downloaded, setDownloaded] = useState<Record<string, boolean>>({});
@@ -41,57 +53,60 @@ export default function HoerenScreen() {
   // (Pruefbericht Phase 3, B-01: ein ungueltiges Manifest/eine ungueltige
   // Basis-URL darf nie als unbehandelte Promise-Ablehnung enden), zeigt
   // stattdessen ein Banner mit de.player.loadError statt eines Absturzes.
-  const runPlayback = useCallback(async (action: () => Promise<void>) => {
+  const runPlayback = useCallback(async (action: () => Promise<unknown>): Promise<boolean> => {
     setPlaybackError(false);
     try {
-      await action();
+      const result = await action();
+      return result !== 'cancelled';
     } catch {
       setPlaybackError(true);
+      return false;
     }
   }, []);
 
+  const reconcileDownloadedFlag = useCallback(async (lessonId: string): Promise<boolean> => {
+    const persisted = await isDownloaded(lessonId).catch(() => false);
+    setDownloaded((current) => reconcileDownloadedUiState(current, lessonId, persisted));
+    return persisted;
+  }, []);
+
   const load = useCallback(async (background = false) => {
+    const request = ++loadRequest.current;
     if (background) setRefreshing(true);
     else setLoading(true);
     try {
       const fs = await getContentFs();
-      const [manifest, modulesFile, progressRows] = await Promise.all([
-        loadLocalManifest(fs),
-        loadModules(fs),
-        listProgress(),
-      ]);
+      const [snapshot, progressRows] = await Promise.all([loadContentSnapshot(fs), listProgress()]);
+      const manifest = snapshot.manifest;
+      const modulesFile = snapshot.modules;
       if (modulesFile) {
-        const list = await buildModuleList(modulesFile, manifest, fs);
-        setModules(list.filter((m) => m.totalLessons > 0));
+        const list = await buildModuleList(modulesFile, manifest, fs, snapshot);
 
-        const downloadedIds = new Set<string>();
-        for (const m of list) {
-          for (const sub of m.subModules) {
-            for (const lesson of sub.lessons) {
-              if (await isDownloaded(lesson.id)) downloadedIds.add(lesson.id);
-            }
-          }
-        }
+        const allLessonIds = list.flatMap((module) => module.subModules.flatMap((sub) => sub.lessons.map((lesson) => lesson.id)));
+        const downloadedIds = await downloadedLessonIds(allLessonIds, snapshot, isDownloaded);
+        const visibleModules = list.filter((m) => m.totalLessons > 0);
+        const lastStarted = [...progressRows]
+          .filter((p) => p.state !== 'new')
+          .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))[0];
+        const lastLesson = lastStarted
+          ? list.flatMap((m) => m.subModules).flatMap((sub) => sub.lessons).find((l) => l.id === lastStarted.lessonId)
+          : undefined;
+        if (request !== loadRequest.current) return;
+        setModules(visibleModules);
         setDownloaded(Object.fromEntries([...downloadedIds].map((id) => [id, true])));
-      }
-
-      const lastStarted = [...progressRows]
-        .filter((p) => p.state !== 'new')
-        .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))[0];
-      if (lastStarted && modulesFile) {
-        const list = await buildModuleList(modulesFile, manifest, fs);
-        const lesson = list
-          .flatMap((m) => m.subModules)
-          .flatMap((sub) => sub.lessons)
-          .find((l) => l.id === lastStarted.lessonId);
-        setContinueCard({ lessonId: lastStarted.lessonId, title: lesson?.title ?? de.hoeren.continueTitleFallback });
+        setContinueCard(lastStarted ? { lessonId: lastStarted.lessonId, title: lastLesson?.title ?? de.hoeren.continueTitleFallback } : null);
+        setLoadError(false);
       } else {
-        setContinueCard(null);
+        throw new Error('Lerninhalte sind gerade nicht verfügbar');
       }
+    } catch {
+      if (request === loadRequest.current) setLoadError(true);
     } finally {
-      setLoading(false);
-      setRefreshing(false);
-      setHasLoadedOnce(true);
+      if (request === loadRequest.current) {
+        setLoading(false);
+        setRefreshing(false);
+        setHasLoadedOnce(true);
+      }
     }
   }, []);
 
@@ -105,10 +120,43 @@ export default function HoerenScreen() {
     }, [load, hasLoadedOnce]),
   );
 
+  useEffect(() => {
+    let cancelled = false;
+    const request = ++searchIndexRequest.current;
+    setIndexLoading(true);
+    void (async () => {
+      try {
+        const fs = await getContentFs();
+        const result = await loadLessonSearchIndex(fs, modules);
+        if (!cancelled && request === searchIndexRequest.current) setSearchIndex(result.entries);
+      } catch {
+        const fallback = modules.flatMap((module) => module.subModules.flatMap((sub) => sub.lessons.map((lesson) => createLessonSearchEntry(lesson.id, lesson.title, module.title, sub.title, null))));
+        if (!cancelled && request === searchIndexRequest.current) setSearchIndex(fallback);
+      } finally {
+        if (!cancelled && request === searchIndexRequest.current) setIndexLoading(false);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [modules]);
+
+  const matchingLessonIds = useMemo(() => {
+    const term = query.trim().toLocaleLowerCase('de-DE');
+    return new Set(term ? searchLessonEntries(searchIndex, term).map((entry) => entry.id) : []);
+  }, [query, searchIndex]);
+  const visibleModules = useMemo(() => {
+    if (!query.trim()) return modules;
+    return modules.map((module) => ({
+      ...module,
+      subModules: module.subModules.map((sub) => ({ ...sub, lessons: sub.lessons.filter((lesson) => matchingLessonIds.has(lesson.id)) })).filter((sub) => sub.lessons.length > 0),
+    })).filter((module) => module.subModules.length > 0);
+  }, [matchingLessonIds, modules, query]);
+
   if (loading && !hasLoadedOnce) {
     return (
-      <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.bg, justifyContent: 'center' }]}>
+      <SafeAreaView edges={['top', 'left', 'right']} style={[styles.container, { backgroundColor: theme.colors.bg, justifyContent: 'center' }]}>
+        <TabScreenTitle title={de.hoeren.title} includeSafeAreaTop={false} />
         <ActivityIndicator color={theme.colors.accent} />
+        <Text style={{ color: theme.colors.textWeak, textAlign: 'center', marginTop: theme.spacing.sm }}>{de.hoeren.loadingBody}</Text>
       </SafeAreaView>
     );
   }
@@ -117,17 +165,18 @@ export default function HoerenScreen() {
 
   if (modules.length === 0) {
     return (
-      <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.bg }]}>
+      <SafeAreaView edges={['top', 'left', 'right']} style={[styles.container, { backgroundColor: theme.colors.bg }]}>
         <ScrollView contentContainerStyle={{ paddingBottom: bottomInset, gap: theme.spacing.lg }}>
-          <TabScreenTitle title={de.hoeren.title} />
+          <TabScreenTitle title={de.hoeren.title} includeSafeAreaTop={false} />
           <View style={{ paddingHorizontal: theme.spacing.base, gap: theme.spacing.lg }}>
+          {loadError ? <View accessibilityRole="alert"><Text style={{ color: theme.colors.error }}>{de.hoeren.loadError}</Text><Pressable testID="hoeren-retry" accessibilityRole="button" onPress={() => void load(false)} style={{ minHeight: theme.minTapTarget, justifyContent: 'center' }}><Text style={{ color: theme.colors.accent }}>{de.hoeren.retry}</Text></Pressable></View> : null}
           {refreshing ? (
             <View style={styles.refreshRow}>
               <ActivityIndicator size="small" color={theme.colors.accent} />
               <Text style={{ color: theme.colors.textWeak, fontSize: 13 }}>{de.hoeren.refreshing}</Text>
             </View>
           ) : null}
-          <EmptyState Icon={Headphones} title={de.hoeren.emptyTitle} body={de.hoeren.emptyBody} />
+          {loadError ? null : <EmptyState Icon={Headphones} title={de.hoeren.emptyTitle} body={de.hoeren.emptyBody} />}
           <PlaylistsSection
             lessonTitleFor={(lessonId) => lessonId}
             onPlaybackError={(empty) => {
@@ -148,9 +197,9 @@ export default function HoerenScreen() {
   }
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.bg }]}>
+    <SafeAreaView edges={['top', 'left', 'right']} style={[styles.container, { backgroundColor: theme.colors.bg }]}>
       <ScrollView contentContainerStyle={{ paddingBottom: bottomInset, gap: theme.spacing.lg }}>
-        <TabScreenTitle title={de.hoeren.title} />
+        <TabScreenTitle title={de.hoeren.title} includeSafeAreaTop={false} />
         <FadeInUp durationMs={200} delayMs={motionStaggerDelay(0)}>
         <View style={{ paddingHorizontal: theme.spacing.base, gap: theme.spacing.lg }}>
         {refreshing ? (
@@ -159,11 +208,19 @@ export default function HoerenScreen() {
             <Text style={{ color: theme.colors.textWeak, fontSize: 13 }}>{de.hoeren.refreshing}</Text>
           </View>
         ) : null}
+        {loadError ? <View accessibilityRole="alert"><Text style={{ color: theme.colors.error }}>{de.hoeren.loadError}</Text><Pressable testID="hoeren-retry" accessibilityRole="button" onPress={() => void load(true)} style={{ minHeight: theme.minTapTarget, justifyContent: 'center' }}><Text style={{ color: theme.colors.accent }}>{de.hoeren.retry}</Text></Pressable></View> : null}
         {playbackError ? (
           <View style={[styles.banner, { backgroundColor: theme.colors.surface, borderColor: theme.colors.error }]}>
             <Text style={{ color: theme.colors.error }}>{de.player.loadError}</Text>
           </View>
         ) : null}
+
+        <View style={[styles.searchBox, { borderColor: theme.colors.border, backgroundColor: theme.colors.surface, borderRadius: theme.radius.md }]}>
+          <Search color={theme.colors.textWeak} size={18} />
+          <TextInput testID="audio-search-input" value={query} onChangeText={setQuery} placeholder={de.hoeren.searchPlaceholder} placeholderTextColor={theme.colors.textWeak} accessibilityLabel={de.hoeren.searchPlaceholder} returnKeyType="search" style={[styles.searchInput, { color: theme.colors.text }]} />
+          {query ? <Pressable testID="audio-search-clear" accessibilityRole="button" accessibilityLabel={de.hoeren.clearSearch} onPress={() => setQuery('')} style={{ minWidth: theme.minTapTarget, minHeight: theme.minTapTarget, alignItems: 'center', justifyContent: 'center' }}><Text style={{ color: theme.colors.accent }}>×</Text></Pressable> : null}
+        </View>
+        {query.trim() && indexLoading ? <Text style={{ color: theme.colors.textWeak }}>{de.hoeren.searchIndexLoading}</Text> : null}
 
         {!hasAnyDownload ? (
           <View
@@ -184,8 +241,11 @@ export default function HoerenScreen() {
                 accessibilityLabel={de.hoeren.offlineEmptyCta}
                 onPress={() => {
                   void (async () => {
-                    await downloadLesson(continueCard.lessonId);
-                    setDownloaded((d) => ({ ...d, [continueCard.lessonId]: true }));
+                    await runPlayback(async () => {
+                      const result = await downloadLesson(continueCard.lessonId);
+                      await reconcileDownloadedFlag(continueCard.lessonId);
+                      return result;
+                    });
                   })();
                 }}
                 style={{ minHeight: theme.minTapTarget, justifyContent: 'center', marginTop: theme.spacing.sm }}
@@ -247,11 +307,12 @@ export default function HoerenScreen() {
           </PressableFeedback>
         ) : null}
 
-        {modules.map((module, moduleIndex) => (
+        {query.trim() && visibleModules.length === 0 && !indexLoading ? <Text style={{ color: theme.colors.textWeak }}>{de.hoeren.searchNoResults}</Text> : null}
+        {visibleModules.map((module, moduleIndex) => (
           <FadeInUp key={module.id} durationMs={200} delayMs={motionStaggerDelay(moduleIndex + 1)}>
           <View style={styles.moduleBlock}>
             <View style={styles.moduleHeader}>
-              <Text style={[styles.moduleTitle, { color: theme.colors.text }]}>{module.title}</Text>
+              <Text style={[styles.moduleTitle, { color: theme.colors.text, flex: 1, minWidth: 0 }]}>{module.title}</Text>
               <Pressable
                 onPress={() => {
                   void runPlayback(async () => {
@@ -269,7 +330,9 @@ export default function HoerenScreen() {
               </Pressable>
             </View>
 
-            {module.subModules.flatMap((sub) => sub.lessons).map((lesson) => (
+            {module.subModules.flatMap((sub) => sub.lessons).map((lesson) => {
+              const downloadState = downloadStates[lesson.id];
+              return (
               <View
                 key={lesson.id}
                 style={[
@@ -298,6 +361,19 @@ export default function HoerenScreen() {
                 >
                   <Play color={theme.colors.accent} size={20} />
                 </PressableFeedback>
+                {downloadState?.status === 'downloading' ? (
+                  <View accessibilityLabel={`Download ${Math.round(downloadState.progress * 100)} Prozent`} style={{ minWidth: 42, alignItems: 'center' }}>
+                    <ActivityIndicator size="small" color={theme.colors.accent} />
+                    <Text style={{ color: theme.colors.textWeak, fontSize: 10 }}>{Math.round(downloadState.progress * 100)}%</Text>
+                    <PressableFeedback onPress={() => void runPlayback(async () => { await cancelDownload(lesson.id); return reconcileDownloadedFlag(lesson.id); })} accessibilityRole="button" accessibilityLabel="Download abbrechen" style={{ padding: 4 }}>
+                      <Text style={{ color: theme.colors.textWeak, fontSize: 10 }}>Abbrechen</Text>
+                    </PressableFeedback>
+                  </View>
+                ) : downloadState?.status === 'error' ? (
+                  <PressableFeedback onPress={() => void runPlayback(async () => { const result = await downloadLesson(lesson.id); await reconcileDownloadedFlag(lesson.id); return result; })} accessibilityRole="button" accessibilityLabel="Download erneut versuchen" style={{ padding: 4 }}>
+                    <Text style={{ color: theme.colors.error, fontSize: 11, maxWidth: 64 }} numberOfLines={2}>Erneut versuchen</Text>
+                  </PressableFeedback>
+                ) : null}
                 <PressableFeedback
                   onPress={() => void runPlayback(() => playLesson(lesson.id))}
                   accessibilityRole="button"
@@ -323,8 +399,9 @@ export default function HoerenScreen() {
                             await deleteDownload(lesson.id);
                             setDownloaded((d) => ({ ...d, [lesson.id]: false }));
                           } else {
-                            await downloadLesson(lesson.id);
-                            setDownloaded((d) => ({ ...d, [lesson.id]: true }));
+                            const result = await downloadLesson(lesson.id);
+                            await reconcileDownloadedFlag(lesson.id);
+                            return result;
                           }
                         });
                       },
@@ -343,7 +420,8 @@ export default function HoerenScreen() {
                   <MoreVertical color={theme.colors.textWeak} size={20} />
                 </PressableFeedback>
               </View>
-            ))}
+              );
+            })}
           </View>
           </FadeInUp>
         ))}
@@ -473,5 +551,7 @@ const styles = StyleSheet.create({
   banner: { padding: 12, borderRadius: 8, borderWidth: StyleSheet.hairlineWidth },
   offlineHint: { borderWidth: StyleSheet.hairlineWidth },
   refreshRow: { flexDirection: 'row', alignItems: 'center', gap: 8, paddingVertical: 4 },
+  searchBox: { minHeight: 50, flexDirection: 'row', alignItems: 'center', gap: 8, borderWidth: StyleSheet.hairlineWidth, paddingHorizontal: 12, marginBottom: 4 },
+  searchInput: { flex: 1, minWidth: 0, minHeight: 48, fontSize: 16 },
   lessonPlayButton: { alignItems: 'center', justifyContent: 'center' },
 });

@@ -18,6 +18,7 @@ export interface PlayerState {
   positionSeconds: number;
   isPlaying: boolean;
   isBuffering: boolean;
+  playbackError: string | null;
   rate: number;
   sleepTimer: { mode: SleepTimerMode; target: SleepTimerTarget } | null;
   downloads: Record<string, DownloadState>;
@@ -32,6 +33,7 @@ export interface PlayerState {
   setPosition: (seconds: number) => void;
   setPlaying: (playing: boolean) => void;
   setBuffering: (buffering: boolean) => void;
+  setPlaybackError: (message: string | null) => void;
   setRate: (rate: number) => void;
   setSleepTimer: (value: { mode: SleepTimerMode; target: SleepTimerTarget } | null) => void;
   setDownloadState: (state: DownloadState) => void;
@@ -49,6 +51,7 @@ const initialState = {
   positionSeconds: 0,
   isPlaying: false,
   isBuffering: false,
+  playbackError: null,
   rate: 1.0,
   sleepTimer: null,
   downloads: {},
@@ -69,6 +72,7 @@ export const usePlayerStore = create<PlayerState>((set) => ({
   setPosition: (positionSeconds) => set({ positionSeconds }),
   setPlaying: (isPlaying) => set({ isPlaying }),
   setBuffering: (isBuffering) => set({ isBuffering }),
+  setPlaybackError: (playbackError) => set({ playbackError }),
   setRate: (rate) => set({ rate }),
   setSleepTimer: (sleepTimer) => set({ sleepTimer }),
   setDownloadState: (state) =>

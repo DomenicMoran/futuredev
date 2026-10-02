@@ -1,24 +1,21 @@
-// Rechtstexte, echte kurze Entwürfe (AP-3.5, Punkt 3, Technikvorgabe 8), keine
-// rechtliche Beratung. Jede Seite zeigt sichtbar den Hinweis "Entwurf,
-// rechtliche Prüfung vor dem Release" (DRAFT_NOTICE aus src/i18n/de.ts,
-// Schlüssel legal.draftNotice). Alle Texte gehen von null Vorwissen aus
-// (Zusatzregel AW-045): kein Fachjargon ohne Erklärung.
+// Sachliche, mit der Website abgestimmte Produktinformationen. Keine Rechtsberatung.
 export const legal = {
   imprint: {
     title: 'Impressum',
     body: [
-      'Diese App ist ein Lernangebot von Domenic Moran, Berlin. Die vollständigen Pflichtangaben nach § 5 Telemediengesetz (Name, ladungsfähige Anschrift, Kontaktmöglichkeit) werden vor der Veröffentlichung im Store hier ergänzt und rechtlich geprüft.',
-      'Verantwortlich für den Inhalt: Domenic Moran.',
-      'Kontakt: wird vor dem Release ergänzt.',
+      'Diensteanbieter: Domenic Moran, Heidelberger Straße 36, 12059 Berlin, Deutschland.',
+      'Kontakt: kontakt@domenicmoran.de',
+      'Verantwortlich für den Inhalt: Domenic Moran, Anschrift wie oben.',
     ],
   },
   privacy: {
     title: 'Datenschutz',
     body: [
-      'Diese App speichert deinen Lernstand ausschließlich auf deinem Gerät (Fortschritt, Wiederholung, Notizen, Lesezeichen, Portfolio, Karriere-Checkliste, Einstellungen). Es gibt kein Nutzerkonto und keinen Server, der diese Daten empfängt.',
-      'Die Lerninhalte selbst (Texte, Audio) lädt die App von einem öffentlichen Speicherort herunter. Dabei überträgt dein Gerät technisch notwendige Informationen wie die IP-Adresse, wie bei jedem Abruf einer Datei aus dem Internet.',
-      'Schaltest du die anonyme Statistik in den Einstellungen ein, sendet die App einzelne, nicht auf dich persönlich zurückführbare Ereignisse (etwa "Lektion abgeschlossen"). Eine zufällige, bei der Installation erzeugte Kennung ordnet diese Ereignisse einer Installation zu, nicht einer Person oder einem Gerät über eine Neuinstallation hinweg. Aktuell wird technisch noch nichts gesendet, unabhängig von der Einstellung.',
-      'Eine ausführliche, rechtlich geprüfte Datenschutzerklärung nach DSGVO wird vor der Veröffentlichung im Store ergänzt.',
+      'FutureDev benötigt kein Nutzerkonto. Dein Lernstand (unter anderem Fortschritt, Wiederholungen, Notizen, Lesezeichen, Portfolio und Einstellungen) wird in der App-Datenbank auf deinem Gerät gespeichert. Die App sendet diese Lerninhalte nicht an einen FutureDev-Lernserver. Der Statistik-Schalter speichert nur eine Einstellung; in der aktuellen App gibt es keinen Ereignisversand für diese Statistik.',
+      'Auf Android schließen die App-Regeln automatische Betriebssystem-Cloudsicherungen und Android-Geräteübertragungen für App-Daten aus. Diese App-Einstellung steuert keine Sicherungen des Betriebssystems auf anderen Plattformen. Wenn du eine Sicherungsdatei exportierst oder mit einer anderen App teilst, können dort zusätzliche Kopien entstehen. Zurücksetzen in FutureDev löscht solche externen Kopien nicht.',
+      'Zum Aktualisieren der Lektionen und zum Laden der Audiodateien ruft die App Dateien von GitHub ab. Dabei kann GitHub technische Nutzungsdaten wie IP-Adresse, Geräteinformationen, Datum und Uhrzeit sowie App-Version verarbeiten. GitHub beschreibt diese Verarbeitung in seiner Datenschutzerklärung: https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement.',
+      'Die FutureDev-Website wird über Vercel bereitgestellt. Vercel beschreibt in seiner Datenschutzhinweise die Verarbeitung von Zugriffs-, Geräte- und Nutzungsinformationen, darunter IP-Adresse und Zeitstempel. Für konkrete Aufbewahrungsfristen der Zugriffsprotokolle wird hier keine Dauer zugesagt. Weitere Informationen: https://vercel.com/legal/privacy-notice.',
+      'Fragen zum Datenschutz: kontakt@domenicmoran.de. Diese Informationen beschreiben den aktuellen technischen Stand; sie sind keine rechtliche Beratung oder Zertifizierung.',
     ],
   },
   licenses: {
@@ -32,7 +29,6 @@ export const legal = {
   },
   about: {
     title: 'Über',
-    // Zwei Sätze, ohne Fachjargon (AW-045): was die App ist, ohne Vorwissen vorauszusetzen.
     body: [
       'FutureDev ist eine App, mit der du Schritt für Schritt Programmieren und die dazugehörigen Berufsgrundlagen lernst, zum Lesen oder Hören, mit kurzen Quizfragen zur Wiederholung.',
       'Sie ersetzt keine Ausbildung und gibt keine Jobgarantie, sondern zeigt dir ehrlich, wie weit du mit deiner Vorbereitung schon bist.',

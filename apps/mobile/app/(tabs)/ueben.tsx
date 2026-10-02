@@ -1,20 +1,23 @@
 import { useCallback, useMemo, useState } from 'react';
 import { RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useFocusEffect } from 'expo-router';
 import { Dumbbell, Headphones, Layers, MessageCircleQuestion } from 'lucide-react-native';
 import { isDue } from '@futuredev/core';
 import { useTheme } from '../../src/theme/useTheme.js';
 import { de } from '../../src/i18n/de.js';
 import { useSettingsStore } from '../../src/state/settings.js';
-import { loadReviewCards } from '../../src/review/cards.js';
+import { loadLegacyReviewArchive, loadReviewCards } from '../../src/review/cards.js';
 import { dailyRationSize, selectDailyRation } from '../../src/review/dailyRation.js';
-import { pickReviewLesson } from '../../src/review/reviewRound.js';
+import type { LeitnerCard } from '@futuredev/core';
 import { knownLessonIds } from '../../src/quiz/content.js';
 import { useBottomChromeInset } from '../../src/navigation/useBottomChromeInset.js';
 import { TabScreenTitle } from '../../src/components/TabScreenTitle.js';
 import { FadeInUp } from '../../src/motion/FadeInUp.js';
 import { PressableFeedback } from '../../src/motion/PressableFeedback.js';
 import { motionStaggerDelay } from '../../src/motion/stagger.js';
+import { getReviewDeckStatus } from '../../src/review/deckStatus.js';
+import { earliestFutureDueAt } from '../../src/review/nextDue.js';
 import modulesFile from '../../../../content/modules.json';
 
 export default function UebenScreen() {
@@ -23,11 +26,16 @@ export default function UebenScreen() {
   const reviewIntensity = useSettingsStore((s) => s.reviewIntensity);
   const [rationCount, setRationCount] = useState<number | null>(null);
   const [totalDueCount, setTotalDueCount] = useState<number | null>(null);
-  const [rationLessonId, setRationLessonId] = useState<string | null>(null);
-  const [wiederholenLessonId, setWiederholenLessonId] = useState<string | null>(null);
+  const [rationCards, setRationCards] = useState<LeitnerCard[]>([]);
+  const [dueCards, setDueCards] = useState<LeitnerCard[]>([]);
+  const [totalCardCount, setTotalCardCount] = useState<number | null>(null);
+  const [nextDueAt, setNextDueAt] = useState<string | null>(null);
+  const [loadError, setLoadError] = useState(false);
+  const [legacyArchiveCount, setLegacyArchiveCount] = useState<number | null>(null);
   const [refreshing, setRefreshing] = useState(false);
   const [publishedLessonIds, setPublishedLessonIds] = useState<string[]>([]);
   const bottomInset = useBottomChromeInset();
+  const reviewDeckStatus = getReviewDeckStatus(totalCardCount, totalDueCount, loadError);
   const inset = theme.spacing.base;
 
   const examModules = useMemo(() => {
@@ -43,21 +51,20 @@ export default function UebenScreen() {
         if (cancelled) return;
         const now = new Date();
         const dueCards = cards.filter((c) => isDue(c, now));
+        const futureDue = earliestFutureDueAt(cards.map((card) => card.dueAt), now);
         const dueTotal = dueCards.length;
         const size = dailyRationSize(dailyGoalMinutes, reviewIntensity);
         const ration = selectDailyRation(cards, size, now);
         setTotalDueCount(dueTotal);
         setRationCount(ration.length);
-        setRationLessonId(pickReviewLesson(ration));
-        setWiederholenLessonId(pickReviewLesson(dueCards));
+        setRationCards(ration);
+        setDueCards(dueCards);
+        setTotalCardCount(cards.length);
+        setNextDueAt(futureDue);
+        setLoadError(false);
       })
       .catch(() => {
-        if (!cancelled) {
-          setRationCount(0);
-          setTotalDueCount(0);
-          setRationLessonId(null);
-          setWiederholenLessonId(null);
-        }
+        if (!cancelled) setLoadError(true);
       })
       .finally(() => {
         if (!cancelled) setRefreshing(false);
@@ -69,6 +76,9 @@ export default function UebenScreen() {
       .catch(() => {
         if (!cancelled) setPublishedLessonIds([]);
       });
+    loadLegacyReviewArchive()
+      .then((rows) => { if (!cancelled) setLegacyArchiveCount(rows.length); })
+      .catch(() => { if (!cancelled) setLegacyArchiveCount(null); });
     return () => {
       cancelled = true;
     };
@@ -76,18 +86,22 @@ export default function UebenScreen() {
 
   useFocusEffect(refresh);
 
-  const sameReviewLesson =
-    rationLessonId !== null && wiederholenLessonId !== null && rationLessonId === wiederholenLessonId;
+  const startReview = (cards: LeitnerCard[]) => {
+    const cardIds = cards.map((card) => card.id);
+    router.push({ pathname: '/quiz/review', params: { cardIds: JSON.stringify(cardIds) } });
+  };
 
   return (
+    <SafeAreaView edges={['top']} style={[styles.container, { backgroundColor: theme.colors.bg }]}>
     <ScrollView
-      style={[styles.container, { backgroundColor: theme.colors.bg }]}
+      style={styles.container}
       contentContainerStyle={{ paddingHorizontal: inset, paddingBottom: bottomInset }}
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh} />}
     >
-      <TabScreenTitle title={de.ueben.title} />
+      <TabScreenTitle title={de.ueben.title} includeSafeAreaTop={false} />
       <FadeInUp durationMs={200} delayMs={motionStaggerDelay(0)}>
       <SectionHeader title={de.ueben.sectionHeute} theme={theme} />
+      {loadError ? <CalmCard title={de.ueben.reviewLoadErrorTitle} body={de.ueben.reviewLoadErrorBody} theme={theme} /> : null}
       {rationCount === null ? null : rationCount === 0 ? (
         <CalmCard
           title={de.ueben.heuteEmptyTitle}
@@ -98,13 +112,11 @@ export default function UebenScreen() {
         <ActionCard
           title={de.ueben.dailyRationTitle}
           body={
-            sameReviewLesson
-              ? `${de.ueben.dailyRationBody(rationCount)} ${de.ueben.dailyRationScopeNote}`
-              : de.ueben.dailyRationBody(rationCount)
+            de.ueben.dailyRationBody(rationCount)
           }
           actionLabel={de.ueben.startDailyRation}
-          onAction={() => rationLessonId && router.push(`/quiz/${rationLessonId}`)}
-          disabled={!rationLessonId}
+          onAction={() => startReview(rationCards)}
+          disabled={rationCards.length === 0}
           theme={theme}
         />
       )}
@@ -120,19 +132,27 @@ export default function UebenScreen() {
       />
 
       <SectionHeader title={de.ueben.sectionWiederholen} theme={theme} topGap />
-      {totalDueCount === null ? null : totalDueCount === 0 ? (
+      {legacyArchiveCount && legacyArchiveCount > 0 ? (
+        <View style={[styles.card, { backgroundColor: theme.colors.surface, borderColor: theme.colors.border, borderRadius: theme.radius.lg, padding: theme.spacing.base, marginBottom: theme.spacing.sm }]}>
+          <Text style={[styles.cardTitle, { color: theme.colors.text }]}>{de.ueben.legacyReviewArchiveTitle}</Text>
+          <Text style={[styles.cardBody, { color: theme.colors.textWeak, marginTop: theme.spacing.xs }]}>
+            {de.ueben.legacyReviewArchiveBody(legacyArchiveCount)}
+          </Text>
+        </View>
+      ) : null}
+      {reviewDeckStatus === 'loading' ? null : reviewDeckStatus === 'future' ? (
+        <CalmCard title={de.ueben.reviewFutureTitle} body={de.ueben.reviewFutureBody(totalCardCount ?? 0, nextDueAt ? new Date(nextDueAt).toLocaleDateString('de-DE') : '')} theme={theme} />
+      ) : reviewDeckStatus === 'empty' ? (
         <CalmCard title={de.ueben.emptyTitle} body={de.ueben.wiederholenEmptyTip} theme={theme} />
       ) : (
         <ActionCard
           title={de.ueben.sectionWiederholen}
           body={
-            sameReviewLesson
-              ? `${de.ueben.wiederholenDueBody(totalDueCount)} ${de.ueben.wiederholenAllDueNote}`
-              : de.ueben.wiederholenDueBody(totalDueCount)
+            de.ueben.wiederholenDueBody(totalDueCount ?? 0)
           }
           actionLabel={de.ueben.wiederholenStart}
-          onAction={() => wiederholenLessonId && router.push(`/quiz/${wiederholenLessonId}`)}
-          disabled={!wiederholenLessonId}
+          onAction={() => startReview(dueCards)}
+          disabled={dueCards.length === 0}
           theme={theme}
           Icon={Dumbbell}
         />
@@ -184,6 +204,7 @@ export default function UebenScreen() {
       />
       </FadeInUp>
     </ScrollView>
+    </SafeAreaView>
   );
 }
 

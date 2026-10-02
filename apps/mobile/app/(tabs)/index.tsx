@@ -1,6 +1,7 @@
-import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { router, useFocusEffect } from 'expo-router';
 
@@ -14,7 +15,7 @@ import { de } from '../../src/i18n/de.js';
 
 import { useSettingsStore } from '../../src/state/settings.js';
 
-import { loadStartData, type ContinueCard, type StartData } from '../../src/settings/startData.js';
+import { loadStartData, resolveStartLessonTitle, type ContinueCard, type StartData } from '../../src/settings/startData.js';
 
 import { useBottomChromeInset } from '../../src/navigation/useBottomChromeInset.js';
 
@@ -23,7 +24,6 @@ import { useContent } from '../../src/content/ContentProvider.js';
 import {
   collectOrderedPublishedLessonIds,
   getFirstPublishedLessonId,
-  type ModuleListEntry,
 } from '../../src/content/listLessons.js';
 
 import { openFirstPublishedLessonOrLernen } from '../../src/navigation/openFirstLesson.js';
@@ -34,6 +34,8 @@ import { formatPlaybackTime } from '../../src/player/formatTime.js';
 import { FadeInUp } from '../../src/motion/FadeInUp.js';
 import { PressableFeedback } from '../../src/motion/PressableFeedback.js';
 import { motionStaggerDelay } from '../../src/motion/stagger.js';
+import { applyLatestRequest, RequestSequence } from '../../src/settings/latestRequest.js';
+import { formatDailyRationTileBody, resolveDailyRationDueState } from '../../src/settings/startDisplay.js';
 
 import {
 
@@ -62,43 +64,63 @@ export default function StartScreen() {
 
   const [data, setData] = useState<StartData | null>(null);
   const [loadError, setLoadError] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const requestSequence = useRef(new RequestSequence());
+  const activeRequest = useRef<{ key: string; id: number; promise: Promise<boolean> } | null>(null);
 
   const bottomInset = useBottomChromeInset();
   const queue = usePlayerStore((s) => s.queue);
   const positionSeconds = usePlayerStore((s) => s.positionSeconds);
 
   const orderedLessonIds = useMemo(() => collectOrderedPublishedLessonIds(moduleList), [moduleList]);
+  const lessonTitleSignature = useMemo(
+    () =>
+      moduleList
+        .flatMap((mod) => mod.subModules.flatMap((sub) => sub.lessons.map((lesson) => `${lesson.id}\t${lesson.title}`)))
+        .join('\n'),
+    [moduleList],
+  );
   const hasBundledModules = moduleList.length > 0;
   const hasPublishedLessons = orderedLessonIds.length > 0;
 
   const refresh = useCallback(() => {
-    loadStartData(dailyGoalMinutes, reviewIntensity, { orderedLessonIds })
-      .then((next) => {
-        setData(next);
-        setLoadError(false);
-      })
-      .catch(() => {
-        setLoadError(true);
-        setData((prev) => prev ?? buildFallbackStartData(moduleList, orderedLessonIds));
-      });
-  }, [dailyGoalMinutes, reviewIntensity, moduleList, orderedLessonIds]);
+    const requestKey = JSON.stringify([dailyGoalMinutes, reviewIntensity, orderedLessonIds]);
+    if (activeRequest.current?.key === requestKey) return activeRequest.current.promise;
+    const requestId = requestSequence.current.next();
+    setLoading(true);
+    const promise = applyLatestRequest(requestSequence.current, requestId, loadStartData(dailyGoalMinutes, reviewIntensity, { orderedLessonIds }), {
+      onSuccess: (next) => { setData(next); setLoadError(false); },
+      onError: () => setLoadError(true),
+    }).finally(() => {
+      if (requestSequence.current.isCurrent(requestId)) {
+        setLoading(false);
+        if (activeRequest.current?.id === requestId) activeRequest.current = null;
+      }
+    });
+    activeRequest.current = { key: requestKey, id: requestId, promise };
+    return promise;
+  }, [dailyGoalMinutes, reviewIntensity, orderedLessonIds]);
 
   useFocusEffect(
     useCallback(() => {
-      refresh();
+      void refresh();
+      return () => {
+        requestSequence.current.next();
+        activeRequest.current = null;
+      };
     }, [refresh]),
   );
 
   useEffect(() => {
     if (hasPublishedLessons) refresh();
-  }, [hasPublishedLessons, refresh]);
+  }, [hasPublishedLessons, lessonTitleSignature, refresh]);
 
   const playerContinueCard = useMemo((): ContinueCard | null => {
     const item = currentItem(queue);
     if (!item) return null;
     return {
       lessonId: item.lessonId,
-      lessonTitle: lessonTitleFromModules(moduleList, item.lessonId) ?? item.title,
+      lessonTitle: resolveStartLessonTitle(moduleList, item.lessonId),
       state: 'listened',
       positionLabel: formatPlaybackTime(positionSeconds),
       readUntil: null,
@@ -106,36 +128,46 @@ export default function StartScreen() {
     };
   }, [queue, moduleList, positionSeconds]);
 
-  const continueCard = data?.continueCard ?? playerContinueCard;
   const nextLessonId =
     data?.nextLessonId ?? getFirstPublishedLessonId(moduleList) ?? orderedLessonIds[0] ?? null;
-  const nextLessonTitle =
-    data?.nextLessonTitle ??
-    (nextLessonId ? lessonTitleFromModules(moduleList, nextLessonId) : null);
 
-  const displayData = useMemo((): StartData | null => {
-    if (data) return data;
-    if (!hasPublishedLessons) return null;
-    return buildFallbackStartData(moduleList, orderedLessonIds);
-  }, [data, hasPublishedLessons, moduleList, orderedLessonIds]);
+  const continueCard = useMemo((): ContinueCard | null => {
+    const base = data?.continueCard ?? playerContinueCard;
+    if (!base) return null;
+    return {
+      ...base,
+      lessonTitle: resolveStartLessonTitle(moduleList, base.lessonId),
+    };
+  }, [data?.continueCard, playerContinueCard, moduleList]);
+
+  const nextLessonTitle = useMemo(
+    () => (nextLessonId ? resolveStartLessonTitle(moduleList, nextLessonId) : null),
+    [nextLessonId, moduleList],
+  );
+
+  const displayData = useMemo((): StartData | null => data, [data]);
+  const dailyRationDueState = useMemo(() => resolveDailyRationDueState(displayData), [displayData]);
+  const dailyRationTileBody = useMemo(() => formatDailyRationTileBody(dailyRationDueState), [dailyRationDueState]);
 
   const greeting = greetingForHour(new Date().getHours());
 
-  const contentStillLoading = moduleList.length === 0 && contentState.modules === null;
+  const contentStillLoading = (moduleList.length === 0 && contentState.modules === null) || (loading && !data);
 
-  const showEmptyState = !contentStillLoading && !hasBundledModules && !continueCard && !nextLessonId;
+  const showEmptyState = !contentStillLoading && !loadError && !hasBundledModules && !continueCard && !nextLessonId;
 
   if (contentStillLoading) {
     return (
+      <SafeAreaView edges={['top', 'left', 'right']} style={[styles.container, { backgroundColor: theme.colors.bg }]}>
       <ScrollView
         style={[styles.container, { backgroundColor: theme.colors.bg, justifyContent: 'center' }]}
         contentContainerStyle={{ flexGrow: 1, paddingBottom: bottomInset, justifyContent: 'center' }}
       >
-        <TabScreenTitle title={de.start.title} />
+        <TabScreenTitle title={de.start.title} includeSafeAreaTop={false} />
         <Text style={[styles.body, { color: theme.colors.textWeak, textAlign: 'center', marginTop: theme.spacing.lg }]}>
           {de.start.loadingBody}
         </Text>
       </ScrollView>
+      </SafeAreaView>
     );
   }
 
@@ -143,6 +175,7 @@ export default function StartScreen() {
 
     return (
 
+      <SafeAreaView edges={['top', 'left', 'right']} style={[styles.container, { backgroundColor: theme.colors.bg }]}>
       <ScrollView
 
         style={[styles.container, { backgroundColor: theme.colors.bg }]}
@@ -151,7 +184,7 @@ export default function StartScreen() {
 
       >
 
-        <TabScreenTitle title={de.start.title} />
+        <TabScreenTitle title={de.start.title} includeSafeAreaTop={false} />
 
         <EmptyState
 
@@ -168,6 +201,7 @@ export default function StartScreen() {
         />
 
       </ScrollView>
+      </SafeAreaView>
 
     );
 
@@ -184,6 +218,7 @@ export default function StartScreen() {
 
   return (
 
+    <SafeAreaView edges={['top', 'left', 'right']} style={[styles.container, { backgroundColor: theme.colors.bg }]}>
     <ScrollView
 
       style={[styles.container, { backgroundColor: theme.colors.bg }]}
@@ -198,14 +233,17 @@ export default function StartScreen() {
 
     >
 
-      <TabScreenTitle title={de.start.title} />
+      <TabScreenTitle title={de.start.title} includeSafeAreaTop={false} />
 
       <FadeInUp durationMs={200} delayMs={motionStaggerDelay(0)}>
 
       {loadError ? (
-        <Text style={[styles.body, { color: theme.colors.textWeak, marginTop: theme.spacing.sm }]}>
-          {de.start.loadErrorHint}
-        </Text>
+        <View accessibilityRole="alert" style={{ marginTop: theme.spacing.sm }}>
+          <Text style={[styles.body, { color: theme.colors.textWeak }]}>{de.start.loadErrorHint}</Text>
+          <Pressable testID="start-retry" accessibilityRole="button" accessibilityLabel={de.ich.retry} onPress={refresh} style={{ minHeight: theme.minTapTarget, justifyContent: 'center' }}>
+            <Text style={[styles.body, { color: theme.colors.accent }]}>{de.ich.retry}</Text>
+          </Pressable>
+        </View>
       ) : null}
 
       <Text
@@ -402,9 +440,7 @@ export default function StartScreen() {
 
           <Text style={[styles.body, { color: theme.colors.textWeak }]}>
 
-            {(displayData?.dueReviewCount ?? 0) > 0
-              ? de.start.dailyRationTileBody(displayData?.dueReviewCount ?? 0)
-              : de.start.dailyRationTileEmpty}
+            {dailyRationTileBody}
 
           </Text>
 
@@ -456,45 +492,13 @@ export default function StartScreen() {
       </FadeInUp>
 
     </ScrollView>
+    </SafeAreaView>
 
   );
 
 }
 
 
-
-function lessonTitleFromModules(moduleList: readonly ModuleListEntry[], lessonId: string): string | null {
-  for (const mod of moduleList) {
-    for (const sub of mod.subModules) {
-      for (const lesson of sub.lessons) {
-        if (lesson.id === lessonId) return lesson.title;
-      }
-    }
-  }
-  return null;
-}
-
-function buildFallbackStartData(
-  moduleList: readonly ModuleListEntry[],
-  orderedLessonIds: readonly string[],
-): StartData {
-  const nextLessonId = getFirstPublishedLessonId(moduleList) ?? orderedLessonIds[0] ?? null;
-  const week: StartData['week'] = [];
-  const today = new Date();
-  for (let i = 6; i >= 0; i -= 1) {
-    const d = new Date(today);
-    d.setDate(today.getDate() - i);
-    week.push({ date: d.toISOString().slice(0, 10), studied: false });
-  }
-  return {
-    continueCard: null,
-    nextLessonId,
-    nextLessonTitle: nextLessonId ? lessonTitleFromModules(moduleList, nextLessonId) : null,
-    dueReviewCount: 0,
-    dailyLearningSecondsToday: null,
-    week,
-  };
-}
 
 function greetingForHour(hour: number): string {
 

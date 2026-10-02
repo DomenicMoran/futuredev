@@ -24,6 +24,7 @@ export type FirstFormPreference = 'read' | 'listen';
 
 interface SettingsState {
   hydrated: boolean;
+  hydrationError: boolean;
   /** Aus SQLite (`onboarding_done`), für Root-Redirect ohne Race zum Onboarding-Store. */
   onboardingDone: boolean;
   colorScheme: ColorSchemeSetting;
@@ -53,6 +54,7 @@ interface SettingsState {
 
 export const useSettingsStore = create<SettingsState>((set) => ({
   hydrated: false,
+  hydrationError: false,
   onboardingDone: false,
   colorScheme: 'system',
   dailyGoalMinutes: 20,
@@ -65,6 +67,8 @@ export const useSettingsStore = create<SettingsState>((set) => ({
   telemetryEnabled: false,
   installId: '',
   hydrate: async () => {
+    set({ hydrationError: false });
+    try {
     let loaded = await hydrateSettings();
     const extra = readExpoExtra();
     if (shouldApplyQaSkipOnboarding(extra) && !loaded.onboardingDone) {
@@ -89,6 +93,7 @@ export const useSettingsStore = create<SettingsState>((set) => ({
     useOnboardingStore.getState().applyHydrated(loaded.onboardingDone, loaded.goal);
     set({
       hydrated: true,
+      hydrationError: false,
       onboardingDone: loaded.onboardingDone,
       colorScheme: loaded.colorScheme,
       dailyGoalMinutes: loaded.dailyGoalMinutes,
@@ -102,6 +107,10 @@ export const useSettingsStore = create<SettingsState>((set) => ({
       installId: loaded.installId,
     });
     return loaded;
+    } catch (error) {
+      set({ hydrated: false, hydrationError: true });
+      throw error;
+    }
   },
   setColorScheme: (value) => {
     set({ colorScheme: value });

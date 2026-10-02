@@ -1,5 +1,5 @@
 # Durable Chatterbox batch launcher for FutureDev.
-# - single instance (Python lock)
+# - single instance (exclusive OS file lock held by Python)
 # - unbuffered logs to %TEMP%
 # - Python --supervise restarts on crash / progress stall
 #
@@ -19,21 +19,13 @@ $Script = Join-Path $AudioDir "render_chatterbox.py"
 $Log = Join-Path $env:TEMP "fd-chatterbox-batch.log"
 $ErrLog = Join-Path $env:TEMP "fd-chatterbox-batch.err.log"
 $Progress = Join-Path $AudioDir "out\_chatterbox_progress.json"
-$Lock = Join-Path $AudioDir "out\_chatterbox_batch.lock"
 
 if (-not (Test-Path $VenvPy)) {
     throw "venv fehlt: $VenvPy"
 }
 
-# Stop leftover workers (same script only)
-Get-CimInstance Win32_Process -Filter "Name='python.exe'" |
-    Where-Object { $_.CommandLine -and $_.CommandLine -like "*render_chatterbox.py*" } |
-    ForEach-Object {
-        Write-Host "Stoppe alten Worker pid=$($_.ProcessId)"
-        Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue
-    }
-Start-Sleep -Seconds 2
-if (Test-Path $Lock) { Remove-Item $Lock -Force -ErrorAction SilentlyContinue }
+# Never kill an existing dashboard/worker or remove its lock. Python's OS lock
+# rejects duplicate batches; pause/resume remains the explicit lifecycle control.
 
 $argsList = @("-u", $Script, "--all-missing", "--supervise", "--stall-seconds", "$StallSeconds")
 if ($Limit -gt 0) {

@@ -7,9 +7,30 @@
 // fälligen Fragen gewählt; eine gemischte Runde über mehrere Lektionen ist
 // eine spätere Ausbaustufe, sobald Agent B mehrere Lektionen liefert.
 import type { LeitnerCard } from '@futuredev/core';
+import type { QuizQuestionInput } from '@futuredev/core';
+import { reviewCardKey } from './cards.js';
+
+/** Resolves due review-card IDs to their exact content questions, never whole lessons. */
+export function selectReviewQuestionsForCards(
+  pool: QuizQuestionInput[],
+  cardIds: string[],
+): { questions: QuizQuestionInput[]; missingCardIds: string[] } {
+  const requested = [...new Set(cardIds)];
+  const wanted = new Set(requested);
+  const questions = pool.filter((question) =>
+    wanted.has(reviewCardKey(question.sourceLessonId, question.questionId)),
+  );
+  const found = new Set(questions.map((question) => reviewCardKey(question.sourceLessonId, question.questionId)));
+  return { questions, missingCardIds: requested.filter((id) => !found.has(id)) };
+}
 
 export function lessonIdOfCard(cardId: string): string {
-  return cardId.split('#')[0] ?? cardId;
+  if (cardId.startsWith('review:')) {
+    const separator = cardId.indexOf(':', 7);
+    if (separator < 0) return '';
+    try { return decodeURIComponent(cardId.slice(7, separator)); } catch { return ''; }
+  }
+  return '';
 }
 
 export function pickReviewLesson(cards: LeitnerCard[]): string | null {

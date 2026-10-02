@@ -17,4 +17,10 @@ describe('shouldConfirmExit', () => {
   it('braucht keine Rueckfrage nach dem Ergebnis (nichts geht mehr verloren)', () => {
     expect(shouldConfirmExit('result')).toBe(false);
   });
+
+  it('schuetzt ein noch speicherndes oder fehlgeschlagenes Ergebnis vor stillem Verlust', () => {
+    expect(shouldConfirmExit('result', true, false)).toBe(true);
+    expect(shouldConfirmExit('result', false, true)).toBe(true);
+    expect(shouldConfirmExit('result', false, false)).toBe(false);
+  });
 });

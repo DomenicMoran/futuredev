@@ -1,17 +1,9 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
-import type { Manifest, ModulesFile } from '@futuredev/content-schema';
 import type { ContentState } from './types.js';
 import { refreshContent } from './sync.js';
-import type { BundledContent } from './bundledContent.js';
 import { buildModuleList, type ModuleListEntry } from './listLessons.js';
 import { getContentFs } from './contentFs.js';
-import { bundledLessons, bundledManifest, bundledModules } from '../../assets/content/bundled.generated.js';
-
-const BUNDLED: BundledContent = {
-  manifest: bundledManifest as unknown as Manifest,
-  modules: bundledModules as unknown as ModulesFile,
-  lessons: bundledLessons,
-};
+import { bundledContent as BUNDLED } from './bundledData.js';
 
 interface ContentContextValue {
   state: ContentState;

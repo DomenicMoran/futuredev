@@ -120,6 +120,7 @@ export default function ErklaerBausteinScreen() {
         <Text style={[styles.bausteinTitle, { color: theme.colors.text, marginTop: theme.spacing.xs }]}>
           {portfolioItem.title}
         </Text>
+        <Text style={[styles.selfAssessment, { color: theme.colors.textWeak, marginTop: theme.spacing.xs }]}>{de.erklaer.selfAssessment}</Text>
       </View>
 
       {phase === 'done' ? (
@@ -208,7 +209,7 @@ export default function ErklaerBausteinScreen() {
               </Text>
               <Pressable
                 accessibilityRole="button"
-                accessibilityLabel={de.erklaer.nextQuestion}
+                accessibilityLabel={questionIndex + 1 < questions.length ? de.erklaer.nextQuestion : de.erklaer.finishQuestions}
                 onPress={goNextQuestion}
                 style={[
                   styles.primaryButton,
@@ -270,6 +271,7 @@ const styles = StyleSheet.create({
   backLabel: { fontSize: 16, lineHeight: 24, fontWeight: '500' },
   bausteinId: { fontSize: 13, fontWeight: '600' },
   bausteinTitle: { fontSize: 20, lineHeight: 26, fontWeight: '700' },
+  selfAssessment: { fontSize: 14, lineHeight: 20 },
   progress: { fontSize: 14, lineHeight: 20, fontWeight: '500' },
   question: { fontSize: 18, lineHeight: 26, fontWeight: '600' },
   ratingButton: { borderWidth: StyleSheet.hairlineWidth, justifyContent: 'center' },

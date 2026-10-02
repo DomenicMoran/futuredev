@@ -19,7 +19,9 @@ export default tseslint.config(
       'tools/audio/.venv-chatterbox/**',
       'apps/web/out/**',
       'apps/web/next-env.d.ts',
-      'tools/qa/**',
+      // Local emulator captures, throwaway fixtures and Python QA environments.
+      // Maintained tools/qa sources remain linted below.
+      'tmp-qa/**',
     ],
   },
   js.configs.recommended,
@@ -34,6 +36,14 @@ export default tseslint.config(
     },
     rules: {
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+    },
+  },
+  {
+    files: ['**/*.cjs', 'tools/*.js'],
+    languageOptions: { sourceType: 'commonjs' },
+    rules: {
+      '@typescript-eslint/no-require-imports': 'off',
+      '@typescript-eslint/no-unused-expressions': ['error', { allowShortCircuit: true }],
     },
   },
 );
