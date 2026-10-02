@@ -1,12 +1,12 @@
 import type { CareerDisplayItem, PortfolioDisplayItem, ProfileData, ProfileToolsData } from './profile.js';
 
-export type ProfileToolsViewModel = {
+export interface ProfileToolsViewModel {
   portfolio: PortfolioDisplayItem[];
   career: CareerDisplayItem[];
   interactive: boolean;
   showToolsLoading: boolean;
   showToolsError: boolean;
-};
+}
 
 /** Tools load failure is not shown while a newer fetch is still in flight. */
 export function shouldShowProfileToolsError(toolsError: boolean, toolsLoading: boolean): boolean {

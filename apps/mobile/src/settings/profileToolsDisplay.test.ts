@@ -11,13 +11,19 @@ const staticPortfolio: PortfolioDisplayItem[] = portfolioFile.items.map((item) =
   url: null,
 }));
 
-const portfolioP00 = staticPortfolio[0]!;
+function firstStaticPortfolioItem(): PortfolioDisplayItem {
+  const item = staticPortfolio[0];
+  if (!item) {
+    throw new Error('content/portfolio.json must contain at least one item');
+  }
+  return item;
+}
 
 function profileWithPortfolio(status: PortfolioDisplayItem['status'], url: string | null): ProfileData {
   return {
     moduleProgress: [],
     readiness: { percent: 0, missing: [] },
-    portfolio: [{ ...portfolioP00, status, url }],
+    portfolio: [{ ...firstStaticPortfolioItem(), status, url }],
     career: [],
     notes: [],
     bookmarks: [],
@@ -63,7 +69,7 @@ describe('resolveProfileToolsViewModel', () => {
   it('prefers the independent tools snapshot over stale profile portfolio data', () => {
     const view = resolveProfileToolsViewModel({
       tools: {
-        portfolio: [{ ...portfolioP00, status: 'erklaert', url: 'https://example.com' }],
+        portfolio: [{ ...firstStaticPortfolioItem(), status: 'erklaert', url: 'https://example.com' }],
         career: [],
       },
       profile: profileWithPortfolio('offen', null),
@@ -80,7 +86,7 @@ describe('resolveProfileToolsViewModel', () => {
   it('keeps the latest tools snapshot visible when profile refresh fails', () => {
     const view = resolveProfileToolsViewModel({
       tools: {
-        portfolio: [{ ...portfolioP00, status: 'erklaert', url: 'https://example.com' }],
+        portfolio: [{ ...firstStaticPortfolioItem(), status: 'erklaert', url: 'https://example.com' }],
         career: [],
       },
       profile: profileWithPortfolio('offen', null),
