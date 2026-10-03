@@ -1,13 +1,13 @@
 import type { Theme } from '../theme/useTheme.js';
 
 /** Muss mit PlaybackScrubber variant=mini hitArea minHeight übereinstimmen. */
-export const MINI_PLAYER_SCRUBBER_HIT_HEIGHT = 44;
+export const MINI_PLAYER_SCRUBBER_HIT_HEIGHT = 48;
 
 /** Sichtbare Fortschrittslinie im Mini-Player (innerhalb der Hit-Area). */
 export const MINI_PLAYER_PROGRESS_HEIGHT = 3;
 
-/** Play-Button in MiniPlayer (44×44). */
-export const MINI_PLAYER_PLAY_BUTTON_SIZE = 44;
+/** Play-Button in MiniPlayer (48×48). */
+export const MINI_PLAYER_PLAY_BUTTON_SIZE = 48;
 
 /** styles.subtitle marginTop in MiniPlayer. */
 export const MINI_PLAYER_SUBTITLE_MARGIN_TOP = 2;

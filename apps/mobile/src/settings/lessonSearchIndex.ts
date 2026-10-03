@@ -29,7 +29,7 @@ export async function loadLessonSearchIndex(
     }))));
 
   const entries = await Promise.all(sources.map(async (source) => {
-    const lesson = await loadLesson(fs, source.id, { bundledFallback: true, snapshot });
+    const lesson = await loadLesson(fs, source.id, { bundledFallback: true, snapshot, preferBundledRevision: true });
     return createLessonSearchEntry(source.id, lesson?.title ?? source.title, source.moduleTitle, source.submoduleTitle, lesson);
   }));
   return { snapshot, entries };

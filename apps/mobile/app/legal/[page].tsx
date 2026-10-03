@@ -7,6 +7,7 @@ import { ChevronLeft, Scale } from 'lucide-react-native';
 import { de } from '../../src/i18n/de.js';
 import { legal } from '../../src/legal/de.js';
 import licenses from '../../src/legal/licenses.json';
+import { useBottomChromeInset } from '../../src/navigation/useBottomChromeInset.js';
 
 type LegalPage = 'imprint' | 'privacy' | 'licenses' | 'about';
 
@@ -25,6 +26,7 @@ const showLegalDraftBanner = __DEV__ || process.env.EXPO_PUBLIC_LEGAL_DRAFT === 
 export default function LegalPageScreen() {
   const { page } = useLocalSearchParams<{ page: string }>();
   const theme = useTheme();
+  const bottomInset = useBottomChromeInset();
 
   const key = (page && page in PAGES ? page : null) as LegalPage | null;
 
@@ -42,7 +44,7 @@ export default function LegalPageScreen() {
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.bg }]}>
       <LegalHeader title={content.title} theme={theme} />
-      <ScrollView contentContainerStyle={{ padding: theme.spacing.lg }}>
+      <ScrollView contentContainerStyle={{ padding: theme.spacing.lg, paddingBottom: bottomInset + theme.spacing.lg }}>
       <Text style={[styles.title, { color: theme.colors.text }]}>{content.title}</Text>
       {showLegalDraftBanner ? (
         <Text style={[styles.draftNotice, { color: theme.colors.warning, marginTop: theme.spacing.xs }]}>

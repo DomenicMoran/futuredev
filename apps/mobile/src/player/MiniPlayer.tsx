@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { ActivityIndicator, Alert, Pressable, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Alert, Pressable, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import { SlideInBottom } from '../motion/SlideInBottom.js';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router, usePathname } from 'expo-router';
@@ -37,6 +37,7 @@ function moduleIdFromLessonId(lessonId: string): string {
 export function MiniPlayer() {
   const theme = useTheme();
   const insets = useSafeAreaInsets();
+  const { fontScale } = useWindowDimensions();
   const pathname = usePathname();
   const tabBarVisible = isTabBarVisible(pathname);
   const queue = usePlayerStore((s) => s.queue);
@@ -76,7 +77,7 @@ export function MiniPlayer() {
         {
           backgroundColor: theme.colors.surface,
           borderTopColor: theme.colors.border,
-          bottom: tabBarVisible ? tabBarHeight(theme, insets.bottom) : insets.bottom,
+          bottom: tabBarVisible ? tabBarHeight(theme, insets.bottom, fontScale) : insets.bottom,
           zIndex: 20,
         },
       ]}

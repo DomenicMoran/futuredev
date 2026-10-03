@@ -2,7 +2,8 @@ import type { Manifest, ModulesFile } from '@futuredev/content-schema';
 import type { LessonState } from '@futuredev/core';
 import { listProgress } from '../data/progress.js';
 import { loadLesson } from './lessonLoader.js';
-import type { ContentSnapshot } from './generation.js';
+import { loadContentSnapshot, type ContentSnapshot } from './generation.js';
+import { getBundledLesson } from './bundledData.js';
 import type { ContentFs } from './types.js';
 
 export interface LessonListEntry {
@@ -43,6 +44,14 @@ export async function buildModuleList(
   const publishedIds = new Set((manifest?.lessons ?? []).map((l) => l.id));
   const progressRows = await listProgress();
   const stateByLessonId = new Map(progressRows.map((row) => [row.lessonId, row.state]));
+  const snapshot = pinnedSnapshot ?? (fs ? await loadContentSnapshot(fs) : undefined);
+  const lessonById = new Map<string, Awaited<ReturnType<typeof loadLesson>>>();
+  const idsToLoad = [...publishedIds];
+  for (let offset = 0; offset < idsToLoad.length; offset += 8) {
+    await Promise.all(idsToLoad.slice(offset, offset + 8).map(async (id) => {
+      lessonById.set(id, fs ? await loadLesson(fs, id, { bundledFallback: true, snapshot, preferBundledRevision: true }) : getBundledLesson(id));
+    }));
+  }
 
   const result: ModuleListEntry[] = [];
   for (const module of modules.modules) {
@@ -58,7 +67,7 @@ export async function buildModuleList(
         const state = stateByLessonId.get(id) ?? 'new';
         totalLessons += 1;
         if (state === 'completed') completedLessons += 1;
-        const lesson = fs ? await loadLesson(fs, id, { bundledFallback: true, snapshot: pinnedSnapshot }) : null;
+        const lesson = lessonById.get(id);
         lessons.push({
           id,
           title: lesson?.title ?? id,

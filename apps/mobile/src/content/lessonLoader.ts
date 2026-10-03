@@ -1,7 +1,7 @@
-import { lessonSchema, modulesFileSchema, manifestSchema, type Lesson, type Manifest, type ModulesFile } from '@futuredev/content-schema';
+import { lessonSchema, type Lesson, type Manifest, type ModulesFile } from '@futuredev/content-schema';
 import type { ContentFs } from './types.js';
 import { CONTENT_DIR_NAME, LESSONS_DIR_NAME } from './contentFs.js';
-import { digestUtf8, type ContentSnapshot } from './generation.js';
+import { digestUtf8, loadContentSnapshot, type ContentSnapshot } from './generation.js';
 import { bundledManifest, getBundledLesson } from './bundledData.js';
 
 function contentDir(fs: ContentFs): string {
@@ -44,21 +44,26 @@ export interface LoadLessonOptions {
   bundledFallback?: boolean;
   /** Pinnt alle Reads an eine bereits geladene Generationswurzel. */
   snapshot?: ContentSnapshot;
+  /** Catalogues can reuse the exact bundled revision without rereading its disk copy. */
+  preferBundledRevision?: boolean;
 }
 
 export async function loadLesson(fs: ContentFs, id: string, options?: LoadLessonOptions): Promise<Lesson | null> {
-  const snapshot = options?.snapshot;
-  if (snapshot) {
-    const fromSnapshot = await readVerifiedLesson(fs, snapshot.root, id, snapshot.manifest);
-    if (fromSnapshot) return fromSnapshot;
-    return null;
+  const snapshot = options?.snapshot ?? await loadContentSnapshot(fs);
+  if (options?.preferBundledRevision) {
+    const expected = snapshot.manifest?.lessons.find((entry) => entry.id === id);
+    if (expected && bundledManifest.lessons.find((entry) => entry.id === id)?.sha256 === expected.sha256) {
+      return getBundledLesson(id);
+    }
   }
-
-  const manifest = await loadLocalManifest(fs);
-  const fromLegacy = await readVerifiedLesson(fs, contentDir(fs), id, manifest);
-  if (fromLegacy) return fromLegacy;
-
-  if (options?.bundledFallback) return getBundledLesson(id);
+  const fromSnapshot = await readVerifiedLesson(fs, snapshot.root, id, snapshot.manifest);
+  if (fromSnapshot) return fromSnapshot;
+  const entry = snapshot.manifest?.lessons.find((lesson) => lesson.id === id);
+  const bundledEntry = bundledManifest.lessons.find((lesson) => lesson.id === id);
+  // A damaged legacy cache may be repaired from the exact bundled revision,
+  // never from a different generation masquerading as current content.
+  if (entry && bundledEntry?.sha256 === entry.sha256) return getBundledLesson(id);
+  if (!snapshot.manifest && !options?.snapshot && options?.bundledFallback) return getBundledLesson(id);
   return null;
 }
 
@@ -68,11 +73,7 @@ export async function saveLesson(fs: ContentFs, id: string, lesson: unknown): Pr
 }
 
 export async function loadLocalManifest(fs: ContentFs): Promise<Manifest | null> {
-  const path = `${contentDir(fs)}manifest.json`;
-  if (!(await fs.exists(path))) return null;
-  const raw = await fs.readFile(path);
-  const parsed = manifestSchema.safeParse(JSON.parse(raw));
-  return parsed.success ? parsed.data : null;
+  return (await loadContentSnapshot(fs)).manifest;
 }
 
 export async function saveLocalManifest(fs: ContentFs, manifest: Manifest): Promise<void> {
@@ -81,11 +82,7 @@ export async function saveLocalManifest(fs: ContentFs, manifest: Manifest): Prom
 }
 
 export async function loadModules(fs: ContentFs): Promise<ModulesFile | null> {
-  const path = `${contentDir(fs)}modules.json`;
-  if (!(await fs.exists(path))) return null;
-  const raw = await fs.readFile(path);
-  const parsed = modulesFileSchema.safeParse(JSON.parse(raw));
-  return parsed.success ? parsed.data : null;
+  return (await loadContentSnapshot(fs)).modules;
 }
 
 /** Manifest der gebuendelten Erststart-Fassung (Offline-Fallback fuer Profil/IDs). */

@@ -59,8 +59,6 @@ export default function OnboardingScreen() {
       return;
     }
     if (step === 2) {
-      setFormDraft(null);
-      setTimeDraft(null);
       setStep(1);
     }
   }
@@ -89,7 +87,7 @@ export default function OnboardingScreen() {
           {
             paddingHorizontal: theme.spacing.lg,
             paddingTop: theme.spacing.lg,
-            paddingBottom: step === 2 ? theme.spacing.md : theme.spacing.xl,
+            paddingBottom: step === 2 ? theme.spacing.md : theme.spacing.xl + insets.bottom,
           },
         ]}
         keyboardShouldPersistTaps="handled"

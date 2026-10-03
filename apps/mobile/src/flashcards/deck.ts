@@ -1,5 +1,6 @@
 import type { LeitnerCard } from '@futuredev/core';
-import { getContentFs, loadLesson, loadLocalManifest } from '../content/index.js';
+import { getContentFs, loadLesson } from '../content/index.js';
+import { loadContentSnapshot } from '../content/generation.js';
 import { listProgress } from '../data/progress.js';
 import { bundledManifest } from '../content/bundledData.js';
 import type { FlashcardEntry } from './types.js';
@@ -15,7 +16,8 @@ function moduleIdFromLessonId(lessonId: string): string {
 /** Begriffe aus begonnenen/abgeschlossenen Lektionen, sonst alle veröffentlichten. */
 export async function loadFlashcardDeck(moduleFilter?: string): Promise<FlashcardEntry[]> {
   const fs = await getContentFs();
-  const manifest = await loadLocalManifest(fs);
+  const snapshot = await loadContentSnapshot(fs);
+  const manifest = snapshot.manifest;
   const lessonIds = (manifest?.lessons?.length ? manifest.lessons : bundledManifest.lessons).map((l) => l.id);
   const progress = await listProgress();
   const touched = new Set(
@@ -28,7 +30,7 @@ export async function loadFlashcardDeck(moduleFilter?: string): Promise<Flashcar
   for (const lessonId of lessonIds) {
     if (moduleFilter && moduleIdFromLessonId(lessonId) !== moduleFilter) continue;
     if (preferTouched && !touched.has(lessonId)) continue;
-    const lesson = await loadLesson(fs, lessonId);
+    const lesson = await loadLesson(fs, lessonId, { snapshot });
     if (!lesson?.terms?.length) continue;
     for (const { term, definition } of lesson.terms) {
       const id = flashcardId(lessonId, term);
@@ -44,7 +46,7 @@ export async function loadFlashcardDeck(moduleFilter?: string): Promise<Flashcar
 
   for (const lessonId of lessonIds) {
     if (moduleFilter && moduleIdFromLessonId(lessonId) !== moduleFilter) continue;
-    const lesson = await loadLesson(fs, lessonId);
+    const lesson = await loadLesson(fs, lessonId, { snapshot });
     if (!lesson?.terms?.length) continue;
     for (const { term, definition } of lesson.terms) {
       const id = flashcardId(lessonId, term);

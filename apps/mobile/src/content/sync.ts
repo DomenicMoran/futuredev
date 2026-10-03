@@ -1,81 +1,60 @@
 import type { ContentState } from './types.js';
 import { getContentFs } from './contentFs.js';
 import { fetchManifest } from './fetchManifest.js';
-import { diffManifests } from './manifestDiff.js';
-import { loadLocalManifest, loadModules, saveLesson, saveLocalManifest } from './lessonLoader.js';
 import { ensureBundledContent, type BundledContent } from './bundledContent.js';
+import { commitContentGeneration, digestUtf8, loadContentSnapshot, type ContentSnapshot } from './generation.js';
+import { fetchVerifiedFile } from './verifiedFile.js';
 
-/**
- * Voller Ladeweg (Technikvorgabe 4): Erststart-Kopie sicherstellen, Manifest
- * holen (mit Timeout), geänderte Lektionen nachladen, neues Manifest
- * schreiben. Fehler (kein Netz, Timeout, ungueltig) werden als Zustand
- * gemeldet statt als Absturz; der zuletzt bekannte lokale Stand bleibt in
- * jedem Fall nutzbar.
- */
-export async function refreshContent(bundled: BundledContent): Promise<ContentState> {
-  const fs = await getContentFs();
-  await ensureBundledContent(fs, bundled);
+let refreshing: Promise<ContentState> | null = null;
 
-  const localManifestBefore = await loadLocalManifest(fs);
-  // Basis-URL kommt aus dem Manifest selbst (lokal, sonst gebuendelt), nicht
-  // aus einer im Code fest verdrahteten Vermutung: eine geaenderte
-  // `contentBaseUrl` in einer neuen Manifest-Fassung greift so automatisch,
-  // ohne dass dieses Modul angefasst werden muss. `EXPO_PUBLIC_...` erlaubt
-  // trotzdem eine Override fuer lokale Entwicklung/Tests.
-  const contentBaseUrl =
-    process.env.EXPO_PUBLIC_CONTENT_BASE_URL ??
-    localManifestBefore?.contentBaseUrl ??
-    bundled.manifest.contentBaseUrl;
-  const result = await fetchManifest(contentBaseUrl);
-
-  if (result.status !== 'ok') {
-    const modules = await loadModules(fs);
-    return {
-      status: localManifestBefore ? 'offline' : 'error',
-      manifest: localManifestBefore,
-      modules,
-      lastUpdatedAt: localManifestBefore?.version ? new Date().toISOString() : null,
-      hasNewLessons: false,
-      message: result.message,
-    };
-  }
-
-  const changedLessons = diffManifests(localManifestBefore, result.manifest);
-  for (const entry of changedLessons) {
-    const lessonResult = await fetchLessonFile(entry, result.manifest.contentBaseUrl);
-    if (lessonResult) {
-      await saveLesson(fs, entry.id, lessonResult);
-    }
-  }
-  await saveLocalManifest(fs, result.manifest);
-  const modules = await loadModules(fs);
-
-  return {
-    status: 'ok',
-    manifest: result.manifest,
-    modules,
-    lastUpdatedAt: new Date().toISOString(),
-    hasNewLessons: changedLessons.length > 0,
-  };
+/** Publish only complete verified generations; coalesce concurrent refreshes. */
+export function refreshContent(bundled: BundledContent): Promise<ContentState> {
+  if (refreshing) return refreshing;
+  const pending = refreshOnce(bundled).finally(() => {
+    if (refreshing === pending) refreshing = null;
+  });
+  refreshing = pending;
+  return pending;
 }
 
-async function fetchLessonFile(
-  entry: { id: string; file: string },
-  contentBaseUrl: string,
-): Promise<unknown | null> {
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 10_000);
+async function refreshOnce(bundled: BundledContent): Promise<ContentState> {
+  let snapshot: ContentSnapshot | null = null;
   try {
-    const response = await fetch(`${contentBaseUrl.replace(/\/$/, '')}/${entry.file}?t=${Date.now()}`, {
-      cache: 'no-store',
-      headers: { 'Cache-Control': 'no-store' },
-      signal: controller.signal,
-    });
-    if (!response.ok) return null;
-    return await response.json();
-  } catch {
-    return null;
-  } finally {
-    clearTimeout(timeout);
+    const fs = await getContentFs();
+    await ensureBundledContent(fs, bundled);
+    snapshot = await loadContentSnapshot(fs);
+    const base = process.env.EXPO_PUBLIC_CONTENT_BASE_URL ?? snapshot.manifest?.contentBaseUrl ?? bundled.manifest.contentBaseUrl;
+    const result = await fetchManifest(base);
+    if (result.status !== 'ok') throw new Error(result.message);
+    const remote = result.manifest;
+    if (JSON.stringify(remote) === JSON.stringify(snapshot.manifest)) {
+      return { status: 'ok', manifest: snapshot.manifest, modules: snapshot.modules, lastUpdatedAt: new Date().toISOString(), hasNewLessons: false };
+    }
+    if (!remote.modulesSha256) throw new Error('Das Inhaltsupdate enthält keine Modulprüfsumme.');
+    const root = remote.contentBaseUrl.replace(/\/$/, '');
+    const rawModules = await fetchVerifiedFile(`${root}/modules.json`, remote.modulesSha256);
+    const rawLessons: Record<string, string> = {};
+    for (const entry of remote.lessons) {
+      if (entry.file !== `${entry.id}.json`) throw new Error('Ungültiger Lektionspfad im Inhaltsupdate.');
+      const old = snapshot.manifest?.lessons.find((item) => item.id === entry.id);
+      if (old?.sha256 === entry.sha256) {
+        try {
+          const raw = await fs.readFile(`${snapshot.root}lessons/${entry.file}`);
+          if (digestUtf8(raw) === entry.sha256) rawLessons[entry.id] = raw;
+        } catch { /* Fetch and verify missing or corrupt local bytes. */ }
+      }
+      rawLessons[entry.id] ??= await fetchVerifiedFile(`${root}/lessons/${entry.file}`, entry.sha256);
+    }
+    const generation = await commitContentGeneration(fs, { manifest: remote, rawManifest: JSON.stringify(remote), rawModules, rawLessons });
+    return { status: 'ok', manifest: generation.manifest, modules: generation.modules, lastUpdatedAt: new Date().toISOString(), hasNewLessons: true };
+  } catch (error) {
+    return {
+      status: snapshot?.manifest ? 'offline' : 'error',
+      manifest: snapshot?.manifest ?? bundled.manifest,
+      modules: snapshot?.modules ?? bundled.modules,
+      lastUpdatedAt: null,
+      hasNewLessons: false,
+      message: error instanceof Error ? error.message : 'Inhalte konnten nicht aktualisiert werden.',
+    };
   }
 }

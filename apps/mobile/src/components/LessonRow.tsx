@@ -41,7 +41,7 @@ function LessonRowInner({ lesson, onPress }: LessonRowProps) {
     <Pressable
       onPress={onPress}
       accessibilityRole="button"
-      accessibilityLabel={`${lesson.title}, ${stateLabel}`}
+      accessibilityLabel={`${lesson.title}, ${subtitle}`}
       style={({ pressed }) => [
         styles.row,
         {

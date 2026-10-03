@@ -12,6 +12,7 @@ import { listBookmarks } from '../data/bookmarks.js';
 import { getContentFs, loadLocalManifest } from '../content/index.js';
 import { de } from '../i18n/de.js';
 import { bundledManifest } from '../content/bundledData.js';
+import { loadContentSnapshot } from '../content/generation.js';
 import type { ProgressRow } from '../data/types.js';
 import modulesFile from '../../../../content/modules.json';
 import portfolioFile from '../../../../content/portfolio.json';
@@ -105,13 +106,13 @@ export async function loadProfileData(): Promise<ProfileData> {
 
   const lessonTitleById = new Map<string, string>();
   const fs = await getContentFs();
-  const manifest = await loadLocalManifest(fs);
+  const snapshot = await loadContentSnapshot(fs);
+  const manifest = snapshot.manifest;
   if (manifest) {
     const { buildModuleList } = await import('../content/listLessons.js');
-    const { loadModules } = await import('../content/lessonLoader.js');
-    const modulesLoaded = await loadModules(fs);
+    const modulesLoaded = snapshot.modules;
     if (modulesLoaded) {
-      const moduleList = await buildModuleList(modulesLoaded, manifest, fs);
+      const moduleList = await buildModuleList(modulesLoaded, manifest, fs, snapshot);
       for (const mod of moduleList) {
         for (const sub of mod.subModules) {
           for (const lesson of sub.lessons) {

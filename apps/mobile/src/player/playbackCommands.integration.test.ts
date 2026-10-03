@@ -3,7 +3,7 @@ import type { ContentFs } from '../content/types.js';
 import { makeValidLesson } from '../../../../packages/content-schema/test/fixtures.js';
 import { setContentFs } from '../content/contentFs.js';
 import { SOFT_START_RAMP_MS } from './rampVolume.js';
-import { playLesson, setSleepTimer, stopPositionTracking } from './index.js';
+import { jumpBackward, jumpForward, playLesson, setSleepTimer, stopPositionTracking } from './index.js';
 import { usePlayerStore } from './store.js';
 import { setQueue } from './queue.js';
 
@@ -72,6 +72,28 @@ describe('native playback event wins over an older soft-start command', () => {
     process.env.EXPO_PUBLIC_AUDIO_BASE_URL = 'https://audio.test';
   });
   afterEach(() => { setSleepTimer(null); stopPositionTracking(); vi.useRealTimers(); delete process.env.EXPO_PUBLIC_AUDIO_BASE_URL; });
+
+  it('updates paused UI and accessibility progress immediately after relative seek', async () => {
+    usePlayerStore.getState().setQueueState(setQueue([
+      { lessonId: 'M01-01-01', title: 'First', durationSeconds: 300 },
+    ], 0));
+    native.position = 45;
+    await jumpForward(30);
+    expect(native.seekTo).toHaveBeenLastCalledWith(75);
+    expect(usePlayerStore.getState().positionSeconds).toBe(75);
+    native.position = 75;
+    await jumpBackward(15);
+    expect(native.seekTo).toHaveBeenLastCalledWith(60);
+    expect(usePlayerStore.getState().positionSeconds).toBe(60);
+    native.position = 295;
+    await jumpForward(30);
+    expect(native.seekTo).toHaveBeenLastCalledWith(300);
+    expect(usePlayerStore.getState().positionSeconds).toBe(300);
+    native.position = 5;
+    await jumpBackward(15);
+    expect(native.seekTo).toHaveBeenLastCalledWith(0);
+    expect(usePlayerStore.getState().positionSeconds).toBe(0);
+  });
 
   it.each(['remote pause', 'native playback error'])('keeps %s truth when soft-start ramp finishes late', async (eventName) => {
     const command = playLesson('M01-01-01');

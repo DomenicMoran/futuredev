@@ -16,12 +16,15 @@ export function createBundledAccessors(raw: BundledRawExports) {
   const lessons: Record<string, unknown> = {};
   for (const [id, value] of Object.entries(raw.bundledLessonRaw)) {
     const parsed = lessonSchema.safeParse(JSON.parse(value));
-    if (parsed.success && parsed.data.id === id) lessons[id] = parsed.data;
+    if (parsed.success && parsed.data.id === id) {
+      lessons[id] = parsed.data;
+      lessonCache.set(id, parsed.data);
+    }
   }
   return {
     manifest,
     modules,
-    bundledContent: { manifest, modules, lessons } satisfies BundledContent,
+    bundledContent: { manifest, modules, lessons, rawManifest: raw.bundledManifestRaw, rawModules: raw.bundledModulesRaw, rawLessons: raw.bundledLessonRaw } satisfies BundledContent,
     lesson(id: string): Lesson | null {
       const cached = lessonCache.get(id);
       if (cached) return cached;

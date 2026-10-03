@@ -1,6 +1,7 @@
 import type { ContentFs } from './types.js';
 
 let instance: ContentFs | null = null;
+let initializing: Promise<ContentFs> | null = null;
 
 /** Nur fuer Tests: ersetzt die Implementierung durch eine Test-Attrappe. */
 export function setContentFs(fs: ContentFs): void {
@@ -8,11 +9,12 @@ export function setContentFs(fs: ContentFs): void {
 }
 
 export async function getContentFs(): Promise<ContentFs> {
-  if (!instance) {
-    const { createFileSystemContentFs } = await import('./fileSystemAdapter.js');
-    instance = await createFileSystemContentFs();
-  }
-  return instance;
+  if (instance) return instance;
+  initializing ??= import('./fileSystemAdapter.js')
+    .then(({ createFileSystemContentFs }) => createFileSystemContentFs())
+    .then((fs) => { instance ??= fs; return instance; })
+    .finally(() => { initializing = null; });
+  return initializing;
 }
 
 export const CONTENT_DIR_NAME = 'content';

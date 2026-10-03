@@ -1,11 +1,15 @@
 import type { ContentFs } from './types.js';
 import { CONTENT_DIR_NAME, LESSONS_DIR_NAME } from './contentFs.js';
 import type { Manifest, ModulesFile } from '@futuredev/content-schema';
+import { commitContentGeneration, loadContentSnapshot } from './generation.js';
 
 export interface BundledContent {
   manifest: Manifest;
   modules: ModulesFile;
   lessons: Record<string, unknown>;
+  rawManifest?: string;
+  rawModules?: string;
+  rawLessons?: Record<string, string>;
 }
 
 /**
@@ -16,6 +20,22 @@ export interface BundledContent {
  * ueberschrieben (Technikvorgabe 4).
  */
 export async function ensureBundledContent(fs: ContentFs, bundled: BundledContent): Promise<boolean> {
+  if (bundled.rawManifest && bundled.rawModules && bundled.rawLessons) {
+    const current = await loadContentSnapshot(fs);
+    if (current.manifest) {
+      const previous = current.manifest.version.split('.').map(Number);
+      const next = bundled.manifest.version.split('.').map(Number);
+      const difference = next.map((value, i) => value - (previous[i] ?? 0)).find((value) => value !== 0) ?? 0;
+      if (difference < 0 || (difference === 0 && current.generationId && !current.recoveryRequired)) return false;
+    }
+    await commitContentGeneration(fs, {
+      manifest: bundled.manifest,
+      rawManifest: bundled.rawManifest,
+      rawModules: bundled.rawModules,
+      rawLessons: bundled.rawLessons,
+    });
+    return true;
+  }
   const contentDir = `${fs.documentDirectory}${CONTENT_DIR_NAME}/`;
   const lessonsDir = `${contentDir}${LESSONS_DIR_NAME}/`;
   const manifestPath = `${contentDir}manifest.json`;

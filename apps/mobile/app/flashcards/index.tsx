@@ -157,7 +157,7 @@ export default function FlashcardsScreen() {
         >
           <ChevronLeft color={theme.colors.text} size={26} />
         </Pressable>
-        <Text style={[styles.headerTitle, { color: theme.colors.text }]}>{de.flashcards.title}</Text>
+        <Text accessibilityRole="header" style={[styles.headerTitle, { color: theme.colors.text }]}>{de.flashcards.title}</Text>
         <View style={{ width: theme.minTapTarget }} />
       </View>
 
@@ -238,7 +238,10 @@ export default function FlashcardsScreen() {
             </Text>
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel={flipped ? de.flashcards.showTerm : de.flashcards.showDefinition}
+              accessibilityLabel={`${progressLabel}. ${flipped ? card.definition : card.term}`}
+              accessibilityHint={flipped ? de.flashcards.showTerm : de.flashcards.showDefinition}
+              accessibilityState={{ expanded: flipped }}
+              accessibilityLiveRegion="polite"
               onPress={() => setFlipped((value) => !value)}
               style={[
                 styles.card,

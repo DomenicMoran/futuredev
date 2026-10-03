@@ -55,7 +55,6 @@ export function PlayerAdvancedControls() {
     return () => clearInterval(handle);
   }, [sleepTimer]);
 
-  const animatedMaxHeight = expandAnim.interpolate({ inputRange: [0, 1], outputRange: [0, 960] });
   const bodyOpacity = expandAnim;
 
   const summary = de.player.advancedSummary(`${rate.toFixed(1)}×`, repeatSummaryLabel(repeatMode));
@@ -90,7 +89,7 @@ export function PlayerAdvancedControls() {
         )}
       </PressableFeedback>
 
-      <Animated.View style={{ maxHeight: animatedMaxHeight, opacity: bodyOpacity, overflow: 'hidden' }}>
+      <Animated.View importantForAccessibility={open ? 'auto' : 'no-hide-descendants'} accessibilityElementsHidden={!open} style={{ maxHeight: open ? undefined : 0, opacity: bodyOpacity, overflow: 'hidden' }}>
         <View style={{ gap: theme.spacing.sm }}>
           <View style={[styles.settingsRow, { gap: theme.spacing.sm }]}>
             <Pressable
@@ -99,7 +98,7 @@ export function PlayerAdvancedControls() {
               accessibilityLabel={de.player.previous}
               style={({ pressed }) => [
                 styles.quietPill,
-                { borderColor: theme.colors.border, minHeight: theme.minTapTarget, opacity: pressed ? 0.88 : 1 },
+                { borderColor: theme.colors.border, minHeight: theme.minTapTarget, minWidth: theme.minTapTarget, opacity: pressed ? 0.88 : 1 },
               ]}
             >
               <ChevronLeft color={theme.colors.textWeak} size={18} />
@@ -110,7 +109,7 @@ export function PlayerAdvancedControls() {
               accessibilityLabel={de.player.next}
               style={({ pressed }) => [
                 styles.quietPill,
-                { borderColor: theme.colors.border, minHeight: theme.minTapTarget, opacity: pressed ? 0.88 : 1 },
+                { borderColor: theme.colors.border, minHeight: theme.minTapTarget, minWidth: theme.minTapTarget, opacity: pressed ? 0.88 : 1 },
               ]}
             >
               <ChevronRight color={theme.colors.textWeak} size={18} />
@@ -119,9 +118,10 @@ export function PlayerAdvancedControls() {
               onPress={() => setRatePickerOpen((v) => !v)}
               accessibilityRole="button"
               accessibilityLabel={`${de.player.rate}: ${rate.toFixed(1)}×`}
+              accessibilityState={{ expanded: ratePickerOpen }}
               style={({ pressed }) => [
                 styles.quietPill,
-                { borderColor: theme.colors.border, minHeight: theme.minTapTarget, opacity: pressed ? 0.88 : 1 },
+                { borderColor: theme.colors.border, minHeight: theme.minTapTarget, minWidth: theme.minTapTarget, opacity: pressed ? 0.88 : 1 },
               ]}
             >
               <Text style={{ color: theme.colors.textWeak, fontSize: theme.type.size.sm.size }}>{rate.toFixed(1)}×</Text>
@@ -147,11 +147,12 @@ export function PlayerAdvancedControls() {
             </Pressable>
             <Pressable
               onPress={() => setSleepPickerOpen((v) => !v)}
+              accessibilityState={{ expanded: sleepPickerOpen }}
               accessibilityRole="button"
               accessibilityLabel={sleepTimer ? `Schlaftimer aktiv: ${sleepTimer.mode.kind === 'minutes' ? `${sleepTimer.mode.minutes} Minuten` : 'bis zum Ende der Lektion'}` : de.player.sleepTimer}
               style={({ pressed }) => [
                 styles.quietPill,
-                { borderColor: sleepTimer ? theme.colors.accent : theme.colors.border, minHeight: theme.minTapTarget, opacity: pressed ? 0.88 : 1 },
+                { borderColor: sleepTimer ? theme.colors.accent : theme.colors.border, minHeight: theme.minTapTarget, minWidth: theme.minTapTarget, opacity: pressed ? 0.88 : 1 },
               ]}
             >
               <Moon color={sleepTimer ? theme.colors.accent : theme.colors.textWeak} size={16} />
@@ -174,6 +175,7 @@ export function PlayerAdvancedControls() {
                   }}
                   accessibilityRole="button"
                   accessibilityLabel={`Tempo ${option.toFixed(1)}`}
+                  accessibilityState={{ selected: option === rate }}
                   style={[
                     styles.option,
                     { backgroundColor: option === rate ? theme.colors.accent : 'transparent', minHeight: theme.minTapTarget },
@@ -227,7 +229,7 @@ export function PlayerAdvancedControls() {
           ) : null}
 
           <View style={styles.chapterList}>
-            <Pressable onPress={() => setQueueOpen((v) => !v)} accessibilityRole="button" accessibilityLabel={de.player.queue}>
+            <Pressable onPress={() => setQueueOpen((v) => !v)} accessibilityRole="button" accessibilityLabel={`${de.player.queue}: ${queue.items.length}`} accessibilityState={{ expanded: queueOpen }} style={{ minHeight: theme.minTapTarget, minWidth: theme.minTapTarget, justifyContent: 'center' }}>
               <Text style={[styles.sectionLabel, { color: theme.colors.textWeak }]}>
                 {de.player.queue} ({queue.items.length})
               </Text>
@@ -248,7 +250,7 @@ export function PlayerAdvancedControls() {
                       onPress={() => void removeFromQueue(index)}
                       accessibilityRole="button"
                       accessibilityLabel={`${de.player.remove}: ${qItem.title}`}
-                      hitSlop={8}
+                      style={{ minHeight: theme.minTapTarget, minWidth: theme.minTapTarget, alignItems: 'center', justifyContent: 'center' }}
                     >
                       <X color={theme.colors.textWeak} size={18} />
                     </Pressable>
@@ -274,6 +276,8 @@ const styles = StyleSheet.create({
   },
   settingsRow: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' },
   quietPill: {
+    minWidth: 48,
+    justifyContent: 'center',
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 12,

@@ -13,7 +13,7 @@ import { buildModuleList, type ModuleListEntry } from '../../src/content/listLes
 import { listProgress } from '../../src/data/index.js';
 import { downloadLesson, cancelDownload, getDownloadedStorageBytes, isDownloaded, playLesson, deleteDownload, enqueueModule } from '../../src/player/index.js';
 import { PlaylistsSection } from '../../src/components/PlaylistsSection.js';
-import { formatBytes } from '../../src/player/downloads.js';
+import { formatBytes, downloadDirPath } from '../../src/player/downloads.js';
 import { useBottomChromeInset } from '../../src/navigation/useBottomChromeInset.js';
 import { FadeInUp } from '../../src/motion/FadeInUp.js';
 import { PressableFeedback } from '../../src/motion/PressableFeedback.js';
@@ -83,7 +83,11 @@ export default function HoerenScreen() {
         const list = await buildModuleList(modulesFile, manifest, fs, snapshot);
 
         const allLessonIds = list.flatMap((module) => module.subModules.flatMap((sub) => sub.lessons.map((lesson) => lesson.id)));
-        const downloadedIds = await downloadedLessonIds(allLessonIds, snapshot, isDownloaded);
+        // Most users have no downloads: do not re-read all 197 lesson payloads
+        // merely to find that their audio files do not exist.
+        const audioFiles = await fs.listDirectory(downloadDirPath(fs.documentDirectory));
+        const candidateIds = new Set(audioFiles.map((name) => name.match(/^(M\d{2}-\d{2}-\d{2})\./)?.[1]).filter(Boolean));
+        const downloadedIds = await downloadedLessonIds(allLessonIds.filter((id) => candidateIds.has(id)), snapshot, isDownloaded);
         const visibleModules = list.filter((m) => m.totalLessons > 0);
         const lastStarted = [...progressRows]
           .filter((p) => p.state !== 'new')

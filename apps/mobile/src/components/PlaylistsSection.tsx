@@ -3,6 +3,7 @@ import { qaPlaylistAutofillName } from '../qa/buildGate.js';
 import {
   ActivityIndicator,
   Modal,
+  ScrollView,
   Pressable,
   StyleSheet,
   Text,
@@ -240,7 +241,8 @@ export function PlaylistsSection({
               testID={`playlist-row-${playlist.name}`}
               onPress={() => toggleExpanded(playlist.id)}
               accessibilityRole="button"
-              accessibilityLabel={playlist.name}
+              accessibilityLabel={`${playlist.name}. ${de.hoeren.playlistLessonCount(items?.length ?? 0)}`}
+              accessibilityState={{ expanded }}
               style={styles.playlistTitleRow}
             >
               <View style={{ flex: 1 }}>
@@ -272,7 +274,7 @@ export function PlaylistsSection({
                   setNameDraft(playlist.name);
                 }}
                 accessibilityRole="button"
-                accessibilityLabel={de.hoeren.playlistRename}
+                accessibilityLabel={`${de.hoeren.playlistRename}: ${playlist.name}`}
                 style={styles.iconBtn}
               >
                 <Pencil color={theme.colors.textWeak} size={18} />
@@ -290,7 +292,7 @@ export function PlaylistsSection({
                     })();
                 }}
                 accessibilityRole="button"
-                accessibilityLabel={de.hoeren.playlistDelete}
+                accessibilityLabel={`${de.hoeren.playlistDelete}: ${playlist.name}`}
                 style={styles.iconBtn}
               >
                 <Trash2 color={theme.colors.error} size={18} />
@@ -408,8 +410,10 @@ function NameModal({
 
   return (
     <Modal visible={visible} transparent animationType="fade" onRequestClose={onCancel}>
-      <Pressable style={styles.modalBackdrop} onPress={onCancel}>
+      <Pressable accessible={false} style={styles.modalBackdrop} onPress={onCancel}>
         <Pressable
+          accessible={false}
+          accessibilityViewIsModal
           style={[styles.modalCard, { backgroundColor: theme.colors.surface, borderRadius: theme.radius.lg }]}
           onPress={(e) => e.stopPropagation()}
         >
@@ -483,14 +487,17 @@ function PickPlaylistModal({
 }) {
   return (
     <Modal visible={visible} transparent animationType="fade" onRequestClose={onCancel}>
-      <Pressable style={styles.modalBackdrop} onPress={onCancel}>
+      <Pressable accessible={false} style={styles.modalBackdrop} onPress={onCancel}>
         <Pressable
+          accessible={false}
+          accessibilityViewIsModal
           style={[styles.modalCard, { backgroundColor: theme.colors.surface, borderRadius: theme.radius.lg, maxHeight: '70%' }]}
           onPress={(e) => e.stopPropagation()}
         >
           <Text style={[styles.playlistName, { color: theme.colors.text, marginBottom: theme.spacing.sm }]}>
             {de.hoeren.playlistPickTitle}
           </Text>
+          <ScrollView keyboardShouldPersistTaps="handled">
           {playlists.map((pl) => (
             <Pressable
               key={pl.id}
@@ -501,9 +508,11 @@ function PickPlaylistModal({
               <Text style={{ color: theme.colors.text, fontSize: 16 }}>{pl.name}</Text>
             </Pressable>
           ))}
+          </ScrollView>
           <Pressable onPress={onCreate} accessibilityRole="button" style={{ minHeight: theme.minTapTarget, justifyContent: 'center', marginTop: theme.spacing.sm }}>
             <Text style={{ color: theme.colors.accent, fontWeight: '600' }}>{de.hoeren.playlistCreate}</Text>
           </Pressable>
+          <Pressable onPress={onCancel} accessibilityRole="button" style={{ minHeight: theme.minTapTarget, justifyContent: 'center' }}><Text style={{ color: theme.colors.textWeak }}>{de.common.cancel}</Text></Pressable>
         </Pressable>
       </Pressable>
     </Modal>
@@ -515,10 +524,10 @@ const styles = StyleSheet.create({
   headerRow: { flexDirection: 'row', alignItems: 'center', gap: 8, width: '100%' },
   sectionTitle: { fontSize: 16, fontWeight: '700' },
   playlistCard: { borderWidth: StyleSheet.hairlineWidth, padding: 12, gap: 8 },
-  playlistTitleRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+  playlistTitleRow: { minHeight: 48, flexDirection: 'row', alignItems: 'center', gap: 8 },
   playlistName: { fontSize: 16, fontWeight: '600' },
   actionsRow: { flexDirection: 'row', gap: 4 },
-  iconBtn: { minWidth: 44, minHeight: 44, alignItems: 'center', justifyContent: 'center' },
+  iconBtn: { minWidth: 48, minHeight: 48, alignItems: 'center', justifyContent: 'center' },
   itemRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   modalBackdrop: {
     flex: 1,
@@ -527,6 +536,6 @@ const styles = StyleSheet.create({
     padding: 24,
   },
   modalCard: { padding: 16, gap: 8, width: '100%', maxWidth: 400, alignSelf: 'center' },
-  modalActions: { flexDirection: 'row', justifyContent: 'flex-end', gap: 16, marginTop: 8 },
+  modalActions: { flexWrap: 'wrap', flexDirection: 'row', justifyContent: 'flex-end', gap: 16, marginTop: 8 },
   input: { borderWidth: StyleSheet.hairlineWidth, paddingHorizontal: 12, paddingVertical: 10, fontSize: 16 },
 });

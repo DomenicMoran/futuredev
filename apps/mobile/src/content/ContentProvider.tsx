@@ -32,10 +32,12 @@ export function ContentProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     let cancelled = false;
     void (async () => {
-      const fs = await getContentFs();
-      const list = await buildModuleList(BUNDLED.modules, BUNDLED.manifest, fs);
+      // Metadata is already validated in memory; never block initial navigation on disk I/O.
+      const list = await buildModuleList(BUNDLED.modules, BUNDLED.manifest);
       if (!cancelled) setModuleList(list);
-    })();
+    })().catch(() => {
+      if (!cancelled) setState((previous) => ({ ...previous, status: 'error', message: 'Lernfortschritt konnte nicht geladen werden.' }));
+    });
     return () => {
       cancelled = true;
     };
@@ -46,7 +48,11 @@ export function ContentProvider({ children }: { children: ReactNode }) {
     setState(nextState);
     if (nextState.modules) {
       const fs = await getContentFs();
-      setModuleList(await buildModuleList(nextState.modules, nextState.manifest, fs));
+      try {
+        setModuleList(await buildModuleList(nextState.modules, nextState.manifest, fs));
+      } catch {
+        setState((previous) => ({ ...previous, status: 'error', message: 'Lerninhalte konnten nicht geladen werden.' }));
+      }
     }
   }, []);
 

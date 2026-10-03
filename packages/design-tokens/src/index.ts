@@ -78,8 +78,7 @@ export const motion = {
   },
 } as const;
 
-// Zielgroesse fuer tippbare Elemente, mindestens 44 Punkt (Apple-Richtlinie,
-// gilt hier projektuebergreifend als Untergrenze).
-export const minTapTarget = 44;
+// Android accessibility: at least 48 dp for interactive targets.
+export const minTapTarget = 48;
 
 export * from './contrast.js';

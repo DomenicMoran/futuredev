@@ -757,7 +757,12 @@ export function jumpBackward(seconds: number): Promise<void> {
     if (!isCurrentSeekIntent(seekIntent) || currentItem(usePlayerStore.getState().queue) !== targetItem) return;
     const position = (await trackPlayer.getProgress()).position; assertPlayerEpoch(epoch);
     if (!isCurrentSeekIntent(seekIntent) || currentItem(usePlayerStore.getState().queue) !== targetItem) return;
-    await trackPlayer.seekTo(Math.max(position - seconds, 0));
+    const destination = clampSeekPosition(Math.max(position - seconds, 0), targetItem.durationSeconds);
+    await trackPlayer.seekTo(destination);
+    assertPlayerEpoch(epoch);
+    if (isCurrentSeekIntent(seekIntent) && currentItem(usePlayerStore.getState().queue) === targetItem) {
+      usePlayerStore.getState().setPosition(destination);
+    }
   });
 }
 
@@ -770,7 +775,12 @@ export function jumpForward(seconds: number): Promise<void> {
     if (!isCurrentSeekIntent(seekIntent) || currentItem(usePlayerStore.getState().queue) !== targetItem) return;
     const position = (await trackPlayer.getProgress()).position; assertPlayerEpoch(epoch);
     if (!isCurrentSeekIntent(seekIntent) || currentItem(usePlayerStore.getState().queue) !== targetItem) return;
-    await trackPlayer.seekTo(position + seconds);
+    const destination = clampSeekPosition(position + seconds, targetItem.durationSeconds);
+    await trackPlayer.seekTo(destination);
+    assertPlayerEpoch(epoch);
+    if (isCurrentSeekIntent(seekIntent) && currentItem(usePlayerStore.getState().queue) === targetItem) {
+      usePlayerStore.getState().setPosition(destination);
+    }
   });
 }
 

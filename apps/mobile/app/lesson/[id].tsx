@@ -245,7 +245,7 @@ export default function LessonScreen() {
   if (lesson === null) {
     return (
       <SafeAreaView edges={['top', 'left', 'right']} style={[styles.container, { backgroundColor: theme.colors.bg }]}>
-        <EmptyState Icon={BookOpen} title={de.lesson.notFoundTitle} body={de.lesson.notFoundBody} />
+        <EmptyState Icon={BookOpen} title={de.lesson.notFoundTitle} body={de.lesson.notFoundBody} actionLabel="Zur Lernübersicht" onAction={() => router.replace('/(tabs)/lernen')} />
       </SafeAreaView>
     );
   }
@@ -604,7 +604,7 @@ export default function LessonScreen() {
                   onPress={() => void openGlossary((item as { term: string }).term)}
                   accessibilityRole="button"
                   accessibilityLabel={(item as { term: string }).term}
-                  style={[styles.termChip, { borderColor: theme.colors.accent, minHeight: 44, alignSelf: 'flex-start' }]}
+                  style={[styles.termChip, { borderColor: theme.colors.accent, minHeight: 48, alignSelf: 'flex-start' }]}
                 >
                   <Text style={{ color: theme.colors.accent, fontSize: 14, lineHeight: 20 }}>{(item as { term: string }).term}</Text>
                 </Pressable>
@@ -650,7 +650,7 @@ export default function LessonScreen() {
                     accessibilityRole="checkbox"
                     accessibilityState={{ checked: checkedTasks.has(i) }}
                     accessibilityLabel={entry}
-                    style={[styles.checklistRow, { minHeight: 44 }]}
+                    style={[styles.checklistRow, { minHeight: 48 }]}
                   >
                     <View
                       style={[
@@ -899,7 +899,7 @@ function LessonHeader({
               onPress={() => onJump(t.key)}
               accessibilityRole="button"
               accessibilityLabel={t.label}
-              style={[styles.jumpChip, { borderColor: theme.colors.border, minHeight: 36 }]}
+              style={[styles.jumpChip, { borderColor: theme.colors.border, minHeight: 48 }]}
             >
               <Text style={{ color: theme.colors.textWeak, fontSize: 13 }}>{t.label}</Text>
             </Pressable>
@@ -958,7 +958,7 @@ function SpeechBlockRow({
             accessibilityRole="button"
             accessibilityLabel={isBookmarked ? de.lesson.bookmarkRemove : `${de.lesson.bookmarkLabel} setzen`}
             accessibilityState={{ checked: isBookmarked }}
-            style={[styles.iconButton, { zIndex: 2, minWidth: 44, minHeight: 44 }]}
+            style={[styles.iconButton, { zIndex: 2, minWidth: 48, minHeight: 48 }]}
           >
             {isBookmarked ? (
               <BookmarkCheck size={18} color={theme.colors.accent} />
@@ -970,7 +970,7 @@ function SpeechBlockRow({
             onPress={onOpenNoteDraft}
             accessibilityRole="button"
             accessibilityLabel={de.lesson.noteAdd}
-            style={[styles.iconButton, { minWidth: 44, minHeight: 44 }]}
+            style={[styles.iconButton, { minWidth: 48, minHeight: 48 }]}
           >
             <MessageSquarePlus size={18} color={noteBody ? theme.colors.accent : theme.colors.textWeak} />
           </Pressable>
@@ -1017,7 +1017,7 @@ function SpeechBlockRow({
             onPress={onSaveNote}
             accessibilityRole="button"
             accessibilityLabel={de.lesson.noteSave}
-            style={[styles.secondaryButton, { borderColor: theme.colors.border, minHeight: 36, marginTop: theme.spacing.xs }]}
+            style={[styles.secondaryButton, { borderColor: theme.colors.border, minHeight: 48, marginTop: theme.spacing.xs }]}
           >
             <Text style={[styles.secondaryButtonLabel, { color: theme.colors.text }]}>{de.lesson.noteSave}</Text>
           </Pressable>
@@ -1043,7 +1043,7 @@ function GlossaryModal({ lesson, term, onClose }: { lesson: Lesson; term: string
             onPress={onClose}
             accessibilityRole="button"
             accessibilityLabel={de.lesson.glossaryClose}
-            style={[styles.secondaryButton, { borderColor: theme.colors.border, minHeight: 44, marginTop: theme.spacing.base }]}
+            style={[styles.secondaryButton, { borderColor: theme.colors.border, minHeight: 48, marginTop: theme.spacing.base }]}
           >
             <Text style={[styles.secondaryButtonLabel, { color: theme.colors.text }]}>{de.lesson.glossaryClose}</Text>
           </Pressable>

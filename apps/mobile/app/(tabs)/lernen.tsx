@@ -54,7 +54,7 @@ export default function LernenScreen() {
   }, [query, searchIndex]);
 
   const header = <View>
-    {state.status === 'offline' ? <StatusBanner text={`${de.lernen.offlineBanner} ${formatDate(state.lastUpdatedAt)}`} color={theme.colors.warning} /> : null}
+    {state.status === 'offline' ? <StatusBanner text={state.lastUpdatedAt ? `${de.lernen.offlineBanner} ${formatDate(state.lastUpdatedAt)}` : 'Gespeicherte Inhalte verfügbar.'} color={theme.colors.textWeak} /> : null}
     {state.status === 'error' ? <View style={styles.errorWrap}><StatusBanner text={de.lernen.errorBanner} color={theme.colors.error} /><Pressable accessibilityRole="button" onPress={() => void refresh()} style={{ minHeight: theme.minTapTarget, justifyContent: 'center' }}><Text style={{ color: theme.colors.accent }}>{de.lernen.retry}</Text></Pressable></View> : null}
     {state.status === 'ok' && state.hasNewLessons ? <StatusBanner text={de.lernen.newLessonsBanner} color={theme.colors.accent} /> : null}
     <TabScreenTitle title={de.lernen.title} includeSafeAreaTop={false} />

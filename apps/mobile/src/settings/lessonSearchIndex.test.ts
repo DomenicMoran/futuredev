@@ -68,7 +68,7 @@ function bundledCommitPayload() {
 }
 
 describe('lesson search index generation binding and read complexity', () => {
-  it('validates one 197-lesson snapshot and performs only one additional checked lesson read per index item', async () => {
+  it('validates one snapshot and reuses exact bundled revisions without additional catalogue reads', async () => {
     const { fs, counts } = createCountedFs();
     await commitContentGeneration(fs, bundledCommitPayload());
     counts.lessonReads = 0;
@@ -77,7 +77,7 @@ describe('lesson search index generation binding and read complexity', () => {
     const lessonCount = bundledManifest.lessons.length;
 
     expect(result.entries).toHaveLength(lessonCount);
-    expect(counts.lessonReads).toBe(lessonCount * 2);
+    expect(counts.lessonReads).toBe(lessonCount);
     expect(counts.lessonReads).toBeLessThan(lessonCount * (lessonCount + 1));
   });
 

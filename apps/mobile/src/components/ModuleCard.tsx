@@ -7,6 +7,7 @@ import { de } from '../i18n/de.js';
 import type { ModuleListEntry } from '../content/listLessons.js';
 import { ModuleCover } from './ModuleCover.js';
 import { ProgressBar } from './ProgressBar.js';
+import { formatLearningDuration } from '../content/formatDuration.js';
 
 interface ModuleCardProps {
   readonly module: ModuleListEntry;
@@ -35,13 +36,13 @@ function ModuleCardInner({ module, onPress }: ModuleCardProps) {
     : `${de.lernen.inPreparation}, ${de.lernen.plannedLessons(module.subModules.length)}`;
 
   const durationSuffix =
-    hasLessons && durationMinutes > 0 ? ` · ${de.module.lessonDuration(durationMinutes)} gesamt` : '';
+    hasLessons && durationMinutes > 0 ? ` · ${formatLearningDuration(durationMinutes)} gesamt` : '';
 
   return (
     <PressableFeedback
       onPress={onPress}
       accessibilityRole="button"
-      accessibilityLabel={module.title}
+      accessibilityLabel={`${module.title}. ${meta}${durationSuffix}`}
       style={[
         styles.card,
         {

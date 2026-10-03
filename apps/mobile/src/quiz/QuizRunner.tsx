@@ -176,7 +176,7 @@ export function QuizRunner({ pool, desiredCount, scope, heading, onExit, onNextL
     return (
       <View style={[styles.container, { backgroundColor: theme.colors.bg, padding: theme.spacing.lg }]}>
         <Text style={[styles.heading, { color: theme.colors.text }]}>{heading}</Text>
-        <Text style={[styles.title, { color: theme.colors.text, marginTop: theme.spacing.base }]}>
+        <Text accessibilityRole="header" accessibilityLiveRegion="polite" style={[styles.title, { color: theme.colors.text, marginTop: theme.spacing.base }]}>
           {de.quiz.rulesTitle}
         </Text>
         <View style={{ marginTop: theme.spacing.base, gap: theme.spacing.sm }}>
@@ -244,7 +244,7 @@ export function QuizRunner({ pool, desiredCount, scope, heading, onExit, onNextL
         ) : null}
         {wrongAnswers.length > 0 ? (
           <View style={{ marginTop: theme.spacing.lg }}>
-            <Text style={[styles.title, { color: theme.colors.text }]}>{de.quiz.resultWrongListTitle}</Text>
+            <Text accessibilityRole="header" accessibilityLiveRegion="polite" style={[styles.title, { color: theme.colors.text }]}>{de.quiz.resultWrongListTitle}</Text>
             {wrongAnswers.map((w) => (
               <View
                 key={w.questionIndex}
@@ -310,7 +310,7 @@ export function QuizRunner({ pool, desiredCount, scope, heading, onExit, onNextL
             <Text style={[styles.smallBody, { color: theme.colors.textWeak }]}>{de.quiz.cancel}</Text>
           </Pressable>
         </View>
-        <Text style={[styles.title, { color: theme.colors.text, marginTop: theme.spacing.base }]}>
+        <Text accessibilityRole="header" accessibilityLiveRegion="polite" style={[styles.title, { color: theme.colors.text, marginTop: theme.spacing.base }]}>
           {question.question}
         </Text>
         <View style={{ marginTop: theme.spacing.lg, gap: theme.spacing.sm }}>
@@ -343,7 +343,7 @@ export function QuizRunner({ pool, desiredCount, scope, heading, onExit, onNextL
                   de.quiz.feedbackWrong,
                   de.quiz.correctAnswerLabel,
                 )}
-                accessibilityState={{ selected: isChosen, disabled: showState }}
+                accessibilityState={{ checked: isChosen, selected: isChosen, disabled: showState }}
                 onPress={() => chooseOption(optionIndex)}
                 disabled={phase === 'feedback'}
                 style={[

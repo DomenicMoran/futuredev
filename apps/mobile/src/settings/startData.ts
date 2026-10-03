@@ -3,8 +3,8 @@
 // `src/data/` und `src/content/` für den Gerätezugriff.
 import { getDatabase } from '../data/db.js';
 import { listProgress } from '../data/progress.js';
-import { getContentFs, loadLocalManifest } from '../content/index.js';
-import { loadModules } from '../content/lessonLoader.js';
+import { getContentFs } from '../content/index.js';
+import { loadContentSnapshot } from '../content/generation.js';
 import { buildModuleList, type ModuleListEntry } from '../content/listLessons.js';
 import { loadReviewCards } from '../review/cards.js';
 import { dailyRationSize, selectDailyRation } from '../review/dailyRation.js';
@@ -72,11 +72,12 @@ export async function loadStartData(
     getContentFs(),
     readDailyLearningSecondsToday(),
   ]);
-  const manifest = await loadLocalManifest(fs);
-  const modulesFile = await loadModules(fs);
+  const snapshot = await loadContentSnapshot(fs);
+  const manifest = snapshot.manifest;
+  const modulesFile = snapshot.modules;
   let moduleList: ModuleListEntry[] = [];
   if (modulesFile) {
-    moduleList = await buildModuleList(modulesFile, manifest, fs);
+    moduleList = await buildModuleList(modulesFile, manifest, fs, snapshot);
   }
   const lessonTitle = (lessonId: string): string => resolveStartLessonTitle(moduleList, lessonId);
 

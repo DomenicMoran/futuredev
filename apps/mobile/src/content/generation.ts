@@ -10,6 +10,10 @@ export const GENERATIONS_DIR = 'generations';
 const SEQUENCED_POINTER = /^active-generation\.(\d{10})\.json$/;
 const generationWriteTails = new Map<string, Promise<void>>();
 const inFlightContentSnapshots = new Map<string, Promise<ContentSnapshot>>();
+// Generation directories are immutable after publication. Verify the full package
+// once per process, then keep checking manifest/modules and each requested lesson.
+// Rechecking all 197 payloads on every tab change blocks Hermes for many seconds.
+const verifiedGenerations = new WeakMap<ContentFs, Set<string>>();
 
 function contentFsKey(fs: ContentFs): string {
   return fs.documentDirectory.replace(/[/\\]+$/, '');
@@ -154,19 +158,29 @@ async function snapshotFromGeneration(fs: ContentFs, base: string, generation: s
   const rawModules = await fs.readFile(modulesPath);
   const modules = modulesFileSchema.parse(JSON.parse(rawModules));
   if (!manifest.modulesSha256 || digestUtf8(rawModules) !== manifest.modulesSha256) throw new Error('Active generation modules checksum mismatch');
-  await verifyManifestLessons(fs, root, manifest);
+  const fingerprint = `${root}:${digestUtf8(rawManifest)}:${manifest.modulesSha256}`;
+  let verified = verifiedGenerations.get(fs);
+  if (!verified?.has(fingerprint)) {
+    await verifyManifestLessons(fs, root, manifest);
+    if (!verified) { verified = new Set(); verifiedGenerations.set(fs, verified); }
+    if (verified.size >= 8) verified.clear();
+    verified.add(fingerprint);
+  }
   return { root, manifest, modules, pointerSequence: sequence, generationId: generation };
 }
 
 async function verifyManifestLessons(fs: ContentFs, root: string, manifest: Manifest): Promise<void> {
-  for (const entry of manifest.lessons) {
+  // Bound native I/O concurrency: avoid 394 serialized bridge round trips without
+  // retaining all lesson payloads at once on a small Android device.
+  for (let offset = 0; offset < manifest.lessons.length; offset += 8) {
+    await Promise.all(manifest.lessons.slice(offset, offset + 8).map(async (entry) => {
     if (entry.file !== `${entry.id}.json`) throw new Error(`Unsafe lesson path ${entry.file}`);
     const path = `${root}${LESSONS_DIR_NAME}/${entry.file}`;
-    if (!(await fs.exists(path))) throw new Error(`Missing generation lesson ${entry.id}`);
     const raw = await fs.readFile(path);
     if (digestUtf8(raw) !== entry.sha256) throw new Error(`Generation lesson SHA-256 mismatch: ${entry.id}`);
     const lesson = lessonSchema.parse(JSON.parse(raw));
     if (lesson.id !== entry.id) throw new Error(`Generation lesson identity mismatch: ${entry.id}`);
+    }));
   }
 }
 
@@ -264,12 +278,17 @@ async function commitContentGenerationLocked(fs: ContentFs, input: {
         await publishGenerationPointer(fs, actualSnapshot, actualSnapshot.generationId, previous);
         return validated;
       }
-      throw new Error(`Content version ${previous.version} already exists with different hashes`);
+      // Migrate the old flat cache without reserializing its bundled payload.
+      // Same-version replacement is allowed only for exactly the same manifest.
+      if (actualSnapshot.generationId || validated.manifestSha256 !== digestUtf8(JSON.stringify(previous))) {
+        throw new Error(`Content version ${previous.version} already exists with different hashes`);
+      }
     }
   }
 
   const base = `${fs.documentDirectory}${CONTENT_DIR_NAME}/`;
   const generationRoot = `${base}${GENERATIONS_DIR}/${validated.generationId}/`;
+  verifiedGenerations.delete(fs);
   const lessonsRoot = `${generationRoot}${LESSONS_DIR_NAME}/`;
   await fs.ensureDirectory(generationRoot);
   await fs.ensureDirectory(lessonsRoot);

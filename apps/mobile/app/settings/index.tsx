@@ -175,7 +175,7 @@ export default function SettingsScreen() {
         >
           <ChevronLeft color={theme.colors.text} size={26} />
         </Pressable>
-        <Text style={[styles.headerTitle, { color: theme.colors.text }]}>{de.settings.title}</Text>
+        <Text accessibilityRole="header" style={[styles.headerTitle, { color: theme.colors.text }]}>{de.settings.title}</Text>
         <View style={{ width: theme.minTapTarget }} />
       </View>
       <ScrollView contentContainerStyle={{ padding: theme.spacing.lg }}>
@@ -240,21 +240,21 @@ export default function SettingsScreen() {
       <SwitchRow theme={theme} title={de.settings.telemetryTitle} body={de.settings.telemetryBody} value={false} disabled />
 
       <View style={{ marginTop: theme.spacing.lg }}>
-        <Text style={[styles.groupTitle, { color: theme.colors.text }]}>{de.settings.exportTitle}</Text>
+        <Text accessibilityRole="header" style={[styles.groupTitle, { color: theme.colors.text }]}>{de.settings.exportTitle}</Text>
         <ActionButton theme={theme} label={de.settings.exportAction} onPress={handleExport} disabled={Boolean(busy)} />
-        <Text style={[styles.groupTitle, { color: theme.colors.text, marginTop: theme.spacing.base }]}>{de.settings.importTitle}</Text>
+        <Text accessibilityRole="header" style={[styles.groupTitle, { color: theme.colors.text, marginTop: theme.spacing.base }]}>{de.settings.importTitle}</Text>
         <ActionButton theme={theme} label={de.settings.importAction} onPress={handleImport} disabled={Boolean(busy)} />
         {hydrateRetryNeeded ? <ActionButton theme={theme} label={de.settings.importHydrateRetry} onPress={retrySettingsHydrate} disabled={Boolean(busy)} /> : null}
-        {status ? <Text style={[styles.status, { color: theme.colors.textWeak }]}>{status}</Text> : null}
+        {status ? <Text accessibilityLiveRegion="polite" style={[styles.status, { color: theme.colors.textWeak }]}>{status}</Text> : null}
       </View>
 
       <View style={{ marginTop: theme.spacing.xl }}>
-        <Text style={[styles.groupTitle, { color: theme.colors.text }]}>{de.settings.resetOnboardingTitle}</Text>
+        <Text accessibilityRole="header" style={[styles.groupTitle, { color: theme.colors.text }]}>{de.settings.resetOnboardingTitle}</Text>
         <ActionButton theme={theme} label={de.settings.resetOnboardingAction} onPress={handleResetOnboarding} />
       </View>
 
       <View style={{ marginTop: theme.spacing.lg }}>
-        <Text style={[styles.groupTitle, { color: theme.colors.error }]}>{de.settings.deleteAllTitle}</Text>
+        <Text accessibilityRole="header" style={[styles.groupTitle, { color: theme.colors.error }]}>{de.settings.deleteAllTitle}</Text>
         <ActionButton theme={theme} label={de.settings.deleteAllAction} onPress={handleDeleteAll} destructive disabled={Boolean(busy)} />
       </View>
       </ScrollView>
@@ -265,7 +265,7 @@ export default function SettingsScreen() {
 function OptionGroup({ theme, title, children }: { theme: ReturnType<typeof useTheme>; title: string; children: ReactNode }) {
   return (
     <View style={{ marginTop: theme.spacing.lg }}>
-      <Text style={[styles.groupTitle, { color: theme.colors.text }]}>{title}</Text>
+      <Text accessibilityRole="header" style={[styles.groupTitle, { color: theme.colors.text }]}>{title}</Text>
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: theme.spacing.sm, marginTop: theme.spacing.xs }}>{children}</View>
     </View>
   );
@@ -274,8 +274,8 @@ function OptionGroup({ theme, title, children }: { theme: ReturnType<typeof useT
 function ChoicePill({ theme, label, active, onPress }: { theme: ReturnType<typeof useTheme>; label: string; active: boolean; onPress: () => void }) {
   return (
     <Pressable
-      accessibilityRole="button"
-      accessibilityState={{ selected: active }}
+      accessibilityRole="radio"
+      accessibilityState={{ checked: active, selected: active }}
       accessibilityLabel={label}
       onPress={onPress}
       style={[
@@ -310,7 +310,7 @@ function SwitchRow({
   return (
     <View style={[styles.switchRow, { marginTop: theme.spacing.lg }]}>
       <View style={{ flex: 1 }}>
-        <Text style={[styles.groupTitle, { color: theme.colors.text }]}>{title}</Text>
+        <Text accessibilityRole="header" style={[styles.groupTitle, { color: theme.colors.text }]}>{title}</Text>
         <Text style={[styles.status, { color: theme.colors.textWeak }]}>{body}</Text>
       </View>
       <Switch value={value} disabled={disabled} accessibilityLabel={title} accessibilityState={{ disabled: Boolean(disabled) }} />
