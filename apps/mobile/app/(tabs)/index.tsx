@@ -1,3 +1,5 @@
+import { ContinueListeningCard } from '../../src/components/ContinueListeningCard.js';
+import { ProgressOverview } from '../../src/components/ProgressOverview.js';
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
@@ -23,7 +25,6 @@ import { useContent } from '../../src/content/ContentProvider.js';
 
 import {
   collectOrderedPublishedLessonIds,
-  getFirstPublishedLessonId,
 } from '../../src/content/listLessons.js';
 
 import { openFirstPublishedLessonOrLernen } from '../../src/navigation/openFirstLesson.js';
@@ -53,7 +54,7 @@ export default function StartScreen() {
 
   const theme = useTheme();
 
-  const { moduleList, state: contentState } = useContent();
+  const { moduleList, statuses, state: contentState } = useContent();
 
   const dailyGoalMinutes = useSettingsStore((s) => s.dailyGoalMinutes);
   const dailyLearningSecondsToday = useSettingsStore((s) => s.dailyLearningSecondsToday);
@@ -129,7 +130,7 @@ export default function StartScreen() {
   }, [queue, moduleList, positionSeconds]);
 
   const nextLessonId =
-    data?.nextLessonId ?? getFirstPublishedLessonId(moduleList) ?? orderedLessonIds[0] ?? null;
+    orderedLessonIds.find(id => !statuses[id]?.done) ?? null;
 
   const continueCard = useMemo((): ContinueCard | null => {
     const base = data?.continueCard ?? playerContinueCard;
@@ -274,7 +275,9 @@ export default function StartScreen() {
 
 
 
-      {continueCard && continueMode ? (
+      <ContinueListeningCard />
+      <ProgressOverview />
+      {continueCard && continueMode && continueMode !== 'listen' && !statuses[continueCard.lessonId]?.read && !statuses[continueCard.lessonId]?.done ? (
 
         <FadeInUp durationMs={200} delayMs={motionStaggerDelay(1)}>
 
@@ -298,16 +301,7 @@ export default function StartScreen() {
 
             <Text style={[styles.body, { color: theme.colors.textWeak }]}>
 
-              {continueMode === 'listen' && continueCard.positionLabel
-
-                ? de.start.continueListenFrom(continueCard.positionLabel)
-
-                : continueMode === 'read' && continueCard.positionLabel
-
-                  ? de.start.continueReadFrom(continueCard.positionLabel)
-
-                  : null}
-
+              {continueCard.positionLabel ? de.start.continueReadFrom(continueCard.positionLabel) : de.start.continueReadAction}
             </Text>
 
             <PrimaryButton

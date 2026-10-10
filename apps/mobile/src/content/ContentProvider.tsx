@@ -1,4 +1,6 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
+import { listLessonStatuses, type LessonStatus } from '../data/lessonStatus.js';
+import { subscribeProgressChanged } from '../data/progressEvents.js';
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import type { ContentState } from './types.js';
 import { refreshContent } from './sync.js';
 import { buildModuleList, type ModuleListEntry } from './listLessons.js';
@@ -9,6 +11,8 @@ interface ContentContextValue {
   state: ContentState;
   moduleList: ModuleListEntry[];
   refresh: () => Promise<void>;
+  statuses: Record<string, LessonStatus>;
+  refreshStatuses: () => Promise<void>;
 }
 
 const ContentContext = createContext<ContentContextValue | null>(null);
@@ -19,7 +23,7 @@ const ContentContext = createContext<ContentContextValue | null>(null);
  * additive Aenderung). Laedt beim ersten Mount: Erststart-Kopie, Manifest
  * abgleichen, Modulliste mit Fortschritt bauen.
  */
-export function ContentProvider({ children }: { children: ReactNode }) {
+export function ContentProvider({ children, navigationKey = '' }: { children: ReactNode; navigationKey?: string }) {
   const [state, setState] = useState<ContentState>(() => ({
     status: 'ok',
     manifest: BUNDLED.manifest,
@@ -27,6 +31,20 @@ export function ContentProvider({ children }: { children: ReactNode }) {
     lastUpdatedAt: null,
     hasNewLessons: false,
   }));
+  const [statuses, setStatuses] = useState<Record<string, LessonStatus>>({});
+  const statusRequest = useRef(0);
+  const refreshStatuses = useCallback(async () => {
+    const token = ++statusRequest.current;
+    const value = await listLessonStatuses();
+    if (token === statusRequest.current) setStatuses(value);
+  }, []);
+  useEffect(() => {
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const load = () => { void refreshStatuses().catch(() => undefined); };
+    load();
+    const unsubscribe = subscribeProgressChanged(() => { if (timer) clearTimeout(timer); timer = setTimeout(load, 100); });
+    return () => { statusRequest.current += 1; unsubscribe(); if (timer) clearTimeout(timer); };
+  }, [navigationKey, refreshStatuses]);
   const [moduleList, setModuleList] = useState<ModuleListEntry[]>([]);
 
   useEffect(() => {
@@ -64,7 +82,7 @@ export function ContentProvider({ children }: { children: ReactNode }) {
     void refresh();
   }, [refresh]);
 
-  const value = useMemo(() => ({ state, moduleList, refresh }), [state, moduleList, refresh]);
+  const value = useMemo(() => ({ state, moduleList, refresh, statuses, refreshStatuses }), [state, moduleList, refresh, statuses, refreshStatuses]);
 
   return <ContentContext.Provider value={value}>{children}</ContentContext.Provider>;
 }

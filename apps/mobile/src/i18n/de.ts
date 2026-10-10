@@ -266,9 +266,9 @@ export const de = {
     profilePreferredLearnTime: (label: string) => `Bevorzugte Lernzeit: ${label}`,
     profileIntensity: (label: string) => `Wiederholung: ${label}`,
     profileProgressSummary: (modulesStarted: number, lessonsDone: number) =>
-      `${modulesStarted} Modul${modulesStarted === 1 ? '' : 'e'} begonnen · ${lessonsDone} Lektion${lessonsDone === 1 ? '' : 'en'} abgeschlossen`,
+      `${modulesStarted} Modul${modulesStarted === 1 ? '' : 'e'} begonnen · ${lessonsDone} Lektion${lessonsDone === 1 ? '' : 'en'} mit Quiz abgeschlossen`,
     profilePartialProgressSummary: (modulesStarted: number, lessonsDone: number, inProgress: number) =>
-      `${modulesStarted} Modul${modulesStarted === 1 ? '' : 'e'} mit Lernaktivität · ${lessonsDone} Lektion${lessonsDone === 1 ? '' : 'en'} abgeschlossen · ${inProgress} weitere mit Aktivität`,
+      `${modulesStarted} Modul${modulesStarted === 1 ? '' : 'e'} mit Lernaktivität · ${lessonsDone} Lektion${lessonsDone === 1 ? '' : 'en'} mit Quiz abgeschlossen · ${inProgress} weitere mit Aktivität`,
     profileToolsLoadError: 'Deine persönlichen Werkzeuge konnten nicht geladen werden.',
     profileProgressEmpty: 'Noch keine abgeschlossenen Lektionen — starte unter Lernen.',
     profileSettings: 'Einstellungen',

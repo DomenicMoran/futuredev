@@ -1,3 +1,4 @@
+import type { Database } from '../data/types.js';
 import { getDatabase } from '../data/db.js';
 
 const PREFIX = 'hearing.v1.';
@@ -38,8 +39,8 @@ function summarize(value: StoredHearing): HearingProgress {
   return { seconds, duration: value.duration, completed: value.ended && seconds >= value.duration * 0.98 };
 }
 
-export async function listHearingProgress(): Promise<Record<string, HearingProgress>> {
-  const db = await getDatabase();
+export async function listHearingProgress(database?: Database): Promise<Record<string, HearingProgress>> {
+  const db = database ?? await getDatabase();
   const result: Record<string, HearingProgress> = {};
   for (const row of await db.listSettings()) {
     if (!row.key.startsWith(PREFIX)) continue;

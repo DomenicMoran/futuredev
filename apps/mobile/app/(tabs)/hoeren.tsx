@@ -1,3 +1,9 @@
+import { matchesListeningFilter } from '../../src/player/listeningFilter.js';
+import { ContinueListeningCard } from '../../src/components/ContinueListeningCard.js';
+import { ProgressOverview } from '../../src/components/ProgressOverview.js';
+import { LessonStatusActions } from '../../src/components/LessonStatusActions.js';
+import { useContent } from '../../src/content/ContentProvider.js';
+import { EMPTY_LESSON_STATUS, lessonStatusLabel } from '../../src/data/lessonStatus.js';
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { ActionSheetIOS, ActivityIndicator, Alert, Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -13,7 +19,7 @@ import { bundledContent } from '../../src/content/bundledData.js';
 import { loadContentSnapshot } from '../../src/content/generation.js';
 import { buildModuleList, type ModuleListEntry } from '../../src/content/listLessons.js';
 import { listProgress } from '../../src/data/index.js';
-import { downloadLesson, cancelDownload, getDownloadedStorageBytes, isDownloaded, playLessonInModuleContext, deleteDownload } from '../../src/player/index.js';
+import { downloadLesson, cancelDownload, getDownloadedStorageBytes, isDownloaded, playLessonInModuleContext, resumeLessonInModuleContext, deleteDownload } from '../../src/player/index.js';
 import { batchDownloads } from '../../src/player/batchDownloads.js';
 import { listHearingProgress } from '../../src/player/hearingProgress.js';
 import { PlaylistsSection } from '../../src/components/PlaylistsSection.js';
@@ -35,6 +41,10 @@ interface ContinueCard {
 
 export default function HoerenScreen() {
   const theme = useTheme();
+  const { statuses, moduleList: cachedModules } = useContent();
+  const [filter, setFilter] = useState('all');
+  const [editingLessonId, setEditingLessonId] = useState<string | null>(null);
+  const [toolsOpen, setToolsOpen] = useState(false);
   const bottomInset = useBottomChromeInset();
   const downloadStates = usePlayerStore((s) => s.downloads);
   const isPlaying = usePlayerStore((s) => s.isPlaying);
@@ -65,12 +75,14 @@ export default function HoerenScreen() {
   const [indexLoading, setIndexLoading] = useState(false);
   const searchIndexRequest = useRef(0);
   const loadRequest = useRef(0);
-  const [modules, setModules] = useState<ModuleListEntry[]>([]);
+  const [modules, setModules] = useState<ModuleListEntry[]>(() => cachedModules);
+  useEffect(() => { if (cachedModules.length) setModules(current => current.length ? current : cachedModules); }, [cachedModules]);
   const [continueCard, setContinueCard] = useState<ContinueCard | null>(null);
   const [downloaded, setDownloaded] = useState<Record<string, boolean>>({});
   const [playbackError, setPlaybackError] = useState(false);
   const [playlistPlaybackError, setPlaylistPlaybackError] = useState(false);
   const [requestAddLessonId, setRequestAddLessonId] = useState<string | null>(null);
+  useEffect(() => { if (batch.running || requestAddLessonId) setToolsOpen(true); }, [batch.running, requestAddLessonId]);
 
   // Faengt einen Fehler beim Starten der Wiedergabe/Warteschlange ab
   // (Pruefbericht Phase 3, B-01: ein ungueltiges Manifest/eine ungueltige
@@ -177,14 +189,16 @@ export default function HoerenScreen() {
     return new Set(term ? searchLessonEntries(searchIndex, term).map((entry) => entry.id) : []);
   }, [query, searchIndex]);
   const visibleModules = useMemo(() => {
-    if (!query.trim()) return modules;
     return modules.map((module) => ({
       ...module,
-      subModules: module.subModules.map((sub) => ({ ...sub, lessons: sub.lessons.filter((lesson) => matchingLessonIds.has(lesson.id)) })).filter((sub) => sub.lessons.length > 0),
+      subModules: module.subModules.map((sub) => ({ ...sub, lessons: sub.lessons.filter((lesson) => {
+        const status = statuses[lesson.id] ?? EMPTY_LESSON_STATUS;
+        return matchesListeningFilter(lesson.id, filter, status, Boolean(downloaded[lesson.id]), !query.trim() || matchingLessonIds.has(lesson.id), editingLessonId);
+      }) })).filter((sub) => sub.lessons.length > 0),
     })).filter((module) => module.subModules.length > 0);
-  }, [matchingLessonIds, modules, query]);
+  }, [matchingLessonIds, modules, query, filter, statuses, downloaded, editingLessonId]);
 
-  if (loading && !hasLoadedOnce) {
+  if (loading && !hasLoadedOnce && modules.length === 0) {
     return (
       <SafeAreaView edges={['top', 'left', 'right']} style={[styles.container, { backgroundColor: theme.colors.bg, justifyContent: 'center' }]}>
         <TabScreenTitle title={de.hoeren.title} includeSafeAreaTop={false} />
@@ -248,6 +262,12 @@ export default function HoerenScreen() {
           </View>
         ) : null}
 
+        <ContinueListeningCard />
+        <ProgressOverview />
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8 }}>
+          {([['all', 'Alle'], ['started', 'Angefangen'], ['unheard', 'Ungehört'], ['heard', 'Gehört'], ['offline', 'Offline']] as const).map(([key, label]) => <Pressable key={key} testID={`audio-filter-${key}`} accessibilityRole="button" accessibilityState={{ selected: filter === key }} onPress={() => setFilter(key)} style={{ minHeight: 48, justifyContent: 'center', paddingHorizontal: 16, borderRadius: 24, backgroundColor: filter === key ? theme.colors.accent : theme.colors.surface, borderWidth: 0.5, borderColor: theme.colors.border }}><Text style={{ color: filter === key ? theme.colors.bg : theme.colors.text, fontWeight: '600' }}>{label}</Text></Pressable>)}
+        </ScrollView>
+        {visibleModules.length === 0 && !indexLoading ? <View style={{ gap: 4 }}><Text style={{ color: theme.colors.textWeak }}>Keine Lektionen für diese Auswahl.</Text><Pressable accessibilityRole="button" onPress={() => { setFilter('all'); setQuery(''); }} style={{ minHeight: 48, justifyContent: 'center' }}><Text style={{ color: theme.colors.accent }}>Alle Lektionen anzeigen</Text></Pressable></View> : null}
         <View style={[styles.searchBox, { borderColor: theme.colors.border, backgroundColor: theme.colors.surface, borderRadius: theme.radius.md }]}>
           <Search color={theme.colors.textWeak} size={18} />
           <TextInput testID="audio-search-input" value={query} onChangeText={setQuery} placeholder={de.hoeren.searchPlaceholder} placeholderTextColor={theme.colors.textWeak} accessibilityLabel={de.hoeren.searchPlaceholder} returnKeyType="search" style={[styles.searchInput, { color: theme.colors.text }]} />
@@ -255,6 +275,11 @@ export default function HoerenScreen() {
         </View>
         {query.trim() && indexLoading ? <Text style={{ color: theme.colors.textWeak }}>{de.hoeren.searchIndexLoading}</Text> : null}
 
+        <View>
+          <Pressable testID="audio-tools-toggle" accessibilityRole="button" accessibilityState={{ expanded: toolsOpen || selecting || batch.running || !!requestAddLessonId }} onPress={() => setToolsOpen(!toolsOpen)} style={{ minHeight: 48, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
+            <Text style={{ color: theme.colors.accent, fontWeight: '600', flex: 1 }}>Downloads & Wiedergabelisten{batch.running ? ' · läuft' : ''}</Text><Text style={{ color: theme.colors.accent }}>{toolsOpen || selecting || batch.running || requestAddLessonId ? '−' : '+'}</Text>
+          </Pressable>
+          {toolsOpen || selecting || batch.running || requestAddLessonId ? <View style={{ gap: theme.spacing.lg }}>
         <View style={[styles.offlineHint, { borderColor: theme.colors.border, borderRadius: theme.radius.md, padding: theme.spacing.base, gap: 8 }]}>
           <Text style={[styles.moduleTitle, { color: theme.colors.text }]}>Offline hören</Text>
           <Text style={{ color: theme.colors.textWeak }}>Einzelne Lektionen auswählen oder ein ganzes Modul laden. Bereits verfügbare Dateien werden übersprungen.</Text>
@@ -328,36 +353,9 @@ export default function HoerenScreen() {
           onRequestAddHandled={() => setRequestAddLessonId(null)}
         />
 
-        {continueCard ? (
-          <PressableFeedback
-            testID="hoeren-continue-play"
-            onPress={() => void runPlayback(() => playLessonInModuleContext(continueCard.lessonId))}
-            accessibilityRole="button"
-            accessibilityLabel={`${de.hoeren.continueCard}: ${continueCard.title}`}
-          >
-            <View
-              style={[
-                styles.continueCard,
-                {
-                  backgroundColor: theme.colors.surface,
-                  borderColor: theme.colors.border,
-                  borderLeftColor: theme.colors.accent,
-                  borderRadius: theme.radius.lg,
-                  padding: theme.spacing.base,
-                  minHeight: theme.minTapTarget,
-                },
-              ]}
-            >
-              <Text style={[styles.cardLabel, { color: theme.colors.textWeak }]}>{de.hoeren.continueCard}</Text>
-              <Text style={[styles.cardTitle, { color: theme.colors.text }]}>{continueCard.title}</Text>
-              <Text style={[styles.continueCta, { color: theme.colors.accent, marginTop: theme.spacing.sm }]}>
-                {de.hoeren.continuePlayAction}
-              </Text>
-            </View>
-          </PressableFeedback>
-        ) : null}
+          </View> : null}
+        </View>
 
-        {query.trim() && visibleModules.length === 0 && !indexLoading ? <Text style={{ color: theme.colors.textWeak }}>{de.hoeren.searchNoResults}</Text> : null}
         {visibleModules.map((module, moduleIndex) => (
           <FadeInUp key={module.id} durationMs={200} delayMs={motionStaggerDelay(moduleIndex + 1)}>
           <View style={styles.moduleBlock}>
@@ -385,6 +383,7 @@ export default function HoerenScreen() {
             {module.subModules.flatMap((sub) => sub.lessons).map((lesson) => {
               const downloadState = downloadStates[lesson.id];
               const heard = hearing[lesson.id];
+              const status = statuses[lesson.id] ?? EMPTY_LESSON_STATUS;
               return (
               <View
                 key={lesson.id}
@@ -401,7 +400,7 @@ export default function HoerenScreen() {
               >
                 {selecting ? <Pressable accessibilityRole="checkbox" accessibilityLabel={`${lesson.title} für Offline auswählen`} accessibilityState={{ checked: selected.has(lesson.id) }} testID={`select-download-${lesson.id}`} onPress={() => toggleSelected(lesson.id)} style={{ minHeight: 48, minWidth: 48, justifyContent: 'center', alignItems: 'center' }}><Text style={{ color: theme.colors.accent, fontSize: 24 }}>{selected.has(lesson.id) ? '☑' : '☐'}</Text></Pressable> : null}
                 {!selecting ? <PressableFeedback
-                  onPress={() => void runPlayback(() => playLessonInModuleContext(lesson.id))}
+                  onPress={() => void runPlayback(() => resumeLessonInModuleContext(lesson.id, status.heard ? 0 : status.listenedUntil))}
                   accessibilityRole="button"
                   accessibilityLabel={`${de.hoeren.playLesson}: ${lesson.title}`}
                   hitSlop={8}
@@ -429,7 +428,7 @@ export default function HoerenScreen() {
                   </PressableFeedback>
                 ) : null}
                 <PressableFeedback
-                  onPress={() => void runPlayback(() => playLessonInModuleContext(lesson.id))}
+                  onPress={() => void runPlayback(() => resumeLessonInModuleContext(lesson.id, status.heard ? 0 : status.listenedUntil))}
                   accessibilityRole="button"
                   accessibilityLabel={`${de.hoeren.playLesson}: ${lesson.title}`}
                   style={[styles.lessonTextBlock, { flex: 1, minWidth: 0 }]}
@@ -437,14 +436,16 @@ export default function HoerenScreen() {
                   <Text numberOfLines={3} ellipsizeMode="tail" style={[styles.lessonTitle, { color: theme.colors.text }]}>
                     {lesson.title}
                   </Text>
-                  <Text testID={`hearing-status-${lesson.id}`} style={{ color: hearing[lesson.id]?.completed ? theme.colors.accent : theme.colors.textWeak, fontSize: 12 }}>
-                    {heard?.completed ? 'Vollständig gehört' : heard && heard.seconds > 0 ? `Angefangen · ${Math.max(1, Math.min(99, Math.round(heard.seconds / Math.max(1, heard.duration) * 100)))} % gehört` : previousHearing.has(lesson.id) ? 'Früherer Hörfortschritt vorhanden' : 'Ungehört'}
+                  <Text testID={`hearing-status-${lesson.id}`} style={{ color: status.heard ? theme.colors.accent : theme.colors.textWeak, fontSize: 12 }}>
+                    {status.overrides.heard === false ? 'Als ungehört markiert' : status.heard ? (status.overrides.heard === true ? 'Als gehört markiert' : 'Vollständig gehört') : heard && heard.seconds > 0 ? `Angefangen · ${Math.max(1, Math.min(99, Math.round(heard.seconds / Math.max(1, heard.duration) * 100)))} % gehört` : previousHearing.has(lesson.id) ? 'Früherer Hörfortschritt vorhanden' : 'Ungehört'}
                     {downloaded[lesson.id] ? ' · Offline verfügbar' : batch.items[lesson.id] === 'queued' ? ' · Download wartet' : ''}
                   </Text>
+                  {status.read || status.done || status.quizPassed ? <Text style={{ color: theme.colors.textWeak, fontSize: 12 }}>{lessonStatusLabel({ ...status, heard: false })}</Text> : null}
                   <Text numberOfLines={1} style={[styles.lessonDuration, { color: theme.colors.textWeak }]}>
-                    {de.hoeren.durationMinutes(lesson.durationMinutes)}
+                    {lesson.durationSeconds !== undefined ? `${Math.floor(lesson.durationSeconds / 60)}:${String(Math.floor(lesson.durationSeconds % 60)).padStart(2, '0')} Audio` : de.hoeren.durationMinutes(lesson.durationMinutes)}
                   </Text>
                 </PressableFeedback>
+                <LessonStatusActions lessonId={lesson.id} title={lesson.title} compact onOpenChange={open => setEditingLessonId(open ? lesson.id : null)} />
                 <PressableFeedback
                   onPress={() =>
                     openLessonMoreMenu({

@@ -10,6 +10,7 @@ export interface LessonListEntry {
   id: string;
   title: string;
   durationMinutes: number;
+  durationSeconds?: number;
   available: boolean; // im Manifest gelistet (Technikvorgabe 4: kein Platzhalter fuer Unveroeffentlichtes)
   state: LessonState;
 }
@@ -72,6 +73,7 @@ export async function buildModuleList(
           id,
           title: lesson?.title ?? id,
           durationMinutes: lesson?.durationMinutes ?? 0,
+          durationSeconds: lesson?.audio.durationSeconds,
           available: true,
           state,
         });

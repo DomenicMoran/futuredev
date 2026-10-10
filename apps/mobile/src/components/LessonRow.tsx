@@ -1,6 +1,9 @@
+import { useContent } from '../content/ContentProvider.js';
+import { EMPTY_LESSON_STATUS, lessonStatusLabel } from '../data/lessonStatus.js';
+import { LessonStatusActions } from './LessonStatusActions.js';
 import { memo } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { CheckCircle2, ChevronRight, Circle } from 'lucide-react-native';
+import { CheckCircle2, Circle } from 'lucide-react-native';
 import { useTheme } from '../theme/useTheme.js';
 import { de } from '../i18n/de.js';
 import type { LessonListEntry } from '../content/listLessons.js';
@@ -10,27 +13,12 @@ interface LessonRowProps {
   readonly onPress: () => void;
 }
 
-function stateLabelFor(state: LessonListEntry['state']): string {
-  switch (state) {
-    case 'new':
-      return de.lernen.stateNew;
-    case 'started':
-      return de.lernen.stateStarted;
-    case 'read':
-      return de.lernen.stateRead;
-    case 'listened':
-      return de.lernen.stateListened;
-    case 'quiz_passed':
-      return de.lernen.stateQuizPassed;
-    case 'completed':
-      return de.lernen.stateCompleted;
-  }
-}
-
 function LessonRowInner({ lesson, onPress }: LessonRowProps) {
   const theme = useTheme();
-  const stateLabel = stateLabelFor(lesson.state);
-  const isCompleted = lesson.state === 'completed';
+  const { statuses } = useContent();
+  const status = statuses[lesson.id] ?? EMPTY_LESSON_STATUS;
+  const stateLabel = lessonStatusLabel(status);
+  const isCompleted = status.done || status.read || status.heard;
 
   const subtitle =
     lesson.durationMinutes > 0
@@ -38,21 +26,12 @@ function LessonRowInner({ lesson, onPress }: LessonRowProps) {
       : stateLabel;
 
   return (
+    <View style={[styles.row, { backgroundColor: theme.colors.surface, borderColor: theme.colors.border, borderRadius: theme.radius.md, paddingLeft: theme.spacing.base, paddingRight: 4 }]}>
     <Pressable
       onPress={onPress}
       accessibilityRole="button"
       accessibilityLabel={`${lesson.title}, ${subtitle}`}
-      style={({ pressed }) => [
-        styles.row,
-        {
-          backgroundColor: theme.colors.surface,
-          borderColor: theme.colors.border,
-          borderRadius: theme.radius.md,
-          padding: theme.spacing.base,
-          minHeight: theme.minTapTarget,
-          opacity: pressed ? 0.96 : 1,
-        },
-      ]}
+      style={({ pressed }) => [{ flex: 1, minWidth: 0, flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: theme.spacing.base, minHeight: theme.minTapTarget, opacity: pressed ? 0.96 : 1 }]}
     >
       {isCompleted ? (
         <CheckCircle2 size={20} color={theme.colors.success} />
@@ -85,8 +64,9 @@ function LessonRowInner({ lesson, onPress }: LessonRowProps) {
           {subtitle}
         </Text>
       </View>
-      <ChevronRight size={20} color={theme.colors.textWeak} />
     </Pressable>
+    <LessonStatusActions lessonId={lesson.id} title={lesson.title} compact />
+    </View>
   );
 }
 

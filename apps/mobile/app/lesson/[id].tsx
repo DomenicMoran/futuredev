@@ -1,3 +1,5 @@
+import { setLessonStatus } from '../../src/data/lessonStatus.js';
+import { LessonStatusActions } from '../../src/components/LessonStatusActions.js';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   Alert,
@@ -72,7 +74,7 @@ export default function LessonScreen() {
   const { stickyBottomOffset } = chromeLayout;
   const firstFormPreference = useSettingsStore((s) => s.firstFormPreference);
   const setDailyLearningSecondsToday = useSettingsStore((s) => s.setDailyLearningSecondsToday);
-  const { state: contentState } = useContent();
+  const { state: contentState, statuses, refreshStatuses } = useContent();
   const stickyBottomPadding = lessonContentBottomPadding(theme);
 
   const [lesson, setLesson] = useState<Lesson | null | undefined>(undefined); // undefined = laedt noch
@@ -454,7 +456,8 @@ export default function LessonScreen() {
     const targetId = id;
     if (!targetId) return;
     setCompletionStatus('saving');
-    const status = await persistReadCompletion(completionStateRef.current, () => markLessonRead(targetId).then(() => undefined));
+    completionStateRef.current.done = statuses[targetId]?.read ?? false;
+    const status = await persistReadCompletion(completionStateRef.current, async () => { await markLessonRead(targetId); await setLessonStatus(targetId, 'read', undefined); await refreshStatuses(); });
     if (currentLessonIdRef.current !== targetId) return;
     setCompletionStatus(status === 'saved' || status === 'already-saved' ? 'saved' : status === 'failed' ? 'error' : 'saving');
   }
@@ -533,13 +536,13 @@ export default function LessonScreen() {
         onScrollToIndexFailed={(info) => retryPendingScroll(info)}
         onScrollBeginDrag={cancelPendingScrollForManualScroll}
         ListHeaderComponent={
-          <LessonHeader
+          <View><LessonHeader
             lesson={lesson}
             sections={sections}
             onJump={jumpTo}
             audioError={audioError}
             onRetryListen={handleListen}
-          />
+          /><LessonStatusActions key={lesson.id} lessonId={lesson.id} title={lesson.title} /></View>
         }
         ListFooterComponent={
           nextLessonId ? (
@@ -672,7 +675,7 @@ export default function LessonScreen() {
             );
           }
           if (section.key === 'completion') {
-            const isComplete = completionStatus === 'saved';
+            const isComplete = statuses[id ?? '']?.read ?? false;
             return (
               <View collapsable={false} ref={(node) => registerJumpAnchor(section.key, index, node)} onLayout={() => onJumpAnchorLayout(section.key, index)} style={{ padding: theme.spacing.base, alignItems: 'stretch' }}>
                 <Pressable

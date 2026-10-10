@@ -1,12 +1,13 @@
 import type { LessonState } from '@futuredev/core';
 import { transitionLesson, createLessonProgress } from '@futuredev/core';
 import { getDatabase } from './db.js';
+import { notifyProgressChanged } from './progressEvents.js';
 import type { Database, ProgressRow } from './types.js';
 
 const lessonWriteQueues = new Map<string, Promise<void>>();
 let lessonWriteEpoch = 0;
 
-function serializeLessonWrite<T>(lessonId: string, work: (tx: Database) => Promise<T>): Promise<T> {
+export function serializeLessonWrite<T>(lessonId: string, work: (tx: Database) => Promise<T>): Promise<T> {
   const requestEpoch = lessonWriteEpoch;
   const previous = lessonWriteQueues.get(lessonId) ?? Promise.resolve();
   const run = async () => {
@@ -15,7 +16,9 @@ function serializeLessonWrite<T>(lessonId: string, work: (tx: Database) => Promi
     if (requestEpoch !== lessonWriteEpoch) throw new Error('Lesson progress write invalidated by data reset');
     // Every state-dependent progress write shares the same DB transaction
     // queue as quiz results and imports; no global get-then-upsert can go stale.
-    return db.transaction(work);
+    const value = await db.transaction(work);
+    notifyProgressChanged();
+    return value;
   };
   const result = previous.then(run, run);
   const settled = result.then(() => undefined, () => undefined);
@@ -95,6 +98,7 @@ async function savePositionInTransaction(
   const state = current.state === 'new' ? 'started' : current.state;
   const updated = { ...current, state, [field]: position, updatedAt: new Date().toISOString() };
   await tx.upsertProgress(updated);
+  if (field === 'listenedUntil') await tx.setSetting('audio.last.v1.' + lessonId, updated.updatedAt);
   return updated;
 }
 
@@ -120,6 +124,7 @@ async function completeAfterQuizIfEarned(tx: Database, progress: ProgressRow): P
 
 export function markLessonRead(lessonId: string): Promise<ProgressRow> {
   return serializeLessonWrite(lessonId, async (tx) => {
+    await tx.setSetting('read.completed.v1.' + lessonId, 'true');
     let current = await readProgress(tx, lessonId);
     if (current.state === 'new') current = await writeStateInTransaction(tx, lessonId, 'started');
     if (current.state === 'started') current = await writeStateInTransaction(tx, lessonId, 'read');

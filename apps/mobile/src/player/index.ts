@@ -404,6 +404,7 @@ async function startQueue(
   lifecycleEpoch = playerLifecycleEpoch,
   intent = startIntentEpoch,
   snapshot?: ContentSnapshot,
+  resumeSeconds = 0,
 ): Promise<void> {
   if (items.length === 0) return;
   const startItem = items[startIndex];
@@ -438,7 +439,7 @@ async function startQueue(
     assertStartIntent(lifecycleEpoch, intent);
   }
 
-  let startSeconds = 0;
+  let startSeconds = clampSeekPosition(Number.isFinite(resumeSeconds) ? Math.max(0, resumeSeconds) : 0, startItem.durationSeconds);
   if (blockIndex !== undefined) {
     const cueSheet = await loadCueSheet(startItem.lessonId, snapshot);
     assertStartIntent(lifecycleEpoch, intent);
@@ -474,10 +475,27 @@ async function startQueue(
  */
 /** Gleiche Lektion in der Warteschlange: Fortsetzen statt Reset (kein Lautstärke-Blast). */
 /** Idempotenter Resume-Endpunkt für UI und Remote-Control (nie ein Toggle). */
+async function recoverMissingNativeQueue(player: Awaited<ReturnType<typeof TP>>, epoch: number): Promise<boolean> {
+  const state = usePlayerStore.getState();
+  const item = currentItem(state.queue);
+  if (!item) return false;
+  const originalIntent = startIntentEpoch;
+  const active = player.getActiveTrack ? await player.getActiveTrack() : undefined;
+  assertPlayerEpoch(epoch);
+  if (originalIntent !== startIntentEpoch || currentItem(usePlayerStore.getState().queue) !== item) return true;
+  // Optional API guard only exists for old test/native adapters. Production RNTP has it.
+  if ((!player.getActiveTrack || active?.id === item.lessonId) && !state.playbackError) return false;
+  const intent = ++startIntentEpoch;
+  invalidateSeekIntent();
+  await startQueue(state.queue.items, state.queue.currentIndex, undefined, epoch, intent, snapshotForQueueItem(item), state.positionSeconds);
+  return true;
+}
+
 export function resumePlayback(): Promise<void> {
   return runPlayerOperation(async (epoch) => {
     await ensureSetup(); assertPlayerEpoch(epoch);
     const player = await TP(); assertPlayerEpoch(epoch);
+    if (await recoverMissingNativeQueue(player, epoch)) return;
     await player.setVolume(1); assertPlayerEpoch(epoch);
     await player.setRate(usePlayerStore.getState().rate); assertPlayerEpoch(epoch);
     usePlayerStore.getState().setPlaybackError(null);
@@ -515,6 +533,7 @@ export function togglePlayback(): Promise<void> {
       if (item) await saveCurrentPositionNow(item.lessonId);
       return;
     }
+    if (await recoverMissingNativeQueue(trackPlayer, epoch)) return;
     usePlayerStore.getState().setPlaybackError(null);
     await preparePlaybackStart(trackPlayer);
     assertPlayerEpoch(epoch);
@@ -556,7 +575,7 @@ export function playLesson(lessonId: string, blockIndex?: number): Promise<void>
 }
 
 /** Startet ab dieser Lektion und stellt den Rest des Moduls in die Warteschlange. */
-export function playLessonInModuleContext(lessonId: string, blockIndex?: number): Promise<void> {
+export function playLessonInModuleContext(lessonId: string, blockIndex?: number, resumeSeconds = 0): Promise<void> {
   invalidateSeekIntent();
   const intent = ++startIntentEpoch;
   return runPlayerOperation(async (epoch) => {
@@ -579,10 +598,10 @@ export function playLessonInModuleContext(lessonId: string, blockIndex?: number)
     cacheLessonSpeechTexts(lesson);
     const item = await lessonToQueueItem(lesson);
     assertStartIntent(epoch, intent);
-    await startQueue([item], 0, blockIndex, epoch, intent, snapshot);
+    await startQueue([item], 0, blockIndex, epoch, intent, snapshot, resumeSeconds);
     return;
   }
-  await startQueue(items, 0, blockIndex, epoch, intent, snapshot);
+  await startQueue(items, 0, blockIndex, epoch, intent, snapshot, resumeSeconds);
   });
 }
 
@@ -1335,3 +1354,11 @@ export async function getDownloadedStorageBytes(lessonIds: readonly string[]): P
 export { usePlayerStore } from './store.js';
 export * from './types.js';
 export { PLAYBACK_RATE_MAX, PLAYBACK_RATE_MIN } from './types.js';
+
+/** Keep an existing live queue intact; new queues seek before their first play. */
+export async function resumeLessonInModuleContext(lessonId: string, seconds = 0): Promise<void> {
+  const state = usePlayerStore.getState();
+  const item = currentItem(state.queue);
+  if (item?.lessonId === lessonId && (state.isPlaying || state.positionSeconds < item.durationSeconds - 2)) { if (!state.isPlaying) await resumePlayback(); return; }
+  await playLessonInModuleContext(lessonId, undefined, seconds);
+}

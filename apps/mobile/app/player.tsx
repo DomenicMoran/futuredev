@@ -1,3 +1,5 @@
+import { playLessonInModuleContext } from '../src/player/index.js';
+import { LessonStatusActions } from '../src/components/LessonStatusActions.js';
 import { useCallback, useEffect, useMemo } from 'react';
 
 import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
@@ -482,6 +484,11 @@ export default function PlayerScreen() {
         </Pressable>
 
 
+
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 8, marginTop: 8 }}>
+          <LessonStatusActions key={item.lessonId} lessonId={item.lessonId} title={item.title} label="Lernstatus bearbeiten" />
+          <Pressable testID="player-restart" accessibilityRole="button" accessibilityLabel="Diese Lektion von Anfang an hören" onPress={() => { void playLessonInModuleContext(item.lessonId).catch((error: unknown) => usePlayerStore.getState().setPlaybackError(error instanceof Error ? error.message : 'Neustart fehlgeschlagen.')); }} style={{ minHeight: 48, alignItems: 'center', justifyContent: 'center' }}><Text style={{ color: theme.colors.accent }}>Von Anfang an</Text></Pressable>
+        </View>
 
         {cueSheet ? (
 

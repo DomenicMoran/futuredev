@@ -105,7 +105,7 @@ function RootLayoutInner() {
   const showMiniPlayer = pathname !== '/onboarding' && pathname !== '/player';
 
   return (
-    <ContentProvider>
+    <ContentProvider navigationKey={pathname}>
       <StatusBar style={theme.scheme === 'dark' ? 'light' : 'dark'} />
       <Stack
         screenOptions={{

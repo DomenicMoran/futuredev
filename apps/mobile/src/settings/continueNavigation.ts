@@ -1,7 +1,7 @@
 import { router } from 'expo-router';
 import type { FirstFormPreference } from '../state/settings.js';
 import { de } from '../i18n/de.js';
-import { playLesson, seekToSeconds } from '../player/index.js';
+import { resumeLessonInModuleContext } from '../player/index.js';
 import type { ContinueCard } from './startData.js';
 
 export type ContinueMode = 'listen' | 'read';
@@ -21,10 +21,7 @@ export async function openContinueDestination(card: ContinueCard, firstFormPrefe
   const mode = resolveContinueMode(card.state, firstFormPreference);
 
   if (mode === 'listen') {
-    await playLesson(card.lessonId);
-    if (card.listenedUntil != null && card.listenedUntil > 0) {
-      await seekToSeconds(card.listenedUntil);
-    }
+    await resumeLessonInModuleContext(card.lessonId, card.listenedUntil ?? 0);
     router.push('/player');
     return;
   }

@@ -1,3 +1,4 @@
+import { useContent } from '../content/ContentProvider.js';
 import { memo, useMemo } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { PressableFeedback } from '../motion/PressableFeedback.js';
@@ -26,13 +27,19 @@ function moduleDurationMinutes(module: ModuleListEntry): number {
 
 function ModuleCardInner({ module, onPress }: ModuleCardProps) {
   const theme = useTheme();
+  const { statuses } = useContent();
+  const entries = module.subModules.flatMap(sub => sub.lessons);
+  const covered = entries.filter(lesson => { const status = statuses[lesson.id]; return status && (status.read || status.heard || status.done); }).length;
+  const read = entries.filter(lesson => statuses[lesson.id]?.read).length;
+  const heard = entries.filter(lesson => statuses[lesson.id]?.heard).length;
+  const done = entries.filter(lesson => statuses[lesson.id]?.done).length;
   const hasLessons = module.totalLessons > 0;
-  const progress = module.totalLessons === 0 ? 0 : module.completedLessons / module.totalLessons;
+  const progress = module.totalLessons === 0 ? 0 : covered / module.totalLessons;
   const durationMinutes = useMemo(() => moduleDurationMinutes(module), [module]);
 
   const progressPercent = Math.round(progress * 100);
   const meta = hasLessons
-    ? `${de.lernen.lessonsProgress(module.completedLessons, module.totalLessons)} · ${de.lernen.moduleProgressPercent(progressPercent)}`
+    ? `${covered} von ${module.totalLessons} bearbeitet · ${de.lernen.moduleProgressPercent(progressPercent)}`
     : `${de.lernen.inPreparation}, ${de.lernen.plannedLessons(module.subModules.length)}`;
 
   const durationSuffix =
@@ -81,6 +88,7 @@ function ModuleCardInner({ module, onPress }: ModuleCardProps) {
           {meta}
           {durationSuffix}
         </Text>
+        {hasLessons ? <Text style={{ color: theme.colors.textWeak, fontSize: 12 }}>{read} gelesen · {heard} gehört · {done} erledigt</Text> : null}
         {hasLessons ? <ProgressBar progress={progress} /> : null}
       </View>
       {hasLessons ? (

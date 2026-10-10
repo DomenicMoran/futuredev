@@ -1,3 +1,4 @@
+import { shouldImportLessonStatus } from './lessonStatus.js';
 import type {
   BookmarkRow,
   CareerChecklistRow,
@@ -128,7 +129,7 @@ export async function importAllInto(db: Database, data: unknown): Promise<void> 
 
   const existingSettings = new Map((await transactionDb.listSettings()).map((r) => [r.key, r]));
   for (const row of bundle.settings) {
-    if (!existingSettings.has(row.key)) {
+    if (!existingSettings.has(row.key) || shouldImportLessonStatus(row.key, existingSettings.get(row.key)?.value ?? '', row.value)) {
       await transactionDb.setSetting(row.key, row.value);
     }
   }

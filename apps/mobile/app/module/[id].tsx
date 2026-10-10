@@ -1,3 +1,4 @@
+import { ProgressOverview } from '../../src/components/ProgressOverview.js';
 import { useMemo } from 'react';
 
 import { Pressable, SectionList, StyleSheet, Text, View } from 'react-native';
@@ -43,7 +44,7 @@ export default function ModuleScreen() {
 
   const bottomInset = useBottomChromeInset();
 
-  const { moduleList } = useContent();
+  const { moduleList, statuses } = useContent();
 
   const module = moduleList.find((m) => m.id === id);
 
@@ -63,7 +64,7 @@ export default function ModuleScreen() {
 
 
 
-  const progress = module && module.totalLessons > 0 ? module.completedLessons / module.totalLessons : 0;
+  const progress = module && module.totalLessons > 0 ? module.subModules.flatMap(sub => sub.lessons).filter(lesson => { const status = statuses[lesson.id]; return status && (status.read || status.heard || status.done); }).length / module.totalLessons : 0;
 
 
 
@@ -112,7 +113,7 @@ export default function ModuleScreen() {
 
               <Text style={[styles.progressMeta, { color: theme.colors.textWeak }]}>
 
-                {de.lernen.lessonsProgress(module.completedLessons, module.totalLessons)}
+                {Math.round(progress * module.totalLessons)} von {module.totalLessons} bearbeitet
 
               </Text>
 
@@ -136,6 +137,7 @@ export default function ModuleScreen() {
 
         <SectionList
 
+          ListHeaderComponent={<ProgressOverview lessonIds={module.subModules.flatMap(sub => sub.lessons.map(lesson => lesson.id))} />}
           sections={sections}
 
           keyExtractor={(lesson) => lesson.id}
