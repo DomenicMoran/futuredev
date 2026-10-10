@@ -15,6 +15,10 @@ function dispatch(action: Promise<unknown> | Promise<void>): void {
 }
 
 export async function PlaybackService(): Promise<void> {
+  const { saveNativePlaybackProgress } = await import('./index.js');
+  TrackPlayer.addEventListener(Event.PlaybackProgressUpdated, (event) => {
+    dispatch(saveNativePlaybackProgress(event));
+  });
   TrackPlayer.addEventListener(Event.RemotePlay, () => dispatch(import('./index.js').then(({ resumePlayback }) => resumePlayback())));
   TrackPlayer.addEventListener(Event.RemotePause, () => dispatch(import('./index.js').then(({ pausePlayback }) => pausePlayback())));
   TrackPlayer.addEventListener(Event.RemoteStop, () => dispatch(import('./index.js').then(({ pausePlayback }) => pausePlayback())));

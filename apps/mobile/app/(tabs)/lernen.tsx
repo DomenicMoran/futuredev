@@ -118,4 +118,3 @@ const styles = StyleSheet.create({
   bannerText: { fontSize: 14, lineHeight: 20 },
   errorWrap: { alignItems: 'flex-start' },
 });
-

@@ -67,4 +67,3 @@ describe('batch downloads', () => {
     gate.resolve('downloaded'); await done;
   });
 });
-

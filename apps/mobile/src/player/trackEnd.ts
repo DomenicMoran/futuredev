@@ -10,8 +10,8 @@ async function saveEndedPosition(lessonId: string, position: number | undefined)
   const state = usePlayerStore.getState();
   const item = state.queue.items.find((entry) => entry.lessonId === lessonId);
   if (!item) return;
-  await savePlaybackPosition(lessonId, position);
   const heard = await recordHearingSample(lessonId, position, item.durationSeconds, false, state.rate);
+  await savePlaybackPosition(lessonId, position);
   if (heard?.completed) await markListened(lessonId, position);
 }
 

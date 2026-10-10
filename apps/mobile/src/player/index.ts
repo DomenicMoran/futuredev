@@ -750,6 +750,7 @@ export async function reorderQueue(fromIndex: number, toIndex: number): Promise<
 /* --------------------------------------------------------------------- Sprung */
 
 export function jumpBackward(seconds: number): Promise<void> {
+  positionSampleEpoch += 1;
   const seekIntent = beginSeekIntent();
   return runPlayerOperation(async (epoch) => {
     const targetItem = currentItem(usePlayerStore.getState().queue);
@@ -768,6 +769,7 @@ export function jumpBackward(seconds: number): Promise<void> {
 }
 
 export function jumpForward(seconds: number): Promise<void> {
+  positionSampleEpoch += 1;
   const seekIntent = beginSeekIntent();
   return runPlayerOperation(async (epoch) => {
     const targetItem = currentItem(usePlayerStore.getState().queue);
@@ -786,6 +788,7 @@ export function jumpForward(seconds: number): Promise<void> {
 }
 
 export function seekToBlock(lessonId: string, blockIndex: number): Promise<void> {
+  positionSampleEpoch += 1;
   const seekIntent = beginSeekIntent();
   return runPlayerOperation(async (epoch) => {
     const targetItem = currentItem(usePlayerStore.getState().queue);
@@ -807,6 +810,7 @@ export function seekToBlock(lessonId: string, blockIndex: number): Promise<void>
 
 /** Seek auf absolute Position (Scrubber, Tap-to-Seek). */
 export function seekToSeconds(seconds: number): Promise<void> {
+  positionSampleEpoch += 1;
   const seekIntent = beginSeekIntent();
   return runPlayerOperation(async (epoch) => {
   const state = usePlayerStore.getState();
@@ -921,6 +925,40 @@ let progressListenerAttached = false;
 let trackedLessonId: string | null = null;
 let positionEpoch = 0;
 const positionSaveTasks = new Set<Promise<void>>();
+let positionSampleEpoch = 0;
+let lastNativePositionSaveAt = -Infinity;
+
+/** Native service events keep persistence alive when Android suspends JS timers. */
+export function saveNativePlaybackProgress(event: { track: number; position: number; duration: number }): Promise<void> {
+  const state = usePlayerStore.getState();
+  const lessonId = trackedLessonId;
+  const token = positionEpoch;
+  const sampleToken = positionSampleEpoch;
+  const lifecycle = playerLifecycleEpoch;
+  if (playerResetting || !lessonId || !Number.isInteger(event.track)
+    || state.queue.currentIndex !== event.track || state.queue.items[event.track]?.lessonId !== lessonId
+    || !Number.isFinite(event.position) || event.position < 0 || !Number.isFinite(event.duration) || event.duration <= 0) return Promise.resolve();
+  const now = Date.now();
+  if (now - lastNativePositionSaveAt < POSITION_SAVE_INTERVAL_SECONDS * 1000) return Promise.resolve();
+  lastNativePositionSaveAt = now;
+  const current = () => !playerResetting && lifecycle === playerLifecycleEpoch && token === positionEpoch
+    && sampleToken === positionSampleEpoch && trackedLessonId === lessonId
+    && currentItem(usePlayerStore.getState().queue)?.lessonId === lessonId;
+  const task = (async () => {
+    const player = await TP();
+    if (!current()) return;
+    const active = await player.getActiveTrack();
+    if (!current() || active?.id !== lessonId) return;
+    usePlayerStore.getState().setPosition(event.position);
+    // Capture coverage synchronously before any DB await can cross a seek/track boundary.
+    const heard = await recordHearingSample(lessonId, event.position, event.duration, true, state.rate, now);
+    await savePlaybackPosition(lessonId, event.position);
+    if (heard?.completed && current()) await markListened(lessonId, event.position);
+  })();
+  positionSaveTasks.add(task);
+  void task.then(() => positionSaveTasks.delete(task), () => positionSaveTasks.delete(task));
+  return task;
+}
 
 function attachPlaybackProgressListener(): void {
   if (progressListenerAttached) return;
@@ -940,6 +978,7 @@ export function startPositionTracking(lessonId: string): void {
   if (playerResetting) return;
   stopPositionTracking();
   const token = positionEpoch;
+  const initialSampleToken = positionSampleEpoch;
   trackedLessonId = lessonId;
   attachPlaybackProgressListener();
 
@@ -948,7 +987,7 @@ export function startPositionTracking(lessonId: string): void {
     const { position } = await trackPlayer.getProgress();
     const active = await trackPlayer.getActiveTrack?.();
     if (active && active.id !== lessonId) return;
-    if (positionEpoch !== token || trackedLessonId !== lessonId) return;
+    if (positionEpoch !== token || trackedLessonId !== lessonId || initialSampleToken !== positionSampleEpoch) return;
     setListenProgressBaseline(lessonId, position);
     beginHearing(lessonId, position);
   })().catch((error: unknown) => {
@@ -972,6 +1011,9 @@ export function startPositionTracking(lessonId: string): void {
   }, POSITION_UI_UPDATE_INTERVAL_SECONDS * 1000);
 
   positionSaveHandle = setInterval(() => {
+    // Native events own regular saves; this remains a fallback for missing service events.
+    if (Date.now() - lastNativePositionSaveAt < POSITION_SAVE_INTERVAL_SECONDS * 2000) return;
+    const sampleToken = positionSampleEpoch;
     const task = (async () => {
       if (playerResetting || !trackedLessonId || positionEpoch !== token) return;
       const trackPlayer = await TP();
@@ -979,9 +1021,9 @@ export function startPositionTracking(lessonId: string): void {
       const { position, duration } = await trackPlayer.getProgress();
       const active = await trackPlayer.getActiveTrack?.();
       if (active && active.id !== lessonId) return;
-      if (playerResetting || positionEpoch !== token || trackedLessonId !== lessonId) return;
-      await savePlaybackPosition(lessonId, position);
+      if (playerResetting || positionEpoch !== token || trackedLessonId !== lessonId || sampleToken !== positionSampleEpoch) return;
       const heard = await recordHearingSample(lessonId, position, duration, usePlayerStore.getState().isPlaying, usePlayerStore.getState().rate);
+      await savePlaybackPosition(lessonId, position);
       if (heard?.completed && positionEpoch === token && trackedLessonId === lessonId) await markListened(lessonId, position);
     })();
     positionSaveTasks.add(task);
@@ -1050,6 +1092,8 @@ async function clearPlayerAndDownloadsImpl(): Promise<void> {
 }
 
 export function stopPositionTracking(): void {
+  positionSampleEpoch += 1;
+  lastNativePositionSaveAt = -Infinity;
   resetHearingBaseline();
   positionEpoch += 1;
   if (positionUiPollHandle) {
@@ -1067,16 +1111,17 @@ export function stopPositionTracking(): void {
 export async function saveCurrentPositionNow(lessonId: string): Promise<void> {
   if (playerResetting) return;
   const epoch = playerLifecycleEpoch;
+  const sampleToken = positionSampleEpoch;
   const task = (async () => {
     const trackPlayer = await TP();
     if (playerResetting || epoch !== playerLifecycleEpoch) return;
     const { position, duration } = await trackPlayer.getProgress();
     const active = await trackPlayer.getActiveTrack?.();
     if (active && active.id !== lessonId) return;
-    if (playerResetting || epoch !== playerLifecycleEpoch) return;
+    if (playerResetting || epoch !== playerLifecycleEpoch || sampleToken !== positionSampleEpoch) return;
     usePlayerStore.getState().setPosition(position);
-    await savePlaybackPosition(lessonId, position);
     const heard = await recordHearingSample(lessonId, position, duration, usePlayerStore.getState().isPlaying, usePlayerStore.getState().rate);
+    await savePlaybackPosition(lessonId, position);
     if (heard?.completed) await markListened(lessonId, position);
   })();
   positionSaveTasks.add(task);
