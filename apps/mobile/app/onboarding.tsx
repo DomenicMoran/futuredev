@@ -48,7 +48,7 @@ export default function OnboardingScreen() {
     setDailyGoalMinutes(minutes);
     await completeOnboarding();
     useSettingsStore.getState().setOnboardingDone(true);
-    router.replace('/(tabs)');
+    router.replace('/placement');
   }
 
   const step2Ready = formDraft !== null && timeDraft !== null;
@@ -507,3 +507,4 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+

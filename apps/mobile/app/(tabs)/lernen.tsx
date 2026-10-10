@@ -1,3 +1,4 @@
+import { PlacementCard } from '../../src/placement/PlacementCard.js';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { ActivityIndicator, FlatList, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { router } from 'expo-router';
@@ -58,6 +59,7 @@ export default function LernenScreen() {
     {state.status === 'error' ? <View style={styles.errorWrap}><StatusBanner text={de.lernen.errorBanner} color={theme.colors.error} /><Pressable accessibilityRole="button" onPress={() => void refresh()} style={{ minHeight: theme.minTapTarget, justifyContent: 'center' }}><Text style={{ color: theme.colors.accent }}>{de.lernen.retry}</Text></Pressable></View> : null}
     {state.status === 'ok' && state.hasNewLessons ? <StatusBanner text={de.lernen.newLessonsBanner} color={theme.colors.accent} /> : null}
     <TabScreenTitle title={de.lernen.title} includeSafeAreaTop={false} />
+    <PlacementCard />
     <View style={[styles.searchBox, { borderColor: theme.colors.border, backgroundColor: theme.colors.surface, borderRadius: theme.radius.md }]}>
       <Search color={theme.colors.textWeak} size={18} />
       <TextInput testID="lesson-search-input" value={query} onChangeText={setQuery} placeholder={de.lernen.searchPlaceholder} placeholderTextColor={theme.colors.textWeak} accessibilityLabel={de.lernen.searchPlaceholder} returnKeyType="search" style={[styles.searchInput, { color: theme.colors.text }]} />
@@ -116,3 +118,4 @@ const styles = StyleSheet.create({
   bannerText: { fontSize: 14, lineHeight: 20 },
   errorWrap: { alignItems: 'flex-start' },
 });
+

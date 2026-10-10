@@ -2,7 +2,7 @@ import type { ContentState } from './types.js';
 import { getContentFs } from './contentFs.js';
 import { fetchManifest } from './fetchManifest.js';
 import { ensureBundledContent, type BundledContent } from './bundledContent.js';
-import { commitContentGeneration, digestUtf8, loadContentSnapshot, type ContentSnapshot } from './generation.js';
+import { commitContentGeneration, compareVersions, digestUtf8, loadContentSnapshot, type ContentSnapshot } from './generation.js';
 import { fetchVerifiedFile } from './verifiedFile.js';
 
 let refreshing: Promise<ContentState> | null = null;
@@ -27,7 +27,7 @@ async function refreshOnce(bundled: BundledContent): Promise<ContentState> {
     const result = await fetchManifest(base);
     if (result.status !== 'ok') throw new Error(result.message);
     const remote = result.manifest;
-    if (JSON.stringify(remote) === JSON.stringify(snapshot.manifest)) {
+    if (JSON.stringify(remote) === JSON.stringify(snapshot.manifest) || (snapshot.manifest && compareVersions(remote.version, snapshot.manifest.version) < 0)) {
       return { status: 'ok', manifest: snapshot.manifest, modules: snapshot.modules, lastUpdatedAt: new Date().toISOString(), hasNewLessons: false };
     }
     if (!remote.modulesSha256) throw new Error('Das Inhaltsupdate enthält keine Modulprüfsumme.');

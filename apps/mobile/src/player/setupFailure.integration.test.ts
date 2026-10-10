@@ -46,7 +46,7 @@ describe('TrackPlayer setup failure recovery', () => {
     await togglePlayback();
     expect(failures.setupPlayer).toHaveBeenCalledTimes(2); // native setup is not repeated after its successful stage
     expect(failures.updateOptions).toHaveBeenCalledTimes(2);
-    expect(failures.addEventListener).toHaveBeenCalledTimes(3);
+    expect(failures.addEventListener).toHaveBeenCalledTimes(2);
     expect(failures.play).toHaveBeenCalledOnce();
     const reset = clearPlayerAndDownloads();
     await reset.ready;

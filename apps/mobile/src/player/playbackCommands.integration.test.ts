@@ -124,7 +124,12 @@ describe('native playback event wins over an older soft-start command', () => {
     await command;
     setSleepTimer({ kind: 'endOfLesson' });
     expect(usePlayerStore.getState().sleepTimer?.mode.kind).toBe('endOfLesson');
-    emit('active-track', { track: { id: 'M01-01-02' } });
+    usePlayerStore.getState().setQueueState(setQueue([
+      { lessonId: 'M01-01-01', title: 'First', durationSeconds: 300 },
+      { lessonId: 'M01-01-02', title: 'Next', durationSeconds: 300 },
+    ]));
+    const { syncActiveTrackIndex } = await import('./trackEnd.js');
+    await syncActiveTrackIndex('M01-01-02');
     expect(usePlayerStore.getState().sleepTimer).toBeNull();
     expect(native.pause).toHaveBeenCalled();
   });

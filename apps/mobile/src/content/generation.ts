@@ -293,10 +293,15 @@ async function commitContentGenerationLocked(fs: ContentFs, input: {
   await fs.ensureDirectory(generationRoot);
   await fs.ensureDirectory(lessonsRoot);
   await fs.writeFile(`${generationRoot}modules.json`, input.rawModules);
-  for (const entry of validated.manifest.lessons) {
-    const rawLesson = input.rawLessons[entry.id];
-    if (rawLesson === undefined) throw new Error(`Missing lesson payload ${entry.id}`);
-    await fs.writeFile(`${lessonsRoot}${entry.file}`, rawLesson);
+  for (let offset = 0; offset < validated.manifest.lessons.length; offset += 8) {
+    const results = await Promise.allSettled(validated.manifest.lessons.slice(offset, offset + 8).map(async (entry) => {
+      const rawLesson = input.rawLessons[entry.id];
+      if (rawLesson === undefined) throw new Error(`Missing lesson payload ${entry.id}`);
+      await fs.writeFile(`${lessonsRoot}${entry.file}`, rawLesson);
+    }));
+    // Drain native writes before releasing the generation lock on failure.
+    const failed = results.find((result) => result.status === 'rejected');
+    if (failed?.status === 'rejected') throw failed.reason;
   }
   // Manifest is written last in the immutable directory. No reader follows it until pointer swap.
   await fs.writeFile(`${generationRoot}manifest.json`, input.rawManifest);
@@ -317,7 +322,7 @@ async function publishGenerationPointer(fs: ContentFs, snapshot: ContentSnapshot
   await fs.moveFile(pointerTemp, pointerPath);
 }
 
-function compareVersions(left: string, right: string): number {
+export function compareVersions(left: string, right: string): number {
   const parse = (version: string) => version.split('.').map(Number);
   const a = parse(left); const b = parse(right);
   for (let index = 0; index < 3; index += 1) {

@@ -30,6 +30,45 @@ function memoryFs() {
 afterEach(() => vi.unstubAllGlobals());
 
 describe('real bundled content through the production boot and update path', () => {
+  it('keeps a newer APK bundle without fetching hundreds of stale remote lessons', async () => {
+    const { fs } = memoryFs();
+    await ensureBundledContent(fs, bundledContent);
+    const before = await loadContentSnapshot(fs);
+    const fetcher = vi.fn(async () => new Response(JSON.stringify({ ...bundledManifest, version: '0.0.1' })));
+    vi.stubGlobal('fetch', fetcher);
+    const result = await refreshContent(bundledContent);
+    expect(result.status).toBe('ok');
+    expect(result.manifest?.version).toBe(bundledManifest.version);
+    expect(result.hasNewLessons).toBe(false);
+    expect(fetcher).toHaveBeenCalledTimes(1);
+    expect((await loadContentSnapshot(fs)).generationId).toBe(before.generationId);
+  });
+  it('bounds and drains parallel generation writes before publishing or failing', async () => {
+    const { fs, files } = memoryFs();
+    const write = fs.writeFile;
+    let active = 0; let peak = 0;
+    let release!: () => void;
+    const held = new Promise<void>((resolve) => { release = resolve; });
+    let failed = false;
+    fs.writeFile = async (path, raw) => {
+      if (!path.includes('/lessons/')) return write(path, raw);
+      active++; peak = Math.max(peak, active);
+      try {
+        await Promise.resolve();
+        if (path.endsWith(bundledManifest.lessons[0]?.file ?? 'missing')) throw new Error('disk full');
+        await held; await write(path, raw);
+      } finally { active--; }
+    };
+    const commit = ensureBundledContent(fs, bundledContent).catch(() => { failed = true; });
+    await vi.waitFor(() => expect(peak).toBe(8));
+    expect(failed).toBe(false);
+    expect([...files.keys()].some(path => path.includes('active-generation') || path.endsWith('manifest.json'))).toBe(false);
+    release(); await commit;
+    expect(active).toBe(0); expect(failed).toBe(true);
+    fs.writeFile = write;
+    await ensureBundledContent(fs, bundledContent);
+    expect((await loadContentSnapshot(fs)).manifest?.version).toBe(bundledManifest.version);
+  });
   it('keeps exact bytes and makes every bundled lesson readable offline after first boot', async () => {
     const { fs } = memoryFs();
     vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('offline')));
@@ -88,7 +127,7 @@ describe('real bundled content through the production boot and update path', () 
     const lesson = JSON.parse(originalRaw);
     lesson.title = 'Geprüftes neues Lernziel';
     const raw = JSON.stringify(lesson);
-    const next = { ...bundledManifest, version: '0.6.3', lessons: bundledManifest.lessons.map((entry) => entry.id === id ? { ...entry, sha256: digestUtf8(raw) } : entry) };
+    const next = { ...bundledManifest, version: bundledManifest.version.split('.').map((n, i) => i === 2 ? String(Number(n) + 1) : n).join('.'), lessons: bundledManifest.lessons.map((entry) => entry.id === id ? { ...entry, sha256: digestUtf8(raw) } : entry) };
     let fail = true;
     vi.stubGlobal('fetch', vi.fn(async (url: string) => {
       if (url.includes('/manifest.json')) return new Response(JSON.stringify(next));
@@ -101,7 +140,7 @@ describe('real bundled content through the production boot and update path', () 
     expect((await loadLesson(fs, id))?.title).not.toBe(lesson.title);
     fail = false;
     expect((await refreshContent(bundledContent)).status).toBe('ok');
-    expect((await loadLocalManifest(fs))?.version).toBe('0.6.3');
+    expect((await loadLocalManifest(fs))?.version).toBe(next.version);
     expect((await loadLesson(fs, id))?.title).toBe(lesson.title);
     const active = await loadContentSnapshot(fs);
     await fs.writeFile(`${active.root}lessons/${id}.json`, raw.replace(lesson.title, 'Ungeprüfte Änderung'));

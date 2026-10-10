@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { ActionSheetIOS, ActivityIndicator, Alert, Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect } from 'expo-router';
@@ -8,10 +8,14 @@ import { useTheme } from '../../src/theme/useTheme.js';
 import { EmptyState } from '../../src/components/EmptyState.js';
 import { de } from '../../src/i18n/de.js';
 import { getContentFs } from '../../src/content/contentFs.js';
+import { ensureBundledContent } from '../../src/content/bundledContent.js';
+import { bundledContent } from '../../src/content/bundledData.js';
 import { loadContentSnapshot } from '../../src/content/generation.js';
 import { buildModuleList, type ModuleListEntry } from '../../src/content/listLessons.js';
 import { listProgress } from '../../src/data/index.js';
-import { downloadLesson, cancelDownload, getDownloadedStorageBytes, isDownloaded, playLesson, deleteDownload, enqueueModule } from '../../src/player/index.js';
+import { downloadLesson, cancelDownload, getDownloadedStorageBytes, isDownloaded, playLessonInModuleContext, deleteDownload } from '../../src/player/index.js';
+import { batchDownloads } from '../../src/player/batchDownloads.js';
+import { listHearingProgress } from '../../src/player/hearingProgress.js';
 import { PlaylistsSection } from '../../src/components/PlaylistsSection.js';
 import { formatBytes, downloadDirPath } from '../../src/player/downloads.js';
 import { useBottomChromeInset } from '../../src/navigation/useBottomChromeInset.js';
@@ -33,6 +37,25 @@ export default function HoerenScreen() {
   const theme = useTheme();
   const bottomInset = useBottomChromeInset();
   const downloadStates = usePlayerStore((s) => s.downloads);
+  const isPlaying = usePlayerStore((s) => s.isPlaying);
+  const batch = useSyncExternalStore(batchDownloads.subscribe, batchDownloads.getSnapshot, batchDownloads.getSnapshot);
+  const [selecting, setSelecting] = useState(false);
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [hearing, setHearing] = useState<Awaited<ReturnType<typeof listHearingProgress>>>({});
+  const [previousHearing, setPreviousHearing] = useState<Set<string>>(new Set());
+  const toggleSelected = (id: string) => setSelected((current) => {
+    const next = new Set(current);
+    if (next.has(id)) next.delete(id); else next.add(id);
+    return next;
+  });
+  useFocusEffect(useCallback(() => {
+    let active = true;
+    const refresh = () => { void listHearingProgress().then((value) => { if (active) setHearing(value); }).catch(() => undefined); };
+    refresh();
+    const timer = isPlaying ? setInterval(refresh, 5000) : undefined;
+    return () => { active = false; if (timer) clearInterval(timer); };
+  }, [isPlaying]));
+
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [hasLoadedOnce, setHasLoadedOnce] = useState(false);
@@ -70,13 +93,23 @@ export default function HoerenScreen() {
     return persisted;
   }, []);
 
+  useEffect(() => {
+    setDownloaded((current) => {
+      const next = { ...current };
+      for (const [id, item] of Object.entries(downloadStates)) next[id] = item.status === 'downloaded';
+      return next;
+    });
+  }, [downloadStates]);
+
   const load = useCallback(async (background = false) => {
     const request = ++loadRequest.current;
     if (background) setRefreshing(true);
     else setLoading(true);
     try {
       const fs = await getContentFs();
+      await ensureBundledContent(fs, bundledContent);
       const [snapshot, progressRows] = await Promise.all([loadContentSnapshot(fs), listProgress()]);
+      if (request === loadRequest.current) setPreviousHearing(new Set(progressRows.filter((row) => (row.listenedUntil ?? 0) > 0).map((row) => row.lessonId)));
       const manifest = snapshot.manifest;
       const modulesFile = snapshot.modules;
       if (modulesFile) {
@@ -226,6 +259,23 @@ export default function HoerenScreen() {
         </View>
         {query.trim() && indexLoading ? <Text style={{ color: theme.colors.textWeak }}>{de.hoeren.searchIndexLoading}</Text> : null}
 
+        <View style={[styles.offlineHint, { borderColor: theme.colors.border, borderRadius: theme.radius.md, padding: theme.spacing.base, gap: 8 }]}>
+          <Text style={[styles.moduleTitle, { color: theme.colors.text }]}>Offline hören</Text>
+          <Text style={{ color: theme.colors.textWeak }}>Einzelne Lektionen auswählen oder ein ganzes Modul laden. Bereits verfügbare Dateien werden übersprungen.</Text>
+          <Pressable accessibilityRole="button" testID="audio-select-toggle" onPress={() => { setSelecting(!selecting); setSelected(new Set()); }} style={{ minHeight: 48, justifyContent: 'center' }}>
+            <Text style={{ color: theme.colors.accent }}>{selecting ? 'Auswahl beenden' : 'Mehrere auswählen'}</Text>
+          </Pressable>
+          {selecting ? <Pressable accessibilityRole="button" testID="audio-download-selected" disabled={batch.running || !selected.size} accessibilityState={{ disabled: batch.running || !selected.size }} onPress={() => { void batchDownloads.start([...selected]); setSelected(new Set()); }} style={{ minHeight: 48, justifyContent: 'center', opacity: batch.running || !selected.size ? 0.5 : 1 }}>
+            <Text style={{ color: theme.colors.accent }}>{selected.size} Lektionen herunterladen</Text>
+          </Pressable> : null}
+          {Object.keys(batch.items).length ? <View accessibilityLiveRegion="polite" style={{ gap: 4 }}>
+            <Text testID="audio-batch-summary" style={{ color: theme.colors.text }}>{batch.running ? 'Downloads laufen' : 'Downloadrunde beendet'}: {Object.values(batch.items).filter((status) => status === 'downloaded' || status === 'skipped').length} / {Object.keys(batch.items).length} offline verfügbar</Text>
+            {Object.values(batch.items).includes('failed') ? <Text style={{ color: theme.colors.error }}>{Object.values(batch.items).filter((status) => status === 'failed').length} fehlgeschlagen. Verbindung und freien Speicher prüfen.</Text> : null}
+            {Object.values(batch.items).includes('cancelled') ? <Text style={{ color: theme.colors.textWeak }}>{Object.values(batch.items).filter((status) => status === 'cancelled').length} abgebrochen</Text> : null}
+            {batch.running ? <Pressable accessibilityRole="button" testID="audio-batch-cancel" onPress={() => void batchDownloads.cancel()} style={{ minHeight: 48, justifyContent: 'center' }}><Text style={{ color: theme.colors.accent }}>Downloads abbrechen</Text></Pressable> : Object.values(batch.items).some((status) => status === 'failed' || status === 'cancelled') ? <Pressable accessibilityRole="button" testID="audio-batch-retry" onPress={() => void batchDownloads.retry()} style={{ minHeight: 48, justifyContent: 'center' }}><Text style={{ color: theme.colors.accent }}>Offene Downloads erneut versuchen</Text></Pressable> : null}
+          </View> : null}
+        </View>
+
         {!hasAnyDownload ? (
           <View
             style={[
@@ -285,7 +335,7 @@ export default function HoerenScreen() {
         {continueCard ? (
           <PressableFeedback
             testID="hoeren-continue-play"
-            onPress={() => void runPlayback(() => playLesson(continueCard.lessonId))}
+            onPress={() => void runPlayback(() => playLessonInModuleContext(continueCard.lessonId))}
             accessibilityRole="button"
             accessibilityLabel={`${de.hoeren.continueCard}: ${continueCard.title}`}
           >
@@ -320,9 +370,8 @@ export default function HoerenScreen() {
               <Pressable
                 onPress={() => {
                   void runPlayback(async () => {
-                    await enqueueModule(module.id);
                     const first = module.subModules[0]?.lessons[0];
-                    if (first) await playLesson(first.id);
+                    if (first) await playLessonInModuleContext(first.id);
                   });
                 }}
                 accessibilityRole="button"
@@ -334,8 +383,12 @@ export default function HoerenScreen() {
               </Pressable>
             </View>
 
+            <Pressable accessibilityRole="button" testID={`download-module-${module.id}`} accessibilityLabel={`Ganzes Modul offline laden: ${module.title}`} disabled={batch.running} accessibilityState={{ disabled: batch.running }} onPress={() => void batchDownloads.start((modules.find((entry) => entry.id === module.id)?.subModules ?? []).flatMap((sub) => sub.lessons.map((lesson) => lesson.id)))} style={{ minHeight: 48, justifyContent: 'center', opacity: batch.running ? 0.5 : 1 }}>
+              <Text style={{ color: theme.colors.accent }}>Ganzes Modul offline laden</Text>
+            </Pressable>
             {module.subModules.flatMap((sub) => sub.lessons).map((lesson) => {
               const downloadState = downloadStates[lesson.id];
+              const heard = hearing[lesson.id];
               return (
               <View
                 key={lesson.id}
@@ -350,8 +403,9 @@ export default function HoerenScreen() {
                   },
                 ]}
               >
-                <PressableFeedback
-                  onPress={() => void runPlayback(() => playLesson(lesson.id))}
+                {selecting ? <Pressable accessibilityRole="checkbox" accessibilityLabel={`${lesson.title} für Offline auswählen`} accessibilityState={{ checked: selected.has(lesson.id) }} testID={`select-download-${lesson.id}`} onPress={() => toggleSelected(lesson.id)} style={{ minHeight: 48, minWidth: 48, justifyContent: 'center', alignItems: 'center' }}><Text style={{ color: theme.colors.accent, fontSize: 24 }}>{selected.has(lesson.id) ? '☑' : '☐'}</Text></Pressable> : null}
+                {!selecting ? <PressableFeedback
+                  onPress={() => void runPlayback(() => playLessonInModuleContext(lesson.id))}
                   accessibilityRole="button"
                   accessibilityLabel={`${de.hoeren.playLesson}: ${lesson.title}`}
                   hitSlop={8}
@@ -364,28 +418,32 @@ export default function HoerenScreen() {
                   ]}
                 >
                   <Play color={theme.colors.accent} size={20} />
-                </PressableFeedback>
+                </PressableFeedback> : null}
                 {downloadState?.status === 'downloading' ? (
                   <View accessibilityLabel={`Download ${Math.round(downloadState.progress * 100)} Prozent`} style={{ minWidth: 42, alignItems: 'center' }}>
                     <ActivityIndicator size="small" color={theme.colors.accent} />
                     <Text style={{ color: theme.colors.textWeak, fontSize: 10 }}>{Math.round(downloadState.progress * 100)}%</Text>
-                    <PressableFeedback onPress={() => void runPlayback(async () => { await cancelDownload(lesson.id); return reconcileDownloadedFlag(lesson.id); })} accessibilityRole="button" accessibilityLabel="Download abbrechen" style={{ padding: 4 }}>
+                    <PressableFeedback onPress={() => void runPlayback(async () => { await cancelDownload(lesson.id); return reconcileDownloadedFlag(lesson.id); })} accessibilityRole="button" accessibilityLabel="Download abbrechen" style={{ padding: 4, minHeight: 48, minWidth: 48, justifyContent: 'center' }}>
                       <Text style={{ color: theme.colors.textWeak, fontSize: 10 }}>Abbrechen</Text>
                     </PressableFeedback>
                   </View>
                 ) : downloadState?.status === 'error' ? (
-                  <PressableFeedback onPress={() => void runPlayback(async () => { const result = await downloadLesson(lesson.id); await reconcileDownloadedFlag(lesson.id); return result; })} accessibilityRole="button" accessibilityLabel="Download erneut versuchen" style={{ padding: 4 }}>
+                  <PressableFeedback onPress={() => void runPlayback(async () => { const result = await downloadLesson(lesson.id); await reconcileDownloadedFlag(lesson.id); return result; })} accessibilityRole="button" accessibilityLabel="Download erneut versuchen" style={{ padding: 4, minHeight: 48, minWidth: 48, justifyContent: 'center' }}>
                     <Text style={{ color: theme.colors.error, fontSize: 11, maxWidth: 64 }} numberOfLines={2}>Erneut versuchen</Text>
                   </PressableFeedback>
                 ) : null}
                 <PressableFeedback
-                  onPress={() => void runPlayback(() => playLesson(lesson.id))}
+                  onPress={() => void runPlayback(() => playLessonInModuleContext(lesson.id))}
                   accessibilityRole="button"
                   accessibilityLabel={`${de.hoeren.playLesson}: ${lesson.title}`}
                   style={[styles.lessonTextBlock, { flex: 1, minWidth: 0 }]}
                 >
                   <Text numberOfLines={3} ellipsizeMode="tail" style={[styles.lessonTitle, { color: theme.colors.text }]}>
                     {lesson.title}
+                  </Text>
+                  <Text testID={`hearing-status-${lesson.id}`} style={{ color: hearing[lesson.id]?.completed ? theme.colors.accent : theme.colors.textWeak, fontSize: 12 }}>
+                    {heard?.completed ? 'Vollständig gehört' : heard && heard.seconds > 0 ? `Angefangen · ${Math.max(1, Math.min(99, Math.round(heard.seconds / Math.max(1, heard.duration) * 100)))} % gehört` : previousHearing.has(lesson.id) ? 'Früherer Hörfortschritt vorhanden' : 'Ungehört'}
+                    {downloaded[lesson.id] ? ' · Offline verfügbar' : batch.items[lesson.id] === 'queued' ? ' · Download wartet' : ''}
                   </Text>
                   <Text numberOfLines={1} style={[styles.lessonDuration, { color: theme.colors.textWeak }]}>
                     {de.hoeren.durationMinutes(lesson.durationMinutes)}
@@ -430,7 +488,7 @@ export default function HoerenScreen() {
           </FadeInUp>
         ))}
 
-        <StorageSection downloaded={downloaded} onCleared={() => setDownloaded({})} />
+        <StorageSection downloaded={downloaded} busy={batch.running} onCleared={() => setDownloaded({})} />
           </View>
         </FadeInUp>
       </ScrollView>
@@ -470,9 +528,11 @@ function openLessonMoreMenu(options: {
 }
 
 function StorageSection({
+  busy,
   downloaded,
   onCleared,
 }: {
+  busy: boolean;
   downloaded: Record<string, boolean>;
   onCleared: () => void;
 }) {
@@ -480,6 +540,8 @@ function StorageSection({
   const downloadedIds = Object.entries(downloaded)
     .filter(([, v]) => v)
     .map(([id]) => id);
+  const [clearError, setClearError] = useState(false);
+  const [clearing, setClearing] = useState(false);
   const [bytesUsed, setBytesUsed] = useState<number | null>(null);
 
   useEffect(() => {
@@ -490,7 +552,7 @@ function StorageSection({
     }
     void getDownloadedStorageBytes(downloadedIds).then((bytes) => {
       if (!cancelled) setBytesUsed(bytes);
-    });
+    }).catch(() => { if (!cancelled) setBytesUsed(null); });
     return () => {
       cancelled = true;
     };
@@ -513,11 +575,18 @@ function StorageSection({
       {bytesUsed != null ? (
         <Text style={{ color: theme.colors.textWeak }}>{de.hoeren.storageUsed(formatBytes(bytesUsed))}</Text>
       ) : null}
+      {clearError ? <Text accessibilityRole="alert" style={{ color: theme.colors.error }}>Downloads konnten nicht vollständig entfernt werden. Bitte erneut versuchen.</Text> : null}
       <Pressable
+        disabled={busy || clearing}
+        accessibilityState={{ disabled: busy || clearing }}
         onPress={() => {
+          setClearing(true); setClearError(false);
           void (async () => {
-            for (const id of downloadedIds) await deleteDownload(id);
-            onCleared();
+            try {
+              for (const id of downloadedIds) await deleteDownload(id);
+              onCleared();
+            } catch { setClearError(true); }
+            finally { setClearing(false); }
           })();
         }}
         accessibilityRole="button"

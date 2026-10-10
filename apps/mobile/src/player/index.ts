@@ -33,6 +33,8 @@ import { checksumCueText, isPlausibleMp3Prefix, parseDownloadPackageMarker, vali
 import { fetchTextWithTimeout } from './mediaFetch.js';
 import { lessonIdsFromLessonInModule, lessonIdsInModule } from './moduleLessonIds.js';
 import { beginSeekIntent, invalidateSeekIntent, isCurrentSeekIntent } from './seekIntent.js';
+import { beginHearing, recordHearingSample, resetHearingBaseline } from './hearingProgress.js';
+import { batchDownloads } from './batchDownloads.js';
 
 export { rampVolume, SOFT_START_RAMP_MS } from './rampVolume.js';
 
@@ -242,15 +244,8 @@ async function ensureSetup(): Promise<void> {
         store.setPlaybackError(status.playbackError);
       });
       attachedPlaybackListeners.add('error');
-      if (!attachedPlaybackListeners.has('active')) trackPlayer.addEventListener(Event.PlaybackActiveTrackChanged, ({ track }) => {
-        if (playerResetting) return;
-        const timer = usePlayerStore.getState().sleepTimer;
-        if (timer?.mode.kind === 'endOfLesson' && track?.id && track.id !== timer.target.trackId) {
-          setSleepTimer(null);
-          void trackPlayer.pause();
-        }
-      });
-      attachedPlaybackListeners.add('active');
+      // Active-track boundaries (timer, repeat, autoplay and progress) have one
+      // owner in PlaybackService/trackEnd; duplicate listeners race each other.
       listenersAttached = true;
     })();
     setupPromise = attempt;
@@ -487,6 +482,8 @@ export function resumePlayback(): Promise<void> {
     await player.setRate(usePlayerStore.getState().rate); assertPlayerEpoch(epoch);
     usePlayerStore.getState().setPlaybackError(null);
     await player.play(); assertPlayerEpoch(epoch);
+    const item = currentItem(usePlayerStore.getState().queue);
+    if (item) startPositionTracking(item.lessonId);
   });
 }
 
@@ -523,6 +520,10 @@ export function togglePlayback(): Promise<void> {
     assertPlayerEpoch(epoch);
     const playToken = ++playIntentEpoch;
     await softStartPlay(trackPlayer, playToken);
+    if (playToken === playIntentEpoch) {
+      const item = currentItem(usePlayerStore.getState().queue);
+      if (item) startPositionTracking(item.lessonId);
+    }
   } catch (error) {
     if (epoch === playerLifecycleEpoch && !playerResetting) {
       const store = usePlayerStore.getState();
@@ -945,8 +946,11 @@ export function startPositionTracking(lessonId: string): void {
   void (async () => {
     const trackPlayer = await TP();
     const { position } = await trackPlayer.getProgress();
+    const active = await trackPlayer.getActiveTrack?.();
+    if (active && active.id !== lessonId) return;
     if (positionEpoch !== token || trackedLessonId !== lessonId) return;
     setListenProgressBaseline(lessonId, position);
+    beginHearing(lessonId, position);
   })().catch((error: unknown) => {
     if (!playerResetting && positionEpoch === token && trackedLessonId === lessonId) {
       usePlayerStore.getState().setPlaybackError(error instanceof Error ? error.message : 'Fortschritt konnte nicht gelesen werden.');
@@ -973,11 +977,12 @@ export function startPositionTracking(lessonId: string): void {
       const trackPlayer = await TP();
       if (playerResetting || positionEpoch !== token) return;
       const { position, duration } = await trackPlayer.getProgress();
+      const active = await trackPlayer.getActiveTrack?.();
+      if (active && active.id !== lessonId) return;
       if (playerResetting || positionEpoch !== token || trackedLessonId !== lessonId) return;
       await savePlaybackPosition(lessonId, position);
-      if (duration > 0 && position >= duration - 0.5) {
-        if (positionEpoch === token && trackedLessonId === lessonId) await markListened(lessonId, position);
-      }
+      const heard = await recordHearingSample(lessonId, position, duration, usePlayerStore.getState().isPlaying, usePlayerStore.getState().rate);
+      if (heard?.completed && positionEpoch === token && trackedLessonId === lessonId) await markListened(lessonId, position);
     })();
     positionSaveTasks.add(task);
     void task.then(() => positionSaveTasks.delete(task), () => positionSaveTasks.delete(task));
@@ -1019,6 +1024,7 @@ export function clearPlayerAndDownloads(): PlayerResetLease {
 }
 
 async function clearPlayerAndDownloadsImpl(): Promise<void> {
+    await batchDownloads.reset();
     downloadEpoch += 1;
     stopPositionTracking();
     clearListenProgressBaselines();
@@ -1044,6 +1050,7 @@ async function clearPlayerAndDownloadsImpl(): Promise<void> {
 }
 
 export function stopPositionTracking(): void {
+  resetHearingBaseline();
   positionEpoch += 1;
   if (positionUiPollHandle) {
     clearInterval(positionUiPollHandle);
@@ -1063,10 +1070,14 @@ export async function saveCurrentPositionNow(lessonId: string): Promise<void> {
   const task = (async () => {
     const trackPlayer = await TP();
     if (playerResetting || epoch !== playerLifecycleEpoch) return;
-    const { position } = await trackPlayer.getProgress();
+    const { position, duration } = await trackPlayer.getProgress();
+    const active = await trackPlayer.getActiveTrack?.();
+    if (active && active.id !== lessonId) return;
     if (playerResetting || epoch !== playerLifecycleEpoch) return;
     usePlayerStore.getState().setPosition(position);
     await savePlaybackPosition(lessonId, position);
+    const heard = await recordHearingSample(lessonId, position, duration, usePlayerStore.getState().isPlaying, usePlayerStore.getState().rate);
+    if (heard?.completed) await markListened(lessonId, position);
   })();
   positionSaveTasks.add(task);
   try { await task; } finally { positionSaveTasks.delete(task); }

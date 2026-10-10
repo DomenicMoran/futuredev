@@ -44,14 +44,14 @@ export async function PlaybackService(): Promise<void> {
     }
   });
 
-  TrackPlayer.addEventListener(Event.PlaybackQueueEnded, () => {
-    dispatch(import('./trackEnd.js').then(({ handlePlaybackQueueEnded }) => handlePlaybackQueueEnded()));
+  TrackPlayer.addEventListener(Event.PlaybackQueueEnded, (event) => {
+    dispatch(import('./trackEnd.js').then(({ handlePlaybackQueueEnded }) => handlePlaybackQueueEnded(event?.position)));
   });
 
   TrackPlayer.addEventListener(Event.PlaybackActiveTrackChanged, (event) => {
     const trackId = event.track?.id;
     if (typeof trackId === 'string') {
-      dispatch(import('./trackEnd.js').then(({ syncActiveTrackIndex }) => syncActiveTrackIndex(trackId)));
+      dispatch(import('./trackEnd.js').then(({ syncActiveTrackIndex }) => syncActiveTrackIndex(trackId, event.lastTrack?.id, event.lastPosition)));
     }
   });
 }
