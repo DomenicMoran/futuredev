@@ -23,7 +23,7 @@ import { FadeInUp } from '../../src/motion/FadeInUp.js';
 import { PressableFeedback } from '../../src/motion/PressableFeedback.js';
 import { motionStaggerDelay } from '../../src/motion/stagger.js';
 import { usePlayerStore } from '../../src/player/store.js';
-import { reconcileDownloadedUiState } from '../../src/player/downloadedUiState.js';
+import { reconcileDownloadAvailability, reconcileDownloadedUiState } from '../../src/player/downloadedUiState.js';
 import { downloadedLessonIds } from '../../src/player/downloadedBatch.js';
 import { loadLessonSearchIndex } from '../../src/settings/lessonSearchIndex.js';
 import { createLessonSearchEntry, searchLessonEntries, type LessonSearchEntry } from '../../src/settings/lessonSearch.js';
@@ -94,11 +94,7 @@ export default function HoerenScreen() {
   }, []);
 
   useEffect(() => {
-    setDownloaded((current) => {
-      const next = { ...current };
-      for (const [id, item] of Object.entries(downloadStates)) next[id] = item.status === 'downloaded';
-      return next;
-    });
+    setDownloaded((current) => reconcileDownloadAvailability(current, downloadStates));
   }, [downloadStates]);
 
   const load = useCallback(async (background = false) => {

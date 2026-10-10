@@ -1206,8 +1206,14 @@ export async function downloadLesson(lessonId: string): Promise<DownloadResult> 
       await fs.writeFile(stagedCues, cueText);
       if (!downloadIsActive(lessonId, token)) { await cleanPartialFiles(); return 'cancelled'; }
 
+      // Expo emits up to ten callbacks/second/transfer. Publish bounded UI work,
+      // not a full catalogue rerender for every native buffer. Terminal states below bypass this gate.
+      let lastProgressPublishAt = Date.now();
       const resumable = createDownloadResumable(remoteAudioUrl(base, lessonId), stagedAudio, {}, (p) => {
         if (!downloadIsActive(lessonId, token)) return;
+        const now = Date.now();
+        if (now >= lastProgressPublishAt && now - lastProgressPublishAt < 1000) return;
+        lastProgressPublishAt = now;
         const bytesTotal = p.totalBytesExpectedToWrite;
         const progress = bytesTotal > 0 ? Math.min(1, p.totalBytesWritten / bytesTotal) : 0;
         usePlayerStore.getState().setDownloadState({ lessonId, status: 'downloading', progress, bytesTotal: bytesTotal > 0 ? bytesTotal : null });

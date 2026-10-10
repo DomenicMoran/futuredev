@@ -13,6 +13,8 @@ const harness = vi.hoisted(() => ({
   audioPayload: `ID3${'a'.repeat(2048)}`,
   onCancel: null as (() => void) | null,
   downloadedCount: 0,
+  onProgress: null as ((event: { totalBytesWritten: number; totalBytesExpectedToWrite: number }) => void) | null,
+  activePath: '',
   holdDownload: false,
   pendingResolve: null as ((result: { status: number; uri: string }) => void) | null,
   failCueMove: false,
@@ -39,9 +41,10 @@ vi.mock('./dataSource.js', () => ({
 }));
 vi.mock('expo-file-system/legacy', () => ({
   deleteAsync: async (path: string) => { harness.files.delete(path); },
-  createDownloadResumable: (_url: string, path: string) => ({
+  createDownloadResumable: (_url: string, path: string, _options: unknown, onProgress: (event: { totalBytesWritten: number; totalBytesExpectedToWrite: number }) => void) => ({
     downloadAsync: async () => {
       harness.downloadedCount += 1;
+      harness.onProgress = onProgress; harness.activePath = path;
       const result = await new Promise<{ status: number; uri: string }>((resolve, reject) => {
         harness.onCancel = () => reject(new Error('aborted'));
         harness.pendingResolve = resolve;
@@ -126,7 +129,7 @@ describe('downloadLesson publication contract', () => {
     harness.status = 200;
     harness.audioPayload = `ID3${'a'.repeat(2048)}`;
     harness.onCancel = null;
-    harness.downloadedCount = 0;
+    harness.downloadedCount = 0; harness.onProgress = null; harness.activePath = '';
     harness.holdDownload = false;
     harness.pendingResolve = null;
     harness.failCueMove = false;
@@ -139,7 +142,41 @@ describe('downloadLesson publication contract', () => {
     process.env.EXPO_PUBLIC_AUDIO_BASE_URL = 'https://media.test';
     vi.stubGlobal('fetch', vi.fn(async () => ({ ok: true, status: 200, text: async () => harness.cueText })));
   });
-  afterEach(() => { vi.unstubAllGlobals(); delete process.env.EXPO_PUBLIC_AUDIO_BASE_URL; });
+  afterEach(() => { vi.restoreAllMocks(); vi.unstubAllGlobals(); delete process.env.EXPO_PUBLIC_AUDIO_BASE_URL; });
+
+  it.each(['downloaded', 'error', 'cancelled'])('bounds progress updates but publishes %s immediately', async (terminal) => {
+    let now = 10_000;
+    vi.spyOn(Date, 'now').mockImplementation(() => now);
+    harness.holdDownload = true;
+    const task = downloadLesson(testLesson.id);
+    // Attach rejection handling immediately; terminal failure is asserted below.
+    const outcome = task.catch(() => 'error' as const);
+    await vi.waitFor(() => expect(harness.onProgress).not.toBeNull());
+    const initial = usePlayerStore.getState().downloads;
+    for (let i = 1; i < 10; i++) {
+      now = 10_000 + i * 100;
+      harness.onProgress?.({ totalBytesWritten: i * 10, totalBytesExpectedToWrite: 1000 });
+      expect(usePlayerStore.getState().downloads).toBe(initial);
+    }
+    now = 11_000;
+    harness.onProgress?.({ totalBytesWritten: 500, totalBytesExpectedToWrite: 1000 });
+    const updated = usePlayerStore.getState().downloads;
+    expect(updated).not.toBe(initial); expect(updated[testLesson.id]?.progress).toBe(0.5);
+    now = 11_100;
+    harness.onProgress?.({ totalBytesWritten: 1000, totalBytesExpectedToWrite: 1000 });
+    expect(usePlayerStore.getState().downloads).toBe(updated);
+    if (terminal === 'cancelled') await cancelDownload(testLesson.id);
+    else {
+      harness.files.set(harness.activePath, harness.audioPayload);
+      harness.pendingResolve?.({ status: terminal === 'error' ? 500 : 200, uri: harness.activePath });
+    }
+    expect(await outcome).toBe(terminal);
+    expect(usePlayerStore.getState().downloads[testLesson.id]?.status).toBe(terminal === 'cancelled' ? 'not-downloaded' : terminal);
+    const finished = usePlayerStore.getState().downloads;
+    now = 20_000;
+    harness.onProgress?.({ totalBytesWritten: 1000, totalBytesExpectedToWrite: 1000 });
+    expect(usePlayerStore.getState().downloads).toBe(finished);
+  });
 
   it('publishes a complete validated package and deduplicates repeated requests', async () => {
     const first = downloadLesson(testLesson.id);
