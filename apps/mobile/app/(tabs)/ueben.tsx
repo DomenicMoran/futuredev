@@ -1,3 +1,4 @@
+import { MasteryCard } from '../../src/mastery/MasteryCard.js';
 import { useCallback, useMemo, useState } from 'react';
 import { RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -98,7 +99,7 @@ export default function UebenScreen() {
       contentContainerStyle={{ paddingHorizontal: inset, paddingBottom: bottomInset }}
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh} />}
     >
-      <TabScreenTitle title={de.ueben.title} includeSafeAreaTop={false} />
+      <TabScreenTitle title={de.ueben.title} includeSafeAreaTop={false} /><MasteryCard />
       <FadeInUp durationMs={200} delayMs={motionStaggerDelay(0)}>
       <SectionHeader title={de.ueben.sectionHeute} theme={theme} />
       {loadError ? <CalmCard title={de.ueben.reviewLoadErrorTitle} body={de.ueben.reviewLoadErrorBody} theme={theme} /> : null}

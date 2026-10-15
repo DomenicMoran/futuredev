@@ -23,6 +23,7 @@ import { formatPlaybackTime } from './formatTime.js';
 import { PlaybackScrubber } from './PlaybackScrubber.js';
 import { JUMP_FORWARD_SECONDS } from './types.js';
 import { jumpForward, seekToSeconds } from './index.js';
+import { clampSeekPosition } from './scrubberMath.js';
 
 function moduleIdFromLessonId(lessonId: string): string {
   const dash = lessonId.indexOf('-');
@@ -66,7 +67,7 @@ export function MiniPlayer() {
 
   if (!item) return null;
 
-  const timeSubtitle = playbackError ? 'Wiedergabe fehlgeschlagen' : isBuffering ? 'Audio wird geladen …' : `${formatPlaybackTime(positionSeconds)} / ${formatPlaybackTime(item.durationSeconds)}`;
+  const timeSubtitle = playbackError ? 'Wiedergabe fehlgeschlagen' : isBuffering ? 'Audio wird geladen …' : `${formatPlaybackTime(clampSeekPosition(positionSeconds, item.durationSeconds))} / ${formatPlaybackTime(item.durationSeconds)}`;
   const coverModuleId = moduleIdFromLessonId(item.lessonId);
 
   return (

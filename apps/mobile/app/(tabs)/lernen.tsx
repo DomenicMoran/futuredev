@@ -1,3 +1,4 @@
+import { MasteryCard } from '../../src/mastery/MasteryCard.js';
 import { ProgressOverview } from '../../src/components/ProgressOverview.js';
 import { PlacementCard } from '../../src/placement/PlacementCard.js';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -61,7 +62,7 @@ export default function LernenScreen() {
     {state.status === 'ok' && state.hasNewLessons ? <StatusBanner text={de.lernen.newLessonsBanner} color={theme.colors.accent} /> : null}
     <TabScreenTitle title={de.lernen.title} includeSafeAreaTop={false} />
     <ProgressOverview />
-        <PlacementCard />
+        <MasteryCard /><PlacementCard />
     <View style={[styles.searchBox, { borderColor: theme.colors.border, backgroundColor: theme.colors.surface, borderRadius: theme.radius.md }]}>
       <Search color={theme.colors.textWeak} size={18} />
       <TextInput testID="lesson-search-input" value={query} onChangeText={setQuery} placeholder={de.lernen.searchPlaceholder} placeholderTextColor={theme.colors.textWeak} accessibilityLabel={de.lernen.searchPlaceholder} returnKeyType="search" style={[styles.searchInput, { color: theme.colors.text }]} />

@@ -227,7 +227,10 @@ async function ensureSetup(): Promise<void> {
         }
         const store = usePlayerStore.getState();
         const phase = state === State.Playing ? 'playing' : state === State.Buffering || state === State.Loading ? 'buffering' : state === State.Error ? 'error' : 'idle';
-        if (phase === 'idle' || phase === 'error') playIntentEpoch += 1;
+        // Ready/None can arrive late from reset/add while play() is already
+        // ramping. They are not a pause intent: cancelling here leaves volume
+        // low and skips startPositionTracking even though native audio plays.
+        if (state === State.Paused || state === State.Stopped || state === State.Error) playIntentEpoch += 1;
         const status = applyNativePlaybackEvent(phase, phase === 'error' ? store.playbackError ?? 'Wiedergabe fehlgeschlagen.' : undefined, store.playbackError);
         store.setPlaying(status.isPlaying);
         store.setBuffering(status.isBuffering);

@@ -117,6 +117,19 @@ describe('native playback event wins over an older soft-start command', () => {
     expect(usePlayerStore.getState().isPlaying).toBe(false);
   });
 
+  it('keeps the volume ramp and progress tracking through delayed native ready events', async () => {
+    const command = playLesson('M01-01-01');
+    await vi.waitFor(() => expect(native.play).toHaveBeenCalledOnce());
+    emit('playback-state', { state: 'ready' });
+    emit('playback-state', { state: 'playing' });
+    await vi.advanceTimersByTimeAsync(SOFT_START_RAMP_MS + 30);
+    await command;
+    expect(native.setVolume).toHaveBeenLastCalledWith(1);
+    native.position = 12;
+    await vi.advanceTimersByTimeAsync(500);
+    expect(usePlayerStore.getState().positionSeconds).toBe(12);
+  });
+
   it('cancels end-of-lesson timer when native playback advances to another track', async () => {
     const command = playLesson('M01-01-01');
     await vi.waitFor(() => expect(native.play).toHaveBeenCalledOnce());

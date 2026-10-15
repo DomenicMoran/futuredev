@@ -1,3 +1,4 @@
+import { MasteryCard } from '../../src/mastery/MasteryCard.js';
 import { matchesListeningFilter } from '../../src/player/listeningFilter.js';
 import { ContinueListeningCard } from '../../src/components/ContinueListeningCard.js';
 import { ProgressOverview } from '../../src/components/ProgressOverview.js';
@@ -201,7 +202,7 @@ export default function HoerenScreen() {
   if (loading && !hasLoadedOnce && modules.length === 0) {
     return (
       <SafeAreaView edges={['top', 'left', 'right']} style={[styles.container, { backgroundColor: theme.colors.bg, justifyContent: 'center' }]}>
-        <TabScreenTitle title={de.hoeren.title} includeSafeAreaTop={false} />
+        <TabScreenTitle title={de.hoeren.title} includeSafeAreaTop={false} /><MasteryCard />
         <ActivityIndicator color={theme.colors.accent} />
         <Text style={{ color: theme.colors.textWeak, textAlign: 'center', marginTop: theme.spacing.sm }}>{de.hoeren.loadingBody}</Text>
       </SafeAreaView>
@@ -214,7 +215,7 @@ export default function HoerenScreen() {
     return (
       <SafeAreaView edges={['top', 'left', 'right']} style={[styles.container, { backgroundColor: theme.colors.bg }]}>
         <ScrollView contentContainerStyle={{ paddingBottom: bottomInset, gap: theme.spacing.lg }}>
-          <TabScreenTitle title={de.hoeren.title} includeSafeAreaTop={false} />
+          <TabScreenTitle title={de.hoeren.title} includeSafeAreaTop={false} /><MasteryCard />
           <View style={{ paddingHorizontal: theme.spacing.base, gap: theme.spacing.lg }}>
           {loadError ? <View accessibilityRole="alert"><Text style={{ color: theme.colors.error }}>{de.hoeren.loadError}</Text><Pressable testID="hoeren-retry" accessibilityRole="button" onPress={() => void load(false)} style={{ minHeight: theme.minTapTarget, justifyContent: 'center' }}><Text style={{ color: theme.colors.accent }}>{de.hoeren.retry}</Text></Pressable></View> : null}
           {refreshing ? (
@@ -246,7 +247,7 @@ export default function HoerenScreen() {
   return (
     <SafeAreaView edges={['top', 'left', 'right']} style={[styles.container, { backgroundColor: theme.colors.bg }]}>
       <ScrollView contentContainerStyle={{ paddingBottom: bottomInset, gap: theme.spacing.lg }}>
-        <TabScreenTitle title={de.hoeren.title} includeSafeAreaTop={false} />
+        <TabScreenTitle title={de.hoeren.title} includeSafeAreaTop={false} /><MasteryCard />
         <FadeInUp durationMs={200} delayMs={motionStaggerDelay(0)}>
         <View style={{ paddingHorizontal: theme.spacing.base, gap: theme.spacing.lg }}>
         {refreshing ? (
