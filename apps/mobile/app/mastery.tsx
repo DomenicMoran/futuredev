@@ -19,6 +19,7 @@ import {
   type BankQuestion,
   type MasteryState,
   type Medium,
+  type ExamScope,
 } from '../src/mastery/engine.js';
 import { loadMastery, saveMastery } from '../src/mastery/persistence.js';
 import { saveReviewPlaylist } from '../src/mastery/playlist.js';
@@ -40,6 +41,7 @@ export default function MasteryScreen() {
   const [exam, setExam] = useState(false);
   const [choice, setChoice] = useState<number | null>(null);
   const [help, setHelp] = useState(false);
+  const [modulePicker, setModulePicker] = useState(false);
   const [details, setDetails] = useState(false);
   const [visibleCount, setVisibleCount] = useState(12);
   const [heard, setHeard] = useState<Record<string, HearingProgress>>({});
@@ -95,6 +97,18 @@ export default function MasteryScreen() {
       ),
     [moduleList],
   );
+  const moduleBanks = useMemo(
+    () =>
+      moduleList.map((m) => {
+        const ids = new Set(m.subModules.flatMap((s) => s.lessons.map((l) => l.id)));
+        const questions = bank.filter((q) => ids.has(q.sourceLessonId));
+        return { id: m.id, title: m.title, lessonIds: [...ids], questions };
+      }),
+    [moduleList, bank],
+  );
+  const selectedModule = moduleBanks.find((m) => m.id === state?.selectedModule) ?? moduleBanks[0];
+  const moduleStats = state && selectedModule ? summary(state, selectedModule.questions) : null;
+  const moduleMode = (state?.examMode ?? 'modules') === 'modules';
   const weakIds = useMemo(
     () => [...new Set(stats?.wrong.map((q) => q.sourceLessonId) ?? [])].sort(),
     [stats],
@@ -159,7 +173,7 @@ export default function MasteryScreen() {
       resetScroll();
     }
   }
-  async function start(full = false) {
+  async function start(full: boolean | ExamScope = false) {
     if (!state) return;
     if (await commit(begin(state, bank, full))) {
       setExam(true);
@@ -266,6 +280,8 @@ export default function MasteryScreen() {
         ) : exam && session ? (
           <>
             <Text accessibilityLiveRegion="polite" style={muted}>
+              {session.title ?? 'Prüfung'}
+              {' · '}
               {index} von {session.keys.length} Antworten gespeichert · Lösungen erst nach der
               Auswertung
             </Text>
@@ -339,8 +355,8 @@ export default function MasteryScreen() {
               false,
               index === 0,
             )}
-            {!question && index === 0
-              ? button('Veraltete Runde schließen', () => {
+            {index === 0
+              ? button('Runde ohne Antworten schließen', () => {
                   void run(async () => {
                     if (await commit({ ...state, session: null })) setExam(false);
                   });
@@ -391,63 +407,173 @@ export default function MasteryScreen() {
                     ? '1 · Wissen prüfen'
                     : 'Alles im Fragenbestand richtig'}
               </Text>
-              <Text style={text}>
-                {session
-                  ? `${session.answers.length} von ${session.keys.length} Antworten gespeichert. Du verlierst beim Pausieren nichts Bestätigtes.`
-                  : stats.remaining
-                    ? `${stats.remaining} ${stats.remaining === 1 ? 'offene Frage' : 'offene Fragen'}. Keine Stichprobe: Jede Frage wird berücksichtigt, auch aus noch nicht gehörten Lektionen.`
-                    : 'Deine Wiederholung ist abgeschlossen. Festige dein Wissen jetzt mit Praxisaufgaben und prüfe später den ganzen Bestand erneut. Neue Lücken erscheinen dann wieder hier.'}
-              </Text>
-              {remainingCount > 0 ? (
-                <Text style={muted}>
-                  Für alle verbleibenden Fragen etwa {timeEstimate}, bei 30–60 Sekunden je Frage.
-                  Plane einzelne Sitzungen von 1–2 Stunden oder kürzer. Du kannst jederzeit
-                  pausieren oder einen Zwischenstand auswerten, ohne den Rest als bestanden zu
-                  zählen.
-                </Text>
-              ) : null}
-              {session
-                ? button(
+              {session ? (
+                <>
+                  <Text style={text}>
+                    {session.title ?? 'Prüfung'}: {session.answers.length} von {session.keys.length}{' '}
+                    Antworten gespeichert.
+                  </Text>
+                  <Text style={muted}>
+                    Noch etwa {timeEstimate}. Jederzeit pausierbar. Um den Umfang zu wechseln, erst
+                    diese Runde auswerten oder fortsetzen.
+                  </Text>
+                  {button(
                     'Prüfung fortsetzen',
                     () => {
                       setExam(true);
                       resetScroll();
                     },
                     true,
-                  )
-                : stats.remaining
-                  ? button(
-                      state.history.length
-                        ? 'Offene Fragen erneut prüfen'
-                        : 'Gesamtprüfung starten',
-                      () => {
-                        void run(() => start());
-                      },
-                      true,
-                    )
-                  : null}
-              {!session && state.history.length
-                ? button('Alles erneut prüfen', () => {
-                    void run(() => start(true));
-                  })
-                : null}
+                  )}
+                </>
+              ) : (
+                <>
+                  <Text style={text}>Wie möchtest du den Stoff zuerst prüfen?</Text>
+                  {button(
+                    'Nach jedem Modul',
+                    () => {
+                      void run(async () => {
+                        await commit({ ...state, examMode: 'modules' });
+                      });
+                    },
+                    false,
+                    false,
+                    moduleMode,
+                  )}
+                  {button(
+                    'Gesamten Stoff zusammen',
+                    () => {
+                      void run(async () => {
+                        await commit({ ...state, examMode: 'whole' });
+                      });
+                    },
+                    false,
+                    false,
+                    !moduleMode,
+                  )}
+                  {moduleMode ? (
+                    <>
+                      <Text style={muted}>
+                        Lerne ein Modul und prüfe es danach. Alle Fehler sammeln sich automatisch in
+                        derselben Wiederholung · auch wenn du erst weitere Module lernst.
+                      </Text>
+                      <Text style={heading}>
+                        {selectedModule?.title ?? 'Module werden geladen …'}
+                      </Text>
+                      {moduleStats ? (
+                        <Text style={muted}>
+                          {moduleStats.passed} richtig · {moduleStats.wrong.length} zu wiederholen ·{' '}
+                          {moduleStats.unseen} ungeprüft · {selectedModule?.questions.length} Fragen
+                          insgesamt
+                        </Text>
+                      ) : null}
+                      {button(modulePicker ? 'Modulauswahl schließen' : 'Modul auswählen', () =>
+                        setModulePicker(!modulePicker),
+                      )}
+                      {modulePicker
+                        ? moduleBanks.map((m) => {
+                            const progress = summary(state, m.questions);
+                            return button(
+                              `${m.id} · ${m.title} · ${progress.passed}/${m.questions.length} richtig · ${progress.unseen} ungeprüft`,
+                              () => {
+                                void run(async () => {
+                                  if (await commit({ ...state, selectedModule: m.id }))
+                                    setModulePicker(false);
+                                });
+                              },
+                              false,
+                              !m.questions.length,
+                              selectedModule?.id === m.id,
+                              `mastery-module-${m.id}`,
+                            );
+                          })
+                        : null}
+                      {button(
+                        'Modulprüfung starten',
+                        () => {
+                          if (selectedModule)
+                            void run(() =>
+                              start({
+                                lessonIds: selectedModule.lessonIds,
+                                title: selectedModule.title,
+                              }),
+                            );
+                        },
+                        true,
+                        !selectedModule?.questions.length,
+                        false,
+                        'mastery-start-module',
+                      )}
+                      <Text style={muted}>
+                        Prüft alle Fragen dieses Moduls, auch bereits richtige. Andere Module und
+                        ihre Fehler bleiben erhalten. Jede bestätigte Antwort wird gespeichert.
+                      </Text>
+                    </>
+                  ) : (
+                    <>
+                      <Text style={muted}>
+                        {stats.remaining} offene Fragen im gesamten Bestand. Für alle offenen Fragen
+                        etwa {timeEstimate}. Kein Zeitlimit; beliebig viele Sitzungen möglich.
+                      </Text>
+                      {stats.remaining
+                        ? button(
+                            state.history.length
+                              ? 'Alle offenen Fragen prüfen'
+                              : 'Gesamtprüfung starten',
+                            () => {
+                              void run(() => start());
+                            },
+                            true,
+                          )
+                        : null}
+                      {state.history.length
+                        ? button('Alles erneut prüfen', () => {
+                            void run(() => start(true));
+                          })
+                        : null}
+                    </>
+                  )}
+                  {stats.wrong.length
+                    ? button(
+                        `Wiederholungsprüfung starten · ${stats.wrong.length} ${stats.wrong.length === 1 ? 'Frage' : 'Fragen'}`,
+                        () => {
+                          void run(() => start('review'));
+                        },
+                        true,
+                        false,
+                        false,
+                        'mastery-start-review',
+                      )
+                    : null}
+                  <Text style={muted}>
+                    {stats.wrong.length
+                      ? 'Die Wiederholungsprüfung enthält ausschließlich deine gesammelten Fehler aus allen Modulen. Ungeprüfter Stoff wird nicht dazugemischt.'
+                      : stats.unseen
+                        ? 'Keine Fehler gesammelt. Noch ungeprüfte Fragen bleiben offen · eine leere Wiederholung bedeutet nicht, dass schon alles geprüft ist.'
+                        : 'Alles im aktuellen Fragenbestand richtig. Mit einer späteren Gesamtprüfung kannst du dein Wissen erneut überprüfen.'}
+                  </Text>
+                </>
+              )}
               {button(help ? 'Anleitung schließen' : 'So funktioniert es', () => setHelp(!help))}
               {help ? (
                 <Text style={text}>
                   1. Höre oder lies die Lektionen, wann und wie du magst. Eine Prüfung ist jederzeit
-                  möglich, ohne Freischaltsperre.{'\n\n'}2. Beantworte die Fragen ohne
-                  nachzuschlagen. „Weiß ich noch nicht“ zählt als Lücke, nicht als Fehler beim
-                  Bedienen.{'\n\n'}3. Nach der Auswertung erhältst du die Lektionen zu deinen
-                  falschen Antworten. Höre sie am Stück, lies sie oder kombiniere beides. Nur Hören
-                  ist vollkommen in Ordnung.{'\n\n'}4. Vollständig erneut gehörte Lektionen werden
-                  automatisch abgehakt; Vorspulen zählt nicht. Du kannst Wiederholtes auch manuell
-                  abhaken. Das ist nur deine Merkliste, kein Wissensnachweis. Prüfe danach die
-                  offenen Fragen erneut. Richtige Antworten entfallen; ungeprüfte Fragen bleiben
-                  dabei.{'\n\n'}5. Wiederhole, bis alle Fragen richtig waren. Prüfe später auch
-                  wieder den ganzen Bestand: vergessene Antworten kommen zurück in die Wiederholung.
-                  Neue oder geänderte Fragen zählen wieder als ungeprüft.{'\n\n'}Prüfungen nur im
-                  Stand, niemals beim Fahren. Audio vor der Fahrt starten. Fortschritt liegt lokal
-                  und ist über Einstellungen → Datenexport sicherbar.
+                  möglich, ohne Freischaltsperre. Wähle „Nach jedem Modul“ oder „Gesamten Stoff
+                  zusammen“. Fehler aus allen Modulen bleiben gemeinsam gespeichert.{'\n\n'}2.
+                  Beantworte die Fragen ohne nachzuschlagen. „Weiß ich noch nicht“ zählt als Lücke,
+                  nicht als Fehler beim Bedienen.{'\n\n'}3. Nach der Auswertung erhältst du die
+                  Lektionen zu deinen falschen Antworten. Höre sie am Stück, lies sie oder
+                  kombiniere beides. Nur Hören ist vollkommen in Ordnung.{'\n\n'}4. Vollständig
+                  erneut gehörte Lektionen werden automatisch abgehakt; Vorspulen zählt nicht. Du
+                  kannst Wiederholtes auch manuell abhaken. Das ist nur deine Merkliste, kein
+                  Wissensnachweis. Prüfe danach die gesammelten Fehler mit der Wiederholungsprüfung
+                  erneut. Richtige Antworten entfallen; falsche bleiben. Noch ungeprüfte Fragen
+                  anderer Module bleiben separat offen.{'\n\n'}5. Wiederhole, bis alle Fragen
+                  richtig waren. Prüfe später auch wieder den ganzen Bestand: vergessene Antworten
+                  kommen zurück in die Wiederholung. Neue oder geänderte Fragen zählen wieder als
+                  ungeprüft.{'\n\n'}Prüfungen nur im Stand, niemals beim Fahren. Audio vor der Fahrt
+                  starten. Fortschritt liegt lokal und ist über Einstellungen → Datenexport
+                  sicherbar.
                 </Text>
               ) : null}
             </View>

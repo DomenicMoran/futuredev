@@ -26,8 +26,8 @@ export function MasteryCard() {
           Was ist wirklich hängen geblieben?
         </Text>
         <Text style={{ color: theme.colors.textWeak, fontSize: 15, lineHeight: 22 }}>
-          Alles prüfen. Wissenslücken gezielt hören oder lesen. Erneut prüfen – bis alle Fragen
-          richtig sind.
+          Modulweise oder alles prüfen. Fehler gemeinsam sammeln und gezielt hören oder lesen.
+          Erneut prüfen – bis alle Fragen richtig sind.
         </Text>
         <Text style={{ color: theme.colors.accent, fontSize: 16, fontWeight: '600' }}>
           Prüfung & Wiederholung öffnen →

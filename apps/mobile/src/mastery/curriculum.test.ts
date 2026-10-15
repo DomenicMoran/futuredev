@@ -9,7 +9,8 @@ import {
 } from '../player/hearingProgress.js';
 import { answer, begin, emptyState, finish, makeBank, summary } from './engine.js';
 import { loadMastery, saveMastery } from './persistence.js';
-import { bundledManifest, getBundledLesson } from '../content/bundledData.js';
+import { bundledContent, bundledManifest, getBundledLesson } from '../content/bundledData.js';
+import { buildModuleList } from '../content/listLessons.js';
 function contentBank() {
   const lessons = bundledManifest.lessons.map((entry) => {
     const lesson = getBundledLesson(entry.id);
@@ -22,6 +23,28 @@ describe('real curriculum and audio-only repetition', () => {
   beforeEach(() => {
     resetToMemoryDatabase();
     resetHearingBaseline();
+  });
+  it('covers every actual question through the ten module exams and pools their errors', async () => {
+    const bank = contentBank();
+    const modules = await buildModuleList(bundledContent.modules, bundledManifest);
+    const seen = new Set<string>();
+    let state = emptyState();
+    for (const module of modules) {
+      state = begin(state, bank, {
+        title: module.title,
+        lessonIds: module.subModules.flatMap((s) => s.lessons.map((l) => l.id)),
+      });
+      for (const key of state.session?.keys ?? []) {
+        expect(seen.has(key)).toBe(false);
+        seen.add(key);
+        state = answer(state, -1, bank);
+      }
+      state = finish(state, bank);
+    }
+    expect(modules).toHaveLength(10);
+    expect(seen.size).toBe(2367);
+    expect(summary(state, bank).unseen).toBe(0);
+    expect(begin(state, bank, 'review').session?.keys).toHaveLength(2367);
   });
   it('draws ALL actual lessons/questions, reaches 100 only with every actual question correct', () => {
     const bank = contentBank();

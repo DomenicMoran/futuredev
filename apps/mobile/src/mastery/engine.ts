@@ -6,7 +6,9 @@ export type Medium = 'audio' | 'read' | 'mixed';
 export interface BankQuestion extends QuizQuestionInput {
   key: string;
 }
+export type ExamScope = 'remaining' | 'all' | 'review' | { lessonIds: string[]; title: string };
 export interface Session {
+  title?: string;
   keys: string[];
   orders: number[][];
   answers: number[];
@@ -15,10 +17,18 @@ export interface Session {
 export interface MasteryState {
   version: 1;
   medium: Medium;
+  examMode?: 'modules' | 'whole';
+  selectedModule?: string;
   results: Record<string, boolean>;
   reviewed: string[];
   session: Session | null;
-  history: { at: string; correct: number; total: number; remaining: number }[];
+  history: {
+    at: string;
+    correct: number;
+    total: number;
+    remaining: number;
+    affectedLessons?: string[];
+  }[];
 }
 export const emptyState = (): MasteryState => ({
   version: 1,
@@ -58,17 +68,32 @@ export function summary(state: MasteryState, bank: BankQuestion[]) {
 export function begin(
   state: MasteryState,
   bank: BankQuestion[],
-  full = false,
+  full: boolean | ExamScope = false,
   seed = Date.now(),
 ): MasteryState {
   if (state.session) throw new Error('Bitte die laufende Prüfung zuerst fortsetzen.');
-  const pending = bank.filter((q) => full || state.results[q.key] !== true);
+  const scope = full === true ? 'all' : full === false ? 'remaining' : full;
+  const ids = typeof scope === 'object' ? new Set(scope.lessonIds) : null;
+  const pending = bank.filter((q) =>
+    ids
+      ? ids.has(q.sourceLessonId)
+      : scope === 'all' ||
+        (scope === 'review' ? state.results[q.key] === false : state.results[q.key] !== true),
+  );
   if (!pending.length) throw new Error('Keine offenen Fragen.');
   const byIdentity = new Map(pending.map((q) => [`${q.sourceLessonId}/${q.questionId}`, q.key]));
   const drawn = drawQuestions(pending, pending.length, seed);
   return {
     ...state,
     session: {
+      title:
+        typeof scope === 'object'
+          ? scope.title
+          : scope === 'review'
+            ? 'Gemeinsame Wiederholungsprüfung'
+            : scope === 'all'
+              ? 'Gesamtprüfung'
+              : 'Alle offenen Fragen',
       keys: drawn.map((q) => byIdentity.get(`${q.sourceLessonId}/${q.questionId}`) ?? ''),
       orders: drawn.map((q) => q.options.map((o) => o.index)),
       answers: [],
@@ -91,22 +116,37 @@ export function finish(state: MasteryState, bank: BankQuestion[]): MasteryState 
   if (!session?.answers.length) throw new Error('Bitte zuerst eine Frage beantworten.');
   const byKey = new Map(bank.map((q) => [q.key, q]));
   const results = { ...state.results };
+  const affected = new Set<string>();
   let correct = 0;
   let total = 0;
   session.answers.forEach((choice, i) => {
     const q = byKey.get(session.keys[i] ?? '');
     if (!q) return; // Changed content is untested, never graded using obsolete answers.
+    affected.add(q.sourceLessonId);
     const passed = choice !== -1 && q.options[choice]?.isCorrect === true;
     results[q.key] = passed;
     total += 1;
     if (passed) correct += 1;
   });
-  const next = { ...state, results, session: null, reviewed: [] };
+  const next = {
+    ...state,
+    results,
+    session: null,
+    reviewed: state.reviewed.filter((id) => !affected.has(id)),
+  };
   return {
     ...next,
     history: [
       ...state.history,
-      { at: new Date().toISOString(), correct, total, remaining: summary(next, bank).remaining },
+      {
+        at: new Date(
+          Math.max(Date.now(), Date.parse(state.history.at(-1)?.at ?? '') + 1 || 0),
+        ).toISOString(),
+        correct,
+        total,
+        remaining: summary(next, bank).remaining,
+        affectedLessons: [...affected],
+      },
     ].slice(-100),
   };
 }
@@ -116,6 +156,8 @@ export function parseState(raw: string | undefined): MasteryState {
   if (
     !s ||
     s.version !== 1 ||
+    (s.examMode !== undefined && !['modules', 'whole'].includes(s.examMode)) ||
+    (s.selectedModule !== undefined && typeof s.selectedModule !== 'string') ||
     !['audio', 'read', 'mixed'].includes(s.medium) ||
     !s.results ||
     Array.isArray(s.results) ||
@@ -127,6 +169,9 @@ export function parseState(raw: string | undefined): MasteryState {
     s.history.some(
       (h) =>
         !h ||
+        (h.affectedLessons !== undefined &&
+          (!Array.isArray(h.affectedLessons) ||
+            h.affectedLessons.some((id) => typeof id !== 'string'))) ||
         typeof h.at !== 'string' ||
         !Number.isFinite(Date.parse(h.at)) ||
         !Number.isInteger(h.total) ||
@@ -144,6 +189,7 @@ export function parseState(raw: string | undefined): MasteryState {
     const r = s.session;
     if (
       !r ||
+      (r.title !== undefined && typeof r.title !== 'string') ||
       !Array.isArray(r.keys) ||
       !r.keys.length ||
       r.keys.some((k) => typeof k !== 'string') ||

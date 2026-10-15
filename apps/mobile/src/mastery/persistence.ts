@@ -18,9 +18,24 @@ export async function saveMastery(state: MasteryState): Promise<void> {
         ...new Set(
           Object.entries(state.results)
             .filter(([, correct]) => !correct)
-            .map(([key]) => key.split('/')[0]),
+            .map(([key]) => key.split('/')[0] ?? ''),
         ),
       ];
+      // Carry unrelated module reviews into the next round. Only evaluated lessons restart.
+      const oldScopeRaw = await tx.getSetting(REVIEW_AUDIO_SCOPE);
+      if (oldScopeRaw && last.affectedLessons) {
+        const oldScope = JSON.parse(oldScopeRaw) as { cycle: string; ids: string[] };
+        const affected = new Set(last.affectedLessons);
+        for (const id of ids) {
+          if (affected.has(id) || !oldScope.ids.includes(id)) continue;
+          const key = 'mastery.hearing.v1.' + id;
+          const rawReview = await tx.getSetting(key);
+          if (!rawReview) continue;
+          const review = JSON.parse(rawReview) as { cycle?: string; value?: unknown } | null;
+          if (review?.cycle === oldScope.cycle)
+            await tx.setSetting(key, JSON.stringify({ ...review, cycle: last.at }));
+        }
+      }
       await tx.setSetting(REVIEW_AUDIO_SCOPE, JSON.stringify({ cycle: last.at, ids }));
     }
   });
