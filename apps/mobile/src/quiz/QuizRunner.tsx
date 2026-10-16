@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Alert, Animated, BackHandler, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Alert, Animated, BackHandler, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useNavigation } from 'expo-router';
 import type { QuizAnswer, QuizQuestionInput, QuizResult } from '@futuredev/core';
 import { useTheme } from '../theme/useTheme.js';
@@ -10,6 +10,7 @@ import { drawRound, evaluateRound, collectWrongAnswers, type QuizRound, type Qui
 import { shouldConfirmExit } from './exitGuard.js';
 import { recordQuizRound } from './results.js';
 import { quizOptionAnnouncement } from './accessibility.js';
+import { recallCovers } from '../learn/session.js';
 
 interface QuizRunnerProps {
   pool: QuizQuestionInput[];
@@ -40,6 +41,10 @@ export function QuizRunner({ pool, desiredCount, scope, heading, onExit, onNextL
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [recallText, setRecallText] = useState('');
+  const [recallOpen, setRecallOpen] = useState(true);
+  const [whyText, setWhyText] = useState('');
+  const [whyShown, setWhyShown] = useState(false);
   const saveInFlightRef = useRef(false);
   const advancedQuestionRef = useRef<number | null>(null);
   const phaseRef = useRef(phase);
@@ -68,6 +73,18 @@ export function QuizRunner({ pool, desiredCount, scope, heading, onExit, onNextL
 
   function startQuiz() {
     setPhase('question');
+  }
+
+  function submitRecall() {
+    if (!question) return;
+    const correctIndex = question.options.findIndex((option) => option.isCorrect);
+    const correct = question.options[correctIndex];
+    if (correct && recallCovers(recallText, question.question, correct.text)) {
+      setRecallOpen(false);
+      chooseOption(correctIndex);
+      return;
+    }
+    setRecallOpen(false);
   }
 
   function chooseOption(optionIndex: number) {
@@ -99,6 +116,10 @@ export function QuizRunner({ pool, desiredCount, scope, heading, onExit, onNextL
     const nextAnswers = [...answers, { questionIndex: index, chosenOptionIndex: chosen }];
     setAnswers(nextAnswers);
     setChosen(null);
+    setRecallText('');
+    setRecallOpen(true);
+    setWhyText('');
+    setWhyShown(false);
 
     if (index + 1 < round.drawn.length) {
       setIndex(index + 1);
@@ -313,6 +334,30 @@ export function QuizRunner({ pool, desiredCount, scope, heading, onExit, onNextL
         <Text accessibilityRole="header" accessibilityLiveRegion="polite" style={[styles.title, { color: theme.colors.text, marginTop: theme.spacing.base }]}>
           {question.question}
         </Text>
+        {phase === 'question' && recallOpen ? (
+          <View style={{ marginTop: theme.spacing.lg, gap: theme.spacing.sm }}>
+            <Text style={[styles.body, { color: theme.colors.text }]}>{de.quiz.recallPrompt}</Text>
+            <TextInput
+              value={recallText}
+              onChangeText={setRecallText}
+              accessibilityLabel={de.quiz.recallPrompt}
+              multiline
+              style={{
+                minHeight: 96,
+                borderWidth: 1,
+                borderColor: theme.colors.border,
+                borderRadius: theme.radius.md,
+                padding: theme.spacing.base,
+                color: theme.colors.text,
+                fontSize: 16,
+              }}
+            />
+            <Pressable accessibilityRole="button" onPress={submitRecall} style={[styles.primaryButton, { backgroundColor: theme.colors.accent, borderRadius: theme.radius.md, minHeight: theme.minTapTarget }]}>
+              <Text style={[styles.primaryButtonLabel, { color: theme.colors.accentText }]}>{de.quiz.recallCheck}</Text>
+            </Pressable>
+          </View>
+        ) : null}
+        {phase === 'feedback' || !recallOpen ? (
         <View style={{ marginTop: theme.spacing.lg, gap: theme.spacing.sm }}>
           {question.options.map((option, optionIndex) => {
             const isChosen = chosen === optionIndex;
@@ -369,6 +414,7 @@ export function QuizRunner({ pool, desiredCount, scope, heading, onExit, onNextL
             );
           })}
         </View>
+        ) : null}
         {phase === 'feedback' && chosen !== null ? (
           <View style={{ marginTop: theme.spacing.lg }}>
             <Text
@@ -386,6 +432,29 @@ export function QuizRunner({ pool, desiredCount, scope, heading, onExit, onNextL
             <Text style={[styles.body, { color: theme.colors.text, marginTop: theme.spacing.xs }]}>
               {question.options[chosen]?.explanation}
             </Text>
+            {question.options[chosen]?.isCorrect ? (
+              <View style={{ marginTop: theme.spacing.base, gap: theme.spacing.sm }}>
+                <Text style={[styles.body, { color: theme.colors.text }]}>
+                  {de.quiz.whyOther} {question.options.find((option) => !option.isCorrect)?.text}
+                </Text>
+                <TextInput
+                  value={whyText}
+                  onChangeText={setWhyText}
+                  accessibilityLabel={de.quiz.whyOther}
+                  multiline
+                  style={{ minHeight: 72, borderWidth: 1, borderColor: theme.colors.border, borderRadius: theme.radius.md, padding: 12, color: theme.colors.text }}
+                />
+                <Pressable accessibilityRole="button" onPress={() => setWhyShown(true)} style={{ minHeight: theme.minTapTarget, justifyContent: 'center' }}>
+                  <Text style={{ color: theme.colors.text }}>{de.quiz.whyCheck}</Text>
+                </Pressable>
+                {whyShown ? (
+                  <Text style={[styles.body, { color: theme.colors.text }]}>
+                    {recallCovers(whyText, question.options.find((option) => !option.isCorrect)?.text ?? '', question.options.find((option) => !option.isCorrect)?.explanation ?? '') ? de.learn.hit : de.learn.miss}{' '}
+                    {question.options.find((option) => !option.isCorrect)?.explanation}
+                  </Text>
+                ) : null}
+              </View>
+            ) : null}
             {!question.options[chosen]?.isCorrect ? (
               <Text style={[styles.body, { color: theme.colors.success, marginTop: theme.spacing.xs }]}>
                 {de.quiz.correctAnswerLabel}: {question.options.find((o) => o.isCorrect)?.explanation}

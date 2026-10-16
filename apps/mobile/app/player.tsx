@@ -1,13 +1,13 @@
 import { runPlayerUiAction } from '../src/player/uiActions.js';
 import { playLessonInModuleContext } from '../src/player/index.js';
 import { LessonStatusActions } from '../src/components/LessonStatusActions.js';
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 
 import { ChevronDown, Pause, Play, Rewind, FastForward, BookOpen } from 'lucide-react-native';
 
@@ -29,10 +29,12 @@ import {
   ensureSpeechTextsForLesson,
   jumpBackward,
   jumpForward,
+  pausePlayback,
   seekToBlock,
   seekToSeconds,
   togglePlayback,
 } from '../src/player/index.js';
+import { keyListenTarget, keySentenceWindows } from '../src/player/keyWindows.js';
 
 import { formatPlaybackTime } from '../src/player/formatTime.js';
 
@@ -67,6 +69,9 @@ export default function PlayerScreen() {
 
   const speechBlockRolesByLessonId = usePlayerStore((s) => s.speechBlockRolesByLessonId);
 
+  const params = useLocalSearchParams<{ keys?: string }>();
+  const [keysOnly, setKeysOnly] = useState(params.keys === '1');
+  const lastKeySeek = useRef<number | null>(null);
   const item = currentItem(queue);
 
   const cueSheet = item ? cueSheetByLessonId[item.lessonId] : undefined;
@@ -104,6 +109,22 @@ export default function PlayerScreen() {
 
     void runPlayerUiAction(() => ensureSpeechTextsForLesson(item.lessonId));
   }, [item, speechTexts]);
+
+  useEffect(() => {
+    if (!keysOnly || !cueSheet || !isPlaying) return;
+    const target = keyListenTarget(positionSeconds, keySentenceWindows(cueSheet.blocks));
+    if (target === null) {
+      lastKeySeek.current = null;
+      return;
+    }
+    if (target === 'pause') {
+      void runPlayerUiAction(() => pausePlayback());
+      return;
+    }
+    if (lastKeySeek.current === target) return;
+    lastKeySeek.current = target;
+    void runPlayerUiAction(() => seekToSeconds(target));
+  }, [keysOnly, cueSheet, isPlaying, positionSeconds]);
 
   if (!item)
     return (
@@ -158,6 +179,15 @@ export default function PlayerScreen() {
           }}
         >
           <ChevronDown color={theme.colors.text} size={26} />
+        </Pressable>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityState={{ selected: keysOnly }}
+          accessibilityLabel={de.player.keysOnly}
+          onPress={() => setKeysOnly((value) => !value)}
+          style={{ minHeight: theme.minTapTarget, justifyContent: 'center', paddingHorizontal: 12 }}
+        >
+          <Text style={{ color: theme.colors.text }}>{keysOnly ? de.player.keysOnlyOn : de.player.keysOnly}</Text>
         </Pressable>
       </View>
 
@@ -477,7 +507,7 @@ export default function PlayerScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1 },
 
-  header: { flexDirection: 'row', justifyContent: 'flex-start', paddingTop: 8 },
+  header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingTop: 8 },
 
   scrollContent: {},
 

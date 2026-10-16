@@ -3,7 +3,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useFocusEffect } from 'expo-router';
-import { Dumbbell, Headphones, Layers, MessageCircleQuestion } from 'lucide-react-native';
+import { Dumbbell, Hammer, Headphones, Layers, MessageCircleQuestion } from 'lucide-react-native';
 import { isDue } from '@futuredev/core';
 import { useTheme } from '../../src/theme/useTheme.js';
 import { de } from '../../src/i18n/de.js';
@@ -235,6 +235,32 @@ export default function UebenScreen() {
               />
             ))}
           </View>
+
+          <SectionHeader title={de.ueben.sectionSitzung} theme={theme} topGap />
+          <LinkCard
+            title={de.ueben.sitzungTitle}
+            body={de.ueben.sitzungBody}
+            onPress={() => router.push('/sitzung')}
+            accessibilityLabel={de.ueben.sitzungAction}
+            theme={theme}
+            Icon={Layers}
+          />
+          <LinkCard
+            title={de.ueben.spielTitle}
+            body={de.ueben.spielBody}
+            onPress={() => router.push('/spiel')}
+            accessibilityLabel={de.ueben.spielAction}
+            theme={theme}
+            Icon={MessageCircleQuestion}
+          />
+          <LinkCard
+            title={de.ueben.bauenTitle}
+            body={de.ueben.bauenBody}
+            onPress={() => router.push('/bauen')}
+            accessibilityLabel={de.ueben.bauenAction}
+            theme={theme}
+            Icon={Hammer}
+          />
 
           <SectionHeader title={de.ueben.sectionErklaeren} theme={theme} topGap />
           <LinkCard
