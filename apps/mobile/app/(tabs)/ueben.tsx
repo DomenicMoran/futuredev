@@ -52,7 +52,10 @@ export default function UebenScreen() {
         if (cancelled) return;
         const now = new Date();
         const dueCards = cards.filter((c) => isDue(c, now));
-        const futureDue = earliestFutureDueAt(cards.map((card) => card.dueAt), now);
+        const futureDue = earliestFutureDueAt(
+          cards.map((card) => card.dueAt),
+          now,
+        );
         const dueTotal = dueCards.length;
         const size = dailyRationSize(dailyGoalMinutes, reviewIntensity);
         const ration = selectDailyRation(cards, size, now);
@@ -78,8 +81,12 @@ export default function UebenScreen() {
         if (!cancelled) setPublishedLessonIds([]);
       });
     loadLegacyReviewArchive()
-      .then((rows) => { if (!cancelled) setLegacyArchiveCount(rows.length); })
-      .catch(() => { if (!cancelled) setLegacyArchiveCount(null); });
+      .then((rows) => {
+        if (!cancelled) setLegacyArchiveCount(rows.length);
+      })
+      .catch(() => {
+        if (!cancelled) setLegacyArchiveCount(null);
+      });
     return () => {
       cancelled = true;
     };
@@ -94,117 +101,163 @@ export default function UebenScreen() {
 
   return (
     <SafeAreaView edges={['top']} style={[styles.container, { backgroundColor: theme.colors.bg }]}>
-    <ScrollView
-      style={styles.container}
-      contentContainerStyle={{ paddingHorizontal: inset, paddingBottom: bottomInset }}
-      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh} />}
-    >
-      <TabScreenTitle title={de.ueben.title} includeSafeAreaTop={false} /><MasteryCard />
-      <FadeInUp durationMs={200} delayMs={motionStaggerDelay(0)}>
-      <SectionHeader title={de.ueben.sectionHeute} theme={theme} />
-      {loadError ? <CalmCard title={de.ueben.reviewLoadErrorTitle} body={de.ueben.reviewLoadErrorBody} theme={theme} /> : null}
-      {rationCount === null ? null : rationCount === 0 ? (
-        <CalmCard
-          title={de.ueben.heuteEmptyTitle}
-          body={de.ueben.heuteEmptyBody}
-          theme={theme}
-        />
-      ) : (
-        <ActionCard
-          title={de.ueben.dailyRationTitle}
-          body={
-            de.ueben.dailyRationBody(rationCount)
-          }
-          actionLabel={de.ueben.startDailyRation}
-          onAction={() => startReview(rationCards)}
-          disabled={rationCards.length === 0}
-          theme={theme}
-        />
-      )}
-
-      <SectionHeader title={de.ueben.sectionFlashcards} theme={theme} topGap />
-      <ActionCard
-        title={de.ueben.sectionFlashcards}
-        body={de.ueben.flashcardsBody}
-        actionLabel={de.ueben.flashcardsOpen}
-        onAction={() => router.push('/flashcards')}
-        theme={theme}
-        Icon={Layers}
-      />
-
-      <SectionHeader title={de.ueben.sectionWiederholen} theme={theme} topGap />
-      {legacyArchiveCount && legacyArchiveCount > 0 ? (
-        <View style={[styles.card, { backgroundColor: theme.colors.surface, borderColor: theme.colors.border, borderRadius: theme.radius.lg, padding: theme.spacing.base, marginBottom: theme.spacing.sm }]}>
-          <Text style={[styles.cardTitle, { color: theme.colors.text }]}>{de.ueben.legacyReviewArchiveTitle}</Text>
-          <Text style={[styles.cardBody, { color: theme.colors.textWeak, marginTop: theme.spacing.xs }]}>
-            {de.ueben.legacyReviewArchiveBody(legacyArchiveCount)}
-          </Text>
-        </View>
-      ) : null}
-      {reviewDeckStatus === 'loading' ? null : reviewDeckStatus === 'future' ? (
-        <CalmCard title={de.ueben.reviewFutureTitle} body={de.ueben.reviewFutureBody(totalCardCount ?? 0, nextDueAt ? new Date(nextDueAt).toLocaleDateString('de-DE') : '')} theme={theme} />
-      ) : reviewDeckStatus === 'empty' ? (
-        <CalmCard title={de.ueben.emptyTitle} body={de.ueben.wiederholenEmptyTip} theme={theme} />
-      ) : (
-        <ActionCard
-          title={de.ueben.sectionWiederholen}
-          body={
-            de.ueben.wiederholenDueBody(totalDueCount ?? 0)
-          }
-          actionLabel={de.ueben.wiederholenStart}
-          onAction={() => startReview(dueCards)}
-          disabled={dueCards.length === 0}
-          theme={theme}
-          Icon={Dumbbell}
-        />
-      )}
-
-      <SectionHeader title={de.ueben.sectionPruefungen} theme={theme} topGap />
-      <View
-        style={[
-          styles.listCard,
-          { backgroundColor: theme.colors.surface, borderColor: theme.colors.border, borderRadius: theme.radius.lg },
-        ]}
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={{ paddingHorizontal: inset, paddingBottom: bottomInset }}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh} />}
       >
-        <ExamRow
-          label={de.ueben.examAllRow}
-          onPress={() => router.push('/quiz/exam?scope=all')}
-          theme={theme}
-          first
-        />
-        {examModules.map((module, idx) => (
-          <ExamRow
-            key={module.id}
-            label={module.title}
-            onPress={() => router.push(`/quiz/exam?scope=module:${module.id}`)}
+        <TabScreenTitle title={de.ueben.title} includeSafeAreaTop={false} />
+        <MasteryCard />
+        <FadeInUp durationMs={200} delayMs={motionStaggerDelay(0)}>
+          <SectionHeader title={de.ueben.sectionHeute} theme={theme} />
+          {loadError ? (
+            <CalmCard
+              title={de.ueben.reviewLoadErrorTitle}
+              body={de.ueben.reviewLoadErrorBody}
+              theme={theme}
+            />
+          ) : null}
+          {rationCount === null ? null : rationCount === 0 ? (
+            <CalmCard
+              title={de.ueben.heuteEmptyTitle}
+              body={de.ueben.heuteEmptyBody}
+              theme={theme}
+            />
+          ) : (
+            <ActionCard
+              title={de.ueben.dailyRationTitle}
+              body={de.ueben.dailyRationBody(rationCount)}
+              actionLabel={de.ueben.startDailyRation}
+              onAction={() => startReview(rationCards)}
+              disabled={rationCards.length === 0}
+              theme={theme}
+            />
+          )}
+
+          <SectionHeader title={de.ueben.sectionFlashcards} theme={theme} topGap />
+          <ActionCard
+            title={de.ueben.sectionFlashcards}
+            body={de.ueben.flashcardsBody}
+            actionLabel={de.ueben.flashcardsOpen}
+            onAction={() => router.push('/flashcards')}
             theme={theme}
-            last={idx === examModules.length - 1}
+            Icon={Layers}
           />
-        ))}
-      </View>
 
-      <SectionHeader title={de.ueben.sectionErklaeren} theme={theme} topGap />
-      <LinkCard
-        title={de.ueben.explainExamTitle}
-        body={de.ueben.explainExamBody}
-        onPress={() => router.push('/erklaer')}
-        accessibilityLabel={de.ueben.explainExamAction}
-        theme={theme}
-        Icon={MessageCircleQuestion}
-      />
+          <SectionHeader title={de.ueben.sectionWiederholen} theme={theme} topGap />
+          {legacyArchiveCount && legacyArchiveCount > 0 ? (
+            <View
+              style={[
+                styles.card,
+                {
+                  backgroundColor: theme.colors.surface,
+                  borderColor: theme.colors.border,
+                  borderRadius: theme.radius.lg,
+                  padding: theme.spacing.base,
+                  marginBottom: theme.spacing.sm,
+                },
+              ]}
+            >
+              <Text style={[styles.cardTitle, { color: theme.colors.text }]}>
+                {de.ueben.legacyReviewArchiveTitle}
+              </Text>
+              <Text
+                style={[
+                  styles.cardBody,
+                  { color: theme.colors.textWeak, marginTop: theme.spacing.xs },
+                ]}
+              >
+                {de.ueben.legacyReviewArchiveBody(legacyArchiveCount)}
+              </Text>
+            </View>
+          ) : null}
+          {reviewDeckStatus === 'loading' ? null : reviewDeckStatus === 'future' ? (
+            <CalmCard
+              title={de.ueben.reviewFutureTitle}
+              body={de.ueben.reviewFutureBody(
+                totalCardCount ?? 0,
+                nextDueAt ? new Date(nextDueAt).toLocaleDateString('de-DE') : '',
+              )}
+              theme={theme}
+            />
+          ) : reviewDeckStatus === 'empty' ? (
+            <CalmCard
+              title={de.ueben.emptyTitle}
+              body={de.ueben.wiederholenEmptyTip}
+              theme={theme}
+            />
+          ) : (
+            <ActionCard
+              title={de.ueben.sectionWiederholen}
+              body={de.ueben.wiederholenDueBody(totalDueCount ?? 0)}
+              actionLabel={de.ueben.wiederholenStart}
+              onAction={() => startReview(dueCards)}
+              disabled={dueCards.length === 0}
+              theme={theme}
+              Icon={Dumbbell}
+            />
+          )}
 
-      <SectionHeader title={de.ueben.sectionHoerenClips} theme={theme} topGap />
-      <LinkCard
-        title={de.ueben.reviewClipsTitle}
-        body={de.ueben.reviewClipsBody}
-        onPress={() => router.push('/(tabs)/hoeren')}
-        accessibilityLabel={de.ueben.reviewClipsAction}
-        theme={theme}
-        Icon={Headphones}
-        accentBar
-      />
-      </FadeInUp>
-    </ScrollView>
+          <SectionHeader title={de.ueben.sectionPruefungen} theme={theme} topGap />
+          <Text
+            style={[
+              styles.cardBody,
+              { color: theme.colors.textWeak, marginBottom: theme.spacing.sm },
+            ]}
+          >
+            Diese Runden prüfen eine Auswahl. Für alle Fragen eines Moduls oder des gesamten Kurses
+            nutze den Lernkreislauf oben. Falsche Antworten werden gemeinsam zur Wiederholung
+            gespeichert.
+          </Text>
+          <View
+            style={[
+              styles.listCard,
+              {
+                backgroundColor: theme.colors.surface,
+                borderColor: theme.colors.border,
+                borderRadius: theme.radius.lg,
+              },
+            ]}
+          >
+            <ExamRow
+              label={de.ueben.examAllRow}
+              onPress={() => router.push('/quiz/exam?scope=all')}
+              theme={theme}
+              first
+            />
+            {examModules.map((module, idx) => (
+              <ExamRow
+                key={module.id}
+                label={module.title}
+                onPress={() => router.push(`/quiz/exam?scope=module:${module.id}`)}
+                theme={theme}
+                last={idx === examModules.length - 1}
+              />
+            ))}
+          </View>
+
+          <SectionHeader title={de.ueben.sectionErklaeren} theme={theme} topGap />
+          <LinkCard
+            title={de.ueben.explainExamTitle}
+            body={de.ueben.explainExamBody}
+            onPress={() => router.push('/erklaer')}
+            accessibilityLabel={de.ueben.explainExamAction}
+            theme={theme}
+            Icon={MessageCircleQuestion}
+          />
+
+          <SectionHeader title={de.ueben.sectionHoerenClips} theme={theme} topGap />
+          <LinkCard
+            title={de.ueben.reviewClipsTitle}
+            body={de.ueben.reviewClipsBody}
+            onPress={() => router.push('/(tabs)/hoeren')}
+            accessibilityLabel={de.ueben.reviewClipsAction}
+            theme={theme}
+            Icon={Headphones}
+            accentBar
+          />
+        </FadeInUp>
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -222,7 +275,11 @@ function SectionHeader({
     <Text
       style={[
         styles.sectionTitle,
-        { color: theme.colors.text, marginTop: topGap ? theme.spacing.lg : theme.spacing.sm, marginBottom: theme.spacing.sm },
+        {
+          color: theme.colors.text,
+          marginTop: topGap ? theme.spacing.lg : theme.spacing.sm,
+          marginBottom: theme.spacing.sm,
+        },
       ]}
     >
       {title}
@@ -230,16 +287,33 @@ function SectionHeader({
   );
 }
 
-function CalmCard({ title, body, theme }: { title: string; body: string; theme: ReturnType<typeof useTheme> }) {
+function CalmCard({
+  title,
+  body,
+  theme,
+}: {
+  title: string;
+  body: string;
+  theme: ReturnType<typeof useTheme>;
+}) {
   return (
     <View
       style={[
         styles.card,
-        { backgroundColor: theme.colors.surface, borderColor: theme.colors.border, borderRadius: theme.radius.lg, padding: theme.spacing.base },
+        {
+          backgroundColor: theme.colors.surface,
+          borderColor: theme.colors.border,
+          borderRadius: theme.radius.lg,
+          padding: theme.spacing.base,
+        },
       ]}
     >
       <Text style={[styles.cardTitle, { color: theme.colors.text }]}>{title}</Text>
-      <Text style={[styles.cardBody, { color: theme.colors.textWeak, marginTop: theme.spacing.xs }]}>{body}</Text>
+      <Text
+        style={[styles.cardBody, { color: theme.colors.textWeak, marginTop: theme.spacing.xs }]}
+      >
+        {body}
+      </Text>
     </View>
   );
 }
@@ -265,18 +339,37 @@ function ActionCard({
     <View
       style={[
         styles.card,
-        { backgroundColor: theme.colors.surface, borderColor: theme.colors.border, borderRadius: theme.radius.lg, padding: theme.spacing.base },
+        {
+          backgroundColor: theme.colors.surface,
+          borderColor: theme.colors.border,
+          borderRadius: theme.radius.lg,
+          padding: theme.spacing.base,
+        },
       ]}
     >
       {Icon ? (
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: theme.spacing.sm, marginBottom: theme.spacing.xs }}>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: theme.spacing.sm,
+            marginBottom: theme.spacing.xs,
+          }}
+        >
           <Icon color={theme.colors.accent} size={24} strokeWidth={1.75} />
           <Text style={[styles.cardTitle, { color: theme.colors.text, flex: 1 }]}>{title}</Text>
         </View>
       ) : (
         <Text style={[styles.cardTitle, { color: theme.colors.text }]}>{title}</Text>
       )}
-      <Text style={[styles.cardBody, { color: theme.colors.textWeak, marginTop: Icon ? 0 : theme.spacing.xs }]}>{body}</Text>
+      <Text
+        style={[
+          styles.cardBody,
+          { color: theme.colors.textWeak, marginTop: Icon ? 0 : theme.spacing.xs },
+        ]}
+      >
+        {body}
+      </Text>
       <PressableFeedback
         accessibilityRole="button"
         accessibilityLabel={actionLabel}
@@ -293,7 +386,9 @@ function ActionCard({
           },
         ]}
       >
-        <Text style={[styles.primaryButtonLabel, { color: theme.colors.accentText }]}>{actionLabel}</Text>
+        <Text style={[styles.primaryButtonLabel, { color: theme.colors.accentText }]}>
+          {actionLabel}
+        </Text>
       </PressableFeedback>
     </View>
   );
@@ -339,7 +434,11 @@ function LinkCard({
       <Icon color={theme.colors.accent} size={28} strokeWidth={1.75} />
       <View style={{ flex: 1 }}>
         <Text style={[styles.cardTitle, { color: theme.colors.text }]}>{title}</Text>
-        <Text style={[styles.cardBody, { color: theme.colors.textWeak, marginTop: theme.spacing.xs }]}>{body}</Text>
+        <Text
+          style={[styles.cardBody, { color: theme.colors.textWeak, marginTop: theme.spacing.xs }]}
+        >
+          {body}
+        </Text>
       </View>
     </PressableFeedback>
   );
@@ -380,7 +479,13 @@ function ExamRow({
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  sectionTitle: { fontSize: 13, lineHeight: 18, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 0.6 },
+  sectionTitle: {
+    fontSize: 13,
+    lineHeight: 18,
+    fontWeight: '700',
+    textTransform: 'uppercase',
+    letterSpacing: 0.6,
+  },
   card: { borderWidth: StyleSheet.hairlineWidth },
   cardTitle: { fontSize: 17, lineHeight: 24, fontWeight: '600' },
   cardBody: { fontSize: 14, lineHeight: 20 },

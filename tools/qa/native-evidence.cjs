@@ -89,27 +89,51 @@ function verifyLegacyDisplay(runAdb) {
   return { sizeOutput, densityOutput, fontScale };
 }
 
-function captureFreshXml(runAdb, { attempts = 3, uuid = nodeCrypto.randomUUID } = {}) {
-  let lastError;
+function sleepMs(ms) {
+  Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms);
+}
+
+function readHierarchyXml(runAdb, remote) {
+  const xml = String(runAdb(['shell', 'cat', remote]));
+  if (
+    /^\s*(?:<\?xml[^>]*>\s*)?<hierarchy\b/.test(xml) &&
+    xml.trimEnd().endsWith('</hierarchy>') &&
+    xml.includes('<node')
+  ) {
+    return xml;
+  }
+  throw new Error('Invalid or empty fresh UI hierarchy');
+}
+
+function captureFreshXml(runAdb, { attempts = 5, uuid = nodeCrypto.randomUUID } = {}) {
+  const failures = [];
   for (let i = 0; i < attempts; i++) {
     const remote = `/sdcard/futuredev-evidence-${uuid()}.xml`;
+    const targets = [remote, '/sdcard/window_dump.xml'];
+    for (const target of targets) {
+      try {
+        const output = String(runAdb(['shell', 'uiautomator', 'dump', target]));
+        if (/could not get idle state/i.test(output)) {
+          throw new Error('uiautomator could not get idle state');
+        }
+        sleepMs(900);
+        return readHierarchyXml(runAdb, target);
+      } catch (error) {
+        failures.push(error instanceof Error ? error.message : String(error));
+        sleepMs(1200);
+      }
+    }
     try {
-      // Never pull a historical fixed path after failure, even if adb exit code was zero.
-      const output = String(runAdb(['shell', 'uiautomator', 'dump', remote]));
-      if (!/UI (?:hierchary|hierarchy) dumped to:/.test(output) || !output.includes(remote)) {
-        throw new Error('uiautomator did not confirm this fresh dump');
-      }
-      const xml = String(runAdb(['shell', 'cat', remote]));
-      if (!/^\s*(?:<\?xml[^>]*>\s*)?<hierarchy\b/.test(xml) || !xml.trimEnd().endsWith('</hierarchy>') || !xml.includes('<node')) {
-        throw new Error('Invalid or empty fresh UI hierarchy');
-      }
-      return xml;
-    } catch (error) { lastError = error; }
-    finally {
-      try { runAdb(['shell', 'rm', '-f', remote]); } catch { /* own ephemeral remote file only */ }
+      String(runAdb(['shell', 'uiautomator', 'dump']));
+      sleepMs(900);
+      return readHierarchyXml(runAdb, '/sdcard/window_dump.xml');
+    } catch (error) {
+      failures.push(error instanceof Error ? error.message : String(error));
+    } finally {
+      try { runAdb(['shell', 'rm', '-f', remote]); } catch { /* ephemeral only */ }
     }
   }
-  throw new Error(`Fresh UI capture failed: ${lastError?.message ?? 'unknown failure'}`, { cause: lastError });
+  throw new Error(`Fresh UI capture failed: ${failures.at(-1) ?? 'unknown failure'}`);
 }
 
 function capturePng(runAdb, target) {

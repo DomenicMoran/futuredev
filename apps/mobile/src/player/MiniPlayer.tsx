@@ -1,3 +1,4 @@
+import { runPlayerUiAction } from './uiActions.js';
 import { useCallback } from 'react';
 import { ActivityIndicator, Alert, Pressable, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import { SlideInBottom } from '../motion/SlideInBottom.js';
@@ -49,7 +50,7 @@ export function MiniPlayer() {
   const item = currentItem(queue);
 
   const onSeekCommit = useCallback((seconds: number) => {
-    void seekToSeconds(seconds);
+    void runPlayerUiAction(() => seekToSeconds(seconds));
   }, []);
 
   const confirmDismissQueue = useCallback(() => {
@@ -59,7 +60,7 @@ export function MiniPlayer() {
         text: de.player.dismissQueueConfirm,
         style: 'destructive',
         onPress: () => {
-          void clearPlayback();
+          void runPlayerUiAction(() => clearPlayback());
         },
       },
     ]);
@@ -156,7 +157,7 @@ export function MiniPlayer() {
           </Pressable>
         ) : (
           <Pressable
-            onPress={() => void jumpForward(JUMP_FORWARD_SECONDS)}
+            onPress={() => void runPlayerUiAction(() => jumpForward(JUMP_FORWARD_SECONDS))}
             accessibilityRole="button"
             accessibilityLabel={de.player.jumpForward}
             hitSlop={8}

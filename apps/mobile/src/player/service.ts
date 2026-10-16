@@ -15,8 +15,10 @@ function dispatch(action: Promise<unknown> | Promise<void>): void {
 }
 
 export async function PlaybackService(): Promise<void> {
-  const { saveNativePlaybackProgress } = await import('./index.js');
+  const { saveNativePlaybackProgress, checkSleepTimer, isQueueMutationInProgress } = await import('./index.js');
   TrackPlayer.addEventListener(Event.PlaybackProgressUpdated, (event) => {
+    // Independent from persistence: a storage error must never prevent stopping audio.
+    dispatch(checkSleepTimer());
     dispatch(saveNativePlaybackProgress(event));
   });
   TrackPlayer.addEventListener(Event.RemotePlay, () => dispatch(import('./index.js').then(({ resumePlayback }) => resumePlayback())));
@@ -49,6 +51,8 @@ export async function PlaybackService(): Promise<void> {
   });
 
   TrackPlayer.addEventListener(Event.PlaybackQueueEnded, (event) => {
+    // Removing/resetting tracks can emit ENDED; editing is not natural completion.
+    if (isQueueMutationInProgress()) return;
     dispatch(import('./trackEnd.js').then(({ handlePlaybackQueueEnded }) => handlePlaybackQueueEnded(event?.position)));
   });
 

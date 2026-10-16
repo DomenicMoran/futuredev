@@ -16,7 +16,7 @@ import { clampRate } from './rate.js';
 import { computeSleepTimerTarget, isSleepTimerElapsed, volumeForSleepTimer } from './sleepTimer.js';
 import { bindQueueItemSnapshot, currentItem, snapshotForQueueItem } from './queue.js';
 import { EMPTY_QUEUE, enqueue, goToNext, goToPrevious, removeAt, reorder, setQueue } from './queue.js';
-import { persistRepeatMode } from './playerPreferences.js';
+import { persistRepeatMode, persistPlaybackRate } from './playerPreferences.js';
 import { usePlayerStore } from './store.js';
 import {
   JUMP_BACKWARD_SECONDS,
@@ -119,6 +119,9 @@ function assertStartIntent(lifecycleEpoch: number, intent: number): void {
   if (intent !== startIntentEpoch) throw new Error('Wiedergabeauswahl wurde ersetzt');
 }
 
+let queueMutationDepth = 0;
+export function isQueueMutationInProgress(): boolean { return queueMutationDepth > 0; }
+
 async function withLatestQueueReplacement<T>(intent: number, work: () => Promise<T>): Promise<T> {
   const previous = queueReplacementTail;
   let release!: () => void;
@@ -126,7 +129,8 @@ async function withLatestQueueReplacement<T>(intent: number, work: () => Promise
   await previous;
   try {
     if (intent !== startIntentEpoch) throw new Error('Wiedergabeauswahl wurde ersetzt');
-    return await work();
+    queueMutationDepth += 1;
+    try { return await work(); } finally { queueMutationDepth -= 1; }
   } finally { release(); }
 }
 
@@ -690,37 +694,30 @@ export function playPlaylist(playlistId: string): Promise<void> {
 
 /** Hängt konkrete Lektionskennungen an die Warteschlange an. */
 export function enqueueLessons(lessonIds: readonly string[], pinnedSnapshot?: ContentSnapshot): Promise<void> {
-  return runPlayerOperation(async (epoch) => {
-  const fs = await getContentFs();
-  const snapshot = pinnedSnapshot ?? await loadContentSnapshot(fs);
-  const items: QueueItem[] = [];
-  for (const id of lessonIds) {
-    assertPlayerEpoch(epoch);
-    const lesson = await getLessonForPlayback(id, snapshot);
-    assertPlayerEpoch(epoch);
-    cacheLessonSpeechTexts(lesson);
-    const item = await lessonToQueueItem(lesson);
-    bindQueueItemSnapshot(item, snapshot);
-    items.push(item);
-  }
-  const state = usePlayerStore.getState();
-  const nextQueue = enqueue(state.queue, items);
-  state.setQueueState(nextQueue);
-
-  await ensureSetup();
-  assertPlayerEpoch(epoch);
-  const trackPlayer = await TP();
-  assertPlayerEpoch(epoch);
-  for (const lessonId of lessonIds) {
-    assertPlayerEpoch(epoch);
-    await trackPlayer.add({
-      id: lessonId,
-      url: await audioSourceForLesson(lessonId, snapshot),
-      title: items.find((i) => i.lessonId === lessonId)?.title ?? lessonId,
-      artist: 'KI-generierte Stimme',
-    });
-  }
-  });
+  const intent = startIntentEpoch;
+  return runPlayerOperation((epoch) => withLatestQueueReplacement(intent, async () => {
+    assertStartIntent(epoch, intent);
+    const fs = await getContentFs();
+    const snapshot = pinnedSnapshot ?? await loadContentSnapshot(fs);
+    assertStartIntent(epoch, intent);
+    await ensureSetup();
+    const trackPlayer = await TP();
+    for (const id of lessonIds) {
+      assertStartIntent(epoch, intent);
+      const lesson = await getLessonForPlayback(id, snapshot);
+      assertStartIntent(epoch, intent);
+      cacheLessonSpeechTexts(lesson);
+      const item = await lessonToQueueItem(lesson);
+      bindQueueItemSnapshot(item, snapshot);
+      const url = await audioSourceForLesson(id, snapshot);
+      assertStartIntent(epoch, intent);
+      await trackPlayer.add({ id, url, title: item.title, artist: 'KI-generierte Stimme' });
+      assertStartIntent(epoch, intent);
+      // Commit only successfully added tracks, including a partial native failure.
+      const state = usePlayerStore.getState();
+      state.setQueueState(enqueue(state.queue, [item]));
+    }
+  }));
 }
 
 export function skipToNext(): Promise<void> {
@@ -729,11 +726,12 @@ export function skipToNext(): Promise<void> {
   const state = usePlayerStore.getState();
   const nextQueue = goToNext(state.queue);
   if (nextQueue === state.queue) return;
-  state.setQueueState(nextQueue);
   const trackPlayer = await TP();
   assertPlayerEpoch(epoch);
   await trackPlayer.skipToNext();
   assertPlayerEpoch(epoch);
+  state.setQueueState(nextQueue);
+  state.setPosition(0);
   const nextItem = nextQueue.items[nextQueue.currentIndex];
   if (nextItem) startPositionTracking(nextItem.lessonId);
   });
@@ -745,28 +743,86 @@ export function skipToPrevious(): Promise<void> {
   const state = usePlayerStore.getState();
   const previousQueue = goToPrevious(state.queue);
   if (previousQueue === state.queue) return;
-  state.setQueueState(previousQueue);
   const trackPlayer = await TP();
   assertPlayerEpoch(epoch);
   await trackPlayer.skipToPrevious();
   assertPlayerEpoch(epoch);
+  state.setQueueState(previousQueue);
+  state.setPosition(0);
   const prevItem = previousQueue.items[previousQueue.currentIndex];
   if (prevItem) startPositionTracking(prevItem.lessonId);
   });
 }
 
 export async function removeFromQueue(index: number): Promise<void> {
-  if (playerResetting) return;
-  const state = usePlayerStore.getState();
-  const nextQueue = removeAt(state.queue, index);
-  if (currentItem(nextQueue) !== currentItem(state.queue)) invalidateSeekIntent();
-  state.setQueueState(nextQueue);
+  const target = usePlayerStore.getState().queue.items[index];
+  if (!target) return;
+  const intent = startIntentEpoch;
+  return runPlayerOperation((epoch) => withLatestQueueReplacement(intent, async () => {
+    assertStartIntent(epoch, intent);
+    const state = usePlayerStore.getState();
+    const queue = state.queue;
+    const keepPaused = !state.isPlaying && !state.isBuffering;
+    const actualIndex = queue.items.indexOf(target);
+    if (actualIndex < 0) return;
+    const removedQueue = removeAt(queue, actualIndex);
+    // Select the surviving track before removal. Android can asynchronously
+    // auto-start after removing its active last item, even after pause() resolved.
+    const nextQueue = actualIndex === queue.currentIndex && actualIndex === queue.items.length - 1 && removedQueue.items.length
+      ? { ...removedQueue, currentIndex: 0 } : removedQueue;
+    const changesCurrent = currentItem(nextQueue) !== currentItem(queue);
+    const player = await TP();
+    assertStartIntent(epoch, intent);
+    if (changesCurrent) invalidateSeekIntent();
+    if (changesCurrent && nextQueue.items.length) {
+      const survivor = currentItem(nextQueue);
+      const survivorIndex = survivor ? queue.items.indexOf(survivor) : -1;
+      await player.skip(survivorIndex, 0);
+      assertStartIntent(epoch, intent);
+      // If subsequent removal fails, the UI must still reflect this successful skip.
+      usePlayerStore.getState().setQueueState({ ...queue, currentIndex: survivorIndex });
+      usePlayerStore.getState().setPosition(0);
+      if (survivor) startPositionTracking(survivor.lessonId);
+    }
+    await player.remove(actualIndex);
+    assertStartIntent(epoch, intent);
+    usePlayerStore.getState().setQueueState(nextQueue);
+    if (changesCurrent && nextQueue.items.length && keepPaused) {
+      // Native removal may auto-start the replacement. Editing is not a play intent.
+      await player.pause();
+      assertStartIntent(epoch, intent);
+      usePlayerStore.getState().setPlaying(false);
+      usePlayerStore.getState().setBuffering(false);
+    }
+    if (changesCurrent) {
+      usePlayerStore.getState().setPosition(0);
+      const next = currentItem(nextQueue);
+      if (next) startPositionTracking(next.lessonId);
+      else {
+        stopPositionTracking();
+        setSleepTimer(null);
+        usePlayerStore.getState().setPlaying(false);
+        usePlayerStore.getState().setBuffering(false);
+      }
+    }
+  }));
 }
 
 export async function reorderQueue(fromIndex: number, toIndex: number): Promise<void> {
-  if (playerResetting) return;
-  const state = usePlayerStore.getState();
-  state.setQueueState(reorder(state.queue, fromIndex, toIndex));
+  const initial = usePlayerStore.getState().queue;
+  const target = initial.items[fromIndex];
+  const destination = initial.items[toIndex];
+  if (!target || !destination || target === destination) return;
+  const intent = startIntentEpoch;
+  return runPlayerOperation((epoch) => withLatestQueueReplacement(intent, async () => {
+    assertStartIntent(epoch, intent);
+    const queue = usePlayerStore.getState().queue;
+    const from = queue.items.indexOf(target); const to = queue.items.indexOf(destination);
+    if (from < 0 || to < 0 || from === to) return;
+    const player = await TP(); assertStartIntent(epoch, intent);
+    await player.move(from, to); assertStartIntent(epoch, intent);
+    usePlayerStore.getState().setQueueState(reorder(queue, from, to));
+  }));
 }
 
 /* --------------------------------------------------------------------- Sprung */
@@ -866,6 +922,8 @@ export function setRate(rate: number): Promise<void> {
   await trackPlayer.setRate(clamped);
   assertPlayerEpoch(epoch);
   usePlayerStore.getState().setRate(clamped);
+  try { await persistPlaybackRate(clamped); }
+  catch { throw new Error('Das Tempo wurde geändert, konnte aber nicht für den nächsten Start gespeichert werden.'); }
   });
 }
 
@@ -877,13 +935,21 @@ let sleepTimerEpoch = 0;
 export function setSleepTimer(mode: SleepTimerMode | null): void {
   if (playerResetting && mode !== null) return;
   sleepTimerEpoch += 1;
-  const token = sleepTimerEpoch;
   if (sleepTimerHandle) {
     clearInterval(sleepTimerHandle);
     sleepTimerHandle = null;
   }
   if (mode === null) {
+    const wasActive = usePlayerStore.getState().sleepTimer !== null;
+    const cancelledAt = sleepTimerEpoch;
     usePlayerStore.getState().setSleepTimer(null);
+    if (wasActive && !playerResetting) {
+      void TP().then(async (player) => {
+        if (cancelledAt === sleepTimerEpoch && !playerResetting) await player.setVolume(1);
+      }).catch((error: unknown) => {
+        if (cancelledAt === sleepTimerEpoch && !playerResetting) usePlayerStore.getState().setPlaybackError(error instanceof Error ? error.message : 'Lautstärke konnte nicht wiederhergestellt werden.');
+      });
+    }
     return;
   }
 
@@ -894,49 +960,60 @@ export function setSleepTimer(mode: SleepTimerMode | null): void {
   const timerTarget = mode.kind === 'endOfLesson' && trackId ? { ...target, trackId } : target;
   usePlayerStore.getState().setSleepTimer({ mode, target: timerTarget });
 
-  sleepTimerHandle = setInterval(() => {
-    void (async () => {
-      const current = usePlayerStore.getState().sleepTimer;
-      if (!current) return;
-      const now = Date.now();
-      const trackPlayer = await TP();
+  sleepTimerHandle = setInterval(() => { void checkSleepTimer(); }, 1000);
+}
+
+let sleepTimerCheck: Promise<void> | null = null;
+/** Native progress events also call this: Android may suspend foreground JS intervals. */
+export function checkSleepTimer(): Promise<void> {
+  if (sleepTimerCheck) return sleepTimerCheck;
+  if (playerResetting || !usePlayerStore.getState().sleepTimer) return Promise.resolve();
+  const token = sleepTimerEpoch;
+  const work = (async () => {
+    const current = usePlayerStore.getState().sleepTimer;
+    if (!current) return;
+    const now = Date.now();
+    const trackPlayer = await TP();
+    if (token !== sleepTimerEpoch) return;
+    if (current.mode.kind === 'endOfLesson') {
+      const progress = await trackPlayer.getProgress();
       if (token !== sleepTimerEpoch) return;
-      if (current.mode.kind === 'endOfLesson') {
-        const progress = await trackPlayer.getProgress();
-        if (token !== sleepTimerEpoch) return;
-        if (current.target.trackId && currentItem(usePlayerStore.getState().queue)?.lessonId !== current.target.trackId) {
-          await trackPlayer.pause();
-          setSleepTimer(null);
-          return;
-        }
-        if (!usePlayerStore.getState().isPlaying) {
-          await trackPlayer.setVolume(1);
-          return;
-        }
-        if (progress.duration > 0 && progress.position >= progress.duration - 0.35) {
-          await trackPlayer.pause();
-          if (token === sleepTimerEpoch) setSleepTimer(null);
-          return;
-        }
-        const rate = usePlayerStore.getState().rate;
-        const remaining = Math.max(0, progress.duration - progress.position) / rate;
-        const dynamicTarget = { ...current.target, endsAtMs: now + remaining * 1000 };
-        usePlayerStore.getState().setSleepTimer({ ...current, target: dynamicTarget });
-        await trackPlayer.setVolume(volumeForSleepTimer(dynamicTarget, now));
-        return;
-      }
-      if (isSleepTimerElapsed(current.target, now)) {
+      if (current.target.trackId && currentItem(usePlayerStore.getState().queue)?.lessonId !== current.target.trackId) {
         await trackPlayer.pause();
-        if (token !== sleepTimerEpoch) return;
-        await trackPlayer.setVolume(1);
         setSleepTimer(null);
         return;
       }
-      await trackPlayer.setVolume(volumeForSleepTimer(current.target, now));
-    })().catch((error) => {
-      if (token === sleepTimerEpoch) usePlayerStore.getState().setPlaybackError(error instanceof Error ? error.message : 'Timerfehler');
-    });
-  }, 1000);
+      if (!usePlayerStore.getState().isPlaying) {
+        await trackPlayer.setVolume(1);
+        return;
+      }
+      if (progress.duration > 0 && progress.position >= progress.duration - 0.35) {
+        await trackPlayer.pause();
+        if (token === sleepTimerEpoch) setSleepTimer(null);
+        return;
+      }
+      const rate = usePlayerStore.getState().rate;
+      const remaining = Math.max(0, progress.duration - progress.position) / rate;
+      const dynamicTarget = { ...current.target, endsAtMs: now + remaining * 1000 };
+      usePlayerStore.getState().setSleepTimer({ ...current, target: dynamicTarget });
+      await trackPlayer.setVolume(volumeForSleepTimer(dynamicTarget, now));
+      return;
+    }
+    if (isSleepTimerElapsed(current.target, now)) {
+      await trackPlayer.pause();
+      if (token !== sleepTimerEpoch) return;
+      await trackPlayer.setVolume(1);
+      setSleepTimer(null);
+      return;
+    }
+    await trackPlayer.setVolume(volumeForSleepTimer(current.target, now));
+  })().catch((error: unknown) => {
+    if (token === sleepTimerEpoch) usePlayerStore.getState().setPlaybackError(error instanceof Error ? error.message : 'Timerfehler');
+  }).finally(() => {
+    if (sleepTimerCheck === work) sleepTimerCheck = null;
+  });
+  sleepTimerCheck = work;
+  return work;
 }
 
 /* ------------------------------------------------------------------ Position */

@@ -1,9 +1,16 @@
 // Schreibt das Ergebnis einer Quizrunde über Agent B's Datenzugriffsschicht
 // (`src/data/`: exam_results, reviews, progress).
-import { createCard, reviewCard, transitionLesson, createLessonProgress, PASS_THRESHOLD_PERCENT, type LeitnerBox, type QuizAnswer, type QuizResult } from '@futuredev/core';
+import {
+  transitionLesson,
+  createLessonProgress,
+  PASS_THRESHOLD_PERCENT,
+  type QuizAnswer,
+  type QuizResult,
+} from '@futuredev/core';
 import { getDatabase } from '../data/db.js';
 import type { QuizRound, QuizScope } from './roundLogic.js';
 import { scopeKey } from './roundLogic.js';
+import { recordSharedQuiz } from '../mastery/quizBridge.js';
 import { reviewCardKey } from '../review/cards.js';
 
 /** Durable identity independent of round/module/all shuffle indices. */
@@ -40,34 +47,19 @@ export async function recordQuizRound(input: RecordQuizRoundInput): Promise<void
       takenAt: now.toISOString(),
     });
 
-    for (const answer of input.answers) {
-      const question = input.round.drawn[answer.questionIndex];
-      if (!question) continue;
-      if (!question.questionId || !question.sourceLessonId) {
-        throw new Error('Quizfrage ohne stabile Herkunftskennung kann nicht für Wiederholung gespeichert werden.');
-      }
-      const existing = await tx.getReview(question.sourceLessonId, question.questionId);
-      const cardId = reviewCardId(question.sourceLessonId, question.questionId);
-      const card = existing
-        ? { id: cardId, box: (existing.leitnerStage || 1) as LeitnerBox, dueAt: existing.dueAt, errorCount: existing.errorCount }
-        : createCard(cardId, now);
-      const updated = reviewCard(card, Boolean(question.options[answer.chosenOptionIndex]?.isCorrect), now);
-      await tx.upsertReview({
-        sourceLessonId: question.sourceLessonId,
-        questionId: question.questionId,
-        leitnerStage: updated.box,
-        dueAt: updated.dueAt,
-        errorCount: updated.errorCount,
-      });
-    }
+    await recordSharedQuiz(tx, input.round.drawn, input.answers, now);
 
     // Best score is monotonic; an earned pass is sticky. A quiz alone does not
     // prove reading, so new/started remain there until explicit content completion.
     if (input.scope.type === 'lesson') {
       const lessonId = input.scope.lessonId;
-      const progress = await tx.getProgress(lessonId) ?? {
-        ...createLessonProgress(lessonId), readUntil: null, listenedUntil: null,
-        quizScore: null, quizPassed: false, updatedAt: now.toISOString(),
+      const progress = (await tx.getProgress(lessonId)) ?? {
+        ...createLessonProgress(lessonId),
+        readUntil: null,
+        listenedUntil: null,
+        quizScore: null,
+        quizPassed: false,
+        updatedAt: now.toISOString(),
       };
       const passed = progress.quizPassed || input.result.scorePercent >= PASS_THRESHOLD_PERCENT;
       let state = progress.state;
@@ -77,7 +69,8 @@ export async function recordQuizRound(input: RecordQuizRoundInput): Promise<void
       }
       const score = Math.round(input.result.scorePercent);
       await tx.upsertProgress({
-        ...progress, state,
+        ...progress,
+        state,
         quizScore: progress.quizScore === null ? score : Math.max(progress.quizScore, score),
         quizPassed: passed,
         updatedAt: now.toISOString(),

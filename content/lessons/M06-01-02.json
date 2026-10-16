@@ -1,7 +1,7 @@
 {
   "id": "M06-01-02",
   "title": "Command-Injection",
-  "durationMinutes": 19,
+  "durationMinutes": 20,
   "prerequisites": [
     "M01-02-03",
     "M03-02-05",
@@ -15,7 +15,7 @@
     },
     {
       "term": "Shell-Escape",
-      "definition": "Das Bereinigen von Benutzereingaben, bevor sie an eine Shell übergeben werden. Dabei werden Sonderzeichen wie Semikolon, Pipe oder Backtick entfernt oder maskiert, damit sie nicht als Shell-Befehle interpretiert werden. Shell-Escape ist eine Notlösung, die bessere Lösung ist, Shell-Aufrufe komplett zu vermeiden."
+      "definition": "Die kontextgerechte Maskierung oder Zitierung eines Datenwerts nach den Syntaxregeln einer konkreten Shell. Sie soll die Auswertung als Shell-Steuerung verhindern, ersetzt aber weder fachliche Validierung noch die Prüfung von Optionen des Zielprogramms. Eine Zeichen-Sperrliste ist nicht dasselbe wie korrektes Escaping."
     },
     {
       "term": "Eingabevalidierung",
@@ -26,7 +26,7 @@
     {
       "speaker": "A",
       "role": "image",
-      "text": "Stell dir einen Koch vor, der ein Rezept nachkocht. Ein Gast ruft aus dem Restaurant: Gib noch etwas Salz dazu! Der Koch hört das, denkt, es sei eine Anweisung seines Chefs, und gibt Salz dazu. Aber der Gast war gar nicht der Chef. Er hat nur so getan, und der Koch hat den Unterschied nicht erkannt. Das ist Command-Injection: Jemand gibt einen Befehl, der wie eine harmlose Zutat aussieht, aber in Wirklichkeit eine gefährliche. Anweisung ist.",
+      "text": "Stell dir eine Restaurantküche vor. Ein Gast schreibt auf seinen Bestellzettel nicht nur den Namen eines Gerichts, sondern auch: Öffne die Kasse. Der Koch behandelt den gesamten Zettel als Arbeitsanweisung und führt beides aus. Genau an dieser Grenze entsteht das Problem: Eine Bestellung ist eine Eingabe des Gastes, aber keine Befugnis, Küchenabläufe zu bestimmen. Bei Command-Injection verwechselt ein Programm in ähnlicher Weise einen Datenwert mit einer auszuführenden Anweisung.",
       "isKeySentence": false
     },
     {
@@ -44,19 +44,19 @@
     {
       "speaker": "A",
       "role": "explain",
-      "text": "Command-Injection nutzt aus, dass viele Programme Shell-Befehle ausführen, indem sie Benutzereingaben in einen Befehlsstring einbauen. Ein typisches Beispiel ist eine Ping-Funktion auf einer Webseite. Der Nutzer gibt eine IP-Adresse ein, und der Server führt ping IP-Adresse aus. Ein Angreifer gibt nicht nur die IP ein, sondern hängt mit einem Semikolon einen zweiten Befehl an: 127. 0. 0. 1; rm -rf /. Der Server führt beide Befehle aus: zuerst den Ping, dann das Löschen aller Dateien.",
+      "text": "Ein Beispiel ist ein Diagnose-Endpunkt, der eine eingegebene Adresse an das Programm Ping weiterreicht. Baut er daraus einen Shell-String, kann ein zusätzliches Semikolon unter passenden Bedingungen einen zweiten Befehl beginnen. Für einen sicheren lokalen Test würde dieser zweite Befehl lediglich einen festen Testtext ausgeben. Beobachte dabei nicht nur das Ergebnis, sondern auch die Ursache: Die Shell sieht einen gemeinsamen Text mit Anweisungen und fremden Daten. Ob ein konkreter Versuch funktioniert, hängt von Shell, Anführungszeichen, Programm und Rechten ab.",
       "isKeySentence": false
     },
     {
       "speaker": "A",
       "role": "term",
-      "text": "Command-Injection ist eine Angriffstechnik, bei der ein Angreifer Betriebssystembefehle in Eingabefelder einschleust und der Server diese mit seinen. Rechten ausführt.",
+      "text": "Command-Injection bedeutet, dass fremde Eingaben die Ausführung von Betriebssystembefehlen beeinflussen. Die betroffene Anwendung führt die unerwünschte Anweisung mit den Rechten ihres Prozesses aus. Ein Angreifer erhält dadurch nicht automatisch Administratorrechte.",
       "isKeySentence": false
     },
     {
       "speaker": "A",
       "role": "example",
-      "text": "Command-Injection in einer Webanwendung: Eine Admin-Seite hat ein Feld, in dem der Nutzer einen Dateinamen eingibt, um ein. Backup zu erstellen. Der Server führt tar -czf backup/eingabe tar gz data/ aus. Ein Angreifer gibt als Dateinamen x; cat /etc/passwd ein. Der Server führt aus: tar -czf backup/x; cat /etc/passwd tar gz data/. Das Semikolon trennt zwei Befehle. Der Server erstellt das Backup und gibt dann die Passwortdatei aus. Der Angreifer sieht alle Benutzerkonten des Servers.",
+      "text": "Stell dir einen Dienst vor, der hochgeladene Bilder über ein externes Programm verkleinert. Der Dateiname stammt aus einem Upload und wird später in einen Shell-String eingefügt. Enthält dieser Name dort wirksame Steuerzeichen, kann er die Bedeutung des gesamten Aufrufs verändern. Ein Name ist keine vertrauenswürdige Anweisung, nur weil er inzwischen in der Datenbank gespeichert ist. Verwende nach Möglichkeit eine Bildbibliothek direkt. Ist ein Prozess nötig, lege das Programm fest und übergib geprüfte Argumente ohne zusätzliche Shell.",
       "isKeySentence": false
     },
     {
@@ -68,37 +68,43 @@
     {
       "speaker": "B",
       "role": "question",
-      "text": "Was ist Shell-Escape, und warum ist es keine gute Lösung?",
+      "text": "Was unterscheidet korrektes Shell-Escaping von einer selbst gebauten Zeichen-Sperrliste?",
       "isKeySentence": false
     },
     {
       "speaker": "A",
       "role": "image",
-      "text": "Stell dir vor, du hast einen Türsteher, der jeden Gast nach Waffen durchsucht. Der Türsteher hat eine Liste von verbotenen Gegenständen: Messer, Pistolen, Schlagringe. Aber ein Angreifer bringt eine Waffe mit, die nicht auf der Liste steht, zum Beispiel einen Taser. Der Türsteher lässt ihn durch, weil der Taser nicht auf seiner Liste war. Shell-Escape ist wie dieser Türsteher: Es filtert bekannte gefährliche Zeichen, aber Angreifer finden immer neue Wege.",
+      "text": "Der Unterschied zwischen Shell-Escape und einer Sperrliste lässt sich an einer Kontrolle erklären. Eine Sperrliste erkennt nur die aufgeschriebenen Gegenstände. Was auf der Liste fehlt, geht möglicherweise durch. Korrektes Escaping hat ein anderes Ziel: Ein Datenwert soll in einem genau bestimmten Sprachkontext ein Datenwert bleiben.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "image",
+      "text": "Das ist eher eine eindeutig beschriftete Verpackung als eine Suche nach verbotenen Wörtern. Die Verpackung muss zum Empfänger passen. Eine für eine Webseite passende Darstellung schützt deshalb nicht automatisch beim Aufruf einer Shell. Prüfe immer den Kontext, in dem die Daten als Nächstes verarbeitet werden.",
       "isKeySentence": false
     },
     {
       "speaker": "A",
       "role": "explain",
-      "text": "Shell-Escape bedeutet, Benutzereingaben zu bereinigen, bevor sie an eine Shell übergeben werden. Dabei werden Sonderzeichen wie Semikolon, Pipe, Backtick oder Dollarzeichen entfernt oder maskiert. Das Problem: Es gibt Dutzende Wege, Befehle in einer Shell zu verketten. Neben dem Semikolon gibt es Pipes, Und-Zeichen, Backticks, Dollar-Klammern und Newlines. Eine Blacklist kann nie vollständig sein. Der Angreifer muss nur ein Zeichen finden, das der Filter vergessen hat.",
+      "text": "Shell-Escaping maskiert oder zitiert einen Wert nach den Regeln einer konkreten Shell. Es ist nicht dasselbe wie das Entfernen einiger unerwünschter Zeichen. Die Schwierigkeit liegt im Kontext: Betriebssystem, Shell und vorhandene Anführungszeichen müssen zusammenpassen. Außerdem kann das gestartete Programm einen korrekt übergebenen Wert weiterhin als eigene Option verstehen. Vermeide deshalb nach Möglichkeit die zusätzliche Shell. Nutze getrennte Argumente, einen festgelegten Programmpfad und eine Prüfung dessen, was jeder Parameter fachlich bedeuten darf.",
       "isKeySentence": false
     },
     {
       "speaker": "A",
       "role": "term",
-      "text": "Shell-Escape ist das Bereinigen von Benutzereingaben vor der Übergabe an eine Shell, wobei Sonderzeichen entfernt oder maskiert werden, damit sie nicht als Befehle interpretiert werden.",
+      "text": "Shell-Escaping ist die kontextgerechte Darstellung eines Datenwerts nach den Syntaxregeln einer Shell. Es soll verhindern, dass Zeichen innerhalb dieses Werts als Shell-Steuerung wirken. Es prüft weder die fachliche Gültigkeit des Werts noch die Berechtigung des Nutzers.",
       "isKeySentence": false
     },
     {
       "speaker": "A",
       "role": "example",
-      "text": "Shell-Escape in der Praxis: Eine Anwendung filtert Semikolons aus Benutzereingaben. Der Angreifer nutzt stattdessen eine Pipe: 127. 0. 0. 1 | rm -rf /. Der Filter lässt die Pipe durch, weil sie nicht auf der Blacklist steht. Die Shell führt den Befehl nach der Pipe aus. Der Angreifer hat den Filter umgangen. Deshalb ist Shell-Escape immer nur eine Notlösung, keine echte Sicherheitsmaßnahme.",
+      "text": "Eine Anwendung entfernt nur Semikolons und baut danach weiter einen Shell-String. Damit hat sie nicht alle anderen Sprachkonstrukte ausgeschlossen. Eine Pipe oder eine andere wirksame Konstruktion kann je nach Kontext weiterhin die Auswertung verändern. Das ist ein Fehler der Sperrliste, kein Beweis, dass jedes korrekt eingesetzte Escaping wirkungslos ist. Die bessere Architektur braucht diese schwer zu prüfende Textzusammensetzung gar nicht: Sie verwendet eine passende Bibliothek oder einen Prozessaufruf ohne Shell und validiert dessen Parameter.",
       "isKeySentence": false
     },
     {
       "speaker": "A",
       "role": "why",
-      "text": "Shell-Escape ist ein Katz-und-Maus-Spiel, das der Verteidiger immer verliert. Der Angreifer muss nur eine Lücke im Filter finden. Der Verteidiger muss alle Lücken schließen. Die einzig sichere Lösung ist, Shell-Aufrufe komplett zu vermeiden und stattdessen parametrisierte APIs zu nutzen.",
+      "text": "Die Trennung reduziert die Zahl der Sprachen, deren Regeln du gleichzeitig beachten musst. Bei einer direkten Bibliotheksfunktion brauchst du keine Shell-Syntax. Bei einem Prozess ohne Shell bleibt noch die Parametersyntax des Zielprogramms. Sicherheit entsteht, wenn du diese Grenzen ausdrücklich modellierst, statt einen universellen Bereinigungsfilter zu erwarten. Begrenzte Prozessrechte und eine eingeschränkte Auswahl zulässiger Aktionen ergänzen diese Maßnahmen, ersetzen sie aber nicht.",
       "isKeySentence": false
     },
     {
@@ -110,25 +116,25 @@
     {
       "speaker": "A",
       "role": "explain",
-      "text": "Path-Traversal ist ein Angriff, bei dem ein Angreifer mit.. /-Sequenzen das vorgesehene Verzeichnis verlässt. Eine Anwendung soll nur Dateien aus einem Upload-Ordner ausliefern. Der Pfad wird aus einem Parameter gebildet: /download? file=report pdf. Ein Angreifer ändert den Parameter zu.. /.. / Punkt-env und bekommt die Umgebungsvariablen des Servers. Path-Traversal wird oft mit Command-Injection kombiniert: Der Angreifer liest zuerst eine sensible Datei und nutzt die darin gefundenen. Zugangsdaten für weitere Angriffe.",
+      "text": "Path-Traversal bedeutet, dass ein Dateiparameter aus einem vorgesehenen Bereich ausbricht. Zwei Punkte als Pfadsegment bezeichnen häufig das übergeordnete Verzeichnis. Wenn ein Download-Endpunkt solche Segmente ungeprüft übernimmt, kann der aufgelöste Pfad außerhalb des Download-Ordners liegen. Eine angefragte Konfigurationsdatei wird nur dann lesbar, wenn sie dort tatsächlich existiert und der Prozess Zugriff hat. Es ist also kein magischer Befehl zum Auslesen aller Umgebungsvariablen. Die Schwachstelle ist der unzulässige Zielpfad.",
       "isKeySentence": false
     },
     {
       "speaker": "A",
       "role": "term",
-      "text": "Path-Traversal ist ein Angriff, bei dem ein Angreifer mit.. /-Sequenzen das vorgesehene Verzeichnis verlässt und auf Dateien außerhalb des Webroots zugreift.",
+      "text": "Path-Traversal ist ein unzulässiger Zugriff auf Pfade außerhalb eines vorgesehenen Verzeichnisbereichs. Je nach Funktion kann das Lesen, Schreiben oder Löschen betreffen. Es ist von der Ausführung zusätzlicher Betriebssystembefehle zu unterscheiden.",
       "isKeySentence": false
     },
     {
       "speaker": "A",
       "role": "example",
-      "text": "Path-Traversal in einer Node.js-Anwendung: Der Code liest eine Datei mit fs readFileSync('. /uploads/' + filename). Der Angreifer gibt als filename.. /.. /.. /etc/passwd ein. Der normalisierte Pfad zeigt auf die Systemdatei. Der Server liest sie aus und sendet sie an den Angreifer. Der Schutz ist einfach: Normalisiere den Pfad mit path resolve und prüfe, ob er mit dem erlaubten Verzeichnis beginnt. Wenn nicht, lehne die Anfrage ab.",
+      "text": "Eine robuste Download-Funktion nimmt möglichst eine bekannte Datei-ID entgegen und ordnet ihr serverseitig einen zulässigen Pfad zu. Muss sie relative Pfade verarbeiten, prüft sie den aufgelösten Pfad einschließlich Verzeichnisgrenzen. Eine einfache Prüfung, ob der Text mit dem Ordnernamen beginnt, ist nicht genug: Ein ähnlich benannter Nachbarordner kann denselben Anfang haben. Symbolische Verknüpfungen und gleichzeitige Änderungen am Dateisystem verdienen eine eigene Prüfung. Zusätzlich muss feststehen, ob der anfragende Nutzer diese konkrete Datei lesen darf.",
       "isKeySentence": false
     },
     {
       "speaker": "A",
       "role": "why",
-      "text": "Path-Traversal und Command-Injection sind enge Verwandte. Beide nutzen aus, dass Benutzereingaben ungeprüft in Systemaufrufe einfließen. Der Unterschied: Command-Injection führt Befehle aus, Path-Traversal liest Dateien. In der Praxis treten sie oft gemeinsam auf, weil ein Angreifer zuerst Dateien liest und dann mit den gefundenen Informationen Befehle ausführt.",
+      "text": "Path-Traversal und Command-Injection können beide an der Grenze zwischen fremden Eingaben und privilegierter Verarbeitung entstehen. Trotzdem sind es verschiedene Fehlerklassen. Ein gefährlicher Pfad benötigt keine Shell, und eine Shell-Injection benötigt keinen Verzeichnisausbruch. Diese Unterscheidung hilft bei Tests: Prüfe für einen Download die erlaubte Dateimenge und Zugriffsrechte. Prüfe für einen Prozessaufruf zusätzlich Programmauswahl, Argumente und eine mögliche Shell-Auswertung.",
       "isKeySentence": false
     },
     {
@@ -140,13 +146,19 @@
     {
       "speaker": "A",
       "role": "explain",
-      "text": "Der zuverlässigste Schutz ist, Shell-Aufrufe komplett zu vermeiden. Statt child_process. Exec mit einem Shell-String zu nutzen, verwendest du child_process. Spawn mit einem Array von Argumenten. Dabei wird jedes Argument als einzelner Parameter übergeben, und die Shell interpretiert keine Sonderzeichen. Wenn du doch eine Shell brauchst, validiere die Eingabe strikt gegen eine Allow-List: Erlaube nur die Zeichen, die du wirklich brauchst, und blockiere alles andere.",
+      "text": "Verwende zuerst eine Bibliotheksfunktion statt eines externen Befehls, wenn sie die Aufgabe erfüllt. Ist ein Prozess nötig, kann die Node-Funktion Spawn ein festgelegtes Programm mit einer getrennten Argumentliste starten. Die Shell bleibt dabei ausgeschaltet. Das Zielprogramm darf nicht selbst wieder eine Shell sein.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Prüfe außerdem jedes Argument. Ein Dateiname, der mit einem Bindestrich beginnt, kann für das Zielprogramm eine Option sein. Manche Programme unterstützen eine besondere Markierung für das Ende der Optionsliste. Lies in der Dokumentation des konkreten Programms nach, ob diese Markierung existiert und wie sie verwendet wird.",
       "isKeySentence": false
     },
     {
       "speaker": "A",
       "role": "example",
-      "text": "In der FutureDev-App vermeiden wir Shell-Aufrufe wo immer möglich. Für Bildverarbeitung nutzen wir sharp als native Bibliothek statt ImageMagick über die Shell. Für Dateioperationen nutzen wir fs-APIs mit normalisierten Pfaden. Wo wir externe Prozesse brauchen, nutzen wir spawn statt exec. Und jede Benutzereingabe, die in einen Dateipfad oder Prozessaufruf einfließt, wird gegen eine strikte Allow-List validiert.",
+      "text": "Ein Beispielentwurf für eine Bildverarbeitung verwendet eine feste Bibliothek und eine erlaubte Menge von Bildformaten. Ein zweiter Entwurf startet ein fest vorgegebenes Konvertierungsprogramm. Er erlaubt nur bestimmte Aktionen, begrenzt Laufzeit und Eingabegröße und verwendet ein eigenes Arbeitsverzeichnis mit geringen Rechten. Beide Entwürfe brauchen weiterhin Fehlerbehandlung und Berechtigungsprüfungen. Das sind Architekturbeispiele, keine Behauptung, dass jede vorhandene Codezeile einer bestimmten App diese Anforderungen bereits erfüllt.",
       "isKeySentence": false
     },
     {
@@ -164,13 +176,13 @@
     {
       "speaker": "A",
       "role": "explain",
-      "text": "Ja, das Prinzip der Injection gibt es überall, wo Benutzereingaben in eine Befehlssprache einfließen. SQL-Injection haben wir bereits kennengelernt. LDAP-Injection betrifft Verzeichnisdienste. XML-Injection betrifft XML-Parser. Sogar in NoSQL-Datenbanken wie MongoDB gibt es Injection-Angriffe, wenn Eingaben ungeprüft in Datenbankabfragen einfließen. Das Muster ist immer dasselbe: Eine Befehlssprache wird mit Benutzereingaben vermischt, und der Angreifer nutzt die Syntax der. Sprache, um eigene Befehle einzuschleusen.",
+      "text": "Ja, das Prinzip der Injection gibt es überall, wo Benutzereingaben in eine Befehlssprache einfließen. SQL-Injection haben wir bereits kennengelernt. LDAP-Injection betrifft Verzeichnisdienste. XML-Injection betrifft XML-Parser. Sogar in NoSQL-Datenbanken wie MongoDB gibt es Injection-Angriffe, wenn Eingaben ungeprüft in Datenbankabfragen einfließen. Das Muster ist immer dasselbe: Eine Befehlssprache wird mit Benutzereingaben vermischt, und der Angreifer nutzt die Syntax der Sprache, um eigene Befehle einzuschleusen.",
       "isKeySentence": false
     },
     {
       "speaker": "A",
       "role": "example",
-      "text": "NoSQL-Injection in MongoDB: Der Server baut eine Abfrage mit db users find({username: eingabe}). Ein Angreifer gibt als Benutzernamen {$gt: ''} ein. Das ist ein MongoDB-Operator, der alle Dokumente findet, deren username größer als ein leerer String ist. Die Abfrage gibt alle Benutzer zurück, nicht nur den einen. Der Angreifer umgeht die Authentifizierung, ohne das Passwort zu kennen. Das Prinzip ist dasselbe wie bei SQL-Injection, nur mit einer anderen Syntax.",
+      "text": "Bei MongoDB kann ein Endpunkt einen einfachen Benutzernamen erwarten, aber versehentlich auch ein Objekt als Filterwert akzeptieren. Ein Objekt mit dem Operator Dollar-gt beschreibt einen Größer-als-Vergleich statt des erwarteten Einzelwerts. Dadurch kann sich die Treffermenge ändern. Daraus folgt nicht automatisch eine erfolgreiche Anmeldung: Die weitere Passwort- und Sitzungsprüfung ist entscheidend. Der konkrete Schutz ist, den erwarteten Datentyp durchzusetzen und die Abfragestruktur selbst aufzubauen, statt beliebige vom Client gelieferte Operatorobjekte zu übernehmen.",
       "isKeySentence": false
     },
     {
@@ -194,19 +206,25 @@
     {
       "speaker": "A",
       "role": "explain",
-      "text": "Zum Abschluss: Die beste Verteidigung gegen Command-Injection ist, sie einmal selbst ausprobiert zu haben. Es gibt dafür spezielle Trainingsplattformen. Dort kannst du in einer sicheren Umgebung Command-Injection selbst durchführen und verstehen, wie einfach diese Angriffe sind, wenn eine Anwendung nicht geschützt ist. Nach einer Stunde auf so einer Plattform wirst du nie wieder einen Shell-Befehl mit Benutzereingaben bauen.",
-      "isKeySentence": false
-    },
-    {
-      "speaker": "A",
-      "role": "why",
-      "text": "Selbst einen Angriff durchzuführen ist die effektivste Art, Sicherheit zu lernen. Wenn du einmal gesehen hast, wie einfach es ist, mit einem einzigen Semikolon einen ganzen Server zu übernehmen, wirst du spawn statt exec nie wieder vergessen. Theorie allein reicht nicht, um Sicherheit zu verinnerlichen.",
+      "text": "Zum Üben eignet sich ein eigenes, isoliertes Testprojekt ohne echte Zugangsdaten. Begrenze es auf lokale Testdateien und harmlose Ausgaben. Teste fremde Systeme nur mit ausdrücklicher Erlaubnis. Vergleiche die unsichere und die verbesserte Variante mit denselben Eingaben.",
       "isKeySentence": false
     },
     {
       "speaker": "A",
       "role": "explain",
-      "text": "Ein weiterer wichtiger Aspekt ist die Fehlerbehandlung. Viele Command-Injection-Angriffe werden erst durch Fehlermeldungen möglich, die zu viele Informationen preisgeben. Wenn deine Anwendung bei einem fehlerhaften Shell-Befehl die komplette Fehlerausgabe an den Nutzer zurücksendet, gibt sie dem Angreifer. Wertvolle Hinweise. Er sieht, welches Betriebssystem läuft, welche Shell verwendet wird und welche Verzeichnisse existieren. Gib niemals rohe Shell-Fehlermeldungen an Nutzer aus.",
+      "text": "Ein guter Test enthält nicht nur einen bekannten Angriff, sondern auch normale Werte, leere Werte, Sonderzeichen und unerwartete Datentypen. Dokumentiere jeweils, welche Grenze die Eingabe überschreiten wollte und welcher konkrete Schutz sie zurückweist.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "why",
+      "text": "Die Übung ist erst aussagekräftig, wenn auch erlaubte Nutzung weiter funktioniert. Eine Funktion, die jede Anfrage ablehnt, blockiert zwar den Testangriff, erfüllt aber ihren Zweck nicht. Prüfe deshalb positive und negative Fälle gemeinsam. Beschreibe außerdem die Grenzen deines Nachweises: Ein blockierter Teststring beweist nicht, dass alle Varianten ausgeschlossen sind. Die nachvollziehbare Architektur, die Eingabeprüfung und mehrere gezielte Tests ergeben zusammen ein deutlich besseres Bild.",
+      "isKeySentence": false
+    },
+    {
+      "speaker": "A",
+      "role": "explain",
+      "text": "Ein weiterer wichtiger Aspekt ist die Fehlerbehandlung. Viele Command-Injection-Angriffe werden erst durch Fehlermeldungen möglich, die zu viele Informationen preisgeben. Wenn deine Anwendung bei einem fehlerhaften Shell-Befehl die komplette Fehlerausgabe an den Nutzer zurücksendet, gibt sie dem Angreifer wertvolle Hinweise. Er sieht, welches Betriebssystem läuft, welche Shell verwendet wird und welche Verzeichnisse existieren. Gib niemals rohe Shell-Fehlermeldungen an Nutzer aus.",
       "isKeySentence": false
     },
     {
@@ -230,25 +248,25 @@
     {
       "speaker": "A",
       "role": "explain",
-      "text": "Ein häufiger Fehler in Node.js ist die Verwendung von template literals in Shell-Befehlen. Der Code sieht harmlos aus: exec(`ping ${ip}`). Aber das template literal baut den String zusammen, bevor exec ihn sieht. Die Shell interpretiert dann alle Sonderzeichen in der IP-Adresse. Die Lösung ist, template literals in Shell-Befehlen komplett zu verbieten und stattdessen spawn mit einem Argument-Array zu verwenden. Ein Linter wie ESLint kann solche gefährlichen Muster automatisch erkennen und warnen.",
+      "text": "Ein Template-String in JavaScript setzt zunächst nur Text zusammen. Problematisch wird das, wenn fremde Werte dadurch in eine ausführbare Shell-Anweisung gelangen. Dasselbe Risiko kann mit gewöhnlicher String-Verkettung entstehen. Verbiete also nicht nur eine Schreibweise, sondern untersuche den Datenfluss bis zum Prozessaufruf. Ein passendes Analysewerkzeug kann bei bekannten Mustern helfen, erkennt aber nicht automatisch alle indirekten Aufrufe. Die Codeprüfung muss Programmauswahl, Shell-Einstellung und Argumentverwendung gemeinsam betrachten.",
       "isKeySentence": false
     },
     {
       "speaker": "A",
       "role": "why",
-      "text": "Template literals in Shell-Befehlen sind eine tickende Zeitbombe. Sie sehen modern und sauber aus, aber sie mischen Benutzereingaben mit Shell-Code auf die gefährlichste Weise. Ein Linter, der solche Muster erkennt, ist eine einfache und effektive zusätzliche Schutzschicht, die du in jedes Projekt. Einbauen solltest.",
+      "text": "Ein Linter ist eine zusätzliche Warnschicht, kein Sicherheitsbeweis. Eine Regel kann direkte Aufrufe einer gefährlichen API markieren. Ein eigener Wrapper oder eine erst später ausgewertete Eingabe kann jedoch zusätzliche Analyse erfordern. Halte deshalb sichere Prozessaufrufe an wenigen gut überprüfbaren Stellen zusammen. Schreibe Tests für diese Schnittstellen und dokumentiere, welche Parameter erlaubt sind. So wird eine spätere Änderung gezielter prüfbar als bei verstreuten Aufrufen.",
       "isKeySentence": false
     },
     {
       "speaker": "A",
       "role": "explain",
-      "text": "Die wichtigste Lektion aus dieser Einheit: Injection ist kein isoliertes Problem einer bestimmten Technologie. Ob SQL, Shell, LDAP, XML oder NoSQL, das Muster ist immer dasselbe. Eine Befehlssprache wird mit Benutzereingaben vermischt, und der Angreifer nutzt die Syntax der Sprache, um eigene Befehle einzuschleusen. Wer dieses Muster einmal verstanden hat, erkennt es in jeder neuen Technologie sofort wieder.",
+      "text": "Die wichtigste Lektion dieser Einheit: Injection ist nicht auf eine einzelne Technik beschränkt. Suche nach Stellen, an denen ein Datenwert die Struktur einer Abfrage oder eines Befehls beeinflussen könnte. Das gemeinsame Muster hilft bei der Suche. Welche Schnittstelle sicher ist und welche Schutzmaßnahmen nötig sind, musst du für die konkrete Technik weiterhin prüfen.",
       "isKeySentence": false
     },
     {
       "speaker": "A",
       "role": "why",
-      "text": "Command-Injection, SQL-Injection und all ihre Verwandten sind keine exotischen Spezialfälle, sondern die häufigsten Sicherheitslücken überhaupt. Die OWASP Top Ten listen Injection seit über zwanzig Jahren auf Platz eins. Wer Injection versteht und konsequent verhindert, hat den größten Teil der Anwendungssicherheit bereits gemeistert. Der Rest sind Variationen desselben Themas.",
+      "text": "Injection ist eine wichtige Familie von Sicherheitsproblemen, aber nicht die gesamte Anwendungssicherheit. Zugriffskontrolle, sichere Sitzungen, Geheimnisverwaltung, Abhängigkeiten und andere Bereiche brauchen eigene Maßnahmen. Eine Rangliste ist keine Garantie, dass ein bestimmter Fehler für dein Projekt der wichtigste ist. Untersuche stattdessen, welche fremden Daten welche privilegierten Aktionen erreichen können, und priorisiere nach den tatsächlichen möglichen Auswirkungen.",
       "isKeySentence": false
     },
     {
@@ -260,7 +278,7 @@
     {
       "speaker": "A",
       "role": "why",
-      "text": "Die Konzepte, die du heute gelernt hast, sind das Fundament der Anwendungssicherheit. Command-Injection, Shell-Escape und Path-Traversal sind drei Varianten desselben Problems. Wer sie versteht, hat den Kern der IT-Sicherheit begriffen und kann das Gelernte auf jede neue Technologie übertragen.",
+      "text": "Du kannst die drei Begriffe nun auseinanderhalten: Command-Injection verändert die Ausführung von Befehlen. Shell-Escaping ist eine kontextbezogene Schutztechnik für Daten innerhalb einer Shell-Syntax. Path-Traversal betrifft unzulässige Dateipfade. Es wäre falsch, sie als drei gleichartige Angriffe zu behandeln. Gemeinsam ist ihnen die Frage nach einer sauberen Grenze: Welche Werte darf ein Aufrufer liefern, wie werden sie interpretiert und was darf der Prozess anschließend tun?",
       "isKeySentence": false
     },
     {
@@ -272,19 +290,19 @@
     {
       "speaker": "B",
       "role": "key",
-      "text": "Also noch einmal ganz kurz: Command-Injection schleust Betriebssystembefehle über Benutzereingaben ein und gibt dem Angreifer direkten Zugriff auf den Server. Shell-Escape ist eine unsichere Notlösung, weil Filter immer umgangen werden können. Path-Traversal liest Dateien außerhalb des erlaubten Verzeichnisses. Der einzig sichere Schutz ist, Shell-Aufrufe zu vermeiden, parametrisierte APIs zu nutzen und Eingaben gegen Allow-Lists zu validieren.",
+      "text": "Merke dir: Trenne fremde Daten von ausführbaren Anweisungen. Vermeide zusätzliche Shells, wenn eine Bibliothek oder ein direkter Prozessaufruf genügt. Ein Argument-Array allein ist kein universeller Schutz: Die Shell-Einstellung, das Zielprogramm und dessen Optionen zählen mit. Für Dateizugriffe prüfst du zusätzlich den tatsächlichen Zielbereich und die Berechtigung. Tests mit harmlosen eigenen Beispielen helfen, diese Grenzen nachzuvollziehen.",
       "isKeySentence": true
     },
     {
       "speaker": "A",
       "role": "image",
-      "text": "Stell dir vor, du sitzt mit einem Freund am Küchentisch. Du erklärst das Thema ohne Fachwörter. Erst das Problem. Dann die einfache Lösung.",
+      "text": "Stell dir vor, du erklärst einem Freund den Unterschied zwischen einem Namen auf einem Bestellzettel und einer Anweisung an die Küche. Nenne anschließend den technischen Übergang: Ein fremder Text landet in einem Shell-String. Beschreibe dann eine Alternative ohne Shell. Wenn du zusätzlich sagen kannst, warum das Zielprogramm Argumente trotzdem als Optionen verstehen könnte, hast du nicht nur den Merksatz wiederholt, sondern die zweite Auswertungsgrenze erkannt.",
       "isKeySentence": false
     },
     {
       "speaker": "A",
       "role": "explain",
-      "text": "Genau so lernen wir hier. Erst ein Bild aus dem Alltag. Dann die Erklärung in kurzen Sätzen. Dann der Fachbegriff. Dann ein zweites Beispiel. Zum Schluss warum es zählt.",
+      "text": "Übertrage das auf einen Download-Endpunkt. Eine Datei-ID aus einer erlaubten Liste ist etwas anderes als ein frei gelieferter Pfad. Prüfe in deinem Beispiel, ob der Nutzer auf diese Datei zugreifen darf. Danach prüfst du, ob der aufgelöste Zielpfad wirklich im erlaubten Bereich liegt. Erkläre beide Prüfungen getrennt: Ein gültiger Pfad ersetzt keine Autorisierung, und eine Anmeldung macht einen beliebigen Pfad nicht zulässig.",
       "isKeySentence": false
     },
     {
@@ -296,13 +314,13 @@
     {
       "speaker": "A",
       "role": "terms_list",
-      "text": "Shell-Escape ist das Bereinigen von Benutzereingaben, bevor sie an eine Shell übergeben werden. Dabei werden Sonderzeichen wie Semikolon, Pipe oder Backtick entfernt oder maskiert, damit sie nicht als Shell-Befehle interpretiert werden. Shell-Escape ist eine Notlösung, die bessere Lösung ist, Shell-Aufrufe komplett zu vermeiden.",
+      "text": "Shell-Escaping bedeutet: Die kontextgerechte Maskierung oder Zitierung eines Datenwerts nach den Syntaxregeln einer konkreten Shell. Sie soll die Auswertung als Shell-Steuerung verhindern, ersetzt aber weder fachliche Validierung noch die Prüfung von Optionen des Zielprogramms. Eine Zeichen-Sperrliste ist nicht dasselbe wie korrektes Escaping.",
       "isKeySentence": false
     },
     {
       "speaker": "A",
       "role": "terms_list",
-      "text": "Path-Traversal ist ein Angriff, bei dem ein Angreifer mit.. /-Sequenzen das vorgesehene Verzeichnis verlässt und auf Dateien außerhalb des Webroots zugreift. Path-Traversal wird oft mit Command-Injection kombiniert, um nicht nur Dateien zu lesen, sondern auch Befehle auf dem Server. Auszuführen. Schutz bieten Pfadnormalisierung und die Prüfung, ob der normalisierte Pfad im erlaubten Verzeichnis liegt.",
+      "text": "Path-Traversal betrifft den Ausbruch aus einem vorgesehenen Dateibereich. Abhängig von der angebotenen Operation kann das Lesen, Schreiben oder Löschen ermöglichen. Eine serverseitige Zuordnung erlaubter Datei-IDs reduziert frei wählbare Pfade. Wo Pfade nötig sind, müssen aufgelöste Ziele, Verzeichnisgrenzen und gegebenenfalls symbolische Verknüpfungen geprüft werden. Die Berechtigung des Nutzers bleibt eine eigene notwendige Prüfung.",
       "isKeySentence": false
     },
     {
@@ -314,7 +332,7 @@
     {
       "speaker": "A",
       "role": "faq",
-      "text": "Ja, Node.js ist sogar besonders anfällig, weil es mit child_process. Exec eine einfache Möglichkeit bietet, Shell-Befehle auszuführen. Viele Entwickler nutzen exec, weil es bequem ist, und bauen Benutzereingaben direkt in den Befehlsstring ein. Das ist genauso gefährlich wie SQL-Injection mit String-Verkettung. Die Lösung ist child_process. Spawn oder execFile, die Befehle ohne Shell ausführen und Argumente als Array übergeben. Damit können keine Shell-Sonderzeichen interpretiert werden.",
+      "text": "Ja. Wenn eine Node-Anwendung fremde Werte in Shell-Strings einbaut, kann eine Command-Injection entstehen. Entscheidend ist nicht die Sprache allein, sondern der Datenfluss und die verwendete API. Eine Bibliothek oder ein direkter Prozessaufruf ohne Shell vermeidet eine Auswertungsgrenze. Auch dabei müssen Programmauswahl, Argumente und Berechtigungen geprüft werden.",
       "isKeySentence": false
     },
     {
@@ -326,7 +344,7 @@
     {
       "speaker": "A",
       "role": "faq",
-      "text": "Eine Allow-List mit alphanumerischen Zeichen ist ein guter Anfang, aber sie reicht nicht immer. Je nach Kontext brauchst du vielleicht Punkte für IP-Adressen, Bindestriche für Dateinamen oder Schrägstriche für Pfade. Die Allow-List muss genau die Zeichen erlauben, die für den jeweiligen Parameter gültig sind, und kein Zeichen mehr. Für eine IP-Adresse sind das Ziffern und Punkte. Für einen Dateinamen sind das Buchstaben, Ziffern, Bindestriche und Unterstriche. Für eine E-Mail-Adresse ist die Allow-List komplexer. Der Schlüssel ist, die Allow-List so eng wie möglich zu fassen.",
+      "text": "Nein. Erlaubte Zeichen allein beweisen nicht, dass ein Wert gültig ist. Auch eine ungültige IPv4-Adresse kann nur aus Ziffern und Punkten bestehen. Prüfe deshalb Typ, Länge, Struktur und fachlich zulässige Werte. Je nach Funktion kommen erlaubte Netzwerkziele oder Dateibereiche hinzu. Ein gültiger Wert bedeutet außerdem nicht automatisch, dass der Nutzer die gewünschte Aktion ausführen darf.",
       "isKeySentence": false
     },
     {
@@ -338,19 +356,19 @@
     {
       "speaker": "A",
       "role": "faq",
-      "text": "exec führt einen Befehl in einer Shell aus und übergibt einen kompletten Befehlsstring. Die Shell interpretiert Sonderzeichen wie Semikolon, Pipe und Backtick. Spawn führt einen Befehl direkt aus, ohne Shell, und übergibt Argumente als Array. Die Argumente werden eins zu eins an den Prozess übergeben, ohne dass eine Shell sie interpretiert spawn ist daher immun gegen Command-Injection, solange der Befehl selbst nicht aus Benutzereingaben stammt. Der Nachteil: spawn kann keine Shell-Features wie Pipes oder Umleitungen nutzen, aber die brauchst du in einer Webanwendung. Sowieso nicht.",
+      "text": "Exec verwendet eine Shell für einen Befehlsstring. Spawn kann ein festgelegtes Programm direkt mit einer getrennten Argumentliste starten, solange die Shell-Option ausgeschaltet bleibt. Mit aktivierter Shell oder einem als Ziel gestarteten Shell-Programm entfällt dieser Vorteil. Auch ohne Shell muss geprüft werden, ob das Zielprogramm einen Parameter als Option oder andere Anweisung behandelt. Spawn ist deshalb nicht pauschal immun gegen Injection.",
       "isKeySentence": false
     },
     {
       "speaker": "B",
       "role": "faq",
-      "text": "Wie erkenne ich Command-Injection in einem Code-Prüfung?",
+      "text": "Wie erkenne ich Command-Injection bei einer Codeprüfung?",
       "isKeySentence": false
     },
     {
       "speaker": "A",
       "role": "faq",
-      "text": "Suche nach allen Stellen, an denen Benutzereingaben in Shell-Befehle, Dateipfade oder Systemaufrufe einfließen. Achte besonders auf child_process. Exec, eval, new Function, setTimeout mit Strings und template literals in Shell-Befehlen. Jede dieser Stellen ist ein potenzielles Einfallstor. Prüfe, ob die Eingabe vorher validiert wird und ob eine parametrisierte Alternative existiert. Ein einziger ungeschützter exec-Aufruf kann die gesamte Anwendung kompromittieren, egal wie gut der Rest gesichert ist.",
+      "text": "Verfolge fremde Daten bis zu Prozess- und Shell-Aufrufen, auch durch Hilfsfunktionen und gespeicherte Dateinamen. Prüfe die Programmauswahl, die Shell-Einstellung und die Bedeutung jedes Arguments. JavaScript-Auswertung mit Eval ist eine eigene gefährliche Auswertungsgrenze und sollte nicht mit einem Betriebssystembefehl gleichgesetzt werden. Validierung, begrenzte Rechte und Tests ergänzen eine Architektur, die möglichst ohne Shell auskommt.",
       "isKeySentence": false
     },
     {
@@ -362,7 +380,7 @@
     {
       "speaker": "A",
       "role": "faq",
-      "text": "Eine Web Application Firewall kann bekannte Angriffsmuster erkennen und blockieren, aber sie ist keine vollständige Lösung. Angreifer finden immer neue Wege, Filter zu umgehen, zum Beispiel durch verschiedene Zeichenkodierungen oder durch das Ausnutzen von. Shell-Features, die die WAF nicht kennt. Eine WAF ist eine zusätzliche Schutzschicht, aber sie ersetzt nicht die sichere Programmierung. Die einzig zuverlässige Lösung ist, Shell-Aufrufe zu vermeiden und Eingaben im Code selbst zu validieren.",
+      "text": "Eine Web Application Firewall kann bestimmte bekannte Muster abfangen, kennt aber nicht die vollständige Bedeutung deiner internen Prozessaufrufe. Sie ersetzt deshalb keine sichere Verarbeitung im Anwendungscode. Vermeide unnötige Shells, trenne Argumente, validiere sie im Kontext des Zielprogramms und begrenze Prozessrechte. Eine WAF ist gegebenenfalls eine zusätzliche Schutzschicht, kein Nachweis, dass die zugrunde liegende Schwachstelle beseitigt wurde.",
       "isKeySentence": false
     }
   ],
@@ -373,345 +391,345 @@
   },
   "quiz": [
     {
-      "question": "Welches Alltagsbild beschreibt Command-Injection am treffendsten?",
+      "question": "Welche Situation veranschaulicht Command-Injection?",
       "area": "Command-Injection",
       "options": [
         {
-          "text": "Ein Gast im Restaurant ruft eine Anweisung, und der Koch führt sie aus, weil er denkt, sie käme vom Chef.",
+          "text": "Ein Gast ergänzt den Bestellzettel um eine Küchenanweisung, die ungeprüft ausgeführt wird.",
           "isCorrect": true,
-          "explanation": "Richtig: der Server führt den Befehl aus, ohne zu prüfen, wer ihn gegeben hat."
+          "explanation": "Eine fremde Eingabe wird als auszuführende Anweisung behandelt."
         },
         {
-          "text": "Ein Dieb bricht nachts in die Küche ein und stiehlt die Messer sowie weitere Utensilien. sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen",
+          "text": "Ein Gast liest einen fremden Bestellzettel, ohne dessen Inhalt oder die Küchenabläufe zu verändern.",
           "isCorrect": false,
-          "explanation": "Falsch: Command-Injection ist kein physischer Einbruch."
+          "explanation": "Das veranschaulicht unberechtigten Lesezugriff, nicht das Einschleusen eines Befehls."
         },
         {
-          "text": "Ein Gast bestellt ein Gericht, das nicht auf der Karte steht.",
+          "text": "Ein Kellner verweigert eine Bestellung, weil eine erforderliche Angabe zum Gericht fehlt.",
           "isCorrect": false,
-          "explanation": "Falsch: es geht nicht um die Bestellung, sondern um die Ausführung von Anweisungen."
+          "explanation": "Eine Eingabe zurückzuweisen ist Validierung, nicht die Ausführung fremder Befehle."
         },
         {
-          "text": "Ein Koch verwechselt Salz mit Zucker und versalzt das Essen.",
+          "text": "Ein Koch bearbeitet eine gültige Bestellung verspätet, weil viele Gäste gleichzeitig bestellen.",
           "isCorrect": false,
-          "explanation": "Falsch: Command-Injection ist absichtlich, nicht aus Versehen."
+          "explanation": "Verzögerung durch Last ist kein Beleg für eingeschleuste Anweisungen."
         }
       ],
       "questionId": "q_a4b18fec-f3ae-49e6-8513-495fedf2e381"
     },
     {
-      "question": "Welches Zeichen trennt in den meisten Shells zwei Befehle?",
+      "question": "Welches Zeichen kann in einer POSIX-Shell zwei nacheinander auszuführende Befehle trennen?",
       "area": "Command-Injection",
       "options": [
         {
-          "text": "Das Semikolon.",
+          "text": "Ein Semikolon zwischen den Befehlen.",
           "isCorrect": true,
-          "explanation": "Richtig: mit ; kann man mehrere Befehle in einer Zeile ausführen."
+          "explanation": "Das Semikolon trennt Befehle, sofern es nicht als Datenzeichen maskiert oder zitiert ist."
         },
         {
-          "text": "Der Doppelpunkt. sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen",
+          "text": "Ein Doppelpunkt zwischen den Befehlen.",
           "isCorrect": false,
-          "explanation": "Falsch: der Doppelpunkt ist in Shells ein No-Op-Befehl."
+          "explanation": "Der Doppelpunkt ist in dieser Position kein Befehlstrenner; als eigener Shell-Befehl hat er eine andere Bedeutung."
         },
         {
-          "text": "Das Komma.",
+          "text": "Ein Komma zwischen den Befehlen.",
           "isCorrect": false,
-          "explanation": "Falsch: das Komma hat in Shells keine besondere Bedeutung."
+          "explanation": "Ein Komma trennt in einer POSIX-Shell nicht allgemein zwei Befehle."
         },
         {
-          "text": "Der Unterstrich.",
+          "text": "Ein Unterstrich zwischen den Befehlen.",
           "isCorrect": false,
-          "explanation": "Falsch: der Unterstrich ist ein gültiges Zeichen in Dateinamen."
+          "explanation": "Ein Unterstrich gehört gewöhnlich zu einem Namen oder Argument und verkettet keine Befehle."
         }
       ],
       "questionId": "q_4f342c56-7665-4b6e-86f1-28f85448df70"
     },
     {
-      "question": "Warum ist Shell-Escape keine zuverlässige Lösung?",
+      "question": "Ein Filter entfernt Semikolons aus einem Shell-String. Warum verhindert das Command-Injection nicht zuverlässig?",
       "area": "Shell-Escape",
       "options": [
         {
-          "text": "Eine Blacklist kann nie alle Wege kennen, Befehle in einer Shell zu verketten.",
+          "text": "Andere Shell-Konstrukte bleiben interpretierbar.",
           "isCorrect": true,
-          "explanation": "Richtig: es gibt zu viele Wege, Befehle zu verketten."
+          "explanation": "Eine Sperrliste einzelner Zeichen ersetzt keine Trennung von Daten und Anweisungen."
         },
         {
-          "text": "Shell-Escape macht die Anwendung zu langsam sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen",
+          "text": "Die Shell nimmt jede Filterung automatisch zurück.",
           "isCorrect": false,
-          "explanation": "Falsch: Performance ist nicht das Problem."
+          "explanation": "Eine solche automatische Rücknahme von Filtern gibt es nicht."
         },
         {
-          "text": "Shell-Escape funktioniert nur auf Linux, nicht auf Windows.",
+          "text": "Ohne Semikolon wird jedes Argument zum Programm.",
           "isCorrect": false,
-          "explanation": "Falsch: Shell-Escape funktioniert auf beiden Plattformen."
+          "explanation": "Ein fehlendes Semikolon macht nicht automatisch jedes Argument zu einem Programm."
         },
         {
-          "text": "Shell-Escape ist nur in Python verfügbar, nicht in Node.js.",
+          "text": "Der Filter verändert nur die Rechte des Prozesses.",
           "isCorrect": false,
-          "explanation": "Falsch: Shell-Escape gibt es in vielen Sprachen."
+          "explanation": "Der Filter verändert Daten; die Prozessrechte werden dadurch nicht festgelegt."
         }
       ],
       "questionId": "q_1fa6dcee-d039-4aab-98f9-8b59292b1c6e"
     },
     {
-      "question": "Welche Node.js-Funktion ist immun gegen Command-Injection?",
+      "question": "Du musst ein fest vorgegebenes Programm mit einem geprüften Dateinamen starten. Welche Variante vermeidet die zusätzliche Shell-Auswertung?",
       "area": "Command-Injection",
       "options": [
         {
-          "text": "child_process.spawn mit einem Array von Argumenten.",
+          "text": "spawn mit getrennten Argumenten und shell: false.",
           "isCorrect": true,
-          "explanation": "Richtig: spawn übergibt Argumente direkt, ohne Shell-Interpretation."
+          "explanation": "Ohne Shell werden deren Steuerzeichen nicht ausgewertet. Das Zielprogramm kann Argumente trotzdem als Optionen interpretieren; prüfe sie separat."
         },
         {
-          "text": "child_process.exec mit einem Shell-String. sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen",
+          "text": "exec mit einem direkt zusammengesetzten Shell-String.",
           "isCorrect": false,
-          "explanation": "Falsch: exec führt den String in einer Shell aus."
+          "explanation": "exec verwendet eine Shell; ungeprüfte Verkettung vermischt Eingaben und Shell-Syntax."
         },
         {
-          "text": "eval mit einem berechneten String.",
+          "text": "spawn mit getrennten Argumenten und shell: true.",
           "isCorrect": false,
-          "explanation": "Falsch: eval führt beliebigen Code aus."
+          "explanation": "Mit shell: true ist die Shell-Auswertung wieder aktiv. Ein Array allein bietet dann keinen entsprechenden Schutz."
         },
         {
-          "text": "new Function mit Benutzereingaben.",
+          "text": "exec mit einem ausschließlich URL-kodierten Dateinamen.",
           "isCorrect": false,
-          "explanation": "Falsch: new Function ist genauso gefährlich wie eval."
+          "explanation": "URL-Kodierung ist kein auf Shell-Syntax zugeschnittener Schutz und ersetzt die Trennung nicht."
         }
       ],
       "questionId": "q_504e3f21-6b5c-46c1-8f16-d19ebad64aef"
     },
     {
-      "question": "Was bewirkt die Eingabe ../../.env bei einer anfälligen Datei-Download-Funktion?",
+      "question": "Ein Download-Endpunkt hängt ../../.env ungeprüft an seinen Basisordner an. Welches Risiko entsteht?",
       "area": "Path-Traversal",
       "options": [
         {
-          "text": "Sie liest die Umgebungsvariablen des Servers aus dem übergeordneten Verzeichnis.",
+          "text": "Er könnte eine Datei außerhalb des Basisordners lesen.",
           "isCorrect": true,
-          "explanation": "Richtig: ../ verlässt das aktuelle Verzeichnis und greift auf .env zu."
+          "explanation": "Ob die Datei existiert und lesbar ist, hängt vom tatsächlichen Pfad und den Prozessrechten ab."
         },
         {
-          "text": "Sie löscht alle Umgebungsvariablen des Servers. sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen",
+          "text": "Er setzt die Umgebungsvariablen des Prozesses zurück.",
           "isCorrect": false,
-          "explanation": "Falsch: Path-Traversal liest nur, es löscht nicht."
+          "explanation": "Ein relativer Pfad verändert für sich keine Umgebungsvariablen."
         },
         {
-          "text": "Sie startet den Server neu.",
+          "text": "Er erstellt eine neue Datei im übergeordneten Ordner.",
           "isCorrect": false,
-          "explanation": "Falsch: Path-Traversal hat keinen Einfluss auf den Serverprozess."
+          "explanation": "Ein Lesezugriff ist kein automatischer Schreib- oder Erstellvorgang."
         },
         {
-          "text": "Sie erstellt eine neue .env-Datei.",
+          "text": "Er erhöht die Betriebssystemrechte des anfragenden Nutzers.",
           "isCorrect": false,
-          "explanation": "Falsch: Path-Traversal erstellt keine Dateien."
+          "explanation": "Ein Verzeichnisausbruch kann Daten offenlegen, erhöht aber nicht automatisch Prozessrechte."
         }
       ],
       "questionId": "q_0624812b-7548-4948-8439-6fff52919694"
     },
     {
-      "question": "Wie schützt man sich am besten vor Path-Traversal?",
+      "question": "Ein Download soll nur bekannte Dateien aus einem festen Ordner liefern. Welche Prüfung ist dafür geeignet?",
       "area": "Path-Traversal",
       "options": [
         {
-          "text": "Pfad normalisieren und prüfen, ob er im erlaubten Verzeichnis liegt.",
+          "text": "Eine erlaubte Datei-ID auf einen geprüften Zielpfad abbilden.",
           "isCorrect": true,
-          "explanation": "Richtig: Normalisierung entfernt ../ und die Verzeichnisprüfung verhindert Ausbrüche."
+          "explanation": "Eine serverseitige Zuordnung vermeidet frei wählbare Pfade. Der Zugriff muss zusätzlich autorisiert sein."
         },
         {
-          "text": "Alle Punkte aus dem Dateinamen entfernen sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen",
+          "text": "Den Ordnernamen als enthaltene Zeichenfolge im Pfad suchen.",
           "isCorrect": false,
-          "explanation": "Falsch: dann funktionieren auch legitime Dateinamen mit Punkten nicht mehr."
+          "explanation": "Eine enthaltene Zeichenfolge beweist nicht, dass der aufgelöste Zielpfad innerhalb des Ordners liegt."
         },
         {
-          "text": "Die Dateiendung auf .pdf beschränken.",
+          "text": "Nur die Dateiendung auf eine erlaubte Erweiterung prüfen.",
           "isCorrect": false,
-          "explanation": "Falsch: der Angreifer könnte eine .env-Datei in .env.pdf umbenennen."
+          "explanation": "Eine zulässige Endung verhindert keinen Zugriff außerhalb des erlaubten Verzeichnisses."
         },
         {
-          "text": "Den Download-Ordner mit einem Passwort schützen.",
+          "text": "Einmal ../ aus dem übergebenen relativen Pfad entfernen.",
           "isCorrect": false,
-          "explanation": "Falsch: das Passwort schützt nicht vor Path-Traversal."
+          "explanation": "Einmaliges Ersetzen ist keine vollständige Prüfung des aufgelösten Zielpfads."
         }
       ],
       "questionId": "q_37975b48-f48b-4469-be9c-223c2a58c15e"
     },
     {
-      "question": "Was haben SQL-Injection, Command-Injection und NoSQL-Injection gemeinsam?",
+      "question": "Was verbindet SQL-Injection, Command-Injection und NoSQL-Injection?",
       "area": "Command-Injection",
       "options": [
         {
-          "text": "Sie alle schleusen Befehle in eine Befehlssprache ein, indem sie Benutzereingaben mit Code vermischen.",
+          "text": "Eingaben verändern unerlaubt die Struktur einer Anweisung.",
           "isCorrect": true,
-          "explanation": "Richtig: das Prinzip ist bei allen Injection-Arten dasselbe."
+          "explanation": "Unvertrauenswürdige Daten werden als Steuerung einer Abfrage oder eines Befehls behandelt."
         },
         {
-          "text": "Sie alle nutzen SQL als Angriffssprache. sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen",
+          "text": "Sie benötigen stets unverschlüsselte Netzwerkverbindungen.",
           "isCorrect": false,
-          "explanation": "Falsch: nur SQL-Injection nutzt SQL."
+          "explanation": "Auch über HTTPS übertragene Eingaben können eine unsichere Verarbeitung ausnutzen."
         },
         {
-          "text": "Sie alle greifen nur die Datenbank an.",
+          "text": "Sie benötigen ein gestohlenes Datenbank-Administratorkennwort.",
           "isCorrect": false,
-          "explanation": "Falsch: Command-Injection greift das Betriebssystem an."
+          "explanation": "Die Anwendung selbst kann die schädliche Anweisung mit ihren eigenen Rechten ausführen."
         },
         {
-          "text": "Sie alle sind mit einer Firewall zu blockieren.",
+          "text": "Sie verändern ausschließlich die Darstellung im Browser.",
           "isCorrect": false,
-          "explanation": "Falsch: eine Firewall schützt nicht zuverlässig vor Injection."
+          "explanation": "Gerade die serverseitige Auswertung von Datenbank- oder Prozessanweisungen ist hier betroffen."
         }
       ],
       "questionId": "q_40ad2935-9d5b-4201-9981-2e45683d7ebf"
     },
     {
-      "question": "Welcher MongoDB-Operator kann für NoSQL-Injection missbraucht werden?",
+      "question": "Ein MongoDB-Endpunkt erwartet einen einzelnen Vergleichswert. Was bedeutet ein ungeprüft übernommenes Objekt mit $gt?",
       "area": "Command-Injection",
       "options": [
         {
-          "text": "Der Operator $gt, der alle Dokumente mit einem Wert größer als der angegebene findet.",
+          "text": "Es kann einen Größer-als-Vergleich statt eines Einzelwerts einführen.",
           "isCorrect": true,
-          "explanation": "Richtig: $gt umgeht die Gleichheitsprüfung und gibt alle Dokumente zurück."
+          "explanation": "Der Operator $gt prüft auf einen größeren Wert. Ungeprüfte Operatorobjekte können die beabsichtigte Abfrage verändern."
         },
         {
-          "text": "Der Operator $delete, der alle Dokumente löscht sowie weitere Aspekte, die in diesem Zusammenhang ebenfalls von Bedeutung sein koennen",
+          "text": "Es kann dem aktuellen Nutzer direkt Administratorrechte erteilen.",
           "isCorrect": false,
-          "explanation": "Falsch: $delete ist kein gültiger MongoDB-Operator."
+          "explanation": "Der Vergleichsoperator ist keine Rechtevergabe; die Gefahr liegt in der veränderten Filterlogik."
         },
         {
-          "text": "Der Operator $login, der die Authentifizierung umgeht.",
+          "text": "Es kann passende Dokumente ohne weiteren Schreibbefehl löschen.",
           "isCorrect": false,
-          "explanation": "Falsch: $login ist kein gültiger MongoDB-Operator."
+          "explanation": "Ein Vergleich in einer Leseabfrage löscht nicht von selbst Dokumente."
         },
         {
-          "text": "Der Operator $admin, der Admin-Rechte gibt.",
+          "text": "Es kann das gesamte Objekt automatisch als Zeichenkette behandeln.",
           "isCorrect": false,
-          "explanation": "Falsch: $admin ist kein gültiger MongoDB-Operator."
+          "explanation": "Ein Operatorobjekt ist nicht dasselbe wie ein geprüfter String. Der erwartete Datentyp muss durchgesetzt werden."
         }
       ],
       "questionId": "q_47d67578-97d5-491e-8fd9-50ee7a5852d4"
     },
     {
-      "question": "Was ist der sicherste Weg, Benutzereingaben für Systemaufrufe zu validieren?",
+      "question": "Wie validierst du einen Parameter, den ein externes Programm als IPv4-Adresse erwartet?",
       "area": "Schutz",
       "options": [
         {
-          "text": "Eine strikte Allow-List, die nur die wirklich benötigten Zeichen erlaubt.",
+          "text": "Mit einer IPv4-Prüfung und erlaubten Zielbereichen.",
           "isCorrect": true,
-          "explanation": "Richtig: eine Allow-List ist sicherer als eine Blacklist."
+          "explanation": "Prüfe Bedeutung, Typ und zulässige Ziele; eine reine Zeichenauswahl reicht nicht."
         },
         {
-          "text": "Eine Blacklist mit allen bekannten gefährlichen Zeichen genügt, weil Shells nur diese festgelegten Zeichen als Steuerbefehle interpretieren und andere Eingaben harmlos sind.",
+          "text": "Mit beliebig vielen Ziffern und Punkten in beliebiger Reihenfolge.",
           "isCorrect": false,
-          "explanation": "Falsch: eine Blacklist kann nie vollständig sein."
+          "explanation": "Auch ungültige Adressen bestehen nur aus Ziffern und Punkten."
         },
         {
-          "text": "Die Eingabe mit escape() behandeln.",
+          "text": "Mit Base64-Kodierung und anschließender Dekodierung im Programm.",
           "isCorrect": false,
-          "explanation": "Falsch: escape() ist für URLs, nicht für Shell-Befehle."
+          "explanation": "Nach dem Dekodieren ist die ursprüngliche Eingabe unverändert; Validierung fehlt weiterhin."
         },
         {
-          "text": "Die Eingabe in Base64 kodieren.",
+          "text": "Mit HTML-Escaping als Prüfung aller gültigen Prozessoptionen.",
           "isCorrect": false,
-          "explanation": "Falsch: Base64 schützt nicht vor Injection."
+          "explanation": "HTML-Escaping ist für einen anderen Ausgabekontext gedacht und validiert keine IP-Adresse."
         }
       ],
       "questionId": "q_6f4ad499-4a3e-4393-8b5f-a531453769af"
     },
     {
-      "question": "Warum ist spawn sicherer als exec in Node.js?",
+      "question": "Warum kann ein spawn-Aufruf trotz shell: false gefährlich bleiben?",
       "area": "Schutz",
       "options": [
         {
-          "text": "Spawn führt Befehle ohne Shell aus, sodass keine Sonderzeichen interpretiert werden.",
+          "text": "Das Zielprogramm kann gefährliche Optionen auswerten.",
           "isCorrect": true,
-          "explanation": "Richtig: spawn umgeht die Shell und ist daher immun gegen Command-Injection."
+          "explanation": "Ohne Shell bleibt Argument-Injection in die Syntax des Zielprogramms möglich. Auch die Programmauswahl muss festgelegt sein."
         },
         {
-          "text": "Spawn startet jeden Prozess automatisch in einer Betriebssystem-Sandbox mit eingeschränkten Rechten, sodass selbst ein übergebener Shell-Befehl keinen Zugriff auf andere Dateien erhält.",
+          "text": "Node aktiviert trotzdem eine zweite Shell im Hintergrund.",
           "isCorrect": false,
-          "explanation": "Falsch: spawn läuft mit denselben Rechten wie der Node-Prozess."
+          "explanation": "shell: false verhindert diesen impliziten Shell-Aufruf; das Zielprogramm ist ein anderer Auswertungskontext."
         },
         {
-          "text": "Spawn validiert automatisch alle Argumente.",
+          "text": "Die Argumentliste wird als JavaScript im Aufrufer ausgeführt.",
           "isCorrect": false,
-          "explanation": "Falsch: spawn validiert nichts automatisch."
+          "explanation": "spawn führt keine allgemeine JavaScript-Auswertung seiner Argumentliste durch."
         },
         {
-          "text": "Spawn ist schneller als exec und daher sicherer.",
+          "text": "Der neue Prozess erhält automatisch höhere Betriebssystemrechte.",
           "isCorrect": false,
-          "explanation": "Falsch: Geschwindigkeit hat nichts mit Sicherheit zu tun."
+          "explanation": "spawn erhöht Rechte nicht automatisch. Begrenzte Rechte sind trotzdem eine zusätzliche Schutzschicht."
         }
       ],
       "questionId": "q_8548a761-cd06-4d84-8ea5-8c1f2e2af3bc"
     },
     {
-      "question": "Welche Code-Stellen sind besonders anfällig für Command-Injection?",
+      "question": "Welche Spur verfolgst du bei einer Codeprüfung auf Command-Injection?",
       "area": "Schutz",
       "options": [
         {
-          "text": "Alle Stellen, an denen Benutzereingaben in Shell-Befehle, eval oder Systemaufrufe einfließen.",
+          "text": "Den Weg fremder Eingaben bis zu Prozess- oder Shell-Aufrufen.",
           "isCorrect": true,
-          "explanation": "Richtig: jede Vermischung von Eingaben und Befehlen ist gefährlich."
+          "explanation": "Entscheidend ist der Datenfluss, einschließlich indirekter Hilfsfunktionen und der Einstellungen der Prozess-API."
         },
         {
-          "text": "Besonders gefährdet sind nur die Stellen, an denen der Quelltext ausdrücklich die Funktion exec aufruft; andere Prozess-APIs und indirekt zusammengesetzte Shell-Befehle gelten als sicher.",
+          "text": "Nur direkte exec-Aufrufe ohne Wrapper oder andere Prozess-APIs.",
           "isCorrect": false,
-          "explanation": "Falsch: auch spawn, eval und andere Funktionen können anfällig sein."
+          "explanation": "Wrapper und alternative APIs können ebenfalls Shell-Aufrufe oder gefährliche Argumente erzeugen."
         },
         {
-          "text": "Nur Stellen in Dateien, die mit admin beginnen.",
+          "text": "Nur POST-Endpunkte, nicht die Parameter von GET-Anfragen.",
           "isCorrect": false,
-          "explanation": "Falsch: der Dateiname ist irrelevant."
+          "explanation": "Die HTTP-Methode garantiert keine Validierung; jede Eingabequelle kann relevant sein."
         },
         {
-          "text": "Nur Stellen, die als POST-Endpunkte registriert sind.",
+          "text": "Nur Dateien, deren Name auf privilegierte Aufgaben hindeutet.",
           "isCorrect": false,
-          "explanation": "Falsch: auch GET-Endpunkte können anfällig sein."
+          "explanation": "Dateinamen sagen nichts über Datenfluss oder tatsächliche Betriebssystemrechte aus."
         }
       ],
       "questionId": "q_e72509a3-fd00-4991-ae2e-e72f03206536"
     },
     {
-      "question": "Was ist der beste Schutz gegen alle Injection-Arten?",
+      "question": "Welche Strategie reduziert Injection-Risiken an der jeweiligen Verarbeitungsgrenze?",
       "area": "Schutz",
       "options": [
         {
-          "text": "Code und Daten strikt trennen, parametrisierte APIs nutzen und Eingaben validieren.",
+          "text": "Daten von Anweisungen trennen und kontextbezogen validieren.",
           "isCorrect": true,
-          "explanation": "Richtig: dieses Prinzip schützt gegen alle Injection-Arten."
+          "explanation": "Verwende geeignete APIs und prüfe die erlaubte Bedeutung der Werte; es gibt keinen universellen Schutzaufruf."
         },
         {
-          "text": "Alle Benutzereingaben mit einer einzigen Funktion bereinigen.",
+          "text": "Alle Eingaben für SQL und Shell einmal zentral HTML-escapen.",
           "isCorrect": false,
-          "explanation": "Falsch: es gibt keine universelle Bereinigungsfunktion."
+          "explanation": "Ein HTML-Schutzverfahren passt nicht automatisch zur SQL- oder Shell-Syntax."
         },
         {
-          "text": "Die Anwendung in einer VM ausführen.",
+          "text": "Eine VM einsetzen und damit auf weitere Parameterprüfung verzichten.",
           "isCorrect": false,
-          "explanation": "Falsch: eine VM ist eine zusätzliche Schutzschicht, aber kein Ersatz für sauberen Code."
+          "explanation": "Isolation kann Schäden begrenzen, verhindert aber nicht die fehlerhafte Auswertung innerhalb der Anwendung."
         },
         {
-          "text": "Nur zahlende Nutzer auf die Anwendung zugreifen lassen.",
+          "text": "Angemeldete Nutzer und alle ihre Eingabewerte als vertrauenswürdig behandeln.",
           "isCorrect": false,
-          "explanation": "Falsch: auch zahlende Nutzer können Angreifer sein."
+          "explanation": "Eine Anmeldung macht Nutzereingaben nicht vertrauenswürdig; auch Konten können missbraucht werden."
         }
       ],
       "questionId": "q_036180ba-294d-44ec-99e4-4cb6bbe6435c"
     }
   ],
   "practiceTask": {
-    "task": "Schreibe eine einfache Node.js-Funktion, die einen Dateinamen als Parameter nimmt und den Inhalt der Datei aus einem Upload-Ordner zurückgibt. Implementiere sie zuerst unsicher mit String-Verkettung. Teste sie mit einem Path-Traversal-Angriff wie ../../../.env. Implementiere sie dann sicher mit path.resolve und einer Verzeichnisprüfung. Teste den Angriff erneut und bestätige, dass er blockiert wird.",
-    "expectation": "Der Unterschied zwischen unsicherer String-Verkettung und sicherer Pfadnormalisierung wurde praktisch erfahren.",
+    "task": "Erstelle ausschließlich in einem eigenen temporären Testordner zwei harmlose Textdateien: eine innerhalb von uploads und eine außerhalb. Schreibe eine Download-Funktion und demonstriere mit einem relativen Pfad, ob die äußere Testdatei erreichbar ist. Verwende keine echten Geheimnisse und veröffentliche die unsichere Variante nicht. Ersetze frei wählbare Pfade anschließend durch eine serverseitige Zuordnung erlaubter Datei-IDs. Teste eine erlaubte ID, eine unbekannte ID und einen Traversal-Pfad. Beschreibe zusätzlich, wo eine Nutzerberechtigungsprüfung nötig wäre.",
+    "expectation": "Die erlaubte Datei bleibt lesbar, unbekannte IDs und Traversal-Eingaben werden zurückgewiesen. Der Nachweis enthält Testfälle und erläutert den Unterschied zwischen Pfadbegrenzung und Autorisierung.",
     "checklist": [
-      "Eine unsichere Datei-Lese-Funktion mit String-Verkettung geschrieben.",
-      "Die Funktion mit einem Path-Traversal-Angriff getestet und den Erfolg des Angriffs bestätigt.",
-      "Die Funktion mit path.resolve und Verzeichnisprüfung sicher gemacht.",
-      "Den Angriff erneut getestet und bestätigt, dass er blockiert wird.",
-      "Die Erkenntnisse dokumentiert."
+      "Nur eigene harmlose Testdateien verwendet.",
+      "Den unzulässigen Zugriff in der isolierten Variante nachgewiesen.",
+      "Erlaubte Datei-IDs serverseitig fest auf zulässige Ziele abgebildet.",
+      "Erlaubte und unerlaubte Anfragen nach der Änderung getestet.",
+      "Grenzen des Tests und die erforderliche Autorisierung erklärt."
     ],
     "portfolioItem": "P04"
   },
   "audio": {
     "file": "M06-01-02.mp3",
-    "durationSeconds": 1110,
+    "durationSeconds": 1225,
     "voices": [
       "A",
       "B"
@@ -721,23 +739,23 @@
   "faq": [
     {
       "question": "Kann Command-Injection auch in JavaScript/Node.js passieren?",
-      "answer": "Ja, Node.js ist sogar besonders anfällig, weil es mit child_process. Exec eine einfache Möglichkeit bietet, Shell-Befehle auszuführen. Viele Entwickler nutzen exec, weil es bequem ist, und bauen Benutzereingaben direkt in den Befehlsstring ein. Das ist genauso gefährlich wie SQL-Injection mit String-Verkettung. Die Lösung ist child_process. Spawn oder execFile, die Befehle ohne Shell ausführen und Argumente als Array übergeben. Damit können keine Shell-Sonderzeichen interpretiert werden."
+      "answer": "Ja. Wenn eine Node-Anwendung fremde Werte in Shell-Strings einbaut, kann eine Command-Injection entstehen. Entscheidend ist nicht die Sprache allein, sondern der Datenfluss und die verwendete API. Eine Bibliothek oder ein direkter Prozessaufruf ohne Shell vermeidet eine Auswertungsgrenze. Auch dabei müssen Programmauswahl, Argumente und Berechtigungen geprüft werden."
     },
     {
       "question": "Reicht es, die Eingabe auf alphanumerische Zeichen zu beschränken?",
-      "answer": "Eine Allow-List mit alphanumerischen Zeichen ist ein guter Anfang, aber sie reicht nicht immer. Je nach Kontext brauchst du vielleicht Punkte für IP-Adressen, Bindestriche für Dateinamen oder Schrägstriche für Pfade. Die Allow-List muss genau die Zeichen erlauben, die für den jeweiligen Parameter gültig sind, und kein Zeichen mehr. Für eine IP-Adresse sind das Ziffern und Punkte. Für einen Dateinamen sind das Buchstaben, Ziffern, Bindestriche und Unterstriche. Für eine E-Mail-Adresse ist die Allow-List komplexer. Der Schlüssel ist, die Allow-List so eng wie möglich zu fassen."
+      "answer": "Nein. Erlaubte Zeichen allein beweisen nicht, dass ein Wert gültig ist. Auch eine ungültige IPv4-Adresse kann nur aus Ziffern und Punkten bestehen. Prüfe deshalb Typ, Länge, Struktur und fachlich zulässige Werte. Je nach Funktion kommen erlaubte Netzwerkziele oder Dateibereiche hinzu. Ein gültiger Wert bedeutet außerdem nicht automatisch, dass der Nutzer die gewünschte Aktion ausführen darf."
     },
     {
       "question": "Was ist der Unterschied zwischen exec und spawn in Node.js?",
-      "answer": "exec führt einen Befehl in einer Shell aus und übergibt einen kompletten Befehlsstring. Die Shell interpretiert Sonderzeichen wie Semikolon, Pipe und Backtick. Spawn führt einen Befehl direkt aus, ohne Shell, und übergibt Argumente als Array. Die Argumente werden eins zu eins an den Prozess übergeben, ohne dass eine Shell sie interpretiert spawn ist daher immun gegen Command-Injection, solange der Befehl selbst nicht aus Benutzereingaben stammt. Der Nachteil: spawn kann keine Shell-Features wie Pipes oder Umleitungen nutzen, aber die brauchst du in einer Webanwendung. Sowieso nicht."
+      "answer": "Exec verwendet eine Shell für einen Befehlsstring. Spawn kann ein festgelegtes Programm direkt mit einer getrennten Argumentliste starten, solange die Shell-Option ausgeschaltet bleibt. Mit aktivierter Shell oder einem als Ziel gestarteten Shell-Programm entfällt dieser Vorteil. Auch ohne Shell muss geprüft werden, ob das Zielprogramm einen Parameter als Option oder andere Anweisung behandelt. Spawn ist deshalb nicht pauschal immun gegen Injection."
     },
     {
-      "question": "Wie erkenne ich Command-Injection in einem Code-Prüfung?",
-      "answer": "Suche nach allen Stellen, an denen Benutzereingaben in Shell-Befehle, Dateipfade oder Systemaufrufe einfließen. Achte besonders auf child_process. Exec, eval, new Function, setTimeout mit Strings und template literals in Shell-Befehlen. Jede dieser Stellen ist ein potenzielles Einfallstor. Prüfe, ob die Eingabe vorher validiert wird und ob eine parametrisierte Alternative existiert. Ein einziger ungeschützter exec-Aufruf kann die gesamte Anwendung kompromittieren, egal wie gut der Rest gesichert ist."
+      "question": "Wie erkenne ich Command-Injection bei einer Codeprüfung?",
+      "answer": "Verfolge fremde Daten bis zu Prozess- und Shell-Aufrufen, auch durch Hilfsfunktionen und gespeicherte Dateinamen. Prüfe die Programmauswahl, die Shell-Einstellung und die Bedeutung jedes Arguments. JavaScript-Auswertung mit Eval ist eine eigene gefährliche Auswertungsgrenze und sollte nicht mit einem Betriebssystembefehl gleichgesetzt werden. Validierung, begrenzte Rechte und Tests ergänzen eine Architektur, die möglichst ohne Shell auskommt."
     },
     {
       "question": "Kann ich Command-Injection mit einer Web Application Firewall blockieren?",
-      "answer": "Eine Web Application Firewall kann bekannte Angriffsmuster erkennen und blockieren, aber sie ist keine vollständige Lösung. Angreifer finden immer neue Wege, Filter zu umgehen, zum Beispiel durch verschiedene Zeichenkodierungen oder durch das Ausnutzen von. Shell-Features, die die WAF nicht kennt. Eine WAF ist eine zusätzliche Schutzschicht, aber sie ersetzt nicht die sichere Programmierung. Die einzig zuverlässige Lösung ist, Shell-Aufrufe zu vermeiden und Eingaben im Code selbst zu validieren."
+      "answer": "Eine Web Application Firewall kann bestimmte bekannte Muster abfangen, kennt aber nicht die vollständige Bedeutung deiner internen Prozessaufrufe. Sie ersetzt deshalb keine sichere Verarbeitung im Anwendungscode. Vermeide unnötige Shells, trenne Argumente, validiere sie im Kontext des Zielprogramms und begrenze Prozessrechte. Eine WAF ist gegebenenfalls eine zusätzliche Schutzschicht, kein Nachweis, dass die zugrunde liegende Schwachstelle beseitigt wurde."
     }
   ]
 }

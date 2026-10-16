@@ -59,7 +59,7 @@ describe('recordQuizRound (AP-3.5, Punkt 1: Ergebnis nach exam_results/progress,
   it('lässt progress unverändert, wenn die Runde nicht bestanden ist, setzt aber das Leitner-Fach falscher Fragen zurück', async () => {
     const pool = makeTestPool(10);
     const round = drawRound(pool, 10, 1);
-    // Erst alles richtig beantworten, damit die erste Karte ein höheres Fach hat...
+    // Erste richtige Antwort startet in Fach 1; erst zeitversetzte Wiederholung steigt auf.
     const allCorrect = round.drawn.map((q, i) => ({ questionIndex: i, chosenOptionIndex: q.options.findIndex((o) => o.isCorrect) }));
     await recordQuizRound({
       scope: { type: 'lesson', lessonId: 'M01-01-01' },
@@ -72,7 +72,7 @@ describe('recordQuizRound (AP-3.5, Punkt 1: Ergebnis nach exam_results/progress,
     const sourceLessonId = must(firstQuestion.sourceLessonId);
     const questionId = must(firstQuestion.questionId);
     const afterCorrect = await db.getReview(sourceLessonId, questionId);
-    expect(afterCorrect?.leitnerStage).toBe(2);
+    expect(afterCorrect?.leitnerStage).toBe(1);
 
     // ...dann dieselbe Frage falsch beantworten: Fach fällt auf 1 zurück.
     const wrongRound = drawRound(pool, 10, 9);
@@ -168,7 +168,7 @@ describe('recordQuizRound (AP-3.5, Punkt 1: Ergebnis nach exam_results/progress,
     await recordQuizRound(input);
     const savedRows = await db.listReviews();
     expect(savedRows).toHaveLength(10);
-    expect(savedRows.every((row) => row.leitnerStage === 2 && row.errorCount === 0)).toBe(true);
+    expect(savedRows.every((row) => row.leitnerStage === 1 && row.errorCount === 0)).toBe(true);
     const beforeRetry = await db.listExamResults();
     expect(beforeRetry).toHaveLength(1);
     await recordQuizRound(input);

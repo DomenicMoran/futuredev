@@ -1,3 +1,4 @@
+import { runPlayerUiAction } from './uiActions.js';
 import { useEffect, useRef, useState } from 'react';
 import { Animated, Pressable, StyleSheet, Text, View } from 'react-native';
 import { PressableFeedback } from '../motion/PressableFeedback.js';
@@ -93,7 +94,7 @@ export function PlayerAdvancedControls() {
         <View style={{ gap: theme.spacing.sm }}>
           <View style={[styles.settingsRow, { gap: theme.spacing.sm }]}>
             <Pressable
-              onPress={() => void skipToPrevious()}
+              onPress={() => void runPlayerUiAction(() => skipToPrevious())}
               accessibilityRole="button"
               accessibilityLabel={de.player.previous}
               style={({ pressed }) => [
@@ -104,7 +105,7 @@ export function PlayerAdvancedControls() {
               <ChevronLeft color={theme.colors.textWeak} size={18} />
             </Pressable>
             <Pressable
-              onPress={() => void skipToNext()}
+              onPress={() => void runPlayerUiAction(() => skipToNext())}
               accessibilityRole="button"
               accessibilityLabel={de.player.next}
               style={({ pressed }) => [
@@ -127,7 +128,7 @@ export function PlayerAdvancedControls() {
               <Text style={{ color: theme.colors.textWeak, fontSize: theme.type.size.sm.size }}>{rate.toFixed(1)}×</Text>
             </Pressable>
             <Pressable
-              onPress={() => void applyRepeatMode(nextRepeatMode(repeatMode))}
+              onPress={() => void runPlayerUiAction(() => applyRepeatMode(nextRepeatMode(repeatMode)))}
               accessibilityRole="button"
               accessibilityLabel={repeatSummaryLabel(repeatMode)}
               style={({ pressed }) => [
@@ -170,7 +171,7 @@ export function PlayerAdvancedControls() {
                 <Pressable
                   key={option}
                   onPress={() => {
-                    void setRate(option);
+                    void runPlayerUiAction(() => setRate(option));
                     setRatePickerOpen(false);
                   }}
                   accessibilityRole="button"
@@ -236,7 +237,7 @@ export function PlayerAdvancedControls() {
             </Pressable>
             {queueOpen
               ? queue.items.map((qItem, index) => (
-                  <View key={qItem.lessonId} style={[styles.chapterItem, { minHeight: theme.minTapTarget }]}>
+                  <View key={`${qItem.lessonId}:${index}`} style={[styles.chapterItem, { minHeight: theme.minTapTarget }]}>
                     <Text
                       style={{
                         color: index === queue.currentIndex ? theme.colors.accent : theme.colors.text,
@@ -247,7 +248,7 @@ export function PlayerAdvancedControls() {
                       {qItem.title}
                     </Text>
                     <Pressable
-                      onPress={() => void removeFromQueue(index)}
+                      onPress={() => void runPlayerUiAction(() => removeFromQueue(index))}
                       accessibilityRole="button"
                       accessibilityLabel={`${de.player.remove}: ${qItem.title}`}
                       style={{ minHeight: theme.minTapTarget, minWidth: theme.minTapTarget, alignItems: 'center', justifyContent: 'center' }}

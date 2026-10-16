@@ -34,6 +34,8 @@ export function buildManifest(input: {
   rawModules: Uint8Array;
   lessons: readonly ManifestSourceLesson[];
 }): Manifest {
+  // Git enforces LF for content JSON. Reject bytes that would change on commit.
+  if (input.rawModules.includes(13)) throw new Error('modules.json must use LF line endings before hashing');
   const modulesText = new TextDecoder('utf-8', { fatal: true }).decode(input.rawModules);
   const modulesResult = modulesFileSchema.safeParse(JSON.parse(modulesText));
   if (!modulesResult.success) throw new Error('modules.json does not match modulesFileSchema');
@@ -56,6 +58,7 @@ export function buildManifest(input: {
 
   for (const source of [...input.lessons].sort((a, b) => a.file.localeCompare(b.file))) {
     if (!/^[A-Za-z0-9-]+\.json$/.test(source.file)) throw new Error(`Unsafe content filename: ${source.file}`);
+    if (source.bytes.includes(13)) throw new Error(`${source.file} must use LF line endings before hashing`);
     const raw = new TextDecoder('utf-8', { fatal: true }).decode(source.bytes);
     const result = lessonSchema.safeParse(JSON.parse(raw));
     if (!result.success) throw new Error(`Lesson ${source.file} does not match lessonSchema`);

@@ -67,6 +67,9 @@ export async function syncActiveTrackIndex(trackId: string | undefined, lastTrac
 
 /** Reagiert auf Ende der Warteschlange (Repeat, Autoplay, Stopp). */
 export async function handlePlaybackQueueEnded(position?: number): Promise<void> {
+  // Queue edits/reset may deliver a delayed ENDED event at zero after the edit
+  // promise settled. A zero-length ending is not evidence of natural playback.
+  if (position !== undefined && (!Number.isFinite(position) || position <= 0)) return;
   const { runPlayerOperation } = await import('./index.js');
   await runPlayerOperation(async () => {
   const state = usePlayerStore.getState();

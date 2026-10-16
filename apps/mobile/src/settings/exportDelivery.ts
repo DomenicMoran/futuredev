@@ -11,16 +11,24 @@ export interface ExportDeliveryTransport {
 export type ExportDeliveryResult = 'shared' | 'saved' | 'cancelled';
 
 /** Delivers a backup externally; a private cache file alone is never success. */
-export async function deliverExport(contents: string, transport: ExportDeliveryTransport): Promise<ExportDeliveryResult> {
+export async function deliverExport(
+  contents: string,
+  transport: ExportDeliveryTransport,
+  destination: 'auto' | 'file' = 'auto',
+): Promise<ExportDeliveryResult> {
   const cachePath = `${transport.cacheDirectory}futuredev-export-${Date.now()}.json`;
   await transport.writeCache(cachePath, contents);
-  if (await transport.isSharingAvailable()) {
+  if (destination === 'auto' && (await transport.isSharingAvailable())) {
     const result = await transport.share(cachePath);
     return result?.action === 'dismissedAction' ? 'cancelled' : 'shared';
   }
   const permission = await transport.requestDirectory();
   if (!permission.granted || !permission.directoryUri) return 'cancelled';
-  const uri = await transport.createDestination(permission.directoryUri, 'FutureDev-Backup.json', 'application/json');
+  const uri = await transport.createDestination(
+    permission.directoryUri,
+    'FutureDev-Backup.json',
+    'application/json',
+  );
   await transport.writeDestination(uri, contents);
   return 'saved';
 }

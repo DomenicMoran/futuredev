@@ -40,5 +40,10 @@ jobs:
       - name: Inhalte prüfen
         run: pnpm content:validate
 
+      # Schema-valid content can still contain unusable generated answers.
+      # This is a blocking check, not a substitute for editorial review.
+      - name: Lerninhalte auf bekannte Qualitätsmängel prüfen
+        run: pnpm content:audit
+
       - name: Auf Schlüsselfunde prüfen, gesamter Baum
         run: node tools/check-secrets.mjs --all

@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { PlaybackService } from './service.js';
-import { clearPlayerAndDownloads, saveNativePlaybackProgress, seekToSeconds, startPositionTracking, stopPositionTracking } from './index.js';
+import { clearPlayerAndDownloads, setSleepTimer, saveNativePlaybackProgress, seekToSeconds, startPositionTracking, stopPositionTracking } from './index.js';
 import { usePlayerStore } from './store.js';
 import { beginHearing, listHearingProgress } from './hearingProgress.js';
 import { resetToMemoryDatabase } from '../data/db.js';
@@ -11,12 +11,14 @@ const h = vi.hoisted(() => ({
   handlers: new Map<string, (event: { track: number; position: number; duration: number }) => void>(),
   active: vi.fn(async (): Promise<{ id: string }> => ({ id: 'a' })),
   save: vi.fn(async (): Promise<void> => undefined),
+  pause: vi.fn(async () => undefined), volume: vi.fn(async () => undefined),
 }));
 vi.mock('react-native', () => ({ NativeModules: { TrackPlayerModule: { getProgress: async () => ({ position: 0, duration: 600 }), getActiveTrack: () => h.active() } }, NativeEventEmitter: class { addListener() { return { remove() { return undefined; } }; } }, DeviceEventEmitter: { addListener() { return { remove() { return undefined; } }; } }, Platform: { OS: 'ios', Version: 1 }, PermissionsAndroid: { request: async () => 'granted', PERMISSIONS: { POST_NOTIFICATIONS: '' } } }));
 vi.mock('react-native/Libraries/Image/resolveAssetSource', () => ({ default: () => null }));
 vi.mock('react-native-track-player', () => ({
   default: {
     addEventListener: (name: string, handler: (event: { track: number; position: number; duration: number }) => void) => { h.handlers.set(name, handler); },
+    pause: h.pause, setVolume: h.volume,
     getActiveTrack: h.active, getProgress: async () => ({ position: 0, duration: 600 }), seekTo: async () => undefined,
   },
   Event: { PlaybackProgressUpdated: 'progress', RemotePlay: 'play', RemotePause: 'pause', RemoteStop: 'stop', RemoteNext: 'next', RemotePrevious: 'previous', RemoteSeek: 'seek', RemoteJumpForward: 'forward', RemoteJumpBackward: 'backward', RemoteDuck: 'duck', PlaybackQueueEnded: 'end', PlaybackActiveTrackChanged: 'active' },
@@ -29,6 +31,7 @@ const tick = async () => { for (let i = 0; i < 40; i++) await Promise.resolve();
 beforeEach(async () => {
   vi.useFakeTimers(); vi.setSystemTime(0); resetToMemoryDatabase();
   setContentFs({ documentDirectory: 'file:///background/' } as ContentFs);
+  h.pause.mockClear(); h.volume.mockClear();
   h.active.mockReset().mockResolvedValue({ id: 'a' }); h.save.mockReset().mockResolvedValue(undefined); h.handlers.clear();
   usePlayerStore.getState().reset();
   usePlayerStore.getState().setQueueState({ items: [{ lessonId: 'a', title: 'A', durationSeconds: 600 }, { lessonId: 'b', title: 'B', durationSeconds: 600 }], currentIndex: 0 });
@@ -36,9 +39,32 @@ beforeEach(async () => {
   await import('react-native-track-player');
   startPositionTracking('a'); await vi.waitFor(() => { expect(usePlayerStore.getState().playbackError).toBeNull(); expect(h.active).toHaveBeenCalled(); }, { timeout: 10_000 }); await tick(); vi.setSystemTime(0); beginHearing('a', 0, true, 0); await PlaybackService();
 });
-afterEach(() => { stopPositionTracking(); vi.useRealTimers(); });
+afterEach(() => { setSleepTimer(null); stopPositionTracking(); vi.useRealTimers(); });
 
 describe('native service progress while JS timers are suspended', () => {
+  it('restores audible volume when the user cancels during the fade', async () => {
+    setSleepTimer({ kind: 'minutes', minutes: 15 });
+    vi.setSystemTime(896_000);
+    h.handlers.get('progress')?.({ track: 0, position: 300, duration: 600 }); await tick();
+    expect(h.volume).toHaveBeenLastCalledWith(0.5);
+    setSleepTimer(null); await tick();
+    expect(h.volume).toHaveBeenLastCalledWith(1);
+    expect(h.pause).not.toHaveBeenCalled();
+  });
+  it('expires the minute timer via native events while every JS interval is suspended', async () => {
+    setSleepTimer({ kind: 'minutes', minutes: 15 });
+    vi.setSystemTime(896_000);
+    h.handlers.get('progress')?.({ track: 0, position: 300, duration: 600 }); await tick();
+    expect(h.volume).toHaveBeenLastCalledWith(0.5);
+    expect(h.pause).not.toHaveBeenCalled();
+    h.save.mockRejectedValueOnce(new Error('storage unavailable'));
+    vi.setSystemTime(900_000);
+    h.handlers.get('progress')?.({ track: 0, position: 306, duration: 600 }); await tick();
+    expect(h.pause).toHaveBeenCalledOnce();
+    expect(h.volume).toHaveBeenLastCalledWith(1);
+    expect(usePlayerStore.getState().sleepTimer).toBeNull();
+  });
+
   it('persists position and coverage via service events without firing any JS interval', async () => {
     // setSystemTime deliberately does not run the foreground five-second interval.
     vi.setSystemTime(60_000);

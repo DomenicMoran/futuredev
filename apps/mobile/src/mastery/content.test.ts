@@ -11,7 +11,7 @@ beforeEach(() => {
 describe('pinned mastery content', () => {
   it('uses the complete validated bundle without rereading every file', async () => {
     mocks.snapshot.mockResolvedValue({ manifest: bundledManifest });
-    expect(await loadMasteryBank()).toHaveLength(2367);
+    expect(await loadMasteryBank()).toHaveLength(2375);
     expect(mocks.lesson).not.toHaveBeenCalled();
   });
   it('loads updates from the pinned generation rather than stale bundled questions', async () => {

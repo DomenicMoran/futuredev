@@ -3,13 +3,14 @@ import type { ContentSnapshot } from '../content/generation.js';
 import type { ContentFs } from '../content/types.js';
 import { makeValidLesson } from '../../../../packages/content-schema/test/fixtures.js';
 import { setContentFs } from '../content/contentFs.js';
-import { clearCueSheetCache, clearPlayback, playLesson, playLessonInModuleContext, seekToBlock, skipToNext, stopPositionTracking } from './index.js';
+import { clearCueSheetCache, clearPlayback, enqueueLessons, playLesson, playLessonInModuleContext, seekToBlock, skipToNext, stopPositionTracking } from './index.js';
 import { usePlayerStore } from './store.js';
 
 const native = vi.hoisted(() => ({
   events: new Map<string, ((event: Record<string, unknown>) => void)[]>(),
   added: [] as { id: string; url: string }[],
   seeks: [] as number[],
+  failAddId: null as string | null,
   snapshot: null as unknown,
 }));
 
@@ -32,7 +33,7 @@ vi.mock('react-native-track-player', () => ({
       return { remove: () => undefined };
     },
     reset: async () => undefined,
-    add: async (track: { id: string; url: string }) => { native.added.push(track); },
+    add: async (track: { id: string; url: string }) => { if (track.id === native.failAddId) throw new Error('add failed'); native.added.push(track); },
     skip: async () => undefined,
     skipToNext: async () => undefined,
     seekTo: async (seconds: number) => { native.seeks.push(seconds); },
@@ -97,6 +98,7 @@ describe('queue items retain their content generation for later seeks', () => {
   beforeEach(() => {
     vi.useFakeTimers();
     native.added.length = 0;
+    native.failAddId = null;
     native.seeks.length = 0;
     native.events.clear();
     native.snapshot = snapshot('A');
@@ -124,6 +126,13 @@ describe('queue items retain their content generation for later seeks', () => {
     await command;
   }
 
+  it('retains only successfully appended items when native add fails partway through', async () => {
+    native.failAddId = 'M01-01-02';
+    await expect(enqueueLessons(['M01-01-01', 'M01-01-02', 'M01-01-03'])).rejects.toThrow('add failed');
+    expect(native.added.map(track => track.id)).toEqual(['M01-01-01']);
+    expect(usePlayerStore.getState().queue.items.map(item => item.lessonId)).toEqual(['M01-01-01']);
+  });
+
   it('uses generation A cues for a later seek even after B becomes active', async () => {
     const command = playLesson('M01-01-01');
     await finishPlay(command);
@@ -139,7 +148,9 @@ describe('queue items retain their content generation for later seeks', () => {
     await finishPlay(command);
     expect(native.added.map((track) => track.id)).toEqual(['M01-01-01', 'M01-01-02']);
     native.snapshot = snapshot('B', ['M01-01-01', 'M01-01-02']);
+    usePlayerStore.getState().setPosition(123);
     await skipToNext();
+    expect(usePlayerStore.getState().positionSeconds).toBe(0);
     await seekToBlock('M01-01-02', 1);
     expect(native.added.every((track) => track.url.includes('A.invalid'))).toBe(true);
     expect(native.seeks.at(-1)).toBe(5);

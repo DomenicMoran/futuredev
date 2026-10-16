@@ -3,7 +3,7 @@ import {
   listReviewHearingProgress,
   type HearingProgress,
 } from '../src/player/hearingProgress.js';
-import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
+import { useCallback, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { ActivityIndicator, Alert, Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useFocusEffect } from 'expo-router';
@@ -21,7 +21,7 @@ import {
   type Medium,
   type ExamScope,
 } from '../src/mastery/engine.js';
-import { loadMastery, saveMastery } from '../src/mastery/persistence.js';
+import { loadMastery, saveMastery, recoverMastery } from '../src/mastery/persistence.js';
 import { saveReviewPlaylist } from '../src/mastery/playlist.js';
 import { applyRepeatMode, playLesson, playPlaylist, usePlayerStore } from '../src/player/index.js';
 import { persistAutoplayNext } from '../src/player/playerPreferences.js';
@@ -39,6 +39,8 @@ export default function MasteryScreen() {
   const lock = useRef(false);
   const scroll = useRef<ScrollView>(null);
   const [exam, setExam] = useState(false);
+  const [unsure, setUnsure] = useState(false);
+  const [now, setNow] = useState(() => new Date());
   const [choice, setChoice] = useState<number | null>(null);
   const [help, setHelp] = useState(false);
   const [modulePicker, setModulePicker] = useState(false);
@@ -49,6 +51,7 @@ export default function MasteryScreen() {
     useCallback(() => {
       let active = true;
       const refresh = () => {
+        setNow(new Date());
         void listReviewHearingProgress()
           .then((value) => {
             if (active) setHeard(value);
@@ -73,7 +76,8 @@ export default function MasteryScreen() {
     setLoading(true);
     setError('');
     try {
-      const [next, saved] = await Promise.all([loadMasteryBank(), loadMastery()]);
+      const next = await loadMasteryBank();
+      const saved = await loadMastery(next);
       if (!next.length) throw new Error('Noch keine Prüfungsfragen verfügbar.');
       setBank(next);
       setState(saved);
@@ -83,10 +87,12 @@ export default function MasteryScreen() {
       setLoading(false);
     }
   }
-  useEffect(() => {
-    void load();
-  }, []);
-  const stats = useMemo(() => (state ? summary(state, bank) : null), [state, bank]);
+  useFocusEffect(
+    useCallback(() => {
+      void load();
+    }, []),
+  );
+  const stats = useMemo(() => (state ? summary(state, bank, now) : null), [state, bank, now]);
   const byKey = useMemo(() => new Map(bank.map((q) => [q.key, q])), [bank]);
   const lessons = useMemo(
     () =>
@@ -118,6 +124,7 @@ export default function MasteryScreen() {
   const index = session?.answers.length ?? 0;
   const question = session ? byKey.get(session.keys[index] ?? '') : undefined;
   const last = state?.history.at(-1);
+  const courseHistory = state?.history.filter((h) => h.remainingScope !== 'round').slice(-5) ?? [];
   const remainingCount = session ? session.keys.length - index : (stats?.remaining ?? 0);
   const timeEstimate =
     remainingCount >= 120
@@ -127,12 +134,14 @@ export default function MasteryScreen() {
         : `${Math.ceil(remainingCount / 2)}–${remainingCount} Minuten`;
   async function commit(next: MasteryState): Promise<boolean> {
     try {
-      await saveMastery(next);
+      await saveMastery(next, state ?? undefined);
       setState(next);
       return true;
-    } catch {
+    } catch (e) {
       setError(
-        'Nicht gespeichert. Bitte erneut versuchen. Deine letzte gespeicherte Antwort bleibt erhalten.',
+        e instanceof Error
+          ? e.message
+          : 'Nicht gespeichert. Bitte erneut versuchen. Deine letzte gespeicherte Antwort bleibt erhalten.',
       );
       return false;
     }
@@ -154,10 +163,11 @@ export default function MasteryScreen() {
   const resetScroll = () => scroll.current?.scrollTo({ y: 0, animated: false });
   async function submit() {
     if (!state || choice === null) return;
-    const next = answer(state, choice, bank);
+    const next = answer(state, choice, bank, !unsure);
     const done = next.session?.answers.length === next.session?.keys.length;
     if (await commit(done ? finish(next, bank) : next)) {
       setChoice(null);
+      setUnsure(false);
       if (done) {
         setExam(false);
         setHeard({});
@@ -169,6 +179,7 @@ export default function MasteryScreen() {
     if (state && (await commit(finish(state, bank)))) {
       setExam(false);
       setChoice(null);
+      setUnsure(false);
       setHeard({});
       resetScroll();
     }
@@ -178,6 +189,7 @@ export default function MasteryScreen() {
     if (await commit(begin(state, bank, full))) {
       setExam(true);
       setChoice(null);
+      setUnsure(false);
       resetScroll();
     }
   }
@@ -256,6 +268,7 @@ export default function MasteryScreen() {
           if (exam) {
             setExam(false);
             setChoice(null);
+            setUnsure(false);
             setHeard({});
             resetScroll();
           } else router.replace('/(tabs)/ueben');
@@ -264,9 +277,16 @@ export default function MasteryScreen() {
           Dein Lernkreislauf
         </Text>
         {error ? (
-          <Text accessibilityRole="alert" style={{ ...text, color: theme.colors.error }}>
-            {error}
-          </Text>
+          <View style={{ gap: 12 }}>
+            <Text accessibilityRole="alert" style={{ ...text, color: theme.colors.error }}>
+              {error}
+            </Text>
+            {state && !loading
+              ? button('Gespeicherten Lernstand neu laden', () => {
+                  void load();
+                })
+              : null}
+          </View>
         ) : null}
         {loading ? (
           <ActivityIndicator
@@ -274,9 +294,30 @@ export default function MasteryScreen() {
             color={theme.colors.accent}
           />
         ) : !state || !stats ? (
-          button('Erneut laden', () => {
-            void load();
-          })
+          <>
+            {button('Erneut laden', () => {
+              void load();
+            })}
+            {button('Datensicherung importieren', () => router.push('/settings'))}
+            {button('Letzten lokalen Lernstand wiederherstellen', () =>
+              Alert.alert(
+                'Lernstand wiederherstellen?',
+                'Stellt die letzte lokale Sicherung wieder her. Die jüngste Änderung kann verloren gehen. Wiederholungen ohne gesicherten Zeitnachweis werden erneut fällig; Notizen und andere Appdaten bleiben erhalten.',
+                [
+                  { text: 'Abbrechen', style: 'cancel' },
+                  {
+                    text: 'Wiederherstellen',
+                    onPress: () => {
+                      void run(async () => {
+                        await recoverMastery();
+                        await load();
+                      });
+                    },
+                  },
+                ],
+              ),
+            )}
+          </>
         ) : exam && session ? (
           <>
             <Text accessibilityLiveRegion="polite" style={muted}>
@@ -312,6 +353,18 @@ export default function MasteryScreen() {
                   choice === -1,
                   'mastery-unknown',
                 )}
+                {button(
+                  unsure ? 'Unsicher markiert · ändern' : 'Geraten / unsicher?',
+                  () => setUnsure(!unsure),
+                  false,
+                  choice === null || choice === -1,
+                  unsure,
+                  'mastery-unsure',
+                )}
+                <Text style={muted}>
+                  Unsichere Antworten bleiben zur Wiederholung vorgemerkt, auch wenn du richtig
+                  gewählt hast.
+                </Text>
                 {button(
                   index + 1 === session.keys.length
                     ? 'Antwort speichern und auswerten'
@@ -395,8 +448,47 @@ export default function MasteryScreen() {
               </Text>
               <Text style={muted}>
                 100 % bedeutet: alle Fragen des aktuellen Bestands zuletzt richtig beantwortet. Das
-                ist keine Garantie für dauerhaftes Können. Praxisaufgaben und spätere
-                Gesamtprüfungen gehören weiterhin dazu.
+                ist keine Garantie für dauerhaftes Können oder Anwendungskompetenz. Praxisaufgaben
+                und spätere Gesamtprüfungen gehören weiterhin dazu.
+              </Text>
+            </View>
+            <View style={card}>
+              <Text accessibilityRole="header" style={heading}>
+                Wissen festigen
+              </Text>
+              <Text style={text}>
+                {stats.confirmed} von {bank.length} Fragen an mindestens drei zeitlich getrennten
+                Prüfterminen sicher richtig
+              </Text>
+              <Text style={muted}>
+                {stats.due.length} richtige Antworten sind jetzt zur Kontrolle fällig. „Einmal
+                richtig“, „mehrfach bestätigt“ und „praktisch angewendet“ sind unterschiedliche
+                Nachweise.
+              </Text>
+              {stats.due.length
+                ? button(
+                    session ? 'Laufende Prüfung fortsetzen' : `Fälliges Wissen prüfen · ${stats.due.length}`,
+                    () => {
+                      if (session) { setExam(true); resetScroll(); }
+                      else void run(() => start('due'));
+                    },
+                    true,
+                    false,
+                    false,
+                    session ? 'mastery-resume-before-due' : 'mastery-start-due',
+                  )
+                : null}
+              {session && stats.due.length > 0 ? (
+                <Text style={muted}>
+                  Deine laufende Prüfung bleibt gespeichert. Werte sie zuerst aus; danach kannst du
+                  eine neue Runde mit dem fälligen Wissen starten.
+                </Text>
+              ) : null}
+              <Text style={muted}>
+                Abstände: 1, 2, 4, 8 und 16 Tage. Zu frühe Wiederholungen zählen nicht als
+                zusätzlicher Festigungsnachweis. Fehler oder Unsicherheit setzen die Festigung
+                zurück. Auch mehrfach bestätigtes Wissen wird wieder fällig. Alte Ergebnisse ohne
+                Zeitnachweis müssen erneut bestätigt werden.
               </Text>
             </View>
             <View style={card}>
@@ -504,6 +596,18 @@ export default function MasteryScreen() {
                         false,
                         'mastery-start-module',
                       )}
+                      {button(
+                        'Praxis & Erklären im Modul',
+                        () => {
+                          if (selectedModule)
+                            router.push({
+                              pathname: '/practice',
+                              params: { moduleId: selectedModule.id },
+                            });
+                        },
+                        false,
+                        !selectedModule?.questions.length,
+                      )}
                       <Text style={muted}>
                         Prüft alle Fragen dieses Moduls, auch bereits richtige. Andere Module und
                         ihre Fehler bleiben erhalten. Jede bestätigte Antwort wird gespeichert.
@@ -577,6 +681,17 @@ export default function MasteryScreen() {
                 </Text>
               ) : null}
             </View>
+            <View style={card}>
+              <Text accessibilityRole="header" style={heading}>
+                3 · Verstehen & Anwenden
+              </Text>
+              <Text style={muted}>
+                Erkläre die Themen mit eigenen Worten und bearbeite die konkreten Praxisaufgaben.
+                Deine Selbsteinschätzung wird getrennt von den Prüfungsantworten gespeichert und ist
+                kein automatisch benoteter Kompetenznachweis.
+              </Text>
+              {button('Praxis & Erklären öffnen', () => router.push('/practice'))}
+            </View>
             {last ? (
               <View style={card}>
                 <Text accessibilityRole="header" style={heading}>
@@ -586,13 +701,12 @@ export default function MasteryScreen() {
                   {last.correct} von {last.total} richtig ·{' '}
                   {new Date(last.at).toLocaleDateString('de-DE')}
                 </Text>
-                <Text style={muted}>
-                  Offene Fragen nach deinen letzten Runden:{' '}
-                  {state.history
-                    .slice(-5)
-                    .map((h) => h.remaining)
-                    .join(' → ')}
-                </Text>
+                {courseHistory.length ? (
+                  <Text style={muted}>
+                    Offene Fragen im Gesamtbestand nach den letzten Lernkreislauf-Runden:{' '}
+                    {courseHistory.map((h) => h.remaining).join(' → ')}
+                  </Text>
+                ) : null}
               </View>
             ) : null}
             <View style={card}>

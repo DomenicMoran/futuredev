@@ -42,13 +42,13 @@ describe('real curriculum and audio-only repetition', () => {
       state = finish(state, bank);
     }
     expect(modules).toHaveLength(10);
-    expect(seen.size).toBe(2367);
+    expect(seen.size).toBe(2375);
     expect(summary(state, bank).unseen).toBe(0);
-    expect(begin(state, bank, 'review').session?.keys).toHaveLength(2367);
+    expect(begin(state, bank, 'review').session?.keys).toHaveLength(2375);
   });
   it('draws ALL actual lessons/questions, reaches 100 only with every actual question correct', () => {
     const bank = contentBank();
-    expect(bank.length).toBe(2367);
+    expect(bank.length).toBe(2375);
     expect(new Set(bank.map((q) => q.sourceLessonId)).size).toBe(197);
     let s = begin(emptyState(), bank, false, 2);
     expect(new Set(s.session?.keys).size).toBe(bank.length);

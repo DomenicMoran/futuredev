@@ -19,8 +19,12 @@ export default function ReviewQuizScreen() {
   const cardIds = useMemo(() => {
     try {
       const parsed: unknown = JSON.parse(rawCardIds ?? '[]');
-      return Array.isArray(parsed) && parsed.every((item) => typeof item === 'string') ? parsed : [];
-    } catch { return []; }
+      return Array.isArray(parsed) && parsed.every((item) => typeof item === 'string')
+        ? parsed
+        : [];
+    } catch {
+      return [];
+    }
   }, [rawCardIds]);
   const [pool, setPool] = useState<QuizQuestionInput[] | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -32,26 +36,40 @@ export default function ReviewQuizScreen() {
     setError(null);
     if (!cardIds.length) {
       setError('Es sind keine fälligen Wiederholungsfragen ausgewählt.');
-      return () => { cancelled = true; };
+      return () => {
+        cancelled = true;
+      };
     }
-    loadAllQuiz().then((allQuestions) => {
-      if (cancelled) return;
-      const selection = selectReviewQuestionsForCards(allQuestions, cardIds);
-      if (selection.missingCardIds.length > 0) {
-        setError('Einige ausgewählte Fragen sind nicht mehr verfügbar. Bitte lade die Wiederholungen neu.');
-        return;
-      }
-      setPool(selection.questions);
-    }).catch((err: unknown) => {
-      if (!cancelled) setError(String(err instanceof Error ? err.message : err));
-    });
-    return () => { cancelled = true; };
+    loadAllQuiz()
+      .then((allQuestions) => {
+        if (cancelled) return;
+        const selection = selectReviewQuestionsForCards(allQuestions, cardIds);
+        if (selection.missingCardIds.length > 0) {
+          setError(
+            'Einige ausgewählte Fragen sind nicht mehr verfügbar. Bitte lade die Wiederholungen neu.',
+          );
+          return;
+        }
+        setPool(selection.questions);
+      })
+      .catch((err: unknown) => {
+        if (!cancelled) setError(String(err instanceof Error ? err.message : err));
+      });
+    return () => {
+      cancelled = true;
+    };
   }, [cardIds]);
 
   if (error || !pool) {
     return (
       <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.bg }]}>
-        <EmptyState Icon={Layers} title="Wiederholen" body={error ?? 'Wiederholungsfragen werden geladen.'} />
+        <EmptyState
+          Icon={Layers}
+          title="Wiederholen"
+          body={error ?? 'Wiederholungsfragen werden geladen.'}
+          actionLabel={error ? 'Zur Wiederholungsauswahl' : undefined}
+          onAction={error ? () => router.replace('/(tabs)/ueben') : undefined}
+        />
       </SafeAreaView>
     );
   }

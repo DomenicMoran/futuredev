@@ -32,6 +32,14 @@ describe('complete manifest generation', () => {
     expect(() => buildManifest({ version: '0.6.0', contentBaseUrl: 'https://example.test', audioBaseUrl: 'https://example.test', rawModules: new TextEncoder().encode(JSON.stringify(incompleteModules)), lessons: [{ file: 'M01-01-01.json', bytes: rawLesson, updatedAt: '2026-09-25T00:00:00Z' }] })).toThrow('modules.json does not match modulesFileSchema');
   });
 
+  it('rejects Windows line endings that Git would normalize after hashing', () => {
+    const encode = (value: unknown, ending: string) => new TextEncoder().encode(JSON.stringify(value, null, 2).replaceAll('\n', ending));
+    const input = { version: '0.6.0', contentBaseUrl: 'https://example.test/content', audioBaseUrl: 'https://example.test/audio', rawModules: encode(validModules(), '\n'), lessons: [{ file: 'M01-01-01.json', bytes: encode(makeValidLesson(), '\n'), updatedAt: '2026-09-25T00:00:00Z' }] };
+    expect(() => buildManifest({ ...input, rawModules: encode(validModules(), '\r\n') })).toThrow('LF line endings');
+    expect(() => buildManifest({ ...input, lessons: input.lessons.map((source) => ({ ...source, bytes: encode(makeValidLesson(), '\r\n') })) })).toThrow('LF line endings');
+    expect(() => buildManifest(input)).not.toThrow();
+  });
+
   it('compares semantic versions numerically', () => {
     expect(compareSemver('0.10.0', '0.6.0')).toBe(1);
     expect(compareSemver('0.5.99', '0.6.0')).toBe(-1);

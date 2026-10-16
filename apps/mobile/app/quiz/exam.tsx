@@ -26,10 +26,13 @@ export default function ExamScreen() {
 
   useEffect(() => {
     let cancelled = false;
+    setPool(null);
+    setError(null);
     const currentScope: QuizScope = scopeParam?.startsWith('module:')
       ? { type: 'module', moduleId: scopeParam.slice('module:'.length) }
       : { type: 'all' };
-    const loader = currentScope.type === 'module' ? loadModuleQuiz(currentScope.moduleId) : loadAllQuiz();
+    const loader =
+      currentScope.type === 'module' ? loadModuleQuiz(currentScope.moduleId) : loadAllQuiz();
     loader
       .then((questions) => {
         if (cancelled) return;
@@ -51,12 +54,21 @@ export default function ExamScreen() {
     scope.type === 'module'
       ? (modulesFile.modules.find((m) => m.id === scope.moduleId)?.title ?? de.module.unknownTitle)
       : null;
-  const heading = scope.type === 'module' && moduleTitle ? de.quiz.moduleExamTitle(moduleTitle) : de.quiz.allExamTitle;
+  const heading =
+    scope.type === 'module' && moduleTitle
+      ? de.quiz.moduleExamTitle(moduleTitle)
+      : de.quiz.allExamTitle;
 
   if (error) {
     return (
       <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.bg }]}>
-        <EmptyState Icon={GraduationCap} title={heading} body={error} />
+        <EmptyState
+          Icon={GraduationCap}
+          title={heading}
+          body={error}
+          actionLabel="Zur Prüfungsauswahl"
+          onAction={() => router.replace('/(tabs)/ueben')}
+        />
       </SafeAreaView>
     );
   }
@@ -64,7 +76,11 @@ export default function ExamScreen() {
   if (!pool) {
     return (
       <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.bg }]}>
-        <EmptyState Icon={GraduationCap} title={de.quiz.examLoadingTitle} body={de.quiz.examLoadingBody} />
+        <EmptyState
+          Icon={GraduationCap}
+          title={de.quiz.examLoadingTitle}
+          body={de.quiz.examLoadingBody}
+        />
       </SafeAreaView>
     );
   }
@@ -72,6 +88,7 @@ export default function ExamScreen() {
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.bg }]}>
       <QuizRunner
+        key={scopeParam ?? 'all'}
         pool={pool}
         desiredCount={questionCountForScope(scope, 0)}
         scope={scope}

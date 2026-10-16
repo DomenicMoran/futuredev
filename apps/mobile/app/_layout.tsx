@@ -58,6 +58,7 @@ function RootLayoutInner() {
       .then((prefs) => {
         usePlayerStore.getState().setAutoplayNext(prefs.autoplayNext);
         usePlayerStore.getState().setRepeatMode(prefs.repeatMode);
+        usePlayerStore.getState().setRate(prefs.rate);
         usePlayerStore.getState().setPlayerPreferencesHydrated(true);
       })
       .catch(() => {

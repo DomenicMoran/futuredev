@@ -11,8 +11,9 @@
   "scripts": {
     "typecheck": "turbo run typecheck",
     "lint": "turbo run lint && eslint .",
-    "test": "turbo run test && node --test tools/check-secrets.test.mjs",
+    "test": "turbo run test && node --test tools/check-secrets.test.mjs tools/audit-learning-content.test.mjs tools/clean-question-padding.test.mjs tools/clean-speech-padding.test.mjs",
     "build": "turbo run build",
+    "content:audit": "node tools/audit-learning-content.mjs",
     "content:validate": "pnpm --filter @futuredev/content-schema run validate",
     "content:manifest": "pnpm --filter @futuredev/content-schema run manifest",
     "content:terms": "pnpm --filter @futuredev/content-schema run terms",
